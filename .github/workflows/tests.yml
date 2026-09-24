@@ -19,6 +19,8 @@ jobs:
           cache: pip
       - name: Install
         run: pip install -e ".[dev]"
+      - name: Compile runtime scripts
+        run: python -m compileall -q src collector scripts
       - name: Unit tests
         run: pytest -q
       - name: Dry-run market pipeline
