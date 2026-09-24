@@ -56,13 +56,13 @@ jobs:
         env:
           TOSS_SNAPSHOT_URL: ${{ secrets.TOSS_SNAPSHOT_URL }}
           TOSS_SNAPSHOT_TOKEN: ${{ secrets.TOSS_SNAPSHOT_TOKEN }}
-        run: python scripts/fetch_toss_snapshot.py
+        run: python scripts/토스스냅샷_가져오기.py
 
       - name: Summarize Toss provider state
         if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
         run: |
           if [ -f data/providers/toss/latest.json ]; then
-            python scripts/summarize_toss_snapshot.py
+            python scripts/토스상태_요약.py
           fi
 
       - name: Korea market tape tick
@@ -90,7 +90,7 @@ jobs:
         run: python -m autoresearch regression
 
       - name: Build dashboard data
-        run: python scripts/build_site.py
+        run: python scripts/대시보드_생성.py
       - name: Validate final repository state
         run: |
           python -m compileall -q src collector scripts
