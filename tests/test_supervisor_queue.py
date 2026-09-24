@@ -90,7 +90,7 @@ def test_append_observation_is_idempotent_and_tracks_pending(tmp_path):
     state = json.loads(
         (tmp_path / "data/supervisor/state.json").read_text(encoding="utf-8")
     )
-    assert state["batch_size"] == 6
+    assert state["batch_size"] == 10
     assert state["last_processed_observation_id"] is None
 
 
@@ -100,7 +100,7 @@ def test_processed_pointer_excludes_old_observations(tmp_path):
         state_path,
         {
             "schema_version": 1,
-            "batch_size": 6,
+            "batch_size": 10,
             "last_processed_observation_id": "obs-old",
         },
     )
