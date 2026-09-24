@@ -210,9 +210,9 @@ def render_market_markdown(result: dict[str, Any]) -> str:
                 or "정량 데이터는 수집됐지만 AI 장세 해석은 아직 없습니다."
             ),
             "",
-            "## 시장 폭",
+            "## 분석 Universe 폭",
             "",
-            f"- 분석 종목 수: {q.get('stock_count', 0)}",
+            f"- 분석 종목 수: {q.get('stock_count', 0)} (현재 거래대금 상위 상세조회 Universe)",
             f"- 상승 종목: {q.get('breadth', {}).get('advancers', 0)}",
             f"- 하락 종목: {q.get('breadth', {}).get('decliners', 0)}",
             f"- 상위 10개 거래대금 집중도: {q.get('turnover', {}).get('top10_share', 0):.1%}",
@@ -717,6 +717,54 @@ class MarketIntelEngine:
             },
         }
 
+    def _recent_market_history(self, limit: int = 12) -> list[dict[str, Any]]:
+        folder = self.root / self.cfg.get("data", {}).get(
+            "snapshot_dir", "data/market/snapshots"
+        )
+        if not folder.exists():
+            return []
+        history: list[dict[str, Any]] = []
+        for path in sorted(folder.glob("*.json"), reverse=True)[:limit]:
+            try:
+                item = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            q = item.get("quantitative", {})
+            if q.get("status") != "ok":
+                continue
+            history.append(
+                {
+                    "generated_at": item.get("generated_at"),
+                    "analyzed_stock_count": q.get("stock_count"),
+                    "advance_ratio": q.get("breadth", {}).get("advance_ratio"),
+                    "top10_turnover_share": q.get("turnover", {}).get("top10_share"),
+                    "recent_listing_count": q.get("recent_listings", {}).get("count"),
+                    "recent_listing_positive_burst_count": q.get(
+                        "recent_listings", {}
+                    ).get("positive_burst_count"),
+                    "coflow_groups": [
+                        {
+                            "group": group.get("group"),
+                            "positive_burst_members": group.get(
+                                "positive_burst_members"
+                            ),
+                        }
+                        for group in q.get("coflow_groups", [])[:5]
+                    ],
+                    "burst_leaders": [
+                        {
+                            "name": stock.get("name"),
+                            "return_pct": stock.get("return_pct"),
+                            "burst_count": stock.get("burst_count"),
+                            "max_burst_ratio": stock.get("max_burst_ratio"),
+                        }
+                        for stock in q.get("burst_leaders", [])[:5]
+                    ],
+                }
+            )
+        history.reverse()
+        return history
+
     def _interpret(
         self,
         quantitative: dict[str, Any],
@@ -737,7 +785,11 @@ class MarketIntelEngine:
                     ensure_ascii=False,
                     indent=2,
                 ),
-                "HISTORY": "10분 스냅샷은 data/market/snapshots에 누적되며 비교 로직은 계속 발전시킨다.",
+                "HISTORY": json.dumps(
+                    self._recent_market_history(),
+                    ensure_ascii=False,
+                    indent=2,
+                ),
             },
         )
         return llm.request_json(prompt, web=False, model_cfg=model_cfg)
