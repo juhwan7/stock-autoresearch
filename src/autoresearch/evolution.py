@@ -48,11 +48,11 @@ class EvolutionEngine:
     def _memory(self) -> str:
         parts = []
         for rel in (
-            "docs/DECISIONS.md",
-            "docs/IDEAS.md",
-            "docs/EXPERIMENTS.md",
-            "docs/HELP_NEEDED.md",
-            "docs/CHANGELOG_AI.md",
+            "docs/결정_원장.md",
+            "docs/아이디어_보드.md",
+            "docs/실험_기록.md",
+            "docs/사용자_도움_필요.md",
+            "docs/AI_변경기록.md",
         ):
             text = _read(self.root / rel, 24000)
             parts.append(f"\n--- {rel} ---\n{text[-16000:]}")
@@ -71,12 +71,12 @@ class EvolutionEngine:
             "config/risk.yaml",
             "config/regression.yaml",
             "config/events_2026.yaml",
-            "docs/TRADING_RESEARCH_MANDATE.md",
-            "docs/RISK_VETO.md",
-            "docs/REGRESSION_GUARD.md",
-            "docs/DOCS_MAP.md",
-            "docs/TOSS_DATA_PLAN.md",
-            "docs/MARKET_DATA_SPEC.md",
+            "docs/매매연구_원칙.md",
+            "docs/오버나이트_리스크_차단.md",
+            "docs/회귀탐지_롤백.md",
+            "docs/문서_지도.md",
+            "docs/토스데이터_운영계획.md",
+            "docs/시장데이터_명세.md",
             "src/autoresearch/market_intel.py",
             "src/autoresearch/risk_engine.py",
             "src/autoresearch/regression.py",
@@ -84,18 +84,18 @@ class EvolutionEngine:
             "src/autoresearch/pullback_stats.py",
             "src/autoresearch/kiwoom_source.py",
             "src/autoresearch/toss_bridge.py",
-            "prompts/market_regime.md",
-            "prompts/risk_evaluator.md",
+            "prompts/시장장세_해석.md",
+            "prompts/리스크_평가.md",
             "src/autoresearch/pipeline.py",
             "src/autoresearch/llm.py",
             "src/autoresearch/scoring.py",
             "src/autoresearch/report.py",
             "src/autoresearch/memory.py",
             "src/autoresearch/evolution.py",
-            "prompts/market_scanner.md",
-            "prompts/researcher.md",
-            "prompts/critic.md",
-            "prompts/chief_researcher.md",
+            "prompts/시장_스캐너.md",
+            "prompts/심층_리서치.md",
+            "prompts/반론_검증.md",
+            "prompts/최종연구_총괄.md",
             "site/index.html",
             "site/app.js",
             "site/style.css",
@@ -134,10 +134,10 @@ class EvolutionEngine:
             }
 
         prompt = render_prompt(
-            load_prompt(self.root, "evolution_scout.md"),
+            load_prompt(self.root, "자기진화_탐색.md"),
             {
                 "NOW": now.isoformat(),
-                "USER_INTENT": _read(self.root / "docs/USER_INTENT.md", 30000),
+                "USER_INTENT": _read(self.root / "docs/사용자_목적.md", 30000),
                 "MEMORY": self._memory(),
                 "SNAPSHOT": self._snapshot(),
             },
@@ -147,10 +147,10 @@ class EvolutionEngine:
 
     def _builder(self, scout: dict[str, Any]) -> dict[str, Any]:
         prompt = render_prompt(
-            load_prompt(self.root, "evolution_builder.md"),
+            load_prompt(self.root, "자기진화_구현.md"),
             {
                 "SCOUT": json.dumps(scout, ensure_ascii=False, indent=2),
-                "RULES": _read(self.root / "docs/EVOLUTION_RULES.md", 30000),
+                "RULES": _read(self.root / "docs/자기진화_규칙.md", 30000),
                 "SNAPSHOT": self._snapshot(),
             },
         )
@@ -273,7 +273,7 @@ class EvolutionEngine:
             f"위험: {scout.get('risk', '')}\n\n"
             f"이번 처리: {outcome}\n"
         )
-        _append(self.root / "docs/IDEAS.md", block)
+        _append(self.root / "docs/아이디어_보드.md", block)
 
     def _record_help(self, now: datetime, scout: dict[str, Any]) -> None:
         if not scout.get("needs_user"):
@@ -287,7 +287,7 @@ class EvolutionEngine:
             f"필요 이유: {scout.get('observation', '')}\n\n"
             f"사용자가 해줄 일:\n\n{help_text or '구체적 작업이 아직 정의되지 않음'}\n"
         )
-        _append(self.root / "docs/HELP_NEEDED.md", block)
+        _append(self.root / "docs/사용자_도움_필요.md", block)
 
     @staticmethod
     def _hash_text(value: str) -> str:
@@ -369,7 +369,7 @@ class EvolutionEngine:
             f"- 기대효과: {scout.get('expected_benefit', '')}\n"
             f"- 검증: {validation}\n"
         )
-        _append(self.root / "docs/CHANGELOG_AI.md", changelog)
+        _append(self.root / "docs/AI_변경기록.md", changelog)
 
         decision = (
             f"## {_kst_label(now)} — {scout.get('title', '자동 개선')}\n\n"
@@ -383,7 +383,7 @@ class EvolutionEngine:
             f"검증: {validation}\n\n"
             f"다음 확인: {', '.join(str(x) for x in builder.get('followups', [])) or '없음'}\n"
         )
-        _append(self.root / "docs/DECISIONS.md", decision)
+        _append(self.root / "docs/결정_원장.md", decision)
 
     def run(self) -> dict[str, Any]:
         now = datetime.now(timezone.utc)
@@ -445,7 +445,7 @@ class EvolutionEngine:
                 f"판정: 롤백\n\n"
                 f"배운 점: 현재 변경안은 검증을 통과하지 못했다. 같은 접근을 반복하지 말고 원인을 수정해야 한다.\n"
             )
-            _append(self.root / "docs/EXPERIMENTS.md", experiment)
+            _append(self.root / "docs/실험_기록.md", experiment)
             outcome = "rolled_back"
 
         self._record_tick(now, scout, builder, outcome, validation)

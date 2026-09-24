@@ -1829,7 +1829,7 @@ class MarketIntelEngine:
         model_cfg = self.cfg.get("models", {}).get("regime", {})
         llm = ResearchLLM(model_cfg)
         prompt = render_prompt(
-            load_prompt(self.root, "market_regime.md"),
+            load_prompt(self.root, "시장장세_해석.md"),
             {
                 "SNAPSHOT": json.dumps(
                     {

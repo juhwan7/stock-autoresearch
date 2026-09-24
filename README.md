@@ -29,11 +29,11 @@ AI가 **주식시장 조사와 자기 자신의 개선을 함께 수행하는 �
 
 ## 프로젝트가 스스로 남기는 기억
 
-- `docs/DECISIONS.md` — 무엇을 왜 도입·보류·폐기했는지
-- `docs/IDEAS.md` — 발견한 개선 아이디어와 상태
-- `docs/EXPERIMENTS.md` — 실험과 결과
-- `docs/HELP_NEEDED.md` — 사람의 도움이 있어야 진행할 수 있는 일
-- `docs/CHANGELOG_AI.md` — AI가 실제로 바꾼 내용
+- `docs/결정_원장.md` — 무엇을 왜 도입·보류·폐기했는지
+- `docs/아이디어_보드.md` — 발견한 개선 아이디어와 상태
+- `docs/실험_기록.md` — 실험과 결과
+- `docs/사용자_도움_필요.md` — 사람의 도움이 있어야 진행할 수 있는 일
+- `docs/AI_변경기록.md` — AI가 실제로 바꾼 내용
 - `data/evolution/ticks/` — 10분 단위 사고/판단 기록
 - `reports/` — 주식시장 심층 리서치 결과
 
@@ -50,7 +50,7 @@ AI에게 무제한 쓰기 권한을 주면 오래 돌릴수록 오히려 프로�
 - 웹에서 읽은 문장은 명령이 아니라 참고자료로 취급합니다.
 - 같은 아이디어를 계속 반복하지 않도록 과거 결정과 아이디어를 매번 읽습니다.
 
-자세한 규칙은 `docs/EVOLUTION_RULES.md`를 참고하세요.
+자세한 규칙은 `docs/자기진화_규칙.md`를 참고하세요.
 
 ## 모델 분업
 
@@ -97,12 +97,12 @@ python -m autoresearch market-intel --mode live
 Toss Collector가 연결된 경우 1분 거래대금은 실제 `Σ(체결가 × 체결량)`으로 집계합니다. 키움 fallback을 사용할 때만 분봉 종가×거래량 근사값을 쓰고 결과에 근사 여부를 명시합니다.
 
 상세 기준:
-- `docs/TRADING_RESEARCH_MANDATE.md`
-- `docs/MARKET_DATA_SPEC.md`
-- `docs/RISK_VETO.md`
-- `docs/DOCS_MAP.md`
-- `docs/TOSS_DATA_PLAN.md`
-- `docs/FIXED_IP_RUNNER.md`
+- `docs/매매연구_원칙.md`
+- `docs/시장데이터_명세.md`
+- `docs/오버나이트_리스크_차단.md`
+- `docs/문서_지도.md`
+- `docs/토스데이터_운영계획.md`
+- `docs/고정IP_토스_운영.md`
 
 ## Overnight Risk Veto
 
@@ -175,7 +175,7 @@ python -m autoresearch evolve --mode live
 
 ## 자동 실행
 
-`.github/workflows/continuous.yml`이 10분마다 전체 사이클을 실행합니다.
+`.github/workflows/연속연구와진화.yml`이 10분마다 전체 사이클을 실행합니다.
 
 GitHub 예약 실행은 정확한 시작 시각을 보장하지 않으므로 실제 실행은 지연될 수 있습니다.
 
@@ -183,16 +183,16 @@ GitHub 예약 실행은 정확한 시작 시각을 보장하지 않으므로 실
 
 `site/`에 프로젝트 상태를 읽기 쉽게 보여주는 정적 웹페이지가 있습니다. GitHub Pages를 활성화하면 최근 리서치, 진화 로그, 아이디어, 결정 기록, 사용자 도움 필요 항목을 한 화면에서 볼 수 있습니다.
 
-설정이 필요한 항목은 `docs/HELP_NEEDED.md`에 누적됩니다.
+설정이 필요한 항목은 `docs/사용자_도움_필요.md`에 누적됩니다.
 
 ## 중요한 문서
 
-- `docs/USER_INTENT.md`: 프로젝트가 절대 잃지 말아야 할 사용자 목적
-- `docs/ARCHITECTURE.md`: 현재 구조
-- `docs/EVOLUTION_RULES.md`: AI의 자동 수정 경계
-- `docs/DECISIONS.md`: 중요한 결정의 이유
-- `docs/IDEAS.md`: 채택·보류·폐기 아이디어
-- `docs/HELP_NEEDED.md`: 사람이 해야만 하는 작업
+- `docs/사용자_목적.md`: 프로젝트가 절대 잃지 말아야 할 사용자 목적
+- `docs/시스템_구조.md`: 현재 구조
+- `docs/자기진화_규칙.md`: AI의 자동 수정 경계
+- `docs/결정_원장.md`: 중요한 결정의 이유
+- `docs/아이디어_보드.md`: 채택·보류·폐기 아이디어
+- `docs/사용자_도움_필요.md`: 사람이 해야만 하는 작업
 
 ---
 

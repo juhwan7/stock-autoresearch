@@ -163,7 +163,7 @@ class RiskEngine:
         cfg = self.cfg.get("models", {}).get("source", {})
         llm = ResearchLLM(cfg)
         prompt = render_prompt(
-            load_prompt(self.root, "risk_calendar_refresh.md"),
+            load_prompt(self.root, "리스크일정_갱신.md"),
             {
                 "NOW": now.isoformat(),
                 "EXISTING": json.dumps(
@@ -250,7 +250,7 @@ class RiskEngine:
         cfg = self.cfg.get("models", {}).get("source", {})
         llm = ResearchLLM(cfg)
         prompt = render_prompt(
-            load_prompt(self.root, "macro_refresh.md"),
+            load_prompt(self.root, "매크로_갱신.md"),
             {"NOW": now.isoformat()},
         )
         try:
@@ -581,7 +581,7 @@ class RiskEngine:
 
         llm = ResearchLLM(cfg)
         prompt = render_prompt(
-            load_prompt(self.root, "risk_evaluator.md"),
+            load_prompt(self.root, "리스크_평가.md"),
             {
                 "NOW": now.isoformat(),
                 "RISK_STATE": json.dumps(state, ensure_ascii=False, indent=2),

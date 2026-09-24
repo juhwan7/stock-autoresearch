@@ -26,7 +26,7 @@ Stock AutoResearch는 단순 뉴스 요약기가 아니라 다음 두 가지를 
 
 사용자의 우선 전략은 **종가베팅과 단기스윙 눌림**이다.
 
-분석 전 반드시 `docs/TRADING_RESEARCH_MANDATE.md`와 `docs/MARKET_DATA_SPEC.md`를 확인한다.
+분석 전 반드시 `docs/매매연구_원칙.md`와 `docs/시장데이터_명세.md`를 확인한다.
 
 특히 다음을 중요하게 본다.
 
@@ -44,7 +44,7 @@ Stock AutoResearch는 단순 뉴스 요약기가 아니라 다음 두 가지를 
 
 ## 종가베팅 Overnight Risk
 
-종가베팅 분석 전 `docs/RISK_VETO.md`를 확인한다.
+종가베팅 분석 전 `docs/오버나이트_리스크_차단.md`를 확인한다.
 
 - 리스크 개수보다 가장 큰 단일 충격을 우선한다.
 - CPI·FOMC·고용·한국은행 등 예정 이벤트를 미리 본다.
@@ -58,7 +58,7 @@ Stock AutoResearch는 단순 뉴스 요약기가 아니라 다음 두 가지를 
 
 ## 자기진화
 
-`docs/USER_INTENT.md`와 `docs/EVOLUTION_RULES.md`를 최상위 제약으로 취급한다.
+`docs/사용자_목적.md`와 `docs/자기진화_규칙.md`를 최상위 제약으로 취급한다.
 
 개선은 많을수록 좋은 것이 아니다. 변경하지 않는 편이 낫다면 이유를 기록하고 변경하지 않는다.
 

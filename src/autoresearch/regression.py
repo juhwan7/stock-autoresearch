@@ -266,7 +266,7 @@ class RegressionDetector:
         manifest["rollback_reason"] = reason
         _write_json(manifest_path, manifest)
 
-        experiment = self.root / "docs" / "EXPERIMENTS.md"
+        experiment = self.root / "docs" / "실험_기록.md"
         experiment.parent.mkdir(parents=True, exist_ok=True)
         with experiment.open("a", encoding="utf-8") as handle:
             handle.write(

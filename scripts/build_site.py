@@ -87,7 +87,7 @@ def recent_reports(limit: int = 100) -> list[dict]:
 
 
 def idea_board() -> dict[str, list[dict[str, str]]]:
-    path = ROOT / "docs" / "IDEAS.md"
+    path = ROOT / "docs" / "아이디어_보드.md"
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
     except OSError:
@@ -358,10 +358,10 @@ def main() -> None:
         "ticks": latest_ticks(),
         "idea_board": idea_board(),
         "recent_changes": recent_change_manifests(),
-        "decision_memory": section_tail(ROOT / "docs" / "DECISIONS.md"),
-        "ideas": section_tail(ROOT / "docs" / "IDEAS.md"),
-        "help_needed": section_tail(ROOT / "docs" / "HELP_NEEDED.md"),
-        "changelog": section_tail(ROOT / "docs" / "CHANGELOG_AI.md"),
+        "decision_memory": section_tail(ROOT / "docs" / "결정_원장.md"),
+        "ideas": section_tail(ROOT / "docs" / "아이디어_보드.md"),
+        "help_needed": section_tail(ROOT / "docs" / "사용자_도움_필요.md"),
+        "changelog": section_tail(ROOT / "docs" / "AI_변경기록.md"),
         "market": market,
         "market_runtime": read_json(ROOT / "data" / "market" / "runtime.json"),
         "toss_provider": toss_provider_status(),
@@ -374,27 +374,27 @@ def main() -> None:
         "docs_links": [
             {
                 "title": "문서 지도",
-                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/DOCS_MAP.md",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/문서_지도.md",
             },
             {
                 "title": "트레이딩 연구 원칙",
-                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/TRADING_RESEARCH_MANDATE.md",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/매매연구_원칙.md",
             },
             {
                 "title": "시장 데이터 명세",
-                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/MARKET_DATA_SPEC.md",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/시장데이터_명세.md",
             },
             {
                 "title": "회귀 탐지·기능 롤백",
-                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/REGRESSION_GUARD.md",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/회귀탐지_롤백.md",
             },
             {
                 "title": "토스 데이터 계획",
-                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/TOSS_DATA_PLAN.md",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/토스데이터_운영계획.md",
             },
             {
                 "title": "결정 원장",
-                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/DECISIONS.md",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/결정_원장.md",
             },
         ],
     }

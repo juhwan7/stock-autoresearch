@@ -49,7 +49,7 @@ class Pipeline:
         if self.mode == "dry-run":
             return mock.scan()
         prompt = self._prompt(
-            "market_scanner.md",
+            "시장_스캐너.md",
             {
                 "NOW_UTC": now_utc,
                 "ROOT_TOPIC": self.research_cfg.get("root_topic", "stocks"),
@@ -69,7 +69,7 @@ class Pipeline:
         if self.mode == "dry-run":
             return mock.research(topic)
         prompt = self._prompt(
-            "researcher.md",
+            "심층_리서치.md",
             {
                 "TOPIC_JSON": topic,
                 "PREVIOUS_RESEARCH": previous or {},
@@ -81,7 +81,7 @@ class Pipeline:
     def _critic(self, research_data: dict[str, Any]) -> dict[str, Any]:
         if self.mode == "dry-run":
             return mock.critic()
-        prompt = self._prompt("critic.md", {"RESEARCH_JSON": research_data})
+        prompt = self._prompt("반론_검증.md", {"RESEARCH_JSON": research_data})
         return self._request("critic", prompt, web=True)
 
     def _finalize(
@@ -93,7 +93,7 @@ class Pipeline:
         if self.mode == "dry-run":
             return mock.final(topic, research_data)
         prompt = self._prompt(
-            "chief_researcher.md",
+            "최종연구_총괄.md",
             {
                 "TOPIC_JSON": topic,
                 "RESEARCH_JSON": research_data,
