@@ -23,13 +23,13 @@ def title_of(path: Path) -> str:
 
 
 def recent_reports(limit: int = 20) -> list[dict]:
-    files = sorted((ROOT / "reports").glob("*.md"), reverse=True)[:limit]
+    files = sorted((ROOT / "reports").rglob("*.md"), reverse=True)[:limit]
     repo = os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch")
     return [
         {
             "title": title_of(path),
-            "file": path.name,
-            "github_url": f"https://github.com/{repo}/blob/main/reports/{path.name}",
+            "file": str(path.relative_to(ROOT / "reports")),
+            "github_url": f"https://github.com/{repo}/blob/main/{path.relative_to(ROOT)}",
         }
         for path in files
     ]
@@ -73,7 +73,15 @@ def section_tail(path: Path, chars: int = 12000) -> str:
     return text[-chars:]
 
 
+def read_json(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
 def main() -> None:
+    market = read_json(ROOT / "data" / "market" / "latest.json")
     status = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "project": "Stock AutoResearch",
@@ -84,6 +92,7 @@ def main() -> None:
         "ideas": section_tail(ROOT / "docs" / "IDEAS.md"),
         "help_needed": section_tail(ROOT / "docs" / "HELP_NEEDED.md"),
         "changelog": section_tail(ROOT / "docs" / "CHANGELOG_AI.md"),
+        "market": market,
     }
     (DATA / "status.json").write_text(
         json.dumps(status, ensure_ascii=False, indent=2),
