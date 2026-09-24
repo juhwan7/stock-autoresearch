@@ -192,6 +192,46 @@ def read_json(path: Path) -> dict:
         return {}
 
 
+def toss_provider_status() -> dict:
+    snapshot = read_json(ROOT / "data" / "providers" / "toss" / "latest.json")
+    fetch_runtime = read_json(
+        ROOT / "data" / "providers" / "toss" / "fetch_runtime.json"
+    )
+    collector = snapshot.get("collector", {}) if snapshot else {}
+    subscriptions = collector.get("subscriptions", [])
+    rejected = collector.get("rejected", [])
+    return {
+        "available": bool(snapshot),
+        "captured_at": snapshot.get("captured_at"),
+        "provider": snapshot.get("provider"),
+        "source_mode": snapshot.get("source_mode"),
+        "minute_amount_method": snapshot.get("minute_amount_method"),
+        "ranking_count": len(snapshot.get("ranking", [])) if snapshot else 0,
+        "regular_ticker_count": len(snapshot.get("minute_by_ticker", {}))
+        if snapshot
+        else 0,
+        "postmarket_ticker_count": len(
+            snapshot.get("postmarket_by_ticker", {})
+        )
+        if snapshot
+        else 0,
+        "subscription_count": len(subscriptions)
+        if isinstance(subscriptions, list)
+        else 0,
+        "rejected_count": len(rejected)
+        if isinstance(rejected, list)
+        else 0,
+        "last_message_at": collector.get("last_message_at"),
+        "last_universe_refresh": collector.get("last_universe_refresh"),
+        "fetch_runtime": {
+            "status": fetch_runtime.get("status"),
+            "fetched_at": fetch_runtime.get("fetched_at"),
+            "captured_at": fetch_runtime.get("captured_at"),
+            "error": fetch_runtime.get("error"),
+        },
+    }
+
+
 def macro_matrix(market: dict, risk: dict) -> dict:
     macro = risk.get("macro", {}) if isinstance(risk, dict) else {}
     values = macro.get("values", {}) if isinstance(macro, dict) else {}
@@ -300,6 +340,7 @@ def main() -> None:
         "changelog": section_tail(ROOT / "docs" / "CHANGELOG_AI.md"),
         "market": market,
         "market_runtime": read_json(ROOT / "data" / "market" / "runtime.json"),
+        "toss_provider": toss_provider_status(),
         "risk": risk,
         "macro_matrix": macro_matrix(market, risk),
         "risk_runtime": read_json(ROOT / "data" / "risk" / "runtime.json"),
