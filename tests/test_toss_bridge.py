@@ -143,7 +143,7 @@ def test_domestic_monitor_window_extends_to_20_10():
 
 def test_nxt_after_data_is_written_to_close_bet_event(tmp_path):
     engine = make_engine(tmp_path)
-    path = tmp_path / "data/market/stats/close_bet_events.csv"
+    path = tmp_path / "data/market/stats/종가베팅_이벤트.csv"
     path.parent.mkdir(parents=True, exist_ok=True)
 
     from autoresearch.market_intel import CLOSE_EVENT_FIELDS, write_event_csv
