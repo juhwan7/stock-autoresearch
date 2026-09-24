@@ -109,7 +109,7 @@ def idea_board() -> dict[str, list[dict[str, str]]]:
         body = []
 
     for line in lines:
-        match = re.match(r"^## (채택|실험중|보류|폐기|재검토) — (.+)$", line)
+        match = re.match(r"^## (채택|실험중|후보|재검토|보류|폐기) — (.+)$", line)
         if match:
             flush()
             current = {"status": match.group(1), "title": match.group(2).strip()}
