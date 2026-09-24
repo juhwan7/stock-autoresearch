@@ -93,6 +93,7 @@ def main() -> None:
         "help_needed": section_tail(ROOT / "docs" / "HELP_NEEDED.md"),
         "changelog": section_tail(ROOT / "docs" / "CHANGELOG_AI.md"),
         "market": market,
+        "market_runtime": read_json(ROOT / "data" / "market" / "runtime.json"),
     }
     (DATA / "status.json").write_text(
         json.dumps(status, ensure_ascii=False, indent=2),
