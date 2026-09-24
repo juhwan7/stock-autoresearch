@@ -10,6 +10,10 @@ function medianField(block, field) {
   return (((block || {}).summary || {}).fields || {})[field]?.median;
 }
 
+function ratePct(value) {
+  return value == null ? "-" : (Number(value) * 100).toFixed(1) + "%";
+}
+
 function esc(value = "") {
   return String(value).replace(/[&<>"']/g, (m) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
@@ -82,11 +86,18 @@ async function load() {
     const closeMae = medianField(closeBlock, "next_mae_pct");
     const swingMfe = medianField(swingBlock, "forward_5d_mfe_pct");
     const swingMae = medianField(swingBlock, "forward_5d_mae_pct");
+    const closeRates = closeBlock.rates || {};
+    const swingRates = swingBlock.rates || {};
+    const rebound5 = (((swingBlock.rebound_drawdown || {}).mfe_ge_5 || {}).summary || {});
+    const rebound5Drawdown = (((rebound5.fields || {}).drawdown_pct || {}).median);
     $("strategy-stats").innerHTML =
       `<div class="mini-row"><strong>종가베팅</strong><span>${esc(closeBlock.reliability || "표본 축적")} · n=${closeN}</span></div>` +
       `<div class="mini-row"><strong>다음날 중앙</strong><span>MFE ${closeMfe ?? "-"}% / MAE ${closeMae ?? "-"}%</span></div>` +
+      `<div class="mini-row"><strong>+5% / -5%</strong><span>${ratePct(closeRates.mfe_ge_5)} / ${ratePct(closeRates.mae_le_minus5)}</span></div>` +
       `<div class="mini-row"><strong>눌림스윙</strong><span>${esc(swingBlock.reliability || "표본 축적")} · n=${swingN}</span></div>` +
-      `<div class="mini-row"><strong>5일 중앙</strong><span>MFE ${swingMfe ?? "-"}% / MAE ${swingMae ?? "-"}%</span></div>`;
+      `<div class="mini-row"><strong>5일 중앙</strong><span>MFE ${swingMfe ?? "-"}% / MAE ${swingMae ?? "-"}%</span></div>` +
+      `<div class="mini-row"><strong>+5% 반등 / -5% 역행</strong><span>${ratePct(swingRates.mfe_ge_5)} / ${ratePct(swingRates.mae_le_minus5)}</span></div>` +
+      `<div class="mini-row"><strong>+5% 반등 표본 중앙 눌림</strong><span>${rebound5Drawdown ?? "-"}%</span></div>`;
 
     const thin = (q.rise_without_burst || []).slice(0, 4);
     if (thin.length) {
