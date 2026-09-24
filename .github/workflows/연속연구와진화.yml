@@ -1,60 +1,39 @@
-name: 10분 연속 연구와 자기진화
+name: 10분 감독 관측 큐
 
 on:
   workflow_dispatch:
-    inputs:
-      mode:
-        description: "실행 모드"
-        required: true
-        default: "live"
-        type: choice
-        options:
-          - live
-          - dry-run
   schedule:
     - cron: "*/10 * * * *"
 
 permissions:
   contents: write
   issues: write
+  actions: read
 
 concurrency:
-  group: stock-autoresearch-writer
+  group: stock-autoresearch-observer
   cancel-in-progress: false
 
 jobs:
-  continuous:
+  observe:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-      - name: Tick 시작 커밋 저장
-        run: echo "TICK_BASE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          fetch-depth: 20
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
+
       - name: Install
         run: pip install -e ".[dev]"
-      - name: Resolve mode
-        env:
-          REQUESTED_MODE: ${{ github.event.inputs.mode }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          MODE="$REQUESTED_MODE"
-          if [ -z "$MODE" ]; then MODE="live"; fi
-          if [ "$MODE" = "live" ] && [ -z "$OPENAI_API_KEY" ]; then
-            echo "OPENAI_API_KEY가 없어 live Continuous Loop를 실행할 수 없습니다."
-            exit 1
-          fi
-          echo "MODE=$MODE" >> "$GITHUB_ENV"
-      - name: Project evolution tick
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: python -m autoresearch evolve --mode "$MODE"
+
       - name: Fetch Toss provider snapshot
+        id: fetch_toss
+        continue-on-error: true
         if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
         env:
           TOSS_SNAPSHOT_URL: ${{ secrets.TOSS_SNAPSHOT_URL }}
@@ -62,64 +41,86 @@ jobs:
         run: python scripts/토스스냅샷_가져오기.py
 
       - name: Summarize Toss provider state
+        id: toss_summary
+        continue-on-error: true
         if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
         run: |
           if [ -f data/providers/toss/latest.json ]; then
             python scripts/토스상태_요약.py
           fi
 
-      - name: Korea market tape tick
-        if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          KIWOOM_APP_KEY: ${{ secrets.KIWOOM_APP_KEY }}
-          KIWOOM_SECRET_KEY: ${{ secrets.KIWOOM_SECRET_KEY }}
-        run: python -m autoresearch market-intel --mode "$MODE"
-
-      - name: Overnight risk tick
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: python -m autoresearch risk-intel --mode "$MODE"
-
-      - name: Market research tick
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: python -m autoresearch run --mode "$MODE"
-
       - name: Health watchdog
+        id: health
+        continue-on-error: true
         run: python -m autoresearch health
 
-      - name: Regression guard
-        run: python -m autoresearch regression
-
       - name: Build dashboard data
+        id: dashboard
+        continue-on-error: true
         run: python scripts/대시보드_생성.py
-      - name: Validate final repository state
+
+      - name: Validate repository
         run: |
-          python -m compileall -q src collector scripts
-          pytest -q
-          git diff --check
-      - name: Commit this tick
-        if: env.MODE == 'live'
-        run: |
-          git config user.name "stock-autoresearch[bot]"
-          git config user.email "stock-autoresearch[bot]@users.noreply.github.com"
-          git add docs prompts site src tests data reports
-          if git diff --cached --quiet; then
-            echo "이번 Tick에는 저장할 변화가 없습니다."
-          else
-            git commit -m "auto: 10-minute research and evolution tick"
-            git pull --rebase
-            git push
+          set +e
+
+          COMPILE_STATUS=ok
+          python -m compileall -q src collector scripts || COMPILE_STATUS=failed
+
+          PYTEST_STATUS=ok
+          pytest -q || PYTEST_STATUS=failed
+
+          DIFF_STATUS=ok
+          git diff --check || DIFF_STATUS=failed
+
+          VALIDATION_STATUS=ok
+          if [ "$COMPILE_STATUS" != "ok" ] || [ "$PYTEST_STATUS" != "ok" ] || [ "$DIFF_STATUS" != "ok" ]; then
+            VALIDATION_STATUS=failed
           fi
 
-      - name: GitHub Issue 변경 알림
-        if: env.MODE == 'live'
+          echo "COMPILE_STATUS=$COMPILE_STATUS" >> "$GITHUB_ENV"
+          echo "PYTEST_STATUS=$PYTEST_STATUS" >> "$GITHUB_ENV"
+          echo "DIFF_STATUS=$DIFF_STATUS" >> "$GITHUB_ENV"
+          echo "VALIDATION_STATUS=$VALIDATION_STATUS" >> "$GITHUB_ENV"
+
+          echo "compile=$COMPILE_STATUS pytest=$PYTEST_STATUS diff=$DIFF_STATUS validation=$VALIDATION_STATUS"
+
+      - name: Record 10-minute supervisor observation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOSS_FETCH_STATUS: ${{ steps.fetch_toss.outcome }}
+          TOSS_SUMMARY_STATUS: ${{ steps.toss_summary.outcome }}
+          HEALTH_STEP_STATUS: ${{ steps.health.outcome }}
+          DASHBOARD_STEP_STATUS: ${{ steps.dashboard.outcome }}
+        run: python -m autoresearch supervisor-observe
+
+      - name: Notify latest hourly supervisor result
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/감독결과_알림.py
+
+      - name: Commit observation data
         run: |
-          python scripts/알림피드백.py notify \
-            --issue 1 \
-            --base-sha "$TICK_BASE_SHA"
+          git config user.name "stock-autoresearch[bot]"
+          git config user.email "stock-autoresearch[bot]@users.noreply.github.com"
+
+          git add data/supervisor
+          if [ -d data/providers/toss ]; then git add data/providers/toss; fi
+          if [ -d data/health ]; then git add data/health; fi
+          if [ -d site ]; then git add site; fi
+
+          if git diff --cached --quiet; then
+            echo "이번 10분 관측에는 저장할 변화가 없습니다."
+          else
+            git commit -m "observe: record 10-minute supervisor checkpoint"
+            git pull --rebase
+            git push
+          fi
+
+      - name: Surface validation failure
+        if: env.VALIDATION_STATUS != 'ok'
+        run: |
+          echo "저장소 검증 실패가 감독 큐에 기록되었습니다."
+          exit 1
