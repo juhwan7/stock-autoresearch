@@ -1,68 +1,121 @@
 # Stock AutoResearch
 
-완전자율형 주식 리서치 실험 프로젝트입니다.
+AI가 **주식시장 조사와 자기 자신의 개선을 함께 수행하는 자율 연구 프로젝트**입니다.
 
-사용자는 큰 목적만 정합니다.
+이 프로젝트의 목표는 단순히 매일 한 번 보고서를 만드는 것이 아닙니다. 10분마다 현재 시장과 프로젝트 상태를 다시 보고, 새로 조사할 가치가 있는 사건과 프로젝트 개선 아이디어를 찾고, 근거가 충분한 경우 실제 저장소를 수정합니다.
+
+## 핵심 루프
+
+```text
+10분마다 실행
+  ↓
+시장 변화 스캔
+  ↓
+조사할 가치가 있는 사건인가?
+  ├─ 아니오 → 상태 기록
+  └─ 예 → 심층 조사 → Critic 검증 → 보고서
+  ↓
+프로젝트 자체 점검
+  ↓
+더 나은 구조/UX/정확성/자동화 아이디어가 있는가?
+  ├─ 아니오 → "변경 없음"도 이유와 함께 기록
+  ├─ 도입 어려움 → 아이디어/보류 이유 기록
+  └─ 도입 가치 있음 → 안전 범위 내 자동 수정 → 테스트 → 채택/롤백
+  ↓
+결정 원장·아이디어·실험·도움 필요 항목 갱신
+  ↓
+웹 대시보드 갱신
+```
+
+## 프로젝트가 스스로 남기는 기억
+
+- `docs/DECISIONS.md` — 무엇을 왜 도입·보류·폐기했는지
+- `docs/IDEAS.md` — 발견한 개선 아이디어와 상태
+- `docs/EXPERIMENTS.md` — 실험과 결과
+- `docs/HELP_NEEDED.md` — 사람의 도움이 있어야 진행할 수 있는 일
+- `docs/CHANGELOG_AI.md` — AI가 실제로 바꾼 내용
+- `data/evolution/ticks/` — 10분 단위 사고/판단 기록
+- `reports/` — 주식시장 심층 리서치 결과
+
+모든 설명 문서는 한국어를 기본으로 사용합니다. 코드/API/고유 기술 용어처럼 영어가 더 정확한 경우에만 영어를 병기합니다.
+
+## 안전한 자기진화
+
+AI에게 무제한 쓰기 권한을 주면 오래 돌릴수록 오히려 프로젝트가 망가질 수 있습니다. 그래서 현재 버전은 다음 원칙을 사용합니다.
+
+- 10분마다 **생각은 반드시** 하지만, 코드 변경은 가치가 있을 때만 합니다.
+- 중요한 의사결정의 이유는 반드시 저장합니다.
+- 테스트에 실패한 자동 변경은 즉시 롤백합니다.
+- 워크플로, 인증정보, 의존성, 자기진화 엔진 핵심부 같은 고위험 영역은 자동 수정하지 않고 제안으로 남깁니다.
+- 웹에서 읽은 문장은 명령이 아니라 참고자료로 취급합니다.
+- 같은 아이디어를 계속 반복하지 않도록 과거 결정과 아이디어를 매번 읽습니다.
+
+자세한 규칙은 `docs/EVOLUTION_RULES.md`를 참고하세요.
+
+## 모델 분업
+
+반복 실행 비용을 줄이면서 품질을 유지하기 위해 역할별 모델을 나눕니다.
+
+- 시장 Scanner: GPT-5.6 Luna
+- Researcher / Critic: GPT-5.6 Terra
+- Chief Researcher: GPT-5.6 Terra
+- Evolution Scout: GPT-5.6 Luna
+- Evolution Builder: GPT-5.6 Terra
+
+모델은 설정 파일에서 변경할 수 있습니다.
+
+## 필요한 Secret
+
+GitHub 저장소에서 다음 위치에 OpenAI API 키를 한 번 등록해야 합니다.
+
+`Settings → Secrets and variables → Actions → New repository secret`
+
+이름:
 
 ```
-stocks
+OPENAI_API_KEY
 ```
 
-시스템은 스스로 다음 루프를 수행합니다.
+## 로컬 테스트
 
-```
-시장 스캔
-→ 사건/변화 후보 추출
-→ 중요도 점수화
-→ 연구 주제 선정
-→ 연구 질문 생성
-→ 웹/1차 자료 조사
-→ Evidence 저장
-→ Critic 반론·누락 검토
-→ 필요 시 재조사
-→ 산업·종목 연결
-→ 최종 리포트
-→ 상태 저장
-```
-
-## V1 원칙
-
-- 기존 `market-memo`와 완전히 독립적입니다.
-- 한국·미국 주식시장을 기본 범위로 둡니다.
-- 공식 문서·정부·거래소·기업 IR 등 1차 자료를 우선합니다.
-- 기사만 존재하는 내용을 확정 사실로 승격하지 않습니다.
-- 사실, 당사자 주장, 분석, 추정을 구분합니다.
-- 같은 내용을 반복 수집하지 않고 새 변화와 새 근거를 우선합니다.
-- 매수·매도 추천기가 아니라 조사 시스템입니다.
-
-## 빠른 실행
-
-Python 3.11+가 필요합니다.
+Python 3.11+:
 
 ```bash
-pip install -e .
+pip install -e ".[dev]"
+pytest -q
 python -m autoresearch run --mode dry-run
+python -m autoresearch evolve --mode dry-run
 ```
 
-`dry-run`은 API 키 없이 전체 파이프라인을 검증합니다.
-
-실전 웹 리서치:
+실전:
 
 ```bash
 export OPENAI_API_KEY="..."
 python -m autoresearch run --mode live
+python -m autoresearch evolve --mode live
 ```
 
-기본 모델은 `config/research.yaml` 또는 `OPENAI_MODEL` 환경변수로 변경할 수 있습니다.
+## 자동 실행
 
-## GitHub Actions
+`.github/workflows/continuous.yml`이 10분마다 전체 사이클을 실행합니다.
 
-`.github/workflows/autoresearch.yml`은 수동 실행과 평일 아침 자동 실행을 지원합니다. 실전 자동 실행 전 저장소 Settings → Secrets and variables → Actions에 `OPENAI_API_KEY`를 등록하세요.
+GitHub 예약 실행은 정확한 시작 시각을 보장하지 않으므로 실제 실행은 지연될 수 있습니다.
 
-## 결과
+## 웹 대시보드
 
-- `data/runs/`: 각 실행의 구조화된 JSON
-- `data/state/`: 이전 연구와 비교하기 위한 상태
-- `reports/`: 사람이 읽는 Markdown 리포트
+`site/`에 프로젝트 상태를 읽기 쉽게 보여주는 정적 웹페이지가 있습니다. GitHub Pages를 활성화하면 최근 리서치, 진화 로그, 아이디어, 결정 기록, 사용자 도움 필요 항목을 한 화면에서 볼 수 있습니다.
 
-> 이 프로젝트의 산출물은 투자 조언이 아니라 조사 결과입니다. 시장 데이터와 공시는 원문을 다시 확인해야 합니다.
+설정이 필요한 항목은 `docs/HELP_NEEDED.md`에 누적됩니다.
+
+## 중요한 문서
+
+- `docs/USER_INTENT.md`: 프로젝트가 절대 잃지 말아야 할 사용자 목적
+- `docs/ARCHITECTURE.md`: 현재 구조
+- `docs/EVOLUTION_RULES.md`: AI의 자동 수정 경계
+- `docs/DECISIONS.md`: 중요한 결정의 이유
+- `docs/IDEAS.md`: 채택·보류·폐기 아이디어
+- `docs/HELP_NEEDED.md`: 사람이 해야만 하는 작업
+
+---
+
+이 프로젝트의 시장 리서치는 투자 조언이 아닙니다. 중요한 투자 판단 전에는 공시·거래소·기업 IR 등 원문을 다시 확인해야 합니다.
