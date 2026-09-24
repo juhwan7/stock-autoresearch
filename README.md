@@ -64,6 +64,38 @@ AI에게 무제한 쓰기 권한을 주면 오래 돌릴수록 오히려 프로�
 
 모델은 설정 파일에서 변경할 수 있습니다.
 
+## 국내시장 Market Tape
+
+국내장에서는 뉴스만 읽지 않고 실제 **분봉 거래대금**을 별도 분석합니다.
+
+```text
+거래대금 상위 종목
+→ 1분봉
+→ 거래대금 Burst
+→ 신규주 확산
+→ 섹터/기업집단 동조
+→ 장후반 거래대금 지속성
+→ 현재 장세
+→ 종가베팅·눌림 연구 통계
+```
+
+실행:
+
+```bash
+python -m autoresearch market-intel --mode dry-run
+python -m autoresearch market-intel --mode live
+```
+
+실전 모드는 키움 REST API의 읽기 전용 시세 조회를 사용합니다. 주문 기능은 프로젝트에 구현하지 않습니다.
+
+종가베팅 연구는 장 마감 시 분석 Universe 전체를 저장하고 다음 거래일의 갭·MFE·MAE를 채웁니다. 단기스윙 눌림은 사전에 고정한 연구 코호트를 저장한 뒤 1·3·5거래일 MFE·MAE를 누적합니다. 성공 사례만 사후 선별하지 않습니다.
+
+현재 1분봉 거래대금은 키움 분봉의 종가×거래량으로 근사하며 실제 체결대금 합계와 차이가 있을 수 있습니다. 결과에 근사 데이터임을 명시합니다.
+
+상세 기준:
+- `docs/TRADING_RESEARCH_MANDATE.md`
+- `docs/MARKET_DATA_SPEC.md`
+
 ## 필요한 Secret
 
 GitHub 저장소에서 다음 위치에 OpenAI API 키를 한 번 등록해야 합니다.
@@ -74,6 +106,13 @@ GitHub 저장소에서 다음 위치에 OpenAI API 키를 한 번 등록해야 �
 
 ```
 OPENAI_API_KEY
+```
+
+국내시장 실데이터까지 사용하려면 다음 두 Secret도 등록합니다.
+
+```
+KIWOOM_APP_KEY
+KIWOOM_SECRET_KEY
 ```
 
 ## 로컬 테스트
