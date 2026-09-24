@@ -54,12 +54,14 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: python -m autoresearch evolve --mode "$MODE"
       - name: Fetch Toss provider snapshot
+        if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
         env:
           TOSS_SNAPSHOT_URL: ${{ secrets.TOSS_SNAPSHOT_URL }}
           TOSS_SNAPSHOT_TOKEN: ${{ secrets.TOSS_SNAPSHOT_TOKEN }}
         run: python scripts/fetch_toss_snapshot.py
 
       - name: Korea market tape tick
+        if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           KIWOOM_APP_KEY: ${{ secrets.KIWOOM_APP_KEY }}
@@ -86,7 +88,7 @@ jobs:
         run: python scripts/build_site.py
       - name: Validate final repository state
         run: |
-          python -m compileall -q src
+          python -m compileall -q src collector scripts
           pytest -q
           git diff --check
       - name: Commit this tick
