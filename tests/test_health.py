@@ -98,3 +98,32 @@ def test_repeated_failure_escalates(tmp_path, monkeypatch):
     second = watchdog.run()
     assert first["status"] == "NOTICE"
     assert second["status"] == "WARN"
+
+
+def test_watchdog_identifies_toss_collector_outage(tmp_path, monkeypatch):
+    watchdog = make_watchdog(tmp_path)
+    write_json(
+        tmp_path / "data/market/runtime.json",
+        {
+            "generated_at": "2026-09-25T09:59:00+09:00",
+            "source_status": "toss_snapshot_unavailable",
+            "provider": "toss",
+        },
+    )
+    write_json(
+        tmp_path / "data/risk/runtime.json",
+        {"generated_at": "2026-09-25T09:59:00+09:00"},
+    )
+    write_json(
+        tmp_path / "data/risk/latest.json",
+        {"macro": {}, "upcoming_events": [{"title": "x"}]},
+    )
+    write_json(
+        tmp_path / "data/macro/current.json",
+        {"captured_at": "2026-09-25T09:59:00+09:00", "values": {}},
+    )
+    monkeypatch.setattr(health, "datetime", FixedDateTime)
+
+    result = watchdog.run()
+    codes = {x["code"] for x in result["issues"]}
+    assert "toss-collector-unavailable" in codes
