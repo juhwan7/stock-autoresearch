@@ -68,6 +68,13 @@ CLOSE_EVENT_FIELDS = [
     "recent_listing_positive_burst_count",
     "recent_listing_10eok_event_count",
     "coflow_group_count",
+    "risk_level_latest",
+    "overnight_max_risk_level",
+    "overnight_risk_hash",
+    "overnight_biggest_risk",
+    "overnight_event_level",
+    "overnight_macro_level",
+    "risk_last_updated_at",
     "next_date",
     "next_open",
     "next_high",
@@ -1202,6 +1209,24 @@ class MarketIntelEngine:
                     x
                     for x in close_completed
                     if str(x.get("synchronized_coflow")) == "1"
+                ],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "Overnight Risk VETO",
+                [
+                    x
+                    for x in close_completed
+                    if str(x.get("overnight_max_risk_level")) == "VETO"
+                ],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "Overnight Risk LOW/WATCH",
+                [
+                    x
+                    for x in close_completed
+                    if str(x.get("overnight_max_risk_level")) in {"LOW", "WATCH"}
                 ],
                 ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
             ),
