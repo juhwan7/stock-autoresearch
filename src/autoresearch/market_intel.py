@@ -24,6 +24,7 @@ from .pullback_stats import (
     cooldown_allows,
     detect_pullback_event,
 )
+from .toss_bridge import TossCollectorBridge, TossSnapshotError
 
 
 KST = timezone(timedelta(hours=9))
@@ -68,6 +69,16 @@ CLOSE_EVENT_FIELDS = [
     "recent_listing_positive_burst_count",
     "recent_listing_10eok_event_count",
     "coflow_group_count",
+    "nxt_eligible",
+    "nxt_after_last_price",
+    "nxt_after_return_pct",
+    "nxt_after_krx_close_premium_pct",
+    "nxt_after_amount",
+    "nxt_after_max_minute_amount",
+    "nxt_after_10eok_count",
+    "nxt_after_20eok_count",
+    "nxt_amount_estimated",
+    "nxt_last_updated_at",
     "risk_level_latest",
     "overnight_max_risk_level",
     "overnight_risk_hash",
@@ -97,6 +108,19 @@ def in_krx_intraday(now: datetime | None = None) -> bool:
         return False
     hhmm = now.strftime("%H:%M")
     return "09:00" <= hhmm <= "15:40"
+
+
+def in_domestic_monitor_window(now: datetime | None = None) -> bool:
+    """Toss Collector 기준 국내 통합시장 감시 창.
+
+    08:00 프리마켓부터 NXT 애프터마켓 종료 직후까지를 감시한다.
+    모든 종목이 NXT 거래대상이라는 뜻은 아니다.
+    """
+    now = now or datetime.now(KST)
+    if now.weekday() >= 5:
+        return False
+    hhmm = now.strftime("%H:%M")
+    return "08:00" <= hhmm <= "20:10"
 
 
 def load_event_csv(path: Path) -> list[dict[str, Any]]:
@@ -582,11 +606,52 @@ class MarketIntelEngine:
         dict[str, dict[str, Any]],
         dict[str, Any],
     ]:
+        now = datetime.now(KST)
+        provider_cfg = self.cfg.get("providers", {})
+        toss_error = ""
+        if str(provider_cfg.get("primary", "toss_collector")) == "toss_collector":
+            bridge = TossCollectorBridge(
+                self.root,
+                snapshot_path=str(
+                    provider_cfg.get(
+                        "toss_snapshot",
+                        "data/providers/toss/latest.json",
+                    )
+                ),
+                max_age_minutes=int(
+                    provider_cfg.get("toss_max_age_minutes", 20)
+                ),
+            )
+            try:
+                minute, metadata, source_state = bridge.market_payload(now)
+                source_state["fallback_used"] = False
+                return minute, metadata, source_state
+            except TossSnapshotError as exc:
+                toss_error = str(exc)
+
+        if not in_krx_intraday(now):
+            return {}, {}, {
+                "source": "toss_collector",
+                "provider": "toss",
+                "status": "toss_snapshot_unavailable",
+                "reason": (
+                    toss_error
+                    or "토스 Collector 데이터가 없어 NXT 시간대 분석을 수행할 수 없음"
+                ),
+                "fallback_used": False,
+            }
+
         if not os.getenv("KIWOOM_APP_KEY") or not os.getenv("KIWOOM_SECRET_KEY"):
             return {}, {}, {
-                "source": "kiwoom",
+                "source": "provider_chain",
+                "provider": "none",
                 "status": "needs_credentials",
-                "reason": "KIWOOM_APP_KEY / KIWOOM_SECRET_KEY가 등록되지 않음",
+                "reason": (
+                    "토스 Collector 사용 불가: "
+                    + (toss_error or "스냅샷 없음")
+                    + " / KIWOOM_APP_KEY·KIWOOM_SECRET_KEY도 없음"
+                ),
+                "fallback_used": False,
             }
 
         source = KiwoomSource()
@@ -636,7 +701,6 @@ class MarketIntelEngine:
             if rank_total
             else None
         )
-        now = datetime.now(KST)
         metadata = self._reference_metadata(source, now)
 
         today = now.strftime("%Y-%m-%d")
@@ -739,6 +803,9 @@ class MarketIntelEngine:
 
         return minute_by_ticker, metadata, {
             "source": "kiwoom",
+            "provider": "kiwoom",
+            "fallback_used": True,
+            "fallback_reason": toss_error,
             "status": "ok" if minute_by_ticker else "no_rows",
             "ranking_count": len(ranking),
             "detail_count": len(minute_by_ticker),
@@ -920,6 +987,61 @@ class MarketIntelEngine:
             write_event_csv(path, rows, CLOSE_EVENT_FIELDS)
 
         return {"created": created, "completed": completed}
+
+    def _update_nxt_after_events(
+        self,
+        now: datetime,
+        source_state: dict[str, Any],
+    ) -> dict[str, int]:
+        postmarket = source_state.get("postmarket", {})
+        stocks = postmarket.get("stocks", [])
+        if source_state.get("provider") != "toss" or not isinstance(stocks, list):
+            return {"updated": 0}
+
+        by_ticker = {
+            str(item.get("ticker") or ""): item
+            for item in stocks
+            if isinstance(item, dict) and item.get("ticker")
+        }
+        if not by_ticker:
+            return {"updated": 0}
+
+        path = self.stats_dir / "close_bet_events.csv"
+        rows = load_event_csv(path)
+        today = now.strftime("%Y-%m-%d")
+        updated = 0
+        for row in rows:
+            if str(row.get("signal_date") or "") != today:
+                continue
+            ticker = str(row.get("ticker") or "")
+            item = by_ticker.get(ticker)
+            if not item:
+                continue
+            row["nxt_eligible"] = "1"
+            row["nxt_after_last_price"] = item.get("last_price", "")
+            row["nxt_after_return_pct"] = item.get("return_pct", "")
+            row["nxt_after_krx_close_premium_pct"] = item.get(
+                "krx_close_premium_pct", ""
+            )
+            row["nxt_after_amount"] = item.get("amount", "")
+            row["nxt_after_max_minute_amount"] = item.get(
+                "max_minute_amount", ""
+            )
+            row["nxt_after_10eok_count"] = item.get(
+                "minute_ge_10eok_count", 0
+            )
+            row["nxt_after_20eok_count"] = item.get(
+                "minute_ge_20eok_count", 0
+            )
+            row["nxt_amount_estimated"] = (
+                "1" if item.get("amount_estimated") else "0"
+            )
+            row["nxt_last_updated_at"] = now.isoformat()
+            updated += 1
+
+        if updated:
+            write_event_csv(path, rows, CLOSE_EVENT_FIELDS)
+        return {"updated": updated}
 
     def _pullback_research_due(self, now: datetime) -> bool:
         cfg = self.cfg.get("pullback_research", {})
@@ -1478,12 +1600,12 @@ class MarketIntelEngine:
             minute, metadata = synthetic_market()
             source_state = {"source": "synthetic", "status": "ok"}
         else:
-            if not in_krx_intraday(now):
+            if not in_domestic_monitor_window(now):
                 minute, metadata = {}, {}
                 source_state = {
-                    "source": "kiwoom",
-                    "status": "outside_regular_session",
-                    "reason": "현재 국내시장 분봉 수집 시간(09:00~15:40)이 아님",
+                    "source": "provider_chain",
+                    "status": "outside_domestic_monitor_window",
+                    "reason": "현재 국내시장 감시 시간(08:00~20:10)이 아님",
                 }
             else:
                 minute, metadata, source_state = self._collect_live()
@@ -1498,6 +1620,11 @@ class MarketIntelEngine:
                 source_state,
             )
 
+        nxt_update = (
+            self._update_nxt_after_events(now, source_state)
+            if self.mode == "live"
+            else {"updated": 0}
+        )
         pullback_update = self._run_pullback_research(now)
         strategy_stats = self._strategy_stats()
         interpretation = (
@@ -1514,6 +1641,7 @@ class MarketIntelEngine:
             "strategy_stats": strategy_stats,
             "event_update": {
                 "close_bet": event_update,
+                "nxt_after": nxt_update,
                 "pullback": pullback_update,
             },
             "interpretation": interpretation,
@@ -1589,6 +1717,7 @@ class MarketIntelEngine:
             "report": result.get("report"),
             "events": {
                 "close_bet": event_update,
+                "nxt_after": nxt_update,
                 "pullback": pullback_update,
             },
         }
