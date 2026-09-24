@@ -148,7 +148,9 @@ class EvolutionEngine:
             if rel.startswith(prefix):
                 return False, "보호 경로"
 
-        if not any(rel.startswith(x) for x in self.auto.get("allowed_prefixes", [])):
+        allowed_paths = set(self.auto.get("allowed_paths", []))
+        allowed_prefix = any(rel.startswith(x) for x in self.auto.get("allowed_prefixes", []))
+        if rel not in allowed_paths and not allowed_prefix:
             return False, "자동 수정 허용 경로가 아님"
 
         if p.suffix not in set(self.auto.get("allowed_extensions", [])):
