@@ -48,6 +48,7 @@ class EvolutionEngine:
     def _memory(self) -> str:
         parts = []
         for rel in (
+            "docs/사용자_피드백.md",
             "docs/결정_원장.md",
             "docs/아이디어_보드.md",
             "docs/실험_기록.md",
@@ -67,10 +68,12 @@ class EvolutionEngine:
             "config/점수기준.yaml",
             "config/출처.yaml",
             "config/자기진화.yaml",
+            "config/알림피드백.yaml",
             "config/시장분석.yaml",
             "config/리스크.yaml",
             "config/회귀탐지.yaml",
             "config/주요일정_2026.yaml",
+            "docs/사용자_피드백.md",
             "docs/매매연구_원칙.md",
             "docs/오버나이트_리스크_차단.md",
             "docs/회귀탐지_롤백.md",
