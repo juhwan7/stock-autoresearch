@@ -88,13 +88,13 @@ python -m autoresearch market-intel --mode dry-run
 python -m autoresearch market-intel --mode live
 ```
 
-현재 동작 중인 Market Tape V1은 키움 REST 읽기 전용 조회를 사용합니다. 신규 데이터 개발의 우선 공급자는 **토스증권 Open API**로 전환했습니다. 토스는 허용 IP가 필요하므로 20시 NXT 통합 실시간 체결은 고정 IP Collector가 준비되면 연결합니다. 주문 기능은 구현하지 않습니다.
+현재 Market Tape는 **Toss-first Provider Chain**을 사용합니다. canonical Collector는 `src/autoresearch/toss_collector.py`이며, 고정 IP 환경에서 Toss `trade:kr` 체결을 받아 KRX 정규장과 NXT 20:00까지의 실제 1분 체결대금을 생성합니다. Toss snapshot이 없을 때 KRX 정규장에서는 키움 REST를 fallback으로 사용할 수 있습니다. 주문 기능은 구현하지 않습니다.
 
 종가베팅 연구는 장중보다 넓은 거래대금 상위 50개 Universe를 장 마감에 분석하고 다음 거래일의 갭·MFE·MAE를 채웁니다. 1분 10억·20억원 이상 거래대금 반복 횟수, 장후반 흐름, 동시 그룹수급, 당일 시장 폭도 함께 저장해 조건별 결과를 비교합니다.
 
 단기스윙 눌림은 사전에 고정한 연구 코호트를 저장한 뒤 1·3·5거래일 MFE·MAE를 누적합니다. 5일 안에 +5%·+10% MFE가 나온 표본의 이전 눌림폭도 역으로 집계합니다. 성공 사례만 사후 선별하지 않습니다.
 
-현재 1분봉 거래대금은 키움 분봉의 종가×거래량으로 근사하며 실제 체결대금 합계와 차이가 있을 수 있습니다. 결과에 근사 데이터임을 명시합니다.
+Toss Collector가 연결된 경우 1분 거래대금은 실제 `Σ(체결가 × 체결량)`으로 집계합니다. 키움 fallback을 사용할 때만 분봉 종가×거래량 근사값을 쓰고 결과에 근사 여부를 명시합니다.
 
 상세 기준:
 - `docs/TRADING_RESEARCH_MANDATE.md`
@@ -102,6 +102,7 @@ python -m autoresearch market-intel --mode live
 - `docs/RISK_VETO.md`
 - `docs/DOCS_MAP.md`
 - `docs/TOSS_DATA_PLAN.md`
+- `docs/FIXED_IP_RUNNER.md`
 
 ## Overnight Risk Veto
 
@@ -142,7 +143,7 @@ KIWOOM_APP_KEY
 KIWOOM_SECRET_KEY
 ```
 
-향후 Toss 고정 IP Collector에서는:
+Toss 고정 IP Collector에서는:
 
 ```
 TOSS_CLIENT_ID
