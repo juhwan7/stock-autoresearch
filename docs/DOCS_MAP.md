@@ -21,6 +21,7 @@
 |---|---|---|---|
 | Overnight Risk | 일정, 매크로, Market Tape | risk_engine.py | [RISK_VETO](RISK_VETO.md) |
 | 국내시장 장세 | KOSPI/KOSDAQ 폭, 1분봉 거래대금 | market_intel.py, market_stats.py | [TRADING_RESEARCH_MANDATE](TRADING_RESEARCH_MANDATE.md) |
+| Data Provider 상태 | Toss snapshot, 체결 신선도, 구독/거절, fallback | health.py, toss_collector.py | [TOSS_DATA_PLAN](TOSS_DATA_PLAN.md), [FIXED_IP_RUNNER](FIXED_IP_RUNNER.md) |
 | 신규주 흐름 | 상장일, 1분 거래대금 Burst | market_stats.py | [MARKET_DATA_SPEC](MARKET_DATA_SPEC.md) |
 | 동조 수급 | 그룹/섹터 동시 Burst | market_stats.py | [TRADING_RESEARCH_MANDATE](TRADING_RESEARCH_MANDATE.md) |
 | 종가베팅 통계 | 다음날 갭·MFE·MAE | market_intel.py | [TRADING_RESEARCH_MANDATE](TRADING_RESEARCH_MANDATE.md) |
@@ -49,6 +50,7 @@ Risk Veto 결과는 다음날 갭 연구의 조건으로 다시 저장한다.
 - [Overnight Risk Veto](RISK_VETO.md)
 - [자동 회귀 탐지와 기능 단위 롤백](REGRESSION_GUARD.md)
 - [토스증권 데이터 전환 계획](TOSS_DATA_PLAN.md)
+- [고정 IP Toss Collector 운영](FIXED_IP_RUNNER.md)
 - [자기진화 규칙](EVOLUTION_RULES.md)
 
 권장 읽기 흐름: 현재 장세 → Risk Veto → 종가베팅 통계 → Regression Guard → 최근 AI 변경.
