@@ -96,6 +96,7 @@ def main() -> None:
         "market_runtime": read_json(ROOT / "data" / "market" / "runtime.json"),
         "risk": read_json(ROOT / "data" / "risk" / "latest.json"),
         "risk_runtime": read_json(ROOT / "data" / "risk" / "runtime.json"),
+        "health": read_json(ROOT / "data" / "health" / "latest.json"),
         "docs_links": [
             {
                 "title": "문서 지도",
