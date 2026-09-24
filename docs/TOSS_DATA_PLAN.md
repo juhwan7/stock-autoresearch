@@ -4,6 +4,24 @@
 
 현재 Market Tape의 기존 키움 코드는 즉시 삭제하지 않고 fallback/비교용으로 남겨두되, 신규 개발의 우선 데이터 공급자는 Toss Open API로 전환한다.
 
+## 현재 구현 상태
+
+완료:
+- `src/autoresearch/toss_bridge.py` 구현
+- `data/providers/toss/latest.json` 정규화 계약 정의
+- 신선한 Toss 스냅샷이 있으면 키움보다 우선 사용
+- Toss 스냅샷이 없고 KRX 정규장이라면 키움 fallback
+- KRX 종료 후에는 Toss 데이터가 없으면 NXT 흐름을 추측하지 않고 `toss_snapshot_unavailable`로 기록
+- 15:40~20:00 NXT 애프터마켓 가격·거래대금·KRX 종가 대비 프리미엄을 종가베팅 이벤트에 저장
+- Health Watchdog에서 Toss Collector 장애를 별도 분류
+
+남은 외부 준비:
+- 고정 공인 IP Collector 실행환경
+- Toss Open API 인증정보와 허용 IP 등록
+- Collector가 실제 WebSocket 체결을 받아 `latest.json` 계약으로 공급
+
+즉 저장소 쪽 수신·분석 구조는 준비됐고, 실제 20시 실시간 데이터 입력만 외부 Collector 연결이 남아 있다.
+
 ## 토스에서 활용할 기능
 
 - 국내·미국 현재가
