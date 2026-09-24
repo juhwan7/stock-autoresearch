@@ -44,17 +44,29 @@ def extract_json(text: str) -> dict[str, Any]:
 
 
 class ResearchLLM:
-    def __init__(self, model_cfg: dict[str, Any]):
+    def __init__(self, model_cfg: dict[str, Any] | None = None):
         if not os.getenv("OPENAI_API_KEY"):
             raise RuntimeError(
                 "OPENAI_API_KEY is required for live mode. Use --mode dry-run to test without a key."
             )
         self.client = OpenAI()
-        self.model = model_cfg.get("name", "gpt-5.6-terra")
-        self.reasoning_effort = model_cfg.get("reasoning_effort", "high")
-        self.search_context = model_cfg.get("web_search_context", "medium")
+        self.default_cfg = model_cfg or {}
 
-    def request_json(self, prompt: str, *, web: bool) -> dict[str, Any]:
+    def request_json(
+        self,
+        prompt: str,
+        *,
+        web: bool,
+        model_cfg: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        cfg = dict(self.default_cfg)
+        if model_cfg:
+            cfg.update(model_cfg)
+
+        model = cfg.get("name", "gpt-5.6-terra")
+        effort = cfg.get("reasoning_effort", "high")
+        search_context = cfg.get("web_search_context", "medium")
+
         last_raw = ""
         last_error: Exception | None = None
 
@@ -67,16 +79,16 @@ class ResearchLLM:
                 )
 
             kwargs: dict[str, Any] = {
-                "model": self.model,
+                "model": model,
                 "input": current_prompt,
             }
-            if self.reasoning_effort:
-                kwargs["reasoning"] = {"effort": self.reasoning_effort}
+            if effort:
+                kwargs["reasoning"] = {"effort": effort}
             if web:
                 kwargs["tools"] = [
                     {
                         "type": "web_search",
-                        "search_context_size": self.search_context,
+                        "search_context_size": search_context,
                     }
                 ]
 
