@@ -26,6 +26,15 @@
 6. 데이터가 없으면 리스크가 없다고 판단하지 말고 unknown으로 남긴다.
 7. 통계적 갭상승 확률은 실제 축적 표본이 없으면 만들어내지 않는다.
 8. 매수·매도 추천을 하지 않는다.
+9. 매크로는 개별 숫자를 따로 보지 말고 교차자산 흐름으로 묶어서 본다.
+   - 국내: KOSPI·KOSDAQ·KOSPI200 선물·야간선물·USD/KRW·한국 국채
+   - 미국 성장주: Nasdaq 현물/선물·SOX·VIX
+   - 금리/달러: 미국 2년·10년 금리·DXY·USD/KRW·USD/CNH
+   - 아시아: Nikkei·Hang Seng·China A50
+   - 경기/인플레 민감: WTI·구리·금
+10. 서로 같은 방향이면 정렬된 위험 신호로 보고, 서로 반대면 conflicting_signals에 명시한다.
+11. “나스닥 하락 → 국내 반도체 약세”처럼 단순 인과로 확정하지 않는다. 전달 경로를 설명하고 반대 신호가 있는지 같이 본다.
+12. 야간선물·나스닥선물·금리·달러가 동시에 위험 방향이면 단일 자산 하나보다 Overnight Gap Risk를 더 높게 본다.
 
 JSON 하나만 출력:
 {
@@ -36,6 +45,10 @@ JSON 하나만 출력:
     "severity": 1
   },
   "summary": "종가베팅 관점의 시황 리스크 한 문장",
+  "macro_regime": "RISK_ON|NEUTRAL|MIXED|RISK_OFF|STRESS|UNKNOWN",
+  "macro_transmission_paths": [
+    "예: 미10Y 상승 + DXY 상승 → 성장주 할인율/외국인 수급 경로 주의"
+  ],
   "veto_reasons": ["..."],
   "supportive_factors": ["..."],
   "conflicting_signals": ["..."],
