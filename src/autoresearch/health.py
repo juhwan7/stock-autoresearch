@@ -172,6 +172,7 @@ class HealthWatchdog:
             )
         )
         provider_state = snapshot or persisted
+        using_persisted = not bool(snapshot) and bool(persisted)
         fetch_runtime = _read_json(
             self.root / comp.get(
                 "fetch_runtime_file",
@@ -204,7 +205,12 @@ class HealthWatchdog:
         snapshot_age = _age_minutes(provider_state.get("captured_at"), now)
         snapshot_limit = float(
             self.cfg.get("thresholds", {}).get(
-                "toss_snapshot_stale_minutes", 5
+                (
+                    "toss_persisted_stale_minutes"
+                    if using_persisted
+                    else "toss_snapshot_stale_minutes"
+                ),
+                20 if using_persisted else 5,
             )
         )
         if snapshot_age is None or snapshot_age > snapshot_limit:
@@ -261,7 +267,12 @@ class HealthWatchdog:
         trade_age = _age_minutes(collector.get("last_message_at"), now)
         trade_limit = float(
             self.cfg.get("thresholds", {}).get(
-                "toss_trade_stale_minutes", 5
+                (
+                    "toss_persisted_trade_stale_minutes"
+                    if using_persisted
+                    else "toss_trade_stale_minutes"
+                ),
+                20 if using_persisted else 5,
             )
         )
         hhmm = now.strftime("%H:%M")
