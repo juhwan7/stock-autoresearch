@@ -18,6 +18,12 @@ from .market_stats import (
     number,
     percent_change,
 )
+from .pullback_stats import (
+    PULLBACK_EVENT_FIELDS,
+    complete_pullback_event,
+    cooldown_allows,
+    detect_pullback_event,
+)
 
 
 KST = timezone(timedelta(hours=9))
@@ -518,6 +524,159 @@ class MarketIntelEngine:
 
         return {"created": created, "completed": completed}
 
+    def _pullback_research_due(self, now: datetime) -> bool:
+        cfg = self.cfg.get("pullback_research", {})
+        if not cfg.get("enabled", True) or now.weekday() >= 5:
+            return False
+        hhmm = now.strftime("%H:%M")
+        if not (
+            str(cfg.get("run_after", "15:30"))
+            <= hhmm
+            <= str(cfg.get("run_before", "18:00"))
+        ):
+            return False
+
+        state_path = self.root / "data" / "market" / "state" / "pullback_research.json"
+        if state_path.exists():
+            try:
+                state = json.loads(state_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                state = {}
+            if state.get("last_success_date") == now.strftime("%Y-%m-%d"):
+                return False
+        return True
+
+    def _pending_pullback_tickers(self) -> list[str]:
+        rows = load_event_csv(self.stats_dir / "pullback_events.csv")
+        tickers: list[str] = []
+        for row in rows:
+            if (
+                row.get("ticker")
+                and not row.get("forward_5d_date")
+                and row.get("ticker") not in tickers
+            ):
+                tickers.append(str(row["ticker"]))
+        return tickers
+
+    def _run_pullback_research(self, now: datetime) -> dict[str, Any]:
+        if self.mode != "live":
+            return {"status": "dry_run_skip", "created": 0, "completed": 0}
+        if not self._pullback_research_due(now):
+            return {"status": "not_due", "created": 0, "completed": 0}
+        if not os.getenv("KIWOOM_APP_KEY") or not os.getenv("KIWOOM_SECRET_KEY"):
+            return {"status": "needs_credentials", "created": 0, "completed": 0}
+
+        cfg = self.cfg.get("pullback_research", {})
+        source = KiwoomSource()
+        limit = int(cfg.get("universe_limit", 20))
+        ranking = source.trading_value_top(limit=limit)
+        ranked_tickers = [
+            str(row.get("stk_cd") or "").split("_")[0]
+            for row in ranking
+            if row.get("stk_cd")
+        ]
+        tickers = list(ranked_tickers)
+        for ticker in self._pending_pullback_tickers():
+            if ticker not in tickers:
+                tickers.append(ticker)
+
+        metadata = self._reference_metadata(source, now)
+        path = self.stats_dir / "pullback_events.csv"
+        events = load_event_csv(path)
+        changed = False
+        created = 0
+        completed = 0
+        fetched = 0
+        base_date = now.strftime("%Y%m%d")
+
+        daily_by_ticker: dict[str, list[dict[str, Any]]] = {}
+        for ticker in tickers:
+            try:
+                raw = source.daily_chart(ticker, base_date=base_date, max_pages=1)
+                daily = source.normalize_daily_rows(raw)
+                if daily:
+                    daily_by_ticker[ticker] = daily
+                    fetched += 1
+            except KiwoomAPIError:
+                continue
+            time.sleep(0.2)
+
+        # 기존 눌림 표본의 1/3/5거래일 MFE·MAE를 먼저 완결한다.
+        for event in events:
+            ticker = str(event.get("ticker") or "")
+            daily = daily_by_ticker.get(ticker)
+            if not daily:
+                continue
+            before = str(event.get("forward_5d_date") or "")
+            if complete_pullback_event(event, daily):
+                changed = True
+                if not before and event.get("forward_5d_date"):
+                    completed += 1
+
+        # 오늘 거래대금 상위 연구 Universe에서 조건을 만족한 모든 종목을 저장한다.
+        for ticker in ranked_tickers:
+            daily = daily_by_ticker.get(ticker)
+            if not daily:
+                continue
+            event = detect_pullback_event(
+                ticker,
+                daily,
+                metadata.get(ticker),
+                min_impulse_return_pct=float(cfg.get("min_impulse_return_pct", 5.0)),
+                min_impulse_amount_krw=float(
+                    cfg.get("min_impulse_amount_krw", 100_000_000_000)
+                ),
+                min_impulse_amount_ratio=float(
+                    cfg.get("min_impulse_amount_ratio", 2.0)
+                ),
+                impulse_lookback_days=int(cfg.get("impulse_lookback_days", 25)),
+                min_drawdown_pct=float(cfg.get("min_drawdown_pct", 5.0)),
+                max_drawdown_pct=float(cfg.get("max_drawdown_pct", 35.0)),
+                min_amount_decay_pct=float(cfg.get("min_amount_decay_pct", 30.0)),
+                max_pullback_days=int(cfg.get("max_pullback_days", 20)),
+            )
+            if not event:
+                continue
+            if not cooldown_allows(
+                events,
+                ticker,
+                str(event.get("signal_date") or ""),
+                calendar_days=int(cfg.get("event_cooldown_calendar_days", 7)),
+            ):
+                continue
+            events.append(event)
+            created += 1
+            changed = True
+
+        if changed:
+            write_event_csv(path, events, PULLBACK_EVENT_FIELDS)
+
+        if fetched:
+            state_path = self.root / "data" / "market" / "state" / "pullback_research.json"
+            state_path.parent.mkdir(parents=True, exist_ok=True)
+            state_path.write_text(
+                json.dumps(
+                    {
+                        "last_success_date": now.strftime("%Y-%m-%d"),
+                        "fetched": fetched,
+                        "universe_count": len(ranked_tickers),
+                        "created": created,
+                        "completed": completed,
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+
+        return {
+            "status": "ok" if fetched else "no_daily_rows",
+            "fetched": fetched,
+            "created": created,
+            "completed": completed,
+            "universe_count": len(ranked_tickers),
+        }
+
     def _strategy_stats(self) -> dict[str, Any]:
         close_events = load_event_csv(self.stats_dir / "close_bet_events.csv")
         pullback_events = load_event_csv(self.stats_dir / "pullback_events.csv")
@@ -604,6 +763,7 @@ class MarketIntelEngine:
         if minute and self.mode == "live":
             event_update = self._update_close_bet_events(now, minute, quantitative)
 
+        pullback_update = self._run_pullback_research(now)
         strategy_stats = self._strategy_stats()
         interpretation = (
             self._interpret(quantitative, strategy_stats)
@@ -617,7 +777,10 @@ class MarketIntelEngine:
             "source": source_state,
             "quantitative": quantitative,
             "strategy_stats": strategy_stats,
-            "event_update": event_update,
+            "event_update": {
+                "close_bet": event_update,
+                "pullback": pullback_update,
+            },
             "interpretation": interpretation,
         }
 
@@ -659,5 +822,8 @@ class MarketIntelEngine:
             "stocks": quantitative.get("stock_count", 0),
             "latest": str(latest.relative_to(self.root)),
             "report": result.get("report"),
-            "events": event_update,
+            "events": {
+                "close_bet": event_update,
+                "pullback": pullback_update,
+            },
         }
