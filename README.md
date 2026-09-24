@@ -282,6 +282,10 @@ change_id를 직접 적지 않고 `좋아`처럼 답해도 직전 봇 알림과 
 
 변경이 없는 10분 Tick은 알림을 보내지 않으며, 같은 Health/Regression 상태도 중복 알림을 억제합니다.
 
+`TELEGRAM_BOT_TOKEN`과 `TELEGRAM_CHAT_ID` Secret을 등록하면 **Telegram으로도 동일한 중요 알림**을 받습니다. Telegram 메시지 아래에는 `💬 바로 피드백`과 `📊 대시보드` 버튼이 표시됩니다. 피드백 버튼은 기존 GitHub Issue #1의 즉시 피드백 루프로 연결됩니다.
+
+연결 절차는 [사용자 도움이 필요한 일](docs/사용자_도움_필요.md)의 Telegram 항목을 보면 됩니다.
+
 ## Regression Guard — 잘못된 개선 자동 감시
 
 새 기능이 테스트는 통과했지만 며칠 뒤 리서치 품질을 떨어뜨릴 수도 있습니다.
