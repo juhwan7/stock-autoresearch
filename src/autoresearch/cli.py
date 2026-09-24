@@ -7,6 +7,7 @@ from pathlib import Path
 from .evolution import EvolutionEngine
 from .market_intel import MarketIntelEngine
 from .pipeline import Pipeline
+from .risk_engine import RiskEngine
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -37,6 +38,14 @@ def build_parser() -> argparse.ArgumentParser:
         default="dry-run",
     )
     market.add_argument("--root", default=".", help="저장소 루트")
+
+    risk = sub.add_parser("risk-intel", help="일정·매크로 기반 Overnight Risk 분석")
+    risk.add_argument(
+        "--mode",
+        choices=["dry-run", "live"],
+        default="dry-run",
+    )
+    risk.add_argument("--root", default=".", help="저장소 루트")
     return parser
 
 
@@ -50,6 +59,8 @@ def main() -> None:
         result = EvolutionEngine(root, args.mode).run()
     elif args.command == "market-intel":
         result = MarketIntelEngine(root, args.mode).run()
+    elif args.command == "risk-intel":
+        result = RiskEngine(root, args.mode).run()
     else:
         raise SystemExit(2)
 
