@@ -28,7 +28,7 @@ Ubuntu 계열 예시:
 3. 서버에 Python 3.11+와 git을 설치한다.
 4. 전용 사용자 stockresearch를 만든다.
 5. 저장소를 /opt/stock-autoresearch에 clone한다.
-6. 가상환경을 만들고 pip install -e . 를 실행한다.
+6. 가상환경을 만들고 `pip install -e ".[dev]" -r collector/requirements.txt` 를 실행한다.
 7. /var/lib/stock-autoresearch/toss 디렉터리를 만들고 stockresearch가 쓸 수 있게 한다.
 
 ## 2. 인증정보
@@ -56,7 +56,7 @@ sudo systemctl status stock-autoresearch-toss
 
 journalctl -u stock-autoresearch-toss -f
 
-정상이라면 /var/lib/stock-autoresearch/toss/latest.json이 약 20초마다 갱신된다.
+정상이라면 기본 설정에서 /var/lib/stock-autoresearch/toss/latest.json이 약 10초마다 갱신된다. 주기는 collector/config.json에서 바꿀 수 있다.
 
 ## 4. Collector가 하는 일
 
@@ -121,3 +121,27 @@ Collector가 멈추더라도 마지막 유효 Market Tape를 빈 데이터로 �
 - [시장 데이터 명세](MARKET_DATA_SPEC.md)
 - [Overnight Risk Veto](RISK_VETO.md)
 - [문서 지도](DOCS_MAP.md)
+
+
+## 9. GitHub 연결 방식은 하나를 선택
+
+### A. self-hosted Runner 방식
+
+이 문서의 기본 권장 구조다.
+
+- Collector와 GitHub Runner를 같은 고정 IP 서버에 둔다.
+- `TOSS_FIXED_IP_RUNNER_ENABLED=true`
+- `.github/workflows/fixed-ip-market.yml`이 로컬 snapshot을 읽는다.
+- 별도의 공개 snapshot URL이 필요 없다.
+
+### B. HTTPS snapshot 방식
+
+GitHub-hosted runner를 계속 사용하고 싶을 때 사용한다.
+
+- Collector 서버의 `collector/serve_snapshot.py`를 localhost로 실행한다.
+- Caddy/nginx 등 HTTPS reverse proxy 뒤에 둔다.
+- `TOSS_SNAPSHOT_EXPORT_TOKEN`으로 snapshot 조회를 보호한다.
+- GitHub Actions Secret에 `TOSS_SNAPSHOT_URL`, `TOSS_SNAPSHOT_TOKEN`을 등록한다.
+- continuous workflow가 매 10분 `scripts/fetch_toss_snapshot.py`로 가져온다.
+
+두 방식을 동시에 활성화하지 않는 것을 권장한다. 같은 Market Tape를 중복 계산·커밋할 필요가 없기 때문이다.
