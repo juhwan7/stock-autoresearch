@@ -870,6 +870,7 @@ class MarketIntelEngine:
                 calendar_days=int(cfg.get("event_cooldown_calendar_days", 7)),
             ):
                 continue
+            event["cohort_version"] = str(cfg.get("cohort_version", "v1"))
             events.append(event)
             created += 1
             changed = True
@@ -907,6 +908,14 @@ class MarketIntelEngine:
         close_events = load_event_csv(self.stats_dir / "close_bet_events.csv")
         pullback_events = load_event_csv(self.stats_dir / "pullback_events.csv")
         minimum = int(self.cfg.get("statistics", {}).get("min_sample_size", 20))
+        current_pullback_version = str(
+            self.cfg.get("pullback_research", {}).get("cohort_version", "v1")
+        )
+        pullback_events = [
+            x
+            for x in pullback_events
+            if str(x.get("cohort_version") or "v1") == current_pullback_version
+        ]
 
         close_completed = [x for x in close_events if x.get("next_date")]
         pullback_completed = [
@@ -1048,6 +1057,7 @@ class MarketIntelEngine:
                 "patterns": close_patterns,
             },
             "pullback": {
+                "cohort_version": current_pullback_version,
                 "pending": len(pullback_events) - len(pullback_completed),
                 "ready": len(pullback_completed) >= minimum,
                 "reliability": reliability(len(pullback_completed)),
