@@ -77,3 +77,12 @@ python -m autoresearch risk-intel --mode dry-run
 ```
 
 현재 Market Tape V1의 실전 데이터는 키움 읽기 전용 조회를 사용한다. 신규 데이터 계층은 토스증권 Open API를 우선하며, Toss 실시간 연결은 고정 IP Collector에서 수행한다. 어떤 공급자에서도 주문 기능은 구현하지 않는다.
+
+
+## 파일명·한국어 UX 규칙
+
+사람이 직접 읽는 새 문서, 프롬프트, GitHub Actions workflow, 운영 안내 파일은 한글 파일명을 우선한다.
+
+예외는 GitHub/Python/웹 도구가 표준 이름이나 import 경로로 직접 사용하는 기술 파일이다. `README.md`, `AGENTS.md`, `pyproject.toml`, `.gitignore`, `site/index.html`, `src/autoresearch/*.py`, 테스트 파일 등은 안정성을 위해 영어 이름을 유지할 수 있다.
+
+새 사용자-facing Markdown을 영문 파일명으로 만들지 않는다. 기존 한글 문서를 다시 영문명으로 되돌리지 않는다.
