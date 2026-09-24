@@ -224,8 +224,8 @@ class HealthWatchdog:
             )
 
         collector = provider_state.get("collector", {})
-        subscriptions = collector.get("subscriptions", [])
-        rejected = collector.get("rejected", [])
+        subscriptions = collector.get("subscriptions")
+        rejected = collector.get("rejected")
         subscription_count = (
             len(subscriptions)
             if isinstance(subscriptions, list)
