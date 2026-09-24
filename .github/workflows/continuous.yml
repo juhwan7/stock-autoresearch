@@ -53,6 +53,13 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: python -m autoresearch evolve --mode "$MODE"
+      - name: Korea market tape tick
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          KIWOOM_APP_KEY: ${{ secrets.KIWOOM_APP_KEY }}
+          KIWOOM_SECRET_KEY: ${{ secrets.KIWOOM_SECRET_KEY }}
+        run: python -m autoresearch market-intel --mode "$MODE"
+
       - name: Market research tick
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
