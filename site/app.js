@@ -21,6 +21,46 @@ async function load() {
     `<div class="metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`
   ).join("");
 
+  const market = data.market || {};
+  const q = market.quantitative || {};
+  const interp = market.interpretation || {};
+  const source = market.source || {};
+  $("market-status").textContent = source.status || q.status || "데이터 없음";
+
+  if (q.status === "ok") {
+    const breadth = q.breadth || {};
+    const turnover = q.turnover || {};
+    $("market-summary").innerHTML =
+      `<div class="regime"><strong>${esc(interp.regime_name || "정량 장세 분석")}</strong><p>${esc(interp.one_line || "분봉 거래대금과 시장 폭을 분석 중입니다.")}</p></div>` +
+      `<div class="market-numbers">
+        <span>분석 종목 <b>${esc(q.stock_count || 0)}</b></span>
+        <span>상승 <b>${esc(breadth.advancers || 0)}</b></span>
+        <span>하락 <b>${esc(breadth.decliners || 0)}</b></span>
+        <span>Top10 집중 <b>${((turnover.top10_share || 0) * 100).toFixed(1)}%</b></span>
+      </div>`;
+
+    $("burst-leaders").innerHTML = (q.burst_leaders || []).slice(0, 6).map((x) =>
+      `<div class="mini-row"><strong>${esc(x.name || x.ticker)}</strong><span>${esc(x.burst_count)}회 · 최대 ${esc(x.max_burst_ratio)}배</span></div>`
+    ).join("") || "<p class='muted'>조건 충족 종목 없음</p>";
+
+    $("coflow-groups").innerHTML = (q.coflow_groups || []).slice(0, 5).map((x) =>
+      `<div class="mini-row"><strong>${esc(x.group)}</strong><span>${esc(x.positive_burst_members)}종목 동조</span></div>`
+    ).join("") || "<p class='muted'>확인된 동조 그룹 없음</p>";
+
+    const st = market.strategy_stats || {};
+    const closeN = (((st.close_bet || {}).summary || {}).sample_size || 0);
+    const swingN = (((st.pullback || {}).summary || {}).sample_size || 0);
+    $("strategy-stats").innerHTML =
+      `<div class="mini-row"><strong>종가베팅</strong><span>표본 ${closeN}개</span></div>` +
+      `<div class="mini-row"><strong>눌림스윙</strong><span>표본 ${swingN}개</span></div>`;
+  } else {
+    const reason = source.reason || q.reason || "국내시장 실데이터가 아직 연결되지 않았습니다.";
+    $("market-summary").innerHTML = `<div class="regime"><strong>분석 대기</strong><p>${esc(reason)}</p></div>`;
+    $("burst-leaders").innerHTML = "<p class='muted'>데이터 필요</p>";
+    $("coflow-groups").innerHTML = "<p class='muted'>데이터 필요</p>";
+    $("strategy-stats").innerHTML = "<p class='muted'>표본 축적 전</p>";
+  }
+
   $("reports").innerHTML = (data.reports || []).length
     ? data.reports.map((r) =>
       `<a class="report" href="${esc(r.github_url)}" target="_blank" rel="noreferrer">
