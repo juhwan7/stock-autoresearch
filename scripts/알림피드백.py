@@ -4,11 +4,15 @@ import argparse
 import json
 import os
 import subprocess
+import sys
 import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 
 from autoresearch.feedback import (
     classify_feedback,
@@ -17,7 +21,6 @@ from autoresearch.feedback import (
 )
 
 
-ROOT = Path(__file__).resolve().parents[1]
 KST = timezone(timedelta(hours=9))
 
 
