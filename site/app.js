@@ -62,7 +62,7 @@ async function load() {
     ).join("") || `<p class="muted">현재 상세 Universe에서 신규주 흐름 없음</p>`;
 
     $("coflow-groups").innerHTML = (q.coflow_groups || []).slice(0, 5).map((x) =>
-      `<div class="mini-row"><strong>${esc(x.group)}</strong><span>${esc(x.positive_burst_members)}종목 동조</span></div>`
+      `<div class="mini-row"><strong>${esc(x.group)}</strong><span>${esc(x.synchronized_burst_members || 0)}종목 · ${esc(x.synchronized_center || "-")} 동조</span></div>`
     ).join("") || "<p class='muted'>확인된 동조 그룹 없음</p>";
 
     const st = market.strategy_stats || {};
