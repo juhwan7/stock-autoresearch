@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: stock-autoresearch-writer
@@ -29,6 +30,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: Tick 시작 커밋 저장
+        run: echo "TICK_BASE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -109,3 +112,12 @@ jobs:
             git pull --rebase
             git push
           fi
+
+      - name: GitHub Issue 변경 알림
+        if: env.MODE == 'live'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/알림피드백.py notify \
+            --issue 1 \
+            --base-sha "$TICK_BASE_SHA"
