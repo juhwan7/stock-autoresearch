@@ -31,7 +31,7 @@ function esc(value = "") {
 }
 
 async function load() {
-  const response = await fetch("data/status.json", { cache: "no-store" });
+  const response = await fetch("data/상태.json", { cache: "no-store" });
   if (!response.ok) throw new Error("status.json을 불러오지 못했습니다.");
   const data = await response.json();
 
