@@ -1,0 +1,25 @@
+[Unit]
+Description=Stock AutoResearch Toss realtime market collector
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=stockresearch
+Group=stockresearch
+WorkingDirectory=/opt/stock-autoresearch
+EnvironmentFile=/etc/stock-autoresearch/toss.env
+ExecStart=/opt/stock-autoresearch/.venv/bin/python -m autoresearch toss-collector --output /var/lib/stock-autoresearch/toss/latest.json --top-n 80 --ranking-refresh 600 --snapshot-seconds 20
+Restart=always
+RestartSec=5
+TimeoutStopSec=20
+
+# 주문/계좌 API를 사용하지 않는 읽기 전용 Collector.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/stock-autoresearch
+
+[Install]
+WantedBy=multi-user.target
