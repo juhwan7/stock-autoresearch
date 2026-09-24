@@ -61,7 +61,7 @@ async function load() {
         <span>KOSPI <b>${kospi.change_pct ?? "-"}%</b><small>상승 ${kospi.rising ?? "-"} / 하락 ${kospi.falling ?? "-"}</small></span>
         <span>KOSDAQ <b>${kosdaq.change_pct ?? "-"}%</b><small>상승 ${kosdaq.rising ?? "-"} / 하락 ${kosdaq.falling ?? "-"}</small></span>
         <span>상세 분석 <b>${esc(q.stock_count || 0)}종목</b><small>거래대금 중심 Universe</small></span>
-        <span>Top10 집중 <b>${((turnover.top10_share || 0) * 100).toFixed(1)}%</b><small>상세 Universe 내</small></span>
+        <span>Top10 집중 <b>${(((source.turnover_rank_top10_share ?? turnover.top10_share) || 0) * 100).toFixed(1)}%</b><small>거래대금 순위 기준</small></span>
       </div>`;
 
     $("burst-leaders").innerHTML = (q.burst_leaders || []).slice(0, 6).map((x) =>
