@@ -135,6 +135,66 @@ class KiwoomSource:
             return []
         return [x for x in rows if isinstance(x, dict)][:limit]
 
+    def daily_chart(
+        self,
+        ticker: str,
+        *,
+        base_date: str,
+        max_pages: int = 1,
+        request_delay: float = 0.2,
+    ) -> list[dict[str, Any]]:
+        """주식일봉차트조회(ka10081).
+
+        수정주가를 적용하고 일자·OHLC·거래량·거래대금을 반환한다.
+        """
+        body = {
+            "stk_cd": ticker,
+            "base_dt": base_date,
+            "upd_stkpc_tp": "1",
+        }
+        rows: list[dict[str, Any]] = []
+        cont_yn = None
+        next_key = None
+        for page in range(max_pages):
+            payload, headers = self._request(
+                "/api/dostk/chart",
+                body,
+                api_id="ka10081",
+                cont_yn=cont_yn,
+                next_key=next_key,
+            )
+            batch = payload.get("stk_dt_pole_chart_qry", [])
+            if isinstance(batch, list):
+                rows.extend(x for x in batch if isinstance(x, dict))
+            cont_yn = headers.get("cont-yn")
+            next_key = headers.get("next-key")
+            if cont_yn != "Y" or not next_key:
+                break
+            if page + 1 < max_pages:
+                time.sleep(request_delay)
+        return rows
+
+    @staticmethod
+    def normalize_daily_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = []
+        for row in rows:
+            dt = str(row.get("dt") or "")
+            close = str(row.get("cur_prc") or "").lstrip("+-")
+            result.append(
+                {
+                    "date": dt,
+                    "open": str(row.get("open_pric") or "").lstrip("+-"),
+                    "high": str(row.get("high_pric") or "").lstrip("+-"),
+                    "low": str(row.get("low_pric") or "").lstrip("+-"),
+                    "close": close,
+                    "volume": str(row.get("trde_qty") or "").lstrip("+-"),
+                    "amount": str(row.get("trde_prica") or "").lstrip("+-"),
+                    "turnover_rate": str(row.get("trde_tern_rt") or "").lstrip("+-"),
+                }
+            )
+        result.sort(key=lambda x: str(x.get("date") or ""))
+        return result
+
     def minute_chart(
         self,
         ticker: str,
