@@ -386,6 +386,18 @@ class RiskEngine:
             "coflow_groups": quantitative.get("coflow_groups", [])[:5],
         }
 
+    def _logic_hashes(self) -> dict[str, str]:
+        result: dict[str, str] = {}
+        for rel in self.cfg.get("dirty_state", {}).get("logic_files", []):
+            path = self.root / str(rel)
+            try:
+                content = path.read_bytes()
+            except OSError:
+                result[str(rel)] = "missing"
+                continue
+            result[str(rel)] = hashlib.sha256(content).hexdigest()
+        return result
+
     def _semantic_payload(
         self,
         event_level: str,
@@ -406,6 +418,7 @@ class RiskEngine:
             rounded_macro[key] = _round_value(value, unit)
 
         return {
+            "logic_hashes": self._logic_hashes(),
             "event_level": event_level,
             "next_event": {
                 "id": biggest.get("id") if biggest else None,
