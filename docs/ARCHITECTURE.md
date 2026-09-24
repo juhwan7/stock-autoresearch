@@ -10,6 +10,13 @@
               ┌──────────────┴──────────────┐
               │                             │
        Market Research                 Project Evolution
+              │
+       Domestic Market Tape
+       ├─ 거래대금 상위
+       ├─ 1분봉 Burst
+       ├─ 신규주 흐름
+       ├─ 그룹/섹터 동조
+       └─ 종배/눌림 통계
               │                             │
        Luna Scanner                    Luna Scout
               │                             │
@@ -46,3 +53,32 @@
 ## 변경 권한
 
 Evolution Agent의 자동 수정 범위와 보호 범위는 `config/evolution.yaml`과 `docs/EVOLUTION_RULES.md`가 함께 정의한다.
+
+
+## 국내시장 Market Tape 계층
+
+```text
+Kiwoom REST (read-only)
+    ↓
+거래대금 상위 Universe
+    ↓
+상위 종목 1분봉
+    ↓
+MarketStats
+ ├─ 분봉 거래대금 Burst
+ ├─ 장후반 거래대금 비중
+ ├─ 상승/하락 시장 폭
+ ├─ 상위 종목 거래대금 집중도
+ ├─ 신규주 흐름
+ └─ 그룹/섹터 동조
+    ↓
+Market Regime AI
+    ↓
+현재 장세 / 종가베팅 경고 / 눌림 관점
+    ↓
+data/market/latest.json
+reports/market/
+GitHub Pages
+```
+
+시장 데이터가 없을 때 AI가 추측으로 장세를 만들지 않는다. 이 경우 `insufficient_data` 또는 `needs_credentials`를 명시한다.
