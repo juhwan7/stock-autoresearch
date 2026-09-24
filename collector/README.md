@@ -1,72 +1,61 @@
 # Toss 실시간 Collector
 
-이 디렉터리는 고정 IP 서버에서 08:00~20:00 국내 통합 체결을 모으는 **읽기 전용** Collector다.
+이 디렉터리는 고정 IP 서버 배포를 위한 호환 파일과 보조 도구를 둔다.
 
-주문 API는 호출하지 않는다.
+**실제 Collector 구현의 단일 소스는 `src/autoresearch/toss_collector.py`다.**
 
-## 왜 별도 서버인가
+따라서 새 기능·버그 수정은 패키지 구현 한 곳에만 적용한다. `collector/toss_collector.py`는 기존 실행 경로를 깨지 않기 위한 얇은 호환 래퍼다.
 
-토스증권 Open API는 허용 IP 등록이 필요하고, 국내 WebSocket은 KRX+NXT 통합 체결을 제공한다.
+## 실행
 
-GitHub-hosted runner는 고정 IP 상시 WebSocket 수집기로 사용하지 않는다.
-
-## 수집 흐름
-
-1. OAuth2 Client Credentials로 access token 발급.
-2. 시장 전체 거래대금 랭킹에서 상위 종목을 구성.
-3. 최대 100개 이내에서 `trade:kr` 실시간 체결 구독.
-4. 체결마다 실제 `체결가 × 체결량`을 합산.
-5. 1분 OHLCV + 실제 1분 거래대금 생성.
-6. 정규장과 NXT 애프터마켓을 별도 저장.
-7. 10초마다 원자적으로 latest.json 갱신.
-8. AutoResearch의 `toss_bridge.py`가 최신 스냅샷을 읽는다.
-
-## 설치
+저장소 루트에서:
 
 ```bash
 python -m venv .venv
 . .venv/bin/activate
-pip install -r collector/requirements.txt
+pip install -e .
 
-cp collector/config.example.json collector/config.json
-```
+export TOSS_CLIENT_ID="..."
+export TOSS_CLIENT_SECRET="..."
 
-환경변수:
-
-```bash
-TOSS_CLIENT_ID=...
-TOSS_CLIENT_SECRET=...
-TOSS_COLLECTOR_CONFIG=/opt/stock-autoresearch/collector/config.json
-TOSS_SNAPSHOT_PATH=/var/lib/stock-autoresearch/toss/latest.json
+python -m autoresearch toss-collector \
+  --output /var/lib/stock-autoresearch/toss/latest.json \
+  --top-n 80 \
+  --ranking-refresh 600 \
+  --snapshot-seconds 20
 ```
 
 토스 WTS의 Open API 설정에서 **이 서버의 고정 공인 IP**를 허용해야 한다.
 
-## systemd
+## 수집 방식
 
-`stock-autoresearch-toss.service.example`을 환경에 맞게 복사해서 사용한다.
+1. OAuth2 Client Credentials로 access token 발급.
+2. `MARKET_TRADING_AMOUNT / KR / realtime` 랭킹에서 거래대금 상위 종목 선정.
+3. 최대 100종목을 `trade:kr`로 구독.
+4. 실시간 체결의 `price × volume`을 합산.
+5. 실제 1분 OHLCV와 1분 거래대금 생성.
+6. 08:00~08:50, 09:00~15:30, 15:40~20:00을 분리 저장.
+7. 최신 스냅샷을 원자적으로 저장.
+8. `toss_bridge.py`가 해당 스냅샷을 Market Tape에 연결.
 
-## 주의
+주문·계좌·보유자산 API는 사용하지 않는다.
 
-- 국내 WebSocket은 KRX+NXT 통합 시세다.
-- 실시간 시세 채널은 중간 프레임 유실이 가능한 구조이므로 Collector는 수신 지연/재연결 횟수를 diagnostics에 남긴다.
-- 연결당 구독은 100건 이하로 유지한다.
-- 서버로부터 데이터를 받는 중에도 keepalive를 위해 60초 주기로 PING을 보낸다.
-- Collector 재시작/네트워크 단절 구간은 정확한 체결대금이 비므로 데이터 품질에서 별도 취급해야 한다.
-- `unknown_trade_keys`가 생기면 토스 WebSocket Trade payload 스키마 변경 여부를 확인한다.
+## 운영 방식
 
-## GitHub와 연결
+권장 방식은 고정 IP 서버에 Collector를 systemd로 상시 실행하고, 같은 서버를 GitHub self-hosted Runner로 연결하는 것이다.
 
-Collector의 출력은 현재 `data/providers/toss/latest.json` 계약과 동일하다.
+자세한 설정:
 
-운영 환경에서는 다음 중 하나로 연결한다.
+- `../docs/FIXED_IP_RUNNER.md`
+- `../deploy/toss-collector.service.example`
+- `../deploy/toss-collector.env.example`
 
-1. 고정 IP 서버를 GitHub **self-hosted runner**로 사용해 같은 서버의 snapshot을 읽게 한다.
-2. 인증된 내부/HTTPS snapshot endpoint를 만들고 10분 workflow가 가져온다.
+대안으로 `serve_snapshot.py`를 통해 인증된 HTTPS snapshot endpoint를 만들고 GitHub-hosted Actions에서 가져오는 경로도 유지한다.
 
-대량 체결 데이터를 매 10초마다 Git commit 하는 방식은 사용하지 않는다.
+## 중요 제약
 
-## 공식 문서
+토스 실시간 시세 채널은 최신 상태 우선의 스트림이므로 네트워크 단절이나 수신 지연 구간의 체결을 완벽하게 재구성할 수 있다고 가정하지 않는다.
 
-- https://developers.tossinvest.com/
-- https://developers.tossinvest.com/docs/market-data
+Collector 재연결/장애 구간은 향후 데이터 품질 플래그와 함께 평가해야 한다.
+
+모든 종목이 NXT 지원 종목이라고 가정하지 않으며, 종목 메타데이터의 `nxtSupported`를 보존한다.
