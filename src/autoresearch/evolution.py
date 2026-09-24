@@ -83,6 +83,7 @@ class EvolutionEngine:
             "src/autoresearch/market_stats.py",
             "src/autoresearch/pullback_stats.py",
             "src/autoresearch/kiwoom_source.py",
+            "src/autoresearch/toss_bridge.py",
             "prompts/market_regime.md",
             "prompts/risk_evaluator.md",
             "src/autoresearch/pipeline.py",
