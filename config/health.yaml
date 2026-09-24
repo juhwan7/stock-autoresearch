@@ -1,0 +1,24 @@
+enabled: true
+timezone: Asia/Seoul
+
+thresholds:
+  warn_consecutive: 2
+  critical_consecutive: 4
+  market_stale_minutes_during_session: 25
+  risk_stale_minutes: 25
+  macro_stale_minutes: 25
+
+data:
+  state_file: data/health/state.json
+  latest_file: data/health/latest.json
+
+components:
+  market:
+    runtime_file: data/market/runtime.json
+  risk:
+    runtime_file: data/risk/runtime.json
+    latest_file: data/risk/latest.json
+  macro:
+    file: data/macro/current.json
+  evolution:
+    ticks_dir: data/evolution/ticks
