@@ -193,3 +193,42 @@
 결정: GitHub Markdown을 직접 찾아다니는 비중을 줄이기 위해 대시보드에 보고서 검색, 날짜·종목·산업 필터, 품질점수 추이, AI 진화 타임라인, Regression Guard 상태, 변경 manifest, 아이디어 상태 칸반을 추가한다.
 
 이유: 시장 리서치 결과와 AI가 프로젝트를 어떻게 바꾸고 있는지를 한 화면에서 추적하기 위해서다.
+
+
+## 2026-09-25 — Toss-first Provider Chain과 20시 NXT 실시간 경로
+
+상태: 도입
+
+결정: 시장 데이터의 신규 1순위 공급자를 Toss Open API 기반 고정 IP Collector로 전환한다. 신선한 Toss snapshot이 있으면 우선 사용하고 KRX 정규장에 Toss 데이터가 없을 때만 키움을 fallback으로 사용한다.
+
+이유: 국내 WebSocket 통합 체결을 이용하면 KRX 이후 NXT 애프터마켓까지 실제 체결가×체결량 기반 1분 거래대금을 만들 수 있기 때문이다.
+
+안전장치: KRX 종료 뒤 Toss 데이터가 없으면 NXT 값을 추측하지 않고 unavailable 상태로 기록한다.
+
+## 2026-09-25 — 실시간 Provider snapshot은 Git 이력이 아니라 런타임 데이터로 취급
+
+상태: 도입
+
+결정: `data/providers/toss/latest.json`은 Git ignore 처리하고 분석 결과·통계·상태 변화만 Git에 남긴다.
+
+이유: 초단기 raw snapshot을 Git에 누적하면 저장소가 빠르게 비대해지고 장기 연구 이력의 신호대잡음비가 나빠진다.
+
+운영: self-hosted runner가 로컬 snapshot을 직접 읽거나 GitHub-hosted runner가 인증 HTTPS endpoint에서 매 Tick 최신 snapshot만 가져온다.
+
+## 2026-09-25 — Market Regime도 의미 상태가 바뀔 때만 AI 호출
+
+상태: 도입
+
+결정: 10분마다 시장 원데이터는 계속 확인하지만 KOSPI/KOSDAQ, breadth, 거래대금 집중도, 신규주 열기, 동조수급, 주도주 burst, NXT 프리미엄의 의미 상태 Hash가 같으면 기존 AI 장세 해석을 재사용한다.
+
+이유: 시장이 사실상 같은데 같은 설명을 반복 생성하는 비용과 문서 중복을 줄이기 위해서다.
+
+안전장치: 의미 변화가 없어도 기본 60분마다 강제 재평가한다.
+
+## 2026-09-25 — Data Provider 자체를 Health Watchdog 대상에 포함
+
+상태: 도입
+
+결정: 시장 결과뿐 아니라 Toss snapshot 신선도, 최근 체결 수신, WebSocket 구독/거절, HTTPS fetch 오류, 키움 fallback 활성화를 별도 Health 상태로 감시한다.
+
+이유: 가격 분석 코드가 정상이어도 입력 데이터 계층이 조용히 멈추면 잘못된 확신을 만들 수 있기 때문이다.
