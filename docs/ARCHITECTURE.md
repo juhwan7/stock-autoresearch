@@ -16,6 +16,7 @@
        ├─ 1분봉 Burst
        ├─ 신규주 흐름
        ├─ 그룹/섹터 동조
+       │   └─ 3분 내 동시 상승+거래대금 Burst
        └─ 종배/눌림 통계
               │                             │
        Luna Scanner                    Luna Scout
@@ -59,8 +60,9 @@ Evolution Agent의 자동 수정 범위와 보호 범위는 `config/evolution.ya
 
 ```text
 Kiwoom REST (read-only)
-    ↓
-거래대금 상위 Universe
+    ├─ KOSPI/KOSDAQ 전체 상승·하락 종목 수
+    ├─ 종합지수 등락률
+    └─ 거래대금 상위 Universe
     ↓
 상위 종목 1분봉
     ↓
