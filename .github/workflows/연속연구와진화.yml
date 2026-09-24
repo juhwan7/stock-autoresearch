@@ -16,8 +16,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: stock-autoresearch-writer
@@ -111,23 +109,3 @@ jobs:
             git pull --rebase
             git push
           fi
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-        continue-on-error: true
-
-      - name: Prepare Pages artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: site
-
-  deploy:
-    needs: continuous
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy dashboard
-        id: deployment
-        uses: actions/deploy-pages@v4
