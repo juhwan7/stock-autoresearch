@@ -45,6 +45,7 @@ jobs:
           fi
           python -m autoresearch run --mode "$MODE"
       - name: Commit artifacts
+        if: github.event.inputs.mode == 'live'
         run: |
           git config user.name "stock-autoresearch[bot]"
           git config user.email "stock-autoresearch[bot]@users.noreply.github.com"
