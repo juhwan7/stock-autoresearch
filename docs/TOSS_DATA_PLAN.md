@@ -7,6 +7,9 @@
 ## 현재 구현 상태
 
 완료:
+- canonical Collector `src/autoresearch/toss_collector.py` 구현
+- 고정 IP systemd/self-hosted Runner 배포 템플릿 구현
+- GitHub-hosted용 인증 HTTPS snapshot fetch 경로 구현
 - `src/autoresearch/toss_bridge.py` 구현
 - `data/providers/toss/latest.json` 정규화 계약 정의
 - 신선한 Toss 스냅샷이 있으면 키움보다 우선 사용
@@ -18,9 +21,9 @@
 남은 외부 준비:
 - 고정 공인 IP Collector 실행환경
 - Toss Open API 인증정보와 허용 IP 등록
-- Collector가 실제 WebSocket 체결을 받아 `latest.json` 계약으로 공급
+- 고정 IP 서버에서 Collector를 실제 실행하고 Toss 허용 IP·인증정보를 연결
 
-즉 저장소 쪽 수신·분석 구조는 준비됐고, 실제 20시 실시간 데이터 입력만 외부 Collector 연결이 남아 있다.
+즉 코드·수신·분석·배포 경로는 준비됐고, 실제 20시 실시간 데이터 입력을 위해 외부 고정 IP 환경을 연결하는 작업만 남아 있다.
 
 ## 토스에서 활용할 기능
 
@@ -85,3 +88,24 @@ Toss의 국내 실시간 WebSocket은 KRX+NXT 통합 시세를 사용한다.
 - [시장 데이터 명세](MARKET_DATA_SPEC.md)
 - [Risk Veto](RISK_VETO.md)
 - [문서 지도](DOCS_MAP.md)
+
+
+## 운영 연결 방식
+
+둘 중 하나만 사용한다.
+
+### A. 고정 IP self-hosted Runner
+
+Collector와 GitHub Runner를 같은 서버에 둔다.
+
+`TOSS_FIXED_IP_RUNNER_ENABLED=true`일 때 `.github/workflows/fixed-ip-market.yml`이 로컬 snapshot을 사용하고 cloud Continuous Loop의 Market Tape 단계는 중복 실행하지 않는다.
+
+### B. HTTPS snapshot
+
+Collector 서버의 snapshot을 인증된 HTTPS endpoint로 제공하고 GitHub-hosted runner가 `scripts/fetch_toss_snapshot.py`로 가져온다.
+
+필요 Secret:
+- `TOSS_SNAPSHOT_URL`
+- `TOSS_SNAPSHOT_TOKEN`
+
+실시간 snapshot 자체는 Git에 누적하지 않는다.
