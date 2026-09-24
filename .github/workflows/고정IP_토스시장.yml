@@ -61,7 +61,7 @@ jobs:
           PY
 
       - name: Summarize Toss provider state
-        run: python scripts/summarize_toss_snapshot.py
+        run: python scripts/토스상태_요약.py
 
       - name: Korea market tape with Toss primary
         env:
@@ -72,7 +72,7 @@ jobs:
         run: |
           python -m autoresearch health
           python -m autoresearch regression
-          python scripts/build_site.py
+          python scripts/대시보드_생성.py
           python -m compileall -q src collector scripts
           pytest -q
           git diff --check
