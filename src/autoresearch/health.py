@@ -106,6 +106,19 @@ class HealthWatchdog:
                     "고정 IP Toss Collector의 실행 상태·허용 IP·스냅샷 신선도를 확인",
                 )
             )
+        elif (
+            str(data.get("provider") or "") == "kiwoom"
+            and bool(data.get("fallback_used"))
+        ):
+            issues.append(
+                self._issue(
+                    "market",
+                    "toss-fallback-active",
+                    "NOTICE",
+                    "Toss primary 대신 키움 fallback으로 Market Tape 실행 중",
+                    "Toss Collector snapshot과 고정 IP 연결을 확인. 정규장 분석은 fallback으로 계속됨",
+                )
+            )
         elif status == "needs_credentials":
             issues.append(
                 self._issue(
@@ -140,6 +153,129 @@ class HealthWatchdog:
                     "WARN",
                     f"시장 runtime이 {age:.0f}분째 갱신되지 않음",
                     "10분 Continuous workflow와 데이터 공급자 상태 확인",
+                )
+            )
+        return issues
+
+    def _check_toss(self, now: datetime) -> list[dict[str, str]]:
+        comp = self.cfg.get("components", {}).get("toss", {})
+        snapshot = _read_json(
+            self.root / comp.get(
+                "snapshot_file",
+                "data/providers/toss/latest.json",
+            )
+        )
+        fetch_runtime = _read_json(
+            self.root / comp.get(
+                "fetch_runtime_file",
+                "data/providers/toss/fetch_runtime.json",
+            )
+        )
+        issues: list[dict[str, str]] = []
+
+        if not _kr_market_monitor_window(now):
+            return issues
+
+        if not snapshot:
+            status = str(fetch_runtime.get("status") or "")
+            detail = (
+                f"fetch 상태={status}"
+                if status
+                else "snapshot 파일 없음"
+            )
+            issues.append(
+                self._issue(
+                    "toss",
+                    "snapshot-missing",
+                    "WARN",
+                    "Toss primary snapshot을 사용할 수 없음 · " + detail,
+                    "고정 IP Collector, 허용 IP, 인증정보, snapshot 전달 경로를 확인",
+                )
+            )
+            return issues
+
+        snapshot_age = _age_minutes(snapshot.get("captured_at"), now)
+        snapshot_limit = float(
+            self.cfg.get("thresholds", {}).get(
+                "toss_snapshot_stale_minutes", 5
+            )
+        )
+        if snapshot_age is None or snapshot_age > snapshot_limit:
+            age_text = (
+                "시각 확인 불가"
+                if snapshot_age is None
+                else f"{snapshot_age:.1f}분"
+            )
+            issues.append(
+                self._issue(
+                    "toss",
+                    "snapshot-stale",
+                    "WARN",
+                    f"Toss snapshot이 오래됨: {age_text}",
+                    "Collector 프로세스와 snapshot 전달 workflow의 갱신 상태 확인",
+                )
+            )
+
+        collector = snapshot.get("collector", {})
+        subscriptions = collector.get("subscriptions", [])
+        rejected = collector.get("rejected", [])
+        if isinstance(rejected, list) and rejected:
+            issues.append(
+                self._issue(
+                    "toss",
+                    "subscription-rejected",
+                    "WARN",
+                    f"Toss WebSocket 구독 거절 {len(rejected)}건",
+                    "구독 코드 수·종목 코드·WebSocket 응답의 rejected 항목 확인",
+                )
+            )
+
+        if not isinstance(subscriptions, list) or not subscriptions:
+            issues.append(
+                self._issue(
+                    "toss",
+                    "subscription-empty",
+                    "WARN",
+                    "Toss WebSocket 활성 구독 정보가 비어 있음",
+                    "거래대금 랭킹 조회와 trade:kr 구독 선언 상태 확인",
+                )
+            )
+
+        trade_age = _age_minutes(collector.get("last_message_at"), now)
+        trade_limit = float(
+            self.cfg.get("thresholds", {}).get(
+                "toss_trade_stale_minutes", 5
+            )
+        )
+        hhmm = now.strftime("%H:%M")
+        active_trade_window = (
+            "08:00" <= hhmm <= "08:50"
+            or "09:00" <= hhmm <= "15:30"
+            or "15:40" <= hhmm <= "20:00"
+        )
+        if (
+            active_trade_window
+            and trade_age is not None
+            and trade_age > trade_limit
+        ):
+            issues.append(
+                self._issue(
+                    "toss",
+                    "trade-stale",
+                    "WARN",
+                    f"Toss 최근 체결 수신이 {trade_age:.1f}분 전",
+                    "WebSocket 연결·PING·재연결 로그와 장 운영 여부를 확인",
+                )
+            )
+
+        if fetch_runtime.get("status") == "error":
+            issues.append(
+                self._issue(
+                    "toss",
+                    "snapshot-fetch-error",
+                    "WARN",
+                    "GitHub-hosted 경로의 Toss snapshot fetch 오류",
+                    "TOSS_SNAPSHOT_URL/TOKEN과 HTTPS endpoint 상태 확인",
                 )
             )
         return issues
@@ -294,6 +430,7 @@ class HealthWatchdog:
         previous = _read_json(self.state_path)
         issues = []
         issues.extend(self._check_market(now))
+        issues.extend(self._check_toss(now))
         issues.extend(self._check_risk(now))
         issues.extend(self._check_macro(now))
         issues.extend(self._check_regression())
