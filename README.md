@@ -61,6 +61,8 @@ AI에게 무제한 쓰기 권한을 주면 오래 돌릴수록 오히려 프로�
 - Chief Researcher: GPT-5.6 Terra
 - Evolution Scout: GPT-5.6 Luna
 - Evolution Builder: GPT-5.6 Terra
+- Macro/Event Source Scout: GPT-5.6 Luna
+- Overnight Risk Evaluator: GPT-5.6 Terra
 
 모델은 설정 파일에서 변경할 수 있습니다.
 
@@ -86,7 +88,7 @@ python -m autoresearch market-intel --mode dry-run
 python -m autoresearch market-intel --mode live
 ```
 
-실전 모드는 키움 REST API의 읽기 전용 시세 조회를 사용합니다. 주문 기능은 프로젝트에 구현하지 않습니다.
+현재 동작 중인 Market Tape V1은 키움 REST 읽기 전용 조회를 사용합니다. 신규 데이터 개발의 우선 공급자는 **토스증권 Open API**로 전환했습니다. 토스는 허용 IP가 필요하므로 20시 NXT 통합 실시간 체결은 고정 IP Collector가 준비되면 연결합니다. 주문 기능은 구현하지 않습니다.
 
 종가베팅 연구는 장중보다 넓은 거래대금 상위 50개 Universe를 장 마감에 분석하고 다음 거래일의 갭·MFE·MAE를 채웁니다. 1분 10억·20억원 이상 거래대금 반복 횟수, 장후반 흐름, 동시 그룹수급, 당일 시장 폭도 함께 저장해 조건별 결과를 비교합니다.
 
@@ -97,6 +99,29 @@ python -m autoresearch market-intel --mode live
 상세 기준:
 - `docs/TRADING_RESEARCH_MANDATE.md`
 - `docs/MARKET_DATA_SPEC.md`
+- `docs/RISK_VETO.md`
+- `docs/DOCS_MAP.md`
+- `docs/TOSS_DATA_PLAN.md`
+
+## Overnight Risk Veto
+
+10분마다 일정과 매크로 상태를 확인합니다. 다만 AI 전체 평가는 의미 상태가 바뀌었을 때만 다시 수행합니다.
+
+```text
+공식 일정 + 매크로 + 국내장
+→ 의미 상태 Hash
+→ 변화 없음: 이전 평가 재사용
+→ 변화 있음: Risk Evaluator 호출
+→ LOW / WATCH / HIGH / VETO
+→ 종가베팅 표본에 밤사이 최대 Risk 저장
+```
+
+실행:
+
+```bash
+python -m autoresearch risk-intel --mode dry-run
+python -m autoresearch risk-intel --mode live
+```
 
 ## 필요한 Secret
 
@@ -110,12 +135,21 @@ GitHub 저장소에서 다음 위치에 OpenAI API 키를 한 번 등록해야 �
 OPENAI_API_KEY
 ```
 
-국내시장 실데이터까지 사용하려면 다음 두 Secret도 등록합니다.
+현재 Market Tape V1의 키움 fallback을 사용하려면:
 
 ```
 KIWOOM_APP_KEY
 KIWOOM_SECRET_KEY
 ```
+
+향후 Toss 고정 IP Collector에서는:
+
+```
+TOSS_CLIENT_ID
+TOSS_CLIENT_SECRET
+```
+
+을 Collector 환경의 Secret으로 사용합니다.
 
 ## 로컬 테스트
 
@@ -126,6 +160,8 @@ pip install -e ".[dev]"
 pytest -q
 python -m autoresearch run --mode dry-run
 python -m autoresearch evolve --mode dry-run
+python -m autoresearch market-intel --mode dry-run
+python -m autoresearch risk-intel --mode dry-run
 ```
 
 실전:
