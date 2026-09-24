@@ -553,6 +553,9 @@ class MarketIntelEngine:
         detail_limit = int(
             self.cfg.get("universe", {}).get("detail_minute_limit", 20)
         )
+        close_research_limit = int(
+            self.cfg.get("universe", {}).get("close_research_limit", 50)
+        )
         ranking = source.trading_value_top(limit=rank_limit)
         now = datetime.now(KST)
         metadata = self._reference_metadata(source, now)
@@ -569,6 +572,17 @@ class MarketIntelEngine:
             ranked_tickers.append(ticker)
             if len(detail_tickers) < detail_limit:
                 detail_tickers.append(ticker)
+
+        intraday_base_count = len(detail_tickers)
+
+        # 장 마감 연구는 장중 표시보다 넓은 거래대금 상위 Universe를 전수 조회한다.
+        close_research_added = 0
+        if now.strftime("%H:%M") >= "15:30":
+            target = ranked_tickers[:close_research_limit]
+            for ticker in target:
+                if ticker not in detail_tickers:
+                    detail_tickers.append(ticker)
+                    close_research_added += 1
 
         base_count = len(detail_tickers)
 
@@ -646,6 +660,8 @@ class MarketIntelEngine:
             "detail_count": len(minute_by_ticker),
             "market_overview": market_overview,
             "detail_universe": {
+                "intraday_turnover_base": intraday_base_count,
+                "close_research_added": close_research_added,
                 "turnover_base": base_count,
                 "recent_listing_extra": recent_added,
                 "group_member_extra": group_added,
