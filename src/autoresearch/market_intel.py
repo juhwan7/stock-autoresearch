@@ -1200,7 +1200,7 @@ class MarketIntelEngine:
         }
 
         # 읽기 쉬운 Markdown 보고서는 실제 분석 데이터가 있을 때만 만든다.
-        if quantitative.get("status") == "ok":
+        if quantitative.get("status") == "ok" and self.mode == "live":
             report_dir = self.root / "reports" / "market"
             report_dir.mkdir(parents=True, exist_ok=True)
             report_path = report_dir / (now.strftime("%Y%m%d-%H%M") + ".md")
@@ -1210,32 +1210,62 @@ class MarketIntelEngine:
             )
             result["report"] = str(report_path.relative_to(self.root))
 
-        latest = self.root / self.cfg.get("data", {}).get(
-            "latest_file", "data/market/latest.json"
-        )
-        latest.parent.mkdir(parents=True, exist_ok=True)
-        latest.write_text(
-            json.dumps(result, ensure_ascii=False, indent=2),
-            encoding="utf-8",
+        data_cfg = self.cfg.get("data", {})
+        latest = self.root / data_cfg.get("latest_file", "data/market/latest.json")
+        runtime = self.root / data_cfg.get("runtime_file", "data/market/runtime.json")
+        dry_run_file = self.root / data_cfg.get(
+            "dry_run_file", "data/market/dry_run_latest.json"
         )
 
-        # 10분 스냅샷도 유효한 시장 데이터가 있을 때만 보존해 저장소 팽창을 줄인다.
-        if quantitative.get("status") == "ok":
-            snap_dir = self.root / self.cfg.get("data", {}).get(
-                "snapshot_dir", "data/market/snapshots"
-            )
-            snap_dir.mkdir(parents=True, exist_ok=True)
-            snap = snap_dir / (now.strftime("%Y%m%d-%H%M") + ".json")
-            snap.write_text(
+        # dry-run은 실제 장세 파일을 절대 덮어쓰지 않는다.
+        if self.mode == "dry-run":
+            dry_run_file.parent.mkdir(parents=True, exist_ok=True)
+            dry_run_file.write_text(
                 json.dumps(result, ensure_ascii=False, indent=2),
                 encoding="utf-8",
             )
+            output_file = dry_run_file
+        else:
+            runtime.parent.mkdir(parents=True, exist_ok=True)
+            runtime.write_text(
+                json.dumps(
+                    {
+                        "generated_at": now.isoformat(),
+                        "source_status": source_state.get("status"),
+                        "market_status": quantitative.get("status"),
+                        "reason": source_state.get("reason") or quantitative.get("reason"),
+                        "last_valid_market_file": str(latest.relative_to(self.root)),
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+            output_file = latest
+
+            # 장외 시간이나 일시적 데이터 오류가 마지막 유효 장세를 덮어쓰지 않게 한다.
+            if quantitative.get("status") == "ok":
+                latest.parent.mkdir(parents=True, exist_ok=True)
+                latest.write_text(
+                    json.dumps(result, ensure_ascii=False, indent=2),
+                    encoding="utf-8",
+                )
+
+                snap_dir = self.root / data_cfg.get(
+                    "snapshot_dir", "data/market/snapshots"
+                )
+                snap_dir.mkdir(parents=True, exist_ok=True)
+                snap = snap_dir / (now.strftime("%Y%m%d-%H%M") + ".json")
+                snap.write_text(
+                    json.dumps(result, ensure_ascii=False, indent=2),
+                    encoding="utf-8",
+                )
 
         return {
             "status": source_state.get("status"),
             "market_status": quantitative.get("status"),
             "stocks": quantitative.get("stock_count", 0),
-            "latest": str(latest.relative_to(self.root)),
+            "latest": str(output_file.relative_to(self.root)),
             "report": result.get("report"),
             "events": {
                 "close_bet": event_update,
