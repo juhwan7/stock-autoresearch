@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .evolution import EvolutionEngine
+from .market_intel import MarketIntelEngine
 from .pipeline import Pipeline
 
 
@@ -28,6 +29,14 @@ def build_parser() -> argparse.ArgumentParser:
         default="dry-run",
     )
     evolve.add_argument("--root", default=".", help="저장소 루트")
+
+    market = sub.add_parser("market-intel", help="국내시장 장세/분봉 거래대금 분석")
+    market.add_argument(
+        "--mode",
+        choices=["dry-run", "live"],
+        default="dry-run",
+    )
+    market.add_argument("--root", default=".", help="저장소 루트")
     return parser
 
 
@@ -39,6 +48,8 @@ def main() -> None:
         result = Pipeline(root, args.mode).run()
     elif args.command == "evolve":
         result = EvolutionEngine(root, args.mode).run()
+    elif args.command == "market-intel":
+        result = MarketIntelEngine(root, args.mode).run()
     else:
         raise SystemExit(2)
 
