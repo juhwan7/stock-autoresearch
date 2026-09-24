@@ -96,7 +96,17 @@ class HealthWatchdog:
             )
             return issues
 
-        if status == "needs_credentials":
+        if status == "toss_snapshot_unavailable":
+            issues.append(
+                self._issue(
+                    "market",
+                    "toss-collector-unavailable",
+                    "WARN",
+                    "NXT 시간대용 토스 Collector 스냅샷을 사용할 수 없음",
+                    "고정 IP Toss Collector의 실행 상태·허용 IP·스냅샷 신선도를 확인",
+                )
+            )
+        elif status == "needs_credentials":
             issues.append(
                 self._issue(
                     "market",
