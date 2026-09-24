@@ -64,6 +64,8 @@ class MinuteSummary:
     max_minute_amount: float
     amount_threshold_counts: dict[str, int]
     burst_count: int
+    burst_times: list[str]
+    positive_burst_times: list[str]
     max_burst_ratio: float
     rise_without_burst: bool
     high_position: float
@@ -93,6 +95,11 @@ class MarketStats:
         ]
         self.close_watch_start = str(minute.get("close_watch_start", "14:30"))
         self.continuous_end = str(minute.get("continuous_end", "15:20"))
+        coflow = cfg.get("coflow", {})
+        self.coflow_window_minutes = int(coflow.get("window_minutes", 3))
+        self.coflow_return_threshold = float(
+            coflow.get("minute_return_threshold_pct", 0.15)
+        )
 
     def summarize_stock(
         self,
@@ -132,14 +139,24 @@ class MarketStats:
 
         amounts: list[float] = []
         burst_count = 0
+        burst_times: list[str] = []
+        positive_burst_times: list[str] = []
         max_ratio = 0.0
         ratios: list[float] = []
-        for row in clean:
+        for idx, row in enumerate(clean):
             baseline = median(amounts[-self.baseline_window:]) if amounts else 0.0
             ratio = row["amount"] / baseline if baseline > 0 else 0.0
             ratios.append(ratio)
             if row["amount"] >= self.min_burst_amount and ratio >= self.burst_ratio:
                 burst_count += 1
+                burst_times.append(row["time"])
+                if idx > 0:
+                    one_min_return = percent_change(
+                        clean[idx - 1]["close"],
+                        row["close"],
+                    )
+                    if one_min_return >= self.coflow_return_threshold:
+                        positive_burst_times.append(row["time"])
             max_ratio = max(max_ratio, ratio)
             amounts.append(row["amount"])
 
@@ -184,6 +201,8 @@ class MarketStats:
             max_minute_amount=round(max_minute_amount, 2),
             amount_threshold_counts=threshold_counts,
             burst_count=burst_count,
+            burst_times=burst_times,
+            positive_burst_times=positive_burst_times,
             max_burst_ratio=round(max_ratio, 3),
             rise_without_burst=stock_return >= 2.0 and burst_count == 0,
             high_position=round(high_position, 4),
@@ -238,27 +257,77 @@ class MarketStats:
 
         coflow = []
         min_members = int(self.cfg.get("coflow", {}).get("minimum_members", 3))
+
+        def minute_index(value: str) -> int:
+            try:
+                hour, minute = value.split(":", 1)
+                return int(hour) * 60 + int(minute)
+            except (ValueError, AttributeError):
+                return -10_000
+
         for key, members in groups.items():
-            positive = [s for s in members if s.return_pct > 0 and s.burst_count > 0]
-            if len(positive) >= min_members:
+            positive = [
+                s
+                for s in members
+                if s.return_pct > 0 and s.positive_burst_times
+            ]
+            events = [
+                (minute_index(tm), s.ticker)
+                for s in positive
+                for tm in s.positive_burst_times
+            ]
+            best_members: set[str] = set()
+            best_center: int | None = None
+            for center, _ in events:
+                near = {
+                    ticker
+                    for event_minute, ticker in events
+                    if abs(event_minute - center) <= self.coflow_window_minutes
+                }
+                if len(near) > len(best_members):
+                    best_members = near
+                    best_center = center
+
+            if len(best_members) >= min_members:
+                synchronized = [s for s in positive if s.ticker in best_members]
+                center_label = (
+                    f"{best_center // 60:02d}:{best_center % 60:02d}"
+                    if best_center is not None
+                    else None
+                )
                 coflow.append({
                     "group": key,
                     "member_count": len(members),
                     "positive_burst_members": len(positive),
+                    "synchronized_burst_members": len(synchronized),
+                    "synchronized_center": center_label,
+                    "window_minutes": self.coflow_window_minutes,
                     "members": [
                         {
                             "ticker": s.ticker,
                             "name": s.name,
                             "return_pct": s.return_pct,
                             "burst_count": s.burst_count,
+                            "positive_burst_times": s.positive_burst_times,
                             "max_burst_ratio": s.max_burst_ratio,
                             "max_minute_amount": s.max_minute_amount,
                             "total_amount": s.total_amount,
                         }
-                        for s in sorted(positive, key=lambda x: x.total_amount, reverse=True)
+                        for s in sorted(
+                            synchronized,
+                            key=lambda x: x.total_amount,
+                            reverse=True,
+                        )
                     ],
                 })
-        coflow.sort(key=lambda x: (x["positive_burst_members"], x["member_count"]), reverse=True)
+        coflow.sort(
+            key=lambda x: (
+                x["synchronized_burst_members"],
+                x["positive_burst_members"],
+                x["member_count"],
+            ),
+            reverse=True,
+        )
 
         return {
             "status": "ok",
