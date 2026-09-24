@@ -313,6 +313,12 @@ class EvolutionEngine:
             return {"decision": "proposal_only", "title": scout.get("title"), "changed": False}
 
         builder = self._builder(scout)
+        if builder.get("risk") == "high":
+            reason = "Builder가 고위험 변경으로 분류함"
+            self._record_idea(now, scout, reason)
+            self._record_tick(now, scout, builder, "blocked", reason)
+            return {"decision": "blocked", "title": scout.get("title"), "changed": False}
+
         if builder.get("blocked_reason"):
             reason = str(builder.get("blocked_reason"))
             self._record_idea(now, scout, f"Builder 보류: {reason}")
