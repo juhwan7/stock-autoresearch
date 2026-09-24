@@ -1,0 +1,75 @@
+enabled: true
+timezone: Asia/Seoul
+
+models:
+  source:
+    name: gpt-5.6-luna
+    reasoning_effort: low
+    web_search_context: low
+  evaluator:
+    name: gpt-5.6-terra
+    reasoning_effort: medium
+    web_search_context: low
+
+refresh:
+  macro_minutes: 10
+  calendar_hours: 12
+  force_evaluation_hours: 6
+
+dirty_state:
+  watched_files:
+    - data/market/latest.json
+    - data/market/runtime.json
+    - data/macro/current.json
+    - data/risk/calendar_live.json
+    - config/events_2026.yaml
+  semantic_rounding:
+    percent: 0.1
+    yield_bp: 2.0
+
+risk:
+  veto_single_event_severity: 5
+  veto_event_hours: 12
+  high_event_hours: 24
+  watch_event_hours: 72
+  nxt_close: "20:00"
+  krx_close: "15:30"
+  gap_risk_levels:
+    - LOW
+    - WATCH
+    - HIGH
+    - VETO
+
+macro_thresholds:
+  nasdaq_futures_pct:
+    watch: -0.6
+    high: -1.0
+    veto: -1.8
+  kospi200_night_futures_pct:
+    watch: -0.6
+    high: -1.0
+    veto: -1.8
+  us10y_change_bp:
+    watch: 8
+    high: 15
+    veto: 25
+  dxy_pct:
+    watch: 0.4
+    high: 0.8
+    veto: 1.3
+  usdkrw_pct:
+    watch: 0.5
+    high: 0.9
+    veto: 1.5
+  vix_pct:
+    watch: 8
+    high: 15
+    veto: 25
+
+data:
+  state_file: data/risk/state.json
+  latest_file: data/risk/latest.json
+  runtime_file: data/risk/runtime.json
+  calendar_file: data/risk/calendar_live.json
+  macro_file: data/macro/current.json
+  report_dir: reports/risk
