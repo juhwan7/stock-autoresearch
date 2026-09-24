@@ -100,8 +100,8 @@ class EvolutionEngine:
             "prompts/반론_검증.md",
             "prompts/최종연구_총괄.md",
             "site/index.html",
-            "site/app.js",
-            "site/style.css",
+            "site/기능.js",
+            "site/스타일.css",
         ]
         chunks: list[str] = []
         used = 0
