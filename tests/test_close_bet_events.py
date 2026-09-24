@@ -150,3 +150,30 @@ def test_next_day_outcome_is_finalized_after_close(tmp_path):
     assert rows[0]["next_date"] == "2026-09-28"
     assert float(rows[0]["next_mfe_pct"]) > 0
     assert float(rows[0]["next_mae_pct"]) < 0
+
+
+def test_next_day_outcome_is_also_measured_from_nxt_final_price(tmp_path):
+    engine = make_engine(tmp_path)
+    engine._update_close_bet_events(
+        datetime(2026, 9, 25, 15, 31, tzinfo=KST),
+        {"A": signal_rows()},
+        quantitative(),
+    )
+
+    path = tmp_path / "data/market/stats/close_bet_events.csv"
+    rows = load_event_csv(path)
+    rows[0]["nxt_after_last_price"] = "108"
+    from autoresearch.market_intel import CLOSE_EVENT_FIELDS, write_event_csv
+    write_event_csv(path, rows, CLOSE_EVENT_FIELDS)
+
+    result = engine._update_close_bet_events(
+        datetime(2026, 9, 28, 15, 31, tzinfo=KST),
+        {"A": next_day_rows()},
+        {"status": "ok", "stocks": []},
+    )
+    assert result["completed"] == 1
+
+    rows = load_event_csv(path)
+    assert round(float(rows[0]["next_gap_from_nxt_pct"]), 4) == round((106 / 108 - 1) * 100, 4)
+    assert round(float(rows[0]["next_mfe_from_nxt_pct"]), 4) == round((110 / 108 - 1) * 100, 4)
+    assert round(float(rows[0]["next_mae_from_nxt_pct"]), 4) == round((101 / 108 - 1) * 100, 4)
