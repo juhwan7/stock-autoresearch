@@ -71,7 +71,9 @@ async function load() {
     ok: "장중 분석",
     outside_regular_session: "장 종료 · 마지막 유효 장세",
     needs_credentials: "키움 API 설정 필요",
-    no_rows: "시세 데이터 없음"
+    no_rows: "시세 데이터 없음",
+    toss_snapshot_unavailable: "토스 Collector 대기",
+    outside_domestic_monitor_window: "국내시장 감시시간 종료"
   };
   $("market-status").textContent = statusLabels[runtimeStatus] || runtimeStatus;
 
@@ -89,6 +91,21 @@ async function load() {
         <span>상세 분석 <b>${esc(q.stock_count || 0)}종목</b><small>거래대금 중심 Universe</small></span>
         <span>Top10 집중 <b>${(((source.turnover_rank_top10_share ?? turnover.top10_share) || 0) * 100).toFixed(1)}%</b><small>거래대금 순위 기준</small></span>
       </div>`;
+
+    const postmarket = source.postmarket || {};
+    $("nxt-after").innerHTML = (postmarket.stocks || []).length
+      ? (postmarket.stocks || []).slice(0, 8).map((x) => {
+          const premium = x.krx_close_premium_pct == null
+            ? "-"
+            : (Number(x.krx_close_premium_pct) >= 0 ? "+" : "") + Number(x.krx_close_premium_pct).toFixed(2) + "%";
+          return `<div class="nxt-card">
+            <strong>${esc(x.name || x.ticker)}</strong>
+            <span>KRX 대비 ${esc(premium)}</span>
+            <span>애프터 ${esc(x.return_pct)}%</span>
+            <span>${esc(krwEok(x.amount))}</span>
+          </div>`;
+        }).join("")
+      : `<p class="muted">${source.provider === "toss" ? "현재 애프터마켓 체결 없음" : "토스 Collector 연결 후 20시까지 표시됩니다."}</p>`;
 
     $("burst-leaders").innerHTML = (q.burst_leaders || []).slice(0, 6).map((x) =>
       `<div class="mini-row"><strong>${esc(x.name || x.ticker)}</strong><span>${esc(x.burst_count)}회 · 1분 최대 ${esc(krwEok(x.max_minute_amount))} · ${esc(x.max_burst_ratio)}배</span></div>`
@@ -146,6 +163,7 @@ async function load() {
   } else {
     const reason = source.reason || q.reason || "국내시장 실데이터가 아직 연결되지 않았습니다.";
     $("market-summary").innerHTML = `<div class="regime"><strong>분석 대기</strong><p>${esc(reason)}</p></div>`;
+    $("nxt-after").innerHTML = "<p class='muted'>토스 Collector 데이터 필요</p>";
     $("burst-leaders").innerHTML = "<p class='muted'>데이터 필요</p>";
     $("new-listings").innerHTML = "<p class='muted'>데이터 필요</p>";
     $("coflow-groups").innerHTML = "<p class='muted'>데이터 필요</p>";
