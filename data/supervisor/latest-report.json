@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "batch_id": "manual-20260925T084307+0900-10diag",
+  "processed_at": "2026-09-25T08:43:07+09:00",
+  "mode": "manual_immediate_diagnostics",
+  "observation_ids": [
+    "manual-20260925T084307+0900-01",
+    "manual-20260925T084307+0900-02",
+    "manual-20260925T084307+0900-03",
+    "manual-20260925T084307+0900-04",
+    "manual-20260925T084307+0900-05",
+    "manual-20260925T084307+0900-06",
+    "manual-20260925T084307+0900-07",
+    "manual-20260925T084307+0900-08",
+    "manual-20260925T084307+0900-09",
+    "manual-20260925T084307+0900-10"
+  ],
+  "status": "no_change",
+  "notify": false,
+  "summary": [
+    "10개 항목은 동일 시점의 독립 진단으로 수집했으며 10분 간격 시계열로 가장하지 않았다.",
+    "10분 관측 workflow, supervisor CLI, 큐 테스트, 1시간 결과 알림 브리지가 main에 연결되어 있다.",
+    "최신 프로젝트 검증 run 36073715244는 success다.",
+    "새 10분 schedule 실행은 아직 한 번도 발생하지 않아 runtime/health/toss/supervisor 자동 산출물은 초기화 전 상태다.",
+    "즉시 수정이 필요한 지속 오류는 현재 근거가 부족해 코드 변경을 추가하지 않았다."
+  ],
+  "persistent_findings": [
+    {
+      "finding": "first_scheduled_observation_pending",
+      "severity": "info",
+      "evidence": "schedule event run 0개; recent/queue/runtime 자동 산출물은 수동 배치 전 미생성",
+      "interpretation": "새 구조 적용 직후의 초기 상태로 판단하며 실패로 확정하지 않음"
+    }
+  ],
+  "actions": [
+    "최신 main의 감독 관련 코드·문서·워크플로를 교차검증했다.",
+    "현재 상태를 10개의 manual_snapshot 진단으로 기록했다.",
+    "반복 신호인 '첫 scheduled observer 미실행/자동 runtime 미초기화'를 하나의 초기화 대기 상태로 묶었다.",
+    "기능 코드에는 추가 변경을 하지 않았다."
+  ],
+  "changed_paths": [],
+  "validation": {
+    "status": "passed",
+    "evidence": {
+      "workflow_run_id": 36073715244,
+      "workflow_name": "프로젝트 검증",
+      "conclusion": "success",
+      "head_sha": "7e75b24e8b110b771531295fb434922e6568aade"
+    },
+    "limitation": "수동 진단 배치는 scheduled 10분 workflow 자체를 실행한 것이 아니므로 첫 실제 schedule run은 별도 확인 필요"
+  },
+  "next_checks": [
+    "첫 scheduled 10분 관측이 실행되는지 확인한다.",
+    "실행 후 data/supervisor/recent.json에 실제 workflow observation이 manual-10 뒤에 추가되는지 확인한다.",
+    "data/health/latest.json과 Toss fetch/status 파일이 정상 생성되는지 확인한다.",
+    "compile/pytest/diff 결과가 실제 10분 observation에 validation=ok로 기록되는지 확인한다.",
+    "향후 실제 관측 6개가 쌓이면 자동 1시간 감독이 manual batch 이후 항목만 처리하는지 확인한다."
+  ]
+}
