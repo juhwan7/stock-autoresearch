@@ -74,15 +74,15 @@ AI가 발견한 아이디어를 상태와 함께 누적한다.
 
 채택 이유: 사용자가 원하는 “여러 종목에 동시에 돈이 들어오는 장면”에 더 가깝다.
 
-## 보류 — 분봉 실제 체결대금 정밀 집계
+## 채택 — Toss WebSocket 실제 1분 체결대금
 
-아이디어: 1분봉 종가×거래량 근사 대신 개별 체결가격×체결량을 합산해 실제 1분 거래대금을 만든다.
+아이디어: 1분봉 종가×거래량 근사 대신 Toss `trade:kr`의 개별 체결가격×체결량을 상시 Collector에서 합산해 실제 1분 거래대금을 만든다.
 
-보류 이유: GitHub Actions는 10분마다 시작하고 종료되는 단기 실행 환경이라 장중 WebSocket 체결 스트림을 지속적으로 보존하기에 적합하지 않다. 틱 조회만으로 매번 전 종목 체결을 재구성하면 API 호출량도 크게 늘 수 있다.
+채택 이유: 고정 IP Collector와 self-hosted/HTTPS snapshot 전달 구조가 구현되어 GitHub Actions의 단기 실행 제약을 분리할 수 있게 됐다.
 
-현재 대안: 분봉 종가×분봉 거래량을 사용하고 `amount_estimated=true`를 명시한다.
+구현: `src/autoresearch/toss_collector.py` → `data/providers/toss/latest.json` → `toss_bridge.py` → Market Tape.
 
-진행 조건: 상시 실행 가능한 별도 수집기 또는 정확한 분 단위 거래대금 공급원을 확보하면 교체한다.
+fallback: Toss가 없을 때 KRX 정규장에서는 키움 종가×거래량 근사값을 쓰고 `amount_estimated=true`로 구분한다.
 
 ## 재검토 — 과거 데이터 백필
 
@@ -161,3 +161,18 @@ AI가 발견한 아이디어를 상태와 함께 누적한다.
 아이디어: 검색, 날짜/종목/산업 필터, 품질점수 추이, AI 진화 타임라인, 아이디어 칸반, Health/Regression 상태를 한 화면에 통합한다.
 
 현재 상태: 핵심 V2 UI 도입. 향후 개별 종목 상세 페이지와 매크로 시계열 페이지를 확장한다.
+
+
+## 채택 — Market Tape 의미 상태 Dirty-state
+
+아이디어: 10분마다 원데이터는 확인하되 KOSPI/KOSDAQ, breadth, 거래대금 집중도, 신규주 열기, 동조수급, burst leader, NXT 프리미엄이 실질적으로 바뀔 때만 AI 장세 해석을 다시 호출한다.
+
+채택 이유: 같은 시장을 10분마다 다시 설명하는 중복과 비용을 줄이면서 의미 변화는 빠르게 반영할 수 있다.
+
+안전장치: 의미 변화가 없어도 기본 60분마다 강제 재평가한다.
+
+## 채택 — Data Provider Health Panel
+
+아이디어: Toss snapshot 나이, 마지막 체결, 구독 수, 거절 수, 실제 1분 거래대금 여부, 키움 fallback 여부를 Health Watchdog와 대시보드에 함께 노출한다.
+
+채택 이유: 분석 결과가 정상처럼 보여도 데이터 입력 계층이 끊긴 상태를 조기에 발견하기 위해서다.
