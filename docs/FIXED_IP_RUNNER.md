@@ -44,7 +44,9 @@ TOSS_CLIENT_SECRET
 
 ## 3. Collector 서비스
 
-deploy/toss-collector.service.example을 참고해 /etc/systemd/system/stock-autoresearch-toss.service를 만든다.
+canonical 구현은 `src/autoresearch/toss_collector.py`이다. `collector/toss_collector.py`는 호환용 진입점이며 동일 canonical 구현으로 위임한다.
+
+`deploy/toss-collector.service.example`을 참고해 /etc/systemd/system/stock-autoresearch-toss.service를 만든다.
 
 그 후:
 
@@ -63,8 +65,8 @@ journalctl -u stock-autoresearch-toss -f
 - OAuth2 Client Credentials 토큰 발급
 - MARKET_TRADING_AMOUNT / KR / realtime 랭킹 조회
 - 거래대금 상위 최대 100종목 선정
-- 종목 메타데이터에서 NXT 지원 여부 확인
-- WebSocket trade:kr 구독
+- 종목 메타데이터의 NXT 지원 여부를 함께 저장
+- WebSocket `trade:kr` 구독
 - KRX+NXT 통합 체결 수신
 - 체결가×체결량을 실제 1분 거래대금으로 합산
 - 08:00~08:50 프리마켓, 09:00~15:30 정규 구간, 15:40~20:00 NXT 애프터 구간을 분리 저장
