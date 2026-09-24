@@ -258,8 +258,11 @@ async function load() {
   regressionBadge.textContent = regressionStatus;
   regressionBadge.dataset.level = regressionStatus;
   const snap = regression.snapshot || {};
+  const baseline = regression.baseline_summary || {};
   $("regression-summary").innerHTML =
     `<div class="regression-number"><strong>${snap.overall_quality ?? "-"}점</strong><span>현재 종합 품질</span></div>` +
+    `<div class="regression-number"><strong>${baseline.overall_7d ?? "-"}점</strong><span>7일 평균 · n=${baseline.samples_7d ?? 0}</span></div>` +
+    `<div class="regression-number"><strong>${baseline.overall_30d ?? "-"}점</strong><span>30일 평균 · n=${baseline.samples_30d ?? 0}</span></div>` +
     `<div class="regression-number"><strong>${regression.active_change_count ?? 0}</strong><span>활성 AI 변경</span></div>` +
     `<div class="regression-number"><strong>${regression.quarantine_count ?? 0}</strong><span>격리</span></div>` +
     `<div class="regression-number"><strong>${regression.rolled_back_count ?? 0}</strong><span>기능 롤백</span></div>`;
