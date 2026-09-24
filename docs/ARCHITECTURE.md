@@ -84,3 +84,44 @@ GitHub Pages
 ```
 
 시장 데이터가 없을 때 AI가 추측으로 장세를 만들지 않는다. 이 경우 `insufficient_data` 또는 `needs_credentials`를 명시한다.
+
+
+## Overnight Risk 계층
+
+국내장 종가베팅 분석 위에 별도의 Risk Veto 계층을 둔다.
+
+시장 Tape → 매크로 상태 → 공식 일정 → 의미 상태 Hash → 변화가 있을 때만 Risk Evaluator → Risk Report 순서다.
+
+핵심 입력:
+- KOSPI/KOSDAQ 장세
+- Nasdaq/S&P 선물
+- 미국 2년·10년 금리
+- DXY
+- USD/KRW
+- VIX
+- KOSPI200 선물/야간선물
+- FOMC, CPI, PPI, 고용, 한국은행 등 예정 일정
+
+Risk는 LOW / WATCH / HIGH / VETO로 구분한다.
+
+단 하나의 severity 5 이벤트도 발표가 임박했고 국내 현물 거래 종료 뒤라면 별도 VETO가 될 수 있다.
+
+## Dirty-state AI 호출
+
+10분 Heartbeat는 유지하지만 매번 같은 분석을 다시 하지 않는다.
+
+의미 상태에는 일정 단계, 반올림된 매크로 구간, 국내장 장세, Risk 규칙/프롬프트 문서 Hash가 들어간다.
+
+Hash가 그대로면 이전 Risk 평가를 재사용한다.
+
+Hash가 바뀌면 관련 Risk AI만 다시 호출한다.
+
+의미 상태가 그대로여도 장기 고착 방지를 위해 설정된 주기마다 강제 재평가한다.
+
+## 종가베팅 데이터와 Risk 연결
+
+15:30 이후 생성된 종가베팅 연구 표본은 그날 밤 Risk 상태가 바뀔 때마다 갱신된다.
+
+최신 Risk와 별도로 그날 밤 관측된 가장 높은 Risk Level을 보존한다.
+
+이를 이용해 향후 VETO일과 LOW/WATCH일의 다음날 갭·MFE·MAE를 비교한다.
