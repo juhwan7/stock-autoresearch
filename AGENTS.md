@@ -1,25 +1,64 @@
 # AGENTS.md
 
-## Mission
-Build and maintain an autonomous stock research system. The system discovers what is worth researching before it writes a report.
+## 프로젝트 임무
 
-## Non-negotiable rules
-1. Keep this repository independent. Do not import files, state, prompts, or assumptions from market-memo.
-2. Prefer primary sources: regulators, exchanges, filings, government documents, company IR/newsrooms, central banks, court/legal records.
-3. A news article alone does not upgrade a claim to confirmed fact.
-4. Separate: verified fact / company or official claim / third-party analysis / inference / unverified item.
-5. Dates, money, percentages, production capacity, ownership, contracts, and market statistics should be tied to the strongest available source.
-6. Search for disconfirming evidence. A research result without a serious counter-case is incomplete.
-7. Do not turn thematic association into company exposure. Stock mapping requires a concrete business link.
-8. Do not issue buy/sell recommendations. This project produces research evidence, not personalized investment advice.
-9. Preserve machine-readable run artifacts under data/runs and human-readable reports under reports.
-10. Avoid silent failures. If live research cannot verify a material point, keep it explicitly unknown.
+Stock AutoResearch는 단순 뉴스 요약기가 아니라 다음 두 가지를 동시에 수행한다.
 
-## Development
-- Python 3.11+
-- Run tests: `pytest`
-- End-to-end without API key: `python -m autoresearch run --mode dry-run`
-- Live: set `OPENAI_API_KEY`, then `python -m autoresearch run --mode live`
+1. 주식시장에서 지금 조사할 가치가 있는 사건과 구조를 스스로 찾고 검증한다.
+2. 프로젝트 자체의 정확성·통계·가독성·자동화 수준을 계속 개선한다.
 
-## Architecture
-Scanner -> scoring -> topic selection -> Researcher -> Critic -> optional re-research -> Chief Researcher -> report/state.
+기존 `market-memo`와는 완전히 독립적이어야 한다.
+
+## 절대 원칙
+
+1. 공시·거래소·정부·규제기관·기업 IR 등 1차 자료를 우선한다.
+2. 기사 하나만으로 중요한 사실을 확정하지 않는다.
+3. 확인된 사실 / 당사자 주장 / 분석 / 추정 / 미확인을 구분한다.
+4. 날짜·금액·비율·계약·생산능력·시장 통계는 가능한 한 원자료에 연결한다.
+5. 결론에 반대되는 자료와 다른 설명도 찾는다.
+6. 단순 테마 연관성을 실제 사업 수혜로 바꾸지 않는다.
+7. 시장 상승·하락의 원인을 뉴스 하나로 단정하지 않는다.
+8. 매수·매도 추천을 만들지 않는다. 근거와 통계를 제공한다.
+9. 실패·보류·폐기한 아이디어의 이유도 장기 기억에 남긴다.
+10. live 데이터가 없으면 추측으로 숫자나 장세를 만들지 않는다.
+
+## 국내시장 단기 트레이딩 연구
+
+사용자의 우선 전략은 **종가베팅과 단기스윙 눌림**이다.
+
+분석 전 반드시 `docs/TRADING_RESEARCH_MANDATE.md`와 `docs/MARKET_DATA_SPEC.md`를 확인한다.
+
+특히 다음을 중요하게 본다.
+
+- 1분 거래대금의 절대값과 종목 평소 대비 상대값
+- 가격 상승이 거래대금으로 확인되는지
+- 14:30~15:20 장후반 거래대금과 가격 흐름
+- 15:20~15:30 종가 단일가의 별도 변화
+- 신규상장주 여러 종목의 동시 자금 유입
+- 섹터·기업집단에서 같은 시간대 발생하는 상승+거래대금 burst
+- 종가베팅 다음 날 갭·MFE·MAE
+- 대량 거래 상승 파동 이후 눌림폭·거래대금 감소·5/20일선·재가속
+- 전체 표본과 실패 사례를 포함한 통계
+
+성공 차트만 골라 통계를 만들지 않는다.
+
+## 자기진화
+
+`docs/USER_INTENT.md`와 `docs/EVOLUTION_RULES.md`를 최상위 제약으로 취급한다.
+
+개선은 많을수록 좋은 것이 아니다. 변경하지 않는 편이 낫다면 이유를 기록하고 변경하지 않는다.
+
+자동 변경은 테스트를 통과해야 하며, 고위험 영역은 제안으로만 남긴다.
+
+## 개발·검증
+
+Python 3.11+.
+
+```bash
+pytest -q
+python -m autoresearch run --mode dry-run
+python -m autoresearch evolve --mode dry-run
+python -m autoresearch market-intel --mode dry-run
+```
+
+실전 시장 데이터는 GitHub Secret의 `KIWOOM_APP_KEY`, `KIWOOM_SECRET_KEY`를 사용한다. 이 프로젝트의 키움 연동은 읽기 전용 시세 조회만 구현한다.
