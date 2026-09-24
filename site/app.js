@@ -152,6 +152,20 @@ async function load() {
     $("strategy-stats").innerHTML = "<p class='muted'>표본 축적 전</p>";
   }
 
+  const health = data.health || {};
+  const healthStatus = health.status || "UNKNOWN";
+  const healthBadge = $("health-status");
+  healthBadge.textContent = healthStatus;
+  healthBadge.dataset.level = healthStatus;
+  $("health-issues").innerHTML = (health.issues || []).length
+    ? health.issues.map((x) =>
+      `<div class="health-item" data-level="${esc(x.severity)}">
+        <div><strong>${esc(x.component)} · ${esc(x.code)}</strong><p>${esc(x.message)}</p></div>
+        <div class="health-recovery">${esc(x.recovery)}</div>
+      </div>`
+    ).join("")
+    : `<div class="health-ok">현재 확인된 운영 이상 없음</div>`;
+
   $("reports").innerHTML = (data.reports || []).length
     ? data.reports.map((r) =>
       `<a class="report" href="${esc(r.github_url)}" target="_blank" rel="noreferrer">
