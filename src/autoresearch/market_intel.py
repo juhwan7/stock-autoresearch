@@ -232,9 +232,31 @@ def render_market_markdown(result: dict[str, Any]) -> str:
                 or "정량 데이터는 수집됐지만 AI 장세 해석은 아직 없습니다."
             ),
             "",
-            "## 분석 Universe 폭",
+            "## 전체시장 폭",
             "",
-            f"- 분석 종목 수: {q.get('stock_count', 0)} (현재 거래대금 상위 상세조회 Universe)",
+        ]
+    )
+
+    overview = result.get("source", {}).get("market_overview", {})
+    if overview:
+        for market_name in ("KOSPI", "KOSDAQ"):
+            market = overview.get(market_name, {})
+            if not market or market.get("error"):
+                continue
+            lines.append(
+                f"- **{market_name}** {market.get('change_pct')}% · "
+                f"상승 {market.get('rising')} / 보합 {market.get('flat')} / 하락 {market.get('falling')} · "
+                f"상승비율 {float(market.get('advance_ratio') or 0):.1%}"
+            )
+    else:
+        lines.append("- 전체시장 breadth 데이터 없음")
+
+    lines.extend(
+        [
+            "",
+            "## 거래대금 상위 상세 Universe",
+            "",
+            f"- 분석 종목 수: {q.get('stock_count', 0)}",
             f"- 상승 종목: {q.get('breadth', {}).get('advancers', 0)}",
             f"- 하락 종목: {q.get('breadth', {}).get('decliners', 0)}",
             f"- 상위 10개 거래대금 집중도: {q.get('turnover', {}).get('top10_share', 0):.1%}",
@@ -473,6 +495,31 @@ class MarketIntelEngine:
             }
 
         source = KiwoomSource()
+        market_overview: dict[str, Any] = {}
+        for label, market_type, index_code in (
+            ("KOSPI", "0", "001"),
+            ("KOSDAQ", "1", "101"),
+        ):
+            try:
+                raw_index = source.market_index_summary(market_type, index_code)
+                rising = int(abs(number(raw_index.get("rising"))))
+                flat = int(abs(number(raw_index.get("stdns"))))
+                falling = int(abs(number(raw_index.get("fall"))))
+                formed = rising + flat + falling
+                market_overview[label] = {
+                    "index": abs(number(raw_index.get("cur_prc"))),
+                    "change_pct": number(raw_index.get("flu_rt")),
+                    "trading_value": abs(number(raw_index.get("trde_prica"))),
+                    "rising": rising,
+                    "flat": flat,
+                    "falling": falling,
+                    "limit_up": int(abs(number(raw_index.get("upl")))),
+                    "limit_down": int(abs(number(raw_index.get("lst")))),
+                    "advance_ratio": round(rising / formed, 4) if formed else None,
+                }
+            except KiwoomAPIError as exc:
+                market_overview[label] = {"error": str(exc)}
+
         rank_limit = int(
             self.cfg.get("universe", {}).get("turnover_rank_limit", 30)
         )
@@ -570,6 +617,7 @@ class MarketIntelEngine:
             "status": "ok" if minute_by_ticker else "no_rows",
             "ranking_count": len(ranking),
             "detail_count": len(minute_by_ticker),
+            "market_overview": market_overview,
             "detail_universe": {
                 "turnover_base": base_count,
                 "recent_listing_extra": recent_added,
@@ -1005,9 +1053,12 @@ class MarketIntelEngine:
             q = item.get("quantitative", {})
             if q.get("status") != "ok":
                 continue
+            overview = item.get("source", {}).get("market_overview", {})
             history.append(
                 {
                     "generated_at": item.get("generated_at"),
+                    "KOSPI": overview.get("KOSPI"),
+                    "KOSDAQ": overview.get("KOSDAQ"),
                     "analyzed_stock_count": q.get("stock_count"),
                     "advance_ratio": q.get("breadth", {}).get("advance_ratio"),
                     "top10_turnover_share": q.get("turnover", {}).get("top10_share"),
