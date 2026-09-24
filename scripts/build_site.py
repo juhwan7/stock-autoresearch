@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -22,17 +23,128 @@ def title_of(path: Path) -> str:
     return path.name
 
 
-def recent_reports(limit: int = 20) -> list[dict]:
+def report_metadata(path: Path) -> dict:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        text = ""
+
+    generated_at = ""
+    quality = None
+    industries: list[str] = []
+    stocks: list[str] = []
+    current = ""
+
+    for line in text.splitlines():
+        if line.startswith("> 생성:"):
+            generated_at = line.split(":", 1)[1].strip()
+        elif line.startswith("> research quality average:"):
+            try:
+                quality = float(line.rsplit(":", 1)[1].strip())
+            except ValueError:
+                quality = None
+        elif line.startswith("## "):
+            current = line[3:].strip()
+        elif line.startswith("- **"):
+            match = re.match(r"- \*\*(.+?)\*\*", line)
+            if not match:
+                continue
+            value = match.group(1).strip()
+            if current == "산업 연결" and value not in industries:
+                industries.append(value)
+            elif current == "상장사 연결" and value not in stocks:
+                stocks.append(value)
+
+    preview = " ".join(
+        line.strip()
+        for line in text.splitlines()
+        if line.strip() and not line.startswith("#") and not line.startswith(">")
+    )[:900]
+    return {
+        "generated_at": generated_at,
+        "quality": quality,
+        "industries": industries[:12],
+        "stocks": stocks[:20],
+        "preview": preview,
+    }
+
+
+def recent_reports(limit: int = 100) -> list[dict]:
     files = sorted((ROOT / "reports").rglob("*.md"), reverse=True)[:limit]
     repo = os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch")
-    return [
-        {
-            "title": title_of(path),
-            "file": str(path.relative_to(ROOT / "reports")),
-            "github_url": f"https://github.com/{repo}/blob/main/{path.relative_to(ROOT)}",
-        }
-        for path in files
-    ]
+    result = []
+    for path in files:
+        meta = report_metadata(path)
+        result.append(
+            {
+                "title": title_of(path),
+                "file": str(path.relative_to(ROOT / "reports")),
+                "github_url": f"https://github.com/{repo}/blob/main/{path.relative_to(ROOT)}",
+                **meta,
+            }
+        )
+    return result
+
+
+def idea_board() -> dict[str, list[dict[str, str]]]:
+    path = ROOT / "docs" / "IDEAS.md"
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return {}
+
+    result: dict[str, list[dict[str, str]]] = {}
+    current: dict[str, str] | None = None
+    body: list[str] = []
+
+    def flush() -> None:
+        nonlocal current, body
+        if current is None:
+            return
+        summary = " ".join(x.strip() for x in body if x.strip())[:500]
+        item = dict(current)
+        item["summary"] = summary
+        result.setdefault(item["status"], []).append(item)
+        current = None
+        body = []
+
+    for line in lines:
+        match = re.match(r"^## (채택|실험중|보류|폐기|재검토) — (.+)$", line)
+        if match:
+            flush()
+            current = {"status": match.group(1), "title": match.group(2).strip()}
+            continue
+        if current is not None:
+            if line.startswith("## "):
+                flush()
+            else:
+                body.append(line)
+    flush()
+    return result
+
+
+def recent_change_manifests(limit: int = 30) -> list[dict]:
+    folder = ROOT / "data" / "evolution" / "changes"
+    result = []
+    if not folder.exists():
+        return result
+    for path in sorted(folder.glob("*.json"), reverse=True)[:limit]:
+        data = read_json(path)
+        if not data:
+            continue
+        result.append(
+            {
+                "change_id": data.get("change_id"),
+                "applied_at": data.get("applied_at"),
+                "title": data.get("title"),
+                "risk": data.get("risk"),
+                "status": data.get("status", "active"),
+                "paths": data.get("paths", []),
+                "rollback_reason": data.get("rollback_reason"),
+                "quarantine_reason": data.get("quarantine_reason"),
+            }
+        )
+    return result
 
 
 def latest_ticks(limit: int = 30) -> list[dict]:
@@ -82,12 +194,24 @@ def read_json(path: Path) -> dict:
 
 def main() -> None:
     market = read_json(ROOT / "data" / "market" / "latest.json")
+    reports = recent_reports()
     status = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "project": "Stock AutoResearch",
         "heartbeat": "10분",
-        "reports": recent_reports(),
+        "reports": reports,
+        "quality_history": [
+            {
+                "title": item.get("title"),
+                "generated_at": item.get("generated_at"),
+                "quality": item.get("quality"),
+            }
+            for item in reversed(reports)
+            if item.get("quality") is not None
+        ][-40:],
         "ticks": latest_ticks(),
+        "idea_board": idea_board(),
+        "recent_changes": recent_change_manifests(),
         "decision_memory": section_tail(ROOT / "docs" / "DECISIONS.md"),
         "ideas": section_tail(ROOT / "docs" / "IDEAS.md"),
         "help_needed": section_tail(ROOT / "docs" / "HELP_NEEDED.md"),
@@ -97,6 +221,8 @@ def main() -> None:
         "risk": read_json(ROOT / "data" / "risk" / "latest.json"),
         "risk_runtime": read_json(ROOT / "data" / "risk" / "runtime.json"),
         "health": read_json(ROOT / "data" / "health" / "latest.json"),
+        "regression": read_json(ROOT / "data" / "regression" / "latest.json"),
+        "quarantine": read_json(ROOT / "data" / "regression" / "quarantine.json"),
         "docs_links": [
             {
                 "title": "문서 지도",
@@ -109,6 +235,14 @@ def main() -> None:
             {
                 "title": "시장 데이터 명세",
                 "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/MARKET_DATA_SPEC.md",
+            },
+            {
+                "title": "회귀 탐지·기능 롤백",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/REGRESSION_GUARD.md",
+            },
+            {
+                "title": "토스 데이터 계획",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/TOSS_DATA_PLAN.md",
             },
             {
                 "title": "결정 원장",
