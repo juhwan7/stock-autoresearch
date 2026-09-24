@@ -86,7 +86,7 @@ def post_issue(report: dict[str, Any]) -> bool:
 
     next_checks = report.get("next_checks") or []
     if next_checks:
-        lines.extend(["", "### 다음 10분 관측에서 확인"])
+        lines.extend(["", "### 다음 6분 관측에서 확인"])
         for item in next_checks[:8]:
             lines.append("- " + str(item))
 
