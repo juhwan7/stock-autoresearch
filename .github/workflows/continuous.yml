@@ -72,6 +72,7 @@ jobs:
           pytest -q
           git diff --check
       - name: Commit this tick
+        if: env.MODE == 'live'
         run: |
           git config user.name "stock-autoresearch[bot]"
           git config user.email "stock-autoresearch[bot]@users.noreply.github.com"
