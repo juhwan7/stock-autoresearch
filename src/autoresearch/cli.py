@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .evolution import EvolutionEngine
+from .health import HealthWatchdog
 from .market_intel import MarketIntelEngine
 from .pipeline import Pipeline
 from .risk_engine import RiskEngine
@@ -46,6 +47,9 @@ def build_parser() -> argparse.ArgumentParser:
         default="dry-run",
     )
     risk.add_argument("--root", default=".", help="저장소 루트")
+
+    health = sub.add_parser("health", help="프로젝트 운영 상태 점검")
+    health.add_argument("--root", default=".", help="저장소 루트")
     return parser
 
 
@@ -61,6 +65,8 @@ def main() -> None:
         result = MarketIntelEngine(root, args.mode).run()
     elif args.command == "risk-intel":
         result = RiskEngine(root, args.mode).run()
+    elif args.command == "health":
+        result = HealthWatchdog(root).run()
     else:
         raise SystemExit(2)
 
