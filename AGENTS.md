@@ -42,6 +42,20 @@ Stock AutoResearch는 단순 뉴스 요약기가 아니라 다음 두 가지를 
 
 성공 차트만 골라 통계를 만들지 않는다.
 
+## 종가베팅 Overnight Risk
+
+종가베팅 분석 전 `docs/RISK_VETO.md`를 확인한다.
+
+- 리스크 개수보다 가장 큰 단일 충격을 우선한다.
+- CPI·FOMC·고용·한국은행 등 예정 이벤트를 미리 본다.
+- Nasdaq/미국채/DXY/USD-KRW/KOSPI200 선물·야간선물 등 매크로를 같이 본다.
+- 20:00 이후 이벤트는 NXT 대상 종목도 국내 현물에서 대응할 수 없는 Overnight Risk로 본다.
+- 모든 종목이 NXT 대상이라고 가정하지 않는다.
+- 과거 표본 없이 갭상승 확률을 만들어내지 않는다.
+- 의미 상태가 변하지 않으면 동일 Risk AI 판단을 반복하지 않는다.
+
+시장 데이터 신규 개발은 토스증권을 우선한다. 현재 키움 연결은 fallback/비교용으로 유지한다.
+
 ## 자기진화
 
 `docs/USER_INTENT.md`와 `docs/EVOLUTION_RULES.md`를 최상위 제약으로 취급한다.
@@ -59,6 +73,7 @@ pytest -q
 python -m autoresearch run --mode dry-run
 python -m autoresearch evolve --mode dry-run
 python -m autoresearch market-intel --mode dry-run
+python -m autoresearch risk-intel --mode dry-run
 ```
 
-실전 시장 데이터는 GitHub Secret의 `KIWOOM_APP_KEY`, `KIWOOM_SECRET_KEY`를 사용한다. 이 프로젝트의 키움 연동은 읽기 전용 시세 조회만 구현한다.
+현재 Market Tape V1의 실전 데이터는 키움 읽기 전용 조회를 사용한다. 신규 데이터 계층은 토스증권 Open API를 우선하며, Toss 실시간 연결은 고정 IP Collector에서 수행한다. 어떤 공급자에서도 주문 기능은 구현하지 않는다.
