@@ -60,6 +60,9 @@ jobs:
           print(f"Imported Toss snapshot age={age:.0f}s")
           PY
 
+      - name: Summarize Toss provider state
+        run: python scripts/summarize_toss_snapshot.py
+
       - name: Korea market tape with Toss primary
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
