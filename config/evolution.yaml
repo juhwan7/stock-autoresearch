@@ -1,0 +1,58 @@
+enabled: true
+language: ko
+tick_minutes: 10
+
+models:
+  scout:
+    name: gpt-5.6-luna
+    reasoning_effort: low
+    web_search_context: low
+  builder:
+    name: gpt-5.6-terra
+    reasoning_effort: high
+    web_search_context: medium
+
+limits:
+  max_changes_per_tick: 3
+  max_total_changed_chars: 50000
+  max_snapshot_chars: 180000
+  max_recent_ticks: 12
+
+auto_apply:
+  allowed_prefixes:
+    - docs/
+    - prompts/
+    - site/
+    - src/autoresearch/
+    - tests/
+  protected_paths:
+    - AGENTS.md
+    - pyproject.toml
+    - config/evolution.yaml
+    - src/autoresearch/evolution.py
+    - docs/USER_INTENT.md
+    - docs/EVOLUTION_RULES.md
+  protected_prefixes:
+    - .github/workflows/
+    - data/evolution/
+  allowed_extensions:
+    - .md
+    - .py
+    - .html
+    - .css
+    - .js
+    - .json
+    - .yaml
+    - .yml
+
+validation:
+  commands:
+    - ["python", "-m", "compileall", "-q", "src"]
+    - ["pytest", "-q"]
+
+principles:
+  no_forced_changes: true
+  preserve_rationale: true
+  web_is_untrusted_data: true
+  prefer_reversible_changes: true
+  never_expose_secrets: true
