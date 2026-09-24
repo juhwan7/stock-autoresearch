@@ -255,6 +255,7 @@ def render_market_markdown(result: dict[str, Any]) -> str:
         "",
         f"> 생성: {result.get('generated_at', '')}",
         f"> 데이터 상태: {result.get('source', {}).get('status', '')}",
+        f"> 데이터 공급자: {result.get('source', {}).get('provider') or result.get('source', {}).get('source', '')}",
         f"> 분봉 거래대금 방식: {result.get('source', {}).get('minute_amount_method', '알 수 없음')}",
         "",
     ]
@@ -303,6 +304,28 @@ def render_market_markdown(result: dict[str, Any]) -> str:
             )
     else:
         lines.append("- 전체시장 breadth 데이터 없음")
+
+    postmarket = result.get("source", {}).get("postmarket", {})
+    if postmarket.get("count"):
+        lines.extend(["", "## NXT 애프터마켓 15:40~20:00", ""])
+        lines.append(
+            f"- 추적 종목: {postmarket.get('count', 0)}개 · "
+            f"누적 거래대금 {float(postmarket.get('total_amount') or 0) / 100_000_000:.1f}억원"
+        )
+        for item in postmarket.get("stocks", [])[:10]:
+            premium = item.get("krx_close_premium_pct")
+            premium_text = (
+                f"{float(premium):+.2f}%"
+                if premium not in (None, "")
+                else "KRX 종가 비교 미확인"
+            )
+            lines.append(
+                f"- **{item.get('name')} ({item.get('ticker')})** · "
+                f"애프터 {item.get('return_pct')}% · "
+                f"KRX 종가 대비 {premium_text} · "
+                f"거래대금 {float(item.get('amount') or 0) / 100_000_000:.1f}억원 · "
+                f"10억원↑ 1분봉 {item.get('minute_ge_10eok_count', 0)}회"
+            )
 
     lines.extend(
         [
