@@ -429,19 +429,66 @@ class MarketIntelEngine:
         today = now.strftime("%Y-%m-%d")
         detail_tickers: list[str] = []
         ranking_by_ticker: dict[str, dict[str, Any]] = {}
+        ranked_tickers: list[str] = []
         for row in ranking:
             ticker = str(row.get("stk_cd") or "").split("_")[0]
             if not ticker:
                 continue
             ranking_by_ticker[ticker] = row
+            ranked_tickers.append(ticker)
             if len(detail_tickers) < detail_limit:
                 detail_tickers.append(ticker)
 
+        base_count = len(detail_tickers)
+
+        # 신규주 장세를 놓치지 않도록 거래대금 순위 안의 신규상장주를 추가 조회한다.
+        recent_extra_limit = int(
+            self.cfg.get("universe", {}).get("recent_listing_extra_limit", 10)
+        )
+        recent_added = 0
+        recent_days = int(
+            self.cfg.get("universe", {}).get("recent_listing_calendar_days", 90)
+        )
+        for ticker in ranked_tickers:
+            if ticker in detail_tickers:
+                continue
+            age = metadata.get(ticker, {}).get("listing_age_days")
+            if age is None or age > recent_days:
+                continue
+            detail_tickers.append(ticker)
+            recent_added += 1
+            if recent_added >= recent_extra_limit:
+                break
+
+        # 한화처럼 특정 기업집단이 움직일 때 동조 여부를 확인하기 위해
+        # 현재 상세 Universe에 포함된 검증된 group_id의 다른 계열사도 제한적으로 조회한다.
+        group_extra_limit = int(
+            self.cfg.get("universe", {}).get("group_member_extra_limit", 10)
+        )
+        active_groups = {
+            str(metadata.get(ticker, {}).get("group_id") or "")
+            for ticker in detail_tickers
+        }
+        active_groups.discard("")
+        group_added = 0
+        if active_groups:
+            for ticker, item in metadata.items():
+                if ticker in detail_tickers:
+                    continue
+                if str(item.get("group_id") or "") not in active_groups:
+                    continue
+                detail_tickers.append(ticker)
+                group_added += 1
+                if group_added >= group_extra_limit:
+                    break
+
         # 다음 날 전체 MFE/MAE는 장 마감 후에만 확정한다.
+        pending_added = 0
         if now.strftime("%H:%M") >= "15:30":
             for ticker in self._pending_close_tickers(today):
                 if ticker not in detail_tickers:
                     detail_tickers.append(ticker)
+                    pending_added += 1
 
         minute_by_ticker: dict[str, list[dict[str, Any]]] = {}
         base_date = datetime.now(KST).strftime("%Y%m%d")
@@ -466,6 +513,12 @@ class MarketIntelEngine:
             "status": "ok" if minute_by_ticker else "no_rows",
             "ranking_count": len(ranking),
             "detail_count": len(minute_by_ticker),
+            "detail_universe": {
+                "turnover_base": base_count,
+                "recent_listing_extra": recent_added,
+                "group_member_extra": group_added,
+                "pending_outcome_extra": pending_added,
+            },
             "minute_amount_method": "close_x_volume_estimate",
         }
 
