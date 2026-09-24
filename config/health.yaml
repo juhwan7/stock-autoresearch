@@ -7,6 +7,8 @@ thresholds:
   market_stale_minutes_during_session: 25
   risk_stale_minutes: 25
   macro_stale_minutes: 25
+  toss_snapshot_stale_minutes: 5
+  toss_trade_stale_minutes: 5
 
 data:
   state_file: data/health/state.json
@@ -15,6 +17,9 @@ data:
 components:
   market:
     runtime_file: data/market/runtime.json
+  toss:
+    snapshot_file: data/providers/toss/latest.json
+    fetch_runtime_file: data/providers/toss/fetch_runtime.json
   risk:
     runtime_file: data/risk/runtime.json
     latest_file: data/risk/latest.json
