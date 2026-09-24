@@ -49,26 +49,69 @@ def quantitative():
                 "return_pct": 4.0,
                 "total_amount": 4500,
                 "close_watch_share": 0.7,
+                "median_minute_amount": 600_000_000,
+                "max_minute_amount": 2_500_000_000,
+                "amount_threshold_counts": {
+                    "500000000": 5,
+                    "1000000000": 3,
+                    "2000000000": 1,
+                    "5000000000": 0,
+                },
                 "burst_count": 2,
+                "positive_burst_times": ["14:30", "14:31"],
                 "max_burst_ratio": 3.0,
+                "minute_coverage_start": "09:00",
+                "minute_coverage_end": "15:20",
+                "full_regular_session": True,
                 "high_position": 0.8,
                 "group_id": "G",
                 "sector": "S",
             }
         ],
+        "recent_listings": {
+            "positive_burst_count": 4,
+            "threshold_event_counts": {"1000000000": 12},
+        },
+        "coflow_groups": [
+            {
+                "group": "G",
+                "synchronized_burst_members": 3,
+                "members": [{"ticker": "A", "name": "테스트"}],
+            }
+        ],
+    }
+
+
+def source_state():
+    return {
+        "turnover_rank_top10_share": 0.62,
+        "market_overview": {
+            "KOSPI": {"change_pct": 1.1, "advance_ratio": 0.58},
+            "KOSDAQ": {"change_pct": 0.7, "advance_ratio": 0.55},
+        },
     }
 
 
 def test_close_bet_event_is_created_with_late_and_auction_moves(tmp_path):
     engine = make_engine(tmp_path)
     now = datetime(2026, 9, 25, 15, 31, tzinfo=KST)
-    result = engine._update_close_bet_events(now, {"A": signal_rows()}, quantitative())
+    result = engine._update_close_bet_events(
+        now,
+        {"A": signal_rows()},
+        quantitative(),
+        source_state(),
+    )
     assert result["created"] == 1
 
     rows = load_event_csv(tmp_path / "data/market/stats/close_bet_events.csv")
     assert len(rows) == 1
     assert float(rows[0]["late_return_pct"]) == 5.0
     assert round(float(rows[0]["closing_auction_pct"]), 4) == round((104 / 105 - 1) * 100, 4)
+    assert rows[0]["minute_ge_10eok_count"] == "3"
+    assert rows[0]["synchronized_coflow"] == "1"
+    assert rows[0]["synchronized_group"] == "G"
+    assert rows[0]["turnover_rank_top10_share"] == "0.62"
+    assert rows[0]["recent_listing_10eok_event_count"] == "12"
 
 
 def test_next_day_outcome_is_not_finalized_intraday(tmp_path):
