@@ -17,10 +17,20 @@
     <div class="pulse"><span></span> Continuous Loop</div>
   </header>
 
+  <nav class="dash-nav">
+    <a href="#risk">Risk</a>
+    <a href="#market">시장</a>
+    <a href="#health">상태</a>
+    <a href="#research">리서치</a>
+    <a href="#evolution">AI 진화</a>
+    <a href="#regression">회귀</a>
+    <a href="#idea-board">아이디어</a>
+  </nav>
+
   <main>
     <section class="metrics" id="metrics"></section>
 
-    <section class="panel risk-panel">
+    <section class="panel risk-panel" id="risk">
       <div class="panel-head">
         <div>
           <p class="kicker">OVERNIGHT RISK VETO</p>
@@ -45,7 +55,7 @@
       </div>
     </section>
 
-    <section class="panel market-panel">
+    <section class="panel market-panel" id="market">
       <div class="panel-head">
         <div>
           <p class="kicker">KOREA MARKET TAPE</p>
@@ -74,7 +84,7 @@
       </div>
     </section>
 
-    <section class="panel health-panel">
+    <section class="panel health-panel" id="health">
       <div class="panel-head">
         <div>
           <p class="kicker">HEALTH WATCHDOG</p>
@@ -85,16 +95,52 @@
       <div id="health-issues" class="health-list"></div>
     </section>
 
-    <section class="grid two">
-      <article class="panel">
-        <div class="panel-head"><div><p class="kicker">MARKET RESEARCH</p><h2>최근 리서치</h2></div></div>
+    <section class="grid two dashboard-main">
+      <article class="panel" id="research">
+        <div class="panel-head">
+          <div><p class="kicker">MARKET RESEARCH</p><h2>리서치 검색·필터</h2></div>
+          <span class="badge" id="report-count">0개</span>
+        </div>
+        <div class="report-controls">
+          <input id="report-search" type="search" placeholder="제목·내용 검색">
+          <input id="report-date" type="date" aria-label="날짜 필터">
+          <select id="report-stock"><option value="">전체 종목</option></select>
+          <select id="report-industry"><option value="">전체 산업</option></select>
+          <button id="report-clear" type="button">초기화</button>
+        </div>
+        <div class="quality-box">
+          <div class="subhead">리서치 품질점수 추이</div>
+          <div id="quality-chart" class="quality-chart"></div>
+        </div>
         <div id="reports" class="list"></div>
       </article>
 
-      <article class="panel">
-        <div class="panel-head"><div><p class="kicker">EVOLUTION</p><h2>최근 10분 판단</h2></div></div>
+      <article class="panel" id="evolution">
+        <div class="panel-head"><div><p class="kicker">EVOLUTION</p><h2>AI 진화 타임라인</h2></div></div>
         <div id="ticks" class="timeline"></div>
       </article>
+    </section>
+
+    <section class="grid two">
+      <article class="panel regression-panel" id="regression">
+        <div class="panel-head">
+          <div><p class="kicker">REGRESSION GUARD</p><h2>기능 단위 회귀 탐지</h2></div>
+          <span class="regression-badge" id="regression-status">확인 중</span>
+        </div>
+        <div id="regression-summary" class="regression-summary"></div>
+        <div class="subhead">최근 평가</div>
+        <div id="regression-evals" class="mini-list"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><div><p class="kicker">CHANGE MANIFEST</p><h2>최근 AI 변경</h2></div></div>
+        <div id="recent-changes" class="timeline"></div>
+      </article>
+    </section>
+
+    <section class="panel" id="idea-board">
+      <div class="panel-head"><div><p class="kicker">IDEA LIFECYCLE</p><h2>채택·실험·보류 아이디어 칸반</h2></div></div>
+      <div id="ideas-kanban" class="kanban"></div>
     </section>
 
     <section class="grid three">
