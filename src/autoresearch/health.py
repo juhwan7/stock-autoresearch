@@ -195,6 +195,45 @@ class HealthWatchdog:
             )
         return issues
 
+    def _check_regression(self) -> list[dict[str, str]]:
+        path = self.root / self.cfg.get("components", {}).get(
+            "regression", {}
+        ).get("latest_file", "data/regression/latest.json")
+        data = _read_json(path)
+        if not data:
+            return [
+                self._issue(
+                    "regression",
+                    "missing",
+                    "NOTICE",
+                    "Regression Guard 상태가 아직 없음",
+                    "regression 명령이 Continuous Loop에 연결됐는지 확인",
+                )
+            ]
+
+        status = str(data.get("status") or "OK")
+        if status == "QUARANTINED":
+            return [
+                self._issue(
+                    "regression",
+                    "quarantined-change",
+                    "WARN",
+                    "품질 악화 의심 변경이 격리됨",
+                    "대시보드의 회귀 상세에서 change_id와 겹친 파일을 검토",
+                )
+            ]
+        if status == "ROLLED_BACK":
+            return [
+                self._issue(
+                    "regression",
+                    "auto-rollback",
+                    "INFO",
+                    "회귀 탐지로 기능 단위 자동 롤백이 수행됨",
+                    "EXPERIMENTS와 변경 manifest에서 원인과 복원 파일 확인",
+                )
+            ]
+        return []
+
     def _check_macro(self, now: datetime) -> list[dict[str, str]]:
         path = self.root / self.cfg.get("components", {}).get("macro", {}).get(
             "file", "data/macro/current.json"
@@ -247,6 +286,7 @@ class HealthWatchdog:
         issues.extend(self._check_market(now))
         issues.extend(self._check_risk(now))
         issues.extend(self._check_macro(now))
+        issues.extend(self._check_regression())
 
         consecutive = self._update_consecutive(previous, issues)
         warn_n = int(self.cfg.get("thresholds", {}).get("warn_consecutive", 2))
