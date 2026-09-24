@@ -86,6 +86,46 @@ class KiwoomSource:
         return self._token
 
 
+    def market_index_summary(
+        self,
+        market_type: str,
+        index_code: str,
+    ) -> dict[str, Any]:
+        """업종현재가(ka20001)의 종합지수 요약.
+
+        KOSPI: market_type=0, index_code=001
+        KOSDAQ: market_type=1, index_code=101
+
+        상승/보합/하락 종목 수와 시장 거래대금을 함께 사용한다.
+        """
+        payload, _ = self._request(
+            "/api/dostk/sect",
+            {
+                "mrkt_tp": market_type,
+                "inds_cd": index_code,
+            },
+            api_id="ka20001",
+        )
+        keys = (
+            "cur_prc",
+            "pred_pre_sig",
+            "pred_pre",
+            "flu_rt",
+            "trde_qty",
+            "trde_prica",
+            "trde_frmatn_stk_num",
+            "trde_frmatn_rt",
+            "open_pric",
+            "high_pric",
+            "low_pric",
+            "upl",
+            "rising",
+            "stdns",
+            "fall",
+            "lst",
+        )
+        return {key: payload.get(key) for key in keys}
+
     def stock_list(
         self,
         market_type: str,
