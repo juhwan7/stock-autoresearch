@@ -53,6 +53,12 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: python -m autoresearch evolve --mode "$MODE"
+      - name: Fetch Toss provider snapshot
+        env:
+          TOSS_SNAPSHOT_URL: ${{ secrets.TOSS_SNAPSHOT_URL }}
+          TOSS_SNAPSHOT_TOKEN: ${{ secrets.TOSS_SNAPSHOT_TOKEN }}
+        run: python scripts/fetch_toss_snapshot.py
+
       - name: Korea market tape tick
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
