@@ -32,10 +32,18 @@ async function load() {
   ).join("");
 
   const market = data.market || {};
+  const runtime = data.market_runtime || {};
   const q = market.quantitative || {};
   const interp = market.interpretation || {};
   const source = market.source || {};
-  $("market-status").textContent = source.status || q.status || "데이터 없음";
+  const runtimeStatus = runtime.source_status || source.status || q.status || "데이터 없음";
+  const statusLabels = {
+    ok: "장중 분석",
+    outside_regular_session: "장 종료 · 마지막 유효 장세",
+    needs_credentials: "키움 API 설정 필요",
+    no_rows: "시세 데이터 없음"
+  };
+  $("market-status").textContent = statusLabels[runtimeStatus] || runtimeStatus;
 
   if (q.status === "ok") {
     const breadth = q.breadth || {};
