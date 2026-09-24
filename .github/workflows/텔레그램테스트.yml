@@ -30,10 +30,42 @@ jobs:
 
           token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
           chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
-          if not token or not chat_id:
-              raise SystemExit(
-                  "TELEGRAM_BOT_TOKEN 또는 TELEGRAM_CHAT_ID Secret이 없습니다."
+          if not token:
+              raise SystemExit("TELEGRAM_BOT_TOKEN Secret이 없습니다.")
+
+          if not chat_id:
+              updates_req = urllib.request.Request(
+                  f"https://api.telegram.org/bot{token}/getUpdates"
               )
+              with urllib.request.urlopen(updates_req, timeout=20) as response:
+                  updates = json.loads(response.read().decode("utf-8"))
+
+              candidates = []
+              for update in updates.get("result", []):
+                  message = (
+                      update.get("message")
+                      or update.get("edited_message")
+                      or update.get("channel_post")
+                      or {}
+                  )
+                  chat = message.get("chat") or {}
+                  if chat.get("id") is not None:
+                      candidates.append(chat)
+
+              if not candidates:
+                  raise SystemExit(
+                      "TELEGRAM_CHAT_ID가 없습니다. Telegram에서 Bot에게 "
+                      "/start 또는 아무 메시지를 먼저 보낸 뒤 다시 실행하세요."
+                  )
+
+              chat = candidates[-1]
+              chat_id = str(chat["id"])
+              print("발견한 Telegram Chat ID:", chat_id)
+              print(
+                  "이 값을 GitHub Actions Secret TELEGRAM_CHAT_ID로 등록한 뒤 "
+                  "workflow를 다시 실행하세요."
+              )
+              raise SystemExit(0)
 
           payload = {
               "chat_id": chat_id,
