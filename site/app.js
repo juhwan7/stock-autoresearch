@@ -206,6 +206,49 @@ async function load() {
     $("strategy-stats").innerHTML = "<p class='muted'>표본 축적 전</p>";
   }
 
+  const macro = data.macro_matrix || {};
+  $("macro-regime").textContent = macro.macro_regime || macro.risk_level || "UNKNOWN";
+  $("macro-regime").dataset.level = macro.risk_level || "LOW";
+  $("macro-coverage").textContent = `${macro.known_count || 0}/${macro.total_count || 0} 확인`;
+
+  $("macro-paths").innerHTML = (macro.transmission_paths || []).length
+    ? (macro.transmission_paths || []).slice(0, 5).map((x) =>
+      `<div class="mini-row macro-note"><span>${esc(x)}</span></div>`
+    ).join("")
+    : "<p class='muted'>AI가 전달 경로를 평가할 데이터가 아직 부족합니다.</p>";
+
+  $("macro-conflicts").innerHTML = (macro.conflicting_signals || []).length
+    ? (macro.conflicting_signals || []).slice(0, 5).map((x) =>
+      `<div class="mini-row macro-note"><span>${esc(x)}</span></div>`
+    ).join("")
+    : "<p class='muted'>현재 기록된 충돌 신호 없음</p>";
+
+  function macroValue(item) {
+    if (item.value == null || item.value === "") return "미확인";
+    const n = Number(item.value);
+    if (!Number.isFinite(n)) return esc(item.value);
+    if (item.kind === "yield") return n.toFixed(3) + "%";
+    if (item.kind === "bp") return (n >= 0 ? "+" : "") + n.toFixed(1) + "bp";
+    return (n >= 0 ? "+" : "") + n.toFixed(2) + "%";
+  }
+
+  const macroGroups = {};
+  (macro.items || []).forEach((item) => {
+    (macroGroups[item.group] ||= []).push(item);
+  });
+  $("macro-groups").innerHTML = Object.entries(macroGroups).map(([group, items]) =>
+    `<div class="macro-group">
+      <div class="subhead">${esc(group)}</div>
+      <div class="macro-cards">
+        ${items.map((x) => `<div class="macro-card" data-risk="${esc(x.risk_level || "LOW")}">
+          <strong>${esc(x.label)}</strong>
+          <b>${macroValue(x)}</b>
+          <small>${esc(x.risk_level || "LOW")}</small>
+        </div>`).join("")}
+      </div>
+    </div>`
+  ).join("");
+
   const health = data.health || {};
   const healthStatus = health.status || "UNKNOWN";
   const healthBadge = $("health-status");
