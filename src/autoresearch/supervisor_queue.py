@@ -12,8 +12,8 @@ from typing import Any, Mapping
 
 
 KST = timezone(timedelta(hours=9))
-BATCH_SIZE = 6
-RECENT_LIMIT = 72
+BATCH_SIZE = 10
+RECENT_LIMIT = 120
 
 
 def _read_json(path: Path) -> dict[str, Any]:
