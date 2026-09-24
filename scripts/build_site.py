@@ -94,6 +94,26 @@ def main() -> None:
         "changelog": section_tail(ROOT / "docs" / "CHANGELOG_AI.md"),
         "market": market,
         "market_runtime": read_json(ROOT / "data" / "market" / "runtime.json"),
+        "risk": read_json(ROOT / "data" / "risk" / "latest.json"),
+        "risk_runtime": read_json(ROOT / "data" / "risk" / "runtime.json"),
+        "docs_links": [
+            {
+                "title": "문서 지도",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/DOCS_MAP.md",
+            },
+            {
+                "title": "트레이딩 연구 원칙",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/TRADING_RESEARCH_MANDATE.md",
+            },
+            {
+                "title": "시장 데이터 명세",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/MARKET_DATA_SPEC.md",
+            },
+            {
+                "title": "결정 원장",
+                "url": "https://github.com/" + os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch") + "/blob/main/docs/DECISIONS.md",
+            },
+        ],
     }
     (DATA / "status.json").write_text(
         json.dumps(status, ensure_ascii=False, indent=2),
