@@ -8,6 +8,7 @@ from .market_stats import number, percent_change
 
 
 PULLBACK_EVENT_FIELDS = [
+    "cohort_version",
     "signal_date",
     "ticker",
     "name",
