@@ -1,0 +1,59 @@
+name: 사용자 피드백 즉시 반영
+
+on:
+  issue_comment:
+    types:
+      - created
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: stock-autoresearch-writer
+  cancel-in-progress: false
+
+jobs:
+  feedback:
+    if: >
+      github.event.issue.number == 1 &&
+      github.event.comment.user.login == 'juhwan7'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 가져오기
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 사용자 피드백 저장
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          COMMENT_ID: ${{ github.event.comment.id }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+          COMMENT_URL: ${{ github.event.comment.html_url }}
+        run: |
+          python scripts/알림피드백.py ingest \
+            --issue 1 \
+            --comment-id "$COMMENT_ID" \
+            --author "$COMMENT_AUTHOR" \
+            --comment-url "$COMMENT_URL"
+
+      - name: 피드백 기억 커밋
+        run: |
+          git config user.name "stock-autoresearch[bot]"
+          git config user.email "stock-autoresearch[bot]@users.noreply.github.com"
+          git add docs/사용자_피드백.md data/feedback
+          if git diff --cached --quiet; then
+            echo "새로 저장할 피드백이 없습니다."
+          else
+            git commit -m "feedback: 사용자 GitHub 피드백 반영"
+            git pull --rebase
+            git push
+          fi
