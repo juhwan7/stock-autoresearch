@@ -57,42 +57,6 @@ async function load() {
     `<div class="mini-row risk-row"><strong>${esc(x.field)}</strong><span>${esc(x.value)} · ${esc(x.risk_level)}</span></div>`
   ).join("") || "<p class='muted'>현재 임계값 초과 경고 없음</p>";
 
-  const macroValues = ((risk.macro || {}).values || {});
-  const macroLabels = [
-    ["nasdaq100_pct", "Nasdaq 100", "%"],
-    ["nasdaq_futures_pct", "Nasdaq 선물", "%"],
-    ["sp500_pct", "S&P 500", "%"],
-    ["sp500_futures_pct", "S&P 선물", "%"],
-    ["sox_pct", "SOX", "%"],
-    ["us2y_yield", "미 2Y", "%"],
-    ["us2y_change_bp", "미 2Y Δ", "bp"],
-    ["us10y_yield", "미 10Y", "%"],
-    ["us10y_change_bp", "미 10Y Δ", "bp"],
-    ["dxy_pct", "DXY", "%"],
-    ["usdkrw_pct", "USD/KRW", "%"],
-    ["usdcnh_pct", "USD/CNH", "%"],
-    ["vix_pct", "VIX", "%"],
-    ["kospi200_futures_pct", "KOSPI200 선물", "%"],
-    ["kospi200_night_futures_pct", "KOSPI 야간선물", "%"],
-    ["nikkei225_pct", "Nikkei 225", "%"],
-    ["hang_seng_pct", "Hang Seng", "%"],
-    ["china_a50_futures_pct", "China A50 선물", "%"],
-    ["wti_pct", "WTI", "%"],
-    ["copper_pct", "구리", "%"],
-    ["gold_pct", "금", "%"],
-    ["bitcoin_pct", "Bitcoin", "%"]
-  ];
-  $("macro-matrix").innerHTML = macroLabels.map(([key, label, unit]) => {
-    const value = macroValues[key];
-    const known = value != null && value !== "";
-    const numeric = known ? Number(value) : null;
-    const sign = known && numeric > 0 && (unit === "%" || unit === "bp") ? "+" : "";
-    return `<div class="macro-cell ${known ? "" : "macro-unknown"}">
-      <span>${esc(label)}</span>
-      <strong>${known ? esc(sign + numeric + unit) : "미확인"}</strong>
-    </div>`;
-  }).join("");
-
   $("docs-links").innerHTML = (data.docs_links || []).map((x) =>
     `<a class="mini-row doc-link" href="${esc(x.url)}" target="_blank" rel="noreferrer"><strong>${esc(x.title)}</strong><span>읽기 ↗</span></a>`
   ).join("");
