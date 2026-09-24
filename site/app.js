@@ -35,6 +35,32 @@ async function load() {
     `<div class="metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`
   ).join("");
 
+  const risk = data.risk || {};
+  const riskEval = risk.evaluation || {};
+  const riskLevel = riskEval.risk_level || risk.risk_level || "LOW";
+  const riskBadge = $("risk-level");
+  riskBadge.textContent = riskLevel;
+  riskBadge.dataset.level = riskLevel;
+
+  const biggest = riskEval.single_biggest_risk || {};
+  $("risk-summary").innerHTML =
+    `<div class="risk-level-large">${esc(riskLevel)}</div>` +
+    `<strong>${esc(riskEval.summary || "리스크 상태를 계산 중입니다.")}</strong>` +
+    `<p>${esc(biggest.title || "확인된 단일 대형 리스크 없음")}</p>` +
+    `<small>${esc(biggest.why || "")}</small>`;
+
+  $("risk-events").innerHTML = (risk.upcoming_events || []).slice(0, 5).map((x) =>
+    `<div class="mini-row risk-row"><strong>${esc(x.title)}</strong><span>${esc(x.hours_to_event)}h · ${esc(x.risk_level)}</span></div>`
+  ).join("") || "<p class='muted'>가까운 주요 일정 없음</p>";
+
+  $("risk-macro").innerHTML = (risk.macro_signals || []).slice(0, 6).map((x) =>
+    `<div class="mini-row risk-row"><strong>${esc(x.field)}</strong><span>${esc(x.value)} · ${esc(x.risk_level)}</span></div>`
+  ).join("") || "<p class='muted'>현재 임계값 초과 경고 없음</p>";
+
+  $("docs-links").innerHTML = (data.docs_links || []).map((x) =>
+    `<a class="mini-row doc-link" href="${esc(x.url)}" target="_blank" rel="noreferrer"><strong>${esc(x.title)}</strong><span>읽기 ↗</span></a>`
+  ).join("");
+
   const market = data.market || {};
   const runtime = data.market_runtime || {};
   const q = market.quantitative || {};
