@@ -40,18 +40,26 @@ async function load() {
   if (q.status === "ok") {
     const breadth = q.breadth || {};
     const turnover = q.turnover || {};
+    const overview = source.market_overview || {};
+    const kospi = overview.KOSPI || {};
+    const kosdaq = overview.KOSDAQ || {};
     $("market-summary").innerHTML =
-      `<div class="regime"><strong>${esc(interp.regime_name || "정량 장세 분석")}</strong><p>${esc(interp.one_line || "분봉 거래대금과 시장 폭을 분석 중입니다.")}</p></div>` +
+      `<div class="regime"><strong>${esc(interp.regime_name || "정량 장세 분석")}</strong><p>${esc(interp.one_line || "분봉 거래대금과 전체시장 폭을 분석 중입니다.")}</p><small>${source.minute_amount_method === "close_x_volume_estimate" ? "1분 거래대금은 종가×거래량 근사" : ""}</small></div>` +
       `<div class="market-numbers">
-        <span>분석 종목 <b>${esc(q.stock_count || 0)}</b></span>
-        <span>상승 <b>${esc(breadth.advancers || 0)}</b></span>
-        <span>하락 <b>${esc(breadth.decliners || 0)}</b></span>
-        <span>Top10 집중 <b>${((turnover.top10_share || 0) * 100).toFixed(1)}%</b></span>
+        <span>KOSPI <b>${kospi.change_pct ?? "-"}%</b><small>상승 ${kospi.rising ?? "-"} / 하락 ${kospi.falling ?? "-"}</small></span>
+        <span>KOSDAQ <b>${kosdaq.change_pct ?? "-"}%</b><small>상승 ${kosdaq.rising ?? "-"} / 하락 ${kosdaq.falling ?? "-"}</small></span>
+        <span>상세 분석 <b>${esc(q.stock_count || 0)}종목</b><small>거래대금 중심 Universe</small></span>
+        <span>Top10 집중 <b>${((turnover.top10_share || 0) * 100).toFixed(1)}%</b><small>상세 Universe 내</small></span>
       </div>`;
 
     $("burst-leaders").innerHTML = (q.burst_leaders || []).slice(0, 6).map((x) =>
       `<div class="mini-row"><strong>${esc(x.name || x.ticker)}</strong><span>${esc(x.burst_count)}회 · 1분 최대 ${esc(krwEok(x.max_minute_amount))} · ${esc(x.max_burst_ratio)}배</span></div>`
     ).join("") || "<p class='muted'>조건 충족 종목 없음</p>";
+
+    const recent = q.recent_listings || {};
+    $("new-listings").innerHTML = (recent.stocks || []).slice(0, 5).map((x) =>
+      `<div class="mini-row"><strong>${esc(x.name || x.ticker)}</strong><span>${esc(x.burst_count)}회 · 1분 최대 ${esc(krwEok(x.max_minute_amount))}</span></div>`
+    ).join("") || `<p class="muted">현재 상세 Universe에서 신규주 흐름 없음</p>`;
 
     $("coflow-groups").innerHTML = (q.coflow_groups || []).slice(0, 5).map((x) =>
       `<div class="mini-row"><strong>${esc(x.group)}</strong><span>${esc(x.positive_burst_members)}종목 동조</span></div>`
@@ -86,6 +94,7 @@ async function load() {
     const reason = source.reason || q.reason || "국내시장 실데이터가 아직 연결되지 않았습니다.";
     $("market-summary").innerHTML = `<div class="regime"><strong>분석 대기</strong><p>${esc(reason)}</p></div>`;
     $("burst-leaders").innerHTML = "<p class='muted'>데이터 필요</p>";
+    $("new-listings").innerHTML = "<p class='muted'>데이터 필요</p>";
     $("coflow-groups").innerHTML = "<p class='muted'>데이터 필요</p>";
     $("strategy-stats").innerHTML = "<p class='muted'>표본 축적 전</p>";
   }
