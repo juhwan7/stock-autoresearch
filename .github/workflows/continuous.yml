@@ -60,6 +60,13 @@ jobs:
           TOSS_SNAPSHOT_TOKEN: ${{ secrets.TOSS_SNAPSHOT_TOKEN }}
         run: python scripts/fetch_toss_snapshot.py
 
+      - name: Summarize Toss provider state
+        if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
+        run: |
+          if [ -f data/providers/toss/latest.json ]; then
+            python scripts/summarize_toss_snapshot.py
+          fi
+
       - name: Korea market tape tick
         if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
         env:
