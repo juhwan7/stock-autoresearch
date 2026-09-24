@@ -95,6 +95,9 @@ CLOSE_EVENT_FIELDS = [
     "next_gap_pct",
     "next_mae_pct",
     "next_mfe_pct",
+    "next_gap_from_nxt_pct",
+    "next_mae_from_nxt_pct",
+    "next_mfe_from_nxt_pct",
 ]
 
 
@@ -883,6 +886,21 @@ class MarketIntelEngine:
                 row["next_gap_pct"] = round(percent_change(entry, ohlc["open"]), 4)
                 row["next_mae_pct"] = round(percent_change(entry, ohlc["low"]), 4)
                 row["next_mfe_pct"] = round(percent_change(entry, ohlc["high"]), 4)
+
+                nxt_entry = number(row.get("nxt_after_last_price"))
+                if nxt_entry > 0:
+                    row["next_gap_from_nxt_pct"] = round(
+                        percent_change(nxt_entry, ohlc["open"]),
+                        4,
+                    )
+                    row["next_mae_from_nxt_pct"] = round(
+                        percent_change(nxt_entry, ohlc["low"]),
+                        4,
+                    )
+                    row["next_mfe_from_nxt_pct"] = round(
+                        percent_change(nxt_entry, ohlc["high"]),
+                        4,
+                    )
                 completed += 1
                 changed = True
 
@@ -1359,6 +1377,34 @@ class MarketIntelEngine:
                 ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
             ),
             pattern(
+                "NXT KRX 종가 대비 +1% 이상",
+                [
+                    x
+                    for x in close_completed
+                    if number(x.get("nxt_after_krx_close_premium_pct")) >= 1.0
+                ],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "NXT KRX 종가 대비 -1% 이하",
+                [
+                    x
+                    for x in close_completed
+                    if number(x.get("nxt_after_krx_close_premium_pct")) <= -1.0
+                    and str(x.get("nxt_eligible")) == "1"
+                ],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "NXT 10억원 이상 1분봉 2회 이상",
+                [
+                    x
+                    for x in close_completed
+                    if number(x.get("nxt_after_10eok_count")) >= 2
+                ],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
                 "Overnight Risk VETO",
                 [
                     x
@@ -1471,6 +1517,19 @@ class MarketIntelEngine:
                     ],
                 ),
                 "rates": close_outcome_rates(close_completed),
+                "nxt_reference_summary": describe_event_sample(
+                    [
+                        x
+                        for x in close_completed
+                        if number(x.get("nxt_after_last_price")) > 0
+                    ],
+                    [
+                        "nxt_after_krx_close_premium_pct",
+                        "next_gap_from_nxt_pct",
+                        "next_mae_from_nxt_pct",
+                        "next_mfe_from_nxt_pct",
+                    ],
+                ),
                 "patterns": close_patterns,
             },
             "pullback": {
