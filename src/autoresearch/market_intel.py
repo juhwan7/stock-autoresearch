@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import os
 import time
@@ -1586,6 +1587,178 @@ class MarketIntelEngine:
         history.reverse()
         return history
 
+    @staticmethod
+    def _round_semantic(value: Any, unit: float) -> float | None:
+        if value in (None, ""):
+            return None
+        n = number(value)
+        if unit <= 0:
+            return n
+        return round(n / unit) * unit
+
+    def _market_semantic_state(
+        self,
+        now: datetime,
+        quantitative: dict[str, Any],
+        source_state: dict[str, Any],
+    ) -> tuple[dict[str, Any], str, bool, dict[str, Any]]:
+        cfg = self.cfg.get("ai_dirty_state", {})
+        state_path = self.root / str(
+            cfg.get("state_file", "data/market/semantic_state.json")
+        )
+        previous: dict[str, Any] = {}
+        if state_path.exists():
+            try:
+                previous = json.loads(state_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                previous = {}
+
+        rounding = cfg.get("rounding", {})
+        index_unit = float(rounding.get("index_pct", 0.2))
+        breadth_unit = float(rounding.get("breadth_ratio", 0.05))
+        turnover_unit = float(rounding.get("turnover_share", 0.05))
+        nxt_unit = float(rounding.get("nxt_premium_pct", 0.5))
+
+        overview = source_state.get("market_overview", {})
+        recent = quantitative.get("recent_listings", {})
+        postmarket = source_state.get("postmarket", {})
+        semantic = {
+            "provider": source_state.get("provider") or source_state.get("source"),
+            "KOSPI": {
+                "change_pct": self._round_semantic(
+                    (overview.get("KOSPI") or {}).get("change_pct"),
+                    index_unit,
+                ),
+                "advance_ratio": self._round_semantic(
+                    (overview.get("KOSPI") or {}).get("advance_ratio"),
+                    breadth_unit,
+                ),
+            },
+            "KOSDAQ": {
+                "change_pct": self._round_semantic(
+                    (overview.get("KOSDAQ") or {}).get("change_pct"),
+                    index_unit,
+                ),
+                "advance_ratio": self._round_semantic(
+                    (overview.get("KOSDAQ") or {}).get("advance_ratio"),
+                    breadth_unit,
+                ),
+            },
+            "top10_turnover_share": self._round_semantic(
+                source_state.get("turnover_rank_top10_share")
+                or quantitative.get("turnover", {}).get("top10_share"),
+                turnover_unit,
+            ),
+            "recent_listings": {
+                "count": recent.get("count"),
+                "positive_burst_count": recent.get("positive_burst_count"),
+                "ten_eok_events": recent.get(
+                    "threshold_event_counts", {}
+                ).get("1000000000"),
+            },
+            "coflow": [
+                {
+                    "group": x.get("group"),
+                    "members": x.get("synchronized_burst_members"),
+                    "center": x.get("synchronized_center"),
+                }
+                for x in quantitative.get("coflow_groups", [])[:5]
+            ],
+            "burst_leaders": [
+                {
+                    "ticker": x.get("ticker"),
+                    "return_pct": self._round_semantic(
+                        x.get("return_pct"), 0.5
+                    ),
+                    "burst_count": x.get("burst_count"),
+                    "ten_eok": x.get(
+                        "amount_threshold_counts", {}
+                    ).get("1000000000"),
+                }
+                for x in quantitative.get("burst_leaders", [])[:8]
+            ],
+            "nxt_after": [
+                {
+                    "ticker": x.get("ticker"),
+                    "premium": self._round_semantic(
+                        x.get("krx_close_premium_pct"),
+                        nxt_unit,
+                    ),
+                    "ten_eok": x.get("minute_ge_10eok_count"),
+                }
+                for x in postmarket.get("stocks", [])[:8]
+            ],
+        }
+        encoded = json.dumps(
+            semantic,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        semantic_hash = hashlib.sha256(encoded).hexdigest()
+
+        dirty = semantic_hash != previous.get("semantic_hash")
+        force_minutes = float(cfg.get("force_minutes", 60))
+        last_eval_raw = previous.get("last_evaluated_at")
+        if last_eval_raw:
+            try:
+                last_eval = datetime.fromisoformat(str(last_eval_raw))
+                if last_eval.tzinfo is None:
+                    last_eval = last_eval.replace(tzinfo=KST)
+                if (
+                    now - last_eval.astimezone(KST)
+                ).total_seconds() >= force_minutes * 60:
+                    dirty = True
+            except ValueError:
+                dirty = True
+        else:
+            dirty = True
+
+        if not cfg.get("enabled", True):
+            dirty = True
+
+        return semantic, semantic_hash, dirty, previous
+
+    def _previous_interpretation(self) -> dict[str, Any] | None:
+        latest = self.root / self.cfg.get("data", {}).get(
+            "latest_file", "data/market/latest.json"
+        )
+        try:
+            data = json.loads(latest.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return None
+        value = data.get("interpretation")
+        return value if isinstance(value, dict) else None
+
+    def _save_market_semantic_state(
+        self,
+        now: datetime,
+        semantic_hash: str,
+        dirty: bool,
+        previous: dict[str, Any],
+    ) -> None:
+        cfg = self.cfg.get("ai_dirty_state", {})
+        path = self.root / str(
+            cfg.get("state_file", "data/market/semantic_state.json")
+        )
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps(
+                {
+                    "semantic_hash": semantic_hash,
+                    "last_seen_at": now.isoformat(),
+                    "last_evaluated_at": (
+                        now.isoformat()
+                        if dirty
+                        else previous.get("last_evaluated_at")
+                    ),
+                },
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
     def _interpret(
         self,
         quantitative: dict[str, Any],
@@ -1650,11 +1823,28 @@ class MarketIntelEngine:
         )
         pullback_update = self._run_pullback_research(now)
         strategy_stats = self._strategy_stats()
-        interpretation = (
-            self._interpret(quantitative, strategy_stats, source_state)
-            if quantitative.get("status") == "ok"
-            else None
-        )
+
+        market_semantic: dict[str, Any] = {}
+        market_semantic_hash = ""
+        market_dirty = False
+        previous_semantic: dict[str, Any] = {}
+        interpretation = None
+        if quantitative.get("status") == "ok":
+            (
+                market_semantic,
+                market_semantic_hash,
+                market_dirty,
+                previous_semantic,
+            ) = self._market_semantic_state(now, quantitative, source_state)
+
+            if self.mode == "live" and market_dirty:
+                interpretation = self._interpret(
+                    quantitative,
+                    strategy_stats,
+                    source_state,
+                )
+            elif self.mode == "live":
+                interpretation = self._previous_interpretation()
 
         result = {
             "generated_at": now.isoformat(),
@@ -1668,10 +1858,17 @@ class MarketIntelEngine:
                 "pullback": pullback_update,
             },
             "interpretation": interpretation,
+            "semantic_state": market_semantic,
+            "semantic_hash": market_semantic_hash,
+            "ai_dirty": market_dirty,
         }
 
         # 읽기 쉬운 Markdown 보고서는 실제 분석 데이터가 있을 때만 만든다.
-        if quantitative.get("status") == "ok" and self.mode == "live":
+        if (
+            quantitative.get("status") == "ok"
+            and self.mode == "live"
+            and market_dirty
+        ):
             report_dir = self.root / "reports" / "market"
             report_dir.mkdir(parents=True, exist_ok=True)
             report_path = report_dir / (now.strftime("%Y%m%d-%H%M") + ".md")
@@ -1680,6 +1877,18 @@ class MarketIntelEngine:
                 encoding="utf-8",
             )
             result["report"] = str(report_path.relative_to(self.root))
+
+        if (
+            self.mode == "live"
+            and quantitative.get("status") == "ok"
+            and market_semantic_hash
+        ):
+            self._save_market_semantic_state(
+                now,
+                market_semantic_hash,
+                market_dirty,
+                previous_semantic,
+            )
 
         data_cfg = self.cfg.get("data", {})
         latest = self.root / data_cfg.get("latest_file", "data/market/latest.json")
@@ -1706,6 +1915,12 @@ class MarketIntelEngine:
                         "provider": source_state.get("provider") or source_state.get("source"),
                         "provider_captured_at": source_state.get("captured_at"),
                         "fallback_used": source_state.get("fallback_used"),
+                        "market_semantic_hash": market_semantic_hash,
+                        "market_ai_dirty": market_dirty,
+                        "market_ai_evaluation_called": (
+                            bool(market_dirty)
+                            and quantitative.get("status") == "ok"
+                        ),
                         "market_status": quantitative.get("status"),
                         "reason": source_state.get("reason") or quantitative.get("reason"),
                         "last_valid_market_file": str(latest.relative_to(self.root)),
