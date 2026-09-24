@@ -71,7 +71,7 @@ class RegressionDetector:
 
     def __init__(self, root: Path):
         self.root = root
-        self.cfg = load_yaml(root / "config" / "regression.yaml")
+        self.cfg = load_yaml(root / "config" / "회귀탐지.yaml")
         data = self.cfg.get("data", {})
         self.history_dir = root / data.get(
             "history_dir", "data/regression/history"
