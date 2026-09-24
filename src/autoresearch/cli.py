@@ -10,6 +10,7 @@ from .market_intel import MarketIntelEngine
 from .pipeline import Pipeline
 from .regression import RegressionDetector
 from .risk_engine import RiskEngine
+from .supervisor_queue import observe as supervisor_observe
 from .toss_collector import main as toss_collector_main
 
 
@@ -59,6 +60,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     regression.add_argument("--root", default=".", help="저장소 루트")
 
+    supervisor = sub.add_parser(
+        "supervisor-observe",
+        help="AI 호출 없이 10분 감독 관측을 큐에 저장",
+    )
+    supervisor.add_argument("--root", default=".", help="저장소 루트")
+
     collector = sub.add_parser(
         "toss-collector",
         help="고정 IP 환경에서 Toss 실시간 체결 Collector 실행",
@@ -86,6 +93,8 @@ def main() -> None:
         result = HealthWatchdog(root).run()
     elif args.command == "regression":
         result = RegressionDetector(root).run()
+    elif args.command == "supervisor-observe":
+        result = supervisor_observe(root)
     elif args.command == "toss-collector":
         toss_collector_main(
             [
