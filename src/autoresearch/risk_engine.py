@@ -6,6 +6,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 from .config import load_prompt, load_yaml, render_prompt
 from .llm import ResearchLLM
@@ -111,12 +112,46 @@ class RiskEngine:
         age = _age_minutes(self.macro_path, now)
         return age is None or age >= minutes
 
+    def _valid_calendar_event(self, event: dict[str, Any]) -> bool:
+        url = str(event.get("official_url") or "")
+        host = (urlparse(url).hostname or "").lower()
+        allowed = [
+            str(x).lower()
+            for x in self.cfg.get("refresh", {}).get(
+                "calendar_allowed_domains", []
+            )
+        ]
+        if not host or not any(
+            host == domain or host.endswith("." + domain)
+            for domain in allowed
+        ):
+            return False
+        if not event.get("id") or not event.get("title"):
+            return False
+        if not event.get("datetime_kst") and not event.get("date_kst"):
+            return False
+        severity = int(number(event.get("severity")) or 0)
+        return 1 <= severity <= 5
+
+    def _merge_calendar_events(
+        self,
+        live_events: list[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
+        merged: dict[str, dict[str, Any]] = {}
+        for event in self._fallback_calendar():
+            if self._valid_calendar_event(event):
+                merged[str(event["id"])] = dict(event)
+        for event in live_events:
+            if isinstance(event, dict) and self._valid_calendar_event(event):
+                merged[str(event["id"])] = dict(event)
+        return list(merged.values())
+
     def _refresh_calendar(self, now: datetime) -> dict[str, Any]:
         existing = _read_json(self.calendar_path)
         if self.mode == "dry-run":
             result = {
                 "generated_at": now.isoformat(),
-                "events": self._fallback_calendar(),
+                "events": self._merge_calendar_events([]),
                 "mode": "dry-run",
             }
             _write_json(self.calendar_path, result)
@@ -142,6 +177,7 @@ class RiskEngine:
             result = llm.request_json(prompt, web=True, model_cfg=cfg)
             if not isinstance(result.get("events"), list):
                 raise ValueError("events가 배열이 아님")
+            result["events"] = self._merge_calendar_events(result["events"])
             result["generated_at"] = str(
                 result.get("generated_at") or now.isoformat()
             )
@@ -309,9 +345,11 @@ class RiskEngine:
             level = _max_level(level, event_level)
 
             if biggest is None or (
+                _severity_rank(event_level),
                 severity,
                 -abs(hours),
             ) > (
+                _severity_rank(str(biggest.get("risk_level") or "LOW")),
                 int(number(biggest.get("severity")) or 0),
                 -abs(float(biggest.get("hours_to_event") or 99999)),
             ):
