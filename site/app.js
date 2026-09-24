@@ -166,13 +166,132 @@ async function load() {
     ).join("")
     : `<div class="health-ok">현재 확인된 운영 이상 없음</div>`;
 
-  $("reports").innerHTML = (data.reports || []).length
-    ? data.reports.map((r) =>
-      `<a class="report" href="${esc(r.github_url)}" target="_blank" rel="noreferrer">
-        <span>${esc(r.title)}</span><small>GitHub ↗</small>
-      </a>`
+  const allReports = data.reports || [];
+  const stockSelect = $("report-stock");
+  const industrySelect = $("report-industry");
+  const searchInput = $("report-search");
+  const dateInput = $("report-date");
+
+  const stocks = [...new Set(allReports.flatMap((r) => r.stocks || []))].sort();
+  const industries = [...new Set(allReports.flatMap((r) => r.industries || []))].sort();
+  stockSelect.insertAdjacentHTML(
+    "beforeend",
+    stocks.map((x) => `<option value="${esc(x)}">${esc(x)}</option>`).join("")
+  );
+  industrySelect.insertAdjacentHTML(
+    "beforeend",
+    industries.map((x) => `<option value="${esc(x)}">${esc(x)}</option>`).join("")
+  );
+
+  function reportDay(value) {
+    if (!value) return "";
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return String(value).slice(0, 10);
+    return parsed.toISOString().slice(0, 10);
+  }
+
+  function renderQualityChart() {
+    const rows = (data.quality_history || []).filter((x) => x.quality != null);
+    $("quality-chart").innerHTML = rows.length
+      ? rows.map((x) => {
+          const score = Math.max(0, Math.min(100, Number(x.quality || 0)));
+          return `<div class="quality-bar-wrap" title="${esc(reportDay(x.generated_at))} · ${score.toFixed(1)}점">
+            <div class="quality-bar" style="height:${score}%"></div>
+          </div>`;
+        }).join("")
+      : `<p class="muted">아직 품질점수 이력이 충분하지 않습니다.</p>`;
+  }
+
+  function renderReports() {
+    const query = (searchInput.value || "").trim().toLowerCase();
+    const day = dateInput.value || "";
+    const stock = stockSelect.value || "";
+    const industry = industrySelect.value || "";
+
+    const filtered = allReports.filter((r) => {
+      const haystack = [
+        r.title,
+        r.preview,
+        ...(r.stocks || []),
+        ...(r.industries || []),
+      ].join(" ").toLowerCase();
+      return (!query || haystack.includes(query))
+        && (!day || reportDay(r.generated_at) === day)
+        && (!stock || (r.stocks || []).includes(stock))
+        && (!industry || (r.industries || []).includes(industry));
+    });
+
+    $("report-count").textContent = filtered.length + "개";
+    $("reports").innerHTML = filtered.length
+      ? filtered.map((r) => {
+          const meta = [
+            reportDay(r.generated_at),
+            r.quality != null ? `품질 ${Number(r.quality).toFixed(1)}` : "",
+            (r.stocks || []).slice(0, 2).join(" · "),
+            (r.industries || []).slice(0, 2).join(" · "),
+          ].filter(Boolean).join(" · ");
+          return `<a class="report report-card" href="${esc(r.github_url)}" target="_blank" rel="noreferrer">
+            <span><strong>${esc(r.title)}</strong><small>${esc(meta)}</small></span>
+            <b>읽기 ↗</b>
+          </a>`;
+        }).join("")
+      : `<div class="report"><span>조건에 맞는 리서치가 없습니다.</span></div>`;
+  }
+
+  [searchInput, dateInput, stockSelect, industrySelect].forEach((element) => {
+    element.addEventListener("input", renderReports);
+    element.addEventListener("change", renderReports);
+  });
+  $("report-clear").addEventListener("click", () => {
+    searchInput.value = "";
+    dateInput.value = "";
+    stockSelect.value = "";
+    industrySelect.value = "";
+    renderReports();
+  });
+  renderQualityChart();
+  renderReports();
+
+  const regression = data.regression || {};
+  const regressionStatus = regression.status || "COLLECTING";
+  const regressionBadge = $("regression-status");
+  regressionBadge.textContent = regressionStatus;
+  regressionBadge.dataset.level = regressionStatus;
+  const snap = regression.snapshot || {};
+  $("regression-summary").innerHTML =
+    `<div class="regression-number"><strong>${snap.overall_quality ?? "-"}점</strong><span>현재 종합 품질</span></div>` +
+    `<div class="regression-number"><strong>${regression.active_change_count ?? 0}</strong><span>활성 AI 변경</span></div>` +
+    `<div class="regression-number"><strong>${regression.quarantine_count ?? 0}</strong><span>격리</span></div>` +
+    `<div class="regression-number"><strong>${regression.rolled_back_count ?? 0}</strong><span>기능 롤백</span></div>`;
+
+  $("regression-evals").innerHTML = (regression.evaluations || []).slice(0, 6).map((x) =>
+    `<div class="mini-row"><strong>${esc(x.change_id || x.status)}</strong><span>${esc(x.status)}${x.drop_7d != null ? " · 7일 " + Number(x.drop_7d).toFixed(1) + "p" : ""}</span></div>`
+  ).join("") || "<p class='muted'>평가할 AI 변경 표본을 수집 중입니다.</p>";
+
+  $("recent-changes").innerHTML = (data.recent_changes || []).length
+    ? (data.recent_changes || []).slice(0, 12).map((x) =>
+      `<div class="tick" data-outcome="${esc(x.status)}">
+        <span class="dot"></span>
+        <div>
+          <strong>${esc(x.title || x.change_id || "AI 변경")}</strong>
+          <p>${esc((x.paths || []).join(", "))}</p>
+          <div class="meta">${esc(x.applied_at || "")} · ${esc(x.status || "active")} · ${esc(x.risk || "")}</div>
+        </div>
+      </div>`
     ).join("")
-    : `<div class="report"><span>아직 생성된 실전 보고서가 없습니다.</span></div>`;
+    : "<p class='muted'>앞으로 자동 적용되는 변경부터 manifest가 기록됩니다.</p>";
+
+  const board = data.idea_board || {};
+  const boardOrder = ["채택", "실험중", "재검토", "보류", "폐기"];
+  $("ideas-kanban").innerHTML = boardOrder.map((status) => {
+    const items = board[status] || [];
+    return `<div class="kanban-column">
+      <div class="kanban-head"><strong>${esc(status)}</strong><span>${items.length}</span></div>
+      <div class="kanban-list">${items.slice(0, 12).map((x) =>
+        `<div class="kanban-card"><strong>${esc(x.title)}</strong><p>${esc(x.summary || "")}</p></div>`
+      ).join("") || "<p class='muted'>없음</p>"}</div>
+    </div>`;
+  }).join("");
 
   $("ticks").innerHTML = (data.ticks || []).length
     ? data.ticks.map((t) =>
