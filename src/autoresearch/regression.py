@@ -267,6 +267,7 @@ class RegressionDetector:
         _write_json(manifest_path, manifest)
 
         experiment = self.root / "docs" / "EXPERIMENTS.md"
+        experiment.parent.mkdir(parents=True, exist_ok=True)
         with experiment.open("a", encoding="utf-8") as handle:
             handle.write(
                 "\n## REG-"
