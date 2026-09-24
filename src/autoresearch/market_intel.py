@@ -780,10 +780,127 @@ class MarketIntelEngine:
         pullback_completed = [
             x for x in pullback_events if x.get("forward_5d_mfe_pct") not in (None, "")
         ]
+        def reliability(n: int) -> str:
+            if n < 5:
+                return "표본 부족"
+            if n < minimum:
+                return "예비 통계"
+            return "사용 가능"
+
+        def pattern(
+            label: str,
+            selected: list[dict[str, Any]],
+            fields: list[str],
+        ) -> dict[str, Any]:
+            summary = describe_event_sample(selected, fields)
+            return {
+                "label": label,
+                "reliability": reliability(len(selected)),
+                "summary": summary,
+            }
+
+        close_patterns = [
+            pattern(
+                "분봉 거래대금 burst 0회",
+                [x for x in close_completed if number(x.get("burst_count")) == 0],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "분봉 거래대금 burst 1~2회",
+                [
+                    x
+                    for x in close_completed
+                    if 1 <= number(x.get("burst_count")) <= 2
+                ],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "분봉 거래대금 burst 3회 이상",
+                [x for x in close_completed if number(x.get("burst_count")) >= 3],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "고가 위치 0.8 이상 마감",
+                [x for x in close_completed if number(x.get("high_position")) >= 0.8],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "장후반 거래대금 비중 30% 이상",
+                [
+                    x
+                    for x in close_completed
+                    if number(x.get("late_amount_share")) >= 0.30
+                ],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "14:30→15:20 상승",
+                [x for x in close_completed if number(x.get("late_return_pct")) > 0],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+        ]
+
+        drawdown_ranges = [
+            (5, 10),
+            (10, 15),
+            (15, 20),
+            (20, 25),
+            (25, 30),
+            (30, 35.0001),
+        ]
+        pullback_patterns = []
+        for low, high in drawdown_ranges:
+            selected = [
+                x
+                for x in pullback_completed
+                if low <= abs(number(x.get("drawdown_pct"))) < high
+            ]
+            upper = 35 if high > 35 else int(high)
+            pullback_patterns.append(
+                pattern(
+                    f"고점 대비 -{int(low)}~-{upper}% 눌림",
+                    selected,
+                    ["forward_5d_mae_pct", "forward_5d_mfe_pct"],
+                )
+            )
+
+        pullback_patterns.extend(
+            [
+                pattern(
+                    "거래대금 50% 이상 감소",
+                    [
+                        x
+                        for x in pullback_completed
+                        if number(x.get("amount_decay_pct")) >= 50
+                    ],
+                    ["forward_5d_mae_pct", "forward_5d_mfe_pct"],
+                ),
+                pattern(
+                    "20일선 ±5% 구간",
+                    [
+                        x
+                        for x in pullback_completed
+                        if abs(number(x.get("ma20_distance_pct"))) <= 5
+                    ],
+                    ["forward_5d_mae_pct", "forward_5d_mfe_pct"],
+                ),
+                pattern(
+                    "첫 양봉 조건",
+                    [
+                        x
+                        for x in pullback_completed
+                        if str(x.get("first_positive_candle")) == "1"
+                    ],
+                    ["forward_5d_mae_pct", "forward_5d_mfe_pct"],
+                ),
+            ]
+        )
+
         return {
             "close_bet": {
                 "pending": len(close_events) - len(close_completed),
                 "ready": len(close_completed) >= minimum,
+                "reliability": reliability(len(close_completed)),
                 "summary": describe_event_sample(
                     close_completed,
                     [
@@ -796,10 +913,12 @@ class MarketIntelEngine:
                         "high_position",
                     ],
                 ),
+                "patterns": close_patterns,
             },
             "pullback": {
                 "pending": len(pullback_events) - len(pullback_completed),
                 "ready": len(pullback_completed) >= minimum,
+                "reliability": reliability(len(pullback_completed)),
                 "summary": describe_event_sample(
                     pullback_completed,
                     [
@@ -810,6 +929,7 @@ class MarketIntelEngine:
                         "forward_5d_mfe_pct",
                     ],
                 ),
+                "patterns": pullback_patterns,
             },
         }
 
