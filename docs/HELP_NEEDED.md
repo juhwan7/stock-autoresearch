@@ -43,11 +43,11 @@ AI가 혼자 해결할 수 없거나 사람이 명시적으로 설정해야 하�
 현재 워크플로는 저장소 파일 쓰기에 필요한 최소 권한만 요청하도록 유지한다.
 
 
-## [권장·국내시장 실데이터] 키움 REST API 읽기 전용 키 등록
+## [선택·fallback] 키움 REST API 읽기 전용 키 등록
 
-상태: 사용자 작업 필요
+상태: 선택 사항
 
-목적: 국내시장 거래대금 상위 종목과 1분봉을 10분마다 실제로 수집해 장세·동조수급·종가베팅 통계를 만들기 위함이다.
+목적: Toss Collector가 아직 연결되지 않았거나 KRX 정규장 중 일시적으로 사용할 수 없을 때 Market Tape의 fallback으로 사용한다.
 
 현재 프로젝트는 **시세 조회만 사용하며 주문 기능은 구현하지 않는다.**
 
@@ -67,20 +67,20 @@ KIWOOM_SECRET_KEY
 - 키 값 자체를 README, Issue, Markdown, 채팅 로그에 붙이지 않는다.
 - 이 두 Secret이 없으면 프로젝트는 시장 분석 모듈을 실패시키지 않고 `needs_credentials` 상태로 기록한다.
 
-현재 수집기는 키움의 거래대금 상위 조회와 1분봉 조회를 사용하도록 구현되어 있다.
+현재 Provider Chain은 Toss-first이며 키움은 KRX 정규장 fallback이다.
 
-## [향후 데이터 정밀화] 분당 실제 체결대금
+## [구현 완료·운영 연결 필요] 분당 실제 체결대금
 
-상태: AI 개선 과제
+상태: Collector 코드 구현 완료 / 고정 IP 운영환경 연결 필요
 
-현재 키움 1분봉은 OHLC·거래량을 사용하므로 분당 거래대금은 우선 `분봉 종가 × 분 거래량`으로 근사한다.
+canonical 구현인 `src/autoresearch/toss_collector.py`가 Toss `trade:kr` 체결을 받아 실제 `Σ(체결가 × 체결량)` 방식으로 1분 거래대금을 만든다.
 
-이는 실제 체결가격별 거래대금 합계와 차이가 날 수 있다. 이후 체결 데이터 또는 더 적합한 데이터 소스를 이용해 실제 분당 거래대금으로 교체해야 한다.
+Toss Collector가 연결되지 않은 키움 fallback에서는 기존처럼 분봉 종가×거래량 근사값을 사용하고 `amount_estimated=true`로 구분한다.
 
 
-## [향후 필수·Toss 실시간] 고정 IP Collector 준비
+## [필수·Toss 실시간 운영] 고정 IP Collector 준비
 
-상태: 사용자 작업 필요
+상태: 사용자 작업 필요 — Collector/배포 코드 구현 완료
 
 목적: KRX 종가 이후 NXT 20:00까지 포함한 실제 통합 체결을 토스증권 WebSocket으로 수집한다.
 
@@ -98,3 +98,30 @@ KIWOOM_SECRET_KEY
 GitHub-hosted Actions는 고정 IP 수집기의 대체로 사용하지 않는다.
 
 현재 프로젝트의 기존 키움 수집기는 fallback/비교용으로 유지하며 신규 개발의 우선 공급자는 Toss로 전환한다.
+
+
+## [Toss 연결 방식] 둘 중 하나만 선택
+
+### A. 고정 IP self-hosted Runner
+
+권장 구조다.
+
+1. 고정 IP 서버에서 canonical Collector(`src/autoresearch/toss_collector.py`)를 systemd로 실행한다.
+2. 같은 서버를 GitHub self-hosted runner로 등록한다.
+3. runner label에 `stock-autoresearch-fixed-ip`를 추가한다.
+4. Actions Variable `TOSS_FIXED_IP_RUNNER_ENABLED=true`를 등록한다.
+5. 필요하면 `TOSS_SNAPSHOT_PATH`를 지정한다.
+
+상세 절차: `docs/FIXED_IP_RUNNER.md`.
+
+### B. HTTPS snapshot 전달
+
+GitHub-hosted runner를 유지하고 싶을 때 사용한다.
+
+1. 고정 IP Collector 서버의 최신 snapshot을 인증된 HTTPS endpoint로 노출한다.
+2. GitHub Actions Secret에 `TOSS_SNAPSHOT_URL`, `TOSS_SNAPSHOT_TOKEN`을 등록한다.
+3. `TOSS_FIXED_IP_RUNNER_ENABLED`는 켜지 않는다.
+
+`continuous.yml`이 매 10분 snapshot을 받아 분석한다.
+
+두 방식을 동시에 켜지 않는다.
