@@ -54,7 +54,7 @@ def _kr_market_monitor_window(now: datetime) -> bool:
 class HealthWatchdog:
     def __init__(self, root: Path):
         self.root = root
-        self.cfg = load_yaml(root / "config" / "health.yaml")
+        self.cfg = load_yaml(root / "config" / "상태감시.yaml")
         data = self.cfg.get("data", {})
         self.state_path = root / data.get("state_file", "data/health/state.json")
         self.latest_path = root / data.get("latest_file", "data/health/latest.json")
