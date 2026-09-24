@@ -14,6 +14,16 @@ function ratePct(value) {
   return value == null ? "-" : (Number(value) * 100).toFixed(1) + "%";
 }
 
+function ageText(value) {
+  if (!value) return "미확인";
+  const stamp = new Date(value);
+  if (Number.isNaN(stamp.getTime())) return "미확인";
+  const minutes = Math.max(0, (Date.now() - stamp.getTime()) / 60000);
+  if (minutes < 1) return "1분 이내";
+  if (minutes < 60) return Math.round(minutes) + "분 전";
+  return (minutes / 60).toFixed(1) + "시간 전";
+}
+
 function esc(value = "") {
   return String(value).replace(/[&<>"']/g, (m) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
@@ -211,6 +221,25 @@ async function load() {
         </div>`).join("")}
       </div>
     </div>`
+  ).join("");
+
+  const provider = data.toss_provider || {};
+  const providerRuntime = data.market_runtime || {};
+  const providerMode = provider.available
+    ? "TOSS LIVE"
+    : (providerRuntime.provider === "kiwoom" ? "KIWOOM FALLBACK" : "WAITING");
+  const providerCards = [
+    ["현재 경로", providerMode],
+    ["Toss Snapshot", provider.available ? ageText(provider.captured_at) : "없음"],
+    ["최근 체결", provider.last_message_at ? ageText(provider.last_message_at) : "미확인"],
+    ["구독", (provider.subscription_count ?? 0) + "개"],
+    ["구독 거절", (provider.rejected_count ?? 0) + "건"],
+    ["정규장 종목", (provider.regular_ticker_count ?? 0) + "개"],
+    ["NXT 종목", (provider.postmarket_ticker_count ?? 0) + "개"],
+    ["1분 거래대금", provider.minute_amount_method === "exact_trade_sum" ? "실체결 합산" : "근사/미확인"],
+  ];
+  $("provider-status").innerHTML = providerCards.map(([label, value]) =>
+    `<div class="provider-card"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`
   ).join("");
 
   const health = data.health || {};
