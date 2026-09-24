@@ -85,6 +85,41 @@ class KiwoomSource:
         self._token = str(token)
         return self._token
 
+
+    def stock_list(
+        self,
+        market_type: str,
+        *,
+        max_pages: int = 10,
+        request_delay: float = 0.2,
+    ) -> list[dict[str, Any]]:
+        """종목정보 리스트(ka10099).
+
+        market_type: 0=코스피, 10=코스닥.
+        상장일(regDay), 업종명(upName)을 신규주/업종 분석에 사용한다.
+        """
+        rows: list[dict[str, Any]] = []
+        cont_yn = None
+        next_key = None
+        for page in range(max_pages):
+            payload, headers = self._request(
+                "/api/dostk/stkinfo",
+                {"mrkt_tp": market_type},
+                api_id="ka10099",
+                cont_yn=cont_yn,
+                next_key=next_key,
+            )
+            batch = payload.get("list", [])
+            if isinstance(batch, list):
+                rows.extend(x for x in batch if isinstance(x, dict))
+            cont_yn = headers.get("cont-yn")
+            next_key = headers.get("next-key")
+            if cont_yn != "Y" or not next_key:
+                break
+            if page + 1 < max_pages:
+                time.sleep(request_delay)
+        return rows
+
     def trading_value_top(self, *, limit: int = 30) -> list[dict[str, Any]]:
         payload, _ = self._request(
             "/api/dostk/rkinfo",
