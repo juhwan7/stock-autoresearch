@@ -43,6 +43,8 @@ def test_group_coflow():
     )
     assert result["status"] == "ok"
     assert result["coflow_groups"][0]["group"] == "한화"
+    assert result["coflow_groups"][0]["synchronized_burst_members"] == 2
+    assert result["coflow_groups"][0]["synchronized_center"] in {"14:30", "14:31"}
 
 
 def test_event_distribution_uses_median():
