@@ -165,6 +165,13 @@ class HealthWatchdog:
                 "data/providers/toss/latest.json",
             )
         )
+        persisted = _read_json(
+            self.root / comp.get(
+                "status_file",
+                "data/providers/toss/status.json",
+            )
+        )
+        provider_state = snapshot or persisted
         fetch_runtime = _read_json(
             self.root / comp.get(
                 "fetch_runtime_file",
@@ -176,7 +183,7 @@ class HealthWatchdog:
         if not _kr_market_monitor_window(now):
             return issues
 
-        if not snapshot:
+        if not provider_state:
             status = str(fetch_runtime.get("status") or "")
             detail = (
                 f"fetch 상태={status}"
@@ -194,7 +201,7 @@ class HealthWatchdog:
             )
             return issues
 
-        snapshot_age = _age_minutes(snapshot.get("captured_at"), now)
+        snapshot_age = _age_minutes(provider_state.get("captured_at"), now)
         snapshot_limit = float(
             self.cfg.get("thresholds", {}).get(
                 "toss_snapshot_stale_minutes", 5
@@ -216,21 +223,31 @@ class HealthWatchdog:
                 )
             )
 
-        collector = snapshot.get("collector", {})
+        collector = provider_state.get("collector", {})
         subscriptions = collector.get("subscriptions", [])
         rejected = collector.get("rejected", [])
-        if isinstance(rejected, list) and rejected:
+        subscription_count = (
+            len(subscriptions)
+            if isinstance(subscriptions, list)
+            else int(collector.get("subscription_count") or 0)
+        )
+        rejected_count = (
+            len(rejected)
+            if isinstance(rejected, list)
+            else int(collector.get("rejected_count") or 0)
+        )
+        if rejected_count:
             issues.append(
                 self._issue(
                     "toss",
                     "subscription-rejected",
                     "WARN",
-                    f"Toss WebSocket 구독 거절 {len(rejected)}건",
+                    f"Toss WebSocket 구독 거절 {rejected_count}건",
                     "구독 코드 수·종목 코드·WebSocket 응답의 rejected 항목 확인",
                 )
             )
 
-        if not isinstance(subscriptions, list) or not subscriptions:
+        if subscription_count <= 0:
             issues.append(
                 self._issue(
                     "toss",
