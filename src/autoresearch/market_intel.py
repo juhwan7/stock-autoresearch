@@ -267,12 +267,28 @@ def render_market_markdown(result: dict[str, Any]) -> str:
     )
 
     for item in q.get("burst_leaders", [])[:10]:
+        counts = item.get("amount_threshold_counts", {})
+        max_eok = float(item.get("max_minute_amount") or 0) / 100_000_000
         lines.append(
             f"- **{item.get('name')} ({item.get('ticker')})** "
             f"수익률 {item.get('return_pct')}% · burst {item.get('burst_count')}회 · "
-            f"최대 {item.get('max_burst_ratio')}배 · "
+            f"1분 최대 {max_eok:.1f}억원 · "
+            f"10억원↑ {counts.get('1000000000', 0)}회 · "
+            f"20억원↑ {counts.get('2000000000', 0)}회 · "
+            f"평소 대비 최대 {item.get('max_burst_ratio')}배 · "
             f"장후반 거래대금 비중 {float(item.get('close_watch_share') or 0):.1%}"
         )
+
+    thin_rises = q.get("rise_without_burst", [])
+    lines.extend(["", "## 거래대금이 확인되지 않은 상승", ""])
+    if thin_rises:
+        for item in thin_rises[:10]:
+            lines.append(
+                f"- **{item.get('name')}** {item.get('return_pct')}% 상승 · "
+                f"상대 burst 0회 · 1분 최대 {float(item.get('max_minute_amount') or 0) / 100_000_000:.1f}억원"
+            )
+    else:
+        lines.append("- 현재 상세 Universe에서 조건에 해당하는 종목 없음")
 
     lines.extend(["", "## 동조 수급 그룹", ""])
     groups = q.get("coflow_groups", [])
@@ -294,6 +310,16 @@ def render_market_markdown(result: dict[str, Any]) -> str:
             "",
             f"- 추적 신규주: {new_flow.get('count', 0)}개",
             f"- 상승 + 거래대금 burst: {new_flow.get('positive_burst_count', 0)}개",
+        ]
+    )
+    for item in new_flow.get("stocks", [])[:10]:
+        lines.append(
+            f"- {item.get('name')} · {item.get('return_pct')}% · "
+            f"burst {item.get('burst_count')}회 · "
+            f"1분 최대 {float(item.get('max_minute_amount') or 0) / 100_000_000:.1f}억원"
+        )
+    lines.extend(
+        [
             "",
             "## 종가베팅 관점",
             "",
