@@ -17,7 +17,8 @@ jobs:
   feedback:
     if: >
       github.event.issue.number == 1 &&
-      github.event.comment.user.login == 'juhwan7'
+      github.event.comment.user.login == 'juhwan7' &&
+      !contains(github.event.comment.body, '<!-- stock-autoresearch-system-note -->')
     runs-on: ubuntu-latest
     steps:
       - name: 저장소 가져오기
