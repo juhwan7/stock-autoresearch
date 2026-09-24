@@ -134,7 +134,7 @@ def test_force_evaluation_after_six_hours(tmp_path):
 
 def test_risk_enrichment_preserves_max_level(tmp_path):
     engine = make_engine(tmp_path)
-    path = tmp_path / "data/market/stats/close_bet_events.csv"
+    path = tmp_path / "data/market/stats/종가베팅_이벤트.csv"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         "signal_date,ticker,next_date\n"

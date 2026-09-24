@@ -684,7 +684,7 @@ class RiskEngine:
         now: datetime,
         result: dict[str, Any],
     ) -> int:
-        path = self.root / "data" / "market" / "stats" / "close_bet_events.csv"
+        path = self.root / "data" / "market" / "stats" / "종가베팅_이벤트.csv"
         if not path.exists():
             return 0
         try:

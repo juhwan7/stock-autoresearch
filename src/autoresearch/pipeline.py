@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from . import mock
+from .claims import append_claim_records
 from .config import load_prompt, load_settings, render_prompt
 from .llm import ResearchLLM
 from .memory import StateStore
@@ -159,6 +160,14 @@ class Pipeline:
                 }
             )
 
+        claim_ledger = append_claim_records(
+            self.root,
+            run_id=run_id,
+            generated_at=generated_at,
+            mode=self.mode,
+            topic_results=topic_results,
+        )
+
         run_data = {
             "run_id": run_id,
             "generated_at": generated_at,
@@ -167,6 +176,7 @@ class Pipeline:
             "ranked_candidates": ranked,
             "selected_count": len(selected),
             "topics": topic_results,
+            "claim_ledger": claim_ledger,
         }
 
         runs_dir = self.root / self.output_cfg.get("runs_dir", "data/runs")
@@ -190,4 +200,5 @@ class Pipeline:
             "selected": len(selected),
             "reports": [x["report"] for x in topic_results],
             "run_file": str(run_path.relative_to(self.root)),
+            "claim_ledger": claim_ledger,
         }
