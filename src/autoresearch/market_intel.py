@@ -39,6 +39,10 @@ CLOSE_EVENT_FIELDS = [
     "close_price",
     "closing_auction_pct",
     "day_return_pct",
+    "minute_coverage_start",
+    "minute_coverage_end",
+    "full_regular_session",
+    "minute_amount_method",
     "total_amount",
     "late_amount_share",
     "burst_count",
@@ -796,8 +800,22 @@ class MarketIntelEngine:
                             else ""
                         ),
                         "day_return_pct": item.get("return_pct"),
-                        "total_amount": item.get("total_amount"),
-                        "late_amount_share": item.get("close_watch_share"),
+                        "minute_coverage_start": item.get("minute_coverage_start"),
+                        "minute_coverage_end": item.get("minute_coverage_end"),
+                        "full_regular_session": (
+                            "1" if item.get("full_regular_session") else "0"
+                        ),
+                        "minute_amount_method": "close_x_volume_estimate",
+                        "total_amount": (
+                            item.get("total_amount")
+                            if item.get("full_regular_session")
+                            else ""
+                        ),
+                        "late_amount_share": (
+                            item.get("close_watch_share")
+                            if item.get("full_regular_session")
+                            else ""
+                        ),
                         "burst_count": item.get("burst_count"),
                         "max_burst_ratio": item.get("max_burst_ratio"),
                         "high_position": item.get("high_position"),
