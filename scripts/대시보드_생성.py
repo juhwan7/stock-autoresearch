@@ -344,7 +344,7 @@ def main() -> None:
     status = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "project": "Stock AutoResearch",
-        "heartbeat": "10분",
+        "heartbeat": "6분",
         "reports": reports,
         "quality_history": [
             {
