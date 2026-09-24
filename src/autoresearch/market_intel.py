@@ -944,16 +944,79 @@ class MarketIntelEngine:
                 return "예비 통계"
             return "사용 가능"
 
+        def rate(
+            selected: list[dict[str, Any]],
+            predicate,
+        ) -> float | None:
+            if not selected:
+                return None
+            hits = sum(1 for item in selected if predicate(item))
+            return round(hits / len(selected), 4)
+
+        def close_outcome_rates(
+            selected: list[dict[str, Any]],
+        ) -> dict[str, float | None]:
+            return {
+                "gap_positive": rate(
+                    selected,
+                    lambda x: number(x.get("next_gap_pct")) > 0,
+                ),
+                "mfe_ge_3": rate(
+                    selected,
+                    lambda x: number(x.get("next_mfe_pct")) >= 3,
+                ),
+                "mfe_ge_5": rate(
+                    selected,
+                    lambda x: number(x.get("next_mfe_pct")) >= 5,
+                ),
+                "mae_le_minus3": rate(
+                    selected,
+                    lambda x: number(x.get("next_mae_pct")) <= -3,
+                ),
+                "mae_le_minus5": rate(
+                    selected,
+                    lambda x: number(x.get("next_mae_pct")) <= -5,
+                ),
+            }
+
+        def pullback_outcome_rates(
+            selected: list[dict[str, Any]],
+        ) -> dict[str, float | None]:
+            return {
+                "mfe_ge_5": rate(
+                    selected,
+                    lambda x: number(x.get("forward_5d_mfe_pct")) >= 5,
+                ),
+                "mfe_ge_10": rate(
+                    selected,
+                    lambda x: number(x.get("forward_5d_mfe_pct")) >= 10,
+                ),
+                "mae_le_minus5": rate(
+                    selected,
+                    lambda x: number(x.get("forward_5d_mae_pct")) <= -5,
+                ),
+                "mae_le_minus10": rate(
+                    selected,
+                    lambda x: number(x.get("forward_5d_mae_pct")) <= -10,
+                ),
+            }
+
         def pattern(
             label: str,
             selected: list[dict[str, Any]],
             fields: list[str],
         ) -> dict[str, Any]:
             summary = describe_event_sample(selected, fields)
+            rates: dict[str, float | None] = {}
+            if "next_mfe_pct" in fields:
+                rates = close_outcome_rates(selected)
+            elif "forward_5d_mfe_pct" in fields:
+                rates = pullback_outcome_rates(selected)
             return {
                 "label": label,
                 "reliability": reliability(len(selected)),
                 "summary": summary,
+                "rates": rates,
             }
 
         close_patterns = [
@@ -1070,6 +1133,7 @@ class MarketIntelEngine:
                         "high_position",
                     ],
                 ),
+                "rates": close_outcome_rates(close_completed),
                 "patterns": close_patterns,
             },
             "pullback": {
@@ -1087,6 +1151,47 @@ class MarketIntelEngine:
                         "forward_5d_mfe_pct",
                     ],
                 ),
+                "rates": pullback_outcome_rates(pullback_completed),
+                "rebound_drawdown": {
+                    "mfe_ge_5": {
+                        "reliability": reliability(
+                            len(
+                                [
+                                    x
+                                    for x in pullback_completed
+                                    if number(x.get("forward_5d_mfe_pct")) >= 5
+                                ]
+                            )
+                        ),
+                        "summary": describe_event_sample(
+                            [
+                                x
+                                for x in pullback_completed
+                                if number(x.get("forward_5d_mfe_pct")) >= 5
+                            ],
+                            ["drawdown_pct", "pullback_days", "amount_decay_pct"],
+                        ),
+                    },
+                    "mfe_ge_10": {
+                        "reliability": reliability(
+                            len(
+                                [
+                                    x
+                                    for x in pullback_completed
+                                    if number(x.get("forward_5d_mfe_pct")) >= 10
+                                ]
+                            )
+                        ),
+                        "summary": describe_event_sample(
+                            [
+                                x
+                                for x in pullback_completed
+                                if number(x.get("forward_5d_mfe_pct")) >= 10
+                            ],
+                            ["drawdown_pct", "pullback_days", "amount_decay_pct"],
+                        ),
+                    },
+                },
                 "patterns": pullback_patterns,
             },
         }
