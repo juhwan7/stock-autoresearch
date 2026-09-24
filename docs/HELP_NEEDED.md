@@ -76,3 +76,25 @@ KIWOOM_SECRET_KEY
 현재 키움 1분봉은 OHLC·거래량을 사용하므로 분당 거래대금은 우선 `분봉 종가 × 분 거래량`으로 근사한다.
 
 이는 실제 체결가격별 거래대금 합계와 차이가 날 수 있다. 이후 체결 데이터 또는 더 적합한 데이터 소스를 이용해 실제 분당 거래대금으로 교체해야 한다.
+
+
+## [향후 필수·Toss 실시간] 고정 IP Collector 준비
+
+상태: 사용자 작업 필요
+
+목적: KRX 종가 이후 NXT 20:00까지 포함한 실제 통합 체결을 토스증권 WebSocket으로 수집한다.
+
+필요한 것:
+1. 고정 공인 IP가 있는 실행환경.
+2. 토스증권 Open API client_id / client_secret 발급.
+3. 토스증권 Open API 설정에서 해당 고정 IP 허용.
+4. Collector 환경에 TOSS_CLIENT_ID, TOSS_CLIENT_SECRET을 Secret으로 저장.
+
+권장 실행환경:
+- 고정 Elastic IP를 연결한 클라우드 VM
+- 고정 IP VPS
+- 고정 공인 IP 서버
+
+GitHub-hosted Actions는 고정 IP 수집기의 대체로 사용하지 않는다.
+
+현재 프로젝트의 기존 키움 수집기는 fallback/비교용으로 유지하며 신규 개발의 우선 공급자는 Toss로 전환한다.
