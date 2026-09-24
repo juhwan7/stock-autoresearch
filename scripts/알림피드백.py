@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from autoresearch.feedback import (
+    build_telegram_payload,
     classify_feedback,
     extract_change_id,
     feedback_fingerprint,
@@ -84,6 +85,42 @@ def already_notified(issue: int, fingerprint: str) -> bool:
 
 def post_comment(issue: int, body: str) -> None:
     github_request("POST", f"/issues/{issue}/comments", {"body": body})
+
+
+def send_telegram_message(text: str) -> bool:
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+    if not token or not chat_id:
+        print("Telegram Secret이 없어 Telegram 알림은 건너뜀")
+        return False
+
+    payload = build_telegram_payload(
+        chat_id=chat_id,
+        text=text,
+        feedback_url="https://github.com/juhwan7/stock-autoresearch/issues/1",
+        dashboard_url="https://juhwan7.github.io/stock-autoresearch/",
+    )
+    request = urllib.request.Request(
+        f"https://api.telegram.org/bot{token}/sendMessage",
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        method="POST",
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            raw = response.read().decode("utf-8")
+            data = json.loads(raw) if raw else {}
+            if not data.get("ok"):
+                raise RuntimeError("Telegram API가 ok=false를 반환함")
+        print("Telegram 알림 전송 완료")
+        return True
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")
+        print(f"Telegram 알림 실패: HTTP {exc.code} {detail[:300]}")
+        return False
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, RuntimeError) as exc:
+        print(f"Telegram 알림 실패: {type(exc).__name__}")
+        return False
 
 
 def latest_notification_context(
@@ -330,6 +367,68 @@ def notify(args: argparse.Namespace) -> int:
     )
     post_comment(issue, "\n".join(lines))
     print("GitHub Issue 알림 작성:", fingerprint)
+
+    telegram_lines = [
+        "🤖 Stock AutoResearch 변경 알림",
+        f"시간: {now}",
+        f"커밋: {sha[:8]}",
+    ]
+    for event in events:
+        etype = event["type"]
+        if etype == "evolution_change":
+            telegram_lines.extend(
+                [
+                    "",
+                    "✅ AI 개선 적용",
+                    f"제목: {event.get('title') or '-'}",
+                    f"change_id: {event.get('change_id') or '-'}",
+                    f"위험도: {event.get('risk') or '-'}",
+                    f"이유: {event.get('reason') or '-'}",
+                    f"기대효과: {event.get('benefit') or '-'}",
+                ]
+            )
+        elif etype == "evolution_attention":
+            telegram_lines.extend(
+                [
+                    "",
+                    "🟡 사용자 확인 필요",
+                    f"상태: {event.get('outcome')}",
+                    f"제목: {event.get('title') or '-'}",
+                    f"이유: {event.get('reason') or '-'}",
+                ]
+            )
+        elif etype == "health":
+            telegram_lines.extend(
+                [
+                    "",
+                    f"⚠️ Health {event.get('status')}",
+                ]
+            )
+            for item in event.get("issues", [])[:5]:
+                telegram_lines.append(
+                    f"- {item.get('component')}/{item.get('code')}: "
+                    f"{item.get('message')}"
+                )
+        elif etype == "regression":
+            telegram_lines.extend(
+                [
+                    "",
+                    f"🛡️ Regression {event.get('status')}",
+                ]
+            )
+            for item in event.get("evaluations", [])[:3]:
+                telegram_lines.append(
+                    f"- {item.get('change_id') or '-'} · "
+                    f"{item.get('status')} · {item.get('reason') or ''}"
+                )
+
+    telegram_lines.extend(
+        [
+            "",
+            "아래 '바로 피드백' 버튼을 누르면 GitHub Issue #1에서 바로 의견을 남길 수 있습니다.",
+        ]
+    )
+    send_telegram_message("\n".join(telegram_lines))
     return 0
 
 
