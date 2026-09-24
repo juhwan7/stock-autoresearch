@@ -127,3 +127,118 @@ def test_watchdog_identifies_toss_collector_outage(tmp_path, monkeypatch):
     result = watchdog.run()
     codes = {x["code"] for x in result["issues"]}
     assert "toss-collector-unavailable" in codes
+
+
+def test_watchdog_accepts_fresh_toss_snapshot(tmp_path, monkeypatch):
+    watchdog = make_watchdog(tmp_path)
+    write_json(
+        tmp_path / "data/market/runtime.json",
+        {
+            "generated_at": "2026-09-25T09:59:00+09:00",
+            "source_status": "ok",
+            "provider": "toss",
+            "fallback_used": False,
+        },
+    )
+    write_json(
+        tmp_path / "data/providers/toss/latest.json",
+        {
+            "captured_at": "2026-09-25T09:59:30+09:00",
+            "collector": {
+                "subscriptions": ["trade:kr:005930"],
+                "rejected": [],
+                "last_message_at": "2026-09-25T09:59:40+09:00",
+            },
+        },
+    )
+    write_json(
+        tmp_path / "data/risk/runtime.json",
+        {"generated_at": "2026-09-25T09:59:00+09:00"},
+    )
+    write_json(
+        tmp_path / "data/risk/latest.json",
+        {"macro": {}, "upcoming_events": [{"title": "x"}]},
+    )
+    write_json(
+        tmp_path / "data/macro/current.json",
+        {"captured_at": "2026-09-25T09:59:00+09:00", "values": {}},
+    )
+    monkeypatch.setattr(health, "datetime", FixedDateTime)
+
+    result = watchdog.run()
+    codes = {x["code"] for x in result["issues"]}
+    assert "snapshot-missing" not in codes
+    assert "snapshot-stale" not in codes
+    assert "trade-stale" not in codes
+    assert "subscription-empty" not in codes
+
+
+def test_watchdog_flags_stale_toss_snapshot(tmp_path, monkeypatch):
+    watchdog = make_watchdog(tmp_path)
+    write_json(
+        tmp_path / "data/market/runtime.json",
+        {
+            "generated_at": "2026-09-25T09:59:00+09:00",
+            "source_status": "ok",
+            "provider": "toss",
+        },
+    )
+    write_json(
+        tmp_path / "data/providers/toss/latest.json",
+        {
+            "captured_at": "2026-09-25T09:40:00+09:00",
+            "collector": {
+                "subscriptions": ["trade:kr:005930"],
+                "rejected": [],
+                "last_message_at": "2026-09-25T09:40:00+09:00",
+            },
+        },
+    )
+    write_json(
+        tmp_path / "data/risk/runtime.json",
+        {"generated_at": "2026-09-25T09:59:00+09:00"},
+    )
+    write_json(
+        tmp_path / "data/risk/latest.json",
+        {"macro": {}, "upcoming_events": [{"title": "x"}]},
+    )
+    write_json(
+        tmp_path / "data/macro/current.json",
+        {"captured_at": "2026-09-25T09:59:00+09:00", "values": {}},
+    )
+    monkeypatch.setattr(health, "datetime", FixedDateTime)
+
+    result = watchdog.run()
+    codes = {x["code"] for x in result["issues"]}
+    assert "snapshot-stale" in codes
+    assert "trade-stale" in codes
+
+
+def test_watchdog_marks_kiwoom_as_toss_fallback(tmp_path, monkeypatch):
+    watchdog = make_watchdog(tmp_path)
+    write_json(
+        tmp_path / "data/market/runtime.json",
+        {
+            "generated_at": "2026-09-25T09:59:00+09:00",
+            "source_status": "ok",
+            "provider": "kiwoom",
+            "fallback_used": True,
+        },
+    )
+    write_json(
+        tmp_path / "data/risk/runtime.json",
+        {"generated_at": "2026-09-25T09:59:00+09:00"},
+    )
+    write_json(
+        tmp_path / "data/risk/latest.json",
+        {"macro": {}, "upcoming_events": [{"title": "x"}]},
+    )
+    write_json(
+        tmp_path / "data/macro/current.json",
+        {"captured_at": "2026-09-25T09:59:00+09:00", "values": {}},
+    )
+    monkeypatch.setattr(health, "datetime", FixedDateTime)
+
+    result = watchdog.run()
+    codes = {x["code"] for x in result["issues"]}
+    assert "toss-fallback-active" in codes
