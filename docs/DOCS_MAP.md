@@ -42,3 +42,13 @@ Risk Veto 결과는 다음날 갭 연구의 조건으로 다시 저장한다.
 - 종가베팅 통계를 읽었다면 → 데이터 명세
 - 기능 변경 이유가 궁금하면 → 결정 원장
 - 아직 안 넣은 기능이 궁금하면 → 아이디어 보드
+
+
+## 안정성 문서
+
+- [Overnight Risk Veto](RISK_VETO.md)
+- [자동 회귀 탐지와 기능 단위 롤백](REGRESSION_GUARD.md)
+- [토스증권 데이터 전환 계획](TOSS_DATA_PLAN.md)
+- [자기진화 규칙](EVOLUTION_RULES.md)
+
+권장 읽기 흐름: 현재 장세 → Risk Veto → 종가베팅 통계 → Regression Guard → 최근 AI 변경.
