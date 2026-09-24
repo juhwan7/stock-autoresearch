@@ -1,0 +1,88 @@
+name: Fixed-IP Toss Market Tape
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stock-autoresearch-writer
+  cancel-in-progress: false
+
+jobs:
+  fixed-ip-market:
+    if: github.event_name == 'workflow_dispatch' || vars.TOSS_FIXED_IP_RUNNER_ENABLED == 'true'
+    runs-on: [self-hosted, linux, stock-autoresearch-fixed-ip]
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Import fresh Toss snapshot
+        env:
+          TOSS_SNAPSHOT_PATH: ${{ vars.TOSS_SNAPSHOT_PATH }}
+        run: |
+          SOURCE="${TOSS_SNAPSHOT_PATH:-/var/lib/stock-autoresearch/toss/latest.json}"
+          if [ ! -f "$SOURCE" ]; then
+            echo "Toss snapshot not found: $SOURCE"
+            exit 1
+          fi
+          python - "$SOURCE" <<'PY'
+          import json, pathlib, sys
+          from datetime import datetime, timezone
+
+          source = pathlib.Path(sys.argv[1])
+          data = json.loads(source.read_text(encoding="utf-8"))
+          captured = datetime.fromisoformat(data["captured_at"])
+          if captured.tzinfo is None:
+              raise SystemExit("captured_at must be timezone-aware")
+          age = (datetime.now(timezone.utc) - captured.astimezone(timezone.utc)).total_seconds()
+          if age > 180:
+              raise SystemExit(f"Toss snapshot is stale: {age:.0f}s")
+          target = pathlib.Path("data/providers/toss/latest.json")
+          target.parent.mkdir(parents=True, exist_ok=True)
+          tmp = target.with_suffix(".json.tmp")
+          tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+          tmp.replace(target)
+          print(f"Imported Toss snapshot age={age:.0f}s")
+          PY
+
+      - name: Korea market tape with Toss primary
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python -m autoresearch market-intel --mode live
+
+      - name: Health / Regression / dashboard
+        run: |
+          python -m autoresearch health
+          python -m autoresearch regression
+          python scripts/build_site.py
+          python -m compileall -q src
+          pytest -q
+          git diff --check
+
+      - name: Commit fixed-IP market state
+        run: |
+          git config user.name "stock-autoresearch[fixed-ip]"
+          git config user.email "stock-autoresearch[bot]@users.noreply.github.com"
+          git add data/providers/toss data/market data/health data/regression reports/market site
+          if git diff --cached --quiet; then
+            echo "저장할 시장 변화가 없습니다."
+          else
+            git commit -m "auto: fixed-IP Toss market tape"
+            git pull --rebase
+            git push
+          fi
