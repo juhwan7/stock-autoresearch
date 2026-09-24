@@ -10,6 +10,7 @@ from .market_intel import MarketIntelEngine
 from .pipeline import Pipeline
 from .regression import RegressionDetector
 from .risk_engine import RiskEngine
+from .toss_collector import main as toss_collector_main
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -57,6 +58,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="7일/30일 품질 회귀 탐지와 기능 단위 롤백",
     )
     regression.add_argument("--root", default=".", help="저장소 루트")
+
+    collector = sub.add_parser(
+        "toss-collector",
+        help="고정 IP 환경에서 Toss 실시간 체결 Collector 실행",
+    )
+    collector.add_argument("--output", default="data/providers/toss/latest.json")
+    collector.add_argument("--top-n", type=int, default=80)
+    collector.add_argument("--ranking-refresh", type=int, default=600)
+    collector.add_argument("--snapshot-seconds", type=int, default=20)
     return parser
 
 
@@ -76,6 +86,16 @@ def main() -> None:
         result = HealthWatchdog(root).run()
     elif args.command == "regression":
         result = RegressionDetector(root).run()
+    elif args.command == "toss-collector":
+        toss_collector_main(
+            [
+                "--output", str((root / args.output).resolve()),
+                "--top-n", str(args.top_n),
+                "--ranking-refresh", str(args.ranking_refresh),
+                "--snapshot-seconds", str(args.snapshot_seconds),
+            ]
+        )
+        return
     else:
         raise SystemExit(2)
 
