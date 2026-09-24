@@ -269,6 +269,29 @@ class MarketStats:
             and s.listing_age_days <= int(self.cfg.get("universe", {}).get("recent_listing_calendar_days", 90))
         ]
 
+        threshold_keys = [
+            str(int(value))
+            for value in self.amount_thresholds
+        ]
+        recent_threshold_event_counts = {
+            key: sum(s.amount_threshold_counts.get(key, 0) for s in recent)
+            for key in threshold_keys
+        }
+        recent_threshold_stock_counts = {
+            key: sum(
+                1
+                for s in recent
+                if s.amount_threshold_counts.get(key, 0) > 0
+            )
+            for key in threshold_keys
+        }
+        recent_max_amounts = [
+            s.max_minute_amount for s in recent if s.max_minute_amount > 0
+        ]
+        recent_median_max_amount = (
+            median(recent_max_amounts) if recent_max_amounts else 0.0
+        )
+
         groups: dict[str, list[MinuteSummary]] = defaultdict(list)
         for s in stocks:
             key = s.group_id or s.sector
@@ -373,8 +396,20 @@ class MarketStats:
             ],
             "recent_listings": {
                 "count": len(recent),
-                "positive_burst_count": sum(1 for s in recent if s.return_pct > 0 and s.burst_count > 0),
-                "stocks": [s.as_dict() for s in sorted(recent, key=lambda x: x.total_amount, reverse=True)[:15]],
+                "positive_burst_count": sum(
+                    1 for s in recent if s.return_pct > 0 and s.burst_count > 0
+                ),
+                "threshold_event_counts": recent_threshold_event_counts,
+                "threshold_stock_counts": recent_threshold_stock_counts,
+                "median_max_minute_amount": round(recent_median_max_amount, 2),
+                "stocks": [
+                    s.as_dict()
+                    for s in sorted(
+                        recent,
+                        key=lambda x: x.total_amount,
+                        reverse=True,
+                    )[:15]
+                ],
             },
             "coflow_groups": coflow[:10],
             "stocks": [s.as_dict() for s in ranked],
