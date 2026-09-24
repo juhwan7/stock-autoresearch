@@ -296,8 +296,9 @@ def render_market_markdown(result: dict[str, Any]) -> str:
         for group in groups[:8]:
             names = ", ".join(x.get("name", "") for x in group.get("members", []))
             lines.append(
-                f"- **{group.get('group')}**: 거래대금 burst를 동반한 상승 종목 "
-                f"{group.get('positive_burst_members')}개 — {names}"
+                f"- **{group.get('group')}**: {group.get('synchronized_center') or '시간 미확인'} 전후 "
+                f"±{group.get('window_minutes', 3)}분 안에 상승+거래대금 burst "
+                f"{group.get('synchronized_burst_members', 0)}종목 동시 포착 — {names}"
             )
     else:
         lines.append("- 현재 데이터에서 조건을 충족한 동조 그룹 없음")
