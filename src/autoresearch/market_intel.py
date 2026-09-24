@@ -259,7 +259,7 @@ def render_market_markdown(result: dict[str, Any]) -> str:
             f"- 분석 종목 수: {q.get('stock_count', 0)}",
             f"- 상승 종목: {q.get('breadth', {}).get('advancers', 0)}",
             f"- 하락 종목: {q.get('breadth', {}).get('decliners', 0)}",
-            f"- 상위 10개 거래대금 집중도: {q.get('turnover', {}).get('top10_share', 0):.1%}",
+            f"- 거래대금 순위 Top10 집중도: {float(result.get('source', {}).get('turnover_rank_top10_share') or q.get('turnover', {}).get('top10_share', 0)):.1%}",
             "",
             "## 분봉 거래대금 Burst 상위",
             "",
@@ -588,6 +588,17 @@ class MarketIntelEngine:
             self.cfg.get("universe", {}).get("close_research_limit", 50)
         )
         ranking = source.trading_value_top(limit=rank_limit)
+        rank_amounts = [
+            abs(number(row.get("trde_prica")))
+            for row in ranking
+            if abs(number(row.get("trde_prica"))) > 0
+        ]
+        rank_total = sum(rank_amounts)
+        ranking_top10_share = (
+            round(sum(rank_amounts[:10]) / rank_total, 4)
+            if rank_total
+            else None
+        )
         now = datetime.now(KST)
         metadata = self._reference_metadata(source, now)
 
@@ -677,6 +688,11 @@ class MarketIntelEngine:
                     "group_id": "",
                     "listing_age_days": None,
                 }
+            if row:
+                metadata[ticker]["day_return_pct"] = number(row.get("flu_rt"))
+                metadata[ticker]["ranking_trading_value_raw"] = abs(
+                    number(row.get("trde_prica"))
+                )
             try:
                 raw = source.minute_chart(ticker, base_date=base_date, max_pages=2)
                 minute_by_ticker[ticker] = source.normalize_minute_rows(raw)
@@ -690,6 +706,7 @@ class MarketIntelEngine:
             "ranking_count": len(ranking),
             "detail_count": len(minute_by_ticker),
             "market_overview": market_overview,
+            "turnover_rank_top10_share": ranking_top10_share,
             "detail_universe": {
                 "intraday_turnover_base": intraday_base_count,
                 "close_research_added": close_research_added,
@@ -1250,7 +1267,10 @@ class MarketIntelEngine:
                     "KOSDAQ": overview.get("KOSDAQ"),
                     "analyzed_stock_count": q.get("stock_count"),
                     "advance_ratio": q.get("breadth", {}).get("advance_ratio"),
-                    "top10_turnover_share": q.get("turnover", {}).get("top10_share"),
+                    "top10_turnover_share": (
+                        item.get("source", {}).get("turnover_rank_top10_share")
+                        or q.get("turnover", {}).get("top10_share")
+                    ),
                     "recent_listing_count": q.get("recent_listings", {}).get("count"),
                     "recent_listing_positive_burst_count": q.get(
                         "recent_listings", {}
