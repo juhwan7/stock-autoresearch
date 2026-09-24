@@ -1,0 +1,39 @@
+enabled: true
+timezone: Asia/Seoul
+
+windows:
+  baseline_7d_days: 7
+  baseline_30d_days: 30
+  post_change_hours: 24
+  grace_hours: 6
+
+minimum_samples:
+  baseline_7d: 12
+  baseline_30d: 24
+  post_change: 6
+
+thresholds:
+  overall_drop_7d: 8.0
+  overall_drop_30d: 8.0
+  research_quality_drop: 8.0
+  severe_overall_drop: 15.0
+
+rollback:
+  enabled: true
+  max_per_tick: 1
+  require_both_baselines: true
+  require_research_quality_drop: true
+  block_on_later_path_overlap: true
+  block_on_current_hash_mismatch: true
+
+quality:
+  weights:
+    research_quality: 0.50
+    health: 0.30
+    data_completeness: 0.20
+
+data:
+  history_dir: data/regression/history
+  latest_file: data/regression/latest.json
+  quarantine_file: data/regression/quarantine.json
+  changes_dir: data/evolution/changes
