@@ -55,3 +55,26 @@ def stable_event_fingerprint(payload: dict[str, Any]) -> str:
         separators=(",", ":"),
     ).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()[:24]
+
+
+
+def build_telegram_payload(
+    *,
+    chat_id: str,
+    text: str,
+    feedback_url: str,
+    dashboard_url: str,
+) -> dict[str, Any]:
+    return {
+        "chat_id": str(chat_id),
+        "text": str(text)[:4096],
+        "link_preview_options": {"is_disabled": True},
+        "reply_markup": {
+            "inline_keyboard": [
+                [
+                    {"text": "💬 바로 피드백", "url": feedback_url},
+                    {"text": "📊 대시보드", "url": dashboard_url},
+                ]
+            ]
+        },
+    }
