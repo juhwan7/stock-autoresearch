@@ -23,10 +23,13 @@ class Pipeline:
         self.research_cfg = self.settings["research"]
         self.limits = self.research_cfg.get("limits", {})
         self.output_cfg = self.research_cfg.get("output", {})
+        self.models = self.research_cfg.get("models", {})
         self.state = StateStore(
             root / self.output_cfg.get("state_dir", "data/state") / "research_state.json"
         )
-        self.llm = None if mode == "dry-run" else ResearchLLM(self.research_cfg["model"])
+        self.llm = None if mode == "dry-run" else ResearchLLM(
+            self.models.get("researcher", {})
+        )
 
     def _prompt(self, name: str, values: dict[str, Any]) -> str:
         rendered = {
@@ -34,6 +37,13 @@ class Pipeline:
             for key, value in values.items()
         }
         return render_prompt(load_prompt(self.root, name), rendered)
+
+    def _request(self, role: str, prompt: str, *, web: bool) -> dict[str, Any]:
+        return self.llm.request_json(
+            prompt,
+            web=web,
+            model_cfg=self.models.get(role, {}),
+        )
 
     def _scan(self, now_utc: str) -> dict[str, Any]:
         if self.mode == "dry-run":
@@ -44,11 +54,11 @@ class Pipeline:
                 "NOW_UTC": now_utc,
                 "ROOT_TOPIC": self.research_cfg.get("root_topic", "stocks"),
                 "MARKETS": self.research_cfg.get("markets", []),
-                "WINDOW_HOURS": self.research_cfg.get("window_hours", 30),
+                "WINDOW_HOURS": self.research_cfg.get("window_hours", 12),
                 "RECENT_TITLES": self.state.recent_titles(),
             },
         )
-        return self.llm.request_json(prompt, web=True)
+        return self._request("scanner", prompt, web=True)
 
     def _research(
         self,
@@ -66,13 +76,13 @@ class Pipeline:
                 "CRITIC_GAPS": critic_gaps or [],
             },
         )
-        return self.llm.request_json(prompt, web=True)
+        return self._request("researcher", prompt, web=True)
 
     def _critic(self, research_data: dict[str, Any]) -> dict[str, Any]:
         if self.mode == "dry-run":
             return mock.critic()
         prompt = self._prompt("critic.md", {"RESEARCH_JSON": research_data})
-        return self.llm.request_json(prompt, web=True)
+        return self._request("critic", prompt, web=True)
 
     def _finalize(
         self,
@@ -90,7 +100,7 @@ class Pipeline:
                 "CRITIC_JSON": critic_data,
             },
         )
-        return self.llm.request_json(prompt, web=False)
+        return self._request("chief", prompt, web=False)
 
     def run(self) -> dict[str, Any]:
         now = datetime.now(timezone.utc)
@@ -104,7 +114,7 @@ class Pipeline:
             self.settings["scoring"].get("weights", {}),
         )
 
-        minimum = float(self.limits.get("minimum_candidate_score", 55))
+        minimum = float(self.limits.get("minimum_candidate_score", 62))
         max_topics = int(self.limits.get("max_topics", 1))
         selected = [x for x in ranked if x.get("priority_score", 0) >= minimum][:max_topics]
 
