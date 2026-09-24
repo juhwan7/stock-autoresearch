@@ -121,3 +121,176 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 28px
 @media (max-width: 700px) {
   .health-item { grid-template-columns: 1fr; }
 }
+
+.dash-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  width: min(1380px, calc(100% - 40px));
+  margin: 0 auto 14px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px;
+  border: 1px solid #202c3e;
+  background: #0d131de8;
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+}
+.dash-nav a {
+  flex: 0 0 auto;
+  padding: 8px 11px;
+  border-radius: 9px;
+  color: #94a5bb;
+  font-size: 12px;
+}
+.dash-nav a:hover { background: #172235; color: #eef3fb; }
+
+.dashboard-main { grid-template-columns: 1.25fr .75fr !important; }
+.report-controls {
+  display: grid;
+  grid-template-columns: 1.4fr .8fr 1fr 1fr auto;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.report-controls input,
+.report-controls select,
+.report-controls button {
+  width: 100%;
+  border: 1px solid #27364d;
+  background: #0e1520;
+  color: #dfe7f2;
+  border-radius: 10px;
+  padding: 10px 11px;
+  font: inherit;
+  font-size: 12px;
+}
+.report-controls button { cursor: pointer; color: #9fb3d1; }
+.report-controls button:hover { border-color: #40597d; }
+
+.quality-box {
+  margin-bottom: 14px;
+  padding: 12px 13px;
+  border: 1px solid #202d41;
+  border-radius: 12px;
+  background: #0e151f;
+}
+.quality-chart {
+  height: 92px;
+  display: flex;
+  align-items: end;
+  gap: 3px;
+  padding-top: 10px;
+  overflow-x: auto;
+}
+.quality-bar-wrap {
+  min-width: 7px;
+  height: 72px;
+  display: flex;
+  align-items: end;
+}
+.quality-bar {
+  width: 100%;
+  min-height: 2px;
+  background: #7799c9;
+  border-radius: 3px 3px 1px 1px;
+}
+.report-card > span { min-width: 0; }
+.report-card > span strong { display: block; font-size: 13px; }
+.report-card > span small {
+  display: block;
+  margin-top: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.report-card > b { flex: 0 0 auto; color: #7d8ea6; font-size: 11px; }
+
+.regression-panel { border-color: #303a4e; }
+.regression-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.regression-number {
+  padding: 13px;
+  border-radius: 11px;
+  background: #101722;
+  border: 1px solid #222f43;
+}
+.regression-number strong {
+  display: block;
+  font-size: 21px;
+  letter-spacing: -.03em;
+}
+.regression-number span { color: #7d8da4; font-size: 10px; }
+.regression-badge {
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid #31405a;
+  font-size: 11px;
+  font-weight: 900;
+}
+.regression-badge[data-level="OK"] { color: #7ee2ae; border-color: #28533f; }
+.regression-badge[data-level="COLLECTING"] { color: #9ec7e8; border-color: #31506a; }
+.regression-badge[data-level="QUARANTINED"] { color: #e6d07f; border-color: #5b5128; }
+.regression-badge[data-level="ROLLED_BACK"] { color: #ff9c8d; border-color: #6a342d; }
+.tick[data-outcome="quarantined"] .dot { background: #e6d07f; }
+.tick[data-outcome="rolled_back_regression"] .dot { background: #ff9b83; }
+
+.kanban {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(180px, 1fr));
+  gap: 10px;
+  overflow-x: auto;
+}
+.kanban-column {
+  min-width: 190px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #0d141e;
+  border: 1px solid #202d40;
+}
+.kanban-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 9px;
+}
+.kanban-head strong { font-size: 12px; }
+.kanban-head span {
+  min-width: 24px;
+  text-align: center;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: #172234;
+  color: #8ea1ba;
+  font-size: 10px;
+}
+.kanban-list { display: grid; gap: 7px; }
+.kanban-card {
+  padding: 10px;
+  border-radius: 9px;
+  background: #131c29;
+  border: 1px solid #22314a;
+}
+.kanban-card strong { display: block; font-size: 11px; line-height: 1.45; }
+.kanban-card p {
+  max-height: 64px;
+  overflow: hidden;
+  margin: 5px 0 0;
+  color: #77879d;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+@media (max-width: 1050px) {
+  .dashboard-main { grid-template-columns: 1fr !important; }
+  .report-controls { grid-template-columns: 1fr 1fr; }
+  .regression-summary { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 650px) {
+  .dash-nav { width: min(100% - 24px, 1380px); }
+  .report-controls { grid-template-columns: 1fr; }
+}
