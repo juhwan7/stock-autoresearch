@@ -1,0 +1,41 @@
+name: GitHub Pages 즉시 배포
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "site/**"
+      - ".github/workflows/페이지배포.yml"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 가져오기
+        uses: actions/checkout@v4
+
+      - name: GitHub Pages 설정
+        uses: actions/configure-pages@v5
+
+      - name: 사이트 업로드
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+      - name: GitHub Pages 배포
+        id: deployment
+        uses: actions/deploy-pages@v4
