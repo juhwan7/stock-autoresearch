@@ -16,6 +16,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from autoresearch.feedback import (
     classify_feedback,
+    extract_change_id,
     feedback_fingerprint,
     stable_event_fingerprint,
 )
@@ -83,6 +84,33 @@ def already_notified(issue: int, fingerprint: str) -> bool:
 
 def post_comment(issue: int, body: str) -> None:
     github_request("POST", f"/issues/{issue}/comments", {"body": body})
+
+
+def latest_notification_context(
+    issue: int,
+    before_comment_id: str | int,
+) -> dict[str, Any]:
+    try:
+        current_id = int(before_comment_id)
+    except (TypeError, ValueError):
+        current_id = 0
+
+    for item in reversed(issue_comments(issue)):
+        try:
+            item_id = int(item.get("id") or 0)
+        except (TypeError, ValueError):
+            continue
+        if current_id and item_id >= current_id:
+            continue
+        body = str(item.get("body") or "")
+        if "<!-- stock-autoresearch-notify:" not in body:
+            continue
+        return {
+            "comment_id": item_id,
+            "comment_url": item.get("html_url") or item.get("url"),
+            "change_id": extract_change_id(body),
+        }
+    return {}
 
 
 def git_names(base_sha: str) -> list[str]:
@@ -185,8 +213,8 @@ def notify(args: argparse.Namespace) -> int:
                 "paths": change.get("paths", []),
             }
         )
-    elif outcome in {"proposal_only", "blocked", "validation_failed"}:
-        if scout.get("needs_user") or outcome == "validation_failed":
+    elif outcome in {"proposal_only", "blocked", "validation_failed", "rolled_back"}:
+        if scout.get("needs_user") or outcome in {"validation_failed", "rolled_back"}:
             events.append(
                 {
                     "type": "evolution_attention",
@@ -316,6 +344,8 @@ def ingest(args: argparse.Namespace) -> int:
         return 0
 
     classification = classify_feedback(body)
+    context = latest_notification_context(issue, comment_id)
+    related_change_id = classification.change_id or context.get("change_id")
     fingerprint = feedback_fingerprint(author, comment_id, body)
     log_path = ROOT / "data" / "feedback" / "사용자_피드백.jsonl"
 
@@ -340,7 +370,8 @@ def ingest(args: argparse.Namespace) -> int:
         "author": author,
         "kind": classification.kind,
         "priority": classification.priority,
-        "change_id": classification.change_id,
+        "change_id": related_change_id,
+        "notification_comment_url": context.get("comment_url"),
         "body": body,
         "status": "pending_evolution_review",
     }
@@ -358,7 +389,8 @@ def ingest(args: argparse.Namespace) -> int:
     block = (
         f"## {now.strftime('%Y-%m-%d %H:%M KST')} — {title}\n\n"
         f"- 우선순위: {classification.priority}\n"
-        f"- change_id: {classification.change_id or '지정 없음'}\n"
+        f"- change_id: {related_change_id or '지정 없음'}\n"
+        f"- 관련 알림: {context.get('comment_url') or '자동 연결 없음'}\n"
         f"- GitHub 댓글: {comment_url or '링크 없음'}\n"
         f"- 내용: {body}\n\n"
         "처리 상태: 다음 자기진화 Tick의 최우선 사용자 피드백으로 전달\n"
