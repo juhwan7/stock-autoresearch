@@ -35,7 +35,7 @@ class EvolutionEngine:
     def __init__(self, root: Path, mode: str = "live"):
         self.root = root
         self.mode = mode
-        self.settings = load_yaml(root / "config" / "evolution.yaml")
+        self.settings = load_yaml(root / "config" / "자기진화.yaml")
         self.research_settings = load_settings(root)
         self.limits = self.settings.get("limits", {})
         self.auto = self.settings.get("auto_apply", {})
@@ -63,14 +63,14 @@ class EvolutionEngine:
         preferred = [
             "README.md",
             "AGENTS.md",
-            "config/research.yaml",
-            "config/scoring.yaml",
-            "config/sources.yaml",
-            "config/evolution.yaml",
-            "config/market_intel.yaml",
-            "config/risk.yaml",
-            "config/regression.yaml",
-            "config/events_2026.yaml",
+            "config/리서치.yaml",
+            "config/점수기준.yaml",
+            "config/출처.yaml",
+            "config/자기진화.yaml",
+            "config/시장분석.yaml",
+            "config/리스크.yaml",
+            "config/회귀탐지.yaml",
+            "config/주요일정_2026.yaml",
             "docs/매매연구_원칙.md",
             "docs/오버나이트_리스크_차단.md",
             "docs/회귀탐지_롤백.md",
