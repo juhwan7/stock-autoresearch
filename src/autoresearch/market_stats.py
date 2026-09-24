@@ -56,6 +56,11 @@ class MinuteSummary:
     first_price: float
     last_price: float
     return_pct: float
+    observed_return_pct: float
+    return_source: str
+    minute_coverage_start: str
+    minute_coverage_end: str
+    full_regular_session: bool
     total_amount: float
     close_watch_amount: float
     close_watch_share: float
@@ -182,7 +187,17 @@ class MarketStats:
             str(int(threshold)): sum(1 for amount in amounts if amount >= threshold)
             for threshold in self.amount_thresholds
         }
-        stock_return = percent_change(first, last)
+        observed_return = percent_change(first, last)
+        has_daily_return = meta.get("day_return_pct") not in (None, "")
+        stock_return = (
+            number(meta.get("day_return_pct"))
+            if has_daily_return
+            else observed_return
+        )
+        return_source = "ka10032_flu_rt" if has_daily_return else "minute_observed"
+        coverage_start = clean[0]["time"]
+        coverage_end = clean[-1]["time"]
+        full_regular_session = coverage_start <= "09:00"
         day_high = max(x["high"] for x in clean)
         day_low = min(x["low"] for x in clean)
         high_position = 0.5 if day_high == day_low else (last - day_low) / (day_high - day_low)
@@ -193,6 +208,11 @@ class MarketStats:
             first_price=first,
             last_price=last,
             return_pct=round(stock_return, 3),
+            observed_return_pct=round(observed_return, 3),
+            return_source=return_source,
+            minute_coverage_start=coverage_start,
+            minute_coverage_end=coverage_end,
+            full_regular_session=full_regular_session,
             total_amount=round(total_amount, 2),
             close_watch_amount=round(close_watch_amount, 2),
             close_watch_share=round(close_watch_amount / total_amount, 4) if total_amount else 0.0,
