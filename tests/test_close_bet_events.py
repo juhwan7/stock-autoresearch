@@ -103,7 +103,7 @@ def test_close_bet_event_is_created_with_late_and_auction_moves(tmp_path):
     )
     assert result["created"] == 1
 
-    rows = load_event_csv(tmp_path / "data/market/stats/close_bet_events.csv")
+    rows = load_event_csv(tmp_path / "data/market/stats/종가베팅_이벤트.csv")
     assert len(rows) == 1
     assert float(rows[0]["late_return_pct"]) == 5.0
     assert round(float(rows[0]["closing_auction_pct"]), 4) == round((104 / 105 - 1) * 100, 4)
@@ -128,7 +128,7 @@ def test_next_day_outcome_is_not_finalized_intraday(tmp_path):
         {"status": "ok", "stocks": []},
     )
     assert result["completed"] == 0
-    rows = load_event_csv(tmp_path / "data/market/stats/close_bet_events.csv")
+    rows = load_event_csv(tmp_path / "data/market/stats/종가베팅_이벤트.csv")
     assert rows[0]["next_date"] == ""
 
 
@@ -146,7 +146,7 @@ def test_next_day_outcome_is_finalized_after_close(tmp_path):
         {"status": "ok", "stocks": []},
     )
     assert result["completed"] == 1
-    rows = load_event_csv(tmp_path / "data/market/stats/close_bet_events.csv")
+    rows = load_event_csv(tmp_path / "data/market/stats/종가베팅_이벤트.csv")
     assert rows[0]["next_date"] == "2026-09-28"
     assert float(rows[0]["next_mfe_pct"]) > 0
     assert float(rows[0]["next_mae_pct"]) < 0
@@ -160,7 +160,7 @@ def test_next_day_outcome_is_also_measured_from_nxt_final_price(tmp_path):
         quantitative(),
     )
 
-    path = tmp_path / "data/market/stats/close_bet_events.csv"
+    path = tmp_path / "data/market/stats/종가베팅_이벤트.csv"
     rows = load_event_csv(path)
     rows[0]["nxt_after_last_price"] = "108"
     from autoresearch.market_intel import CLOSE_EVENT_FIELDS, write_event_csv

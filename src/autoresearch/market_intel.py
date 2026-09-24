@@ -553,7 +553,7 @@ class MarketIntelEngine:
         )
 
     def _pending_close_tickers(self, today: str) -> list[str]:
-        rows = load_event_csv(self.stats_dir / "close_bet_events.csv")
+        rows = load_event_csv(self.stats_dir / "종가베팅_이벤트.csv")
         seen = []
         for row in rows:
             if (
@@ -618,7 +618,7 @@ class MarketIntelEngine:
             }
 
         # 사람이 검증한 기업집단/테마 메타데이터는 API 기본정보 위에 덮어쓴다.
-        manual = load_metadata(self.root / "data" / "market" / "metadata.csv")
+        manual = load_metadata(self.root / "data" / "market" / "종목_메타데이터.csv")
         for ticker, item in manual.items():
             base = out.setdefault(ticker, {"name": item.get("name") or ticker})
             for key, value in item.items():
@@ -856,7 +856,7 @@ class MarketIntelEngine:
         quantitative: dict[str, Any],
         source_state: dict[str, Any] | None = None,
     ) -> dict[str, int]:
-        path = self.stats_dir / "close_bet_events.csv"
+        path = self.stats_dir / "종가베팅_이벤트.csv"
         rows = load_event_csv(path)
         today = now.strftime("%Y-%m-%d")
         changed = False
@@ -1048,7 +1048,7 @@ class MarketIntelEngine:
         if not by_ticker:
             return {"updated": 0}
 
-        path = self.stats_dir / "close_bet_events.csv"
+        path = self.stats_dir / "종가베팅_이벤트.csv"
         rows = load_event_csv(path)
         today = now.strftime("%Y-%m-%d")
         updated = 0
@@ -1108,7 +1108,7 @@ class MarketIntelEngine:
         return True
 
     def _pending_pullback_tickers(self) -> list[str]:
-        rows = load_event_csv(self.stats_dir / "pullback_events.csv")
+        rows = load_event_csv(self.stats_dir / "눌림스윙_이벤트.csv")
         tickers: list[str] = []
         for row in rows:
             if (
@@ -1142,7 +1142,7 @@ class MarketIntelEngine:
                 tickers.append(ticker)
 
         metadata = self._reference_metadata(source, now)
-        path = self.stats_dir / "pullback_events.csv"
+        path = self.stats_dir / "눌림스윙_이벤트.csv"
         events = load_event_csv(path)
         changed = False
         created = 0
@@ -1240,8 +1240,8 @@ class MarketIntelEngine:
         }
 
     def _strategy_stats(self) -> dict[str, Any]:
-        close_events = load_event_csv(self.stats_dir / "close_bet_events.csv")
-        pullback_events = load_event_csv(self.stats_dir / "pullback_events.csv")
+        close_events = load_event_csv(self.stats_dir / "종가베팅_이벤트.csv")
+        pullback_events = load_event_csv(self.stats_dir / "눌림스윙_이벤트.csv")
         minimum = int(self.cfg.get("statistics", {}).get("min_sample_size", 20))
         current_pullback_version = str(
             self.cfg.get("pullback_research", {}).get("cohort_version", "v1")

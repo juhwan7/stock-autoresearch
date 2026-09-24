@@ -43,7 +43,7 @@ def test_strategy_rates_and_rebound_drawdown(tmp_path):
         "burst_count",
     ]
     write_csv(
-        stats_dir / "close_bet_events.csv",
+        stats_dir / "종가베팅_이벤트.csv",
         close_fields,
         [
             {
@@ -103,7 +103,7 @@ def test_strategy_rates_and_rebound_drawdown(tmp_path):
             "forward_5d_mfe_pct": "2",
         },
     ]
-    write_csv(stats_dir / "pullback_events.csv", PULLBACK_EVENT_FIELDS, pullback_rows)
+    write_csv(stats_dir / "눌림스윙_이벤트.csv", PULLBACK_EVENT_FIELDS, pullback_rows)
 
     stats = engine._strategy_stats()
 
