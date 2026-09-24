@@ -314,6 +314,66 @@ class MarketIntelEngine:
                 seen.append(str(row["ticker"]))
         return seen
 
+    def _reference_metadata(
+        self,
+        source: KiwoomSource,
+        now: datetime,
+    ) -> dict[str, dict[str, Any]]:
+        cache = self.root / "data" / "market" / "reference" / "kiwoom_stock_list.json"
+        today = now.strftime("%Y-%m-%d")
+        cached: dict[str, Any] = {}
+        if cache.exists():
+            try:
+                cached = json.loads(cache.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                cached = {}
+
+        items = cached.get("items") if cached.get("date") == today else None
+        if not isinstance(items, list):
+            items = []
+            for market_type in ("0", "10"):
+                try:
+                    items.extend(source.stock_list(market_type))
+                except KiwoomAPIError:
+                    continue
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            cache.write_text(
+                json.dumps({"date": today, "items": items}, ensure_ascii=False),
+                encoding="utf-8",
+            )
+
+        out: dict[str, dict[str, Any]] = {}
+        for row in items:
+            ticker = str(row.get("code") or "").split("_")[0]
+            if not ticker:
+                continue
+            reg = str(row.get("regDay") or "").replace("-", "")
+            listing_age = None
+            if len(reg) == 8 and reg.isdigit():
+                try:
+                    listing_dt = datetime.strptime(reg, "%Y%m%d").date()
+                    listing_age = (now.date() - listing_dt).days
+                except ValueError:
+                    listing_age = None
+            out[ticker] = {
+                "name": row.get("name") or ticker,
+                "market": row.get("marketName") or "",
+                "listing_date": reg,
+                "listing_age_days": listing_age,
+                "sector": row.get("upName") or "",
+                "industry": row.get("upName") or "",
+                "group_id": "",
+            }
+
+        # 사람이 검증한 기업집단/테마 메타데이터는 API 기본정보 위에 덮어쓴다.
+        manual = load_metadata(self.root / "data" / "market" / "metadata.csv")
+        for ticker, item in manual.items():
+            base = out.setdefault(ticker, {"name": item.get("name") or ticker})
+            for key, value in item.items():
+                if value not in (None, ""):
+                    base[key] = value
+        return out
+
     def _collect_live(
         self,
     ) -> tuple[
@@ -336,9 +396,10 @@ class MarketIntelEngine:
             self.cfg.get("universe", {}).get("detail_minute_limit", 20)
         )
         ranking = source.trading_value_top(limit=rank_limit)
-        metadata = load_metadata(self.root / "data" / "market" / "metadata.csv")
+        now = datetime.now(KST)
+        metadata = self._reference_metadata(source, now)
 
-        today = datetime.now(KST).strftime("%Y-%m-%d")
+        today = now.strftime("%Y-%m-%d")
         detail_tickers: list[str] = []
         ranking_by_ticker: dict[str, dict[str, Any]] = {}
         for row in ranking:
