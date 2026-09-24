@@ -69,9 +69,17 @@ async function load() {
     ).join("") || "<p class='muted'>조건 충족 종목 없음</p>";
 
     const recent = q.recent_listings || {};
-    $("new-listings").innerHTML = (recent.stocks || []).slice(0, 5).map((x) =>
-      `<div class="mini-row"><strong>${esc(x.name || x.ticker)}</strong><span>${esc(x.burst_count)}회 · 1분 최대 ${esc(krwEok(x.max_minute_amount))}</span></div>`
-    ).join("") || `<p class="muted">현재 상세 Universe에서 신규주 흐름 없음</p>`;
+    const recentEvents = recent.threshold_event_counts || {};
+    const recentStocks = recent.threshold_stock_counts || {};
+    const recentHeader = recent.count
+      ? `<div class="mini-row"><strong>10억↑ 분봉</strong><span>${esc(recentEvents["1000000000"] || 0)}회 · ${esc(recentStocks["1000000000"] || 0)}종목</span></div>` +
+        `<div class="mini-row"><strong>20억↑ 분봉</strong><span>${esc(recentEvents["2000000000"] || 0)}회 · ${esc(recentStocks["2000000000"] || 0)}종목</span></div>`
+      : "";
+    $("new-listings").innerHTML = recentHeader + (
+      (recent.stocks || []).slice(0, 5).map((x) =>
+        `<div class="mini-row"><strong>${esc(x.name || x.ticker)}</strong><span>${esc(x.burst_count)}회 · 1분 최대 ${esc(krwEok(x.max_minute_amount))}</span></div>`
+      ).join("") || `<p class="muted">현재 상세 Universe에서 신규주 흐름 없음</p>`
+    );
 
     $("coflow-groups").innerHTML = (q.coflow_groups || []).slice(0, 5).map((x) =>
       `<div class="mini-row"><strong>${esc(x.group)}</strong><span>${esc(x.synchronized_burst_members || 0)}종목 · ${esc(x.synchronized_center || "-")} 동조</span></div>`
