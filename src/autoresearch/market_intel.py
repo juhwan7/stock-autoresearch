@@ -202,6 +202,7 @@ def render_market_markdown(result: dict[str, Any]) -> str:
         "",
         f"> 생성: {result.get('generated_at', '')}",
         f"> 데이터 상태: {result.get('source', {}).get('status', '')}",
+        f"> 분봉 거래대금 방식: {result.get('source', {}).get('minute_amount_method', '알 수 없음')}",
         "",
     ]
 
@@ -300,8 +301,64 @@ def render_market_markdown(result: dict[str, Any]) -> str:
         sample = block.get("summary", {}).get("sample_size", 0)
         lines.append(
             f"- {label}: 표본 {sample}개 · "
-            f"{'통계 사용 가능' if block.get('ready') else '표본 축적 중'}"
+            f"{block.get('reliability') or ('통계 사용 가능' if block.get('ready') else '표본 축적 중')}"
         )
+
+    def median_stat(pattern: dict[str, Any], field: str) -> Any:
+        return (
+            pattern.get("summary", {})
+            .get("fields", {})
+            .get(field, {})
+            .get("median")
+        )
+
+    close_patterns = [
+        x
+        for x in strategy.get("close_bet", {}).get("patterns", [])
+        if x.get("summary", {}).get("sample_size", 0) > 0
+    ]
+    lines.extend(["", "## 종가베팅 조건별 통계", ""])
+    if close_patterns:
+        lines.extend(
+            [
+                "| 조건 | 표본 | 상태 | 다음날 중앙 MFE | 다음날 중앙 MAE |",
+                "|---|---:|---|---:|---:|",
+            ]
+        )
+        for item in close_patterns:
+            n = item.get("summary", {}).get("sample_size", 0)
+            mfe = median_stat(item, "next_mfe_pct")
+            mae = median_stat(item, "next_mae_pct")
+            lines.append(
+                f"| {item.get('label')} | {n} | {item.get('reliability')} | "
+                f"{mfe if mfe is not None else '-'}% | {mae if mae is not None else '-'}% |"
+            )
+    else:
+        lines.append("- 아직 완결된 표본이 없습니다.")
+
+    pullback_patterns = [
+        x
+        for x in strategy.get("pullback", {}).get("patterns", [])
+        if x.get("summary", {}).get("sample_size", 0) > 0
+    ]
+    lines.extend(["", "## 눌림 조건별 5거래일 통계", ""])
+    if pullback_patterns:
+        lines.extend(
+            [
+                "| 조건 | 표본 | 상태 | 5일 중앙 MFE | 5일 중앙 MAE |",
+                "|---|---:|---|---:|---:|",
+            ]
+        )
+        for item in pullback_patterns:
+            n = item.get("summary", {}).get("sample_size", 0)
+            mfe = median_stat(item, "forward_5d_mfe_pct")
+            mae = median_stat(item, "forward_5d_mae_pct")
+            lines.append(
+                f"| {item.get('label')} | {n} | {item.get('reliability')} | "
+                f"{mfe if mfe is not None else '-'}% | {mae if mae is not None else '-'}% |"
+            )
+    else:
+        lines.append("- 아직 5거래일까지 완결된 눌림 표본이 없습니다.")
 
     lines.extend(
         [
@@ -985,6 +1042,7 @@ class MarketIntelEngine:
         self,
         quantitative: dict[str, Any],
         strategy_stats: dict[str, Any],
+        source_state: dict[str, Any],
     ) -> dict[str, Any] | None:
         if self.mode != "live" or quantitative.get("status") != "ok":
             return None
@@ -995,6 +1053,7 @@ class MarketIntelEngine:
             {
                 "SNAPSHOT": json.dumps(
                     {
+                        "data_quality": source_state,
                         "quantitative": quantitative,
                         "strategy_stats": strategy_stats,
                     },
@@ -1034,7 +1093,7 @@ class MarketIntelEngine:
         pullback_update = self._run_pullback_research(now)
         strategy_stats = self._strategy_stats()
         interpretation = (
-            self._interpret(quantitative, strategy_stats)
+            self._interpret(quantitative, strategy_stats, source_state)
             if quantitative.get("status") == "ok"
             else None
         )
