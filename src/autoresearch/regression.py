@@ -521,14 +521,35 @@ class RegressionDetector:
                 if rolled_back >= rollback_limit:
                     break
 
+        rolling_7d = [
+            row
+            for row in history
+            if (_parse_time(row.get("timestamp")) or now)
+            >= now - timedelta(days=7)
+        ]
+        rolling_30d = history
+        baseline_summary = {
+            "overall_7d": self._avg(rolling_7d, "overall_quality"),
+            "overall_30d": self._avg(rolling_30d, "overall_quality"),
+            "research_7d": self._avg(rolling_7d, "research_quality"),
+            "research_30d": self._avg(rolling_30d, "research_quality"),
+            "samples_7d": len(rolling_7d),
+            "samples_30d": len(rolling_30d),
+        }
+
         status = "OK"
         if any(x.get("status") == "rolled_back" for x in evaluations):
             status = "ROLLED_BACK"
         elif any(x.get("status") == "quarantined" for x in evaluations):
             status = "QUARANTINED"
-        elif any(
-            str(x.get("status", "")).startswith("collecting")
-            for x in evaluations
+        elif (
+            not manifests
+            or baseline_summary["samples_7d"]
+            < int(self.cfg.get("minimum_samples", {}).get("baseline_7d", 12))
+            or any(
+                str(x.get("status", "")).startswith("collecting")
+                for x in evaluations
+            )
         ):
             status = "COLLECTING"
 
@@ -536,6 +557,7 @@ class RegressionDetector:
             "generated_at": now.isoformat(),
             "status": status,
             "snapshot": snapshot,
+            "baseline_summary": baseline_summary,
             "evaluations": evaluations[:20],
             "active_change_count": sum(
                 1
