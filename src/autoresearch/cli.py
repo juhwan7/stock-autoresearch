@@ -8,6 +8,7 @@ from .evolution import EvolutionEngine
 from .health import HealthWatchdog
 from .market_intel import MarketIntelEngine
 from .pipeline import Pipeline
+from .regression import RegressionDetector
 from .risk_engine import RiskEngine
 
 
@@ -50,6 +51,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     health = sub.add_parser("health", help="프로젝트 운영 상태 점검")
     health.add_argument("--root", default=".", help="저장소 루트")
+
+    regression = sub.add_parser(
+        "regression",
+        help="7일/30일 품질 회귀 탐지와 기능 단위 롤백",
+    )
+    regression.add_argument("--root", default=".", help="저장소 루트")
     return parser
 
 
@@ -67,6 +74,8 @@ def main() -> None:
         result = RiskEngine(root, args.mode).run()
     elif args.command == "health":
         result = HealthWatchdog(root).run()
+    elif args.command == "regression":
+        result = RegressionDetector(root).run()
     else:
         raise SystemExit(2)
 
