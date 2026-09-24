@@ -1,0 +1,39 @@
+enabled: true
+market: KRX
+timezone: Asia/Seoul
+
+universe:
+  turnover_rank_limit: 30
+  detail_minute_limit: 20
+  recent_listing_calendar_days: 90
+
+minute_analysis:
+  baseline_window: 20
+  burst_ratio: 2.5
+  min_burst_amount_krw: 500000000
+  strong_burst_ratio: 4.0
+  close_watch_start: "14:30"
+  continuous_end: "15:20"
+
+coflow:
+  minimum_members: 3
+  minute_return_threshold_pct: 0.15
+  burst_ratio_threshold: 1.8
+
+statistics:
+  min_sample_size: 20
+  percentiles: [0.25, 0.5, 0.75]
+  close_bet_forward_days: [1]
+  pullback_forward_days: [1, 3, 5]
+
+data:
+  raw_dir: data/market/raw
+  snapshot_dir: data/market/snapshots
+  stats_dir: data/market/stats
+  latest_file: data/market/latest.json
+
+models:
+  regime:
+    name: gpt-5.6-terra
+    reasoning_effort: medium
+    web_search_context: low
