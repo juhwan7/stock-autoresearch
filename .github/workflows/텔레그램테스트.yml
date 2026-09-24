@@ -1,0 +1,70 @@
+name: 텔레그램 알림 테스트
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  telegram-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 가져오기
+        uses: actions/checkout@v4
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 테스트 메시지 전송
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+          chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+          if not token or not chat_id:
+              raise SystemExit(
+                  "TELEGRAM_BOT_TOKEN 또는 TELEGRAM_CHAT_ID Secret이 없습니다."
+              )
+
+          payload = {
+              "chat_id": chat_id,
+              "text": (
+                  "✅ Stock AutoResearch Telegram 연결 성공\n\n"
+                  "앞으로 실제 AI 개선, 중요한 Health 경고, "
+                  "Regression 이벤트가 발생하면 이 채팅으로 알립니다."
+              ),
+              "link_preview_options": {"is_disabled": True},
+              "reply_markup": {
+                  "inline_keyboard": [[
+                      {
+                          "text": "💬 바로 피드백",
+                          "url": "https://github.com/juhwan7/stock-autoresearch/issues/1",
+                      },
+                      {
+                          "text": "📊 대시보드",
+                          "url": "https://juhwan7.github.io/stock-autoresearch/",
+                      },
+                  ]]
+              },
+          }
+          req = urllib.request.Request(
+              f"https://api.telegram.org/bot{token}/sendMessage",
+              data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+              method="POST",
+              headers={"Content-Type": "application/json"},
+          )
+          with urllib.request.urlopen(req, timeout=20) as response:
+              data = json.loads(response.read().decode("utf-8"))
+          if not data.get("ok"):
+              raise SystemExit("Telegram API가 ok=false를 반환했습니다.")
+          print("Telegram 테스트 알림 전송 성공")
+          PY
