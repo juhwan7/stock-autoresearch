@@ -76,7 +76,7 @@ class RiskEngine:
             raise ValueError("mode must be dry-run or live")
         self.root = root
         self.mode = mode
-        self.cfg = load_yaml(root / "config" / "risk.yaml")
+        self.cfg = load_yaml(root / "config" / "리스크.yaml")
         self.data_cfg = self.cfg.get("data", {})
         self.state_path = root / self.data_cfg.get(
             "state_file", "data/risk/state.json"
@@ -98,7 +98,7 @@ class RiskEngine:
         )
 
     def _fallback_calendar(self) -> list[dict[str, Any]]:
-        data = load_yaml(self.root / "config" / "events_2026.yaml")
+        data = load_yaml(self.root / "config" / "주요일정_2026.yaml")
         rows = data.get("events", [])
         return [x for x in rows if isinstance(x, dict)]
 
