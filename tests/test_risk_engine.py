@@ -130,3 +130,72 @@ def test_force_evaluation_after_six_hours(tmp_path):
     old = {"last_evaluated_at": (now - timedelta(hours=7)).isoformat()}
     assert engine._force_due(now, recent) is False
     assert engine._force_due(now, old) is True
+
+
+def test_risk_enrichment_preserves_max_level(tmp_path):
+    engine = make_engine(tmp_path)
+    path = tmp_path / "data/market/stats/close_bet_events.csv"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        "signal_date,ticker,next_date\n"
+        "2026-09-25,A,\n",
+        encoding="utf-8",
+    )
+    now = datetime(2026, 9, 25, 18, 0, tzinfo=KST)
+
+    first = {
+        "risk_level": "VETO",
+        "event_risk_level": "VETO",
+        "macro_risk_level": "WATCH",
+        "semantic_hash": "hash-veto",
+        "evaluation": {
+            "risk_level": "VETO",
+            "single_biggest_risk": {"title": "미국 CPI"},
+        },
+    }
+    assert engine._enrich_close_events(now, first) == 1
+
+    second = {
+        "risk_level": "WATCH",
+        "event_risk_level": "WATCH",
+        "macro_risk_level": "LOW",
+        "semantic_hash": "hash-watch",
+        "evaluation": {
+            "risk_level": "WATCH",
+            "single_biggest_risk": {"title": "이벤트 해소 후"},
+        },
+    }
+    engine._enrich_close_events(now + timedelta(hours=4), second)
+
+    import csv
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        row = next(csv.DictReader(handle))
+
+    assert row["risk_level_latest"] == "WATCH"
+    assert row["overnight_max_risk_level"] == "VETO"
+    assert row["overnight_risk_hash"] == "hash-watch"
+
+
+def test_logic_document_change_changes_semantic_hash(tmp_path):
+    engine = make_engine(tmp_path)
+    engine.cfg.setdefault("dirty_state", {})["logic_files"] = [
+        "prompts/risk_evaluator.md"
+    ]
+    market = {"regime": "테스트", "coflow_groups": []}
+    macro = {"values": {}}
+
+    before = engine._semantic_payload(
+        "LOW", None, [], macro, "LOW", [], market
+    )
+    before_hash = engine._hash(before)
+
+    (tmp_path / "prompts" / "risk_evaluator.md").write_text(
+        "changed rule",
+        encoding="utf-8",
+    )
+    after = engine._semantic_payload(
+        "LOW", None, [], macro, "LOW", [], market
+    )
+    after_hash = engine._hash(after)
+
+    assert before_hash != after_hash
