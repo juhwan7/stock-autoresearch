@@ -1,0 +1,17 @@
+[Unit]
+Description=Stock AutoResearch Toss Market Collector
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/stock-autoresearch
+EnvironmentFile=/etc/stock-autoresearch/toss.env
+ExecStart=/opt/stock-autoresearch/.venv/bin/python collector/toss_collector.py
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
