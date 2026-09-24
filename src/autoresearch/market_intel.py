@@ -361,6 +361,9 @@ def render_market_markdown(result: dict[str, Any]) -> str:
             .get("median")
         )
 
+    def rate_text(value: Any) -> str:
+        return "-" if value is None else f"{float(value):.1%}"
+
     close_patterns = [
         x
         for x in strategy.get("close_bet", {}).get("patterns", [])
@@ -370,17 +373,20 @@ def render_market_markdown(result: dict[str, Any]) -> str:
     if close_patterns:
         lines.extend(
             [
-                "| 조건 | 표본 | 상태 | 다음날 중앙 MFE | 다음날 중앙 MAE |",
-                "|---|---:|---|---:|---:|",
+                "| 조건 | 표본 | 상태 | 중앙 MFE | 중앙 MAE | +5% 도달 | -5% 역행 |",
+                "|---|---:|---|---:|---:|---:|---:|",
             ]
         )
         for item in close_patterns:
             n = item.get("summary", {}).get("sample_size", 0)
             mfe = median_stat(item, "next_mfe_pct")
             mae = median_stat(item, "next_mae_pct")
+            rates = item.get("rates", {})
             lines.append(
                 f"| {item.get('label')} | {n} | {item.get('reliability')} | "
-                f"{mfe if mfe is not None else '-'}% | {mae if mae is not None else '-'}% |"
+                f"{mfe if mfe is not None else '-'}% | {mae if mae is not None else '-'}% | "
+                f"{rate_text(rates.get('mfe_ge_5'))} | "
+                f"{rate_text(rates.get('mae_le_minus5'))} |"
             )
     else:
         lines.append("- 아직 완결된 표본이 없습니다.")
@@ -394,20 +400,45 @@ def render_market_markdown(result: dict[str, Any]) -> str:
     if pullback_patterns:
         lines.extend(
             [
-                "| 조건 | 표본 | 상태 | 5일 중앙 MFE | 5일 중앙 MAE |",
-                "|---|---:|---|---:|---:|",
+                "| 조건 | 표본 | 상태 | 5일 중앙 MFE | 5일 중앙 MAE | +5% 반등 | -5% 역행 |",
+                "|---|---:|---|---:|---:|---:|---:|",
             ]
         )
         for item in pullback_patterns:
             n = item.get("summary", {}).get("sample_size", 0)
             mfe = median_stat(item, "forward_5d_mfe_pct")
             mae = median_stat(item, "forward_5d_mae_pct")
+            rates = item.get("rates", {})
             lines.append(
                 f"| {item.get('label')} | {n} | {item.get('reliability')} | "
-                f"{mfe if mfe is not None else '-'}% | {mae if mae is not None else '-'}% |"
+                f"{mfe if mfe is not None else '-'}% | {mae if mae is not None else '-'}% | "
+                f"{rate_text(rates.get('mfe_ge_5'))} | "
+                f"{rate_text(rates.get('mae_le_minus5'))} |"
             )
     else:
         lines.append("- 아직 5거래일까지 완결된 눌림 표본이 없습니다.")
+
+    rebound = strategy.get("pullback", {}).get("rebound_drawdown", {})
+    lines.extend(["", "## 반등한 표본의 이전 눌림 깊이", ""])
+    for key, label in (("mfe_ge_5", "5거래일 내 +5% 이상 MFE"), ("mfe_ge_10", "5거래일 내 +10% 이상 MFE")):
+        block = rebound.get(key, {})
+        sample = block.get("summary", {}).get("sample_size", 0)
+        median_drawdown = (
+            block.get("summary", {})
+            .get("fields", {})
+            .get("drawdown_pct", {})
+            .get("median")
+        )
+        if sample:
+            lines.append(
+                f"- {label}: 표본 {sample}개 · 중앙 눌림폭 {median_drawdown}% · "
+                f"{block.get('reliability', '표본 상태 미확인')}"
+            )
+    if not any(
+        rebound.get(key, {}).get("summary", {}).get("sample_size", 0)
+        for key in ("mfe_ge_5", "mfe_ge_10")
+    ):
+        lines.append("- 아직 반등 성공 표본이 충분하지 않습니다.")
 
     lines.extend(
         [
