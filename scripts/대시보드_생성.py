@@ -398,7 +398,7 @@ def main() -> None:
             },
         ],
     }
-    (DATA / "status.json").write_text(
+    (DATA / "상태.json").write_text(
         json.dumps(status, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
