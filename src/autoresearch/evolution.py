@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 from datetime import datetime, timedelta, timezone
@@ -39,6 +40,7 @@ class EvolutionEngine:
         self.limits = self.settings.get("limits", {})
         self.auto = self.settings.get("auto_apply", {})
         self.validation = self.settings.get("validation", {})
+        self._last_change_backup: dict[str, str | None] = {}
         self.llm = None
         if mode == "live":
             self.llm = ResearchLLM(self.settings.get("models", {}).get("scout", {}))
@@ -204,6 +206,8 @@ class EvolutionEngine:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(str(item["content"]), encoding="utf-8")
 
+        self._last_change_backup = dict(backups)
+
         try:
             for argv in self.validation.get("commands", []):
                 if not isinstance(argv, list) or not argv:
@@ -281,6 +285,68 @@ class EvolutionEngine:
         )
         _append(self.root / "docs/HELP_NEEDED.md", block)
 
+    @staticmethod
+    def _hash_text(value: str) -> str:
+        return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+    def _record_change_manifest(
+        self,
+        now: datetime,
+        scout: dict[str, Any],
+        builder: dict[str, Any],
+    ) -> str:
+        raw_id = (
+            now.strftime("%Y%m%dT%H%M%SZ")
+            + "-"
+            + str(scout.get("title") or "change")
+        )
+        short = hashlib.sha256(raw_id.encode("utf-8")).hexdigest()[:10]
+        change_id = now.strftime("%Y%m%dT%H%M%SZ") + "-" + short
+
+        files = []
+        for item in builder.get("changes", []):
+            rel = str(item.get("path") or "")
+            after = str(item.get("content") or "")
+            before = self._last_change_backup.get(rel)
+            files.append(
+                {
+                    "path": rel,
+                    "before_content": before,
+                    "after_content": after,
+                    "before_hash": (
+                        self._hash_text(before) if before is not None else None
+                    ),
+                    "after_hash": self._hash_text(after),
+                }
+            )
+
+        manifest = {
+            "change_id": change_id,
+            "applied_at": now.isoformat(),
+            "title": scout.get("title"),
+            "category": scout.get("category"),
+            "risk": scout.get("risk"),
+            "decision_basis": scout.get("decision_basis"),
+            "expected_benefit": scout.get("expected_benefit"),
+            "summary": builder.get("summary"),
+            "paths": [x.get("path") for x in files],
+            "files": files,
+            "status": "active",
+        }
+        path = (
+            self.root
+            / "data"
+            / "evolution"
+            / "changes"
+            / (change_id + ".json")
+        )
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps(manifest, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        return change_id
+
     def _record_change(
         self,
         now: datetime,
@@ -289,8 +355,10 @@ class EvolutionEngine:
         validation: str,
     ) -> None:
         paths = [x.get("path") for x in builder.get("changes", [])]
+        change_id = self._record_change_manifest(now, scout, builder)
         changelog = (
             f"## {_kst_label(now)} — {scout.get('title', '자동 개선')}\n\n"
+            f"- change_id: {change_id}\n"
             f"- 분류: {scout.get('category')}\n"
             f"- 변경: {', '.join(str(x) for x in paths)}\n"
             f"- 이유: {scout.get('decision_basis', '')}\n"
@@ -302,6 +370,7 @@ class EvolutionEngine:
         decision = (
             f"## {_kst_label(now)} — {scout.get('title', '자동 개선')}\n\n"
             f"상태: 도입\n\n"
+            f"change_id: {change_id}\n\n"
             f"발견: {scout.get('observation', '')}\n\n"
             f"결정: {builder.get('summary', '')}\n\n"
             f"이유: {scout.get('decision_basis', '')}\n\n"
