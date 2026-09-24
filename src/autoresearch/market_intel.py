@@ -45,11 +45,29 @@ CLOSE_EVENT_FIELDS = [
     "minute_amount_method",
     "total_amount",
     "late_amount_share",
+    "median_minute_amount",
+    "max_minute_amount",
+    "minute_ge_5eok_count",
+    "minute_ge_10eok_count",
+    "minute_ge_20eok_count",
+    "minute_ge_50eok_count",
     "burst_count",
+    "positive_burst_count",
     "max_burst_ratio",
+    "synchronized_coflow",
+    "synchronized_group",
+    "synchronized_member_count",
     "high_position",
     "group_id",
     "sector",
+    "kospi_change_pct",
+    "kospi_advance_ratio",
+    "kosdaq_change_pct",
+    "kosdaq_advance_ratio",
+    "turnover_rank_top10_share",
+    "recent_listing_positive_burst_count",
+    "recent_listing_10eok_event_count",
+    "coflow_group_count",
     "next_date",
     "next_open",
     "next_high",
@@ -735,6 +753,7 @@ class MarketIntelEngine:
         now: datetime,
         minute: dict[str, list[dict[str, Any]]],
         quantitative: dict[str, Any],
+        source_state: dict[str, Any] | None = None,
     ) -> dict[str, int]:
         path = self.stats_dir / "close_bet_events.csv"
         rows = load_event_csv(path)
@@ -777,6 +796,19 @@ class MarketIntelEngine:
             existing = {
                 (str(x.get("signal_date")), str(x.get("ticker"))) for x in rows
             }
+            source_state = source_state or {}
+            overview = source_state.get("market_overview", {})
+            kospi = overview.get("KOSPI", {})
+            kosdaq = overview.get("KOSDAQ", {})
+            recent_flow = quantitative.get("recent_listings", {})
+            coflow_groups = quantitative.get("coflow_groups", [])
+            coflow_by_ticker: dict[str, dict[str, Any]] = {}
+            for group in coflow_groups:
+                for member in group.get("members", []):
+                    ticker_key = str(member.get("ticker") or "")
+                    if ticker_key:
+                        coflow_by_ticker[ticker_key] = group
+
             for item in quantitative.get("stocks", []):
                 ticker = str(item.get("ticker") or "")
                 if not ticker or (today, ticker) in existing:
@@ -824,11 +856,53 @@ class MarketIntelEngine:
                             if item.get("full_regular_session")
                             else ""
                         ),
+                        "median_minute_amount": item.get("median_minute_amount"),
+                        "max_minute_amount": item.get("max_minute_amount"),
+                        "minute_ge_5eok_count": item.get(
+                            "amount_threshold_counts", {}
+                        ).get("500000000", 0),
+                        "minute_ge_10eok_count": item.get(
+                            "amount_threshold_counts", {}
+                        ).get("1000000000", 0),
+                        "minute_ge_20eok_count": item.get(
+                            "amount_threshold_counts", {}
+                        ).get("2000000000", 0),
+                        "minute_ge_50eok_count": item.get(
+                            "amount_threshold_counts", {}
+                        ).get("5000000000", 0),
                         "burst_count": item.get("burst_count"),
+                        "positive_burst_count": len(
+                            item.get("positive_burst_times", [])
+                        ),
                         "max_burst_ratio": item.get("max_burst_ratio"),
+                        "synchronized_coflow": (
+                            "1" if ticker in coflow_by_ticker else "0"
+                        ),
+                        "synchronized_group": (
+                            coflow_by_ticker.get(ticker, {}).get("group", "")
+                        ),
+                        "synchronized_member_count": (
+                            coflow_by_ticker.get(ticker, {}).get(
+                                "synchronized_burst_members", 0
+                            )
+                        ),
                         "high_position": item.get("high_position"),
                         "group_id": item.get("group_id"),
                         "sector": item.get("sector"),
+                        "kospi_change_pct": kospi.get("change_pct", ""),
+                        "kospi_advance_ratio": kospi.get("advance_ratio", ""),
+                        "kosdaq_change_pct": kosdaq.get("change_pct", ""),
+                        "kosdaq_advance_ratio": kosdaq.get("advance_ratio", ""),
+                        "turnover_rank_top10_share": source_state.get(
+                            "turnover_rank_top10_share", ""
+                        ),
+                        "recent_listing_positive_burst_count": recent_flow.get(
+                            "positive_burst_count", 0
+                        ),
+                        "recent_listing_10eok_event_count": recent_flow.get(
+                            "threshold_event_counts", {}
+                        ).get("1000000000", 0),
+                        "coflow_group_count": len(coflow_groups),
                     }
                 )
                 existing.add((today, ticker))
@@ -1114,6 +1188,24 @@ class MarketIntelEngine:
                 ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
             ),
             pattern(
+                "1분 10억원 이상 거래대금 3회 이상",
+                [
+                    x
+                    for x in close_completed
+                    if number(x.get("minute_ge_10eok_count")) >= 3
+                ],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
+                "동시 그룹 수급 포함",
+                [
+                    x
+                    for x in close_completed
+                    if str(x.get("synchronized_coflow")) == "1"
+                ],
+                ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
+            ),
+            pattern(
                 "고가 위치 0.8 이상 마감",
                 [x for x in close_completed if number(x.get("high_position")) >= 0.8],
                 ["next_gap_pct", "next_mae_pct", "next_mfe_pct"],
@@ -1374,7 +1466,12 @@ class MarketIntelEngine:
         quantitative = self.stats.summarize_market(minute, metadata)
         event_update = {"created": 0, "completed": 0}
         if minute and self.mode == "live":
-            event_update = self._update_close_bet_events(now, minute, quantitative)
+            event_update = self._update_close_bet_events(
+                now,
+                minute,
+                quantitative,
+                source_state,
+            )
 
         pullback_update = self._run_pullback_research(now)
         strategy_stats = self._strategy_stats()
