@@ -37,6 +37,11 @@ def classify_feedback(body: str) -> FeedbackClassification:
     return FeedbackClassification("freeform", "normal", change_id)
 
 
+def extract_change_id(value: str) -> str | None:
+    match = CHANGE_ID_RE.search(str(value or ""))
+    return match.group(0) if match else None
+
+
 def feedback_fingerprint(author: str, comment_id: str | int, body: str) -> str:
     raw = f"{author}|{comment_id}|{body}".encode("utf-8")
     return hashlib.sha256(raw).hexdigest()[:20]
