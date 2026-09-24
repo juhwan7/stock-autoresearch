@@ -40,7 +40,7 @@ class AfterCloseDateTime(real_datetime):
         return value if tz is None else value.astimezone(tz)
 
 
-def test_live_after_close_preserves_last_valid_market(tmp_path, monkeypatch):
+def test_live_after_krx_close_without_toss_preserves_last_valid_market(tmp_path, monkeypatch):
     engine = make_engine(tmp_path, "live")
     latest = tmp_path / "data/market/latest.json"
     latest.parent.mkdir(parents=True, exist_ok=True)
@@ -56,13 +56,13 @@ def test_live_after_close_preserves_last_valid_market(tmp_path, monkeypatch):
 
     result = engine.run()
 
-    assert result["status"] == "outside_regular_session"
+    assert result["status"] == "toss_snapshot_unavailable"
     assert json.loads(latest.read_text(encoding="utf-8")) == original
 
     runtime = json.loads(
         (tmp_path / "data/market/runtime.json").read_text(encoding="utf-8")
     )
-    assert runtime["source_status"] == "outside_regular_session"
+    assert runtime["source_status"] == "toss_snapshot_unavailable"
     assert runtime["last_valid_market_file"] == "data/market/latest.json"
 
 
