@@ -26,6 +26,7 @@ jobs:
           python - <<'PY'
           import json
           import os
+          import time
           import urllib.request
 
           token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
@@ -34,38 +35,54 @@ jobs:
               raise SystemExit("TELEGRAM_BOT_TOKEN Secret이 없습니다.")
 
           if not chat_id:
-              updates_req = urllib.request.Request(
-                  f"https://api.telegram.org/bot{token}/getUpdates"
+              me_req = urllib.request.Request(
+                  f"https://api.telegram.org/bot{token}/getMe"
               )
-              with urllib.request.urlopen(updates_req, timeout=20) as response:
-                  updates = json.loads(response.read().decode("utf-8"))
+              with urllib.request.urlopen(me_req, timeout=20) as response:
+                  me = json.loads(response.read().decode("utf-8"))
+              username = ((me.get("result") or {}).get("username") or "확인불가")
+              print("연결된 Telegram Bot:", "@" + username)
 
               candidates = []
-              for update in updates.get("result", []):
-                  message = (
-                      update.get("message")
-                      or update.get("edited_message")
-                      or update.get("channel_post")
-                      or {}
+              for attempt in range(6):
+                  updates_req = urllib.request.Request(
+                      f"https://api.telegram.org/bot{token}/getUpdates?timeout=5"
                   )
-                  chat = message.get("chat") or {}
-                  if chat.get("id") is not None:
-                      candidates.append(chat)
+                  with urllib.request.urlopen(updates_req, timeout=10) as response:
+                      updates = json.loads(response.read().decode("utf-8"))
+
+                  for update in updates.get("result", []):
+                      message = (
+                          update.get("message")
+                          or update.get("edited_message")
+                          or update.get("channel_post")
+                          or {}
+                      )
+                      chat = message.get("chat") or {}
+                      if chat.get("id") is not None:
+                          candidates.append(chat)
+
+                  if candidates:
+                      break
+                  print(
+                      f"Chat ID 대기 중 ({attempt + 1}/6). "
+                      f"Telegram에서 @{username}에게 '테스트'라고 보내세요."
+                  )
+                  time.sleep(1)
 
               if not candidates:
                   raise SystemExit(
-                      "TELEGRAM_CHAT_ID가 없습니다. Telegram에서 Bot에게 "
-                      "/start 또는 아무 메시지를 먼저 보낸 뒤 다시 실행하세요."
+                      f"@{username} 대화에서 새 메시지를 찾지 못했습니다. "
+                      "이 Bot 채팅에 '테스트'라고 한 번 보내고 다시 실행하세요."
                   )
 
               chat = candidates[-1]
               chat_id = str(chat["id"])
               print("발견한 Telegram Chat ID:", chat_id)
               print(
-                  "이 값을 GitHub Actions Secret TELEGRAM_CHAT_ID로 등록한 뒤 "
-                  "workflow를 다시 실행하세요."
+                  "TELEGRAM_CHAT_ID Secret이 없어 자동 발견한 Chat ID로 "
+                  "이번 테스트 메시지를 바로 전송합니다."
               )
-              raise SystemExit(0)
 
           payload = {
               "chat_id": chat_id,
