@@ -192,8 +192,90 @@ def read_json(path: Path) -> dict:
         return {}
 
 
+def macro_matrix(market: dict, risk: dict) -> dict:
+    macro = risk.get("macro", {}) if isinstance(risk, dict) else {}
+    values = macro.get("values", {}) if isinstance(macro, dict) else {}
+    signal_map = {
+        str(x.get("field")): str(x.get("risk_level"))
+        for x in risk.get("macro_signals", [])
+        if isinstance(x, dict) and x.get("field")
+    }
+    source_map = {}
+    for item in macro.get("sources", []) if isinstance(macro, dict) else []:
+        if not isinstance(item, dict):
+            continue
+        field = str(item.get("field") or "")
+        if field:
+            source_map[field] = {
+                "title": item.get("title"),
+                "url": item.get("url"),
+                "timestamp": item.get("timestamp"),
+            }
+
+    overview = (market.get("source") or {}).get("market_overview", {})
+    definitions = [
+        ("국내", "KOSPI", "kospi_pct", "pct", (overview.get("KOSPI") or {}).get("change_pct")),
+        ("국내", "KOSDAQ", "kosdaq_pct", "pct", (overview.get("KOSDAQ") or {}).get("change_pct")),
+        ("국내", "KOSPI200 선물", "kospi200_futures_pct", "pct", values.get("kospi200_futures_pct")),
+        ("국내", "KOSPI200 야간선물", "kospi200_night_futures_pct", "pct", values.get("kospi200_night_futures_pct")),
+        ("환율·금리", "USD/KRW", "usdkrw_pct", "pct", values.get("usdkrw_pct")),
+        ("환율·금리", "DXY", "dxy_pct", "pct", values.get("dxy_pct")),
+        ("환율·금리", "USD/CNH", "usdcnh_pct", "pct", values.get("usdcnh_pct")),
+        ("환율·금리", "미국 2Y", "us2y_yield", "yield", values.get("us2y_yield")),
+        ("환율·금리", "미국 2Y Δ", "us2y_change_bp", "bp", values.get("us2y_change_bp")),
+        ("환율·금리", "미국 10Y", "us10y_yield", "yield", values.get("us10y_yield")),
+        ("환율·금리", "미국 10Y Δ", "us10y_change_bp", "bp", values.get("us10y_change_bp")),
+        ("환율·금리", "한국 3Y", "korea3y_yield", "yield", values.get("korea3y_yield")),
+        ("환율·금리", "한국 10Y", "korea10y_yield", "yield", values.get("korea10y_yield")),
+        ("미국", "Nasdaq 100", "nasdaq100_pct", "pct", values.get("nasdaq100_pct")),
+        ("미국", "Nasdaq 선물", "nasdaq_futures_pct", "pct", values.get("nasdaq_futures_pct")),
+        ("미국", "S&P 500", "sp500_pct", "pct", values.get("sp500_pct")),
+        ("미국", "S&P 선물", "sp500_futures_pct", "pct", values.get("sp500_futures_pct")),
+        ("미국", "SOX", "sox_pct", "pct", values.get("sox_pct")),
+        ("미국", "VIX", "vix_pct", "pct", values.get("vix_pct")),
+        ("아시아", "Nikkei 225", "nikkei225_pct", "pct", values.get("nikkei225_pct")),
+        ("아시아", "Hang Seng", "hang_seng_pct", "pct", values.get("hang_seng_pct")),
+        ("아시아", "China A50 선물", "china_a50_futures_pct", "pct", values.get("china_a50_futures_pct")),
+        ("원자재", "WTI", "wti_pct", "pct", values.get("wti_pct")),
+        ("원자재", "구리", "copper_pct", "pct", values.get("copper_pct")),
+        ("원자재", "금", "gold_pct", "pct", values.get("gold_pct")),
+        ("원자재", "Bitcoin", "bitcoin_pct", "pct", values.get("bitcoin_pct")),
+    ]
+
+    items = []
+    for group, label, field, kind, value in definitions:
+        source = source_map.get(field, {})
+        items.append(
+            {
+                "group": group,
+                "label": label,
+                "field": field,
+                "kind": kind,
+                "value": value,
+                "risk_level": signal_map.get(field, "LOW"),
+                "source": source,
+            }
+        )
+
+    known = sum(1 for item in items if item.get("value") not in (None, ""))
+    evaluation = risk.get("evaluation", {}) if isinstance(risk, dict) else {}
+    return {
+        "captured_at": macro.get("captured_at") if isinstance(macro, dict) else None,
+        "source_mode": macro.get("source_mode") if isinstance(macro, dict) else None,
+        "known_count": known,
+        "total_count": len(items),
+        "risk_level": risk.get("macro_risk_level") if isinstance(risk, dict) else None,
+        "macro_regime": evaluation.get("macro_regime"),
+        "transmission_paths": evaluation.get("macro_transmission_paths", []),
+        "conflicting_signals": evaluation.get("conflicting_signals", []),
+        "unknowns": macro.get("unknowns", []) if isinstance(macro, dict) else [],
+        "items": items,
+    }
+
+
 def main() -> None:
     market = read_json(ROOT / "data" / "market" / "latest.json")
+    risk = read_json(ROOT / "data" / "risk" / "latest.json")
     reports = recent_reports()
     status = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -218,7 +300,8 @@ def main() -> None:
         "changelog": section_tail(ROOT / "docs" / "CHANGELOG_AI.md"),
         "market": market,
         "market_runtime": read_json(ROOT / "data" / "market" / "runtime.json"),
-        "risk": read_json(ROOT / "data" / "risk" / "latest.json"),
+        "risk": risk,
+        "macro_matrix": macro_matrix(market, risk),
         "risk_runtime": read_json(ROOT / "data" / "risk" / "runtime.json"),
         "health": read_json(ROOT / "data" / "health" / "latest.json"),
         "regression": read_json(ROOT / "data" / "regression" / "latest.json"),
