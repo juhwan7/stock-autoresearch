@@ -69,6 +69,10 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: python -m autoresearch run --mode "$MODE"
+
+      - name: Health watchdog
+        run: python -m autoresearch health
+
       - name: Build dashboard data
         run: python scripts/build_site.py
       - name: Validate final repository state
