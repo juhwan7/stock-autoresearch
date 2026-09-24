@@ -627,6 +627,77 @@ class RiskEngine:
         )
         return "\n".join(lines)
 
+    def _enrich_close_events(
+        self,
+        now: datetime,
+        result: dict[str, Any],
+    ) -> int:
+        path = self.root / "data" / "market" / "stats" / "close_bet_events.csv"
+        if not path.exists():
+            return 0
+        try:
+            with path.open("r", encoding="utf-8-sig", newline="") as f:
+                reader = csv.DictReader(f)
+                fieldnames = list(reader.fieldnames or [])
+                rows = list(reader)
+        except OSError:
+            return 0
+
+        extra = [
+            "risk_level_latest",
+            "overnight_max_risk_level",
+            "overnight_risk_hash",
+            "overnight_biggest_risk",
+            "overnight_event_level",
+            "overnight_macro_level",
+            "risk_last_updated_at",
+        ]
+        for field in extra:
+            if field not in fieldnames:
+                fieldnames.append(field)
+
+        today = now.strftime("%Y-%m-%d")
+        current = str(
+            (result.get("evaluation") or {}).get("risk_level")
+            or result.get("risk_level")
+            or "LOW"
+        )
+        biggest = (
+            (result.get("evaluation") or {})
+            .get("single_biggest_risk", {})
+            .get("title", "")
+        )
+        changed = 0
+
+        for row in rows:
+            if str(row.get("signal_date") or "") != today:
+                continue
+            old_max = str(row.get("overnight_max_risk_level") or "LOW")
+            max_level = _max_level(old_max, current)
+            row["risk_level_latest"] = current
+            row["overnight_max_risk_level"] = max_level
+            row["overnight_risk_hash"] = result.get("semantic_hash", "")
+            row["overnight_biggest_risk"] = biggest
+            row["overnight_event_level"] = result.get("event_risk_level", "")
+            row["overnight_macro_level"] = result.get("macro_risk_level", "")
+            row["risk_last_updated_at"] = now.isoformat()
+            changed += 1
+
+        if not changed:
+            return 0
+
+        temp = path.with_suffix(path.suffix + ".risk.tmp")
+        with temp.open("w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=fieldnames,
+                extrasaction="ignore",
+            )
+            writer.writeheader()
+            writer.writerows(rows)
+        temp.replace(path)
+        return changed
+
     def run(self) -> dict[str, Any]:
         now = datetime.now(KST)
         calendar = self._refresh_calendar(now)
@@ -686,6 +757,8 @@ class RiskEngine:
                 "macro_source": macro.get("source_mode"),
             },
         )
+        enriched_close_events = self._enrich_close_events(now, result)
+
         _write_json(
             self.state_path,
             {
@@ -716,4 +789,5 @@ class RiskEngine:
             "report": result.get("report"),
             "next_event": biggest.get("title") if biggest else None,
             "macro_source": macro.get("source_mode"),
+            "enriched_close_events": enriched_close_events,
         }
