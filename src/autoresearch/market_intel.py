@@ -1703,6 +1703,9 @@ class MarketIntelEngine:
                     {
                         "generated_at": now.isoformat(),
                         "source_status": source_state.get("status"),
+                        "provider": source_state.get("provider") or source_state.get("source"),
+                        "provider_captured_at": source_state.get("captured_at"),
+                        "fallback_used": source_state.get("fallback_used"),
                         "market_status": quantitative.get("status"),
                         "reason": source_state.get("reason") or quantitative.get("reason"),
                         "last_valid_market_file": str(latest.relative_to(self.root)),
