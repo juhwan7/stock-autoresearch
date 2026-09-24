@@ -33,6 +33,11 @@ CLOSE_EVENT_FIELDS = [
     "ticker",
     "name",
     "entry_price",
+    "price_1430",
+    "price_1520",
+    "late_return_pct",
+    "close_price",
+    "closing_auction_pct",
     "day_return_pct",
     "total_amount",
     "late_amount_share",
@@ -136,6 +141,22 @@ def session_ohlc(
         "low": min(float(x["low"]) for x in clean),
         "close": float(clean[-1]["close"]),
     }
+
+
+def session_price_at_or_before(
+    rows: list[dict[str, Any]],
+    target: str,
+) -> float | None:
+    candidates: list[tuple[str, float]] = []
+    for row in rows:
+        tm = normalize_time(str(row.get("time") or row.get("cntr_tm") or ""))
+        close = abs(number(row.get("close") or row.get("cur_prc")))
+        if close > 0 and tm <= target:
+            candidates.append((tm, close))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda x: x[0])
+    return candidates[-1][1]
 
 
 def synthetic_market() -> tuple[dict[str, list[dict[str, Any]]], dict[str, dict[str, Any]]]:
@@ -416,10 +437,11 @@ class MarketIntelEngine:
             if len(detail_tickers) < detail_limit:
                 detail_tickers.append(ticker)
 
-        # 전일 종가베팅 표본은 다음 날 결과를 완결하기 위해 순위에서 빠져도 조회한다.
-        for ticker in self._pending_close_tickers(today):
-            if ticker not in detail_tickers:
-                detail_tickers.append(ticker)
+        # 다음 날 전체 MFE/MAE는 장 마감 후에만 확정한다.
+        if now.strftime("%H:%M") >= "15:30":
+            for ticker in self._pending_close_tickers(today):
+                if ticker not in detail_tickers:
+                    detail_tickers.append(ticker)
 
         minute_by_ticker: dict[str, list[dict[str, Any]]] = {}
         base_date = datetime.now(KST).strftime("%Y%m%d")
@@ -460,29 +482,31 @@ class MarketIntelEngine:
         completed = 0
         created = 0
 
-        # 과거 미완료 표본의 다음 거래일 결과를 채운다.
-        for row in rows:
-            if (
-                not row.get("signal_date")
-                or row.get("signal_date") >= today
-                or row.get("next_date")
-            ):
-                continue
-            ticker = str(row.get("ticker") or "")
-            ohlc = session_ohlc(minute.get(ticker, []), cutoff="15:30")
-            entry = number(row.get("entry_price"))
-            if not ohlc or entry <= 0:
-                continue
-            row["next_date"] = today
-            row["next_open"] = round(ohlc["open"], 4)
-            row["next_high"] = round(ohlc["high"], 4)
-            row["next_low"] = round(ohlc["low"], 4)
-            row["next_close"] = round(ohlc["close"], 4)
-            row["next_gap_pct"] = round(percent_change(entry, ohlc["open"]), 4)
-            row["next_mae_pct"] = round(percent_change(entry, ohlc["low"]), 4)
-            row["next_mfe_pct"] = round(percent_change(entry, ohlc["high"]), 4)
-            completed += 1
-            changed = True
+        # 과거 미완료 표본은 다음 거래일 15:30 이후에만 완결한다.
+        # 장중에 확정하면 아직 나오지 않은 저가/고가를 누락해 MAE/MFE가 왜곡된다.
+        if now.strftime("%H:%M") >= "15:30":
+            for row in rows:
+                if (
+                    not row.get("signal_date")
+                    or row.get("signal_date") >= today
+                    or row.get("next_date")
+                ):
+                    continue
+                ticker = str(row.get("ticker") or "")
+                ohlc = session_ohlc(minute.get(ticker, []), cutoff="15:30")
+                entry = number(row.get("entry_price"))
+                if not ohlc or entry <= 0:
+                    continue
+                row["next_date"] = today
+                row["next_open"] = round(ohlc["open"], 4)
+                row["next_high"] = round(ohlc["high"], 4)
+                row["next_low"] = round(ohlc["low"], 4)
+                row["next_close"] = round(ohlc["close"], 4)
+                row["next_gap_pct"] = round(percent_change(entry, ohlc["open"]), 4)
+                row["next_mae_pct"] = round(percent_change(entry, ohlc["low"]), 4)
+                row["next_mfe_pct"] = round(percent_change(entry, ohlc["high"]), 4)
+                completed += 1
+                changed = True
 
         # 15:30 이후 현재 분석 Universe 전체를 편향 없는 종가베팅 연구 표본으로 저장한다.
         if (
@@ -499,12 +523,29 @@ class MarketIntelEngine:
                 ohlc = session_ohlc(minute.get(ticker, []), cutoff="15:30")
                 if not ohlc:
                     continue
+                minute_rows = minute.get(ticker, [])
+                price_1430 = session_price_at_or_before(minute_rows, "14:30")
+                price_1520 = session_price_at_or_before(minute_rows, "15:20")
+                close_price = ohlc["close"]
                 rows.append(
                     {
                         "signal_date": today,
                         "ticker": ticker,
                         "name": item.get("name") or ticker,
-                        "entry_price": round(ohlc["close"], 4),
+                        "entry_price": round(close_price, 4),
+                        "price_1430": round(price_1430, 4) if price_1430 else "",
+                        "price_1520": round(price_1520, 4) if price_1520 else "",
+                        "late_return_pct": (
+                            round(percent_change(price_1430, price_1520), 4)
+                            if price_1430 and price_1520
+                            else ""
+                        ),
+                        "close_price": round(close_price, 4),
+                        "closing_auction_pct": (
+                            round(percent_change(price_1520, close_price), 4)
+                            if price_1520
+                            else ""
+                        ),
                         "day_return_pct": item.get("return_pct"),
                         "total_amount": item.get("total_amount"),
                         "late_amount_share": item.get("close_watch_share"),
@@ -696,6 +737,8 @@ class MarketIntelEngine:
                         "next_gap_pct",
                         "next_mae_pct",
                         "next_mfe_pct",
+                        "late_return_pct",
+                        "closing_auction_pct",
                         "late_amount_share",
                         "high_position",
                     ],
