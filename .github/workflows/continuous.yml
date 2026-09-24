@@ -60,6 +60,11 @@ jobs:
           KIWOOM_SECRET_KEY: ${{ secrets.KIWOOM_SECRET_KEY }}
         run: python -m autoresearch market-intel --mode "$MODE"
 
+      - name: Overnight risk tick
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python -m autoresearch risk-intel --mode "$MODE"
+
       - name: Market research tick
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
