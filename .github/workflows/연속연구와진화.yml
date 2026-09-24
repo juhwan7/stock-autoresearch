@@ -1,9 +1,9 @@
-name: 10분 감독 관측 큐
+name: 6분 감독 관측 큐
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/6 * * * *"
 
 permissions:
   contents: write
@@ -84,7 +84,7 @@ jobs:
 
           echo "compile=$COMPILE_STATUS pytest=$PYTEST_STATUS diff=$DIFF_STATUS validation=$VALIDATION_STATUS"
 
-      - name: Record 10-minute supervisor observation
+      - name: Record 6-minute supervisor observation
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TOSS_FETCH_STATUS: ${{ steps.fetch_toss.outcome }}
@@ -112,9 +112,9 @@ jobs:
           if [ -d site ]; then git add site; fi
 
           if git diff --cached --quiet; then
-            echo "이번 10분 관측에는 저장할 변화가 없습니다."
+            echo "이번 6분 관측에는 저장할 변화가 없습니다."
           else
-            git commit -m "observe: record 10-minute supervisor checkpoint"
+            git commit -m "observe: record 6-minute supervisor checkpoint"
             git pull --rebase
             git push
           fi
