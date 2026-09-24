@@ -285,7 +285,7 @@ async function load() {
     : "<p class='muted'>앞으로 자동 적용되는 변경부터 manifest가 기록됩니다.</p>";
 
   const board = data.idea_board || {};
-  const boardOrder = ["채택", "실험중", "재검토", "보류", "폐기"];
+  const boardOrder = ["채택", "실험중", "후보", "재검토", "보류", "폐기"];
   $("ideas-kanban").innerHTML = boardOrder.map((status) => {
     const items = board[status] || [];
     return `<div class="kanban-column">
