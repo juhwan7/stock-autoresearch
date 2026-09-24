@@ -199,3 +199,53 @@ def test_logic_document_change_changes_semantic_hash(tmp_path):
     after_hash = engine._hash(after)
 
     assert before_hash != after_hash
+
+
+def test_calendar_rejects_non_official_domain(tmp_path):
+    engine = make_engine(tmp_path)
+    engine.cfg.setdefault("refresh", {})["calendar_allowed_domains"] = [
+        "bls.gov",
+        "federalreserve.gov",
+    ]
+    assert engine._valid_calendar_event(
+        {
+            "id": "cpi",
+            "title": "CPI",
+            "datetime_kst": "2026-10-14T21:30:00+09:00",
+            "severity": 5,
+            "official_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
+        }
+    )
+    assert not engine._valid_calendar_event(
+        {
+            "id": "rumor",
+            "title": "루머 일정",
+            "datetime_kst": "2026-10-14T21:30:00+09:00",
+            "severity": 5,
+            "official_url": "https://example.com/calendar",
+        }
+    )
+
+
+def test_active_veto_beats_far_future_same_severity(tmp_path):
+    engine = make_engine(tmp_path)
+    now = datetime(2026, 10, 14, 12, 0, tzinfo=KST)
+    calendar = {
+        "events": [
+            {
+                "id": "far",
+                "title": "먼 FOMC",
+                "datetime_kst": "2026-10-29T03:00:00+09:00",
+                "severity": 5,
+            },
+            {
+                "id": "near",
+                "title": "오늘 CPI",
+                "datetime_kst": "2026-10-14T21:30:00+09:00",
+                "severity": 5,
+            },
+        ]
+    }
+    _, level, biggest = engine._event_state(now, calendar)
+    assert level == "VETO"
+    assert biggest["id"] == "near"
