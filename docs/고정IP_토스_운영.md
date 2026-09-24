@@ -119,10 +119,10 @@ Collector가 멈추더라도 마지막 유효 Market Tape를 빈 데이터로 �
 
 ## 관련 문서
 
-- [토스증권 데이터 전환 계획](TOSS_DATA_PLAN.md)
-- [시장 데이터 명세](MARKET_DATA_SPEC.md)
-- [Overnight Risk Veto](RISK_VETO.md)
-- [문서 지도](DOCS_MAP.md)
+- [토스증권 데이터 전환 계획](토스데이터_운영계획.md)
+- [시장 데이터 명세](시장데이터_명세.md)
+- [Overnight Risk Veto](오버나이트_리스크_차단.md)
+- [문서 지도](문서_지도.md)
 
 
 ## 9. GitHub 연결 방식은 하나를 선택
