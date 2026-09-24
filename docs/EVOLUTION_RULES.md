@@ -39,7 +39,10 @@ Evolution Agent가 직접 바꾸지 않는 영역:
 - `.env*`
 - `AGENTS.md`
 - `config/evolution.yaml`
+- `config/risk.yaml`
 - `src/autoresearch/evolution.py`
+- `prompts/risk_evaluator.md`
+- `docs/RISK_VETO.md`
 - `docs/USER_INTENT.md`
 - `docs/EVOLUTION_RULES.md`
 
@@ -60,3 +63,12 @@ AI가 변경한 파일은 경로 정책 검사, 변경량 한도, Python 컴파�
 ## 8. 과거의 실패를 반복하지 않는다
 
 Scout는 매번 DECISIONS, IDEAS, EXPERIMENTS의 최근 기록을 참고한다. 같은 제안을 반복하려면 이전과 무엇이 달라졌는지 설명해야 한다.
+
+
+## 9. Risk 규칙 변경은 회귀검증 전 자동 적용 금지
+
+종가베팅 Risk Veto의 임계값과 핵심 프롬프트는 현재 보호 영역이다.
+
+향후 Regression Detector가 7일/30일 기준선과 변경 단위 성과를 추적할 수 있게 된 뒤에만 자동 변경 범위를 확대한다.
+
+그 전에는 Evolution Agent가 개선안을 제안할 수는 있지만 직접 임계값을 바꾸지 않는다.
