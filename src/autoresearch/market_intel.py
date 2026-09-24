@@ -308,6 +308,8 @@ def render_market_markdown(result: dict[str, Any]) -> str:
         lines.append("- 현재 데이터에서 조건을 충족한 동조 그룹 없음")
 
     new_flow = q.get("recent_listings", {})
+    threshold_events = new_flow.get("threshold_event_counts", {})
+    threshold_stocks = new_flow.get("threshold_stock_counts", {})
     lines.extend(
         [
             "",
@@ -315,6 +317,12 @@ def render_market_markdown(result: dict[str, Any]) -> str:
             "",
             f"- 추적 신규주: {new_flow.get('count', 0)}개",
             f"- 상승 + 거래대금 burst: {new_flow.get('positive_burst_count', 0)}개",
+            f"- 10억원 이상 1분봉: {threshold_events.get('1000000000', 0)}회 · "
+            f"{threshold_stocks.get('1000000000', 0)}종목",
+            f"- 20억원 이상 1분봉: {threshold_events.get('2000000000', 0)}회 · "
+            f"{threshold_stocks.get('2000000000', 0)}종목",
+            f"- 신규주별 최대 1분 거래대금 중앙값: "
+            f"{float(new_flow.get('median_max_minute_amount') or 0) / 100_000_000:.1f}억원",
         ]
     )
     for item in new_flow.get("stocks", [])[:10]:
