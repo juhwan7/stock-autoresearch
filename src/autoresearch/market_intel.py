@@ -543,7 +543,7 @@ class MarketIntelEngine:
     def __init__(self, root: Path, mode: str):
         self.root = root
         self.mode = mode
-        self.cfg = load_yaml(root / "config" / "market_intel.yaml")
+        self.cfg = load_yaml(root / "config" / "시장분석.yaml")
         self.stats = MarketStats(self.cfg)
 
     @property
