@@ -1,5 +1,15 @@
 const $ = (id) => document.getElementById(id);
 
+function krwEok(value) {
+  const n = Number(value || 0);
+  if (!Number.isFinite(n)) return "-";
+  return (n / 100000000).toFixed(n >= 1000000000 ? 1 : 2) + "억";
+}
+
+function medianField(block, field) {
+  return (((block || {}).summary || {}).fields || {})[field]?.median;
+}
+
 function esc(value = "") {
   return String(value).replace(/[&<>"']/g, (m) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
@@ -40,7 +50,7 @@ async function load() {
       </div>`;
 
     $("burst-leaders").innerHTML = (q.burst_leaders || []).slice(0, 6).map((x) =>
-      `<div class="mini-row"><strong>${esc(x.name || x.ticker)}</strong><span>${esc(x.burst_count)}회 · 최대 ${esc(x.max_burst_ratio)}배</span></div>`
+      `<div class="mini-row"><strong>${esc(x.name || x.ticker)}</strong><span>${esc(x.burst_count)}회 · 1분 최대 ${esc(krwEok(x.max_minute_amount))} · ${esc(x.max_burst_ratio)}배</span></div>`
     ).join("") || "<p class='muted'>조건 충족 종목 없음</p>";
 
     $("coflow-groups").innerHTML = (q.coflow_groups || []).slice(0, 5).map((x) =>
@@ -48,11 +58,30 @@ async function load() {
     ).join("") || "<p class='muted'>확인된 동조 그룹 없음</p>";
 
     const st = market.strategy_stats || {};
-    const closeN = (((st.close_bet || {}).summary || {}).sample_size || 0);
-    const swingN = (((st.pullback || {}).summary || {}).sample_size || 0);
+    const closeBlock = st.close_bet || {};
+    const swingBlock = st.pullback || {};
+    const closeN = ((closeBlock.summary || {}).sample_size || 0);
+    const swingN = ((swingBlock.summary || {}).sample_size || 0);
+    const closeMfe = medianField(closeBlock, "next_mfe_pct");
+    const closeMae = medianField(closeBlock, "next_mae_pct");
+    const swingMfe = medianField(swingBlock, "forward_5d_mfe_pct");
+    const swingMae = medianField(swingBlock, "forward_5d_mae_pct");
     $("strategy-stats").innerHTML =
-      `<div class="mini-row"><strong>종가베팅</strong><span>표본 ${closeN}개</span></div>` +
-      `<div class="mini-row"><strong>눌림스윙</strong><span>표본 ${swingN}개</span></div>`;
+      `<div class="mini-row"><strong>종가베팅</strong><span>${esc(closeBlock.reliability || "표본 축적")} · n=${closeN}</span></div>` +
+      `<div class="mini-row"><strong>다음날 중앙</strong><span>MFE ${closeMfe ?? "-"}% / MAE ${closeMae ?? "-"}%</span></div>` +
+      `<div class="mini-row"><strong>눌림스윙</strong><span>${esc(swingBlock.reliability || "표본 축적")} · n=${swingN}</span></div>` +
+      `<div class="mini-row"><strong>5일 중앙</strong><span>MFE ${swingMfe ?? "-"}% / MAE ${swingMae ?? "-"}%</span></div>`;
+
+    const thin = (q.rise_without_burst || []).slice(0, 4);
+    if (thin.length) {
+      $("burst-leaders").insertAdjacentHTML(
+        "beforeend",
+        `<div class="thin-title">거래대금 미확인 상승</div>` +
+        thin.map((x) =>
+          `<div class="mini-row warning-row"><strong>${esc(x.name || x.ticker)}</strong><span>+${esc(x.return_pct)}% · burst 0</span></div>`
+        ).join("")
+      );
+    }
   } else {
     const reason = source.reason || q.reason || "국내시장 실데이터가 아직 연결되지 않았습니다.";
     $("market-summary").innerHTML = `<div class="regime"><strong>분석 대기</strong><p>${esc(reason)}</p></div>`;
