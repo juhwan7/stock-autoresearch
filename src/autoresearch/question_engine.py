@@ -173,3 +173,26 @@ def merge_question_queue(root: Path, observation: dict[str, Any], questions: lis
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return output
+
+
+def merge_follow_up_questions(root: Path, follow_ups: list[dict[str, Any]], *, observed_at: str, batch_id: str) -> dict[str, Any]:
+    """1시간 연구에서 새로 생긴 미해결 질문을 기존 질문 큐에 다시 넣는다."""
+    synthetic = {"observed_at": observed_at, "observation_id": "research-" + batch_id}
+    rows: list[dict[str, Any]] = []
+    for raw in follow_ups:
+        text = str(raw.get("question") or "").strip()
+        subject = str(raw.get("subject") or "").strip()
+        kind = str(raw.get("kind") or "follow_up").strip()
+        if not text or not subject:
+            continue
+        item = _question(
+            kind,
+            subject,
+            text,
+            priority=int(raw.get("priority") or 3),
+            evidence=["1시간 심층연구에서 생성", str(raw.get("reason") or "")],
+            parent=str(raw.get("parent_question_id") or "") or None,
+        )
+        item["source"] = "hourly_research"
+        rows.append(item)
+    return merge_question_queue(root, synthetic, rows)
