@@ -395,7 +395,7 @@ def append_observation(
 
 def observe(root: Path, env: Mapping[str, str] | None = None) -> dict[str, Any]:
     observation = build_observation(root, env=env)
-    questions = infer_questions(observation)
+    questions = infer_questions(observation, root=root)
     observation["research_questions"] = questions
     result = append_observation(root, observation)
     queue = merge_question_queue(root, observation, questions)
