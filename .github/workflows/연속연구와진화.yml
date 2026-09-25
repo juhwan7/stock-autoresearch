@@ -52,6 +52,10 @@ jobs:
       - name: Collect broad market discovery
         id: discovery
         continue-on-error: true
+        env:
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
         run: python -m autoresearch market-discovery-observe
 
       - name: Health watchdog
