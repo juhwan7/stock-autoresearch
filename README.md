@@ -418,7 +418,7 @@ GitHub 파일을 직접 뒤지지 않고 다음을 볼 수 있습니다.
 대표적으로:
 
 - GitHub Pages
-- OpenAI API Key는 6분/1시간 기본 운영에는 불필요하며, 기존 live CLI를 별도로 직접 실행할 때만 선택 사항
+- OpenAI API Key는 6분/1시간 기본 운영에는 불필요하며, live CLI를 별도 환경에서 직접 실행할 때만 선택 사항
 - Toss Open API 인증
 - Toss 허용 고정 IP
 - 필요 시 self-hosted Runner
