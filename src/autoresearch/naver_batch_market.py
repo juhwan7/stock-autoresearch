@@ -414,9 +414,14 @@ def build_daily_tracked_universe(
     previous_at = _parse_time(previous.get("generated_at"))
     same_day = bool(previous_at and _same_kst_day(previous_at, now))
 
+    previous_was_fresh = previous.get("ranking_fresh_today")
     prior_rows = (
         previous.get("tracked_universe", [])
-        if same_day and isinstance(previous.get("tracked_universe"), list)
+        if (
+            same_day
+            and previous_was_fresh is not False
+            and isinstance(previous.get("tracked_universe"), list)
+        )
         else []
     )
     tracked: dict[str, dict[str, Any]] = {}
