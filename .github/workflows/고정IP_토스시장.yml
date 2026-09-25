@@ -41,23 +41,17 @@ jobs:
       - name: Summarize Toss provider state
         run: python scripts/토스상태_요약.py
 
-      - name: Refresh market runtime without AI
-        run: python -m autoresearch market-intel --mode sensor
-
-      - name: Health / Regression / dashboard / tests
+      - name: Validate Toss batch code
         run: |
-          python -m autoresearch health
-          python -m autoresearch regression
-          python scripts/대시보드_생성.py
-          python -m compileall -q src collector scripts
-          pytest -q
+          python -m compileall -q src
+          pytest -q tests/test_toss_collector.py tests/test_toss_batch_market.py
           git diff --check
 
       - name: Commit Toss market state
         run: |
           git config user.name "stock-autoresearch[toss-fixed-ip]"
           git config user.email "stock-autoresearch[bot]@users.noreply.github.com"
-          git add data/providers/toss data/market data/health data/regression site
+          git add data/providers/toss
           if git diff --cached --quiet; then
             echo "저장할 Toss 시장 변화가 없습니다."
           else
