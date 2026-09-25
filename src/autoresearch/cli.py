@@ -104,7 +104,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
-    root = Path(args.root).resolve()
+    root = Path(getattr(args, "root", ".")).resolve()
 
     if args.command == "run":
         result = Pipeline(root, args.mode).run()
