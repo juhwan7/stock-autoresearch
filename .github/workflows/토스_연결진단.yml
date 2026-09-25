@@ -1,0 +1,70 @@
+name: 토스 연결 진단
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/토스_연결진단.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check configuration without exposing secrets
+        env:
+          TOSS_CLIENT_ID: ${{ secrets.TOSS_CLIENT_ID }}
+          TOSS_CLIENT_SECRET: ${{ secrets.TOSS_CLIENT_SECRET }}
+          TOSS_FIXED_IP_RUNNER_ENABLED: ${{ vars.TOSS_FIXED_IP_RUNNER_ENABLED }}
+        run: |
+          python - <<'PY'
+          import os
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+          client_id = os.getenv("TOSS_CLIENT_ID", "").strip()
+          client_secret = os.getenv("TOSS_CLIENT_SECRET", "").strip()
+          fixed = os.getenv("TOSS_FIXED_IP_RUNNER_ENABLED", "").strip()
+
+          print("TOSS_CLIENT_ID_PRESENT=" + str(bool(client_id)).lower())
+          print("TOSS_CLIENT_SECRET_PRESENT=" + str(bool(client_secret)).lower())
+          print("TOSS_FIXED_IP_RUNNER_ENABLED=" + (fixed or "<unset>"))
+
+          if not client_id or not client_secret:
+              raise SystemExit("Toss credentials are not configured in repository secrets.")
+
+          body = urllib.parse.urlencode({
+              "grant_type": "client_credentials",
+              "client_id": client_id,
+              "client_secret": client_secret,
+          }).encode()
+          req = urllib.request.Request(
+              "https://openapi.tossinvest.com/oauth2/token",
+              data=body,
+              method="POST",
+              headers={"Content-Type": "application/x-www-form-urlencoded"},
+          )
+          try:
+              with urllib.request.urlopen(req, timeout=15) as response:
+                  print("TOSS_OAUTH_HTTP=" + str(response.status))
+                  print("TOSS_OAUTH_REACHABLE=true")
+          except urllib.error.HTTPError as exc:
+              print("TOSS_OAUTH_HTTP=" + str(exc.code))
+              print("TOSS_OAUTH_REACHABLE=false")
+              if exc.code == 403:
+                  print("DIAGNOSIS=hosted_runner_ip_not_allowed")
+              elif exc.code in (400, 401):
+                  print("DIAGNOSIS=credentials_or_request_rejected")
+              else:
+                  print("DIAGNOSIS=http_error")
+          except Exception as exc:
+              print("TOSS_OAUTH_REACHABLE=false")
+              print("DIAGNOSIS=network_error")
+              print("ERROR_TYPE=" + type(exc).__name__)
+          PY
