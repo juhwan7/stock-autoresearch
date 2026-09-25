@@ -234,7 +234,7 @@ def _normalize_code(value: Any) -> str:
     return code
 
 
-def extract_ranked_stocks(payload: Any, limit: int = 40) -> list[dict[str, Any]]:
+def extract_ranked_stocks(payload: Any, limit: int = 50) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     seen: set[str] = set()
     for row in _walk_dicts(payload):
@@ -319,7 +319,7 @@ def extract_polling_quotes(payload: Any) -> dict[str, dict[str, Any]]:
     return result
 
 
-def fetch_turnover_universe(limit: int = 40) -> list[dict[str, Any]]:
+def fetch_turnover_universe(limit: int = 50) -> list[dict[str, Any]]:
     params = urllib.parse.urlencode(
         {
             "listingType": "tradingValueDesc",
@@ -405,6 +405,64 @@ def _same_kst_day(a: datetime, b: datetime) -> bool:
     return a.astimezone(KST).date() == b.astimezone(KST).date()
 
 
+def build_daily_tracked_universe(
+    current_top: list[dict[str, Any]],
+    previous: dict[str, Any],
+    now: datetime,
+) -> list[dict[str, Any]]:
+    """오늘 한 번이라도 거래대금 Top50에 들어온 종목을 장 마감까지 유지한다."""
+    previous_at = _parse_time(previous.get("generated_at"))
+    same_day = bool(previous_at and _same_kst_day(previous_at, now))
+
+    prior_rows = (
+        previous.get("tracked_universe", [])
+        if same_day and isinstance(previous.get("tracked_universe"), list)
+        else []
+    )
+    tracked: dict[str, dict[str, Any]] = {}
+    for row in prior_rows:
+        if not isinstance(row, dict):
+            continue
+        code = _normalize_code(row.get("ticker"))
+        if len(code) != 6:
+            continue
+        tracked[code] = dict(row)
+        tracked[code]["ticker"] = code
+        tracked[code]["in_current_top50"] = False
+        tracked[code]["current_rank"] = None
+
+    for rank, row in enumerate(current_top[:50], start=1):
+        code = _normalize_code(row.get("ticker"))
+        if len(code) != 6:
+            continue
+        existing = tracked.get(code, {})
+        first_seen = (
+            existing.get("first_top50_at")
+            or now.isoformat()
+        )
+        tracked[code] = {
+            **existing,
+            "ticker": code,
+            "name": row.get("name") or existing.get("name") or code,
+            "first_top50_at": first_seen,
+            "last_top50_at": now.isoformat(),
+            "current_rank": rank,
+            "last_top50_rank": rank,
+            "in_current_top50": True,
+            "ranking_trading_value": row.get("ranking_trading_value"),
+        }
+
+    rows = list(tracked.values())
+    rows.sort(
+        key=lambda item: (
+            0 if item.get("in_current_top50") else 1,
+            int(item.get("current_rank") or item.get("last_top50_rank") or 9999),
+            str(item.get("ticker") or ""),
+        )
+    )
+    return rows
+
+
 def build_interval_rows(
     current_quotes: dict[str, dict[str, Any]],
     previous: dict[str, Any],
@@ -453,7 +511,7 @@ def build_interval_rows(
     return rows, elapsed_minutes
 
 
-def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dict[str, Any]:
+def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict[str, Any]:
     now = now or datetime.now(KST)
     if now.tzinfo is None:
         now = now.replace(tzinfo=KST)
@@ -466,13 +524,23 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dic
     source_status = "ok"
     error: str | None = None
     try:
-        universe = fetch_turnover_universe(limit=limit)
+        current_top50 = fetch_turnover_universe(limit=50)
     except Exception as exc:
-        universe = []
+        current_top50 = []
         source_status = "ranking_error"
         error = type(exc).__name__
 
-    codes = [item["ticker"] for item in universe]
+    tracked_universe = build_daily_tracked_universe(
+        current_top50,
+        previous,
+        now,
+    )
+    codes = [
+        str(item.get("ticker") or "")
+        for item in tracked_universe
+        if item.get("ticker")
+    ]
+
     quotes: dict[str, dict[str, Any]] = {}
     polling_mode = "unavailable"
     if codes:
@@ -483,7 +551,14 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dic
             error = type(exc).__name__
 
     universe_by_code = {
-        item["ticker"]: item for item in universe if item.get("ticker")
+        str(item.get("ticker") or ""): item
+        for item in tracked_universe
+        if item.get("ticker")
+    }
+    current_top_by_code = {
+        str(item.get("ticker") or ""): item
+        for item in current_top50
+        if item.get("ticker")
     }
     names = {code: item.get("name") for code, item in universe_by_code.items()}
     for code in codes:
@@ -504,7 +579,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dic
             quote["name"] = names.get(code)
         if quote.get("accumulated_trading_value") is None:
             quote["accumulated_trading_value"] = _number(
-                universe_by_code.get(code, {}).get("ranking_trading_value")
+                current_top_by_code.get(code, {}).get("ranking_trading_value")
             )
             if quote.get("accumulated_trading_value") is not None:
                 quote["trading_value_source"] = "ranking"
@@ -521,8 +596,9 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dic
     }
     minute_samples_by_ticker: dict[str, list[dict[str, Any]]] = {}
     minute_sample_errors: dict[str, str] = {}
-    minute_detail_limit = min(20, len(codes))
-    for code in codes[:minute_detail_limit]:
+    # 오늘 한 번이라도 Top50에 들어온 모든 종목을 계속 갱신한다.
+    # 현재 54위 등 Top50 밖으로 밀려난 종목도 당일 추적에서 제외하지 않는다.
+    for code in codes:
         quote = quotes.get(code) or {}
         # 휴장일/장 종료 뒤 과거 값이 섞이는 것을 막기 위해 오늘 체결이 확인된 종목만 조회한다.
         if not _quote_traded_today(quote, now):
@@ -539,7 +615,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dic
             minute_sample_errors[code] = type(exc).__name__
         time.sleep(0.12)
 
-    if not universe:
+    if not current_top50 and not tracked_universe:
         status = "unavailable"
     elif not quotes:
         status = "degraded"
@@ -557,8 +633,22 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dic
         "provider": "naver_public",
         "mode": "six_minute_batch",
         "polling_mode": polling_mode,
-        "universe_method": "trading_value_desc",
-        "universe_count": len(universe),
+        "universe_method": "daily_union_of_every_top50_entry",
+        "current_top50_count": len(current_top50),
+        "tracked_universe_count": len(tracked_universe),
+        "dropped_from_current_top50_count": sum(
+            1 for item in tracked_universe
+            if not item.get("in_current_top50")
+        ),
+        "tracked_universe": tracked_universe,
+        "current_top50": [
+            {
+                **item,
+                "current_rank": rank,
+            }
+            for rank, item in enumerate(current_top50[:50], start=1)
+        ],
+        "universe_count": len(tracked_universe),
         "quote_count": len(quotes),
         "elapsed_minutes_from_previous": elapsed_minutes,
         "exact_1m_bars": False,
@@ -567,6 +657,12 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dic
         "amount_method": "cumulative_trading_value_delta",
         "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
         "minute_sample_ticker_count": len(minute_samples_by_ticker),
+        "tracked_outside_top50_with_samples": sum(
+            1
+            for item in tracked_universe
+            if not item.get("in_current_top50")
+            and str(item.get("ticker") or "") in minute_samples_by_ticker
+        ),
         "minute_sample_errors": minute_sample_errors,
         "minute_samples_by_ticker": minute_samples_by_ticker,
         "interpretation": (
@@ -580,6 +676,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dic
         "limitations": [
             "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
             "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
+            "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
             "최근 6개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
             "6분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용",
         ],
