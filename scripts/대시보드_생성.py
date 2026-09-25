@@ -346,6 +346,8 @@ def main() -> None:
         "project": "Stock AutoResearch",
         "heartbeat": "6분",
         "reports": reports,
+        "supervisor_latest": read_json(ROOT / "data" / "supervisor" / "latest-report.json"),
+        "discovery": read_json(ROOT / "data" / "discovery" / "latest.json"),
         "quality_history": [
             {
                 "title": item.get("title"),
