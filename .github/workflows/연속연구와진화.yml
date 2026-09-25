@@ -42,7 +42,7 @@ jobs:
       - name: Fetch Toss provider snapshot
         id: fetch_toss
         continue-on-error: true
-        if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
+        if: vars.TOSS_OPTIONAL_ENABLED == 'true'
         env:
           TOSS_SNAPSHOT_URL: ${{ secrets.TOSS_SNAPSHOT_URL }}
           TOSS_SNAPSHOT_TOKEN: ${{ secrets.TOSS_SNAPSHOT_TOKEN }}
@@ -51,11 +51,16 @@ jobs:
       - name: Summarize Toss provider state
         id: toss_summary
         continue-on-error: true
-        if: vars.TOSS_FIXED_IP_RUNNER_ENABLED != 'true'
+        if: vars.TOSS_OPTIONAL_ENABLED == 'true'
         run: |
           if [ -f data/providers/toss/latest.json ]; then
             python scripts/토스상태_요약.py
           fi
+
+      - name: Collect public six-minute market batch
+        id: public_batch
+        continue-on-error: true
+        run: python -m autoresearch naver-batch-market --limit 40
 
       - name: Collect broad market discovery
         id: discovery
@@ -127,6 +132,7 @@ jobs:
           HEALTH_STEP_STATUS: ${{ steps.health.outcome }}
           DASHBOARD_STEP_STATUS: ${{ steps.dashboard.outcome }}
           DISCOVERY_STEP_STATUS: ${{ steps.discovery.outcome }}
+          PUBLIC_BATCH_STATUS: ${{ steps.public_batch.outcome }}
           MARKET_SENSOR_STATUS: ${{ steps.market_sensor.outcome }}
           RISK_SENSOR_STATUS: ${{ steps.risk_sensor.outcome }}
           REGRESSION_STEP_STATUS: ${{ steps.regression.outcome }}
@@ -147,6 +153,7 @@ jobs:
 
           git add data/supervisor
           if [ -d data/providers/toss ]; then git add data/providers/toss; fi
+          if [ -d data/providers/naver_batch ]; then git add data/providers/naver_batch; fi
           if [ -d data/health ]; then git add data/health; fi
           if [ -d data/discovery ]; then git add data/discovery; fi
           if [ -d data/market ]; then git add data/market; fi
