@@ -65,7 +65,25 @@ jobs:
           DART_API_KEY: ${{ secrets.DART_API_KEY }}
         run: python -m autoresearch market-discovery-observe
 
-      - name: Health watchdog
+      - name: Repair market runtime without AI
+        id: market_sensor
+        continue-on-error: true
+        env:
+          KIWOOM_APP_KEY: ${{ secrets.KIWOOM_APP_KEY }}
+          KIWOOM_SECRET_KEY: ${{ secrets.KIWOOM_SECRET_KEY }}
+        run: python -m autoresearch market-intel --mode sensor
+
+      - name: Repair risk and macro runtime without AI
+        id: risk_sensor
+        continue-on-error: true
+        run: python -m autoresearch risk-intel --mode sensor
+
+      - name: Refresh regression guard
+        id: regression
+        continue-on-error: true
+        run: python -m autoresearch regression
+
+      - name: Health watchdog after repair attempts
         id: health
         continue-on-error: true
         run: python -m autoresearch health
@@ -108,6 +126,9 @@ jobs:
           HEALTH_STEP_STATUS: ${{ steps.health.outcome }}
           DASHBOARD_STEP_STATUS: ${{ steps.dashboard.outcome }}
           DISCOVERY_STEP_STATUS: ${{ steps.discovery.outcome }}
+          MARKET_SENSOR_STATUS: ${{ steps.market_sensor.outcome }}
+          RISK_SENSOR_STATUS: ${{ steps.risk_sensor.outcome }}
+          REGRESSION_STEP_STATUS: ${{ steps.regression.outcome }}
         run: python -m autoresearch supervisor-observe
 
       - name: Notify latest hourly supervisor result
@@ -127,6 +148,10 @@ jobs:
           if [ -d data/providers/toss ]; then git add data/providers/toss; fi
           if [ -d data/health ]; then git add data/health; fi
           if [ -d data/discovery ]; then git add data/discovery; fi
+          if [ -d data/market ]; then git add data/market; fi
+          if [ -d data/risk ]; then git add data/risk; fi
+          if [ -d data/macro ]; then git add data/macro; fi
+          if [ -d data/regression ]; then git add data/regression; fi
           if [ -d site ]; then git add site; fi
 
           if git diff --cached --quiet; then
