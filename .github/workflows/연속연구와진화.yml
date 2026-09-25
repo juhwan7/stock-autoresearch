@@ -49,6 +49,11 @@ jobs:
             python scripts/토스상태_요약.py
           fi
 
+      - name: Collect broad market discovery
+        id: discovery
+        continue-on-error: true
+        run: python -m autoresearch market-discovery-observe
+
       - name: Health watchdog
         id: health
         continue-on-error: true
@@ -91,6 +96,7 @@ jobs:
           TOSS_SUMMARY_STATUS: ${{ steps.toss_summary.outcome }}
           HEALTH_STEP_STATUS: ${{ steps.health.outcome }}
           DASHBOARD_STEP_STATUS: ${{ steps.dashboard.outcome }}
+          DISCOVERY_STEP_STATUS: ${{ steps.discovery.outcome }}
         run: python -m autoresearch supervisor-observe
 
       - name: Notify latest hourly supervisor result
@@ -109,6 +115,7 @@ jobs:
           git add data/supervisor
           if [ -d data/providers/toss ]; then git add data/providers/toss; fi
           if [ -d data/health ]; then git add data/health; fi
+          if [ -d data/discovery ]; then git add data/discovery; fi
           if [ -d site ]; then git add site; fi
 
           if git diff --cached --quiet; then
