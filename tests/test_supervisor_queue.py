@@ -38,7 +38,9 @@ def test_build_observation_collects_health_and_feedback(tmp_path):
             "generated_at": "2026-09-25T08:19:00+09:00",
             "item_count": 12,
             "new_item_count": 3,
-            "topic_counts": {"market": 4, "semiconductor_ai": 8},
+            "topic_counts": {"kr_market_broad": 8, "global_market": 4},
+            "trending_terms": [{"term": "조선", "count": 4, "score": 11}],
+            "sector_selection": {"mode": "dynamic", "fixed_sector_whitelist": False},
             "naver_indices": {"KOSPI": "7000.00"},
             "source_summary": {"ok_or_partial": 3, "failed": 0},
             "new_items": [{"title": "새 뉴스", "url": "https://example.com/news"}],
@@ -78,6 +80,8 @@ def test_build_observation_collects_health_and_feedback(tmp_path):
     assert observation["user_feedback"]["pending_count"] == 1
     assert observation["market_discovery"]["new_item_count"] == 3
     assert observation["market_discovery"]["top_new_items"][0]["title"] == "새 뉴스"
+    assert observation["market_discovery"]["trending_terms"][0]["term"] == "조선"
+    assert observation["market_discovery"]["sector_selection"]["mode"] == "dynamic"
     assert "health:WARN" in observation["signals"]
     assert "validation:failed" in observation["signals"]
 
