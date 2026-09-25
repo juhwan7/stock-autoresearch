@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-25T11:07:37.618576+09:00",
+  "updated_at": "2026-09-25T11:20:16.292667+09:00",
   "batch_size": 10,
   "observations": [
     {
@@ -1816,6 +1816,414 @@
       },
       "signals": [
         "health:CRITICAL",
+        "discovery:degraded",
+        "market:needs_credentials"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "observation_id": "obs-20260925T112016+0900-36085808052-1",
+      "observed_at": "2026-09-25T11:20:16.292667+09:00",
+      "source": {
+        "repository": "juhwan7/stock-autoresearch",
+        "workflow": "6분 감독 관측 큐",
+        "run_id": "36085808052",
+        "run_attempt": "1",
+        "head_sha": "877bbcaeb6a76364adfa04754a3fd7097ce7bb1a",
+        "ref_name": "main"
+      },
+      "queue": {
+        "batch_size": 10,
+        "pending_before_append": 6,
+        "last_processed_observation_id": "manual-20260925T084307+0900-10",
+        "pending_after_append": 7
+      },
+      "validation": {
+        "status": "ok",
+        "compile": "ok",
+        "pytest": "ok",
+        "diff_check": "ok"
+      },
+      "steps": {
+        "toss_fetch": "skipped",
+        "toss_summary": "skipped",
+        "health": "success",
+        "dashboard": "success",
+        "market_discovery": "success",
+        "market_sensor_repair": "success",
+        "risk_sensor_repair": "success",
+        "regression_refresh": "success"
+      },
+      "health": {
+        "status": "WARN",
+        "generated_at": "2026-09-25T11:20:14.266762+09:00",
+        "issues": [
+          {
+            "component": "macro",
+            "code": "unavailable",
+            "severity": "WARN",
+            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+          },
+          {
+            "component": "discovery",
+            "code": "google-news-degraded",
+            "severity": "WARN",
+            "message": "Google News 탐색 5/7개 그룹이 비어 있거나 오류"
+          }
+        ]
+      },
+      "regression": {
+        "status": "COLLECTING",
+        "generated_at": "2026-09-25T02:20:13.579619+00:00",
+        "quarantine_count": 0,
+        "rolled_back_count": 0
+      },
+      "market_discovery": {
+        "generated_at": "2026-09-25T11:20:05.861693+09:00",
+        "item_count": 34,
+        "new_item_count": 2,
+        "topic_counts": {
+          "kr_corporate_events": 4,
+          "broad_fallback": 30
+        },
+        "trending_terms": [
+          {
+            "term": "유가",
+            "count": 10,
+            "publisher_count": 8,
+            "previous_count": 11,
+            "delta": -1,
+            "score": 28,
+            "examples": [
+              "미국·이란, 호르무즈 해협 협상 검토에 유가 하락",
+              "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
+              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]"
+            ]
+          },
+          {
+            "term": "뉴욕증시",
+            "count": 7,
+            "publisher_count": 7,
+            "previous_count": 7,
+            "delta": 0,
+            "score": 21,
+            "examples": [
+              "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
+              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]",
+              "유가 뛰자 채권·주식 동반 충격…개장 전 밀린 나스닥 선물[뉴욕증시 브리핑]"
+            ]
+          },
+          {
+            "term": "국제유가",
+            "count": 5,
+            "publisher_count": 5,
+            "previous_count": 5,
+            "delta": 0,
+            "score": 15,
+            "examples": [
+              "美 10년물 국채금리 5.2% 돌파…국제유가 상승 등 영향",
+              "국제유가, 중동 공급 차질 우려에 급등",
+              "후티 반군, 사우디 미사일 공격 소식에…국제유가 3% 넘게 급등"
+            ]
+          },
+          {
+            "term": "금리",
+            "count": 4,
+            "publisher_count": 4,
+            "previous_count": 4,
+            "delta": 0,
+            "score": 12,
+            "examples": [
+              "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
+              "[속보] 美국채 금리 급등에도 보합권…S&P·나스닥 제자리",
+              "[뉴욕채권] 약세 지속…유가·바이백 실망 속 30년물 금리 22년來 최고"
+            ]
+          },
+          {
+            "term": "국채금리",
+            "count": 4,
+            "publisher_count": 4,
+            "previous_count": 4,
+            "delta": 0,
+            "score": 12,
+            "examples": [
+              "美 10년물 국채금리 5.2% 돌파…국제유가 상승 등 영향",
+              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]",
+              "[해외시황] 뉴욕증시, 유가·국채금리 급등에 '혼조'…다우 0.31%↓"
+            ]
+          },
+          {
+            "term": "후티",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 4,
+            "delta": -1,
+            "score": 9,
+            "examples": [
+              "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소",
+              "후티 반군, 사우디 미사일 공격 소식에…국제유가 3% 넘게 급등",
+              "국제유가 3% 급등…후티 또 사우디 송유관 공격 - 머니투데이"
+            ]
+          },
+          {
+            "term": "혼조",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]",
+              "[해외시황] 뉴욕증시, 유가·국채금리 급등에 '혼조'…다우 0.31%↓"
+            ]
+          },
+          {
+            "term": "호르무즈",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "미국·이란, 호르무즈 해협 협상 검토에 유가 하락",
+              "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소",
+              "[금/유가] '호르무즈 개방' 기대에도 공급 부족에 브렌트 107달러 근접"
+            ]
+          },
+          {
+            "term": "다우",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]",
+              "[해외시황] 뉴욕증시, 유가·국채금리 급등에 '혼조'…다우 0.31%↓"
+            ]
+          },
+          {
+            "term": "뉴욕마감",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "나스닥만 겨우 웃었다…금리상승에 방향 잃은 증시[뉴욕마감] - 머니투데이",
+              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]"
+            ]
+          },
+          {
+            "term": "국채",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "[속보] 美국채 금리 급등에도 보합권…S&P·나스닥 제자리",
+              "급등하는 국채 수익률과 유가, 미국 증시 선물 하락 압박",
+              "[뉴욕증시 마감] 유가·국채 금리 급등 및 美·이란 협상 기대감 엇갈리며 혼조세"
+            ]
+          },
+          {
+            "term": "머니투데이",
+            "count": 4,
+            "publisher_count": 1,
+            "previous_count": 4,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "나스닥만 겨우 웃었다…금리상승에 방향 잃은 증시[뉴욕마감] - 머니투데이",
+              "잘나가던 불닭·K뷰티 환율에 울상…그래도 사라는 증권가 - 머니투데이",
+              "도프, 내년 코스닥 상장 계획…기업가치 2000억 전망 - 머니투데이"
+            ]
+          },
+          {
+            "term": "이슈",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
+              "신한투자증권, 종목 이슈·미국 공시 AI가 실시간 정리"
+            ]
+          },
+          {
+            "term": "이란",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "미국·이란, 호르무즈 해협 협상 검토에 유가 하락",
+              "[뉴욕증시 마감] 유가·국채 금리 급등 및 美·이란 협상 기대감 엇갈리며 혼조세"
+            ]
+          },
+          {
+            "term": "위기",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+              "코스닥 ‘시총 미달 상폐’ 속출…내달엔 동전주까지 위기"
+            ]
+          },
+          {
+            "term": "신한투자증권",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
+              "신한투자증권, 종목 이슈·미국 공시 AI가 실시간 정리"
+            ]
+          },
+          {
+            "term": "신한투자",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "\"종목 이슈부터 미 공시까지\"…신한투자, 개인 맞춤형 'AI PB' 출격",
+              "[증권업 소식] 키움·KB·신한투자·대신·한국투자·카카오페이증권"
+            ]
+          },
+          {
+            "term": "속출",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+              "코스닥 ‘시총 미달 상폐’ 속출…내달엔 동전주까지 위기"
+            ]
+          },
+          {
+            "term": "성적",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "추석에 멈춘 코스피…재개장 성적 결정할 국내 증시 변수는",
+              "코스피 7000인데 개미는 울었다…27년 만에 최악의 투자 성적"
+            ]
+          },
+          {
+            "term": "선물",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "유가 뛰자 채권·주식 동반 충격…개장 전 밀린 나스닥 선물[뉴욕증시 브리핑]",
+              "급등하는 국채 수익률과 유가, 미국 증시 선물 하락 압박"
+            ]
+          }
+        ],
+        "new_dart_filings": [],
+        "official_web_candidates": [],
+        "toss_market": {
+          "available": false
+        },
+        "sector_selection": {
+          "mode": "dynamic",
+          "fixed_sector_whitelist": false,
+          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 1시간 AI가 주도 섹터를 선택"
+        },
+        "naver_indices": {
+          "KOSPI": "7,080.92",
+          "KOSDAQ": "844.48",
+          "KOSPI200": "1,126.12"
+        },
+        "source_summary": {
+          "ok_or_partial": 3,
+          "failed": 0,
+          "degraded": 5
+        },
+        "top_new_items": [
+          {
+            "topic": "broad_fallback",
+            "title": "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+            "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFAzT3EyN0Rka3BKQnpGS21tbHMtdHY4RFZpNFF0YzNRbndRZkFUUU9IcUZNNFljaTBFNzI4eUZSbjBGMmVTb085bXJ5clBRMWU2Qm04dXhBZFRiSGvSAWBBVV95cUxPN2llVVhtVTRwWWJnSS1hZkZzbm83TXdtcmtRNTk5SFVxa252NXI3Z2NxX0pBeVNndzZCMW1Db0N1bW9EanJZdXNVakRPd1Mzd254WXA5UFRtMXB6X3VPWnY?oc=5",
+            "published_at": "Fri, 25 Sep 2026 02:00:00 GMT",
+            "publisher": "연합뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "코스닥 ‘시총 미달 상폐’ 속출…내달엔 동전주까지 위기",
+            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5YaWJIaE1qVG0yS2lOZloxUG5NLTJCWVd4R3U0MmlXODQya0lfc1QyUXdUd1Vqb3FTcUZLa2dhc291X0lkUW9VQXNnUl8yRlU?oc=5",
+            "published_at": "Fri, 25 Sep 2026 02:09:27 GMT",
+            "publisher": "v.daum.net",
+            "discovery_source": "google_news_rss"
+          }
+        ],
+        "handoff_queries": [
+          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+          "유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "뉴욕증시 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "국제유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "금리 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "국채금리 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "후티 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "혼조 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "호르무즈 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+        ]
+      },
+      "market": {
+        "generated_at": "2026-09-25T11:20:12.456260+09:00",
+        "source_status": "needs_credentials",
+        "provider": "none",
+        "fallback_used": false
+      },
+      "toss": {
+        "available": null,
+        "captured_at": null,
+        "collector": null
+      },
+      "user_feedback": {
+        "pending_count": 0,
+        "latest_pending_comment_id": null
+      },
+      "git": {
+        "head_sha": "877bbcaeb6a76364adfa04754a3fd7097ce7bb1a",
+        "latest_commit_changed_files": [
+          "\".github/workflows/\\354\\227\\260\\354\\206\\215\\354\\227\\260\\352\\265\\254\\354\\231\\200\\354\\247\\204\\355\\231\\224.yml\""
+        ]
+      },
+      "previous_workflow_run": {
+        "id": 36085819701,
+        "name": "프로젝트 검증",
+        "event": "push",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-09-25T02:20:00Z",
+        "updated_at": "2026-09-25T02:20:04Z",
+        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36085819701",
+        "head_sha": "13a4920ee91b439551f10f2485250ff3b8e6c81e"
+      },
+      "signals": [
+        "health:WARN",
         "discovery:degraded",
         "market:needs_credentials"
       ]

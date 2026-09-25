@@ -1,45 +1,27 @@
 {
-  "generated_at": "2026-09-25T11:07:35.200136+09:00",
-  "status": "CRITICAL",
-  "issue_count": 4,
+  "generated_at": "2026-09-25T11:20:14.266762+09:00",
+  "status": "WARN",
+  "issue_count": 2,
   "issues": [
-    {
-      "component": "market",
-      "code": "credentials",
-      "severity": "WARN",
-      "message": "국내시장 데이터 인증정보가 준비되지 않음",
-      "recovery": "HELP_NEEDED의 시장 데이터 Secret/Collector 항목 확인",
-      "consecutive": "2"
-    },
-    {
-      "component": "toss",
-      "code": "snapshot-missing",
-      "severity": "CRITICAL",
-      "message": "Toss primary snapshot을 사용할 수 없음 · fetch 상태=not_configured",
-      "recovery": "고정 IP Collector, 허용 IP, 인증정보, snapshot 전달 경로를 확인",
-      "consecutive": "6"
-    },
     {
       "component": "macro",
       "code": "unavailable",
       "severity": "WARN",
       "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
       "recovery": "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
-      "consecutive": "2"
+      "consecutive": "3"
     },
     {
       "component": "discovery",
       "code": "google-news-degraded",
-      "severity": "NOTICE",
+      "severity": "WARN",
       "message": "Google News 탐색 5/7개 그룹이 비어 있거나 오류",
       "recovery": "6분 센서가 when 필터 제거 + broad fallback을 자동 재시도. 반복되면 1시간 AI가 검색식/소스를 수정",
-      "consecutive": "1"
+      "consecutive": "2"
     }
   ],
   "consecutive": {
-    "market:credentials": 2,
-    "toss:snapshot-missing": 6,
-    "macro:unavailable": 2,
-    "discovery:google-news-degraded": 1
+    "macro:unavailable": 3,
+    "discovery:google-news-degraded": 2
   }
 }
