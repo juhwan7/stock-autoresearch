@@ -36,7 +36,7 @@ async function load() {
   const data = await response.json();
 
   const metrics = [
-    ["Heartbeat", data.heartbeat || "10분"],
+    ["Heartbeat", data.heartbeat || "6분"],
     ["최근 보고서", (data.reports || []).length + "개"],
     ["최근 진화 Tick", (data.ticks || []).length + "개"],
     ["상태", "자동 진화 중"],
@@ -44,6 +44,57 @@ async function load() {
   $("metrics").innerHTML = metrics.map(([label, value]) =>
     `<div class="metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`
   ).join("");
+
+  const supervisor = data.supervisor_latest || {};
+  const discovery = data.discovery || {};
+  const supervisorStatus = $("supervisor-status");
+  if (supervisorStatus) {
+    supervisorStatus.textContent = supervisor.status || "NO DATA";
+    supervisorStatus.dataset.level = supervisor.status || "unknown";
+  }
+
+  const summaryRows = (supervisor.summary || []).slice(0, 6);
+  if ($("supervisor-summary")) {
+    $("supervisor-summary").innerHTML = summaryRows.length
+      ? summaryRows.map((x) => `<div class="mini-row"><span>${esc(x)}</span></div>`).join("")
+      : "<p class='muted'>아직 심층 리서치 결과가 없습니다.</p>";
+  }
+
+  const reportPath = supervisor.research_report_path || "";
+  const reportLink = $("supervisor-report-link");
+  if (reportLink) {
+    if (reportPath) {
+      reportLink.href = "https://github.com/juhwan7/stock-autoresearch/blob/main/" + encodeURI(reportPath);
+      reportLink.style.display = "inline-flex";
+    } else {
+      reportLink.style.display = "none";
+    }
+  }
+
+  const dynamic = (supervisor.dynamic_trends || discovery.trending_terms || []).slice(0, 8);
+  if ($("dynamic-trends")) {
+    $("dynamic-trends").innerHTML = dynamic.length
+      ? dynamic.map((x) => {
+          const name = x.name || x.term || x.topic || "트렌드";
+          const reason = x.reason || x.evidence || (x.count != null ? `언급 ${x.count}건` : "");
+          return `<div class="mini-row"><strong>${esc(name)}</strong><span>${esc(reason)}</span></div>`;
+        }).join("")
+      : "<p class='muted'>동적 트렌드 수집 중</p>";
+  }
+
+  const filings = (discovery.new_dart_filings || []).slice(0, 8);
+  if ($("new-filings")) {
+    $("new-filings").innerHTML = filings.length
+      ? filings.map((x) => `<a class="mini-row doc-link" href="${esc(x.url || "#")}" target="_blank" rel="noreferrer"><strong>${esc(x.corp_name || "")}</strong><span>${esc(x.report_nm || "")}</span></a>`).join("")
+      : "<p class='muted'>새 공시 없음 또는 DART API 대기</p>";
+  }
+
+  const sourceRows = Object.entries(discovery.source_status || {}).slice(0, 10);
+  if ($("discovery-sources")) {
+    $("discovery-sources").innerHTML = sourceRows.length
+      ? sourceRows.map(([name, value]) => `<div class="mini-row"><strong>${esc(name)}</strong><span>${esc((value || {}).status || "unknown")}</span></div>`).join("")
+      : "<p class='muted'>6분 센서 첫 실행 대기</p>";
+  }
 
   const risk = data.risk || {};
   const riskEval = risk.evaluation || {};
