@@ -586,6 +586,55 @@ def collect(
                 "error": type(exc).__name__,
             }
 
+    google_ok_groups = sum(
+        1
+        for key, value in source_status.items()
+        if key.startswith("google_news:")
+        and isinstance(value, dict)
+        and int(value.get("count") or 0) > 0
+    )
+    if google_ok_groups < 3:
+        broad_key = "google_news:broad_fallback"
+        try:
+            broad_params = urllib.parse.urlencode(
+                {
+                    "q": "코스피 OR 코스닥 OR 한국증시 OR 나스닥 OR 미국채 OR 환율 OR 유가",
+                    "hl": "ko",
+                    "gl": "KR",
+                    "ceid": "KR:ko",
+                }
+            )
+            broad_xml = fetcher(
+                "https://news.google.com/rss/search?" + broad_params
+            )
+            broad_rows = recent_items(
+                parse_google_news_rss(
+                    broad_xml,
+                    "broad_fallback",
+                    limit=30,
+                ),
+                now,
+                hours=72,
+            )
+            items.extend(broad_rows)
+            source_status[broad_key] = {
+                "status": "ok" if broad_rows else "empty",
+                "count": len(broad_rows),
+                "auto_repair": "broad_market_fallback",
+            }
+        except (
+            OSError,
+            TimeoutError,
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            ValueError,
+        ) as exc:
+            source_status[broad_key] = {
+                "status": "error",
+                "error": type(exc).__name__,
+                "auto_repair": "broad_market_fallback",
+            }
+
     naver_headers = _naver_headers()
     if naver_headers is None:
         source_status["naver_news_api"] = {"status": "needs_credentials"}
@@ -676,7 +725,9 @@ def collect(
             continue
         seen.add(key)
         deduped.append(item)
-    deduped = recent_items(deduped, now, hours=36)[:80]
+    # 개별 source가 fallback에서 72시간 창을 사용했다면 마지막 병합 단계에서
+    # 다시 36시간으로 잘라 수집 건수를 0으로 만드는 모순을 피한다.
+    deduped = recent_items(deduped, now, hours=72)[:100]
 
     new_items = [item for item in deduped if _item_key(item) not in previous_keys]
     topic_counts: dict[str, int] = {}
