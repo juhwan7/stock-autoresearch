@@ -39,16 +39,18 @@ def build_parser() -> argparse.ArgumentParser:
     market = sub.add_parser("market-intel", help="국내시장 장세/분봉 거래대금 분석")
     market.add_argument(
         "--mode",
-        choices=["dry-run", "live"],
+        choices=["dry-run", "live", "sensor"],
         default="dry-run",
+        help="sensor는 실제 입력을 읽되 OpenAI 호출 없이 6분 자동복구용 runtime만 갱신",
     )
     market.add_argument("--root", default=".", help="저장소 루트")
 
     risk = sub.add_parser("risk-intel", help="일정·매크로 기반 Overnight Risk 분석")
     risk.add_argument(
         "--mode",
-        choices=["dry-run", "live"],
+        choices=["dry-run", "live", "sensor"],
         default="dry-run",
+        help="sensor는 LLM 없이 일정·매크로·Risk runtime을 안전하게 갱신",
     )
     risk.add_argument("--root", default=".", help="저장소 루트")
 
