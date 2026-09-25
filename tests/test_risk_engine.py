@@ -249,3 +249,21 @@ def test_active_veto_beats_far_future_same_severity(tmp_path):
     _, level, biggest = engine._event_state(now, calendar)
     assert level == "VETO"
     assert biggest["id"] == "near"
+
+
+def test_sensor_evaluation_never_needs_llm(tmp_path):
+    engine = make_engine(tmp_path)
+    engine.mode = "sensor"
+    result = engine._evaluate(
+        datetime(2026, 9, 25, 10, 0, tzinfo=KST),
+        {
+            "risk_level": "WATCH",
+            "single_biggest_event": None,
+            "macro_signals": [
+                {"field": "us10y_change_bp", "value": 10, "risk_level": "WATCH"}
+            ],
+        },
+        True,
+    )
+    assert result["risk_level"] == "WATCH"
+    assert "summary" in result
