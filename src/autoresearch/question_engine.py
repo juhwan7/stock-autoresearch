@@ -95,6 +95,30 @@ def infer_questions(observation: dict[str, Any]) -> list[dict[str, Any]]:
         msg = str(issue.get("message") or issue.get("code") or "")
         out.append(_question("system", subject, f"{subject}의 '{msg}' 문제가 반복되는 구조적 원인인가 일시적 센서 공백인가? 다음 관측에서 무엇으로 구분할 수 있는가?", priority=5 if severity == "CRITICAL" else 3, evidence=[msg]))
 
+    # 데이터 자체가 불완전하면 1시간 AI가 강한 결론을 내리기 전에
+    # 데이터 신뢰도를 먼저 검증하도록 메타 질문을 만든다.
+    limitations = market.get("limitations") or []
+    if market.get("minute_amount_exact") is False:
+        out.append(_question(
+            "data_quality",
+            "minute_trading_value",
+            "분 단위 거래대금이 근사치인 현재 관측에서 어떤 결론까지 상대 비교로 허용하고, 어떤 절대값 판단은 보류해야 하는가?",
+            priority=4,
+            evidence=[str(market.get("minute_amount_method") or "approximation")] + [str(x) for x in limitations[:3]],
+        ))
+
+    # 질문 엔진 자체도 검증 대상이다. 중요한 신호가 있는데 질문이 거의 없으면
+    # 다음 1시간 연구가 누락 원인을 찾도록 한다.
+    meaningful_inputs = len(filings) + len(leaders) + len(new_items)
+    if meaningful_inputs >= 5 and len(out) < 5:
+        out.append(_question(
+            "meta",
+            "question_coverage",
+            "이번 6분 관측에는 여러 시장 단서가 있는데 질문 생성량이 적다. 질문 규칙이 놓친 변화 유형이나 섹터 연결은 무엇인가?",
+            priority=3,
+            evidence=[f"meaningful_inputs={meaningful_inputs}", f"generated={len(out)}"],
+        ))
+
     # 같은 관측에서 동일 질문은 한 번만 보존한다.
     dedup: dict[str, dict[str, Any]] = {}
     for item in out:
