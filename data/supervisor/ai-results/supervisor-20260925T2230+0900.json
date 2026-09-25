@@ -1,0 +1,85 @@
+{
+  "batch_id": "supervisor-20260925T2230+0900",
+  "processed_at": "2026-09-25T22:30:00+09:00",
+  "notify": true,
+  "observation_ids": [
+    "obs-20260925T215636+0900-36137826255-1"
+  ],
+  "summary": [
+    "최근 30분: 6분 센서가 21:56 KST 예약 실행에 성공해 16:31 이후 관측 공백은 복구됐다.",
+    "시장: AI 투자수요는 실제 기업투자 지표로 재확인됐지만, 강한 미국 경제가 높은 장기금리와 추가 금리인상 기대를 지지해 AI 강세와 할인율 부담이 동시에 커지는 충돌 장세다.",
+    "A 검증 수정: 21:30 내구재는 단순 위험 이벤트에서 'AI 설비투자 강도 확인 + 금리 부담 강화 가능성'으로 해석을 변경한다.",
+    "오버나잇 우선순위: ① 5%대 미 장기금리와 Fed 재인상 기대 ② 중동 협상과 Brent 100달러 부근 공급위험 ③ 미국 정규장 AI·반도체 강세가 실제 거래대금으로 확산되는지 순으로 본다.",
+    "프로젝트: 결과 적용 workflow가 아직 checkout mtime으로 newest 파일을 고르는 경쟁조건을 확인했다. processed_at 역행 방지는 있으나 정확한 트리거 batch 선택으로 고치는 변경은 GitHub 안전 검사에 막혀 blocked로 넘겼다.",
+    "웹/데이터: 국내장은 감시시간 종료라 Top50 0건 자체는 장애가 아니다. 다만 Toss collector는 subscription_count=0, last_message_at=null이라 실시간 메시지 수신은 별도 미확인 상태다."
+  ],
+  "actions": [
+    "직전 A 시장 해석을 21:30 미국 지표로 재검증",
+    "6분 센서 공백을 실제 예약 실행 성공 근거로 resolved 처리",
+    "국내 장외시간 Top50 0건을 normal로 분류해 오탐 방지",
+    "Supervisor 결과 선택 경쟁조건 수정 시도 후 안전검사 차단을 blocked로 기록"
+  ],
+  "changed_paths": [],
+  "next_checks": [
+    "미국 정규장 첫 30~60분 AI·반도체 거래대금과 시장 폭이 프리마켓 강세를 확인하는지",
+    "미 10년물 금리가 5.1%대에서 더 상승하는지와 Nasdaq 상대강도",
+    "Brent가 중동 협상 진전에 100달러 아래로 안정되는지 또는 공급우려로 재상승하는지",
+    "다음 A는 result workflow 수정에 동일 쓰기 방법을 반복하지 말고 허용된 다른 변경 경로가 생겼을 때만 재시도",
+    "Toss collector의 subscription_count와 last_message_at이 다음 실제 국내 거래 세션에서 채워지는지 확인"
+  ],
+  "market_narrative": [
+    "최근 3거래일의 핵심 충돌은 그대로다. AI 관련 투자와 주가는 버티고 있지만 유가와 미국 장기금리가 높은 수준이라 시장 전체가 편하게 위험을 늘리는 장세는 아니다.",
+    "이번 21:30 미국 지표는 이 구도를 더 선명하게 만들었다. 8월 내구재 전체 주문은 보합으로 예상보다 강했고, 핵심 자본재 주문은 1.6% 증가해 기업의 AI 인프라 중심 설비투자가 강하다는 근거가 추가됐다. 동시에 강한 경제는 연준의 추가 긴축 가능성과 높은 장기금리를 지지할 수 있다.",
+    "따라서 현재는 'AI 수요가 강하니 무조건 호재'가 아니라 AI·반도체에는 실적·투자 근거가 생기는 반면 고금리에 민감한 시장 전체에는 할인율 부담이 남는 선택적 강세로 보는 편이 합리적이다.",
+    "한국장은 휴장/장외 구간의 빈 거래대금을 악재로 해석하지 않는다. 다음 실제 거래 세션에서는 미국 AI 강세가 삼성전자·SK하이닉스 등 국내 반도체와 데이터센터 밸류체인의 실제 거래대금 상위 진입·동조 수급으로 이어지는지 확인해야 한다."
+  ],
+  "market_focus": [
+    {
+      "title": "미 장기금리·Fed 재인상 기대",
+      "reason": "강한 설비투자가 AI 수요를 확인하는 동시에 높은 할인율을 오래 유지시킬 수 있다."
+    },
+    {
+      "title": "AI 설비투자 지속",
+      "reason": "핵심 자본재 주문이 예상보다 강해 AI 인프라 투자 가설에 실물경제 근거가 추가됐다."
+    },
+    {
+      "title": "중동·유가",
+      "reason": "협상 기대가 유가를 누르지만 공급경로 충격 위험이 남아 금리·인플레이션과 연결된다."
+    },
+    {
+      "title": "정규장 실제 수급",
+      "reason": "프리마켓 상승이 개장 후 거래대금 집중과 시장 폭 확대로 이어져야 선택적 AI 강세가 확인된다."
+    }
+  ],
+  "invalidation_checks": [
+    "미 10년물이 뚜렷하게 하락하면서 AI 외 업종까지 상승 폭이 넓어지면 '고금리 때문에 선택적 강세' 해석을 낮춘다.",
+    "AI·반도체가 개장 후 거래대금 상위에서 이탈하고 상대강도가 꺾이면 설비투자 지표가 즉시 주가 수급으로 연결된다는 가설을 폐기한다.",
+    "Brent가 협상 진전으로 100달러 아래에서 안정되면 유가를 오버나잇 2순위에서 낮춘다."
+  ],
+  "problem_states": [
+    {
+      "id": "six-minute-sensor-gap",
+      "status": "resolved",
+      "evidence": "2026-09-25 21:56 KST scheduled run 36137826255 completed successfully and wrote obs-20260925T215636+0900-36137826255-1",
+      "verify_after": null
+    },
+    {
+      "id": "domestic-top50-empty-after-hours",
+      "status": "normal",
+      "evidence": "market source_status=outside_domestic_monitor_window; public batch unavailable outside actual domestic trading window",
+      "verify_after": "next domestic trading session"
+    },
+    {
+      "id": "supervisor-result-trigger-selection",
+      "status": "blocked",
+      "evidence": "workflow still selects newest checkout file by mtime; two distinct safe GitHub write paths were blocked by safety checks this cycle; apply script processed_at guard remains secondary protection",
+      "verify_after": "when a permitted repository write path is available or workflow changes for another reason"
+    },
+    {
+      "id": "toss-live-message-receipt",
+      "status": "verification_pending",
+      "evidence": "snapshot available but subscription_count=0 and last_message_at=null",
+      "verify_after": "next domestic live trading session"
+    }
+  ]
+}
