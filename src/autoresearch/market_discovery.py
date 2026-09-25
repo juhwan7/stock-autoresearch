@@ -281,6 +281,23 @@ def fetch_dart_filings(now: datetime, *, limit: int = 100) -> tuple[list[dict[st
     return rows, "ok"
 
 
+def summarize_public_batch_market(root: Path) -> dict[str, Any]:
+    snapshot = _read_json(root / "data" / "providers" / "naver_batch" / "latest.json")
+    if not snapshot:
+        return {"available": False}
+    return {
+        "available": snapshot.get("status") in {"ok", "warming_or_gap"},
+        "generated_at": snapshot.get("generated_at"),
+        "status": snapshot.get("status"),
+        "provider": snapshot.get("provider"),
+        "exact_1m_bars": snapshot.get("exact_1m_bars"),
+        "amount_method": snapshot.get("amount_method"),
+        "elapsed_minutes_from_previous": snapshot.get("elapsed_minutes_from_previous"),
+        "interval_leaders": (snapshot.get("interval_leaders") or [])[:20],
+        "limitations": snapshot.get("limitations") or [],
+    }
+
+
 def summarize_toss_market(root: Path) -> dict[str, Any]:
     snapshot = _read_json(root / "data" / "providers" / "toss" / "latest.json")
     if not snapshot:
@@ -772,6 +789,7 @@ def collect(
         if str(item.get("rcept_no") or "") not in previous_filing_ids
     ]
 
+    public_batch_market = summarize_public_batch_market(root)
     toss_market = summarize_toss_market(root)
     handoff_queries = build_dynamic_handoff_queries(trending_terms)
 
@@ -809,6 +827,7 @@ def collect(
         "dart_filings": dart_rows[:100],
         "new_dart_filings": new_dart_filings[:40],
         "official_web_candidates": official_candidates[:30],
+        "public_batch_market": public_batch_market,
         "toss_market": toss_market,
         "item_count": len(deduped),
         "new_item_count": len(new_items),
@@ -823,11 +842,12 @@ def collect(
         "rules": {
             "discovery_only": True,
             "confirm_material_claims_with_primary_sources": True,
-            "canonical_trade_data": "Toss/KRX/broker API",
+            "canonical_trade_data": "정확 1분봉은 Toss/KRX/broker 우선. 기본 no-Pi 모드는 네이버 공개 6분 누적 거래대금 차분",
             "portal_news_role": "discovery_and_cross_check",
             "dart_role": "official_filing_primary_source",
             "official_web_candidates_role": "candidate_only_verify_domain_before_claim",
-            "toss_role": "canonical_turnover_and_minute_trade_signal_when_available",
+            "public_batch_role": "기본 no-Pi 6분 자금유입 센서. exact_1m_bars=false이면 개별 1분 Burst 근거로 사용하지 않음",
+            "toss_role": "선택 연결 시 정확한 체결·1분 거래대금 보강",
         },
     }
     _write_json(output, snapshot)
