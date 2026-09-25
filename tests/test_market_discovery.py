@@ -3,6 +3,7 @@ from autoresearch.market_discovery import (
     extract_naver_indices,
     extract_trending_terms,
     parse_google_news_rss,
+    recent_items,
     summarize_toss_market,
 )
 
@@ -74,3 +75,30 @@ def test_summarize_toss_market_exposes_turnover_and_burst(tmp_path):
     assert result["available"] is True
     assert result["top_turnover"][0]["name"] == "테스트조선"
     assert result["minute_burst_leaders"][0]["burst_ratio"] > 1
+
+
+def test_google_news_parser_strips_publisher_suffix():
+    xml = """<?xml version="1.0"?>
+    <rss><channel>
+      <item>
+        <title>조선 수주 확대 - 연합뉴스</title>
+        <link>https://example.com/a</link>
+        <pubDate>Fri, 25 Sep 2026 00:30:00 GMT</pubDate>
+        <source>연합뉴스</source>
+      </item>
+    </channel></rss>
+    """
+    rows = parse_google_news_rss(xml, "kr_market_broad")
+    assert rows[0]["title"] == "조선 수주 확대"
+
+
+def test_recent_items_drops_stale_articles():
+    from datetime import datetime, timezone
+
+    items = [
+        {"title": "최신", "published_at": "Fri, 25 Sep 2026 00:30:00 GMT"},
+        {"title": "오래됨", "published_at": "Mon, 10 Aug 2026 00:00:00 GMT"},
+    ]
+    now = datetime(2026, 9, 25, 1, 0, tzinfo=timezone.utc)
+    result = recent_items(items, now, hours=36)
+    assert [item["title"] for item in result] == ["최신"]
