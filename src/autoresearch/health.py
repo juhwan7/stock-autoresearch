@@ -75,6 +75,52 @@ class HealthWatchdog:
             "recovery": recovery,
         }
 
+    def _public_batch_state(self, now: datetime) -> tuple[dict[str, Any], bool]:
+        comp = self.cfg.get("components", {}).get("public_batch", {})
+        path = self.root / comp.get(
+            "latest_file", "data/providers/naver_batch/latest.json"
+        )
+        data = _read_json(path)
+        age = _age_minutes(data.get("generated_at"), now) if data else None
+        limit = float(
+            self.cfg.get("thresholds", {}).get(
+                "public_batch_stale_minutes", 15
+            )
+        )
+        fresh = bool(
+            data
+            and str(data.get("status") or "") in {"ok", "warming_or_gap"}
+            and age is not None
+            and age <= limit
+        )
+        return data, fresh
+
+    def _check_public_batch(self, now: datetime) -> list[dict[str, str]]:
+        if not _kr_market_monitor_window(now):
+            return []
+        data, fresh = self._public_batch_state(now)
+        if not data:
+            return [
+                self._issue(
+                    "public_batch",
+                    "missing",
+                    "WARN",
+                    "라즈베리파이 없는 6분 공개 시세 배치가 아직 없음",
+                    "naver-batch-market 단계를 다시 실행",
+                )
+            ]
+        if not fresh:
+            return [
+                self._issue(
+                    "public_batch",
+                    "stale-or-degraded",
+                    "WARN",
+                    f"6분 공개 시세 배치 상태: {data.get('status')}",
+                    "네이버 공개 랭킹/폴링 fallback을 재시도하고 반복되면 1시간 AI가 parser를 수정",
+                )
+            ]
+        return []
+
     def _check_market(self, now: datetime) -> list[dict[str, str]]:
         path = self.root / self.cfg.get("components", {}).get("market", {}).get(
             "runtime_file", "data/market/runtime.json"
@@ -83,6 +129,11 @@ class HealthWatchdog:
         issues = []
         status = str(data.get("source_status") or "")
         age = _age_minutes(data.get("generated_at"), now)
+
+        _, public_batch_fresh = self._public_batch_state(now)
+
+        if not data and public_batch_fresh:
+            return issues
 
         if not data:
             issues.append(
@@ -119,7 +170,7 @@ class HealthWatchdog:
                     "Toss Collector snapshot과 고정 IP 연결을 확인. 정규장 분석은 fallback으로 계속됨",
                 )
             )
-        elif status == "needs_credentials":
+        elif status == "needs_credentials" and not public_batch_fresh:
             issues.append(
                 self._issue(
                     "market",
@@ -180,6 +231,12 @@ class HealthWatchdog:
             )
         )
         issues: list[dict[str, str]] = []
+
+        _, public_batch_fresh = self._public_batch_state(now)
+        if public_batch_fresh:
+            # 기본 운영 모드는 네이버 공개 6분 배치다.
+            # Toss는 정확한 실시간 체결 보강용 선택 공급자이므로 없어도 장애가 아니다.
+            return issues
 
         if not _kr_market_monitor_window(now):
             return issues
@@ -521,6 +578,7 @@ class HealthWatchdog:
         now = datetime.now(KST)
         previous = _read_json(self.state_path)
         issues = []
+        issues.extend(self._check_public_batch(now))
         issues.extend(self._check_market(now))
         issues.extend(self._check_toss(now))
         issues.extend(self._check_risk(now))
