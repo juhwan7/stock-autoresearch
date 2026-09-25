@@ -1,59 +1,112 @@
 {
   "schema_version": 1,
-  "batch_id": "manual-20260925T084307+0900-10diag",
-  "processed_at": "2026-09-25T08:43:07+09:00",
-  "mode": "manual_immediate_diagnostics",
-  "observation_ids": [
-    "manual-20260925T084307+0900-01",
-    "manual-20260925T084307+0900-02",
-    "manual-20260925T084307+0900-03",
-    "manual-20260925T084307+0900-04",
-    "manual-20260925T084307+0900-05",
-    "manual-20260925T084307+0900-06",
-    "manual-20260925T084307+0900-07",
-    "manual-20260925T084307+0900-08",
-    "manual-20260925T084307+0900-09",
-    "manual-20260925T084307+0900-10"
-  ],
-  "status": "no_change",
-  "notify": false,
+  "batch_id": "immediate-20260925T0923+0900-multisource",
+  "processed_at": "2026-09-25T09:23:00+09:00",
+  "observation_ids": [],
+  "expected_observation_count": 10,
+  "sensor_gap": 10,
+  "status": "changed",
+  "notify": true,
+  "research_report_path": "reports/2026-09-25-0923-멀티소스-심층리서치.md",
   "summary": [
-    "10개 항목은 동일 시점의 독립 진단으로 수집했으며 10분 간격 시계열로 가장하지 않았다.",
-    "10분 관측 workflow, supervisor CLI, 큐 테스트, 1시간 결과 알림 브리지가 main에 연결되어 있다.",
-    "최신 프로젝트 검증 run 36073715244는 success다.",
-    "새 10분 schedule 실행은 아직 한 번도 발생하지 않아 runtime/health/toss/supervisor 자동 산출물은 초기화 전 상태다.",
-    "즉시 수정이 필요한 지속 오류는 현재 근거가 부족해 코드 변경을 추가하지 않았다."
+    "즉시 멀티소스 AI 심층 리서치를 실행했습니다. 오늘은 추석 KRX 휴장이라 국내 실시간 체결을 추정하지 않았습니다.",
+    "미중 정상회담은 무역 휴전을 2개월 연장했지만 관세·희토류·기술제한 핵심 쟁점은 다음 협상으로 남았습니다.",
+    "전일 미국장은 거의 보합이었지만 Brent 약 107달러와 미국채 금리 상승이 월요일 한국장의 주요 거시 리스크입니다.",
+    "6분 센서를 프로젝트 Health 전용에서 시장·뉴스 단서 수집까지 확장했습니다. Google News 다중 주제 RSS와 네이버 금융 공개 지수 보조값을 수집합니다.",
+    "앞으로 매시간 AI는 6분 센서의 market_discovery 단서를 참고하되 웹·원기사·공식 1차자료를 다시 깊게 조사합니다."
   ],
   "persistent_findings": [
     {
-      "finding": "first_scheduled_observation_pending",
-      "severity": "info",
-      "evidence": "schedule event run 0개; recent/queue/runtime 자동 산출물은 수동 배치 전 미생성",
-      "interpretation": "새 구조 적용 직후의 초기 상태로 판단하며 실패로 확정하지 않음"
+      "finding": "scheduled_6m_observer_not_yet_accumulating",
+      "severity": "attention",
+      "evidence": "이번 즉시 실행 시 state.json 이후 실제 자동 6분 관측이 0개라 sensor_gap=10",
+      "interpretation": "시장 리서치는 중단하지 않고 웹에서 직접 수행했으며, 자동 센서 스케줄은 후속 Actions에서 재확인"
+    },
+    {
+      "finding": "market_discovery_was_project_only",
+      "severity": "resolved",
+      "evidence": "6분 workflow에 market-discovery-observe를 추가하고 supervisor observation에 market_discovery를 포함",
+      "interpretation": "이제 프로젝트 상태뿐 아니라 시간대별 시장·뉴스 단서도 다음 AI 배치로 전달"
+    }
+  ],
+  "market_research": [
+    {
+      "topic": "KRX holiday",
+      "status": "verified_fact",
+      "finding": "2026-09-25 추석 휴장. 다음 국내 거래일 9월 28일.",
+      "implication": "오늘 국내 1분 거래대금·수급을 실시간값처럼 생성하지 않음"
+    },
+    {
+      "topic": "US-China summit",
+      "status": "verified_fact",
+      "finding": "무역 휴전 2개월 연장. 관세·중국의 미국산 구매·희토류·기술제한 핵심 쟁점은 후속 협상으로 이월.",
+      "implication": "정상회담 자체를 완전한 정책 리스크 해소로 해석하지 않음"
+    },
+    {
+      "topic": "oil_and_rates",
+      "status": "verified_fact",
+      "finding": "9월24일 미 증시는 거의 보합, Brent는 약 107달러 접근, 미국채 금리는 상승.",
+      "implication": "월요일 국내 성장주와 테마주의 할인율·위험선호에 유가와 금리가 중요"
+    },
+    {
+      "topic": "rare_earths",
+      "status": "verified_fact",
+      "finding": "미국의 중국 희토류 의존은 여전히 높고 이트륨 공급 병목이 항공·전력·반도체 장비 공급망 이슈로 남아 있음.",
+      "implication": "관련 국내주는 실제 공급망 계약·대체능력 확인 없이 테마 수혜로 확정하지 않음"
+    }
+  ],
+  "discovery_sources_checked": [
+    "Reuters",
+    "중국 외교부/중국 정부 영문 사이트",
+    "White House",
+    "한국 증시 휴장 일정 자료",
+    "SK hynix Newsroom",
+    "Samsung Newsroom",
+    "국내 주요 뉴스 검색 결과"
+  ],
+  "primary_sources_checked": [
+    "https://www.mfa.gov.cn/zyxw/202609/t20260925_12031134.shtml",
+    "https://www.whitehouse.gov/briefings-statements/2026/09/first-lady-melania-trump-releases-details-ahead-of-his-excellency-xi-jinping-president-of-the-peoples-republic-of-china-and-madame-peng-liyuans-visit-to-the-white-house/",
+    "https://news.skhynix.com/en/share-buyback-and-retirement/",
+    "https://news.samsung.com/kr/"
+  ],
+  "source_conflicts": [
+    {
+      "subject": "삼성전자·SK하이닉스 자사주 매입 종료 시점",
+      "status": "needs_exact_filing_check",
+      "detail": "언론의 조기 종료 전망은 발견했지만 실제 남은 매입량·정확한 종료일은 각사 공시와 취득 진행 내역을 추가 확인하기 전 확정하지 않음"
     }
   ],
   "actions": [
-    "최신 main의 감독 관련 코드·문서·워크플로를 교차검증했다.",
-    "현재 상태를 10개의 manual_snapshot 진단으로 기록했다.",
-    "반복 신호인 '첫 scheduled observer 미실행/자동 runtime 미초기화'를 하나의 초기화 대기 상태로 묶었다.",
-    "기능 코드에는 추가 변경을 하지 않았다."
+    "src/autoresearch/market_discovery.py 추가: Google News RSS 다중 주제 + 네이버 금융 지수 보조값 수집",
+    "6분 workflow에 비AI 시장 discovery 단계 추가",
+    "각 supervisor observation에 market_discovery 요약·새 헤드라인·handoff query 포함",
+    "Telegram 알림에 심층 리서치 결과 링크 버튼 추가",
+    "latest-report.json 변경 즉시 Telegram/GitHub Issue로 보내는 push workflow 추가",
+    "현재 시점 멀티소스 심층 리서치 보고서 생성"
   ],
-  "changed_paths": [],
+  "changed_paths": [
+    "src/autoresearch/market_discovery.py",
+    "src/autoresearch/cli.py",
+    "src/autoresearch/supervisor_queue.py",
+    ".github/workflows/연속연구와진화.yml",
+    ".github/workflows/감독결과_즉시알림.yml",
+    "tests/test_market_discovery.py",
+    "tests/test_supervisor_queue.py",
+    "scripts/감독결과_알림.py",
+    "docs/감독큐_운영.md",
+    "README.md",
+    "reports/2026-09-25-0923-멀티소스-심층리서치.md"
+  ],
   "validation": {
-    "status": "passed",
-    "evidence": {
-      "workflow_run_id": 36073715244,
-      "workflow_name": "프로젝트 검증",
-      "conclusion": "success",
-      "head_sha": "7e75b24e8b110b771531295fb434922e6568aade"
-    },
-    "limitation": "수동 진단 배치는 scheduled 10분 workflow 자체를 실행한 것이 아니므로 첫 실제 schedule run은 별도 확인 필요"
+    "status": "pending_github_actions",
+    "note": "방금 추가한 discovery 코드와 즉시 알림 workflow의 프로젝트 검증 결과를 확인 중"
   },
   "next_checks": [
-    "첫 scheduled 10분 관측이 실행되는지 확인한다.",
-    "실행 후 data/supervisor/recent.json에 실제 workflow observation이 manual-10 뒤에 추가되는지 확인한다.",
-    "data/health/latest.json과 Toss fetch/status 파일이 정상 생성되는지 확인한다.",
-    "compile/pytest/diff 결과가 실제 10분 observation에 validation=ok로 기록되는지 확인한다.",
-    "향후 실제 관측 6개가 쌓이면 자동 1시간 감독이 manual batch 이후 항목만 처리하는지 확인한다."
+    "프로젝트 검증에서 새 market_discovery parser/CLI/supervisor handoff 테스트가 통과하는지 확인",
+    "감독 결과 즉시 알림 workflow가 이번 latest-report push를 감지해 Telegram으로 발송하는지 확인",
+    "다음 6분 sensor run에서 data/discovery/latest.json이 생성되고 recent.json 관측에 market_discovery가 들어가는지 확인",
+    "GitHub cron 지연 여부와 실제 6분 schedule 실행 시작 여부 재확인",
+    "9월25일 미국장 종료 후 유가·미국채·반도체 상대강도를 다음 리서치에서 갱신"
   ]
 }
