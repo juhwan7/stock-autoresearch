@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "data/supervisor/latest-report.json"
+  issues:
+    types: [labeled]
 
 permissions:
   contents: read
@@ -16,6 +18,7 @@ concurrency:
 
 jobs:
   notify:
+    if: github.event_name == 'push' || (github.event_name == 'issues' && github.event.label.name == 'supervisor-notify')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
