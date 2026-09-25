@@ -347,6 +347,7 @@ def main() -> None:
         "heartbeat": "6분",
         "reports": reports,
         "supervisor_latest": read_json(ROOT / "data" / "supervisor" / "latest-report.json"),
+        "supervisor_recent": read_json(ROOT / "data" / "supervisor" / "recent.json"),
         "discovery": read_json(ROOT / "data" / "discovery" / "latest.json"),
         "quality_history": [
             {
