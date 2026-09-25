@@ -197,3 +197,16 @@ def test_daily_tracked_universe_resets_on_new_day():
     ]
     tracked = build_daily_tracked_universe(current_top, previous, now)
     assert [x["ticker"] for x in tracked] == ["000660"]
+
+
+def test_stale_same_day_universe_is_not_carried_forward():
+    now = datetime(2026, 9, 25, 11, 45, tzinfo=KST)
+    previous = {
+        "generated_at": (now - timedelta(minutes=6)).isoformat(),
+        "ranking_fresh_today": False,
+        "tracked_universe": [
+            {"ticker": "005930", "name": "삼성전자", "last_top50_rank": 1}
+        ],
+    }
+    tracked = build_daily_tracked_universe([], previous, now)
+    assert tracked == []
