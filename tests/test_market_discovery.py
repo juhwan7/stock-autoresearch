@@ -1,5 +1,7 @@
 from autoresearch.market_discovery import (
+    build_dynamic_handoff_queries,
     extract_naver_indices,
+    extract_trending_terms,
     parse_google_news_rss,
 )
 
@@ -32,3 +34,15 @@ def test_extract_naver_indices():
     assert result["KOSPI"] == "7,123.45"
     assert result["KOSDAQ"] == "845.67"
     assert result["KOSPI200"] == "999.01"
+
+
+def test_dynamic_trends_are_derived_from_headlines():
+    items = [
+        {"title": "조선 수주 확대 기대", "publisher": "매체A"},
+        {"title": "조선 대형 수주 잇따라", "publisher": "매체B"},
+        {"title": "원전 해외 수주 기대", "publisher": "매체C"},
+    ]
+    trends = extract_trending_terms(items, {})
+    assert trends[0]["term"] == "수주" or any(item["term"] == "조선" for item in trends)
+    queries = build_dynamic_handoff_queries(trends)
+    assert any("조선" in query or "수주" in query for query in queries)
