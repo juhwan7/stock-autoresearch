@@ -72,8 +72,8 @@ def _round_value(value: Any, unit: float) -> float | None:
 
 class RiskEngine:
     def __init__(self, root: Path, mode: str = "live"):
-        if mode not in {"dry-run", "live"}:
-            raise ValueError("mode must be dry-run or live")
+        if mode not in {"dry-run", "live", "sensor"}:
+            raise ValueError("mode must be dry-run, live or sensor")
         self.root = root
         self.mode = mode
         self.cfg = load_yaml(root / "config" / "리스크.yaml")
@@ -153,6 +153,17 @@ class RiskEngine:
                 "generated_at": now.isoformat(),
                 "events": self._merge_calendar_events([]),
                 "mode": "dry-run",
+            }
+            _write_json(self.calendar_path, result)
+            return result
+
+        if self.mode == "sensor":
+            result = {
+                "generated_at": now.isoformat(),
+                "events": self._merge_calendar_events(
+                    existing.get("events", []) if isinstance(existing.get("events"), list) else []
+                ),
+                "mode": "sensor_no_ai",
             }
             _write_json(self.calendar_path, result)
             return result
@@ -244,6 +255,23 @@ class RiskEngine:
             return provider
 
         existing = _read_json(self.macro_path)
+        if self.mode == "sensor":
+            if existing.get("values"):
+                existing["source_mode"] = str(
+                    existing.get("source_mode") or "cached"
+                )
+                return existing
+            result = {
+                "captured_at": now.isoformat(),
+                "values": {},
+                "sources": [],
+                "unknowns": [
+                    "6분 sensor에 연결된 실시간 매크로 provider가 없음"
+                ],
+                "source_mode": "unavailable",
+            }
+            _write_json(self.macro_path, result)
+            return result
         if not self._macro_due(now) and existing.get("values"):
             return existing
 
@@ -566,7 +594,7 @@ class RiskEngine:
         dirty: bool,
     ) -> dict[str, Any]:
         cfg = self.cfg.get("models", {}).get("evaluator", {})
-        if self.mode == "dry-run":
+        if self.mode in {"dry-run", "sensor"}:
             return self._deterministic_summary(
                 state["risk_level"],
                 state.get("single_biggest_event"),
