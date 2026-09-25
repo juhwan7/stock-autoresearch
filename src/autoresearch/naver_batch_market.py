@@ -692,6 +692,12 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
             "generated_at": snapshot["generated_at"],
             "status": status,
             "elapsed_minutes_from_previous": elapsed_minutes,
+            "current_top50_count": len(current_top50),
+            "tracked_universe_count": len(tracked_universe),
+            "dropped_from_current_top50_count": sum(
+                1 for item in tracked_universe
+                if not item.get("in_current_top50")
+            ),
             "interval_leaders": valid_rows[:20],
         }
     )
@@ -707,7 +713,13 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
     return {
         "status": status,
         "provider": "naver_public",
-        "universe_count": len(universe),
+        "current_top50_count": len(current_top50),
+        "tracked_universe_count": len(tracked_universe),
+        "dropped_from_current_top50_count": sum(
+            1 for item in tracked_universe
+            if not item.get("in_current_top50")
+        ),
+        "universe_count": len(tracked_universe),
         "quote_count": len(quotes),
         "valid_interval_count": len(valid_rows),
         "elapsed_minutes": elapsed_minutes,
