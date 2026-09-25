@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .question_engine import infer_questions, merge_question_queue
+from .hypothesis_learning import due_hypotheses
 
 
 KST = timezone(timedelta(hours=9))
@@ -322,6 +323,9 @@ def build_observation(
             "latest_commit_changed_files": _latest_changed_files(root),
         },
         "previous_workflow_run": previous_run,
+        "hypothesis_verification": {
+            "due": due_hypotheses(root, now.isoformat())[:30],
+        },
         "signals": signals,
     }
 
