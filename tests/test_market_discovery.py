@@ -3,6 +3,7 @@ from autoresearch.market_discovery import (
     extract_naver_indices,
     extract_trending_terms,
     parse_google_news_rss,
+    summarize_toss_market,
 )
 
 
@@ -46,3 +47,30 @@ def test_dynamic_trends_are_derived_from_headlines():
     assert trends[0]["term"] == "수주" or any(item["term"] == "조선" for item in trends)
     queries = build_dynamic_handoff_queries(trends)
     assert any("조선" in query or "수주" in query for query in queries)
+
+
+def test_summarize_toss_market_exposes_turnover_and_burst(tmp_path):
+    path = tmp_path / "data/providers/toss/latest.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        """{
+          "captured_at": "2026-09-25T10:00:00+09:00",
+          "ranking": [
+            {"rank": 1, "ticker": "000001", "trading_value": 10000000000, "day_return_pct": 8.0, "last_price": 10000}
+          ],
+          "metadata": {"000001": {"name": "테스트조선"}},
+          "minute_by_ticker": {
+            "000001": [
+              {"amount": 100000000},
+              {"amount": 120000000},
+              {"amount": 500000000}
+            ]
+          },
+          "turnover_rank_top10_share": 0.42
+        }""",
+        encoding="utf-8",
+    )
+    result = summarize_toss_market(tmp_path)
+    assert result["available"] is True
+    assert result["top_turnover"][0]["name"] == "테스트조선"
+    assert result["minute_burst_leaders"][0]["burst_ratio"] > 1
