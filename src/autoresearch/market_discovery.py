@@ -88,6 +88,36 @@ def parse_google_news_rss(xml_text: str, topic: str, limit: int = 10) -> list[di
     return rows
 
 
+def extract_naver_index_basic(payload: dict[str, Any]) -> str | None:
+    value = payload.get("closePrice")
+    if value in (None, ""):
+        value = payload.get("close")
+    text = _clean_text(str(value or ""))
+    return text or None
+
+
+def fetch_naver_indices_json() -> dict[str, str | None]:
+    endpoints = {
+        "KOSPI": "https://stock.naver.com/api/securityFe/api/index/KOSPI/basic",
+        "KOSDAQ": "https://stock.naver.com/api/securityFe/api/index/KOSDAQ/basic",
+        "KOSPI200": "https://stock.naver.com/api/securityFe/api/index/KPI200/basic",
+    }
+    result: dict[str, str | None] = {}
+    for name, url in endpoints.items():
+        try:
+            result[name] = extract_naver_index_basic(_fetch_json(url))
+        except (
+            OSError,
+            TimeoutError,
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            json.JSONDecodeError,
+            ValueError,
+        ):
+            result[name] = None
+    return result
+
+
 def extract_naver_indices(html_text: str) -> dict[str, str | None]:
     result: dict[str, str | None] = {
         "KOSPI": None,
@@ -499,22 +529,51 @@ def collect(
     source_status: dict[str, dict[str, Any]] = {}
 
     for topic, query in QUERY_GROUPS:
-        params = urllib.parse.urlencode(
-            {
-                "q": query + " when:1d",
-                "hl": "ko",
-                "gl": "KR",
-                "ceid": "KR:ko",
-            }
-        )
-        url = "https://news.google.com/rss/search?" + params
         key = "google_news:" + topic
         try:
-            xml_text = fetcher(url)
-            rows = parse_google_news_rss(xml_text, topic, limit=12)
-            rows = recent_items(rows, now, hours=36)
+            params = urllib.parse.urlencode(
+                {
+                    "q": query + " when:1d",
+                    "hl": "ko",
+                    "gl": "KR",
+                    "ceid": "KR:ko",
+                }
+            )
+            xml_text = fetcher("https://news.google.com/rss/search?" + params)
+            rows = recent_items(
+                parse_google_news_rss(xml_text, topic, limit=12),
+                now,
+                hours=48,
+            )
+            retried_without_when = False
+            if not rows:
+                retried_without_when = True
+                fallback_params = urllib.parse.urlencode(
+                    {
+                        "q": query,
+                        "hl": "ko",
+                        "gl": "KR",
+                        "ceid": "KR:ko",
+                    }
+                )
+                fallback_xml = fetcher(
+                    "https://news.google.com/rss/search?" + fallback_params
+                )
+                rows = recent_items(
+                    parse_google_news_rss(fallback_xml, topic, limit=20),
+                    now,
+                    hours=72,
+                )
             items.extend(rows)
-            source_status[key] = {"status": "ok", "count": len(rows)}
+            source_status[key] = {
+                "status": "ok" if rows else "empty",
+                "count": len(rows),
+                "auto_repair": (
+                    "retry_without_when_filter"
+                    if retried_without_when
+                    else None
+                ),
+            }
         except (
             OSError,
             TimeoutError,
@@ -577,26 +636,37 @@ def collect(
             "error": type(exc).__name__,
         }
 
-    naver_url = "https://finance.naver.com/sise/"
-    try:
-        html_text = fetcher(naver_url)
-        indices = extract_naver_indices(html_text)
+    indices = fetch_naver_indices_json()
+    if any(indices.values()):
         source_status["naver_finance"] = {
-            "status": "ok" if any(indices.values()) else "partial",
+            "status": "ok",
+            "mode": "stock_naver_json",
             "indices": indices,
         }
-    except (
-        OSError,
-        TimeoutError,
-        urllib.error.URLError,
-        urllib.error.HTTPError,
-        ValueError,
-    ) as exc:
-        source_status["naver_finance"] = {
-            "status": "error",
-            "error": type(exc).__name__,
-            "indices": {},
-        }
+    else:
+        naver_url = "https://finance.naver.com/sise/"
+        try:
+            html_text = fetcher(naver_url)
+            indices = extract_naver_indices(html_text)
+            source_status["naver_finance"] = {
+                "status": "ok" if any(indices.values()) else "degraded",
+                "mode": "legacy_html_fallback",
+                "auto_repair": "json_endpoint_failed_then_html_fallback",
+                "indices": indices,
+            }
+        except (
+            OSError,
+            TimeoutError,
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            ValueError,
+        ) as exc:
+            source_status["naver_finance"] = {
+                "status": "error",
+                "error": type(exc).__name__,
+                "mode": "all_fallbacks_failed",
+                "indices": {},
+            }
 
     deduped: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -664,6 +734,11 @@ def collect(
         for value in source_status.values()
         if str(value.get("status")) == "error"
     )
+    degraded_sources = sum(
+        1
+        for value in source_status.values()
+        if str(value.get("status")) in {"empty", "degraded"}
+    )
 
     snapshot = {
         "schema_version": 1,
@@ -673,6 +748,7 @@ def collect(
         "source_summary": {
             "ok_or_partial": ok_sources,
             "failed": failed_sources,
+            "degraded": degraded_sources,
         },
         "naver_indices": (
             source_status.get("naver_finance", {}).get("indices") or {}
