@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-25T10:58:35.036324+09:00",
+  "generated_at": "2026-09-25T11:04:41.509853+09:00",
   "status": "CRITICAL",
-  "issue_count": 5,
+  "issue_count": 3,
   "issues": [
     {
       "component": "market",
-      "code": "runtime-missing",
-      "severity": "CRITICAL",
-      "message": "Market runtime 상태 파일이 없음",
-      "recovery": "market-intel 실행과 데이터 공급자 설정을 확인",
-      "consecutive": "4"
+      "code": "credentials",
+      "severity": "NOTICE",
+      "message": "국내시장 데이터 인증정보가 준비되지 않음",
+      "recovery": "HELP_NEEDED의 시장 데이터 Secret/Collector 항목 확인",
+      "consecutive": "1"
     },
     {
       "component": "toss",
@@ -17,38 +17,20 @@
       "severity": "CRITICAL",
       "message": "Toss primary snapshot을 사용할 수 없음 · fetch 상태=not_configured",
       "recovery": "고정 IP Collector, 허용 IP, 인증정보, snapshot 전달 경로를 확인",
-      "consecutive": "4"
-    },
-    {
-      "component": "risk",
-      "code": "runtime-missing",
-      "severity": "CRITICAL",
-      "message": "Risk runtime 상태가 없음",
-      "recovery": "risk-intel dry-run/live 실행 여부 확인",
-      "consecutive": "4"
+      "consecutive": "5"
     },
     {
       "component": "macro",
-      "code": "missing",
-      "severity": "CRITICAL",
-      "message": "매크로 스냅샷이 없음",
-      "recovery": "Risk source refresh 또는 Toss/외부 Collector 연결 확인",
-      "consecutive": "4"
-    },
-    {
-      "component": "regression",
-      "code": "missing",
+      "code": "unavailable",
       "severity": "NOTICE",
-      "message": "Regression Guard 상태가 아직 없음",
-      "recovery": "regression 명령이 Continuous Loop에 연결됐는지 확인",
-      "consecutive": "4"
+      "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
+      "recovery": "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
+      "consecutive": "1"
     }
   ],
   "consecutive": {
-    "risk:runtime-missing": 4,
-    "toss:snapshot-missing": 4,
-    "market:runtime-missing": 4,
-    "macro:missing": 4,
-    "regression:missing": 4
+    "market:credentials": 1,
+    "macro:unavailable": 1,
+    "toss:snapshot-missing": 5
   }
 }
