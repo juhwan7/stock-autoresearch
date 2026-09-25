@@ -285,6 +285,15 @@ def build_observation(
                 "elapsed_minutes_from_previous"
             ),
             "interval_leaders": (public_batch.get("interval_leaders") or [])[:20],
+            "one_minute_samples_available": public_batch.get("one_minute_samples_available"),
+            "minute_amount_exact": public_batch.get("minute_amount_exact"),
+            "minute_amount_method": public_batch.get("minute_amount_method"),
+            "minute_sample_ticker_count": public_batch.get("minute_sample_ticker_count"),
+            "minute_samples_by_ticker": {
+                str(ticker): rows[-6:]
+                for ticker, rows in (public_batch.get("minute_samples_by_ticker") or {}).items()
+                if isinstance(rows, list)
+            },
             "limitations": public_batch.get("limitations") or [],
         },
         "market": {
