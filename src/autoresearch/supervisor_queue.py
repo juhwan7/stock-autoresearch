@@ -10,7 +10,6 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
-from .question_engine import infer_questions, merge_question_queue
 from .hypothesis_learning import due_hypotheses
 
 
@@ -398,11 +397,11 @@ def append_observation(
 
 
 def observe(root: Path, env: Mapping[str, str] | None = None) -> dict[str, Any]:
+    """Record facts only.
+
+    The six-minute sensor is deliberately not a reasoning layer. It collects
+    observable market/system state and leaves questions, hypotheses, bug
+    diagnosis, and project-improvement decisions to the :00/:30 Supervisor.
+    """
     observation = build_observation(root, env=env)
-    questions = infer_questions(observation, root=root)
-    observation["research_questions"] = questions
-    result = append_observation(root, observation)
-    queue = merge_question_queue(root, observation, questions)
-    result["generated_question_count"] = len(questions)
-    result["open_question_count"] = queue.get("open_count", 0)
-    return result
+    return append_observation(root, observation)
