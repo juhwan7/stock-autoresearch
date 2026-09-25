@@ -1,18 +1,8 @@
 {
-  "generated_at": "2026-09-25T17:47:42.137804+00:00",
+  "generated_at": "2026-09-25T20:46:52.159496+00:00",
   "project": "Stock AutoResearch",
   "heartbeat": "6분",
   "reports": [
-    {
-      "title": "종가베팅 Overnight Risk",
-      "file": "risk/20260926-0247.md",
-      "github_url": "https://github.com/juhwan7/stock-autoresearch/blob/main/reports/risk/20260926-0247.md",
-      "generated_at": "2026-09-26T02:47:40.767390+09:00",
-      "quality": null,
-      "industries": [],
-      "stocks": [],
-      "preview": "현재 확인 가능한 입력 기준 대형 Overnight Risk는 제한적. - **미국 고용보고서** · severity 5 - 162.71시간 후 · AFTER_NXT_CLOSE | 일정 | 남은 시간 | 중요도 | 위험 단계 | 거래 가능성 관점 | |---|---:|---:|---|---| | 미국 고용보고서 | 162.71h | 5 | LOW | AFTER_NXT_CLOSE | | 9월 FOMC 의사록 공개 | 288.21h | 4 | LOW | KOREA_TRADING_HOURS | | 미국 CPI | 450.71h | 5 | LOW | AFTER_NXT_CLOSE | | 미국 PPI | 474.71h | 4 | LOW | AFTER_NXT_CLOSE | | 한국은행 통화정책방향 결정회의 | 630.21h | 5 | LOW | UNKNOWN_TIME | | FOMC 금리결정·기자회견 | 792.21h | 5 | LOW | KOREA_TRADING_HOURS | - 현재 임계값을 넘은 매크로 경고 없음 - 별도 미확인 항목 없음 - 2026-10-02T21:30:00+09:00 --- Risk Veto는 매수·매도 추천이 아니라 다음날 갭 리스크 연구용 상태입니다."
-    },
     {
       "title": "2026-09-25 10:57 시간별 시장 리서치",
       "file": "2026-09-25_시간별_시장리서치_1057.md",
@@ -85,74 +75,70 @@
     }
   ],
   "supervisor_latest": {
-    "batch_id": "supervisor-20260926T0230+0900",
-    "processed_at": "2026-09-26T02:30:00+09:00",
+    "batch_id": "supervisor-20260926T0530+0900",
+    "processed_at": "2026-09-26T05:30:00+09:00",
     "notify": true,
     "observation_ids": [],
     "status": "investigating",
     "summary": [
-      "최근 30분: 저장소에 새 6분 관측은 없어서 국내 수급 숫자를 새로 추정하지 않았다. 공개 미국시장 최신 교차검증에서도 Dow +0.34%, S&P 500 +0.18%, Nasdaq +0.21% 수준의 제한적 상승으로 직전 큰 방향은 유지된다.",
-      "A 해석 검증: 최근 3거래일을 'AI 수요가 지수를 받치지만 금리·유가가 시장 전체 확산을 제한'하는 구조로 본 판단은 유지한다. 23일 유가 약 4% 상승과 금리 상승으로 주가가 밀렸고 24일 S&P 500 -0.02%, 25일에는 AI 낙관과 유가 완화로 소폭 반등했다.",
-      "현재 위험순위: 1) 미국 장기금리와 다음 주 고용·PCE, 2) 중동 협상과 Brent 100달러대 공급위험, 3) AI·기술주 중심의 좁은 시장폭. 25일 유가는 휴전 기대에 약 3% 하락했지만 공급시설 공격 위험은 남아 있다.",
-      "새 버그 검증: Google News 세부 그룹 7개 중 5개가 empty여도 broad_fallback이 정상 30건을 확보했다. 그런데 HealthWatchdog는 이를 WARN으로 누적해 현재 CRITICAL까지 승격한다. 실제 데이터 탐색이 유지되는 상황을 시스템 장애로 과장하는 오탐이다.",
-      "수정안은 broad_fallback status=ok이고 count>0이면 google-news-degraded를 NOTICE로 제한하고 fallback까지 실패했을 때만 WARN→CRITICAL 승격시키는 것이다. 코드 수정은 시도했지만 GitHub 쓰기 안전검사에 차단되어 실제 반영됐다고 처리하지 않는다.",
-      "운영 확인: 직전 02:00 A 결과는 main에 생성됐고 canonical apply 커밋까지 이어졌다. 따라서 결과 적용 경로는 직전 사이클에서 정상 동작했다. 이번 B는 새 결과 파일 생성 후 동일 경로로 canonical/Telegram 적용을 요청한다."
+      "최근 30분 국내 신규 실거래 관측은 확인되지 않아 국내 수급을 추정하지 않았다. 미국 25일 장은 AI 관련 기술주가 지수를 끌어올렸지만 높은 유가와 국채금리가 계속 부담이었다.",
+      "직전 A의 'AI 선택적 강세와 매크로 압박의 충돌' 해석은 유지한다. Reuters 종가 보도도 AI 주도 상승과 높은 유가·금리를 동시에 핵심 변수로 확인했다.",
+      "오버나잇 우선순위는 1) 미국 장기금리와 다음 주 고용·PCE, 2) 중동·유가, 3) AI 상승의 시장폭 확산 여부다.",
+      "새 버그 검증: src/autoresearch/health.py에서 Google News 세부검색 실패가 broad fallback 성공을 무시하고 WARN 누적되는 코드와, 주말/장외에도 macro empty가 WARN인 코드를 직접 확인했다.",
+      "수정 패치와 회귀테스트 추가를 시도했지만 GitHub 쓰기 안전검사에 차단되어 코드 변경은 완료 처리하지 않았다. 같은 실패를 반복하지 않고 blocked 상태를 유지한다.",
+      "운영: 최신 canonical state는 03:00 A 결과까지 적용돼 있으며 02:30 B 결과도 apply 완료 이력이 있다."
     ],
     "actions": [
-      "최근 3거래일 미국시장 가설을 최신 Reuters 기사로 재검증",
-      "Google News broad fallback 30건 확보와 Health CRITICAL 오탐의 원인 코드 확인",
-      "broad fallback 성공 시 NOTICE로 제한하는 패치를 시도했으나 안전검사 차단으로 미반영"
+      "최신 main의 state, 03:00 A 결과, health.py 원본을 직접 확인",
+      "Reuters로 25일 미국장 종가와 다음 주 금리 위험을 재검증",
+      "Health false-CRITICAL 최소 패치와 test_health.py 회귀테스트 추가를 시도했으나 안전검사 차단 확인"
     ],
     "changed_paths": [],
     "next_checks": [
-      "미국장 후반 상승폭과 시장폭이 AI 외 업종으로 넓어지는지 확인",
-      "10년물 5.1% 아래 안정 여부와 Brent 100달러 하회 여부 확인",
-      "다음 센서에서 macro runtime과 Google News 세부검색 회복 여부 확인",
-      "허용된 코드 수정 경로가 생기면 Google News fallback Health 오탐을 우선 수정",
+      "허용되는 쓰기 경로가 열리면 broad fallback 성공 시 google-news-degraded를 NOTICE로 제한하는 최소 패치 적용",
+      "주말/국내장 외 macro empty를 NOTICE로 제한하고 평일 감시시간에는 WARN 유지",
+      "다음 A에서 25일 미국장 최종 시장폭과 10년물·Brent 종가를 재확인",
       "다음 국내 실거래 세션에서 Toss subscription_count와 last_message_at 검증"
     ],
     "market_narrative": [
-      "최근 3거래일은 AI 투자수요와 유가·금리 부담의 줄다리기로 설명하는 것이 가장 일관적이다. 23일에는 유가 급등과 금리 상승이 주가를 눌렀고, 24일에는 높은 유가·금리 속 S&P 500이 거의 보합, 25일에는 유가 완화와 AI 기대가 지수를 소폭 플러스로 돌렸다.",
-      "현재는 시장 전체 위험선호보다 AI·기술주 중심 선택적 위험선호에 가깝다. AI 설비투자는 강하지만 높은 장기금리는 다른 성장주와 시장 전체 밸류에이션을 제한한다.",
-      "25일 유가가 약 3% 하락한 것은 긍정적이지만 미·이란 휴전 기대에 따른 위험 프리미엄 완화다. 후티의 사우디 공격과 공급차질 가능성이 남아 있어 유가 위험 해소로 분류하지 않는다.",
-      "내부 6분 관측은 새 값이 없으므로 국내 수급은 추정하지 않는다. 다음 국내 거래세션에서 미국 AI 강세가 국내 반도체·AI 인프라 거래대금으로 실제 전달되는지가 핵심 검증 포인트다."
+      "25일 미국장은 AI 관련 기술주 매수가 지수를 올렸지만 높은 유가와 최근 급등한 국채금리가 투자심리를 계속 제한했다.",
+      "8월 핵심 자본재 주문의 강한 증가는 AI 인프라 설비투자 수요를 지지하지만, 강한 경제활동은 금리 부담을 오래 유지시킬 수 있어 전면적 주식 호재로 단순화하지 않는다.",
+      "다음 주 고용과 PCE가 금리 경로를 다시 흔들 수 있어 현재는 AI 상승 자체보다 장기금리와 시장폭 확산 여부가 더 중요한 확인조건이다."
     ],
     "market_focus": [
       {
-        "title": "미국 장기금리",
-        "reason": "5%대 장기금리와 다음 주 고용·PCE가 추가 금리인상 경로를 흔들 수 있어 1순위."
+        "title": "미국 장기금리·고용·PCE",
+        "reason": "높은 장기금리가 AI 외 시장 확산을 제한하고 다음 주 지표가 금리 경로를 바꿀 수 있음"
       },
       {
         "title": "중동·유가",
-        "reason": "휴전 기대에 유가는 하락했지만 사우디 공급시설 공격 위험이 남아 주말 갭 리스크가 있다."
+        "reason": "유가가 높은 수준에 남아 인플레이션과 장기금리 부담을 연결함"
       },
       {
-        "title": "AI·기술주 시장폭",
-        "reason": "AI가 지수를 지지해도 상승 업종이 넓어지지 않으면 시장 전체 위험선호로 보기 어렵다."
+        "title": "AI 상승의 시장폭",
+        "reason": "AI 주도 상승이 다른 업종으로 넓어지는지 확인 필요"
       },
       {
-        "title": "Health 오탐",
-        "reason": "Google News broad fallback 30건이 정상인데 세부검색 실패가 CRITICAL로 누적돼 운영상 과장 경보가 발생한다."
+        "title": "Health false CRITICAL",
+        "reason": "fallback 성공과 장외시간을 무시하는 경보 로직이 실제 장애를 과장함"
       }
     ],
     "invalidation_checks": [
-      "10년물이 5.1% 아래로 안정되고 Brent가 100달러 아래로 내려가며 상승 업종 수가 넓어지면 'AI 선택적 강세+매크로 압박' 해석을 낮춘다.",
-      "AI·기술주가 상대약세로 전환해도 S&P 500 시장폭이 개선되면 'AI가 지수를 떠받친다'는 가설을 재검토한다.",
-      "미·이란 협상이 실제 공급 정상화 조치로 이어지면 유가 위험순위를 낮춘다.",
-      "다음 센서에서 broad fallback까지 실패하면 Google News 상태를 실제 장애 가능성이 높은 WARN/CRITICAL로 다시 평가한다.",
-      "다음 국내 거래세션에서 미국 AI 흐름이 국내 반도체·AI 인프라 거래대금으로 연결되지 않으면 미국→한국 전달 가설을 반증한다."
+      "10년물이 안정되고 유가가 내려가며 상승 업종 수가 넓어지면 'AI 선택적 강세+매크로 압박' 해석을 낮춘다.",
+      "Google News broad fallback까지 실패하면 현재 경보를 오탐이 아니라 실제 데이터 장애로 재평가한다.",
+      "다음 국내 실거래 세션에서 미국 AI 강세가 국내 관련주 거래대금으로 이어지지 않으면 미국→한국 전달 가설을 반증한다."
     ],
     "problem_states": [
       {
         "id": "six-minute-sensor-gap",
         "status": "resolved",
-        "evidence": "직전 scheduled sensor 성공; 현재는 장외 새 관측 없음",
+        "evidence": "03:00 A 이전 새 6분 관측 커밋 확인",
         "verify_after": null
       },
       {
         "id": "supervisor-result-trigger-selection",
         "status": "blocked",
-        "evidence": "workflow가 filesystem mtime 선택; processed_at 역행 방어만 존재",
+        "evidence": "기존 상태 승계",
         "verify_after": "when workflow edit is permitted"
       },
       {
@@ -164,32 +150,20 @@
       {
         "id": "macro-runtime-empty",
         "status": "investigating",
-        "evidence": "마지막 health에서 values empty가 11회 누적",
-        "verify_after": "next sensor observation"
-      },
-      {
-        "id": "google-news-degraded",
-        "status": "investigating",
-        "evidence": "세부 5/7 empty지만 broad_fallback ok count=30; 현재 CRITICAL은 과장 가능성 높음",
-        "verify_after": "next sensor observation"
+        "evidence": "health.py가 장외/주말에도 empty를 WARN 처리",
+        "verify_after": "after severity patch"
       },
       {
         "id": "google-news-health-fallback-severity",
         "status": "blocked",
-        "evidence": "NOTICE 제한 패치 시도가 GitHub 안전검사에 차단됨",
-        "verify_after": "when a permitted code-edit path becomes available"
-      },
-      {
-        "id": "telegram-report-format",
-        "status": "blocked",
-        "evidence": "직전 A에서 확인한 1시간 표기/summary 절단 문제 미수정",
-        "verify_after": "when a permitted code-edit path becomes available"
+        "evidence": "health.py에서 broad fallback 성공을 severity에 반영하지 않는 위치 확인; 쓰기 안전검사 차단",
+        "verify_after": "when code edit is permitted"
       }
     ]
   },
   "supervisor_recent": {
     "schema_version": 1,
-    "updated_at": "2026-09-25T21:56:36.240221+09:00",
+    "updated_at": "2026-09-26T02:47:44.150451+09:00",
     "batch_size": 10,
     "observations": [
       {
@@ -6634,12 +6608,526 @@
           "discovery:degraded",
           "market:outside_domestic_monitor_window"
         ]
+      },
+      {
+        "schema_version": 1,
+        "observation_id": "obs-20260926T024744+0900-36169299976-1",
+        "observed_at": "2026-09-26T02:47:44.150451+09:00",
+        "source": {
+          "repository": "juhwan7/stock-autoresearch",
+          "workflow": "6분 감독 관측 큐",
+          "run_id": "36169299976",
+          "run_attempt": "1",
+          "head_sha": "05a1aa5308b6dfb040186ae0f3829148b853c3b5",
+          "ref_name": "main"
+        },
+        "queue": {
+          "batch_size": 10,
+          "pending_before_append": 0,
+          "last_processed_observation_id": "obs-20260925T215636+0900-36137826255-1",
+          "pending_after_append": 1
+        },
+        "validation": {
+          "status": "ok",
+          "compile": "ok",
+          "pytest": "ok",
+          "diff_check": "ok"
+        },
+        "steps": {
+          "toss_fetch": "success",
+          "toss_summary": "success",
+          "health": "success",
+          "dashboard": "success",
+          "market_discovery": "success",
+          "public_batch_market": "success",
+          "market_sensor_repair": "success",
+          "risk_sensor_repair": "success",
+          "regression_refresh": "success"
+        },
+        "health": {
+          "status": "CRITICAL",
+          "generated_at": "2026-09-26T02:47:42.030860+09:00",
+          "issues": [
+            {
+              "component": "macro",
+              "code": "unavailable",
+              "severity": "CRITICAL",
+              "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+            },
+            {
+              "component": "discovery",
+              "code": "google-news-degraded",
+              "severity": "CRITICAL",
+              "message": "Google News 탐색 5/7개 그룹이 비어 있거나 오류"
+            }
+          ]
+        },
+        "regression": {
+          "status": "COLLECTING",
+          "generated_at": "2026-09-25T17:47:41.408971+00:00",
+          "quarantine_count": 0,
+          "rolled_back_count": 0
+        },
+        "market_discovery": {
+          "generated_at": "2026-09-26T02:47:33.101620+09:00",
+          "item_count": 34,
+          "new_item_count": 13,
+          "topic_counts": {
+            "kr_corporate_events": 4,
+            "broad_fallback": 30
+          },
+          "trending_terms": [
+            {
+              "term": "유가",
+              "count": 8,
+              "publisher_count": 5,
+              "previous_count": 6,
+              "delta": 2,
+              "score": 23,
+              "examples": [
+                "[외환-마감] 엔화 강세·유가 하락에…8.50원↓",
+                "유가 꺾이자 美 국채금리 진정…증시 선물 반등",
+                "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞"
+              ]
+            },
+            {
+              "term": "상폐",
+              "count": 5,
+              "publisher_count": 5,
+              "previous_count": 7,
+              "delta": -2,
+              "score": 15,
+              "examples": [
+                "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+                "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
+                "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도"
+              ]
+            },
+            {
+              "term": "환율",
+              "count": 4,
+              "publisher_count": 4,
+              "previous_count": 3,
+              "delta": 1,
+              "score": 13,
+              "examples": [
+                "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
+                "美 국채금리 5% 쇼크, 한국 덮치나… 환율·증시·대출금리 ‘경고등’",
+                "'반도체 랠리'에 코스피 7,100선 재돌파...환율 1,340원대 급락"
+              ]
+            },
+            {
+              "term": "코스닥서",
+              "count": 4,
+              "publisher_count": 4,
+              "previous_count": 4,
+              "delta": 0,
+              "score": 12,
+              "examples": [
+                "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+                "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
+                "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도"
+              ]
+            },
+            {
+              "term": "시총",
+              "count": 4,
+              "publisher_count": 4,
+              "previous_count": 6,
+              "delta": -2,
+              "score": 12,
+              "examples": [
+                "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞",
+                "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
+                "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도"
+              ]
+            },
+            {
+              "term": "달러",
+              "count": 3,
+              "publisher_count": 3,
+              "previous_count": 0,
+              "delta": 3,
+              "score": 12,
+              "examples": [
+                "Leader’s Advantage Acquisition Corp., 나스닥에서 1억 5천만 달러 IPO 완료",
+                "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞",
+                "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개"
+              ]
+            },
+            {
+              "term": "금리",
+              "count": 4,
+              "publisher_count": 3,
+              "previous_count": 4,
+              "delta": 0,
+              "score": 11,
+              "examples": [
+                "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞",
+                "금리 상승과 100달러 유가에도 주식이 버틴 이유? 이 두 단어로 설명된다.",
+                "[뉴욕개장] AI 훈풍에 유가·금리 부담 상쇄…보합 출발"
+              ]
+            },
+            {
+              "term": "추석",
+              "count": 3,
+              "publisher_count": 2,
+              "previous_count": 0,
+              "delta": 3,
+              "score": 11,
+              "examples": [
+                "[추석 이후 증시] 장문수 센터장 \"10월까진 투심 부진, 코스피 연말 8400 목표\"",
+                "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]",
+                "[추석 이후 증시] 황승택 센터장 \"AI인프라 투자 업종 유망. 기존 주도주 중심 대응\""
+              ]
+            },
+            {
+              "term": "이슈",
+              "count": 3,
+              "publisher_count": 3,
+              "previous_count": 3,
+              "delta": 0,
+              "score": 9,
+              "examples": [
+                "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
+                "신한투자증권, 종목 이슈·미국 공시 AI가 실시간 정리",
+                "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]"
+              ]
+            },
+            {
+              "term": "위기",
+              "count": 3,
+              "publisher_count": 3,
+              "previous_count": 4,
+              "delta": -1,
+              "score": 9,
+              "examples": [
+                "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+                "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+                "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기"
+              ]
+            },
+            {
+              "term": "속출",
+              "count": 3,
+              "publisher_count": 3,
+              "previous_count": 4,
+              "delta": -1,
+              "score": 9,
+              "examples": [
+                "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+                "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
+                "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
+              ]
+            },
+            {
+              "term": "이후",
+              "count": 3,
+              "publisher_count": 2,
+              "previous_count": 3,
+              "delta": 0,
+              "score": 8,
+              "examples": [
+                "[추석 이후 증시] 장문수 센터장 \"10월까진 투심 부진, 코스피 연말 8400 목표\"",
+                "미국-이란, 호르무즈 해협 합의 논의 보도에 유가 급등세 이후 하락",
+                "[추석 이후 증시] 황승택 센터장 \"AI인프라 투자 업종 유망. 기존 주도주 중심 대응\""
+              ]
+            },
+            {
+              "term": "협상",
+              "count": 2,
+              "publisher_count": 2,
+              "previous_count": 0,
+              "delta": 2,
+              "score": 8,
+              "examples": [
+                "미국·이란 외교 협상 주목에 국제유가 하락…WTI 93.32달러",
+                "美·이란 협상 기대에 유가 하락…공급 불안은 여전"
+              ]
+            },
+            {
+              "term": "이유",
+              "count": 2,
+              "publisher_count": 2,
+              "previous_count": 0,
+              "delta": 2,
+              "score": 8,
+              "examples": [
+                "코스피 상승세 ‘지지부진한 이유’ 있었다…서학개미 미장 보유액 2천억 재진입",
+                "금리 상승과 100달러 유가에도 주식이 버틴 이유? 이 두 단어로 설명된다."
+              ]
+            },
+            {
+              "term": "이란",
+              "count": 2,
+              "publisher_count": 2,
+              "previous_count": 0,
+              "delta": 2,
+              "score": 8,
+              "examples": [
+                "미국·이란 외교 협상 주목에 국제유가 하락…WTI 93.32달러",
+                "美·이란 협상 기대에 유가 하락…공급 불안은 여전"
+              ]
+            },
+            {
+              "term": "우려",
+              "count": 2,
+              "publisher_count": 2,
+              "previous_count": 0,
+              "delta": 2,
+              "score": 8,
+              "examples": [
+                "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
+                "유럽 증시 소폭 상승, 유가 안정세가 금리 급등 우려 상쇄"
+              ]
+            },
+            {
+              "term": "신한투자증권",
+              "count": 2,
+              "publisher_count": 2,
+              "previous_count": 0,
+              "delta": 2,
+              "score": 8,
+              "examples": [
+                "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
+                "신한투자증권, 종목 이슈·미국 공시 AI가 실시간 정리"
+              ]
+            },
+            {
+              "term": "신한투자",
+              "count": 2,
+              "publisher_count": 2,
+              "previous_count": 0,
+              "delta": 2,
+              "score": 8,
+              "examples": [
+                "\"종목 이슈부터 미 공시까지\"…신한투자, 개인 맞춤형 'AI PB' 출격",
+                "[증권업 소식] 키움·KB·신한투자·대신·한국투자·카카오페이증권"
+              ]
+            },
+            {
+              "term": "시총미달",
+              "count": 2,
+              "publisher_count": 2,
+              "previous_count": 0,
+              "delta": 2,
+              "score": 8,
+              "examples": [
+                "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+                "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
+              ]
+            },
+            {
+              "term": "선물",
+              "count": 2,
+              "publisher_count": 2,
+              "previous_count": 0,
+              "delta": 2,
+              "score": 8,
+              "examples": [
+                "유가 꺾이자 美 국채금리 진정…증시 선물 반등",
+                "급등하는 국채 수익률과 유가, 미국 증시 선물 하락 압박"
+              ]
+            }
+          ],
+          "new_dart_filings": [],
+          "official_web_candidates": [],
+          "toss_market": {
+            "available": true,
+            "captured_at": "2026-09-25T23:36:10.304937+09:00",
+            "top_turnover": [],
+            "minute_burst_leaders": [],
+            "top10_share": null
+          },
+          "sector_selection": {
+            "mode": "dynamic",
+            "fixed_sector_whitelist": false,
+            "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 1시간 AI가 주도 섹터를 선택"
+          },
+          "naver_indices": {
+            "KOSPI": "7,080.92",
+            "KOSDAQ": "844.48",
+            "KOSPI200": "1,126.12"
+          },
+          "source_summary": {
+            "ok_or_partial": 3,
+            "failed": 0,
+            "degraded": 5
+          },
+          "top_new_items": [
+            {
+              "topic": "broad_fallback",
+              "title": "코스피 상승세 ‘지지부진한 이유’ 있었다…서학개미 미장 보유액 2천억 재진입",
+              "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9OZ0pZdm9ranJ2X0RFVUtoZXNqc2FlbWlfTjNReXoybWFNRHYxRFVSSlZCVTdRTzdjUl9Nb0FKb0dxNy13TjZwRXJQbzJhNkQ1?oc=5",
+              "published_at": "Fri, 25 Sep 2026 15:48:42 GMT",
+              "publisher": "문화일보",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "broad_fallback",
+              "title": "코스피 상승 돕던 삼전닉스 자사주 매입, 다음 달 종료…수급 부담 커지나",
+              "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5vVFVvUDZ0a1BmR3ZkZ1ZicnlUZE8tYWx2bDEtak55X003RkRGVUowRTRCRExJeUp6YlQ1dmdudnBFX0VfcXgybFZpMFJlQXBBSmFYa1FqUTZWVDJ1cEM3WUhQWQ?oc=5",
+              "published_at": "Fri, 25 Sep 2026 15:00:03 GMT",
+              "publisher": "더구루",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "broad_fallback",
+              "title": "유가 꺾이자 美 국채금리 진정…증시 선물 반등",
+              "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQMnlQaTBRbGxNV1dnNFp0RmJQU2hGeFV1eG5GcmFCS3l6M2VXQWVIZ0hCbXVVZVlrMTJ6ZWZiTVNsRXM3YXEwN3BGUER6SXM0Q2x2eDlUdG9peTNhdWt2MExtQm9wSnNUOU9tRmlmWDZiZE9vMl9COUgxWnRHb0xPSWduRFpteHRp?oc=5",
+              "published_at": "Fri, 25 Sep 2026 17:00:00 GMT",
+              "publisher": "글로벌이코노믹",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "broad_fallback",
+              "title": "Leader’s Advantage Acquisition Corp., 나스닥에서 1억 5천만 달러 IPO 완료",
+              "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5xWUtUTTlBdGU4XzBmQk9vaVkyVFVFU1hFSTYxeThIMV96YXBPVWNnTXAxcDdQQWQtc3JLTThCV3JmWXZSNzljSVJlYktlcy1ZNERjaVdNX3d5eklnbzRGVThLenotY25NVHBWZllGWWlQUEdvYkc5Sw?oc=5",
+              "published_at": "Fri, 25 Sep 2026 17:43:00 GMT",
+              "publisher": "Investing.com 한국어",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "broad_fallback",
+              "title": "미국·이란 외교 협상 주목에 국제유가 하락…WTI 93.32달러",
+              "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFB6ZkxjZF9Ub21ieVFXRkdDNDMtd3dYb1JnNmlBazRBOGlKbXNsanJmRzEzMnEtWGpJVEltZURTcjJITmR6ZWphZEJELVJfeUlp?oc=5",
+              "published_at": "Fri, 25 Sep 2026 15:00:44 GMT",
+              "publisher": "블루밍비트",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "broad_fallback",
+              "title": "美·이란 협상 기대에 유가 하락…공급 불안은 여전",
+              "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNc19RZHVndWl3SDc5cmNTdURqVGY5YzFPQ2VLbk9hZ0Y3RUJIaWxLbE13V2w5cWZaSXNZZDg4eG02cUZFNEdKaXZVa2tIZi1KN0hFWnZYZFEweHNZWGdTei01S3RXdjIxaHZvdFhPN2ZJeFlESjhQZi16cnpfblg1RExucGxmenpo?oc=5",
+              "published_at": "Fri, 25 Sep 2026 16:00:00 GMT",
+              "publisher": "글로벌이코노믹",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "broad_fallback",
+              "title": "유럽증시, 다시 살아난 종전 기대감에 대부분 상승… 국제유가도 하락",
+              "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBta2txQjJ6Qm5pekNFclc3RVdER2FWSzM1Y1FiYXdZSkduejMtN0lKLXVDVWwyVTVxU3VteUdFeGwyVkV5ZDN0ZllUVE1HR1J1ZUxnSGVocE53WlB2?oc=5",
+              "published_at": "Fri, 25 Sep 2026 17:33:00 GMT",
+              "publisher": "뉴스핌",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "broad_fallback",
+              "title": "[뉴욕개장] AI 훈풍에 유가·금리 부담 상쇄…보합 출발",
+              "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE05RmZHdGRmYVItSXRzMVA2cUNQUEdiekxsYVMweGZZd2hJSkxGaE5LWW1iSHljYlE5T1pUX0ZISGhVVUZyU01NNW4ycGxzdThtTFQxOWk0S1TSAV5BVV95cUxQSHYzd05BR0JBY09yUm9VNVkxRm55aU4tQlJOMk15OVVWQ1pRSjZVN2pXaGEzVExWQ29oQW56RHNTRkRRLTFjQ3AtY2ZzSmkteTAtRHI0WWxIN2pVemp3?oc=5",
+              "published_at": "Fri, 25 Sep 2026 14:05:34 GMT",
+              "publisher": "뉴스1",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "broad_fallback",
+              "title": "코스피, 반도체 타고 7100선 돌파…'배당' 삼전 3%대↑[개장시황]",
+              "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBhVG1tVzVtYXBpWlFWdFJTbDdjZ2xCNG96bFdMN0JSc3ZFQVJhb1dhR2Vlby1MclMtUE1KUnhCbnRrbEhJRl9kOHFuU28yZkk?oc=5",
+              "published_at": "Wed, 23 Sep 2026 00:37:33 GMT",
+              "publisher": "v.daum.net",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "broad_fallback",
+              "title": "'반도체 랠리'에 코스피 7,100선 재돌파...환율 1,340원대 급락",
+              "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBURFNrZnNvdWdnTS1RMGNfTnVMd29aWDJ5bTVqdHhTWVkwMEJnQk1iYUZBeVhib2hUSDlPRW9VTzNaRE55cmtSeWpXWGVYQ19pdHZaTHJvVEZVVHFsaGc?oc=5",
+              "published_at": "Wed, 23 Sep 2026 01:59:00 GMT",
+              "publisher": "YTN",
+              "discovery_source": "google_news_rss"
+            }
+          ],
+          "handoff_queries": [
+            "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+            "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+            "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+            "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+            "유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "상폐 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "환율 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "코스닥서 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "시총 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "달러 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "금리 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "추석 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+          ]
+        },
+        "public_batch_market": {
+          "generated_at": "2026-09-26T02:47:27.551718+09:00",
+          "status": "unavailable",
+          "provider": "naver_public",
+          "exact_1m_bars": false,
+          "elapsed_minutes_from_previous": null,
+          "interval_leaders": [],
+          "one_minute_samples_available": false,
+          "minute_amount_exact": false,
+          "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
+          "minute_sample_ticker_count": 0,
+          "current_top50_count": 0,
+          "tracked_universe_count": 0,
+          "dropped_from_current_top50_count": 0,
+          "tracked_outside_top50_with_samples": 0,
+          "minute_samples_by_ticker": {},
+          "limitations": [
+            "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+            "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
+            "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
+            "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
+            "최근 6개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+            "6분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+          ]
+        },
+        "market": {
+          "generated_at": "2026-09-26T02:47:40.139112+09:00",
+          "source_status": "outside_domestic_monitor_window",
+          "provider": "provider_chain",
+          "fallback_used": null
+        },
+        "toss": {
+          "available": true,
+          "captured_at": "2026-09-25T23:36:10.304937+09:00",
+          "collector": {
+            "subscription_count": 0,
+            "rejected_count": 0,
+            "last_message_at": null,
+            "last_universe_refresh": "2026-09-25T23:36:10.304937+09:00"
+          }
+        },
+        "user_feedback": {
+          "pending_count": 0,
+          "latest_pending_comment_id": null
+        },
+        "git": {
+          "head_sha": "05a1aa5308b6dfb040186ae0f3829148b853c3b5",
+          "latest_commit_changed_files": [
+            "data/supervisor/latest-report.json",
+            "data/supervisor/state.json"
+          ]
+        },
+        "previous_workflow_run": {
+          "id": 36167865452,
+          "name": "Supervisor 결과 적용 및 Telegram",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "created_at": "2026-09-25T17:33:23Z",
+          "updated_at": "2026-09-25T17:33:47Z",
+          "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36167865452",
+          "head_sha": "864e356f3c2aa7ce00d6c6def41c839750cf7469"
+        },
+        "hypothesis_verification": {
+          "due": []
+        },
+        "signals": [
+          "health:CRITICAL",
+          "discovery:degraded",
+          "market:outside_domestic_monitor_window"
+        ]
       }
     ]
   },
   "discovery": {
     "schema_version": 1,
-    "generated_at": "2026-09-26T02:47:33.101620+09:00",
+    "generated_at": "2026-09-26T05:46:42.618261+09:00",
     "purpose": "6분 비AI 시장·뉴스 단서 센서. 1시간 ChatGPT 심층리서치의 탐색 힌트이며 사실 확정 엔진이 아님.",
     "source_status": {
       "google_news:kr_market_broad": {
@@ -6714,75 +7202,75 @@
     "trending_terms": [
       {
         "term": "유가",
-        "count": 8,
-        "publisher_count": 5,
-        "previous_count": 6,
+        "count": 10,
+        "publisher_count": 6,
+        "previous_count": 8,
         "delta": 2,
-        "score": 23,
+        "score": 28,
         "examples": [
-          "[외환-마감] 엔화 강세·유가 하락에…8.50원↓",
-          "유가 꺾이자 美 국채금리 진정…증시 선물 반등",
-          "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞"
+          "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+          "[속보]나스닥 0.5% 상승 마감…국채금리 상승에도 유가 하락",
+          "유가 꺾이자 美 국채금리 진정…증시 선물 반등"
         ]
       },
       {
-        "term": "상폐",
+        "term": "호르무즈",
         "count": 5,
         "publisher_count": 5,
-        "previous_count": 7,
-        "delta": -2,
-        "score": 15,
+        "previous_count": 0,
+        "delta": 5,
+        "score": 20,
         "examples": [
-          "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-          "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
-          "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도"
+          "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+          "[뉴욕유가] 호르무즈 해법 기대감에 사흘만에 하락…WTI, 2.33%↓",
+          "[뉴욕증시] '호르무즈 낙관론'에 국제유가 하락...3대 지수 상승"
         ]
       },
       {
-        "term": "환율",
-        "count": 4,
+        "term": "뉴욕증시",
+        "count": 5,
         "publisher_count": 4,
-        "previous_count": 3,
-        "delta": 1,
-        "score": 13,
+        "previous_count": 0,
+        "delta": 5,
+        "score": 19,
         "examples": [
-          "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
-          "美 국채금리 5% 쇼크, 한국 덮치나… 환율·증시·대출금리 ‘경고등’",
-          "'반도체 랠리'에 코스피 7,100선 재돌파...환율 1,340원대 급락"
+          "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+          "뉴욕증시, 유가 하락에 3대 지수 상승…다우 0.93%↑",
+          "[뉴욕증시] '호르무즈 낙관론'에 국제유가 하락...3대 지수 상승"
         ]
       },
       {
-        "term": "코스닥서",
+        "term": "나스닥",
         "count": 4,
         "publisher_count": 4,
-        "previous_count": 4,
-        "delta": 0,
-        "score": 12,
+        "previous_count": 0,
+        "delta": 4,
+        "score": 16,
         "examples": [
-          "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-          "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
-          "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도"
+          "[속보]나스닥 0.5% 상승 마감…국채금리 상승에도 유가 하락",
+          "[뉴욕마감]국채금리 급등에도 AI주 랠리…나스닥 0.48%↑",
+          "뉴욕증시, 상승세로 마감…나스닥 0.48%↑"
         ]
       },
       {
-        "term": "시총",
+        "term": "협상",
         "count": 4,
         "publisher_count": 4,
-        "previous_count": 6,
-        "delta": -2,
-        "score": 12,
+        "previous_count": 2,
+        "delta": 2,
+        "score": 14,
         "examples": [
-          "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞",
-          "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
-          "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도"
+          "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+          "국제유가, 미·이란 협상 기대감에 2%대 하락",
+          "미국-이란 협상·호르무즈 재개 기대에 유가 하락…WTI 2.3%↓"
         ]
       },
       {
         "term": "달러",
-        "count": 3,
+        "count": 4,
         "publisher_count": 3,
-        "previous_count": 0,
-        "delta": 3,
+        "previous_count": 3,
+        "delta": 1,
         "score": 12,
         "examples": [
           "Leader’s Advantage Acquisition Corp., 나스닥에서 1억 5천만 달러 IPO 완료",
@@ -6791,29 +7279,94 @@
         ]
       },
       {
-        "term": "금리",
-        "count": 4,
+        "term": "하락에",
+        "count": 3,
         "publisher_count": 3,
-        "previous_count": 4,
-        "delta": 0,
-        "score": 11,
+        "previous_count": 0,
+        "delta": 3,
+        "score": 12,
         "examples": [
-          "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞",
-          "금리 상승과 100달러 유가에도 주식이 버틴 이유? 이 두 단어로 설명된다.",
-          "[뉴욕개장] AI 훈풍에 유가·금리 부담 상쇄…보합 출발"
+          "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+          "[외환-마감] 엔화 강세·유가 하락에…8.50원↓",
+          "뉴욕증시, 유가 하락에 3대 지수 상승…다우 0.93%↑"
         ]
       },
       {
-        "term": "추석",
+        "term": "마감",
+        "count": 3,
+        "publisher_count": 3,
+        "previous_count": 0,
+        "delta": 3,
+        "score": 12,
+        "examples": [
+          "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+          "[속보]나스닥 0.5% 상승 마감…국채금리 상승에도 유가 하락",
+          "뉴욕증시, 상승세로 마감…나스닥 0.48%↑"
+        ]
+      },
+      {
+        "term": "기대감에",
+        "count": 3,
+        "publisher_count": 3,
+        "previous_count": 0,
+        "delta": 3,
+        "score": 12,
+        "examples": [
+          "국제유가, 미·이란 협상 기대감에 2%대 하락",
+          "[뉴욕유가] 호르무즈 해법 기대감에 사흘만에 하락…WTI, 2.33%↓",
+          "유럽증시, 다시 살아난 종전 기대감에 대부분 상승… 국제유가도 하락"
+        ]
+      },
+      {
+        "term": "국채금리",
+        "count": 3,
+        "publisher_count": 3,
+        "previous_count": 0,
+        "delta": 3,
+        "score": 12,
+        "examples": [
+          "[속보]나스닥 0.5% 상승 마감…국채금리 상승에도 유가 하락",
+          "유가 꺾이자 美 국채금리 진정…증시 선물 반등",
+          "[뉴욕마감]국채금리 급등에도 AI주 랠리…나스닥 0.48%↑"
+        ]
+      },
+      {
+        "term": "국제유가",
+        "count": 3,
+        "publisher_count": 3,
+        "previous_count": 0,
+        "delta": 3,
+        "score": 12,
+        "examples": [
+          "국제유가, 미·이란 협상 기대감에 2%대 하락",
+          "[뉴욕증시] '호르무즈 낙관론'에 국제유가 하락...3대 지수 상승",
+          "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]"
+        ]
+      },
+      {
+        "term": "미달",
         "count": 3,
         "publisher_count": 2,
         "previous_count": 0,
         "delta": 3,
         "score": 11,
         "examples": [
-          "[추석 이후 증시] 장문수 센터장 \"10월까진 투심 부진, 코스피 연말 8400 목표\"",
-          "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]",
-          "[추석 이후 증시] 황승택 센터장 \"AI인프라 투자 업종 유망. 기존 주도주 중심 대응\""
+          "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
+          "사일렉시온 테라퓨틱스, 나스닥서 '1달러 미만' 상장유지 요건 미달 통지 수령",
+          "샌유웨이브 헬스, 나스닥 상장유지 요건 미달 통지 수령"
+        ]
+      },
+      {
+        "term": "코스닥서",
+        "count": 3,
+        "publisher_count": 3,
+        "previous_count": 4,
+        "delta": -1,
+        "score": 9,
+        "examples": [
+          "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+          "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
+          "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도"
         ]
       },
       {
@@ -6830,130 +7383,45 @@
         ]
       },
       {
-        "term": "위기",
+        "term": "시총",
         "count": 3,
         "publisher_count": 3,
         "previous_count": 4,
         "delta": -1,
         "score": 9,
         "examples": [
-          "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-          "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-          "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기"
+          "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
+          "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞",
+          "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도"
         ]
       },
       {
-        "term": "속출",
+        "term": "상폐",
         "count": 3,
         "publisher_count": 3,
-        "previous_count": 4,
-        "delta": -1,
+        "previous_count": 5,
+        "delta": -2,
         "score": 9,
         "examples": [
           "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
           "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출",
-          "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
+          "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도"
         ]
       },
       {
-        "term": "이후",
-        "count": 3,
-        "publisher_count": 2,
-        "previous_count": 3,
-        "delta": 0,
-        "score": 8,
-        "examples": [
-          "[추석 이후 증시] 장문수 센터장 \"10월까진 투심 부진, 코스피 연말 8400 목표\"",
-          "미국-이란, 호르무즈 해협 합의 논의 보도에 유가 급등세 이후 하락",
-          "[추석 이후 증시] 황승택 센터장 \"AI인프라 투자 업종 유망. 기존 주도주 중심 대응\""
-        ]
-      },
-      {
-        "term": "협상",
+        "term": "지수",
         "count": 2,
         "publisher_count": 2,
         "previous_count": 0,
         "delta": 2,
         "score": 8,
         "examples": [
-          "미국·이란 외교 협상 주목에 국제유가 하락…WTI 93.32달러",
-          "美·이란 협상 기대에 유가 하락…공급 불안은 여전"
+          "뉴욕증시, 유가 하락에 3대 지수 상승…다우 0.93%↑",
+          "[뉴욕증시] '호르무즈 낙관론'에 국제유가 하락...3대 지수 상승"
         ]
       },
       {
-        "term": "이유",
-        "count": 2,
-        "publisher_count": 2,
-        "previous_count": 0,
-        "delta": 2,
-        "score": 8,
-        "examples": [
-          "코스피 상승세 ‘지지부진한 이유’ 있었다…서학개미 미장 보유액 2천억 재진입",
-          "금리 상승과 100달러 유가에도 주식이 버틴 이유? 이 두 단어로 설명된다."
-        ]
-      },
-      {
-        "term": "이란",
-        "count": 2,
-        "publisher_count": 2,
-        "previous_count": 0,
-        "delta": 2,
-        "score": 8,
-        "examples": [
-          "미국·이란 외교 협상 주목에 국제유가 하락…WTI 93.32달러",
-          "美·이란 협상 기대에 유가 하락…공급 불안은 여전"
-        ]
-      },
-      {
-        "term": "우려",
-        "count": 2,
-        "publisher_count": 2,
-        "previous_count": 0,
-        "delta": 2,
-        "score": 8,
-        "examples": [
-          "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
-          "유럽 증시 소폭 상승, 유가 안정세가 금리 급등 우려 상쇄"
-        ]
-      },
-      {
-        "term": "신한투자증권",
-        "count": 2,
-        "publisher_count": 2,
-        "previous_count": 0,
-        "delta": 2,
-        "score": 8,
-        "examples": [
-          "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
-          "신한투자증권, 종목 이슈·미국 공시 AI가 실시간 정리"
-        ]
-      },
-      {
-        "term": "신한투자",
-        "count": 2,
-        "publisher_count": 2,
-        "previous_count": 0,
-        "delta": 2,
-        "score": 8,
-        "examples": [
-          "\"종목 이슈부터 미 공시까지\"…신한투자, 개인 맞춤형 'AI PB' 출격",
-          "[증권업 소식] 키움·KB·신한투자·대신·한국투자·카카오페이증권"
-        ]
-      },
-      {
-        "term": "시총미달",
-        "count": 2,
-        "publisher_count": 2,
-        "previous_count": 0,
-        "delta": 2,
-        "score": 8,
-        "examples": [
-          "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-          "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
-        ]
-      },
-      {
-        "term": "선물",
+        "term": "반등",
         "count": 2,
         "publisher_count": 2,
         "previous_count": 0,
@@ -6961,7 +7429,31 @@
         "score": 8,
         "examples": [
           "유가 꺾이자 美 국채금리 진정…증시 선물 반등",
-          "급등하는 국채 수익률과 유가, 미국 증시 선물 하락 압박"
+          "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞"
+        ]
+      },
+      {
+        "term": "미국-이란",
+        "count": 2,
+        "publisher_count": 2,
+        "previous_count": 0,
+        "delta": 2,
+        "score": 8,
+        "examples": [
+          "미국-이란 협상·호르무즈 재개 기대에 유가 하락…WTI 2.3%↓",
+          "미국-이란, 호르무즈 해협 합의 논의 보도에 유가 급등세 이후 하락"
+        ]
+      },
+      {
+        "term": "동전주",
+        "count": 2,
+        "publisher_count": 2,
+        "previous_count": 0,
+        "delta": 2,
+        "score": 8,
+        "examples": [
+          "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+          "‘동전주 투자 주의’…시총 미달 상폐, 코스닥서 속출"
         ]
       }
     ],
@@ -6970,12 +7462,12 @@
     "official_web_candidates": [],
     "public_batch_market": {
       "available": false,
-      "generated_at": "2026-09-26T02:47:27.551718+09:00",
+      "generated_at": "2026-09-26T05:46:38.237090+09:00",
       "status": "unavailable",
       "provider": "naver_public",
       "exact_1m_bars": false,
       "amount_method": "cumulative_trading_value_delta",
-      "elapsed_minutes_from_previous": null,
+      "elapsed_minutes_from_previous": 179.17808953333332,
       "interval_leaders": [],
       "one_minute_samples_available": false,
       "minute_amount_exact": false,
@@ -6997,128 +7489,112 @@
     },
     "toss_market": {
       "available": true,
-      "captured_at": "2026-09-25T23:36:10.304937+09:00",
+      "captured_at": "2026-09-26T03:52:51.552163+09:00",
       "top_turnover": [],
       "minute_burst_leaders": [],
       "top10_share": null
     },
     "item_count": 34,
-    "new_item_count": 13,
+    "new_item_count": 12,
     "new_items": [
       {
         "topic": "broad_fallback",
-        "title": "코스피 상승세 ‘지지부진한 이유’ 있었다…서학개미 미장 보유액 2천억 재진입",
-        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9OZ0pZdm9ranJ2X0RFVUtoZXNqc2FlbWlfTjNReXoybWFNRHYxRFVSSlZCVTdRTzdjUl9Nb0FKb0dxNy13TjZwRXJQbzJhNkQ1?oc=5",
-        "published_at": "Fri, 25 Sep 2026 15:48:42 GMT",
-        "publisher": "문화일보",
+        "title": "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1qTW1OZ0VOT2FUaW9WekJ3cHhGd0Y1eU1EWHJfcWstQnU1Y0JfRlM2a2xCTnJhbGM0M0ZKbS04YlZyZ2pDWHMxcTY1NkV5Rl9PWEZTLWhWUlc0OUnSAWBBVV95cUxNX19EUV9hU1p1QUtBcGRTNUU3UFlDZ0FJaTJvLUptVERGWks3ZHhxRUVLVDNJX0Zfc3JBS2JZdk5pQmpyNHdiNU9OUUxDczFfVWFlaV92ZUo1SmxmZ0JUZW0?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:17:48 GMT",
+        "publisher": "연합뉴스",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "코스피 상승 돕던 삼전닉스 자사주 매입, 다음 달 종료…수급 부담 커지나",
-        "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5vVFVvUDZ0a1BmR3ZkZ1ZicnlUZE8tYWx2bDEtak55X003RkRGVUowRTRCRExJeUp6YlQ1dmdudnBFX0VfcXgybFZpMFJlQXBBSmFYa1FqUTZWVDJ1cEM3WUhQWQ?oc=5",
-        "published_at": "Fri, 25 Sep 2026 15:00:03 GMT",
-        "publisher": "더구루",
+        "title": "국제유가, 미·이란 협상 기대감에 2%대 하락",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFA3TmZJemRGSWJrOWVDQjk0WVl1Q0NtNlVLYXZEcFdqeDlDaTg0NjlkQW56LVo1ZEZIZVQ5RGJmT1h0YjluQ1Z4MktrN2NORER4NlY3NmY2ZW9hcHM?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:16:00 GMT",
+        "publisher": "KBS 뉴스",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "유가 꺾이자 美 국채금리 진정…증시 선물 반등",
-        "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQMnlQaTBRbGxNV1dnNFp0RmJQU2hGeFV1eG5GcmFCS3l6M2VXQWVIZ0hCbXVVZVlrMTJ6ZWZiTVNsRXM3YXEwN3BGUER6SXM0Q2x2eDlUdG9peTNhdWt2MExtQm9wSnNUOU9tRmlmWDZiZE9vMl9COUgxWnRHb0xPSWduRFpteHRp?oc=5",
-        "published_at": "Fri, 25 Sep 2026 17:00:00 GMT",
-        "publisher": "글로벌이코노믹",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "Leader’s Advantage Acquisition Corp., 나스닥에서 1억 5천만 달러 IPO 완료",
-        "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5xWUtUTTlBdGU4XzBmQk9vaVkyVFVFU1hFSTYxeThIMV96YXBPVWNnTXAxcDdQQWQtc3JLTThCV3JmWXZSNzljSVJlYktlcy1ZNERjaVdNX3d5eklnbzRGVThLenotY25NVHBWZllGWWlQUEdvYkc5Sw?oc=5",
-        "published_at": "Fri, 25 Sep 2026 17:43:00 GMT",
-        "publisher": "Investing.com 한국어",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "미국·이란 외교 협상 주목에 국제유가 하락…WTI 93.32달러",
-        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFB6ZkxjZF9Ub21ieVFXRkdDNDMtd3dYb1JnNmlBazRBOGlKbXNsanJmRzEzMnEtWGpJVEltZURTcjJITmR6ZWphZEJELVJfeUlp?oc=5",
-        "published_at": "Fri, 25 Sep 2026 15:00:44 GMT",
-        "publisher": "블루밍비트",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "美·이란 협상 기대에 유가 하락…공급 불안은 여전",
-        "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNc19RZHVndWl3SDc5cmNTdURqVGY5YzFPQ2VLbk9hZ0Y3RUJIaWxLbE13V2w5cWZaSXNZZDg4eG02cUZFNEdKaXZVa2tIZi1KN0hFWnZYZFEweHNZWGdTei01S3RXdjIxaHZvdFhPN2ZJeFlESjhQZi16cnpfblg1RExucGxmenpo?oc=5",
-        "published_at": "Fri, 25 Sep 2026 16:00:00 GMT",
-        "publisher": "글로벌이코노믹",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "유럽증시, 다시 살아난 종전 기대감에 대부분 상승… 국제유가도 하락",
-        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBta2txQjJ6Qm5pekNFclc3RVdER2FWSzM1Y1FiYXdZSkduejMtN0lKLXVDVWwyVTVxU3VteUdFeGwyVkV5ZDN0ZllUVE1HR1J1ZUxnSGVocE53WlB2?oc=5",
-        "published_at": "Fri, 25 Sep 2026 17:33:00 GMT",
-        "publisher": "뉴스핌",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "[뉴욕개장] AI 훈풍에 유가·금리 부담 상쇄…보합 출발",
-        "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE05RmZHdGRmYVItSXRzMVA2cUNQUEdiekxsYVMweGZZd2hJSkxGaE5LWW1iSHljYlE5T1pUX0ZISGhVVUZyU01NNW4ycGxzdThtTFQxOWk0S1TSAV5BVV95cUxQSHYzd05BR0JBY09yUm9VNVkxRm55aU4tQlJOMk15OVVWQ1pRSjZVN2pXaGEzVExWQ29oQW56RHNTRkRRLTFjQ3AtY2ZzSmkteTAtRHI0WWxIN2pVemp3?oc=5",
-        "published_at": "Fri, 25 Sep 2026 14:05:34 GMT",
+        "title": "[속보]나스닥 0.5% 상승 마감…국채금리 상승에도 유가 하락",
+        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1OQ0hLUGRTZURYNlh4T3lobklzNTY3S1B1UUoxdlRnZXVoZlpTb0t4WmlrVFJwbks4em1RQjExd3NZUC1MQ0ZRTllabXdfRmt1ZldTTTBOMVltSlRlRVlmdG5sUFpxMWvSAWxBVV95cUxPVjU0VEU0cEZ0RTdTSHVVNVQ2T1VJbDF3Q0JDTGRVaERua3dQeXRCckdjUWxOTHJSOFdLTWJXaUhndzJDRWFNZWE4Uk4xZ3VFcFVCNVk5MW5aelVVQmFpT0l1czVDU1pYLUdKcVk?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:01:35 GMT",
         "publisher": "뉴스1",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "코스피, 반도체 타고 7100선 돌파…'배당' 삼전 3%대↑[개장시황]",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBhVG1tVzVtYXBpWlFWdFJTbDdjZ2xCNG96bFdMN0JSc3ZFQVJhb1dhR2Vlby1MclMtUE1KUnhCbnRrbEhJRl9kOHFuU28yZkk?oc=5",
-        "published_at": "Wed, 23 Sep 2026 00:37:33 GMT",
+        "title": "[뉴욕유가] 호르무즈 해법 기대감에 사흘만에 하락…WTI, 2.33%↓",
+        "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE13RzJvcFdHZThvQmlWUnJjSVpnSUc4bnc5ek8ySVdxQWthaVU5dlYtS01sS1hlaWkxYUVvM19RZlNaYXlDZ0wtb3pxNTVzUkVOMGRzajdRN2doaTJGamZYeW5VRFlMZjhraE5jYm5vRkN3Zw?oc=5",
+        "published_at": "Fri, 25 Sep 2026 19:17:45 GMT",
+        "publisher": "KB Think",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "뉴욕증시, 유가 하락에 3대 지수 상승…다우 0.93%↑",
+        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBtZVNma2NIbk5ZaXpCaEo0OGJpQ3dQbldZUjl2TEtrSFF1amphMHk0S1ZCU0lvRDZyQUhqcVRrTjN5MW4xQkZXdWQ5aTV1VEpzQWNaSVR0VlE2VEd2?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:27:00 GMT",
+        "publisher": "뉴스핌",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "[뉴욕마감]국채금리 급등에도 AI주 랠리…나스닥 0.48%↑",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5Fb3hXZm5VUjQyVkxlOXZYYXY1RHhGR3BvOEpSdTlNdHBXUjBEMkk2Wjl4ZktOOG85bUNuLUdueXllOVhQWE5oZTNCYnZ4Z2c?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:33:49 GMT",
         "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "'반도체 랠리'에 코스피 7,100선 재돌파...환율 1,340원대 급락",
-        "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBURFNrZnNvdWdnTS1RMGNfTnVMd29aWDJ5bTVqdHhTWVkwMEJnQk1iYUZBeVhib2hUSDlPRW9VTzNaRE55cmtSeWpXWGVYQ19pdHZaTHJvVEZVVHFsaGc?oc=5",
-        "published_at": "Wed, 23 Sep 2026 01:59:00 GMT",
-        "publisher": "YTN",
+        "title": "[뉴욕증시] '호르무즈 낙관론'에 국제유가 하락...3대 지수 상승",
+        "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQaGk5OGc4bmtfcUVjdEx1Y2UtRUJQdG5CdktoSngzX0xyOG85R19SZHA4Q255TU5BM1d5MXM4MlFYcWNOUzJnRjlrUjdpemdwaXZmZ0lrWnNXaGtOOWpfcl9Hc2ZJam96X0Z6Sl9mNFRsN2ZBNDZZUkdBMmJieXZETHlCaEN6VWJm?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:39:27 GMT",
+        "publisher": "글로벌이코노믹",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "[추석 이후 증시] 황승택 센터장 \"AI인프라 투자 업종 유망. 기존 주도주 중심 대응\"",
-        "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE41MmhaQ3d1VWM3NlA3Y2QtUFJxYkZrcnl4bUxwbTlYekE5Y1Vabkt6dDJHR2FhcGxPbEtxR2hLS0RlLUhLclY5SHoxQXJPZFRpb1U0ZWJzclRRVWFFZmdIYWZIeVBkQ3JM?oc=5",
-        "published_at": "Fri, 25 Sep 2026 16:18:24 GMT",
-        "publisher": "팍스경제TV",
+        "title": "미국-이란 협상·호르무즈 재개 기대에 유가 하락…WTI 2.3%↓",
+        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE15bXhjbWdTamktcFVvVzFNTlo0N1BCaHJlQ2NlRldEQU5yaGloclZYQVU1eWdIT0hFb0RKRkhhc3FQYm5fSm5BMy1FMEd6V3d3amg0cWN6cm1nLTlUa211NGEzc0Z1Y1nSAWxBVV95cUxOMmxIN0Q0NnhjNndBRk0xZTgxdEw0QU92enkzc1VtV1NmNFdJX1hPTzNnRjJXY091RWw0WFJxUVNiZ2ZYTWR3YVRYU2hxQkFYVERVWTBWRUE5aUZmVHpPV3JOc3ZCMi1xN0Jmb2g?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:06:55 GMT",
+        "publisher": "뉴스1",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "환율 1,300원대로 급락했지만…빅맥지수상 원화 여전히 30% 넘게 저평가",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9QLVVpczlCVll3LWxZeUktRHRaMVJOcXhZRU5pS0tQVW52akhKWW5PNWlRR1JsT0lYakZTeENrVTZTV2dldGh1ZVlVakpiOFBnYTQtaWRSb015WUlnNWo2UVJ1eEpNVGFWem1qX2trOGE?oc=5",
-        "published_at": "Thu, 24 Sep 2026 04:30:02 GMT",
-        "publisher": "연합인포맥스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "유럽 증시 소폭 상승, 유가 안정세가 금리 급등 우려 상쇄",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE0tdFpHMWhXRndXVDNtUFkxNzF0dDVQTFBoNnhCVTN2Q2oxR2RrUnpSOG5wcHdQQzBTYVhfY2NfWDJ2d2ptWWZNMlpNU3pjQkp6c1F2WE5XejhLT1pWcVJhMHlnTzBWU3BNMmxmLW1WNFo?oc=5",
-        "published_at": "Fri, 25 Sep 2026 07:04:00 GMT",
+        "title": "Leader’s Advantage, 나스닥에서 1억 5천만 달러 규모 스팩 IPO 완료",
+        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5xdktjeW0wOUJFaGZGS0U1bi0zVEVMMThLV2xiZEo4VGpUY21YanJvdUVTb294YVU2TFV0b0NFRTZIQTBiNVoxUWFYWEJiY0tMeHB1VC1kNzFZX3hmQUF5eGQwRjAtcllFelBJUGNZS2E?oc=5",
+        "published_at": "Fri, 25 Sep 2026 17:37:00 GMT",
         "publisher": "Investing.com 한국어",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "사일렉시온 테라퓨틱스, 나스닥서 '1달러 미만' 상장유지 요건 미달 통지 수령",
+        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE8tanJBUTFPZmpSMWlnbUJJeVdWNkM5YlU4YW9xRmZ3YklyUWRhSWhzUlh6blF2VXAyZUt0MDMxM0VERUJTTFNBZldIQUlqbElCcDVGLWI2aGdSLUg2dHRJV3JReXAxWWV0MkMtOWtNQW94THM?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:21:03 GMT",
+        "publisher": "데이터투자",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "뉴욕증시, 상승세로 마감…나스닥 0.48%↑",
+        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5SbVN2MFozVUlWOW9Tb1prWFNOeVh3eGgxMC1RTHY3XzFVY3lCZC1Xc2J0Nkx6U2xDeFV6Vy1FdnJHTkxEZExIYjdXN2g0eVNf?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:04:18 GMT",
+        "publisher": "블루밍비트",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "샌유웨이브 헬스, 나스닥 상장유지 요건 미달 통지 수령",
+        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBoQ0JZVktqeUZLMlhVV2prbUdIeE5JbzB3a296OEhXemtFUlo1VVhBX3JhS1BmSWhtWG9tTXpuVjdoMGNWSkpQNGtHNjR1cWVWd0NaOHNrZENjMmtKRndNTGQ0MF9sdVFSb0VQQVFSVmhoLVU?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:41:24 GMT",
+        "publisher": "데이터투자",
         "discovery_source": "google_news_rss"
       }
     ],
     "items": [
-      {
-        "topic": "kr_corporate_events",
-        "title": "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
-        "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNR0x0eVBSMkpRWlpJUHV1RlBWY3VJWTlielM1RmEyUjJ6VldmNkp6X05naGk2V3BxTDNZbnlfbFV0RE5ITERkYlVKTUdSbFc3RUUzTS0xQTI0X1hmNkw3WTJPamxONnByMjZtVFR5RGNnV2YyOGtvVVNMVXgyOEVXYlRLOE9JWHPSAXtBVV95cUxPR1ZSVGJ0S2hkNGVBTXN0WUl5YmZ2Sk8tRmstQUlXTlFqcjBSSUNwTlQtSDJ1Uko3cUFIeXZMbDR2N2RnQzZEZ3VCdk1qc29EX3FIOHpLUjVzVHNlWG8yd1Y0R0NMZER5aDdHeVhKSmI2bzhYYTdPd2g0Znc?oc=5",
-        "published_at": "Wed, 23 Sep 2026 04:54:00 GMT",
-        "publisher": "디지틀조선일보",
-        "discovery_source": "google_news_rss"
-      },
       {
         "topic": "kr_corporate_events",
         "title": "\"종목 이슈부터 미 공시까지\"…신한투자, 개인 맞춤형 'AI PB' 출격",
@@ -7129,10 +7605,18 @@
       },
       {
         "topic": "kr_corporate_events",
+        "title": "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
+        "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNR0x0eVBSMkpRWlpJUHV1RlBWY3VJWTlielM1RmEyUjJ6VldmNkp6X05naGk2V3BxTDNZbnlfbFV0RE5ITERkYlVKTUdSbFc3RUUzTS0xQTI0X1hmNkw3WTJPamxONnByMjZtVFR5RGNnV2YyOGtvVVNMVXgyOEVXYlRLOE9JWHPSAXtBVV95cUxPR1ZSVGJ0S2hkNGVBTXN0WUl5YmZ2Sk8tRmstQUlXTlFqcjBSSUNwTlQtSDJ1Uko3cUFIeXZMbDR2N2RnQzZEZ3VCdk1qc29EX3FIOHpLUjVzVHNlWG8yd1Y0R0NMZER5aDdHeVhKSmI2bzhYYTdPd2g0Znc?oc=5",
+        "published_at": "Wed, 23 Sep 2026 04:54:00 GMT",
+        "publisher": "디지틀조선일보",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_corporate_events",
         "title": "신한투자증권, 종목 이슈·미국 공시 AI가 실시간 정리",
         "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE11cXBKWDZ4aFhQM0V4bWFQdGZ2eU91VzljaFpPbEpoc0l2ZVFyeDZHemNab0RMTU4zc0NwVDlYM3UzNmZvLXVvRTJrdVZFNWZqZl9sd094OXl0a1JDeDFQaWxxY25iX216WmtkYkkydjVLd1XSAXdBVV95cUxQV0I4aW1nQnNqYU9ZaGRLbkZrY1VCQU9LZVg0RkgxaTViZDhLYXpQek13Um9xVDNrN3hfQXNrd3JVXzZXOEJSc3pPYWNrVGRxbVpEbTFqUXl4cDlaM3FCRUNQUkgwODVhUEc5X2cxTWVOQ045eGpsNA?oc=5",
         "published_at": "Wed, 23 Sep 2026 00:26:01 GMT",
-        "publisher": "newsfreezone.co.kr",
+        "publisher": "뉴스프리존",
         "discovery_source": "google_news_rss"
       },
       {
@@ -7145,34 +7629,26 @@
       },
       {
         "topic": "broad_fallback",
-        "title": "코스피 상승세 ‘지지부진한 이유’ 있었다…서학개미 미장 보유액 2천억 재진입",
-        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9OZ0pZdm9ranJ2X0RFVUtoZXNqc2FlbWlfTjNReXoybWFNRHYxRFVSSlZCVTdRTzdjUl9Nb0FKb0dxNy13TjZwRXJQbzJhNkQ1?oc=5",
-        "published_at": "Fri, 25 Sep 2026 15:48:42 GMT",
-        "publisher": "문화일보",
+        "title": "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1qTW1OZ0VOT2FUaW9WekJ3cHhGd0Y1eU1EWHJfcWstQnU1Y0JfRlM2a2xCTnJhbGM0M0ZKbS04YlZyZ2pDWHMxcTY1NkV5Rl9PWEZTLWhWUlc0OUnSAWBBVV95cUxNX19EUV9hU1p1QUtBcGRTNUU3UFlDZ0FJaTJvLUptVERGWks3ZHhxRUVLVDNJX0Zfc3JBS2JZdk5pQmpyNHdiNU9OUUxDczFfVWFlaV92ZUo1SmxmZ0JUZW0?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:17:48 GMT",
+        "publisher": "연합뉴스",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "[외환-마감] 엔화 강세·유가 하락에…8.50원↓",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5zbFVXb1VFdXpudWZlbjYtLVhsTTFmUTZhOUc0SFZObC1WQVBvQWhUSWZfNUFOOFJZRTZ1eGpaM19uS1FRWlFTQzI3a1NKYXBTeUxIUGI0QmFRTTZjcEUxbko5VjR6WGtJeXdHMU0tX2o?oc=5",
-        "published_at": "Fri, 25 Sep 2026 09:00:47 GMT",
-        "publisher": "연합인포맥스",
+        "title": "국제유가, 미·이란 협상 기대감에 2%대 하락",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFA3TmZJemRGSWJrOWVDQjk0WVl1Q0NtNlVLYXZEcFdqeDlDaTg0NjlkQW56LVo1ZEZIZVQ5RGJmT1h0YjluQ1Z4MktrN2NORER4NlY3NmY2ZW9hcHM?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:16:00 GMT",
+        "publisher": "KBS 뉴스",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "코스피 상승 돕던 삼전닉스 자사주 매입, 다음 달 종료…수급 부담 커지나",
-        "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5vVFVvUDZ0a1BmR3ZkZ1ZicnlUZE8tYWx2bDEtak55X003RkRGVUowRTRCRExJeUp6YlQ1dmdudnBFX0VfcXgybFZpMFJlQXBBSmFYa1FqUTZWVDJ1cEM3WUhQWQ?oc=5",
-        "published_at": "Fri, 25 Sep 2026 15:00:03 GMT",
-        "publisher": "더구루",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5STjNGdjNXbHNIb1FYQWhOWE9XNHdPbGstQUNMRTY4QmE4Q0xYQlpFeU8zM1ZZQUgyWmZRbEY2Ri1mRGZwVmlXcV9LSFEwVjRXaGZUeGl6SEdwTEFGRGt2LS0wWGMtSVE?oc=5",
-        "published_at": "Fri, 25 Sep 2026 02:15:00 GMT",
-        "publisher": "연합뉴스TV",
+        "title": "[속보]나스닥 0.5% 상승 마감…국채금리 상승에도 유가 하락",
+        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1OQ0hLUGRTZURYNlh4T3lobklzNTY3S1B1UUoxdlRnZXVoZlpTb0t4WmlrVFJwbks4em1RQjExd3NZUC1MQ0ZRTllabXdfRmt1ZldTTTBOMVltSlRlRVlmdG5sUFpxMWvSAWxBVV95cUxPVjU0VEU0cEZ0RTdTSHVVNVQ2T1VJbDF3Q0JDTGRVaERua3dQeXRCckdjUWxOTHJSOFdLTWJXaUhndzJDRWFNZWE4Uk4xZ3VFcFVCNVk5MW5aelVVQmFpT0l1czVDU1pYLUdKcVk?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:01:35 GMT",
+        "publisher": "뉴스1",
         "discovery_source": "google_news_rss"
       },
       {
@@ -7185,6 +7661,46 @@
       },
       {
         "topic": "broad_fallback",
+        "title": "코스피 상승세 ‘지지부진한 이유’ 있었다…서학개미 미장 보유액 2천억 재진입",
+        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9OZ0pZdm9ranJ2X0RFVUtoZXNqc2FlbWlfTjNReXoybWFNRHYxRFVSSlZCVTdRTzdjUl9Nb0FKb0dxNy13TjZwRXJQbzJhNkQ1?oc=5",
+        "published_at": "Fri, 25 Sep 2026 15:48:42 GMT",
+        "publisher": "문화일보",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "[뉴욕유가] 호르무즈 해법 기대감에 사흘만에 하락…WTI, 2.33%↓",
+        "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE13RzJvcFdHZThvQmlWUnJjSVpnSUc4bnc5ek8ySVdxQWthaVU5dlYtS01sS1hlaWkxYUVvM19RZlNaYXlDZ0wtb3pxNTVzUkVOMGRzajdRN2doaTJGamZYeW5VRFlMZjhraE5jYm5vRkN3Zw?oc=5",
+        "published_at": "Fri, 25 Sep 2026 19:17:45 GMT",
+        "publisher": "KB Think",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "[외환-마감] 엔화 강세·유가 하락에…8.50원↓",
+        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5zbFVXb1VFdXpudWZlbjYtLVhsTTFmUTZhOUc0SFZObC1WQVBvQWhUSWZfNUFOOFJZRTZ1eGpaM19uS1FRWlFTQzI3a1NKYXBTeUxIUGI0QmFRTTZjcEUxbko5VjR6WGtJeXdHMU0tX2o?oc=5",
+        "published_at": "Fri, 25 Sep 2026 09:00:47 GMT",
+        "publisher": "연합인포맥스",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "뉴욕증시, 유가 하락에 3대 지수 상승…다우 0.93%↑",
+        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBtZVNma2NIbk5ZaXpCaEo0OGJpQ3dQbldZUjl2TEtrSFF1amphMHk0S1ZCU0lvRDZyQUhqcVRrTjN5MW4xQkZXdWQ5aTV1VEpzQWNaSVR0VlE2VEd2?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:27:00 GMT",
+        "publisher": "뉴스핌",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "코스피 상승 돕던 삼전닉스 자사주 매입, 다음 달 종료…수급 부담 커지나",
+        "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5vVFVvUDZ0a1BmR3ZkZ1ZicnlUZE8tYWx2bDEtak55X003RkRGVUowRTRCRExJeUp6YlQ1dmdudnBFX0VfcXgybFZpMFJlQXBBSmFYa1FqUTZWVDJ1cEM3WUhQWQ?oc=5",
+        "published_at": "Fri, 25 Sep 2026 15:00:03 GMT",
+        "publisher": "더구루",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
         "title": "Leader’s Advantage Acquisition Corp., 나스닥에서 1억 5천만 달러 IPO 완료",
         "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5xWUtUTTlBdGU4XzBmQk9vaVkyVFVFU1hFSTYxeThIMV96YXBPVWNnTXAxcDdQQWQtc3JLTThCV3JmWXZSNzljSVJlYktlcy1ZNERjaVdNX3d5eklnbzRGVThLenotY25NVHBWZllGWWlQUEdvYkc5Sw?oc=5",
         "published_at": "Fri, 25 Sep 2026 17:43:00 GMT",
@@ -7193,50 +7709,10 @@
       },
       {
         "topic": "broad_fallback",
-        "title": "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞",
-        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9jT2lMX2hGcHlSUGhUUTVnOHdMQlFzX29ZM3dYOTNZSVpOMTg0a0FCSFRndVRBQmN3SjE1MW9BZGVjRERTVFMtYW9SVk04UGxkNm9BWm9md1BNVW1x?oc=5",
-        "published_at": "Fri, 25 Sep 2026 12:22:00 GMT",
-        "publisher": "뉴스핌",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1weFBicjQ3ZWZ2SlhjQ09WX1hMY3FReEd2ZV9WV2RhaV9xS0JCUTJ0dnpMT2wwN3hTOWxpSGI3T2hLR1Z6U2V4cTNGcUJId2c?oc=5",
-        "published_at": "Fri, 25 Sep 2026 07:22:07 GMT",
-        "publisher": "v.daum.net",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "달러-원, 뉴욕장서 1,350원 중반대 거래",
-        "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1rNFA4dmxqOTBlZXBIY2pQVngwd3NIaF83eDhxSm13cS1jR0tmandoT1JFUWcyRTVkZndFcTc2aWZ2VHhvc0RIVXFkVUNRZklQZmNCWVJPYmswTDMydXg5ZTdmQlNrblNzbnJ5MU13Mm5UUQ?oc=5",
-        "published_at": "Fri, 25 Sep 2026 12:12:20 GMT",
-        "publisher": "KB Think",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "[추석 이후 증시] 장문수 센터장 \"10월까진 투심 부진, 코스피 연말 8400 목표\"",
-        "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE53ZVNCMm52STUwVng0NC1vbTFGd25jLTJTcFZnWjFCZkZWSVhhckZINkppYWpzaDVaZzNjQTcxVWpXS0tfX0V5eTRLaW9hbnNfdUhiRjU1ZjFzNnhVci15VE93MTVYbmpH?oc=5",
-        "published_at": "Fri, 25 Sep 2026 00:10:08 GMT",
-        "publisher": "팍스경제TV",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1ZQzdRRzVGSEtmY2N4N0ExRllkVmZvVjJYYlBnXzJRT0xic2xPVXFrYzZCbndlT2hjczUwcGtVeE1Nb25xVjZKbTRuWGRPU3E4V3NoUDRnYnUtRW8?oc=5",
-        "published_at": "Fri, 25 Sep 2026 02:29:30 GMT",
-        "publisher": "에너지경제신문",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "미국·이란 외교 협상 주목에 국제유가 하락…WTI 93.32달러",
-        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFB6ZkxjZF9Ub21ieVFXRkdDNDMtd3dYb1JnNmlBazRBOGlKbXNsanJmRzEzMnEtWGpJVEltZURTcjJITmR6ZWphZEJELVJfeUlp?oc=5",
-        "published_at": "Fri, 25 Sep 2026 15:00:44 GMT",
-        "publisher": "블루밍비트",
+        "title": "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5STjNGdjNXbHNIb1FYQWhOWE9XNHdPbGstQUNMRTY4QmE4Q0xYQlpFeU8zM1ZZQUgyWmZRbEY2Ri1mRGZwVmlXcV9LSFEwVjRXaGZUeGl6SEdwTEFGRGt2LS0wWGMtSVE?oc=5",
+        "published_at": "Fri, 25 Sep 2026 02:15:00 GMT",
+        "publisher": "연합뉴스TV",
         "discovery_source": "google_news_rss"
       },
       {
@@ -7249,9 +7725,57 @@
       },
       {
         "topic": "broad_fallback",
-        "title": "미국-이란, 호르무즈 해협 합의 논의 보도에 유가 급등세 이후 하락",
-        "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBsOUZaVmF0N3pod0kzYUU4anV3UTFYR0dKUm1DNl9ZbFBUQTlzbFpjS0h5ZVlNb014RGV2dXVyWngtbGdjcXVfSUVtV3MzR2g4dkozOE1QU0tFcE9GUUNmdlpjSi0wdF9rVjJzY1Fzaw?oc=5",
-        "published_at": "Fri, 25 Sep 2026 00:47:00 GMT",
+        "title": "[뉴욕마감]국채금리 급등에도 AI주 랠리…나스닥 0.48%↑",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5Fb3hXZm5VUjQyVkxlOXZYYXY1RHhGR3BvOEpSdTlNdHBXUjBEMkk2Wjl4ZktOOG85bUNuLUdueXllOVhQWE5oZTNCYnZ4Z2c?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:33:49 GMT",
+        "publisher": "v.daum.net",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "[뉴욕증시] '호르무즈 낙관론'에 국제유가 하락...3대 지수 상승",
+        "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQaGk5OGc4bmtfcUVjdEx1Y2UtRUJQdG5CdktoSngzX0xyOG85R19SZHA4Q255TU5BM1d5MXM4MlFYcWNOUzJnRjlrUjdpemdwaXZmZ0lrWnNXaGtOOWpfcl9Hc2ZJam96X0Z6Sl9mNFRsN2ZBNDZZUkdBMmJieXZETHlCaEN6VWJm?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:39:27 GMT",
+        "publisher": "글로벌이코노믹",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "뉴욕증시 프리뷰, 유가·금리 진정에 반등 시도…메타 시총 2조 달러 눈앞",
+        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9jT2lMX2hGcHlSUGhUUTVnOHdMQlFzX29ZM3dYOTNZSVpOMTg0a0FCSFRndVRBQmN3SjE1MW9BZGVjRERTVFMtYW9SVk04UGxkNm9BWm9md1BNVW1x?oc=5",
+        "published_at": "Fri, 25 Sep 2026 12:22:00 GMT",
+        "publisher": "뉴스핌",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "유럽증시, 다시 살아난 종전 기대감에 대부분 상승… 국제유가도 하락",
+        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBta2txQjJ6Qm5pekNFclc3RVdER2FWSzM1Y1FiYXdZSkduejMtN0lKLXVDVWwyVTVxU3VteUdFeGwyVkV5ZDN0ZllUVE1HR1J1ZUxnSGVocE53WlB2?oc=5",
+        "published_at": "Fri, 25 Sep 2026 17:33:00 GMT",
+        "publisher": "뉴스핌",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "미국-이란 협상·호르무즈 재개 기대에 유가 하락…WTI 2.3%↓",
+        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE15bXhjbWdTamktcFVvVzFNTlo0N1BCaHJlQ2NlRldEQU5yaGloclZYQVU1eWdIT0hFb0RKRkhhc3FQYm5fSm5BMy1FMEd6V3d3amg0cWN6cm1nLTlUa211NGEzc0Z1Y1nSAWxBVV95cUxOMmxIN0Q0NnhjNndBRk0xZTgxdEw0QU92enkzc1VtV1NmNFdJX1hPTzNnRjJXY091RWw0WFJxUVNiZ2ZYTWR3YVRYU2hxQkFYVERVWTBWRUE5aUZmVHpPV3JOc3ZCMi1xN0Jmb2g?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:06:55 GMT",
+        "publisher": "뉴스1",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1weFBicjQ3ZWZ2SlhjQ09WX1hMY3FReEd2ZV9WV2RhaV9xS0JCUTJ0dnpMT2wwN3hTOWxpSGI3T2hLR1Z6U2V4cTNGcUJId2c?oc=5",
+        "published_at": "Fri, 25 Sep 2026 07:22:07 GMT",
+        "publisher": "v.daum.net",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "Leader’s Advantage, 나스닥에서 1억 5천만 달러 규모 스팩 IPO 완료",
+        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5xdktjeW0wOUJFaGZGS0U1bi0zVEVMMThLV2xiZEo4VGpUY21YanJvdUVTb294YVU2TFV0b0NFRTZIQTBiNVoxUWFYWEJiY0tMeHB1VC1kNzFZX3hmQUF5eGQwRjAtcllFelBJUGNZS2E?oc=5",
+        "published_at": "Fri, 25 Sep 2026 17:37:00 GMT",
         "publisher": "Investing.com 한국어",
         "discovery_source": "google_news_rss"
       },
@@ -7265,10 +7789,10 @@
       },
       {
         "topic": "broad_fallback",
-        "title": "유럽증시, 다시 살아난 종전 기대감에 대부분 상승… 국제유가도 하락",
-        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBta2txQjJ6Qm5pekNFclc3RVdER2FWSzM1Y1FiYXdZSkduejMtN0lKLXVDVWwyVTVxU3VteUdFeGwyVkV5ZDN0ZllUVE1HR1J1ZUxnSGVocE53WlB2?oc=5",
-        "published_at": "Fri, 25 Sep 2026 17:33:00 GMT",
-        "publisher": "뉴스핌",
+        "title": "미국-이란, 호르무즈 해협 합의 논의 보도에 유가 급등세 이후 하락",
+        "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBsOUZaVmF0N3pod0kzYUU4anV3UTFYR0dKUm1DNl9ZbFBUQTlzbFpjS0h5ZVlNb014RGV2dXVyWngtbGdjcXVfSUVtV3MzR2g4dkozOE1QU0tFcE9GUUNmdlpjSi0wdF9rVjJzY1Fzaw?oc=5",
+        "published_at": "Fri, 25 Sep 2026 00:47:00 GMT",
+        "publisher": "Investing.com 한국어",
         "discovery_source": "google_news_rss"
       },
       {
@@ -7281,18 +7805,18 @@
       },
       {
         "topic": "broad_fallback",
-        "title": "급등하는 국채 수익률과 유가, 미국 증시 선물 하락 압박",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBjR0EyVnU4akVTUDJ1SW5tMzg4TEw4SnZsN0Jtd0Y2VTBIQS1YNTJGOVlOdFExaGdzYTluVlNFaXhVY2pGeUVLdkhrXzF2Y3hvQWlJN3BNdUNLaFVPQTVIRkhQVUVzOWtJejdhTVE2LWI?oc=5",
-        "published_at": "Fri, 25 Sep 2026 00:53:00 GMT",
-        "publisher": "Investing.com 한국어",
+        "title": "사일렉시온 테라퓨틱스, 나스닥서 '1달러 미만' 상장유지 요건 미달 통지 수령",
+        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE8tanJBUTFPZmpSMWlnbUJJeVdWNkM5YlU4YW9xRmZ3YklyUWRhSWhzUlh6blF2VXAyZUt0MDMxM0VERUJTTFNBZldIQUlqbElCcDVGLWI2aGdSLUg2dHRJV3JReXAxWWV0MkMtOWtNQW94THM?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:21:03 GMT",
+        "publisher": "데이터투자",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "속보 코스피 0.9%·코스닥 1.2% 상승 마감",
-        "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5YVkI5V2ZyYk01RXRudHlvUG5LYi0yanRoY3hvbWtJOGV1MDdlUy1rZGRTTHJGUWJTQzlsR3hNbXdseTkyaV9sTXFWWGxYeUtYVmZjWmp4SEgzZU9XNlE?oc=5",
-        "published_at": "Wed, 23 Sep 2026 06:41:00 GMT",
-        "publisher": "YTN",
+        "title": "뉴욕증시, 상승세로 마감…나스닥 0.48%↑",
+        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5SbVN2MFozVUlWOW9Tb1prWFNOeVh3eGgxMC1RTHY3XzFVY3lCZC1Xc2J0Nkx6U2xDeFV6Vy1FdnJHTkxEZExIYjdXN2g0eVNf?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:04:18 GMT",
+        "publisher": "블루밍비트",
         "discovery_source": "google_news_rss"
       },
       {
@@ -7300,31 +7824,15 @@
         "title": "시총 기준 강화로 코스닥서 8개 종목 퇴출…추가 상폐 우려도",
         "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9zeWRxRnZTUE9nSHZOeUphYmk2ekQ5NXdIS25tbmE4YUMtb051aWVCR2pKV3c0OWNoZlFjZDBHdXRaSXBBWjJjWk1mMl84ZnY4UHgzUjhPc29qQQ?oc=5",
         "published_at": "Fri, 25 Sep 2026 08:43:18 GMT",
-        "publisher": "hankyung.com",
+        "publisher": "한국경제",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "[뉴욕개장] AI 훈풍에 유가·금리 부담 상쇄…보합 출발",
-        "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE05RmZHdGRmYVItSXRzMVA2cUNQUEdiekxsYVMweGZZd2hJSkxGaE5LWW1iSHljYlE5T1pUX0ZISGhVVUZyU01NNW4ycGxzdThtTFQxOWk0S1TSAV5BVV95cUxQSHYzd05BR0JBY09yUm9VNVkxRm55aU4tQlJOMk15OVVWQ1pRSjZVN2pXaGEzVExWQ29oQW56RHNTRkRRLTFjQ3AtY2ZzSmkteTAtRHI0WWxIN2pVemp3?oc=5",
-        "published_at": "Fri, 25 Sep 2026 14:05:34 GMT",
-        "publisher": "뉴스1",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-        "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE93QWtKUVVNeGF5Q1Z2SHF3RUVmdllOdDI0LUkteXBWYXVLT1g3NVk5SEJlRVpDdDg4dDFRZkVmazV5aUdyWGcyUGdDSE9od2E4eFMtLVJXWFBENVV6NkNYamhFUHBOMFY5VFIw?oc=5",
-        "published_at": "Fri, 25 Sep 2026 05:36:46 GMT",
-        "publisher": "BBS불교방송",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "美 국채금리 5% 쇼크, 한국 덮치나… 환율·증시·대출금리 ‘경고등’",
-        "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE40dnFTN1JyY2IxQVNtakpkQmdlM3BzV05PcVRKTm5JdWZjbUdhMGxMbGJ3cmxhT1JsMnRXcDFUVFA0c3JVNVJfcm80cUUyOE04U25ZVWI4TVp1dzE3RjN3WTJ4Y3RNRWhfS1E?oc=5",
-        "published_at": "Fri, 25 Sep 2026 08:00:00 GMT",
-        "publisher": "천지일보",
+        "title": "샌유웨이브 헬스, 나스닥 상장유지 요건 미달 통지 수령",
+        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBoQ0JZVktqeUZLMlhVV2prbUdIeE5JbzB3a296OEhXemtFUlo1VVhBX3JhS1BmSWhtWG9tTXpuVjdoMGNWSkpQNGtHNjR1cWVWd0NaOHNrZENjMmtKRndNTGQ0MF9sdVFSb0VQQVFSVmhoLVU?oc=5",
+        "published_at": "Fri, 25 Sep 2026 20:41:24 GMT",
+        "publisher": "데이터투자",
         "discovery_source": "google_news_rss"
       },
       {
@@ -7337,49 +7845,25 @@
       },
       {
         "topic": "broad_fallback",
-        "title": "추석에 멈춘 코스피…재개장 성적 결정할 국내 증시 변수는",
-        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE10d3hlbEJ5TUVjdjRraTdlNHVlanUwYWJldkZYbDBxRUZ4b3BOVXkxU01DUzRUUTl1aTNRa2ZXM0p3MUdOMXJhUXl5QnZpenM5c1pUWm1ueFBIVDNM?oc=5",
-        "published_at": "Thu, 24 Sep 2026 22:00:00 GMT",
-        "publisher": "뉴스핌",
+        "title": "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1ZQzdRRzVGSEtmY2N4N0ExRllkVmZvVjJYYlBnXzJRT0xic2xPVXFrYzZCbndlT2hjczUwcGtVeE1Nb25xVjZKbTRuWGRPU3E4V3NoUDRnYnUtRW8?oc=5",
+        "published_at": "Fri, 25 Sep 2026 02:29:30 GMT",
+        "publisher": "에너지경제신문",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "'반도체 랠리'에 코스피 7,100선 재돌파...환율 1,340원대 급락",
-        "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBURFNrZnNvdWdnTS1RMGNfTnVMd29aWDJ5bTVqdHhTWVkwMEJnQk1iYUZBeVhib2hUSDlPRW9VTzNaRE55cmtSeWpXWGVYQ19pdHZaTHJvVEZVVHFsaGc?oc=5",
-        "published_at": "Wed, 23 Sep 2026 01:59:00 GMT",
-        "publisher": "YTN",
+        "title": "달러-원, 뉴욕장서 1,350원 중반대 거래",
+        "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1rNFA4dmxqOTBlZXBIY2pQVngwd3NIaF83eDhxSm13cS1jR0tmandoT1JFUWcyRTVkZndFcTc2aWZ2VHhvc0RIVXFkVUNRZklQZmNCWVJPYmswTDMydXg5ZTdmQlNrblNzbnJ5MU13Mm5UUQ?oc=5",
+        "published_at": "Fri, 25 Sep 2026 12:12:20 GMT",
+        "publisher": "KB Think",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "broad_fallback",
-        "title": "[추석 이후 증시] 황승택 센터장 \"AI인프라 투자 업종 유망. 기존 주도주 중심 대응\"",
-        "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE41MmhaQ3d1VWM3NlA3Y2QtUFJxYkZrcnl4bUxwbTlYekE5Y1Vabkt6dDJHR2FhcGxPbEtxR2hLS0RlLUhLclY5SHoxQXJPZFRpb1U0ZWJzclRRVWFFZmdIYWZIeVBkQ3JM?oc=5",
-        "published_at": "Fri, 25 Sep 2026 16:18:24 GMT",
-        "publisher": "팍스경제TV",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "환율 1,300원대로 급락했지만…빅맥지수상 원화 여전히 30% 넘게 저평가",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9QLVVpczlCVll3LWxZeUktRHRaMVJOcXhZRU5pS0tQVW52akhKWW5PNWlRR1JsT0lYakZTeENrVTZTV2dldGh1ZVlVakpiOFBnYTQtaWRSb015WUlnNWo2UVJ1eEpNVGFWem1qX2trOGE?oc=5",
-        "published_at": "Thu, 24 Sep 2026 04:30:02 GMT",
-        "publisher": "연합인포맥스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기",
-        "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBpbWprMnpXazFjdm13NVNOZkZRZlFHMXc4NkVQMFNUZE5Cc2k1bFFybUdyOWo2Zk9GVVpaVHNOZE0wekEwazlIbjFMWDM5dno1dkJRS2xyX0tfN2tMb2JSeWUxdVU?oc=5",
-        "published_at": "Fri, 25 Sep 2026 02:25:39 GMT",
-        "publisher": "서울경제TV",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "유럽 증시 소폭 상승, 유가 안정세가 금리 급등 우려 상쇄",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE0tdFpHMWhXRndXVDNtUFkxNzF0dDVQTFBoNnhCVTN2Q2oxR2RrUnpSOG5wcHdQQzBTYVhfY2NfWDJ2d2ptWWZNMlpNU3pjQkp6c1F2WE5XejhLT1pWcVJhMHlnTzBWU3BNMmxmLW1WNFo?oc=5",
-        "published_at": "Fri, 25 Sep 2026 07:04:00 GMT",
+        "title": "급등하는 국채 수익률과 유가, 미국 증시 선물 하락 압박",
+        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBjR0EyVnU4akVTUDJ1SW5tMzg4TEw4SnZsN0Jtd0Y2VTBIQS1YNTJGOVlOdFExaGdzYTluVlNFaXhVY2pGeUVLdkhrXzF2Y3hvQWlJN3BNdUNLaFVPQTVIRkhQVUVzOWtJejdhTVE2LWI?oc=5",
+        "published_at": "Fri, 25 Sep 2026 00:53:00 GMT",
         "publisher": "Investing.com 한국어",
         "discovery_source": "google_news_rss"
       }
@@ -7390,13 +7874,13 @@
       "한국 증시 오늘 새 공시 수주 계약 정책 변화",
       "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
       "유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "상폐 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "환율 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "코스닥서 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "시총 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+      "호르무즈 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+      "뉴욕증시 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+      "나스닥 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+      "협상 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "달러 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "금리 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "추석 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+      "하락에 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+      "마감 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
     ],
     "sector_selection": {
       "mode": "dynamic",
@@ -7540,7 +8024,7 @@
   "changelog": "# AI 자동 변경 기록\n\n이 파일은 Evolution Agent가 실제로 저장소에 적용한 의미 있는 변화를 요약한다.\n\n원시 10분 Tick 기록은 `data/evolution/ticks/`에 별도로 저장한다.\n\n---\n\n## 2026-09-25 — Self-Evolving V2 기반 도입\n\n- 10분 Continuous Loop 설계\n- 프로젝트 자기진화 Scout/Builder 구조\n- 결정 원장/아이디어/실험/도움 필요 메모\n- 안전한 자동 수정 경계\n- GitHub Pages용 대시보드 설계\n- 역할별 모델 분리 및 비용 최적화 방향\n",
   "market": {},
   "market_runtime": {
-    "generated_at": "2026-09-26T02:47:40.139112+09:00",
+    "generated_at": "2026-09-26T05:46:49.433703+09:00",
     "source_status": "outside_domestic_monitor_window",
     "provider": "provider_chain",
     "provider_captured_at": null,
@@ -7554,7 +8038,7 @@
   },
   "toss_provider": {
     "available": true,
-    "captured_at": "2026-09-25T23:36:10.304937+09:00",
+    "captured_at": "2026-09-26T03:52:51.552163+09:00",
     "provider": "toss",
     "source_mode": "rest_6m_batch",
     "minute_amount_method": "close_x_volume; current Top50 interval may be scaled to exact ranking tradingAmount delta",
@@ -7564,16 +8048,16 @@
     "subscription_count": 0,
     "rejected_count": 0,
     "last_message_at": null,
-    "last_universe_refresh": "2026-09-25T23:36:10.304937+09:00",
+    "last_universe_refresh": "2026-09-26T03:52:51.552163+09:00",
     "fetch_runtime": {
       "status": "ok",
-      "fetched_at": "2026-09-25T17:47:26.722586+00:00",
-      "captured_at": "2026-09-25T23:36:10.304937+09:00",
+      "fetched_at": "2026-09-25T20:46:37.393994+00:00",
+      "captured_at": "2026-09-26T03:52:51.552163+09:00",
       "error": null
     }
   },
   "risk": {
-    "generated_at": "2026-09-26T02:47:40.767390+09:00",
+    "generated_at": "2026-09-26T05:46:50.223370+09:00",
     "risk_level": "LOW",
     "event_risk_level": "LOW",
     "macro_risk_level": "LOW",
@@ -7596,7 +8080,7 @@
       "note": "BLS 08:30 ET 발표를 KST로 환산",
       "resolved_datetime_kst": "2026-10-02T21:30:00+09:00",
       "time_unknown": false,
-      "hours_to_event": 162.71,
+      "hours_to_event": 159.72,
       "phase": "FUTURE",
       "risk_level": "LOW",
       "trade_window": "AFTER_NXT_CLOSE"
@@ -7621,7 +8105,7 @@
         "note": "BLS 08:30 ET 발표를 KST로 환산",
         "resolved_datetime_kst": "2026-10-02T21:30:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 162.71,
+        "hours_to_event": 159.72,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "AFTER_NXT_CLOSE"
@@ -7642,7 +8126,7 @@
         "official_url": "https://www.federalreserve.gov/monetarypolicy.htm",
         "resolved_datetime_kst": "2026-10-08T03:00:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 288.21,
+        "hours_to_event": 285.22,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "KOREA_TRADING_HOURS"
@@ -7666,7 +8150,7 @@
         "note": "BLS 08:30 ET 발표를 KST로 환산",
         "resolved_datetime_kst": "2026-10-14T21:30:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 450.71,
+        "hours_to_event": 447.72,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "AFTER_NXT_CLOSE"
@@ -7687,7 +8171,7 @@
         "official_url": "https://www.bls.gov/schedule/2026/10_sched_list.htm",
         "resolved_datetime_kst": "2026-10-15T21:30:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 474.71,
+        "hours_to_event": 471.72,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "AFTER_NXT_CLOSE"
@@ -7710,7 +8194,7 @@
         "note": "공식 일정에서 날짜 확인. 정확한 발표 시각은 확정 자료가 있을 때 갱신.",
         "resolved_datetime_kst": "2026-10-22T09:00:00+09:00",
         "time_unknown": true,
-        "hours_to_event": 630.21,
+        "hours_to_event": 627.22,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "UNKNOWN_TIME"
@@ -7734,14 +8218,14 @@
         "note": "10월 27~28일 회의. 정책 발표 시점은 통상 14:00 ET 기준 fallback.",
         "resolved_datetime_kst": "2026-10-29T03:00:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 792.21,
+        "hours_to_event": 789.22,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "KOREA_TRADING_HOURS"
       }
     ],
     "macro": {
-      "captured_at": "2026-09-26T02:47:40.767390+09:00",
+      "captured_at": "2026-09-26T05:46:50.223370+09:00",
       "values": {},
       "sources": [],
       "unknowns": [
@@ -7818,12 +8302,12 @@
       }
     },
     "semantic_hash": "9210755795b9502d510d64304953da026abff40904c0b814bd98d43e778cac2c",
-    "dirty": true,
+    "dirty": false,
     "evaluation": {
       "risk_level": "LOW",
       "single_biggest_risk": {
         "title": "미국 고용보고서",
-        "why": "162.71시간 후 · AFTER_NXT_CLOSE",
+        "why": "159.72시간 후 · AFTER_NXT_CLOSE",
         "severity": 5
       },
       "summary": "현재 확인 가능한 입력 기준 대형 Overnight Risk는 제한적.",
@@ -7835,7 +8319,7 @@
     }
   },
   "macro_matrix": {
-    "captured_at": "2026-09-26T02:47:40.767390+09:00",
+    "captured_at": "2026-09-26T05:46:50.223370+09:00",
     "source_mode": "unavailable",
     "known_count": 0,
     "total_count": 26,
@@ -8084,16 +8568,16 @@
     ]
   },
   "risk_runtime": {
-    "generated_at": "2026-09-26T02:47:40.767390+09:00",
-    "dirty": true,
+    "generated_at": "2026-09-26T05:46:50.223370+09:00",
+    "dirty": false,
     "semantic_hash": "9210755795b9502d510d64304953da026abff40904c0b814bd98d43e778cac2c",
     "previous_hash": "9210755795b9502d510d64304953da026abff40904c0b814bd98d43e778cac2c",
-    "evaluation_called": true,
+    "evaluation_called": false,
     "calendar_source": "live",
     "macro_source": "unavailable"
   },
   "health": {
-    "generated_at": "2026-09-26T02:47:42.030860+09:00",
+    "generated_at": "2026-09-26T05:46:51.789497+09:00",
     "status": "CRITICAL",
     "issue_count": 2,
     "issues": [
@@ -8103,7 +8587,7 @@
         "severity": "CRITICAL",
         "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
         "recovery": "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
-        "consecutive": "12"
+        "consecutive": "13"
       },
       {
         "component": "discovery",
@@ -8111,19 +8595,19 @@
         "severity": "CRITICAL",
         "message": "Google News 탐색 5/7개 그룹이 비어 있거나 오류",
         "recovery": "6분 센서가 when 필터 제거 + broad fallback을 자동 재시도. 반복되면 1시간 AI가 검색식/소스를 수정",
-        "consecutive": "11"
+        "consecutive": "12"
       }
     ],
     "consecutive": {
-      "macro:unavailable": 12,
-      "discovery:google-news-degraded": 11
+      "discovery:google-news-degraded": 12,
+      "macro:unavailable": 13
     }
   },
   "regression": {
-    "generated_at": "2026-09-25T17:47:41.408971+00:00",
+    "generated_at": "2026-09-25T20:46:51.015513+00:00",
     "status": "COLLECTING",
     "snapshot": {
-      "timestamp": "2026-09-25T17:47:41.408971+00:00",
+      "timestamp": "2026-09-25T20:46:51.015513+00:00",
       "overall_quality": 52.0,
       "research_quality": null,
       "health_score": 20.0,
@@ -8131,12 +8615,12 @@
       "health_status": "CRITICAL"
     },
     "baseline_summary": {
-      "overall_7d": 54.5,
-      "overall_30d": 54.5,
+      "overall_7d": 54.31,
+      "overall_30d": 54.31,
       "research_7d": null,
       "research_30d": null,
-      "samples_7d": 12,
-      "samples_30d": 12
+      "samples_7d": 13,
+      "samples_30d": 13
     },
     "evaluations": [],
     "active_change_count": 0,
