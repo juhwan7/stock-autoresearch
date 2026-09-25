@@ -92,3 +92,26 @@ def test_merge_rows_deduplicates_same_minute():
     )
     assert len(merged) == 1
     assert merged[0]["close"] == 101
+
+
+def test_requested_limit_is_bounded_by_toss_maximum(monkeypatch, tmp_path):
+    import autoresearch.toss_batch_market as module
+
+    seen = {}
+
+    class FakeClient:
+        def __init__(self, client_id, client_secret):
+            pass
+
+        def rankings(self, count):
+            seen["count"] = count
+            return []
+
+        def stocks(self, symbols):
+            return {}
+
+    monkeypatch.setenv("TOSS_CLIENT_ID", "id")
+    monkeypatch.setenv("TOSS_CLIENT_SECRET", "secret")
+    monkeypatch.setattr(module, "TossRestClient", FakeClient)
+    module.collect(tmp_path, now=datetime(2026, 9, 25, 12, 0, tzinfo=KST), limit=150)
+    assert seen["count"] == 100
