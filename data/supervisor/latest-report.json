@@ -1,112 +1,141 @@
 {
   "schema_version": 1,
-  "batch_id": "immediate-20260925T0923+0900-multisource",
-  "processed_at": "2026-09-25T09:23:00+09:00",
-  "observation_ids": [],
+  "batch_id": "hourly-20260925T1159+0900-10",
+  "processed_at": "2026-09-25T11:59:36+09:00",
+  "observation_ids": [
+    "obs-20260925T100127+0900-36080146095-1",
+    "obs-20260925T100250+0900-36080256714-1",
+    "obs-20260925T100347+0900-36080324305-1",
+    "obs-20260925T105837+0900-36084289048-1",
+    "obs-20260925T110443+0900-36084727157-1",
+    "obs-20260925T110737+0900-36084931950-1",
+    "obs-20260925T112016+0900-36085808052-1",
+    "obs-20260925T112324+0900-36085971818-1",
+    "obs-20260925T114213+0900-36087318444-1",
+    "obs-20260925T114442+0900-36087484086-1"
+  ],
   "expected_observation_count": 10,
-  "sensor_gap": 10,
+  "sensor_gap": 0,
   "status": "changed",
   "notify": true,
-  "research_report_path": "reports/2026-09-25-0923-멀티소스-심층리서치.md",
   "summary": [
-    "즉시 멀티소스 AI 심층 리서치를 실행했습니다. 오늘은 추석 KRX 휴장이라 국내 실시간 체결을 추정하지 않았습니다.",
-    "미중 정상회담은 무역 휴전을 2개월 연장했지만 관세·희토류·기술제한 핵심 쟁점은 다음 협상으로 남았습니다.",
-    "전일 미국장은 거의 보합이었지만 Brent 약 107달러와 미국채 금리 상승이 월요일 한국장의 주요 거시 리스크입니다.",
-    "6분 센서를 프로젝트 Health 전용에서 시장·뉴스 단서 수집까지 확장했습니다. Google News 다중 주제 RSS와 네이버 금융 공개 지수 보조값을 수집합니다.",
-    "앞으로 매시간 AI는 6분 센서의 market_discovery 단서를 참고하되 웹·원기사·공식 1차자료를 다시 깊게 조사합니다."
+    "KRX 추석 휴장으로 국내 실시간 주도 섹터는 확정하지 않았고, 네이버 6분 배치의 fresh Top50/1분 표본 부재를 정상 휴장 상태로 판정했다.",
+    "다음 국내 개장의 최우선 외부 변수는 유가와 미국 장기금리 상승이다. 9월24일 미 10년물 5.18%, 30년물 5.47%로 전일 대비 각각 7bp 상승했다.",
+    "미중 정상회담은 무역 휴전을 2개월 연장했지만 관세·희토류·기술제한 핵심 쟁점은 미해결 상태다.",
+    "최신 main의 stale holiday Top50 제거 수정과 관련 CI/smoke test가 성공해 휴장일 허위 자금유입 신호 위험이 낮아졌다."
   ],
   "persistent_findings": [
     {
-      "finding": "scheduled_6m_observer_not_yet_accumulating",
-      "severity": "attention",
-      "evidence": "이번 즉시 실행 시 state.json 이후 실제 자동 6분 관측이 0개라 sensor_gap=10",
-      "interpretation": "시장 리서치는 중단하지 않고 웹에서 직접 수행했으며, 자동 센서 스케줄은 후속 Actions에서 재확인"
+      "finding": "holiday_public_batch_unavailable",
+      "severity": "info",
+      "evidence": "naver_batch latest ranking_fresh_today=false, current_top50_count=0, minute samples=0",
+      "interpretation": "2026-09-25 KRX 휴장에 맞는 상태이며 주도 섹터 정량 판정에 사용하지 않음"
     },
     {
-      "finding": "market_discovery_was_project_only",
-      "severity": "resolved",
-      "evidence": "6분 workflow에 market-discovery-observe를 추가하고 supervisor observation에 market_discovery를 포함",
-      "interpretation": "이제 프로젝트 상태뿐 아니라 시간대별 시장·뉴스 단서도 다음 AI 배치로 전달"
+      "finding": "health_critical_in_default_public_mode",
+      "severity": "attention",
+      "evidence": "11:42~11:46 관측에서 validation은 ok지만 health=CRITICAL, market:needs_credentials가 지속",
+      "interpretation": "기본 네이버 공개 배치 모드에서 선택적 Kiwoom/Toss 미설정이 Health를 과도하게 악화시키는지 구성요소별 재검토 필요"
+    },
+    {
+      "finding": "discovery_recovered_after_gap",
+      "severity": "monitor",
+      "evidence": "10:02~11:04 discovery 0건 이후 11:07부터 34건으로 회복",
+      "interpretation": "자동복구가 작동했으나 discovery:degraded 신호가 지속돼 다음 관측에서도 확인"
     }
   ],
   "market_research": [
     {
-      "topic": "KRX holiday",
+      "topic": "oil_and_long_rates",
       "status": "verified_fact",
-      "finding": "2026-09-25 추석 휴장. 다음 국내 거래일 9월 28일.",
-      "implication": "오늘 국내 1분 거래대금·수급을 실시간값처럼 생성하지 않음"
+      "finding": "9/24 미국 10년물 5.18%, 30년물 5.47%; 중동 불확실성과 유가 상승이 장기금리 압력을 강화",
+      "implication": "9/28 한국 개장 전 성장주 할인율과 위험선호 최우선 점검"
     },
     {
-      "topic": "US-China summit",
-      "status": "verified_fact",
-      "finding": "무역 휴전 2개월 연장. 관세·중국의 미국산 구매·희토류·기술제한 핵심 쟁점은 후속 협상으로 이월.",
-      "implication": "정상회담 자체를 완전한 정책 리스크 해소로 해석하지 않음"
+      "topic": "AI_semiconductors",
+      "status": "analysis",
+      "finding": "9/21 AI/반도체 강세 뒤 9/24 금리·유가 상승에도 Nasdaq은 +0.01%로 보합권",
+      "implication": "구조 모멘텀은 남았지만 한국 반도체 주도 여부는 월요일 실제 거래대금으로 재확인"
     },
     {
-      "topic": "oil_and_rates",
+      "topic": "US_China_trade_rare_earth",
       "status": "verified_fact",
-      "finding": "9월24일 미 증시는 거의 보합, Brent는 약 107달러 접근, 미국채 금리는 상승.",
-      "implication": "월요일 국내 성장주와 테마주의 할인율·위험선호에 유가와 금리가 중요"
-    },
-    {
-      "topic": "rare_earths",
-      "status": "verified_fact",
-      "finding": "미국의 중국 희토류 의존은 여전히 높고 이트륨 공급 병목이 항공·전력·반도체 장비 공급망 이슈로 남아 있음.",
-      "implication": "관련 국내주는 실제 공급망 계약·대체능력 확인 없이 테마 수혜로 확정하지 않음"
+      "finding": "무역 휴전 2개월 연장; 관세·희토류·기술제한은 후속 협상으로 이월",
+      "implication": "관련 국내 테마는 실제 수출허가·계약·거래대금 확인 전 수혜 확정 금지"
     }
   ],
+  "dynamic_trends": [
+    {
+      "rank": 1,
+      "name": "유가·장기금리",
+      "confidence": "high_external_macro",
+      "domestic_leadership": "not_confirmable_holiday"
+    },
+    {
+      "rank": 2,
+      "name": "AI·반도체",
+      "confidence": "watch",
+      "domestic_leadership": "verify_on_2026-09-28"
+    },
+    {
+      "rank": 3,
+      "name": "미중 무역·희토류 공급망",
+      "confidence": "watch",
+      "domestic_leadership": "verify_on_2026-09-28"
+    }
+  ],
+  "sensor_timeline": [
+    "10:01 discovery 41건, 지수 null, 저품질 토큰 혼입",
+    "10:02 pytest 일시 실패",
+    "10:03 pytest 정상 복귀",
+    "11:04 네이버 지수 보조값 복구",
+    "11:07 discovery 34건으로 회복, 유가·금리 키워드 중심",
+    "11:23 public_batch_market 연결",
+    "11:42~11:46 휴장일 fresh Top50 없음; 최신 수정으로 stale universe 제거"
+  ],
   "discovery_sources_checked": [
+    "GitHub 6분 market_discovery",
+    "네이버 공개 6분 배치",
     "Reuters",
-    "중국 외교부/중국 정부 영문 사이트",
-    "White House",
-    "한국 증시 휴장 일정 자료",
-    "SK hynix Newsroom",
-    "Samsung Newsroom",
-    "국내 주요 뉴스 검색 결과"
+    "국내 휴장 일정 보도",
+    "일반 웹 검색"
   ],
   "primary_sources_checked": [
-    "https://www.mfa.gov.cn/zyxw/202609/t20260925_12031134.shtml",
-    "https://www.whitehouse.gov/briefings-statements/2026/09/first-lady-melania-trump-releases-details-ahead-of-his-excellency-xi-jinping-president-of-the-peoples-republic-of-china-and-madame-peng-liyuans-visit-to-the-white-house/",
-    "https://news.skhynix.com/en/share-buyback-and-retirement/",
-    "https://news.samsung.com/kr/"
+    "U.S. Treasury Daily Treasury Rates",
+    "Federal Reserve 2026-09-16 FOMC Statement/SEP",
+    "중국 외교부 2026-09-25 정상회담 자료"
   ],
   "source_conflicts": [
     {
-      "subject": "삼성전자·SK하이닉스 자사주 매입 종료 시점",
-      "status": "needs_exact_filing_check",
-      "detail": "언론의 조기 종료 전망은 발견했지만 실제 남은 매입량·정확한 종료일은 각사 공시와 취득 진행 내역을 추가 확인하기 전 확정하지 않음"
+      "subject": "네이버 지수 휴장일 값",
+      "status": "resolved_interpretation",
+      "detail": "11시 센서에 숫자가 존재하지만 휴장일이므로 당일 실시간 지수로 해석하지 않음"
+    },
+    {
+      "subject": "미중 정상회담 효과",
+      "status": "resolved_scope",
+      "detail": "휴전 연장은 확인되나 구조적 관세·희토류·기술제한 해결로 확대 해석하지 않음"
     }
   ],
   "actions": [
-    "src/autoresearch/market_discovery.py 추가: Google News RSS 다중 주제 + 네이버 금융 지수 보조값 수집",
-    "6분 workflow에 비AI 시장 discovery 단계 추가",
-    "각 supervisor observation에 market_discovery 요약·새 헤드라인·handoff query 포함",
-    "Telegram 알림에 심층 리서치 결과 링크 버튼 추가",
-    "latest-report.json 변경 즉시 Telegram/GitHub Issue로 보내는 push workflow 추가",
-    "현재 시점 멀티소스 심층 리서치 보고서 생성"
+    "reports/2026-09-25-1159-시간별-시장심층리서치.md 생성",
+    "첫 10개 실제 센서 관측을 처리",
+    "휴장일 stale Top50 제거 관련 최신 CI 성공 확인"
   ],
   "changed_paths": [
-    "src/autoresearch/market_discovery.py",
-    "src/autoresearch/cli.py",
-    "src/autoresearch/supervisor_queue.py",
-    ".github/workflows/연속연구와진화.yml",
-    ".github/workflows/감독결과_즉시알림.yml",
-    "tests/test_market_discovery.py",
-    "tests/test_supervisor_queue.py",
-    "scripts/감독결과_알림.py",
-    "docs/감독큐_운영.md",
-    "README.md",
-    "reports/2026-09-25-0923-멀티소스-심층리서치.md"
+    "reports/2026-09-25-1159-시간별-시장심층리서치.md",
+    "data/supervisor/latest-report.json",
+    "data/supervisor/state.json"
   ],
   "validation": {
-    "status": "pending_github_actions",
-    "note": "방금 추가한 discovery 코드와 즉시 알림 workflow의 프로젝트 검증 결과를 확인 중"
+    "status": "pending_next_observation",
+    "note": "보고서/감독 상태 저장 후 다음 6분 관측에서 main 검증과 Health 상태를 재확인"
   },
   "next_checks": [
-    "프로젝트 검증에서 새 market_discovery parser/CLI/supervisor handoff 테스트가 통과하는지 확인",
-    "감독 결과 즉시 알림 workflow가 이번 latest-report push를 감지해 Telegram으로 발송하는지 확인",
-    "다음 6분 sensor run에서 data/discovery/latest.json이 생성되고 recent.json 관측에 market_discovery가 들어가는지 확인",
-    "GitHub cron 지연 여부와 실제 6분 schedule 실행 시작 여부 재확인",
-    "9월25일 미국장 종료 후 유가·미국채·반도체 상대강도를 다음 리서치에서 갱신"
-  ]
+    "9/25 미국장 종료 후 Nasdaq/SOX·Brent·미 국채 장기금리 재확인",
+    "9/28 개장 후 naver_batch ranking_fresh_today=true 및 1분 근사 표본 생성 확인",
+    "Health CRITICAL의 market:needs_credentials가 기본 public mode에서 적절한지 점검",
+    "discovery:degraded 지속 여부 확인"
+  ],
+  "research_report_path": "reports/2026-09-25-1159-시간별-시장심층리서치.md"
 }
