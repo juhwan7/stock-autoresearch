@@ -4,8 +4,10 @@ from datetime import datetime, timedelta, timezone
 from autoresearch.naver_batch_market import (
     KST,
     build_interval_rows,
+    calibrate_minute_samples,
     extract_polling_quotes,
     extract_ranked_stocks,
+    parse_time_quote_rows,
 )
 
 
@@ -122,3 +124,34 @@ def test_ranking_turnover_can_backfill_polling_turnover():
         if quote.get("accumulated_trading_value") is None:
             quote["accumulated_trading_value"] = universe_by_code[code]["ranking_trading_value"]
     assert quotes["005930"]["accumulated_trading_value"] == 15_000_000_000
+
+
+def test_parse_time_quote_rows_builds_minute_volume_and_amount():
+    html = """
+    <table>
+      <tr onmouseover="mouseOver(this)">
+        <td><span>10:06</span></td><td><span>10,000</span></td><td><span>0</span></td>
+        <td><span>10,010</span></td><td><span>9,990</span></td><td><span>1,600</span></td><td><span>600</span></td>
+      </tr>
+      <tr onmouseover="mouseOver(this)">
+        <td><span>10:05</span></td><td><span>9,900</span></td><td><span>0</span></td>
+        <td><span>9,910</span></td><td><span>9,890</span></td><td><span>1,000</span></td><td><span>400</span></td>
+      </tr>
+    </table>
+    """
+    rows = parse_time_quote_rows(html)
+    assert [row["time"] for row in rows] == ["10:05", "10:06"]
+    assert rows[-1]["minute_volume"] == 600
+    assert rows[-1]["raw_trading_value_estimate"] == 6_000_000
+
+
+def test_calibrate_minute_samples_matches_six_minute_total():
+    rows = [
+        {"time": "10:01", "raw_trading_value_estimate": 100.0},
+        {"time": "10:02", "raw_trading_value_estimate": 200.0},
+        {"time": "10:03", "raw_trading_value_estimate": 300.0},
+    ]
+    calibrated = calibrate_minute_samples(rows, 1_200.0)
+    assert round(sum(x["minute_trading_value"] for x in calibrated), 6) == 1_200.0
+    assert all(x["calibrated_to_interval_total"] for x in calibrated)
+    assert all(x["amount_estimated"] for x in calibrated)
