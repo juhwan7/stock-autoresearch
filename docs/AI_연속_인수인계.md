@@ -48,6 +48,8 @@
 - 30분: `AutoResearch 연속 감독 30분`
 - 목표 흐름: 15:00 A → 15:30 B → 16:00 A → 16:30 B처럼 같은 상태를 교대로 이어받는다.
 - 각 실행은 A 시장 연구와 B 프로젝트 자율개선을 모두 수행한다.
+- Telegram Supervisor 결과는 정각(:00)과 30분(:30) AI 사이클에서만 시간당 2회 보낸다. 6분 센서는 관측·큐 적재만 하며 Telegram 결과 알림을 보내지 않는다.
+- 시장·코드 변화가 없어도 :00/:30 사이클 결과 자체를 새 batch_id와 notify=true로 latest-report에 저장해 결과를 보고한다.
 - 종료 전 `data/supervisor/latest-report.json`과 `data/supervisor/state.json`을 최신 SHA 기준으로 순차 갱신하고 다시 읽어 일치 여부를 검증해야 한다.
 - `latest-report.json`에는 고유 batch_id, processed_at, notify=true와 summary/actions/changed_paths/next_checks를 남긴다.
 - state의 처리 포인터는 실제 마지막 처리 관측 및 batch와 일치해야 한다.
