@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import urllib.error
 import urllib.parse
@@ -99,6 +100,222 @@ def extract_naver_indices(html_text: str) -> dict[str, str | None]:
         if match:
             result[name] = _clean_text(match.group(1))
     return result
+
+
+def _fetch_json(
+    url: str,
+    *,
+    headers: dict[str, str] | None = None,
+    timeout: int = 10,
+) -> dict[str, Any]:
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "application/json",
+            **(headers or {}),
+        },
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        raw = response.read().decode("utf-8")
+    value = json.loads(raw)
+    return value if isinstance(value, dict) else {}
+
+
+def _naver_headers() -> dict[str, str] | None:
+    client_id = os.getenv("NAVER_CLIENT_ID", "").strip()
+    client_secret = os.getenv("NAVER_CLIENT_SECRET", "").strip()
+    if not client_id or not client_secret:
+        return None
+    return {
+        "X-Naver-Client-Id": client_id,
+        "X-Naver-Client-Secret": client_secret,
+    }
+
+
+def fetch_naver_news(query: str, *, display: int = 20) -> list[dict[str, Any]]:
+    headers = _naver_headers()
+    if headers is None:
+        return []
+    params = urllib.parse.urlencode(
+        {"query": query, "display": min(max(display, 1), 100), "start": 1, "sort": "date"}
+    )
+    payload = _fetch_json(
+        "https://openapi.naver.com/v1/search/news.json?" + params,
+        headers=headers,
+    )
+    rows: list[dict[str, Any]] = []
+    for item in payload.get("items") or []:
+        if not isinstance(item, dict):
+            continue
+        title = _clean_text(item.get("title"))
+        url = str(item.get("originallink") or item.get("link") or "").strip()
+        if not title or not url:
+            continue
+        rows.append(
+            {
+                "topic": "naver_news",
+                "title": title,
+                "url": url,
+                "published_at": _clean_text(item.get("pubDate")) or None,
+                "publisher": None,
+                "discovery_source": "naver_news_api",
+            }
+        )
+    return rows
+
+
+def fetch_naver_official_web_candidates(
+    query: str,
+    *,
+    display: int = 10,
+) -> list[dict[str, Any]]:
+    headers = _naver_headers()
+    if headers is None:
+        return []
+    params = urllib.parse.urlencode(
+        {"query": query + " 공식 IR 뉴스룸", "display": min(max(display, 1), 100), "start": 1}
+    )
+    payload = _fetch_json(
+        "https://openapi.naver.com/v1/search/webkr.json?" + params,
+        headers=headers,
+    )
+    rows: list[dict[str, Any]] = []
+    for item in payload.get("items") or []:
+        if not isinstance(item, dict):
+            continue
+        title = _clean_text(item.get("title"))
+        url = str(item.get("link") or "").strip()
+        description = _clean_text(item.get("description"))
+        if not title or not url:
+            continue
+        rows.append(
+            {
+                "topic": "official_web_candidate",
+                "title": title,
+                "url": url,
+                "description": description,
+                "published_at": None,
+                "publisher": None,
+                "discovery_source": "naver_web_api",
+                "verification_required": True,
+            }
+        )
+    return rows
+
+
+def fetch_dart_filings(now: datetime, *, limit: int = 100) -> tuple[list[dict[str, Any]], str]:
+    api_key = os.getenv("DART_API_KEY", "").strip()
+    if not api_key:
+        return [], "needs_credentials"
+    day = now.astimezone(KST).strftime("%Y%m%d")
+    params = urllib.parse.urlencode(
+        {
+            "crtfc_key": api_key,
+            "bgn_de": day,
+            "end_de": day,
+            "page_no": 1,
+            "page_count": min(max(limit, 1), 100),
+        }
+    )
+    payload = _fetch_json("https://opendart.fss.or.kr/api/list.json?" + params)
+    status = str(payload.get("status") or "")
+    if status == "013":
+        return [], "ok"
+    if status and status != "000":
+        return [], "error:" + status
+
+    rows: list[dict[str, Any]] = []
+    for item in payload.get("list") or []:
+        if not isinstance(item, dict):
+            continue
+        rcept_no = str(item.get("rcept_no") or "").strip()
+        corp_name = str(item.get("corp_name") or "").strip()
+        report_nm = str(item.get("report_nm") or "").strip()
+        if not rcept_no or not report_nm:
+            continue
+        rows.append(
+            {
+                "rcept_no": rcept_no,
+                "corp_name": corp_name,
+                "report_nm": report_nm,
+                "rcept_dt": item.get("rcept_dt"),
+                "corp_cls": item.get("corp_cls"),
+                "flr_nm": item.get("flr_nm"),
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + rcept_no,
+            }
+        )
+    return rows, "ok"
+
+
+def summarize_toss_market(root: Path) -> dict[str, Any]:
+    snapshot = _read_json(root / "data" / "providers" / "toss" / "latest.json")
+    if not snapshot:
+        return {"available": False}
+
+    ranking = [
+        item for item in snapshot.get("ranking", [])
+        if isinstance(item, dict)
+    ][:30]
+    metadata = snapshot.get("metadata") or {}
+    minute_by_ticker = snapshot.get("minute_by_ticker") or {}
+
+    burst_rows: list[dict[str, Any]] = []
+    for ticker, bars in minute_by_ticker.items():
+        if not isinstance(bars, list) or not bars:
+            continue
+        numeric = [
+            float(bar.get("amount") or 0)
+            for bar in bars[-20:]
+            if isinstance(bar, dict)
+        ]
+        if not numeric:
+            continue
+        baseline_values = numeric[:-1] or numeric
+        ordered = sorted(baseline_values)
+        baseline = ordered[len(ordered) // 2] if ordered else 0.0
+        latest = numeric[-1]
+        ratio = (latest / baseline) if baseline > 0 else None
+        info = metadata.get(ticker) if isinstance(metadata, dict) else {}
+        burst_rows.append(
+            {
+                "ticker": ticker,
+                "name": (info or {}).get("name") if isinstance(info, dict) else None,
+                "latest_minute_amount": latest,
+                "median_recent_amount": baseline,
+                "burst_ratio": ratio,
+            }
+        )
+    burst_rows.sort(
+        key=lambda item: (
+            float(item.get("burst_ratio") or 0),
+            float(item.get("latest_minute_amount") or 0),
+        ),
+        reverse=True,
+    )
+
+    top_ranking = []
+    for item in ranking:
+        ticker = str(item.get("ticker") or "")
+        info = metadata.get(ticker) if isinstance(metadata, dict) else {}
+        top_ranking.append(
+            {
+                "rank": item.get("rank"),
+                "ticker": ticker,
+                "name": (info or {}).get("name") if isinstance(info, dict) else None,
+                "trading_value": item.get("trading_value"),
+                "day_return_pct": item.get("day_return_pct"),
+                "last_price": item.get("last_price"),
+            }
+        )
+
+    return {
+        "available": True,
+        "captured_at": snapshot.get("captured_at"),
+        "top_turnover": top_ranking[:20],
+        "minute_burst_leaders": burst_rows[:20],
+        "top10_share": snapshot.get("turnover_rank_top10_share"),
+    }
 
 
 def _default_fetch(url: str, timeout: int = 10) -> str:
@@ -276,6 +493,56 @@ def collect(
                 "error": type(exc).__name__,
             }
 
+    naver_headers = _naver_headers()
+    if naver_headers is None:
+        source_status["naver_news_api"] = {"status": "needs_credentials"}
+        source_status["naver_web_api"] = {"status": "needs_credentials"}
+    else:
+        naver_news_rows: list[dict[str, Any]] = []
+        for query in [
+            "한국 증시 주도주 거래대금",
+            "한국 기업 공시 수주 계약",
+            "코스피 코스닥 정책 산업",
+        ]:
+            try:
+                naver_news_rows.extend(fetch_naver_news(query, display=20))
+            except (
+                OSError,
+                TimeoutError,
+                urllib.error.URLError,
+                urllib.error.HTTPError,
+                json.JSONDecodeError,
+                ValueError,
+            ) as exc:
+                source_status["naver_news_api"] = {
+                    "status": "error",
+                    "error": type(exc).__name__,
+                }
+                break
+        else:
+            items.extend(naver_news_rows)
+            source_status["naver_news_api"] = {
+                "status": "ok",
+                "count": len(naver_news_rows),
+            }
+
+    try:
+        dart_rows, dart_status = fetch_dart_filings(now)
+        source_status["dart"] = {"status": dart_status, "count": len(dart_rows)}
+    except (
+        OSError,
+        TimeoutError,
+        urllib.error.URLError,
+        urllib.error.HTTPError,
+        json.JSONDecodeError,
+        ValueError,
+    ) as exc:
+        dart_rows = []
+        source_status["dart"] = {
+            "status": "error",
+            "error": type(exc).__name__,
+        }
+
     naver_url = "https://finance.naver.com/sise/"
     try:
         html_text = fetcher(naver_url)
@@ -314,6 +581,43 @@ def collect(
         topic_counts[topic] = topic_counts.get(topic, 0) + 1
 
     trending_terms = extract_trending_terms(deduped, previous)
+
+    official_candidates: list[dict[str, Any]] = []
+    if naver_headers is not None:
+        for trend in trending_terms[:5]:
+            term = str(trend.get("term") or "").strip()
+            if not term:
+                continue
+            try:
+                official_candidates.extend(
+                    fetch_naver_official_web_candidates(term, display=5)
+                )
+            except (
+                OSError,
+                TimeoutError,
+                urllib.error.URLError,
+                urllib.error.HTTPError,
+                json.JSONDecodeError,
+                ValueError,
+            ):
+                continue
+        if source_status.get("naver_web_api", {}).get("status") != "error":
+            source_status["naver_web_api"] = {
+                "status": "ok",
+                "count": len(official_candidates),
+            }
+
+    previous_filing_ids = {
+        str(item.get("rcept_no") or "")
+        for item in previous.get("dart_filings", [])
+        if isinstance(item, dict)
+    }
+    new_dart_filings = [
+        item for item in dart_rows
+        if str(item.get("rcept_no") or "") not in previous_filing_ids
+    ]
+
+    toss_market = summarize_toss_market(root)
     handoff_queries = build_dynamic_handoff_queries(trending_terms)
 
     ok_sources = sum(
@@ -341,6 +645,10 @@ def collect(
         ),
         "topic_counts": topic_counts,
         "trending_terms": trending_terms,
+        "dart_filings": dart_rows[:100],
+        "new_dart_filings": new_dart_filings[:40],
+        "official_web_candidates": official_candidates[:30],
+        "toss_market": toss_market,
         "item_count": len(deduped),
         "new_item_count": len(new_items),
         "new_items": new_items[:20],
@@ -356,6 +664,9 @@ def collect(
             "confirm_material_claims_with_primary_sources": True,
             "canonical_trade_data": "Toss/KRX/broker API",
             "portal_news_role": "discovery_and_cross_check",
+            "dart_role": "official_filing_primary_source",
+            "official_web_candidates_role": "candidate_only_verify_domain_before_claim",
+            "toss_role": "canonical_turnover_and_minute_trade_signal_when_available",
         },
     }
     _write_json(output, snapshot)
