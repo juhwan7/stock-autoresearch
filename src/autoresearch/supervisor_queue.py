@@ -160,6 +160,9 @@ def build_observation(
     regression = _read_json(root / "data" / "regression" / "latest.json")
     market = _read_json(root / "data" / "market" / "runtime.json")
     discovery = _read_json(root / "data" / "discovery" / "latest.json")
+    public_batch = _read_json(
+        root / "data" / "providers" / "naver_batch" / "latest.json"
+    )
     toss = _read_json(root / "data" / "providers" / "toss" / "status.json")
     if not toss:
         toss = _read_json(root / "data" / "providers" / "toss" / "latest.json")
@@ -242,6 +245,7 @@ def build_observation(
             "health": env.get("HEALTH_STEP_STATUS"),
             "dashboard": env.get("DASHBOARD_STEP_STATUS"),
             "market_discovery": env.get("DISCOVERY_STEP_STATUS"),
+            "public_batch_market": env.get("PUBLIC_BATCH_STATUS"),
             "market_sensor_repair": env.get("MARKET_SENSOR_STATUS"),
             "risk_sensor_repair": env.get("RISK_SENSOR_STATUS"),
             "regression_refresh": env.get("REGRESSION_STEP_STATUS"),
@@ -271,6 +275,17 @@ def build_observation(
             "source_summary": discovery.get("source_summary"),
             "top_new_items": (discovery.get("new_items") or [])[:10],
             "handoff_queries": discovery.get("handoff_queries"),
+        },
+        "public_batch_market": {
+            "generated_at": public_batch.get("generated_at"),
+            "status": public_batch.get("status"),
+            "provider": public_batch.get("provider"),
+            "exact_1m_bars": public_batch.get("exact_1m_bars"),
+            "elapsed_minutes_from_previous": public_batch.get(
+                "elapsed_minutes_from_previous"
+            ),
+            "interval_leaders": (public_batch.get("interval_leaders") or [])[:20],
+            "limitations": public_batch.get("limitations") or [],
         },
         "market": {
             "generated_at": market.get("generated_at"),
