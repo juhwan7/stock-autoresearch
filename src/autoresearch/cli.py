@@ -69,7 +69,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="라즈베리파이 없이 네이버 공개 시세로 6분 거래대금 배치를 수집",
     )
     batch_market.add_argument("--root", default=".", help="저장소 루트")
-    batch_market.add_argument("--limit", type=int, default=40, help="거래대금 상위 추적 종목 수")
+    batch_market.add_argument("--limit", type=int, default=50, help="현재 거래대금 Top50 + 당일 Top50 진입 종목 전체를 추적")
 
     discovery = sub.add_parser(
         "market-discovery-observe",
