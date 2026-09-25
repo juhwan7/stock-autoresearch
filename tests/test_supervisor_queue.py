@@ -32,6 +32,19 @@ def test_build_observation_collects_health_and_feedback(tmp_path):
             ],
         },
     )
+    write_json(
+        tmp_path / "data/discovery/latest.json",
+        {
+            "generated_at": "2026-09-25T08:19:00+09:00",
+            "item_count": 12,
+            "new_item_count": 3,
+            "topic_counts": {"market": 4, "semiconductor_ai": 8},
+            "naver_indices": {"KOSPI": "7000.00"},
+            "source_summary": {"ok_or_partial": 3, "failed": 0},
+            "new_items": [{"title": "새 뉴스", "url": "https://example.com/news"}],
+            "handoff_queries": ["코스피 코스닥 증시"],
+        },
+    )
     feedback = tmp_path / "data/feedback/사용자_피드백.jsonl"
     feedback.parent.mkdir(parents=True)
     feedback.write_text(
@@ -63,6 +76,8 @@ def test_build_observation_collects_health_and_feedback(tmp_path):
     assert observation["queue"]["batch_size"] == BATCH_SIZE
     assert observation["health"]["status"] == "WARN"
     assert observation["user_feedback"]["pending_count"] == 1
+    assert observation["market_discovery"]["new_item_count"] == 3
+    assert observation["market_discovery"]["top_new_items"][0]["title"] == "새 뉴스"
     assert "health:WARN" in observation["signals"]
     assert "validation:failed" in observation["signals"]
 
