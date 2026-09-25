@@ -10,6 +10,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
+from .question_engine import infer_questions, merge_question_queue
+
 
 KST = timezone(timedelta(hours=9))
 BATCH_SIZE = 10
@@ -393,4 +395,10 @@ def append_observation(
 
 def observe(root: Path, env: Mapping[str, str] | None = None) -> dict[str, Any]:
     observation = build_observation(root, env=env)
-    return append_observation(root, observation)
+    questions = infer_questions(observation)
+    observation["research_questions"] = questions
+    result = append_observation(root, observation)
+    queue = merge_question_queue(root, observation, questions)
+    result["generated_question_count"] = len(questions)
+    result["open_question_count"] = queue.get("open_count", 0)
+    return result
