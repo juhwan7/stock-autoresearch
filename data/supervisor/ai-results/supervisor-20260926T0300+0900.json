@@ -1,0 +1,104 @@
+{
+  "batch_id": "supervisor-20260926T0300+0900",
+  "processed_at": "2026-09-26T03:00:00+09:00",
+  "notify": true,
+  "observation_ids": [],
+  "status": "investigating",
+  "summary": [
+    "최근 30분: 새 국내 실거래 관측은 없어 국내 수급 숫자를 추정하지 않았다. 미국장은 AI 낙관이 지수를 지지하지만 높은 국채금리와 유가 부담 때문에 상승폭이 제한되는 기존 구조가 유지된다.",
+    "현재 핵심: Reuters 최신 보도 기준 25일 장중 Dow +0.34%, S&P 500 +0.18%, Nasdaq +0.21%의 제한적 상승이었다. 글로벌 주식형 펀드는 2주 연속 유출 뒤 순유입으로 전환돼 AI 위험선호가 단순 하루 반응만은 아니라는 근거가 추가됐다.",
+    "오버나잇 위험순위는 1) 미국 장기금리와 다음 주 고용·PCE, 2) 중동 협상과 유가 공급위험, 3) AI·기술주 중심의 좁은 시장폭이다. 유가는 휴전 기대에 약 3% 하락했지만 사우디 공급시설 공격 위험이 남아 위험 해소로 보지 않는다.",
+    "새 조사: 8월 미국 핵심 자본재 주문 +1.6%, 출하 +0.6%로 설비투자 강도가 확인됐다. AI 인프라 수요에는 우호적이지만 강한 투자·성장은 금리 부담을 오래 끌 수 있어 주식에는 양면적이다.",
+    "프로젝트: 직전 B가 찾은 Google News broad fallback 성공에도 Health가 CRITICAL로 누적되는 오탐은 계속 investigating/blocked 상태다. 코드검색 인덱스에서 관련 구현 위치를 찾지 못해 같은 쓰기 실패를 반복하지 않고 이번 사이클에는 억지 패치를 하지 않았다.",
+    "운영: 직전 02:30 B 결과는 canonical apply 커밋까지 완료됐고 이후 6분 관측 커밋도 새로 생성됐다. 결과 적용 경로와 6분 센서 자체는 현재 살아 있다."
+  ],
+  "actions": [
+    "최근 미국장·유가·자금흐름·설비투자 데이터를 Reuters로 재교차검증",
+    "직전 B 문제상태와 최신 canonical state가 일치하는지 확인",
+    "Google News Health 오탐 구현 위치를 코드검색으로 재탐색했으나 인덱스 결과가 없어 반복 쓰기 시도를 중단"
+  ],
+  "changed_paths": [],
+  "next_checks": [
+    "미국장 후반 AI·기술주 강세가 시장 전체 업종/시장폭으로 확산되는지 확인",
+    "10년물 금리 안정 여부와 Brent 추가 하락/재상승 확인",
+    "다음 센서에서 macro runtime과 Google News 세부검색 회복 여부 확인",
+    "Google News broad fallback 성공 시 경보 severity를 낮추는 실제 구현 위치를 허용된 경로에서 찾으면 최소 패치 후 테스트",
+    "다음 국내 실거래 세션에서 Toss subscription_count와 last_message_at 검증"
+  ],
+  "market_narrative": [
+    "최근 3거래일의 공통축은 AI 투자수요가 주식을 지지하는 동시에 유가와 장기금리가 시장 전체의 확산을 막는 구조다. 24일 S&P 500은 거의 보합이었고 25일에도 AI 기대와 유가 완화가 지수를 소폭 플러스로 만들었지만 강한 전면 위험선호로 보기는 어렵다.",
+    "자금 측면에서는 글로벌 주식형 펀드가 2주 연속 유출 뒤 다시 순유입으로 돌아섰다. 따라서 AI 위험선호에는 실제 자금 유입 근거가 있지만, 높은 금리와 좁은 시장폭 때문에 AI 밖으로 얼마나 확산되는지가 더 중요하다.",
+    "8월 핵심 자본재 주문 +1.6%와 출하 +0.6%는 기업 설비투자가 견조함을 보여준다. AI 인프라 수요에는 긍정적이지만 동시에 경제·투자 강도가 금리 하락을 늦출 수 있으므로 '좋은 데이터=주식 전면 호재'로 단순화하지 않는다.",
+    "중동에서는 미·이란 휴전 기대가 유가를 낮췄지만 후티의 사우디 공격과 공급차질 위험이 남아 있다. 유가가 더 내려가고 장기금리도 안정되어야 AI 선택적 강세가 시장 전체 강세로 확산될 여지가 커진다.",
+    "국내 신규 체결 데이터가 없는 시간대이므로 미국 흐름이 한국 반도체·AI 인프라로 전달됐다고 미리 판단하지 않는다. 다음 국내 실거래 세션의 실제 거래대금과 순위 변화로 확인한다."
+  ],
+  "market_focus": [
+    {
+      "title": "미국 장기금리",
+      "reason": "다음 주 고용·PCE와 견조한 설비투자가 금리 경로를 다시 흔들 수 있어 최우선."
+    },
+    {
+      "title": "중동·유가",
+      "reason": "휴전 기대가 위험 프리미엄을 낮췄지만 사우디 공급시설 공격 가능성은 남아 있다."
+    },
+    {
+      "title": "AI 자금 유입의 확산 여부",
+      "reason": "글로벌 주식형 펀드 순유입은 긍정적이나 AI 밖 시장폭이 넓어지는지 확인이 필요하다."
+    },
+    {
+      "title": "Google News Health 오탐",
+      "reason": "broad fallback이 데이터를 확보해도 세부검색 실패가 CRITICAL로 누적되는 운영 오탐이 남아 있다."
+    }
+  ],
+  "invalidation_checks": [
+    "10년물 금리가 뚜렷하게 안정되고 유가가 추가 하락하면서 상승 업종/시장폭이 넓어지면 'AI 선택적 강세+매크로 압박' 해석을 낮춘다.",
+    "AI·기술주가 약해져도 시장폭이 개선되면 'AI가 지수를 떠받친다'는 가설을 재검토한다.",
+    "미·이란 협상이 실제 공급 정상화와 공격 감소로 이어지면 중동·유가 위험순위를 낮춘다.",
+    "다음 Google News 관측에서 broad fallback까지 실패하면 현재 Health 경보를 오탐이 아닌 실제 데이터 장애로 재평가한다.",
+    "다음 국내 실거래 세션에서 미국 AI 강세가 국내 관련 종목 거래대금·순위 상승으로 연결되지 않으면 미국→한국 전달 가설을 반증한다."
+  ],
+  "problem_states": [
+    {
+      "id": "six-minute-sensor-gap",
+      "status": "resolved",
+      "evidence": "02:47 KST 부근 최신 6분 관측 커밋 확인",
+      "verify_after": null
+    },
+    {
+      "id": "supervisor-result-trigger-selection",
+      "status": "blocked",
+      "evidence": "기존 mtime 선택 구조; processed_at 역행 방어 존재",
+      "verify_after": "when workflow edit is permitted"
+    },
+    {
+      "id": "toss-live-message-receipt",
+      "status": "verification_pending",
+      "evidence": "국내 실거래 세션 전",
+      "verify_after": "next domestic live trading session"
+    },
+    {
+      "id": "macro-runtime-empty",
+      "status": "investigating",
+      "evidence": "직전 B 기준 values empty 누적; 다음 센서 값 필요",
+      "verify_after": "next sensor observation"
+    },
+    {
+      "id": "google-news-degraded",
+      "status": "investigating",
+      "evidence": "직전 B 기준 세부 5/7 empty, broad fallback count=30",
+      "verify_after": "next sensor observation"
+    },
+    {
+      "id": "google-news-health-fallback-severity",
+      "status": "blocked",
+      "evidence": "코드검색에서도 구현 위치를 확인하지 못했고 이전 쓰기 안전검사 차단을 반복하지 않음",
+      "verify_after": "when permitted edit path/location is identified"
+    },
+    {
+      "id": "telegram-report-format",
+      "status": "blocked",
+      "evidence": "직전 상태 유지; 동일 실패 방법 반복 금지",
+      "verify_after": "when a permitted code-edit path becomes available"
+    }
+  ]
+}
