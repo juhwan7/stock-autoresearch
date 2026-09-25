@@ -474,14 +474,18 @@ class HealthWatchdog:
             if str(key).startswith("google_news:")
             and isinstance(value, dict)
         ]
-        if google and all(str(x.get("status")) in {"empty", "error"} for x in google):
+        empty_google = [
+            x for x in google
+            if str(x.get("status")) in {"empty", "error"}
+        ]
+        if google and len(empty_google) >= max(3, (len(google) + 1) // 2):
             issues.append(
                 self._issue(
                     "discovery",
-                    "google-news-empty",
+                    "google-news-degraded",
                     "WARN",
-                    "Google News 탐색 그룹 전체가 비어 있음",
-                    "6분 센서가 when 필터 제거 fallback을 자동 재시도. 반복되면 1시간 AI가 검색식/소스를 수정",
+                    f"Google News 탐색 {len(empty_google)}/{len(google)}개 그룹이 비어 있거나 오류",
+                    "6분 센서가 when 필터 제거 + broad fallback을 자동 재시도. 반복되면 1시간 AI가 검색식/소스를 수정",
                 )
             )
 
