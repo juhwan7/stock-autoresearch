@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-09-25T11:46:19.909702+09:00",
+  "generated_at": "2026-09-25T12:42:07.825515+09:00",
   "status": "CRITICAL",
   "issue_count": 5,
   "issues": [
     {
       "component": "public_batch",
       "code": "stale-or-degraded",
-      "severity": "NOTICE",
+      "severity": "WARN",
       "message": "6분 공개 시세 배치 상태: unavailable",
       "recovery": "네이버 공개 랭킹/폴링 fallback을 재시도하고 반복되면 1시간 AI가 parser를 수정",
-      "consecutive": "1"
+      "consecutive": "2"
     },
     {
       "component": "market",
       "code": "credentials",
-      "severity": "NOTICE",
+      "severity": "WARN",
       "message": "국내시장 데이터 인증정보가 준비되지 않음",
       "recovery": "HELP_NEEDED의 시장 데이터 Secret/Collector 항목 확인",
-      "consecutive": "1"
+      "consecutive": "2"
     },
     {
       "component": "toss",
-      "code": "snapshot-missing",
+      "code": "subscription-empty",
       "severity": "NOTICE",
-      "message": "Toss primary snapshot을 사용할 수 없음 · fetch 상태=not_configured",
-      "recovery": "고정 IP Collector, 허용 IP, 인증정보, snapshot 전달 경로를 확인",
+      "message": "Toss WebSocket 활성 구독 정보가 비어 있음",
+      "recovery": "거래대금 랭킹 조회와 trade:kr 구독 선언 상태 확인",
       "consecutive": "1"
     },
     {
@@ -33,7 +33,7 @@
       "severity": "CRITICAL",
       "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
       "recovery": "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
-      "consecutive": "7"
+      "consecutive": "8"
     },
     {
       "component": "discovery",
@@ -41,14 +41,14 @@
       "severity": "CRITICAL",
       "message": "Google News 탐색 5/7개 그룹이 비어 있거나 오류",
       "recovery": "6분 센서가 when 필터 제거 + broad fallback을 자동 재시도. 반복되면 1시간 AI가 검색식/소스를 수정",
-      "consecutive": "6"
+      "consecutive": "7"
     }
   ],
   "consecutive": {
-    "macro:unavailable": 7,
-    "toss:snapshot-missing": 1,
-    "discovery:google-news-degraded": 6,
-    "market:credentials": 1,
-    "public_batch:stale-or-degraded": 1
+    "macro:unavailable": 8,
+    "public_batch:stale-or-degraded": 2,
+    "toss:subscription-empty": 1,
+    "market:credentials": 2,
+    "discovery:google-news-degraded": 7
   }
 }
