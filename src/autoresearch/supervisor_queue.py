@@ -159,6 +159,7 @@ def build_observation(
     health = _read_json(root / "data" / "health" / "latest.json")
     regression = _read_json(root / "data" / "regression" / "latest.json")
     market = _read_json(root / "data" / "market" / "runtime.json")
+    discovery = _read_json(root / "data" / "discovery" / "latest.json")
     toss = _read_json(root / "data" / "providers" / "toss" / "status.json")
     if not toss:
         toss = _read_json(root / "data" / "providers" / "toss" / "latest.json")
@@ -195,6 +196,10 @@ def build_observation(
         signals.append("validation:" + validation_status)
     if feedback_count:
         signals.append("user_feedback:" + str(feedback_count))
+
+    discovery_sources = discovery.get("source_summary", {}) if isinstance(discovery, dict) else {}
+    if discovery and not int(discovery_sources.get("ok_or_partial") or 0):
+        signals.append("discovery:unavailable")
 
     market_source_status = str(market.get("source_status") or "")
     if market_source_status and market_source_status not in {"ok", "idle"}:
@@ -234,6 +239,7 @@ def build_observation(
             "toss_summary": env.get("TOSS_SUMMARY_STATUS"),
             "health": env.get("HEALTH_STEP_STATUS"),
             "dashboard": env.get("DASHBOARD_STEP_STATUS"),
+            "market_discovery": env.get("DISCOVERY_STEP_STATUS"),
         },
         "health": {
             "status": health_status,
@@ -245,6 +251,16 @@ def build_observation(
             "generated_at": regression.get("generated_at"),
             "quarantine_count": regression.get("quarantine_count"),
             "rolled_back_count": regression.get("rolled_back_count"),
+        },
+        "market_discovery": {
+            "generated_at": discovery.get("generated_at"),
+            "item_count": discovery.get("item_count"),
+            "new_item_count": discovery.get("new_item_count"),
+            "topic_counts": discovery.get("topic_counts"),
+            "naver_indices": discovery.get("naver_indices"),
+            "source_summary": discovery.get("source_summary"),
+            "top_new_items": (discovery.get("new_items") or [])[:10],
+            "handoff_queries": discovery.get("handoff_queries"),
         },
         "market": {
             "generated_at": market.get("generated_at"),
