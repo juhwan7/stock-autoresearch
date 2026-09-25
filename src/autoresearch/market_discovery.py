@@ -8,6 +8,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from html import unescape
 from pathlib import Path
 from typing import Any, Callable
@@ -70,6 +71,8 @@ def parse_google_news_rss(xml_text: str, topic: str, limit: int = 10) -> list[di
         link = _clean_text(item.findtext("link"))
         published_at = _clean_text(item.findtext("pubDate"))
         source = _clean_text(item.findtext("source"))
+        if source and title.endswith(" - " + source):
+            title = title[: -(len(source) + 3)].strip()
         if not title or not link:
             continue
         rows.append(
@@ -356,10 +359,40 @@ def _title_tokens(title: str) -> list[str]:
             continue
         if token in STOPWORDS:
             continue
-        if token.isdigit():
+        lower = token.lower()
+        if lower in {"kr", "co", "com", "net", "org", "www", "html", "http", "https"}:
+            continue
+        if token.isdigit() or re.fullmatch(r"20\d{2}년", token):
             continue
         tokens.append(token)
     return tokens
+
+
+def _published_datetime(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        parsed = parsedate_to_datetime(value)
+    except (TypeError, ValueError, OverflowError):
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(KST)
+
+
+def recent_items(
+    items: list[dict[str, Any]],
+    now: datetime,
+    *,
+    hours: int = 36,
+) -> list[dict[str, Any]]:
+    cutoff = now.astimezone(KST) - timedelta(hours=hours)
+    result: list[dict[str, Any]] = []
+    for item in items:
+        stamp = _published_datetime(str(item.get("published_at") or ""))
+        if stamp is None or stamp >= cutoff:
+            result.append(item)
+    return result
 
 
 def extract_trending_terms(
@@ -468,7 +501,7 @@ def collect(
     for topic, query in QUERY_GROUPS:
         params = urllib.parse.urlencode(
             {
-                "q": query,
+                "q": query + " when:1d",
                 "hl": "ko",
                 "gl": "KR",
                 "ceid": "KR:ko",
@@ -478,7 +511,8 @@ def collect(
         key = "google_news:" + topic
         try:
             xml_text = fetcher(url)
-            rows = parse_google_news_rss(xml_text, topic, limit=8)
+            rows = parse_google_news_rss(xml_text, topic, limit=12)
+            rows = recent_items(rows, now, hours=36)
             items.extend(rows)
             source_status[key] = {"status": "ok", "count": len(rows)}
         except (
@@ -572,7 +606,7 @@ def collect(
             continue
         seen.add(key)
         deduped.append(item)
-    deduped = deduped[:60]
+    deduped = recent_items(deduped, now, hours=36)[:80]
 
     new_items = [item for item in deduped if _item_key(item) not in previous_keys]
     topic_counts: dict[str, int] = {}
