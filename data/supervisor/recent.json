@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-25T10:01:27.939159+09:00",
+  "updated_at": "2026-09-25T10:02:50.403557+09:00",
   "batch_size": 10,
   "observations": [
     {
@@ -768,6 +768,149 @@
         "head_sha": "1ba442237042307782b568c6df7c6b2a48a4e8df"
       },
       "signals": []
+    },
+    {
+      "schema_version": 1,
+      "observation_id": "obs-20260925T100250+0900-36080256714-1",
+      "observed_at": "2026-09-25T10:02:50.403557+09:00",
+      "source": {
+        "repository": "juhwan7/stock-autoresearch",
+        "workflow": "6분 감독 관측 큐",
+        "run_id": "36080256714",
+        "run_attempt": "1",
+        "head_sha": "6b3bc635e5b474e5a480ee80e67e1595c9e7898a",
+        "ref_name": "main"
+      },
+      "queue": {
+        "batch_size": 10,
+        "pending_before_append": 1,
+        "last_processed_observation_id": "manual-20260925T084307+0900-10",
+        "pending_after_append": 2
+      },
+      "validation": {
+        "status": "failed",
+        "compile": "ok",
+        "pytest": "failed",
+        "diff_check": "ok"
+      },
+      "steps": {
+        "toss_fetch": "success",
+        "toss_summary": "success",
+        "health": "success",
+        "dashboard": "success",
+        "market_discovery": "success"
+      },
+      "health": {
+        "status": "WARN",
+        "generated_at": "2026-09-25T10:02:48.203375+09:00",
+        "issues": [
+          {
+            "component": "market",
+            "code": "runtime-missing",
+            "severity": "WARN",
+            "message": "Market runtime 상태 파일이 없음"
+          },
+          {
+            "component": "toss",
+            "code": "snapshot-missing",
+            "severity": "WARN",
+            "message": "Toss primary snapshot을 사용할 수 없음 · fetch 상태=not_configured"
+          },
+          {
+            "component": "risk",
+            "code": "runtime-missing",
+            "severity": "WARN",
+            "message": "Risk runtime 상태가 없음"
+          },
+          {
+            "component": "macro",
+            "code": "missing",
+            "severity": "WARN",
+            "message": "매크로 스냅샷이 없음"
+          },
+          {
+            "component": "regression",
+            "code": "missing",
+            "severity": "NOTICE",
+            "message": "Regression Guard 상태가 아직 없음"
+          }
+        ]
+      },
+      "regression": {
+        "status": "MISSING",
+        "generated_at": null,
+        "quarantine_count": null,
+        "rolled_back_count": null
+      },
+      "market_discovery": {
+        "generated_at": "2026-09-25T10:02:43.137190+09:00",
+        "item_count": 0,
+        "new_item_count": 0,
+        "topic_counts": {},
+        "trending_terms": [],
+        "new_dart_filings": [],
+        "official_web_candidates": [],
+        "toss_market": {
+          "available": false
+        },
+        "sector_selection": {
+          "mode": "dynamic",
+          "fixed_sector_whitelist": false,
+          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 1시간 AI가 주도 섹터를 선택"
+        },
+        "naver_indices": {
+          "KOSPI": null,
+          "KOSDAQ": null,
+          "KOSPI200": null
+        },
+        "source_summary": {
+          "ok_or_partial": 7,
+          "failed": 0
+        },
+        "top_new_items": [],
+        "handoff_queries": [
+          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+          "미국 증시 금리 환율 원자재 변화 한국 증시 영향"
+        ]
+      },
+      "market": {
+        "generated_at": null,
+        "source_status": null,
+        "provider": null,
+        "fallback_used": null
+      },
+      "toss": {
+        "available": null,
+        "captured_at": null,
+        "collector": null
+      },
+      "user_feedback": {
+        "pending_count": 0,
+        "latest_pending_comment_id": null
+      },
+      "git": {
+        "head_sha": "6b3bc635e5b474e5a480ee80e67e1595c9e7898a",
+        "latest_commit_changed_files": [
+          "\".github/workflows/\\354\\227\\260\\354\\206\\215\\354\\227\\260\\352\\265\\254\\354\\231\\200\\354\\247\\204\\355\\231\\224.yml\""
+        ]
+      },
+      "previous_workflow_run": {
+        "id": 36080256717,
+        "name": "프로젝트 검증",
+        "event": "push",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-09-25T01:02:30Z",
+        "updated_at": "2026-09-25T01:02:33Z",
+        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36080256717",
+        "head_sha": "6b3bc635e5b474e5a480ee80e67e1595c9e7898a"
+      },
+      "signals": [
+        "health:WARN",
+        "validation:failed"
+      ]
     }
   ]
 }
