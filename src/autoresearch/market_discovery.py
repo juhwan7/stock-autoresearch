@@ -17,13 +17,20 @@ OUTPUT = Path("data/discovery/latest.json")
 USER_AGENT = "Mozilla/5.0 (compatible; StockAutoResearch/1.0; +https://github.com/juhwan7/stock-autoresearch)"
 
 QUERY_GROUPS: list[tuple[str, str]] = [
-    ("market", "코스피 코스닥 증시 외국인 기관"),
-    ("semiconductor_ai", "반도체 HBM AI 데이터센터 삼성전자 SK하이닉스"),
-    ("robot_power_defense", "로봇 전력 원전 방산 한국 주식"),
-    ("bio_battery_auto", "바이오 2차전지 자동차 한국 주식"),
-    ("macro", "나스닥 미국채 금리 원달러 환율 유가"),
-    ("policy_supply_chain", "관세 희토류 수출통제 공급망 반도체"),
+    ("kr_market_broad", "한국 증시 코스피 코스닥 주도주 거래대금 급등 공시"),
+    ("kr_market_flow", "한국 증시 외국인 기관 거래대금 상승률 상위"),
+    ("kr_corporate_events", "한국 기업 공시 수주 계약 투자 실적 신규상장"),
+    ("global_market", "미국 증시 나스닥 S&P500 미국채 금리 환율 원자재 한국 증시"),
+    ("policy_geopolitics", "한국 미국 중국 일본 정책 관세 규제 공급망 지정학 증시"),
+    ("emerging_trends", "한국 주식 산업 신기술 공급망 수주 테마 시장 트렌드"),
 ]
+
+STOPWORDS = {
+    "한국", "증시", "주식", "시장", "코스피", "코스닥", "관련", "전망", "급등", "급락",
+    "상승", "하락", "오늘", "내일", "뉴스", "단독", "속보", "종목", "기업", "투자",
+    "외국인", "기관", "개인", "거래", "거래대금", "주가", "정부", "미국", "중국",
+    "일본", "글로벌", "국내", "올해", "내년", "확대", "감소", "증가", "발표", "공개",
+}
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -123,6 +130,101 @@ def _item_key(item: dict[str, Any]) -> str:
     )
 
 
+def _title_tokens(title: str) -> list[str]:
+    cleaned = re.sub(r"[^0-9A-Za-z가-힣+\-]", " ", title)
+    tokens: list[str] = []
+    for token in cleaned.split():
+        token = token.strip("+-")
+        if len(token) < 2:
+            continue
+        if token in STOPWORDS:
+            continue
+        if token.isdigit():
+            continue
+        tokens.append(token)
+    return tokens
+
+
+def extract_trending_terms(
+    items: list[dict[str, Any]],
+    previous: dict[str, Any] | None = None,
+    *,
+    limit: int = 20,
+) -> list[dict[str, Any]]:
+    previous = previous or {}
+    previous_counts = {
+        str(item.get("term")): int(item.get("count") or 0)
+        for item in previous.get("trending_terms", [])
+        if isinstance(item, dict) and item.get("term")
+    }
+
+    counts: dict[str, int] = {}
+    publishers: dict[str, set[str]] = {}
+    examples: dict[str, list[str]] = {}
+    for item in items:
+        title = str(item.get("title") or "")
+        publisher = str(item.get("publisher") or "")
+        unique_tokens = set(_title_tokens(title))
+        for token in unique_tokens:
+            counts[token] = counts.get(token, 0) + 1
+            if publisher:
+                publishers.setdefault(token, set()).add(publisher)
+            bucket = examples.setdefault(token, [])
+            if title and title not in bucket and len(bucket) < 3:
+                bucket.append(title)
+
+    ranked: list[dict[str, Any]] = []
+    for term, count in counts.items():
+        if count < 2:
+            continue
+        publisher_count = len(publishers.get(term, set()))
+        previous_count = previous_counts.get(term, 0)
+        delta = count - previous_count
+        score = (count * 2) + publisher_count + max(delta, 0)
+        ranked.append(
+            {
+                "term": term,
+                "count": count,
+                "publisher_count": publisher_count,
+                "previous_count": previous_count,
+                "delta": delta,
+                "score": score,
+                "examples": examples.get(term, []),
+            }
+        )
+
+    ranked.sort(
+        key=lambda item: (
+            int(item.get("score") or 0),
+            int(item.get("publisher_count") or 0),
+            int(item.get("count") or 0),
+            str(item.get("term") or ""),
+        ),
+        reverse=True,
+    )
+    return ranked[:limit]
+
+
+def build_dynamic_handoff_queries(
+    trending_terms: list[dict[str, Any]],
+    *,
+    limit: int = 8,
+) -> list[str]:
+    queries = [
+        "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+        "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+        "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+        "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+    ]
+    for item in trending_terms[:limit]:
+        term = str(item.get("term") or "").strip()
+        if term:
+            queries.append(
+                f"{term} 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+            )
+    return queries
+
+
 def collect(
     root: Path,
     *,
@@ -211,6 +313,9 @@ def collect(
         topic = str(item.get("topic") or "unknown")
         topic_counts[topic] = topic_counts.get(topic, 0) + 1
 
+    trending_terms = extract_trending_terms(deduped, previous)
+    handoff_queries = build_dynamic_handoff_queries(trending_terms)
+
     ok_sources = sum(
         1
         for value in source_status.values()
@@ -235,13 +340,17 @@ def collect(
             source_status.get("naver_finance", {}).get("indices") or {}
         ),
         "topic_counts": topic_counts,
+        "trending_terms": trending_terms,
         "item_count": len(deduped),
         "new_item_count": len(new_items),
         "new_items": new_items[:20],
         "items": deduped,
-        "handoff_queries": [
-            query for _, query in QUERY_GROUPS
-        ],
+        "handoff_queries": handoff_queries,
+        "sector_selection": {
+            "mode": "dynamic",
+            "fixed_sector_whitelist": False,
+            "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 1시간 AI가 주도 섹터를 선택",
+        },
         "rules": {
             "discovery_only": True,
             "confirm_material_claims_with_primary_sources": True,
