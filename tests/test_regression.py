@@ -198,3 +198,30 @@ def test_small_quality_change_is_not_regression(tmp_path):
 
     assert result["status"] == "no_regression"
     assert target.read_text(encoding="utf-8") == "after"
+
+
+def test_evaluated_change_becomes_learning_memory(tmp_path):
+    detector = make_detector(tmp_path)
+    manifest_data = {
+        "change_id": "learn-1",
+        "title": "학습 연결 테스트",
+        "expected_benefit": "품질 개선",
+        "paths": ["src/feature.py"],
+    }
+    evaluation = {
+        "status": "no_regression",
+        "baseline_7d": 90.0,
+        "post_overall": 91.0,
+    }
+
+    detector._record_learning(evaluation, manifest_data)
+
+    text = (tmp_path / "docs/실험_기록.md").read_text(encoding="utf-8")
+    assert "LEARN-learn-1" in text
+    assert "판정: 유지" in text
+    assert manifest_data["learning_recorded"] is True
+
+    detector._record_learning(evaluation, manifest_data)
+    assert (tmp_path / "docs/실험_기록.md").read_text(encoding="utf-8").count(
+        "LEARN-learn-1"
+    ) == 1
