@@ -200,6 +200,8 @@ def build_observation(
     discovery_sources = discovery.get("source_summary", {}) if isinstance(discovery, dict) else {}
     if discovery and not int(discovery_sources.get("ok_or_partial") or 0):
         signals.append("discovery:unavailable")
+    if int(discovery_sources.get("degraded") or 0):
+        signals.append("discovery:degraded")
 
     market_source_status = str(market.get("source_status") or "")
     if market_source_status and market_source_status not in {"ok", "idle"}:
@@ -240,6 +242,9 @@ def build_observation(
             "health": env.get("HEALTH_STEP_STATUS"),
             "dashboard": env.get("DASHBOARD_STEP_STATUS"),
             "market_discovery": env.get("DISCOVERY_STEP_STATUS"),
+            "market_sensor_repair": env.get("MARKET_SENSOR_STATUS"),
+            "risk_sensor_repair": env.get("RISK_SENSOR_STATUS"),
+            "regression_refresh": env.get("REGRESSION_STEP_STATUS"),
         },
         "health": {
             "status": health_status,
