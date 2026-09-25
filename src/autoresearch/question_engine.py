@@ -6,6 +6,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from .question_learning import learned_priority_bonus
+
 
 def _qid(kind: str, subject: str, question: str) -> str:
     raw = "|".join((kind, subject, question))
@@ -25,7 +27,7 @@ def _question(kind: str, subject: str, text: str, *, priority: int, evidence: li
     }
 
 
-def infer_questions(observation: dict[str, Any]) -> list[dict[str, Any]]:
+def infer_questions(observation: dict[str, Any], *, root: Path | None = None) -> list[dict[str, Any]]:
     """6분 관측만으로 다음 1시간 AI가 조사할 질문 후보를 만든다.
 
     이 단계는 답을 만들거나 원인을 확정하지 않는다. 관측된 변화에서 검증 가능한
@@ -119,8 +121,7 @@ def infer_questions(observation: dict[str, Any]) -> list[dict[str, Any]]:
             evidence=[f"meaningful_inputs={meaningful_inputs}", f"generated={len(out)}"],
         ))
 
-    # 같은 관측에서 동일 질문은 한 번만 보존한다.
-    dedup: dict[str, dict[str, Any]] = {}
+    # 과거 1시간 연구에서 실제로 유용했던 질문 종류는 충분한 표본이 있을 때만\n    # 최대 1점 보정한다. 현재 시장 신호가 과거 학습에 압도되지 않게 제한한다.\n    bonuses = learned_priority_bonus(root) if root is not None else {}\n    for item in out:\n        bonus = int(bonuses.get(str(item.get("kind")), 0))\n        item["learned_priority_bonus"] = bonus\n        item["priority"] = max(1, min(5, int(item["priority"]) + bonus))\n\n    # 같은 관측에서 동일 질문은 한 번만 보존한다.\n    dedup: dict[str, dict[str, Any]] = {}
     for item in out:
         dedup[item["question_id"]] = item
     return sorted(dedup.values(), key=lambda x: (-int(x["priority"]), x["question_id"]))
