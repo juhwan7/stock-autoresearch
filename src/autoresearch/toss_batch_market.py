@@ -210,12 +210,13 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
     previous = _read_json(latest_path)
     previous_at = _parse_time(previous.get("captured_at"))
 
-    ranking = client.rankings(50)
+    top_n = min(max(int(limit), 1), 100)
+    ranking = client.rankings(top_n)
     ranked_at = _parse_time(ranking[0].get("ranked_at")) if ranking else None
     ranking_fresh_today = bool(ranked_at and ranked_at.date() == now.date())
 
     metadata = dict(previous.get("metadata") or {})
-    current_top50 = ranking[:50] if ranking_fresh_today else []
+    current_top50 = ranking[:top_n] if ranking_fresh_today else []
     current_codes = [str(row.get("ticker") or "") for row in current_top50 if row.get("ticker")]
     if current_codes:
         metadata.update(client.stocks(current_codes))
