@@ -86,3 +86,17 @@ python -m autoresearch risk-intel --mode dry-run
 예외는 GitHub/Python/웹 도구가 표준 이름이나 import 경로로 직접 사용하는 기술 파일이다. `README.md`, `AGENTS.md`, `pyproject.toml`, `.gitignore`, `site/index.html`, `src/autoresearch/*.py`, 테스트 파일 등은 안정성을 위해 영어 이름을 유지할 수 있다.
 
 새 사용자-facing Markdown을 영문 파일명으로 만들지 않는다. 기존 한글 문서를 다시 영문명으로 되돌리지 않는다.
+
+
+## 질문 기반 시장 학습
+
+6분 관측은 단순 데이터 저장이 아니라 no-AI 질문 추론 단계다. `data/supervisor/question_queue.json`이 있으면 1시간 감독은 이를 반드시 읽는다.
+
+- 질문 수 자체를 성과로 보지 않는다. 반복성, 거래대금 근거, 1차 자료 존재, 반증 가능성으로 중요도를 판단한다.
+- 같은 현상의 질문은 묶되 시간 순서 정보는 보존한다.
+- 답을 찾으면 근거와 함께 answered/partially_answered/unresolved를 구분한다.
+- unresolved는 다음 배치로 넘기고, 답변 과정에서 생긴 후속 질문은 다시 큐에 넣는다.
+- 각 핵심 가설에는 최소 하나의 반증 질문 또는 대체 설명을 둔다.
+- 수급이 뉴스보다 먼저였는지 뒤였는지 6분 관측 시계열로 확인한다.
+- 장 종료/다음 거래일에는 중요한 가설의 사후 결과를 확인해 어떤 질문·근거가 유용했는지 학습한다.
+- 매수·매도 추천이 아니라 시장 구조와 근거를 더 잘 이해하기 위한 질문이어야 한다.
