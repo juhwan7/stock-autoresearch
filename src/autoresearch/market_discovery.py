@@ -294,6 +294,15 @@ def summarize_public_batch_market(root: Path) -> dict[str, Any]:
         "amount_method": snapshot.get("amount_method"),
         "elapsed_minutes_from_previous": snapshot.get("elapsed_minutes_from_previous"),
         "interval_leaders": (snapshot.get("interval_leaders") or [])[:20],
+        "one_minute_samples_available": snapshot.get("one_minute_samples_available"),
+        "minute_amount_exact": snapshot.get("minute_amount_exact"),
+        "minute_amount_method": snapshot.get("minute_amount_method"),
+        "minute_sample_ticker_count": snapshot.get("minute_sample_ticker_count"),
+        "minute_samples_by_ticker": {
+            str(ticker): rows[-6:]
+            for ticker, rows in (snapshot.get("minute_samples_by_ticker") or {}).items()
+            if isinstance(rows, list)
+        },
         "limitations": snapshot.get("limitations") or [],
     }
 
@@ -846,7 +855,7 @@ def collect(
             "portal_news_role": "discovery_and_cross_check",
             "dart_role": "official_filing_primary_source",
             "official_web_candidates_role": "candidate_only_verify_domain_before_claim",
-            "public_batch_role": "기본 no-Pi 6분 자금유입 센서. exact_1m_bars=false이면 개별 1분 Burst 근거로 사용하지 않음",
+            "public_batch_role": "기본 no-Pi 센서. 6분마다 최근 6개 분 단위 표본을 받아 1분 거래대금을 근사하고, 누적 거래대금 차분으로 합계를 교차검증. minute_amount_exact=false이므로 정확 체결합계로 표현하지 않음",
             "toss_role": "선택 연결 시 정확한 체결·1분 거래대금 보강",
         },
     }
