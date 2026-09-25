@@ -299,7 +299,7 @@ def build_interval_rows(
     return rows, elapsed_minutes
 
 
-def collect(root: Path, *, now: datetime | None = None, limit: int = 40) -> dict[str, Any]:
+def collect(root: Path, *, now: datetime | None = None, limit: int = 100) -> dict[str, Any]:
     now = now or datetime.now(KST)
     if now.tzinfo is None:
         now = now.replace(tzinfo=KST)
@@ -328,10 +328,34 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 40) -> dict
             source_status = "polling_error"
             error = type(exc).__name__
 
-    names = {item["ticker"]: item["name"] for item in universe}
-    for code, quote in quotes.items():
+    universe_by_code = {
+        item["ticker"]: item for item in universe if item.get("ticker")
+    }
+    names = {code: item.get("name") for code, item in universe_by_code.items()}
+    for code in codes:
+        quote = quotes.setdefault(
+            code,
+            {
+                "ticker": code,
+                "name": names.get(code),
+                "last_price": None,
+                "day_return_pct": None,
+                "accumulated_trading_value": None,
+                "accumulated_trading_volume": None,
+                "local_traded_at": None,
+                "market_status": None,
+            },
+        )
         if not quote.get("name"):
             quote["name"] = names.get(code)
+        if quote.get("accumulated_trading_value") is None:
+            quote["accumulated_trading_value"] = _number(
+                universe_by_code.get(code, {}).get("ranking_trading_value")
+            )
+            if quote.get("accumulated_trading_value") is not None:
+                quote["trading_value_source"] = "ranking"
+        else:
+            quote["trading_value_source"] = "polling"
 
     interval_rows, elapsed_minutes = build_interval_rows(quotes, previous, now)
     valid_rows = [item for item in interval_rows if item.get("interval_valid")]
