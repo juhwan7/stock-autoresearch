@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .evolution import EvolutionEngine
 from .health import HealthWatchdog
+from .market_discovery import collect as market_discovery_collect
 from .market_intel import MarketIntelEngine
 from .pipeline import Pipeline
 from .regression import RegressionDetector
@@ -60,9 +61,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     regression.add_argument("--root", default=".", help="저장소 루트")
 
+    discovery = sub.add_parser(
+        "market-discovery-observe",
+        help="AI 호출 없이 웹·포털 시장 단서를 수집",
+    )
+    discovery.add_argument("--root", default=".", help="저장소 루트")
+
     supervisor = sub.add_parser(
         "supervisor-observe",
-        help="AI 호출 없이 10분 감독 관측을 큐에 저장",
+        help="AI 호출 없이 6분 감독 관측을 큐에 저장",
     )
     supervisor.add_argument("--root", default=".", help="저장소 루트")
 
@@ -93,6 +100,8 @@ def main() -> None:
         result = HealthWatchdog(root).run()
     elif args.command == "regression":
         result = RegressionDetector(root).run()
+    elif args.command == "market-discovery-observe":
+        result = market_discovery_collect(root)
     elif args.command == "supervisor-observe":
         result = supervisor_observe(root)
     elif args.command == "toss-collector":
