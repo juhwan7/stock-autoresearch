@@ -8,6 +8,7 @@ from .evolution import EvolutionEngine
 from .health import HealthWatchdog
 from .market_discovery import collect as market_discovery_collect
 from .market_intel import MarketIntelEngine
+from .naver_batch_market import collect as naver_batch_market_collect
 from .pipeline import Pipeline
 from .regression import RegressionDetector
 from .risk_engine import RiskEngine
@@ -63,6 +64,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     regression.add_argument("--root", default=".", help="저장소 루트")
 
+    batch_market = sub.add_parser(
+        "naver-batch-market",
+        help="라즈베리파이 없이 네이버 공개 시세로 6분 거래대금 배치를 수집",
+    )
+    batch_market.add_argument("--root", default=".", help="저장소 루트")
+    batch_market.add_argument("--limit", type=int, default=40, help="거래대금 상위 추적 종목 수")
+
     discovery = sub.add_parser(
         "market-discovery-observe",
         help="AI 호출 없이 웹·포털 시장 단서를 수집",
@@ -102,6 +110,8 @@ def main() -> None:
         result = HealthWatchdog(root).run()
     elif args.command == "regression":
         result = RegressionDetector(root).run()
+    elif args.command == "naver-batch-market":
+        result = naver_batch_market_collect(root, limit=args.limit)
     elif args.command == "market-discovery-observe":
         result = market_discovery_collect(root)
     elif args.command == "supervisor-observe":
