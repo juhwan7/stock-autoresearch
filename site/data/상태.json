@@ -1,18 +1,8 @@
 {
-  "generated_at": "2026-09-25T07:30:31.932032+00:00",
+  "generated_at": "2026-09-25T07:31:45.276130+00:00",
   "project": "Stock AutoResearch",
   "heartbeat": "6분",
   "reports": [
-    {
-      "title": "종가베팅 Overnight Risk",
-      "file": "risk/20260925-1630.md",
-      "github_url": "https://github.com/juhwan7/stock-autoresearch/blob/main/reports/risk/20260925-1630.md",
-      "generated_at": "2026-09-25T16:30:30.570371+09:00",
-      "quality": null,
-      "industries": [],
-      "stocks": [],
-      "preview": "현재 확인 가능한 입력 기준 대형 Overnight Risk는 제한적. - **미국 고용보고서** · severity 5 - 172.99시간 후 · AFTER_NXT_CLOSE | 일정 | 남은 시간 | 중요도 | 위험 단계 | 거래 가능성 관점 | |---|---:|---:|---|---| | 미국 고용보고서 | 172.99h | 5 | LOW | AFTER_NXT_CLOSE | | 9월 FOMC 의사록 공개 | 298.49h | 4 | LOW | KOREA_TRADING_HOURS | | 미국 CPI | 460.99h | 5 | LOW | AFTER_NXT_CLOSE | | 미국 PPI | 484.99h | 4 | LOW | AFTER_NXT_CLOSE | | 한국은행 통화정책방향 결정회의 | 640.49h | 5 | LOW | UNKNOWN_TIME | | FOMC 금리결정·기자회견 | 802.49h | 5 | LOW | KOREA_TRADING_HOURS | - 현재 임계값을 넘은 매크로 경고 없음 - 별도 미확인 항목 없음 - 2026-10-02T21:30:00+09:00 --- Risk Veto는 매수·매도 추천이 아니라 다음날 갭 리스크 연구용 상태입니다."
-    },
     {
       "title": "2026-09-25 10:57 시간별 시장 리서치",
       "file": "2026-09-25_시간별_시장리서치_1057.md",
@@ -32,6 +22,16 @@
       "industries": [],
       "stocks": [],
       "preview": "- 정각 예약과 동일한 감독 절차를 사용자 요청으로 수동 실행했다. - 2026-09-25 한국 증시는 추석 휴장으로 당일 국내 실시간 주도 섹터를 확정하지 않는다. - 네이버 공개 배치의 current_top50=0, minute sample=0은 휴장일에는 정상일 수 있으므로 그 자체를 시장 데이터 장애로 확정하지 않는다. - 다만 Health가 CRITICAL이며 macro runtime 값 공백과 Google News 탐색 저하가 반복되고 있어 프로젝트 개선 신호로 유지한다. - 다음 한국 개장 전 핵심 외부 변수는 유가와 미국 장기금리이며, 국내 주도주는 실제 개장 후 거래대금으로 다시 확인한다. 1. **휴장 인식 Health 보정 필요** - 휴장일의 public_batch unavailable/current_top50=0을 평일 데이터 장애와 같은 방식으로 누적 경고하면 불필요한 CRITICAL을 만들 수 있다. - 다음 개선에서는 KRX 거래일 캘린더를 Health 판정에 명시적으로 연결하는 방안을 검토한다. 2. **Macro runtime 실제값 공백** - macro:unavailable이 연속 8회다. - 단순 재시도보다 현재 provider 경로와 fallback을 조사할 필요가 있다. 3. **Google News discovery 저하** - google-news-degraded가 연속 7회다. - broad fallback으로 일부 결과는 들어오지만 검색 그룹별 빈 결과가 반복된다. - 검색식·when 필터·대체 속보/공식 소스 라인을 다음 프로젝트 개선 후보로 둔다. 4. **6분 실행 간격 불규칙** - 최근 관측에는 10:03→10:58, 11:23→11:42, 11:46→12:42처럼 큰 공백이 있다. - GitHub Actions 지연/실행 조건"
+    },
+    {
+      "title": "2026-09-25 16:30 연속 Supervisor 점검",
+      "file": "2026-09-25-1630-연속-Supervisor-점검.md",
+      "github_url": "https://github.com/juhwan7/stock-autoresearch/blob/main/reports/2026-09-25-1630-연속-Supervisor-점검.md",
+      "generated_at": "",
+      "quality": null,
+      "industries": [],
+      "stocks": [],
+      "preview": "- 직전 canonical checkpoint 이후 미처리 관측은 11:46, 12:42 두 건이다. - 12:42 Toss snapshot은 available=true지만 subscription_count=0, last_message_at=null이므로 실제 체결 수신으로 보지 않는다. - 12:42 이후 6분 관측이 새로 누적되지 않아 센서 스케줄 공백을 다음 최우선 운영 검증으로 올린다. - 국내 휴장 상태이므로 Top50=0을 장중 자금 흐름으로 해석하지 않는다. - 외부 시장은 미국 장기금리와 유가 상승이 계속 핵심 위험 변수이며, 미중 정상회담은 무역 휴전 2개월 연장 외 핵심 쟁점의 광범위한 타결로 확대 해석하지 않는다. evidence: 6분 workflow는 cron */6 설정이지만 canonical queue의 마지막 관측이 12:42다. Telegram 알림 스크립트에는 Issue marker가 있으면 전체 종료하는 전역 중복 차단이 남아 있다. expected_benefit: 센서 공백을 조기에 탐지하고, Issue 알림 성공 뒤 Telegram만 실패한 경우 재시도 가능성을 보존한다. risk: 알림 중복 억제를 잘못 제거하면 6분마다 같은 Telegram이 반복될 수 있다. validation_plan: 6분 센서에서 감독결과 알림 호출을 분리하고 latest-report push 전용 알림으로 제한한 뒤 실제 새 report 배치에서 workflow/Telegram을 end-to-end 확인한다. 이번 실행 환경에서는 해당 workflow/알림 코드 쓰기가 보호 규칙에 의해 차단되어 변경을 적용하지 않았다. Reuters 9월 24~25일 보도 기준 미국 장기국채 매도세와 유가 상승이 글로벌 위험자산의 핵심 압력으로 지속되고 있다. 미중 정상회담에서는 무역"
     },
     {
       "title": "2026-09-25 16:00 연속 Supervisor 시장·프로젝트 점검",
@@ -207,7 +207,7 @@
   },
   "discovery": {
     "schema_version": 1,
-    "generated_at": "2026-09-25T16:30:23.085216+09:00",
+    "generated_at": "2026-09-25T16:31:36.952701+09:00",
     "purpose": "6분 비AI 시장·뉴스 단서 센서. 1시간 ChatGPT 심층리서치의 탐색 힌트이며 사실 확정 엔진이 아님.",
     "source_status": {
       "google_news:kr_market_broad": {
@@ -281,29 +281,29 @@
     },
     "trending_terms": [
       {
-        "term": "상폐",
-        "count": 7,
-        "publisher_count": 6,
-        "previous_count": 6,
-        "delta": 1,
-        "score": 21,
-        "examples": [
-          "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-          "[속보]'시총미달 상폐' 코스닥서 속출",
-          "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
-        ]
-      },
-      {
         "term": "유가",
         "count": 7,
         "publisher_count": 6,
-        "previous_count": 8,
-        "delta": -1,
+        "previous_count": 7,
+        "delta": 0,
         "score": 20,
         "examples": [
           "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
           "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
           "급등하는 국채 수익률과 유가, 미국 증시 선물 하락 압박"
+        ]
+      },
+      {
+        "term": "상폐",
+        "count": 7,
+        "publisher_count": 6,
+        "previous_count": 7,
+        "delta": 0,
+        "score": 20,
+        "examples": [
+          "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+          "[속보]'시총미달 상폐' 코스닥서 속출",
+          "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
         ]
       },
       {
@@ -336,9 +336,9 @@
         "term": "시총미달",
         "count": 4,
         "publisher_count": 4,
-        "previous_count": 3,
-        "delta": 1,
-        "score": 13,
+        "previous_count": 4,
+        "delta": 0,
+        "score": 12,
         "examples": [
           "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
           "[속보]'시총미달 상폐' 코스닥서 속출",
@@ -349,9 +349,9 @@
         "term": "속출",
         "count": 4,
         "publisher_count": 4,
-        "previous_count": 3,
-        "delta": 1,
-        "score": 13,
+        "previous_count": 4,
+        "delta": 0,
+        "score": 12,
         "examples": [
           "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
           "[속보]'시총미달 상폐' 코스닥서 속출",
@@ -359,37 +359,11 @@
         ]
       },
       {
-        "term": "환율",
-        "count": 3,
-        "publisher_count": 3,
-        "previous_count": 0,
-        "delta": 3,
-        "score": 12,
-        "examples": [
-          "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
-          "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
-          "ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’"
-        ]
-      },
-      {
-        "term": "동전주까지",
-        "count": 3,
-        "publisher_count": 3,
-        "previous_count": 0,
-        "delta": 3,
-        "score": 12,
-        "examples": [
-          "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-          "코스닥 ‘시총 미달 상폐’ 속출…내달엔 동전주까지 위기",
-          "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기"
-        ]
-      },
-      {
         "term": "퇴출",
         "count": 4,
         "publisher_count": 3,
-        "previous_count": 5,
-        "delta": -1,
+        "previous_count": 4,
+        "delta": 0,
         "score": 11,
         "examples": [
           "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기",
@@ -398,12 +372,25 @@
         ]
       },
       {
+        "term": "환율",
+        "count": 3,
+        "publisher_count": 3,
+        "previous_count": 3,
+        "delta": 0,
+        "score": 9,
+        "examples": [
+          "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
+          "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
+          "ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’"
+        ]
+      },
+      {
         "term": "코스닥서",
         "count": 3,
         "publisher_count": 3,
-        "previous_count": 2,
-        "delta": 1,
-        "score": 10,
+        "previous_count": 3,
+        "delta": 0,
+        "score": 9,
         "examples": [
           "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
           "[속보]'시총미달 상폐' 코스닥서 속출",
@@ -437,11 +424,24 @@
         ]
       },
       {
+        "term": "동전주까지",
+        "count": 3,
+        "publisher_count": 3,
+        "previous_count": 3,
+        "delta": 0,
+        "score": 9,
+        "examples": [
+          "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+          "코스닥 ‘시총 미달 상폐’ 속출…내달엔 동전주까지 위기",
+          "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기"
+        ]
+      },
+      {
         "term": "뉴욕증시",
         "count": 3,
         "publisher_count": 3,
-        "previous_count": 6,
-        "delta": -3,
+        "previous_count": 3,
+        "delta": 0,
         "score": 9,
         "examples": [
           "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
@@ -479,8 +479,8 @@
         "term": "국채금리",
         "count": 3,
         "publisher_count": 3,
-        "previous_count": 4,
-        "delta": -1,
+        "previous_count": 3,
+        "delta": 0,
         "score": 9,
         "examples": [
           "美 10년물 국채금리 5.2% 돌파…국제유가 상승 등 영향",
@@ -492,9 +492,9 @@
         "term": "후티",
         "count": 3,
         "publisher_count": 2,
-        "previous_count": 2,
-        "delta": 1,
-        "score": 9,
+        "previous_count": 3,
+        "delta": 0,
+        "score": 8,
         "examples": [
           "후티 반군, 사우디 미사일 공격 소식에…국제유가 3% 넘게 급등",
           "예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑",
@@ -515,27 +515,27 @@
         ]
       },
       {
-        "term": "호르무즈",
+        "term": "혼조",
         "count": 2,
         "publisher_count": 2,
         "previous_count": 0,
         "delta": 2,
         "score": 8,
         "examples": [
-          "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
-          "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소"
+          "[해외시황] 뉴욕증시, 유가·국채금리 급등에 '혼조'…다우 0.31%↓",
+          "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]"
         ]
       },
       {
-        "term": "합의",
+        "term": "추석",
         "count": 2,
         "publisher_count": 2,
         "previous_count": 0,
         "delta": 2,
         "score": 8,
         "examples": [
-          "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
-          "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소"
+          "[추석 이후 증시] 장문수 센터장 \"10월까진 투심 부진, 코스피 연말 8400 목표\"",
+          "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]"
         ]
       }
     ],
@@ -544,12 +544,12 @@
     "official_web_candidates": [],
     "public_batch_market": {
       "available": false,
-      "generated_at": "2026-09-25T16:30:18.702635+09:00",
+      "generated_at": "2026-09-25T16:31:31.169613+09:00",
       "status": "unavailable",
       "provider": "naver_public",
       "exact_1m_bars": false,
       "amount_method": "cumulative_trading_value_delta",
-      "elapsed_minutes_from_previous": 228.41168275,
+      "elapsed_minutes_from_previous": 1.2077829666666666,
       "interval_leaders": [],
       "one_minute_samples_available": false,
       "minute_amount_exact": false,
@@ -577,80 +577,15 @@
       "top10_share": null
     },
     "item_count": 34,
-    "new_item_count": 8,
-    "new_items": [
-      {
-        "topic": "broad_fallback",
-        "title": "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
-        "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE00eTZ3N1N2anVLWjYyT3hHVlFCRUpLeUtPTDBiejZYR0tSbHM3M0VxQTA5TURUYzBkZmdDSHdSS01YQW96enFYVnYtOTYxMHdDQWpxMHRwVjFNdGdUbkgwdNIBYEFVX3lxTE00eTZ3N1N2anVLWjYyT3hHVlFCRUpLeUtPTDBiejZYR0tSbHM3M0VxQTA5TURUYzBkZmdDSHdSS01YQW96enFYVnYtOTYxMHdDQWpxMHRwVjFNdGdUbkgwdA?oc=5",
-        "published_at": "Fri, 25 Sep 2026 01:00:01 GMT",
-        "publisher": "yna.co.kr",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
-        "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBsOUZaVmF0N3pod0kzYUU4anV3UTFYR0dKUm1DNl9ZbFBUQTlzbFpjS0h5ZVlNb014RGV2dXVyWngtbGdjcXVfSUVtV3MzR2g4dkozOE1QU0tFcE9GUUNmdlpjSi0wdF9rVjJzY1Fzaw?oc=5",
-        "published_at": "Fri, 25 Sep 2026 00:47:00 GMT",
-        "publisher": "Investing.com 한국어",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE8yOG5JdllmV0JXRGx3ekg5M2c3YjBnemkyOXlqZkhzQnJYS0pNTTJrZTl6QkxZU2J0N0RpWFFaaWk4WkV1ZXFIZ2x1UVVlYjAwc3E2VE4yMlBlQ2M?oc=5",
-        "published_at": "Fri, 25 Sep 2026 07:20:00 GMT",
-        "publisher": "KBS 뉴스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "[속보]'시총미달 상폐' 코스닥서 속출",
-        "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9yeG1NRlVxQWY0RW9YVUFEd3JtbmliMTY1OHFyY3dUNlVkOWNEdnljbnMyOTFhQ0tZWGNBR1pCdDdQUF9nYi01dldFSFFGc19MZHUyY1lTVWFKR2FGOGRvU0xhR1dqOFBCaHI2TQ?oc=5",
-        "published_at": "Fri, 25 Sep 2026 04:48:00 GMT",
-        "publisher": "한경매거진&북",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-        "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE93QWtKUVVNeGF5Q1Z2SHF3RUVmdllOdDI0LUkteXBWYXVLT1g3NVk5SEJlRVpDdDg4dDFRZkVmazV5aUdyWGcyUGdDSE9od2E4eFMtLVJXWFBENVV6NkNYamhFUHBOMFY5VFIw?oc=5",
-        "published_at": "Fri, 25 Sep 2026 05:36:46 GMT",
-        "publisher": "BBS불교방송",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "유럽 증시, 국제유가 하락에 힘입어 소폭 상승",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE0tdFpHMWhXRndXVDNtUFkxNzF0dDVQTFBoNnhCVTN2Q2oxR2RrUnpSOG5wcHdQQzBTYVhfY2NfWDJ2d2ptWWZNMlpNU3pjQkp6c1F2WE5XejhLT1pWcVJhMHlnTzBWU3BNMmxmLW1WNFo?oc=5",
-        "published_at": "Fri, 25 Sep 2026 07:04:00 GMT",
-        "publisher": "Investing.com 한국어",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFB0Y0Q1OE0wWnQxM2lzU0hxcW5jMEF5UWZpRnkxYWsyanlBczhxX0w0aVkxNnhEekR6eU9SV0xpaVlVVGduVzFvbjhyUTJ1VWhrQXBtb1Uyc0Y4OXVueFY3RzJaTWtSNUg3MzcweGFTaGw?oc=5",
-        "published_at": "Thu, 24 Sep 2026 17:23:52 GMT",
-        "publisher": "연합인포맥스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
-        "title": "ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’",
-        "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE15NnFSU3NlR0xxVllLa1M4VXk0dGFHZWRKVTZXSHNYV1ZGU1o1dTNINnAzMmJBT2dVZkpQUXhGR0pqNzM5Z2RpT0U5bTRMQ29XTlhxZXdJNUo3SGdMMEswMGlyVjFTbUcxMllyTQ?oc=5",
-        "published_at": "Fri, 25 Sep 2026 00:00:00 GMT",
-        "publisher": "인사이드비나",
-        "discovery_source": "google_news_rss"
-      }
-    ],
+    "new_item_count": 0,
+    "new_items": [],
     "items": [
       {
         "topic": "kr_corporate_events",
         "title": "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
         "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNR0x0eVBSMkpRWlpJUHV1RlBWY3VJWTlielM1RmEyUjJ6VldmNkp6X05naGk2V3BxTDNZbnlfbFV0RE5ITERkYlVKTUdSbFc3RUUzTS0xQTI0X1hmNkw3WTJPamxONnByMjZtVFR5RGNnV2YyOGtvVVNMVXgyOEVXYlRLOE9JWHPSAXtBVV95cUxPR1ZSVGJ0S2hkNGVBTXN0WUl5YmZ2Sk8tRmstQUlXTlFqcjBSSUNwTlQtSDJ1Uko3cUFIeXZMbDR2N2RnQzZEZ3VCdk1qc29EX3FIOHpLUjVzVHNlWG8yd1Y0R0NMZER5aDdHeVhKSmI2bzhYYTdPd2g0Znc?oc=5",
         "published_at": "Wed, 23 Sep 2026 04:54:00 GMT",
-        "publisher": "디지틀조선일보",
+        "publisher": "digitalchosun.dizzo.com",
         "discovery_source": "google_news_rss"
       },
       {
@@ -674,7 +609,7 @@
         "title": "[증권업 소식] 키움·KB·신한투자·대신·한국투자·카카오페이증권",
         "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBWMGZBSEliM0hWYlo1MTdQT0JycDduWWFNNkJRa1dabEdlNDRsa095N3R6UGlYZlpEVldJNE5hZlUxUXRoOFlKYWJ2NVFfSjFaOUtDT0p2UFYtamw3NFBQSdIBb0FVX3lxTE1UeF9NX2hCMnc5UjFpU0NYV3VjbjNQNmlKOW1MTU1xS3lNeDJTS0cyN1BUM3hNRUNmLTN6TkVNWm9VVDEzR2M0VWtIRnNQZG1kbHdPUlR3QVVOQy1nWUxlaWN0b2RCNjE4ZUNQM3ZHUQ?oc=5",
         "published_at": "Wed, 23 Sep 2026 01:04:52 GMT",
-        "publisher": "sateconomy.co.kr",
+        "publisher": "토요경제",
         "discovery_source": "google_news_rss"
       },
       {
@@ -682,7 +617,7 @@
         "title": "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
         "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5STjNGdjNXbHNIb1FYQWhOWE9XNHdPbGstQUNMRTY4QmE4Q0xYQlpFeU8zM1ZZQUgyWmZRbEY2Ri1mRGZwVmlXcV9LSFEwVjRXaGZUeGl6SEdwTEFGRGt2LS0wWGMtSVE?oc=5",
         "published_at": "Fri, 25 Sep 2026 02:15:00 GMT",
-        "publisher": "yonhapnewstv.co.kr",
+        "publisher": "연합뉴스TV",
         "discovery_source": "google_news_rss"
       },
       {
@@ -690,7 +625,7 @@
         "title": "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
         "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE00eTZ3N1N2anVLWjYyT3hHVlFCRUpLeUtPTDBiejZYR0tSbHM3M0VxQTA5TURUYzBkZmdDSHdSS01YQW96enFYVnYtOTYxMHdDQWpxMHRwVjFNdGdUbkgwdNIBYEFVX3lxTE00eTZ3N1N2anVLWjYyT3hHVlFCRUpLeUtPTDBiejZYR0tSbHM3M0VxQTA5TURUYzBkZmdDSHdSS01YQW96enFYVnYtOTYxMHdDQWpxMHRwVjFNdGdUbkgwdA?oc=5",
         "published_at": "Fri, 25 Sep 2026 01:00:01 GMT",
-        "publisher": "yna.co.kr",
+        "publisher": "연합뉴스",
         "discovery_source": "google_news_rss"
       },
       {
@@ -735,18 +670,18 @@
       },
       {
         "topic": "broad_fallback",
-        "title": "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-        "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE93QWtKUVVNeGF5Q1Z2SHF3RUVmdllOdDI0LUkteXBWYXVLT1g3NVk5SEJlRVpDdDg4dDFRZkVmazV5aUdyWGcyUGdDSE9od2E4eFMtLVJXWFBENVV6NkNYamhFUHBOMFY5VFIw?oc=5",
-        "published_at": "Fri, 25 Sep 2026 05:36:46 GMT",
-        "publisher": "BBS불교방송",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
         "title": "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
         "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9nbmNRNHRYYTM4NUlYdFlzaWV1NDRfLUNTVFdBQU5FLWUwVmEyZHhnNENWdG5yZ0poMTVLMUN3bDNkd0JKM3VzcGtoU20yOVJ6Tk5UaXhyUUd6OU9P?oc=5",
         "published_at": "Thu, 24 Sep 2026 20:23:00 GMT",
         "publisher": "뉴스핌",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+        "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE93QWtKUVVNeGF5Q1Z2SHF3RUVmdllOdDI0LUkteXBWYXVLT1g3NVk5SEJlRVpDdDg4dDFRZkVmazV5aUdyWGcyUGdDSE9od2E4eFMtLVJXWFBENVV6NkNYamhFUHBOMFY5VFIw?oc=5",
+        "published_at": "Fri, 25 Sep 2026 05:36:46 GMT",
+        "publisher": "BBS불교방송",
         "discovery_source": "google_news_rss"
       },
       {
@@ -842,7 +777,7 @@
         "title": "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기",
         "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5FTy1MSWFaeWdKZ3VnbWR4UkM1SWdna0MtTGk0eDZJWEZhZVkxTTZsTXIwVUtndE1ZOTRFdjQyZFdFWE1BVUl6dHd5bTVuOXVOTlc2TXBMb3NFQ3gyNmtmZjRuOFZlTlBNZzlhS0lxZw?oc=5",
         "published_at": "Fri, 25 Sep 2026 03:16:25 GMT",
-        "publisher": "seoul.co.kr",
+        "publisher": "서울신문",
         "discovery_source": "google_news_rss"
       },
       {
@@ -855,18 +790,18 @@
       },
       {
         "topic": "broad_fallback",
-        "title": "[속보] 美국채 금리 급등에도 보합권…S&P·나스닥 제자리",
-        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFAwc3VmaTFuR0lGUDlfTlJVVFMxSjRadjJISzBDcTRVTnhPQmtHUTI0RVVxMVN6X1pQNnhIY2RjZEFVS0R3aHZ2VzhaaFh4eUFlZEVyRGstcl91TFBtekNYbUN4QUdTS2fSAWxBVV95cUxPWjI3SWY3QlNaaWNmdTd4QkN3RHZ4dU5WUHZrbEdDaXVObWpFandNUjRQRnVURTBEX1lYN25EUWFyMjBFbm9NcEFzNEdEbFlubXhfNC00UGRPTTF4aGZ3YzFjMEhzeFZ2VHIzWHo?oc=5",
-        "published_at": "Thu, 24 Sep 2026 20:02:30 GMT",
-        "publisher": "뉴스1",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
         "title": "코스피 7000인데 개미는 울었다…27년 만에 최악의 투자 성적",
         "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFAteDRmbUVuRmVuREZyZjFQN29oSExhN3JZeTY2S0VCdDhoSkdEQV82ZmtHVWk1SGFLa19KUGhvZVVvdnZaRXc?oc=5",
         "published_at": "Wed, 23 Sep 2026 21:01:35 GMT",
         "publisher": "v.daum.net",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "[속보] 美국채 금리 급등에도 보합권…S&P·나스닥 제자리",
+        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFAwc3VmaTFuR0lGUDlfTlJVVFMxSjRadjJISzBDcTRVTnhPQmtHUTI0RVVxMVN6X1pQNnhIY2RjZEFVS0R3aHZ2VzhaaFh4eUFlZEVyRGstcl91TFBtekNYbUN4QUdTS2fSAWxBVV95cUxPWjI3SWY3QlNaaWNmdTd4QkN3RHZ4dU5WUHZrbEdDaXVObWpFandNUjRQRnVURTBEX1lYN25EUWFyMjBFbm9NcEFzNEdEbFlubXhfNC00UGRPTTF4aGZ3YzFjMEhzeFZ2VHIzWHo?oc=5",
+        "published_at": "Thu, 24 Sep 2026 20:02:30 GMT",
+        "publisher": "뉴스1",
         "discovery_source": "google_news_rss"
       },
       {
@@ -887,18 +822,18 @@
       },
       {
         "topic": "broad_fallback",
-        "title": "국제유가, 중동 공급 차질 우려에 급등",
-        "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1HR0phWVlIZDktdzBPQ3JOVGFrOWFkdzhrU2NwZGFnRHkzbldzUHdjamVVekRZdTU1X1FENEdwSTBUQXVpSDBkWkZYN1Ytandqb2dJeGFXRzhha1dVelVQb1hfdHB5WEd5d3Jn?oc=5",
-        "published_at": "Fri, 25 Sep 2026 01:09:18 GMT",
-        "publisher": "BBS불교방송",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "broad_fallback",
         "title": "[뉴욕채권] 약세 지속…유가·바이백 실망 속 30년물 금리 22년來 최고",
         "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE8waThLQ1Vmd3dRdUt4eFRJZXJwemw0bjUxSXN3QUZEaTJTV3kzQXMyM0J0a1QyQWp3X3ZPQXFxTmRRV3Y0RTU2MzE2ZlFraVhKMlY1ajFZU0diWUx5bGcwcldIOE1rdmlTYzF4QWpFR1RUUQ?oc=5",
         "published_at": "Thu, 24 Sep 2026 19:55:31 GMT",
         "publisher": "KB Think",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "broad_fallback",
+        "title": "국제유가, 중동 공급 차질 우려에 급등",
+        "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1HR0phWVlIZDktdzBPQ3JOVGFrOWFkdzhrU2NwZGFnRHkzbldzUHdjamVVekRZdTU1X1FENEdwSTBUQXVpSDBkWkZYN1Ytandqb2dJeGFXRzhha1dVelVQb1hfdHB5WEd5d3Jn?oc=5",
+        "published_at": "Fri, 25 Sep 2026 01:09:18 GMT",
+        "publisher": "BBS불교방송",
         "discovery_source": "google_news_rss"
       },
       {
@@ -923,14 +858,14 @@
       "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
       "한국 증시 오늘 새 공시 수주 계약 정책 변화",
       "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
-      "상폐 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+      "상폐 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "위기 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "국제유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "시총미달 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "속출 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "환율 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "동전주까지 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+      "퇴출 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+      "환율 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
     ],
     "sector_selection": {
       "mode": "dynamic",
@@ -1074,7 +1009,7 @@
   "changelog": "# AI 자동 변경 기록\n\n이 파일은 Evolution Agent가 실제로 저장소에 적용한 의미 있는 변화를 요약한다.\n\n원시 10분 Tick 기록은 `data/evolution/ticks/`에 별도로 저장한다.\n\n---\n\n## 2026-09-25 — Self-Evolving V2 기반 도입\n\n- 10분 Continuous Loop 설계\n- 프로젝트 자기진화 Scout/Builder 구조\n- 결정 원장/아이디어/실험/도움 필요 메모\n- 안전한 자동 수정 경계\n- GitHub Pages용 대시보드 설계\n- 역할별 모델 분리 및 비용 최적화 방향\n",
   "market": {},
   "market_runtime": {
-    "generated_at": "2026-09-25T16:30:29.957663+09:00",
+    "generated_at": "2026-09-25T16:31:43.218824+09:00",
     "source_status": "toss_snapshot_unavailable",
     "provider": "toss",
     "provider_captured_at": null,
@@ -1101,13 +1036,13 @@
     "last_universe_refresh": "2026-09-25T12:40:55.854533+09:00",
     "fetch_runtime": {
       "status": "ok",
-      "fetched_at": "2026-09-25T07:30:17.863014+00:00",
+      "fetched_at": "2026-09-25T07:31:30.022211+00:00",
       "captured_at": "2026-09-25T12:40:55.854533+09:00",
       "error": null
     }
   },
   "risk": {
-    "generated_at": "2026-09-25T16:30:30.570371+09:00",
+    "generated_at": "2026-09-25T16:31:43.876714+09:00",
     "risk_level": "LOW",
     "event_risk_level": "LOW",
     "macro_risk_level": "LOW",
@@ -1130,7 +1065,7 @@
       "note": "BLS 08:30 ET 발표를 KST로 환산",
       "resolved_datetime_kst": "2026-10-02T21:30:00+09:00",
       "time_unknown": false,
-      "hours_to_event": 172.99,
+      "hours_to_event": 172.97,
       "phase": "FUTURE",
       "risk_level": "LOW",
       "trade_window": "AFTER_NXT_CLOSE"
@@ -1155,7 +1090,7 @@
         "note": "BLS 08:30 ET 발표를 KST로 환산",
         "resolved_datetime_kst": "2026-10-02T21:30:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 172.99,
+        "hours_to_event": 172.97,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "AFTER_NXT_CLOSE"
@@ -1176,7 +1111,7 @@
         "official_url": "https://www.federalreserve.gov/monetarypolicy.htm",
         "resolved_datetime_kst": "2026-10-08T03:00:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 298.49,
+        "hours_to_event": 298.47,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "KOREA_TRADING_HOURS"
@@ -1200,7 +1135,7 @@
         "note": "BLS 08:30 ET 발표를 KST로 환산",
         "resolved_datetime_kst": "2026-10-14T21:30:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 460.99,
+        "hours_to_event": 460.97,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "AFTER_NXT_CLOSE"
@@ -1221,7 +1156,7 @@
         "official_url": "https://www.bls.gov/schedule/2026/10_sched_list.htm",
         "resolved_datetime_kst": "2026-10-15T21:30:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 484.99,
+        "hours_to_event": 484.97,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "AFTER_NXT_CLOSE"
@@ -1244,7 +1179,7 @@
         "note": "공식 일정에서 날짜 확인. 정확한 발표 시각은 확정 자료가 있을 때 갱신.",
         "resolved_datetime_kst": "2026-10-22T09:00:00+09:00",
         "time_unknown": true,
-        "hours_to_event": 640.49,
+        "hours_to_event": 640.47,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "UNKNOWN_TIME"
@@ -1268,14 +1203,14 @@
         "note": "10월 27~28일 회의. 정책 발표 시점은 통상 14:00 ET 기준 fallback.",
         "resolved_datetime_kst": "2026-10-29T03:00:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 802.49,
+        "hours_to_event": 802.47,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "KOREA_TRADING_HOURS"
       }
     ],
     "macro": {
-      "captured_at": "2026-09-25T16:30:30.570371+09:00",
+      "captured_at": "2026-09-25T16:31:43.876714+09:00",
       "values": {},
       "sources": [],
       "unknowns": [
@@ -1352,12 +1287,12 @@
       }
     },
     "semantic_hash": "9210755795b9502d510d64304953da026abff40904c0b814bd98d43e778cac2c",
-    "dirty": true,
+    "dirty": false,
     "evaluation": {
       "risk_level": "LOW",
       "single_biggest_risk": {
         "title": "미국 고용보고서",
-        "why": "172.99시간 후 · AFTER_NXT_CLOSE",
+        "why": "172.97시간 후 · AFTER_NXT_CLOSE",
         "severity": 5
       },
       "summary": "현재 확인 가능한 입력 기준 대형 Overnight Risk는 제한적.",
@@ -1369,7 +1304,7 @@
     }
   },
   "macro_matrix": {
-    "captured_at": "2026-09-25T16:30:30.570371+09:00",
+    "captured_at": "2026-09-25T16:31:43.876714+09:00",
     "source_mode": "unavailable",
     "known_count": 0,
     "total_count": 26,
@@ -1618,42 +1553,42 @@
     ]
   },
   "risk_runtime": {
-    "generated_at": "2026-09-25T16:30:30.570371+09:00",
-    "dirty": true,
+    "generated_at": "2026-09-25T16:31:43.876714+09:00",
+    "dirty": false,
     "semantic_hash": "9210755795b9502d510d64304953da026abff40904c0b814bd98d43e778cac2c",
-    "previous_hash": "7b9b777404568c60c544d7ed84a8db66842d72ba57848fe9d595f576c3ee9c23",
-    "evaluation_called": true,
+    "previous_hash": "9210755795b9502d510d64304953da026abff40904c0b814bd98d43e778cac2c",
+    "evaluation_called": false,
     "calendar_source": "live",
     "macro_source": "unavailable"
   },
   "health": {
-    "generated_at": "2026-09-25T16:30:31.813751+09:00",
+    "generated_at": "2026-09-25T16:31:45.169453+09:00",
     "status": "CRITICAL",
     "issue_count": 6,
     "issues": [
       {
         "component": "public_batch",
         "code": "stale-or-degraded",
-        "severity": "WARN",
+        "severity": "CRITICAL",
         "message": "6분 공개 시세 배치 상태: unavailable",
         "recovery": "네이버 공개 랭킹/폴링 fallback을 재시도하고 반복되면 1시간 AI가 parser를 수정",
-        "consecutive": "3"
+        "consecutive": "4"
       },
       {
         "component": "market",
         "code": "toss-collector-unavailable",
-        "severity": "NOTICE",
+        "severity": "WARN",
         "message": "NXT 시간대용 토스 Collector 스냅샷을 사용할 수 없음",
         "recovery": "고정 IP Toss Collector의 실행 상태·허용 IP·스냅샷 신선도를 확인",
-        "consecutive": "1"
+        "consecutive": "2"
       },
       {
         "component": "toss",
         "code": "snapshot-stale",
-        "severity": "NOTICE",
-        "message": "Toss snapshot이 오래됨: 229.6분",
+        "severity": "WARN",
+        "message": "Toss snapshot이 오래됨: 230.8분",
         "recovery": "Collector 프로세스와 snapshot 전달 workflow의 갱신 상태 확인",
-        "consecutive": "1"
+        "consecutive": "2"
       },
       {
         "component": "toss",
@@ -1661,7 +1596,7 @@
         "severity": "WARN",
         "message": "Toss WebSocket 활성 구독 정보가 비어 있음",
         "recovery": "거래대금 랭킹 조회와 trade:kr 구독 선언 상태 확인",
-        "consecutive": "2"
+        "consecutive": "3"
       },
       {
         "component": "macro",
@@ -1669,7 +1604,7 @@
         "severity": "CRITICAL",
         "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
         "recovery": "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
-        "consecutive": "9"
+        "consecutive": "10"
       },
       {
         "component": "discovery",
@@ -1677,23 +1612,23 @@
         "severity": "CRITICAL",
         "message": "Google News 탐색 5/7개 그룹이 비어 있거나 오류",
         "recovery": "6분 센서가 when 필터 제거 + broad fallback을 자동 재시도. 반복되면 1시간 AI가 검색식/소스를 수정",
-        "consecutive": "8"
+        "consecutive": "9"
       }
     ],
     "consecutive": {
-      "toss:subscription-empty": 2,
-      "toss:snapshot-stale": 1,
-      "public_batch:stale-or-degraded": 3,
-      "market:toss-collector-unavailable": 1,
-      "discovery:google-news-degraded": 8,
-      "macro:unavailable": 9
+      "toss:snapshot-stale": 2,
+      "toss:subscription-empty": 3,
+      "discovery:google-news-degraded": 9,
+      "public_batch:stale-or-degraded": 4,
+      "macro:unavailable": 10,
+      "market:toss-collector-unavailable": 2
     }
   },
   "regression": {
-    "generated_at": "2026-09-25T07:30:31.210255+00:00",
+    "generated_at": "2026-09-25T07:31:44.546251+00:00",
     "status": "COLLECTING",
     "snapshot": {
-      "timestamp": "2026-09-25T07:30:31.210255+00:00",
+      "timestamp": "2026-09-25T07:31:44.546251+00:00",
       "overall_quality": 52.0,
       "research_quality": null,
       "health_score": 20.0,
@@ -1701,12 +1636,12 @@
       "health_status": "CRITICAL"
     },
     "baseline_summary": {
-      "overall_7d": 55.33,
-      "overall_30d": 55.33,
+      "overall_7d": 55.0,
+      "overall_30d": 55.0,
       "research_7d": null,
       "research_30d": null,
-      "samples_7d": 9,
-      "samples_30d": 9
+      "samples_7d": 10,
+      "samples_30d": 10
     },
     "evaluations": [],
     "active_change_count": 0,
