@@ -53,6 +53,31 @@ async function load() {
     supervisorStatus.dataset.level = supervisor.status || "unknown";
   }
 
+  const narrativeRows = (supervisor.market_narrative || supervisor.market_context || supervisor.summary || []).slice(0, 5);
+  const narrative = $("market-narrative");
+  if (narrative) narrative.innerHTML = narrativeRows.length
+    ? narrativeRows.map((x, i) => `<p class="brief-paragraph${i === 0 ? " lead-brief" : ""}">${esc(typeof x === "string" ? x : (x.text || x.summary || ""))}</p>`).join("")
+    : "<p class='muted'>최근 3거래일 시장 흐름을 연결해 설명할 AI 해설을 기다리는 중입니다.</p>";
+
+  const focusRows = (supervisor.market_focus || supervisor.dynamic_trends || []).slice(0, 4);
+  const focus = $("market-focus");
+  if (focus) focus.innerHTML = focusRows.length
+    ? focusRows.map((x, i) => {
+        const title = typeof x === "string" ? x : (x.title || x.name || x.term || "핵심 이슈");
+        const reason = typeof x === "string" ? "" : (x.reason || x.why || x.evidence || "");
+        return `<div class="mini-row"><strong>${i + 1}. ${esc(title)}</strong><span>${esc(reason)}</span></div>`;
+      }).join("")
+    : "<p class='muted'>핵심 이슈를 선별 중입니다.</p>";
+
+  const invalidRows = (supervisor.invalidation_checks || supervisor.next_checks || []).slice(0, 4);
+  const invalid = $("market-invalidation");
+  if (invalid) invalid.innerHTML = invalidRows.length
+    ? invalidRows.map(x => `<div class="mini-row"><span>${esc(typeof x === "string" ? x : (x.check || x.title || x.reason || ""))}</span></div>`).join("")
+    : "<p class='muted'>다음 6분 데이터와 뉴스로 계속 재검증합니다.</p>";
+
+  const briefStatus = $("market-brief-status");
+  if (briefStatus) briefStatus.textContent = supervisor.processed_at ? `최근 AI · ${relativeTime(supervisor.processed_at)}` : ":00/:30 AI 해석";
+
   const summaryRows = (supervisor.summary || []).slice(0, 6);
   if ($("supervisor-summary")) {
     $("supervisor-summary").innerHTML = summaryRows.length
