@@ -420,7 +420,17 @@ class HealthWatchdog:
                     "missing",
                     "WARN",
                     "매크로 스냅샷이 없음",
-                    "Risk source refresh 또는 Toss/외부 Collector 연결 확인",
+                    "6분 no-AI Risk sensor와 외부 provider 연결을 확인",
+                )
+            ]
+        if not isinstance(data.get("values"), dict) or not data.get("values"):
+            return [
+                self._issue(
+                    "macro",
+                    "unavailable",
+                    "WARN",
+                    "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
+                    "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
                 )
             ]
         age = _age_minutes(data.get("captured_at"), now)
@@ -438,6 +448,56 @@ class HealthWatchdog:
                 )
             ]
         return []
+
+    def _check_discovery(self) -> list[dict[str, str]]:
+        path = self.root / "data" / "discovery" / "latest.json"
+        data = _read_json(path)
+        if not data:
+            return [
+                self._issue(
+                    "discovery",
+                    "missing",
+                    "WARN",
+                    "6분 시장 discovery 결과가 없음",
+                    "market-discovery-observe를 다시 실행",
+                )
+            ]
+
+        issues: list[dict[str, str]] = []
+        source_status = data.get("source_status", {})
+        if not isinstance(source_status, dict):
+            source_status = {}
+
+        google = [
+            value
+            for key, value in source_status.items()
+            if str(key).startswith("google_news:")
+            and isinstance(value, dict)
+        ]
+        if google and all(str(x.get("status")) in {"empty", "error"} for x in google):
+            issues.append(
+                self._issue(
+                    "discovery",
+                    "google-news-empty",
+                    "WARN",
+                    "Google News 탐색 그룹 전체가 비어 있음",
+                    "6분 센서가 when 필터 제거 fallback을 자동 재시도. 반복되면 1시간 AI가 검색식/소스를 수정",
+                )
+            )
+
+        naver = source_status.get("naver_finance")
+        if isinstance(naver, dict) and str(naver.get("status")) in {"degraded", "error"}:
+            issues.append(
+                self._issue(
+                    "discovery",
+                    "naver-index-degraded",
+                    "WARN",
+                    "네이버 공개 지수값 자동 수집이 degraded 상태",
+                    "신형 JSON endpoint → legacy HTML fallback을 자동 시도. 반복되면 parser를 수정",
+                )
+            )
+        return issues
+
 
     def _update_consecutive(
         self,
@@ -461,6 +521,7 @@ class HealthWatchdog:
         issues.extend(self._check_toss(now))
         issues.extend(self._check_risk(now))
         issues.extend(self._check_macro(now))
+        issues.extend(self._check_discovery())
         issues.extend(self._check_regression())
 
         consecutive = self._update_consecutive(previous, issues)
