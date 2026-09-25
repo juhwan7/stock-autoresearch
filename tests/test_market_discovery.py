@@ -1,5 +1,6 @@
 from autoresearch.market_discovery import (
     build_dynamic_handoff_queries,
+    extract_naver_index_basic,
     extract_naver_indices,
     extract_trending_terms,
     parse_google_news_rss,
@@ -102,3 +103,9 @@ def test_recent_items_drops_stale_articles():
     now = datetime(2026, 9, 25, 1, 0, tzinfo=timezone.utc)
     result = recent_items(items, now, hours=36)
     assert [item["title"] for item in result] == ["최신"]
+
+
+def test_extract_naver_index_basic_from_new_json_shape():
+    assert extract_naver_index_basic({"closePrice": "3,421.55"}) == "3,421.55"
+    assert extract_naver_index_basic({"close": 842.1}) == "842.1"
+    assert extract_naver_index_basic({}) is None
