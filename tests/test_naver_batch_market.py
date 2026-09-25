@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from autoresearch.naver_batch_market import (
     KST,
+    build_daily_tracked_universe,
     build_interval_rows,
     calibrate_minute_samples,
     extract_polling_quotes,
@@ -155,3 +156,44 @@ def test_calibrate_minute_samples_matches_six_minute_total():
     assert round(sum(x["minute_trading_value"] for x in calibrated), 6) == 1_200.0
     assert all(x["calibrated_to_interval_total"] for x in calibrated)
     assert all(x["amount_estimated"] for x in calibrated)
+
+
+def test_daily_tracked_universe_keeps_stock_after_it_drops_below_top50():
+    now = datetime(2026, 9, 28, 10, 6, tzinfo=KST)
+    previous = {
+        "generated_at": (now - timedelta(minutes=6)).isoformat(),
+        "tracked_universe": [
+            {
+                "ticker": "005930",
+                "name": "삼성전자",
+                "first_top50_at": (now - timedelta(minutes=30)).isoformat(),
+                "last_top50_at": (now - timedelta(minutes=6)).isoformat(),
+                "last_top50_rank": 47,
+                "in_current_top50": True,
+                "current_rank": 47,
+            }
+        ],
+    }
+    current_top = [
+        {"ticker": "000660", "name": "SK하이닉스", "ranking_trading_value": 100}
+    ]
+    tracked = build_daily_tracked_universe(current_top, previous, now)
+    samsung = next(x for x in tracked if x["ticker"] == "005930")
+    assert samsung["in_current_top50"] is False
+    assert samsung["current_rank"] is None
+    assert samsung["last_top50_rank"] == 47
+
+
+def test_daily_tracked_universe_resets_on_new_day():
+    now = datetime(2026, 9, 29, 9, 6, tzinfo=KST)
+    previous = {
+        "generated_at": datetime(2026, 9, 28, 15, 30, tzinfo=KST).isoformat(),
+        "tracked_universe": [
+            {"ticker": "005930", "name": "삼성전자", "last_top50_rank": 47}
+        ],
+    }
+    current_top = [
+        {"ticker": "000660", "name": "SK하이닉스", "ranking_trading_value": 100}
+    ]
+    tracked = build_daily_tracked_universe(current_top, previous, now)
+    assert [x["ticker"] for x in tracked] == ["000660"]
