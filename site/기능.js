@@ -96,6 +96,67 @@ async function load() {
       : "<p class='muted'>6분 센서 첫 실행 대기</p>";
   }
 
+  const recentObs = ((data.supervisor_recent || {}).observations || []).slice(-6);
+  const macroMatrixForRisk = data.macro_matrix || {};
+  const macroKnown = Number(macroMatrixForRisk.known_count || 0);
+  const macroTotal = Number(macroMatrixForRisk.total_count || 0);
+  const macroMissing = macroTotal > 0 && macroKnown === 0;
+  const levelScore = {VETO: 5, HIGH: 4, WATCH: 3, LOW: 1, UNKNOWN: 2};
+
+  const overnightRows = [];
+  const riskPreview = data.risk || {};
+  (riskPreview.macro_signals || []).forEach((x) => overnightRows.push({
+    level: x.risk_level || "WATCH",
+    title: x.field || "매크로 변화",
+    value: x.value == null ? "" : String(x.value),
+    why: "금리·환율·원자재 변화가 다음 한국장 밸류에이션과 외국인 수급에 전달될 수 있습니다."
+  }));
+  (riskPreview.upcoming_events || []).slice(0, 4).forEach((x) => {
+    if (Number(x.hours_to_event || 9999) <= 36) overnightRows.push({
+      level: x.risk_level || "WATCH",
+      title: x.title || "주요 일정",
+      value: x.hours_to_event == null ? "" : Number(x.hours_to_event).toFixed(1) + "시간 후",
+      why: "보유 중 발표될 수 있는 이벤트라 갭 변동 위험을 별도로 봅니다."
+    });
+  });
+  if (macroMissing) overnightRows.push({
+    level: "UNKNOWN",
+    title: "실시간 매크로 데이터 공백",
+    value: macroKnown + "/" + macroTotal,
+    why: "값이 없으므로 LOW로 해석하지 않습니다. 유가·금리·환율 확인 전에는 오버나잇 판단 신뢰도를 낮춥니다."
+  });
+  const aiSummary = ((data.supervisor_latest || {}).summary || []);
+  aiSummary.slice(0, 3).forEach((x, idx) => overnightRows.push({
+    level: idx === 0 ? "WATCH" : "LOW",
+    title: idx === 0 ? "AI 최우선 관찰" : "AI 추가 관찰",
+    value: "",
+    why: String(x)
+  }));
+  overnightRows.sort((a,b) => (levelScore[b.level] || 0) - (levelScore[a.level] || 0));
+  const riskList = $("overnight-risk-list");
+  if (riskList) riskList.innerHTML = overnightRows.slice(0, 6).map((x, i) =>
+    `<div class="overnight-risk-card" data-level="${esc(x.level)}">
+      <div class="risk-rank">${i + 1}</div>
+      <div><div class="risk-title-line"><strong>${esc(x.title)}</strong><span>${esc(x.level)}</span></div>
+      <p>${esc(x.why)}</p><small>${esc(x.value)}</small></div>
+    </div>`
+  ).join("") || "<p class='muted'>확인 가능한 리스크 입력을 수집 중입니다.</p>";
+  const coverage = $("overnight-coverage");
+  if (coverage) coverage.textContent = macroMissing ? "데이터 공백 · 판단 보류" : `매크로 ${macroKnown}/${macroTotal}`;
+
+  const flow = $("six-minute-flow");
+  if (flow) flow.innerHTML = recentObs.map((obs) => {
+    const t = String(obs.observed_at || "").slice(11,16);
+    const leaders = (((obs.public_batch_market || {}).interval_leaders) || []).slice(0,3);
+    const names = leaders.map(x => x.name || x.stock_name || x.ticker || x.code).filter(Boolean);
+    return `<div class="flow-point"><time>${esc(t || "-")}</time><div><strong>${esc(names.join(" · ") || "유효 자금흐름 없음")}</strong><small>${esc((obs.signals || []).slice(0,2).join(" · "))}</small></div></div>`;
+  }).join("") || "<p class='muted'>6분 관측이 쌓이면 최근 30분 자금 이동을 시간순으로 표시합니다.</p>";
+
+  const interpretation = $("overnight-interpretation");
+  if (interpretation) interpretation.innerHTML = aiSummary.length
+    ? aiSummary.slice(0,4).map(x => `<p>${esc(x)}</p>`).join("")
+    : "<p class='muted'>:00/:30 Supervisor 해석을 기다리는 중입니다.</p>";
+
   const risk = data.risk || {};
   const riskEval = risk.evaluation || {};
   const riskLevel = riskEval.risk_level || risk.risk_level || "LOW";
