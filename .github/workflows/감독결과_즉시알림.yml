@@ -1,0 +1,37 @@
+name: 감독 결과 즉시 알림
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/supervisor/latest-report.json"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: supervisor-report-notify
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Send supervisor result
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/감독결과_알림.py
