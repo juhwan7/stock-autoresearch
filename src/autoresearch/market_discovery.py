@@ -298,6 +298,10 @@ def summarize_public_batch_market(root: Path) -> dict[str, Any]:
         "minute_amount_exact": snapshot.get("minute_amount_exact"),
         "minute_amount_method": snapshot.get("minute_amount_method"),
         "minute_sample_ticker_count": snapshot.get("minute_sample_ticker_count"),
+        "current_top50_count": snapshot.get("current_top50_count"),
+        "tracked_universe_count": snapshot.get("tracked_universe_count"),
+        "dropped_from_current_top50_count": snapshot.get("dropped_from_current_top50_count"),
+        "tracked_outside_top50_with_samples": snapshot.get("tracked_outside_top50_with_samples"),
         "minute_samples_by_ticker": {
             str(ticker): rows[-6:]
             for ticker, rows in (snapshot.get("minute_samples_by_ticker") or {}).items()
