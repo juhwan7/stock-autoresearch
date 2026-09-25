@@ -1,0 +1,124 @@
+# AI 연속 인수인계
+
+이 문서는 새로운 ChatGPT/Supervisor가 이전 대화와 작업의 맥락을 잃지 않고 바로 이어서 작업하기 위한 **연속 인수인계 기준 문서**다.
+
+## 읽기 순서
+
+새 AI는 작업을 시작할 때 다음 순서로 확인한다.
+
+1. `AGENTS.md`
+2. `docs/문서_지도.md`
+3. **이 문서**
+4. `docs/사용자_목적.md`
+5. `docs/사용자_피드백.md`
+6. `docs/결정_원장.md`
+7. `data/supervisor/latest-report.json`
+8. `data/supervisor/state.json` 및 기존 Supervisor 큐/최근 관측
+
+채팅 원문 전체를 GitHub에 복제하는 문서가 아니다. 프로젝트 판단에 필요한 사용자 요구, 결정 이유, 실패, 검증 결과, 미완료 작업과 다음 시작점을 손실 없이 구조화해 누적한다. Secret·토큰·개인정보는 기록하지 않는다.
+
+## 사용자가 원하는 운영 방식
+
+- Stock AutoResearch는 사용자가 매번 기능을 지시해야 움직이는 프로젝트가 아니라 AI가 시장과 프로젝트를 계속 관찰하고 스스로 개선 후보를 찾는 프로젝트다.
+- 시장 연구와 프로젝트 개선은 같은 Supervisor 루프다.
+- 현재 ChatGPT Supervisor는 정각과 30분에 번갈아 실행되어 하나의 연속 상태를 이어받는다.
+- :00 작업과 :30 작업은 독립 연구가 아니다. 직전 사이클의 state/latest-report/queue, 미완료 작업과 검증 가설을 반드시 이어받는다.
+- 시장 변화가 없어도 프로젝트 자율개선 검토는 생략하지 않는다.
+- 의미 없는 커밋이나 문구 변경을 개선으로 취급하지 않는다.
+- 안전하고 되돌릴 수 있으며 근거와 검증 계획이 있는 작은 변경을 우선한다.
+- 사용자는 진행이 긴 작업에서 단계별 진행상황을 원한다.
+- 사용자-facing 설명과 문서는 한국어를 기본으로 한다.
+- 주문·자동매매 기능은 만들거나 활성화하지 않는다.
+
+## 시장 데이터 핵심 요구
+
+- 국내 단기 연구의 핵심은 종가베팅과 눌림 단기스윙이다.
+- 시장→섹터→종목→비중의 구조와 실제 돈의 흐름을 중시한다.
+- Toss를 신규 데이터 우선 공급자로 사용하지만 연결됐다는 사실만으로 완전하다고 가정하지 않는다.
+- 6분마다 거래대금 상위 50종목을 관찰하고 해당 6분 구간의 1분 단위 데이터를 누적하는 방향이다.
+- Top50에서 밀려난 종목도 당일 추적 Universe에서 즉시 버리지 않고 계속 관찰해야 한다.
+- Top50 개수, 1분봉 공백, fetch 오류, 6분 지연, 공급자 종목 차이, Top50 이탈 추적을 검사한다.
+- 누락 backfill은 provenance와 exact/estimated를 유지한다.
+- 정확도 우선순위는 Toss/KRX/증권사 정확 체결합계 > Naver 누적 거래대금 차분 > 가격×거래량 근사다.
+- 6분 센서는 OpenAI API 없이 동작해야 한다.
+
+## 2026-09-25 현재 연속 Supervisor 구조
+
+- 정각: `AutoResearch 동적 트렌드 AI 심층리서치`
+- 30분: `AutoResearch 연속 감독 30분`
+- 목표 흐름: 15:00 A → 15:30 B → 16:00 A → 16:30 B처럼 같은 상태를 교대로 이어받는다.
+- 각 실행은 A 시장 연구와 B 프로젝트 자율개선을 모두 수행한다.
+- 종료 전 `data/supervisor/latest-report.json`과 `data/supervisor/state.json`을 최신 SHA 기준으로 순차 갱신하고 다시 읽어 일치 여부를 검증해야 한다.
+- `latest-report.json`에는 고유 batch_id, processed_at, notify=true와 summary/actions/changed_paths/next_checks를 남긴다.
+- state의 처리 포인터는 실제 마지막 처리 관측 및 batch와 일치해야 한다.
+- 파일 쓰기 충돌이면 최신 SHA를 다시 읽고 재시도한다.
+- 별도의 평행 Supervisor 상태를 만들지 않는다.
+
+## Telegram 알림 경로와 최근 장애
+
+목표 경로는 다음과 같다.
+
+`Supervisor 실행 → latest-report/state 저장 → 감독 결과 즉시 알림 workflow → Telegram`
+
+2026-09-25 확인된 문제:
+- `latest-report.json`은 11:59 배치를 가리키는데 `state.json` 처리 포인터가 08:43에 남아 있는 불일치가 발견됐다.
+- 15:30 Supervisor 실행은 있었지만 새 latest-report가 GitHub에 저장되지 않아 Telegram workflow가 발동하지 않았다.
+- Telegram 스크립트가 GitHub Issue 댓글 성공 뒤에만 Telegram을 호출하던 결합도 발견됐다.
+
+적용한 개선:
+- Telegram 전송을 GitHub Issue 댓글 성공 여부와 분리했다. Issue가 실패해도 Telegram 전송을 독립적으로 시도한다.
+- 정각/30분 Supervisor 프롬프트에 최신 blob SHA 재조회 → 순차 저장 → 재조회 검증 규칙을 추가했다.
+- `감독결과_즉시알림.yml`에는 기존 latest-report push 트리거를 유지하면서 보조 알림 트리거 기반을 추가했다.
+
+주의:
+- 위 개선이 실제 다음 Supervisor 배치에서 end-to-end로 성공하는지는 반드시 운영 실행으로 사후검증한다.
+- Telegram Secret 값은 어떤 문서/로그에도 저장하지 않는다.
+
+## Toss/6분 센서 운영 의도
+
+- 진짜 1분 실시간 스트리밍 자체가 목적은 아니다.
+- 6분마다 상위 50종목을 확인하면서 직전 6분의 1분 데이터 6개를 확보하는 구조가 핵심이다.
+- 상위 50위에서 54위 등으로 밀린 종목도 이미 추적 대상이었다면 계속 갱신한다.
+- Toss 고정 IP Collector와 공개/보조 provider를 함께 사용하되 공급자 누락을 숨기지 않는다.
+- 휴장일·장외시간을 장애나 실제 장중 흐름으로 오판하지 않는다.
+
+## AI가 프로젝트를 개선할 때 기억할 것
+
+매 사이클 최소 한 개 개선 후보를 검토한다. 우선순위:
+1. 데이터 누락/stale/provider 불일치/fallback/backfill
+2. API 401/403/429/5xx/schema/rate limit
+3. 6분 센서 지연·공백·Top50 이탈 추적
+4. Health/Regression/Pages/Actions/Telegram
+5. 질문→가설→반증→사후검증
+6. 테스트와 실제 실행경로 불일치
+7. 중복·구형 코드/문서
+8. 가치 있는 새 데이터·속보·외부 서비스/API
+
+개선 전 evidence, expected_benefit, risk, validation_plan을 명시한다. due hypothesis는 실제 후속 관측으로 판정한다.
+
+## 대화에서 나온 내용을 앞으로 보존하는 규칙
+
+프로젝트와 관련된 새 사용자 요구나 중요한 결정이 나오면 다음 중 적절한 위치에 기록한다.
+
+- 장기 목적/선호 변화 → 이 문서 + `사용자_목적.md`
+- 새로운 설계 결정과 이유 → `결정_원장.md`
+- 사용자의 수정/보류/아이디어 → `사용자_피드백.md`
+- 실제 AI 변경 → `AI_변경기록.md`
+- 실험과 검증 → `실험_기록.md`
+- 다음 AI가 즉시 알아야 할 현재 상태/미완료 작업 → 이 문서 + Supervisor state/queue/latest-report
+
+매 정각/30분 Supervisor는 실행 종료 전에 **이번 사이클에서 새로 생긴 장기 맥락이 있는지 판단**하고, 있으면 기존 문서에 중복 없이 반영한다. 단순 시장 숫자나 일회성 로그까지 이 문서에 계속 붙이지 않는다.
+
+## 다음 AI의 첫 질문
+
+새 AI는 작업을 시작할 때 스스로 다음을 확인한다.
+
+- 직전 Supervisor는 어디까지 처리했는가?
+- state와 latest-report가 같은 batch를 가리키는가?
+- 직전 사이클의 미완료 작업과 검증 가설은 무엇인가?
+- 사용자의 가장 최근 요구가 canonical 문서에 반영됐는가?
+- 최근 변경의 CI와 실제 운영 사후검증이 끝났는가?
+- Telegram/latest-report 경로가 실제 end-to-end로 동작했는가?
+- Toss/Top50/1분 데이터에 조용한 누락이 없는가?
+
+이 질문에 답한 뒤 새 작업을 시작한다.
