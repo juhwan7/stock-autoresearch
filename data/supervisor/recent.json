@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-25T12:42:10.079997+09:00",
+  "updated_at": "2026-09-25T16:30:33.884959+09:00",
   "batch_size": 10,
   "observations": [
     {
@@ -4436,6 +4436,827 @@
         "health:CRITICAL",
         "discovery:degraded",
         "market:needs_credentials"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "observation_id": "obs-20260925T163033+0900-36107941964-1",
+      "observed_at": "2026-09-25T16:30:33.884959+09:00",
+      "source": {
+        "repository": "juhwan7/stock-autoresearch",
+        "workflow": "6분 감독 관측 큐",
+        "run_id": "36107941964",
+        "run_attempt": "1",
+        "head_sha": "9a72a49ba1a028562b3cd95655f20292e378f27f",
+        "ref_name": "main"
+      },
+      "queue": {
+        "batch_size": 10,
+        "pending_before_append": 2,
+        "last_processed_observation_id": "obs-20260925T114442+0900-36087484086-1",
+        "pending_after_append": 3
+      },
+      "validation": {
+        "status": "ok",
+        "compile": "ok",
+        "pytest": "ok",
+        "diff_check": "ok"
+      },
+      "steps": {
+        "toss_fetch": "success",
+        "toss_summary": "success",
+        "health": "success",
+        "dashboard": "success",
+        "market_discovery": "success",
+        "public_batch_market": "success",
+        "market_sensor_repair": "success",
+        "risk_sensor_repair": "success",
+        "regression_refresh": "success"
+      },
+      "health": {
+        "status": "CRITICAL",
+        "generated_at": "2026-09-25T16:30:31.813751+09:00",
+        "issues": [
+          {
+            "component": "public_batch",
+            "code": "stale-or-degraded",
+            "severity": "WARN",
+            "message": "6분 공개 시세 배치 상태: unavailable"
+          },
+          {
+            "component": "market",
+            "code": "toss-collector-unavailable",
+            "severity": "NOTICE",
+            "message": "NXT 시간대용 토스 Collector 스냅샷을 사용할 수 없음"
+          },
+          {
+            "component": "toss",
+            "code": "snapshot-stale",
+            "severity": "NOTICE",
+            "message": "Toss snapshot이 오래됨: 229.6분"
+          },
+          {
+            "component": "toss",
+            "code": "subscription-empty",
+            "severity": "WARN",
+            "message": "Toss WebSocket 활성 구독 정보가 비어 있음"
+          },
+          {
+            "component": "macro",
+            "code": "unavailable",
+            "severity": "CRITICAL",
+            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+          },
+          {
+            "component": "discovery",
+            "code": "google-news-degraded",
+            "severity": "CRITICAL",
+            "message": "Google News 탐색 5/7개 그룹이 비어 있거나 오류"
+          }
+        ]
+      },
+      "regression": {
+        "status": "COLLECTING",
+        "generated_at": "2026-09-25T07:30:31.210255+00:00",
+        "quarantine_count": 0,
+        "rolled_back_count": 0
+      },
+      "market_discovery": {
+        "generated_at": "2026-09-25T16:30:23.085216+09:00",
+        "item_count": 34,
+        "new_item_count": 8,
+        "topic_counts": {
+          "kr_corporate_events": 4,
+          "broad_fallback": 30
+        },
+        "trending_terms": [
+          {
+            "term": "상폐",
+            "count": 7,
+            "publisher_count": 6,
+            "previous_count": 6,
+            "delta": 1,
+            "score": 21,
+            "examples": [
+              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+              "[속보]'시총미달 상폐' 코스닥서 속출",
+              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
+            ]
+          },
+          {
+            "term": "유가",
+            "count": 7,
+            "publisher_count": 6,
+            "previous_count": 8,
+            "delta": -1,
+            "score": 20,
+            "examples": [
+              "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
+              "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
+              "급등하는 국채 수익률과 유가, 미국 증시 선물 하락 압박"
+            ]
+          },
+          {
+            "term": "위기",
+            "count": 5,
+            "publisher_count": 5,
+            "previous_count": 5,
+            "delta": 0,
+            "score": 15,
+            "examples": [
+              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+              "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기"
+            ]
+          },
+          {
+            "term": "국제유가",
+            "count": 5,
+            "publisher_count": 5,
+            "previous_count": 5,
+            "delta": 0,
+            "score": 15,
+            "examples": [
+              "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]",
+              "美 10년물 국채금리 5.2% 돌파…국제유가 상승 등 영향",
+              "유럽 증시, 국제유가 하락에 힘입어 소폭 상승"
+            ]
+          },
+          {
+            "term": "시총미달",
+            "count": 4,
+            "publisher_count": 4,
+            "previous_count": 3,
+            "delta": 1,
+            "score": 13,
+            "examples": [
+              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+              "[속보]'시총미달 상폐' 코스닥서 속출",
+              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
+            ]
+          },
+          {
+            "term": "속출",
+            "count": 4,
+            "publisher_count": 4,
+            "previous_count": 3,
+            "delta": 1,
+            "score": 13,
+            "examples": [
+              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+              "[속보]'시총미달 상폐' 코스닥서 속출",
+              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
+            ]
+          },
+          {
+            "term": "환율",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 0,
+            "delta": 3,
+            "score": 12,
+            "examples": [
+              "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
+              "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
+              "ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’"
+            ]
+          },
+          {
+            "term": "동전주까지",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 0,
+            "delta": 3,
+            "score": 12,
+            "examples": [
+              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+              "코스닥 ‘시총 미달 상폐’ 속출…내달엔 동전주까지 위기",
+              "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기"
+            ]
+          },
+          {
+            "term": "퇴출",
+            "count": 4,
+            "publisher_count": 3,
+            "previous_count": 5,
+            "delta": -1,
+            "score": 11,
+            "examples": [
+              "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기",
+              "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기",
+              "코스닥 8개사·코스피 1개사 퇴출…‘시총미달·동전주’ 관리종목 대폭 증가"
+            ]
+          },
+          {
+            "term": "코스닥서",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 2,
+            "delta": 1,
+            "score": 10,
+            "examples": [
+              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+              "[속보]'시총미달 상폐' 코스닥서 속출",
+              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
+            ]
+          },
+          {
+            "term": "이슈",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
+              "신한투자증권, 종목 이슈·미국 공시 AI가 실시간 정리",
+              "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]"
+            ]
+          },
+          {
+            "term": "무더기",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
+              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+              "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기"
+            ]
+          },
+          {
+            "term": "뉴욕증시",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 6,
+            "delta": -3,
+            "score": 9,
+            "examples": [
+              "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
+              "[해외시황] 뉴욕증시, 유가·국채금리 급등에 '혼조'…다우 0.31%↓",
+              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]"
+            ]
+          },
+          {
+            "term": "내달",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기",
+              "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기",
+              "시총 기준 강화에 코스닥 8개사 상폐 결정…내달 추가 퇴출 가능성"
+            ]
+          },
+          {
+            "term": "금리",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
+              "[속보] 美국채 금리 급등에도 보합권…S&P·나스닥 제자리",
+              "[뉴욕채권] 약세 지속…유가·바이백 실망 속 30년물 금리 22년來 최고"
+            ]
+          },
+          {
+            "term": "국채금리",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 4,
+            "delta": -1,
+            "score": 9,
+            "examples": [
+              "美 10년물 국채금리 5.2% 돌파…국제유가 상승 등 영향",
+              "[해외시황] 뉴욕증시, 유가·국채금리 급등에 '혼조'…다우 0.31%↓",
+              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]"
+            ]
+          },
+          {
+            "term": "후티",
+            "count": 3,
+            "publisher_count": 2,
+            "previous_count": 2,
+            "delta": 1,
+            "score": 9,
+            "examples": [
+              "후티 반군, 사우디 미사일 공격 소식에…국제유가 3% 넘게 급등",
+              "예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑",
+              "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소"
+            ]
+          },
+          {
+            "term": "시총",
+            "count": 3,
+            "publisher_count": 2,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 8,
+            "examples": [
+              "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기",
+              "코스닥 ‘시총 미달 상폐’ 속출…내달엔 동전주까지 위기",
+              "시총 기준 강화에 코스닥 8개사 상폐 결정…내달 추가 퇴출 가능성"
+            ]
+          },
+          {
+            "term": "호르무즈",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
+              "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소"
+            ]
+          },
+          {
+            "term": "합의",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
+              "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소"
+            ]
+          }
+        ],
+        "new_dart_filings": [],
+        "official_web_candidates": [],
+        "toss_market": {
+          "available": true,
+          "captured_at": "2026-09-25T12:40:55.854533+09:00",
+          "top_turnover": [],
+          "minute_burst_leaders": [],
+          "top10_share": null
+        },
+        "sector_selection": {
+          "mode": "dynamic",
+          "fixed_sector_whitelist": false,
+          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 1시간 AI가 주도 섹터를 선택"
+        },
+        "naver_indices": {
+          "KOSPI": "7,080.92",
+          "KOSDAQ": "844.48",
+          "KOSPI200": "1,126.12"
+        },
+        "source_summary": {
+          "ok_or_partial": 3,
+          "failed": 0,
+          "degraded": 5
+        },
+        "top_new_items": [
+          {
+            "topic": "broad_fallback",
+            "title": "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE00eTZ3N1N2anVLWjYyT3hHVlFCRUpLeUtPTDBiejZYR0tSbHM3M0VxQTA5TURUYzBkZmdDSHdSS01YQW96enFYVnYtOTYxMHdDQWpxMHRwVjFNdGdUbkgwdNIBYEFVX3lxTE00eTZ3N1N2anVLWjYyT3hHVlFCRUpLeUtPTDBiejZYR0tSbHM3M0VxQTA5TURUYzBkZmdDSHdSS01YQW96enFYVnYtOTYxMHdDQWpxMHRwVjFNdGdUbkgwdA?oc=5",
+            "published_at": "Fri, 25 Sep 2026 01:00:01 GMT",
+            "publisher": "yna.co.kr",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
+            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBsOUZaVmF0N3pod0kzYUU4anV3UTFYR0dKUm1DNl9ZbFBUQTlzbFpjS0h5ZVlNb014RGV2dXVyWngtbGdjcXVfSUVtV3MzR2g4dkozOE1QU0tFcE9GUUNmdlpjSi0wdF9rVjJzY1Fzaw?oc=5",
+            "published_at": "Fri, 25 Sep 2026 00:47:00 GMT",
+            "publisher": "Investing.com 한국어",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
+            "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE8yOG5JdllmV0JXRGx3ekg5M2c3YjBnemkyOXlqZkhzQnJYS0pNTTJrZTl6QkxZU2J0N0RpWFFaaWk4WkV1ZXFIZ2x1UVVlYjAwc3E2VE4yMlBlQ2M?oc=5",
+            "published_at": "Fri, 25 Sep 2026 07:20:00 GMT",
+            "publisher": "KBS 뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "[속보]'시총미달 상폐' 코스닥서 속출",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9yeG1NRlVxQWY0RW9YVUFEd3JtbmliMTY1OHFyY3dUNlVkOWNEdnljbnMyOTFhQ0tZWGNBR1pCdDdQUF9nYi01dldFSFFGc19MZHUyY1lTVWFKR2FGOGRvU0xhR1dqOFBCaHI2TQ?oc=5",
+            "published_at": "Fri, 25 Sep 2026 04:48:00 GMT",
+            "publisher": "한경매거진&북",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE93QWtKUVVNeGF5Q1Z2SHF3RUVmdllOdDI0LUkteXBWYXVLT1g3NVk5SEJlRVpDdDg4dDFRZkVmazV5aUdyWGcyUGdDSE9od2E4eFMtLVJXWFBENVV6NkNYamhFUHBOMFY5VFIw?oc=5",
+            "published_at": "Fri, 25 Sep 2026 05:36:46 GMT",
+            "publisher": "BBS불교방송",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "유럽 증시, 국제유가 하락에 힘입어 소폭 상승",
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE0tdFpHMWhXRndXVDNtUFkxNzF0dDVQTFBoNnhCVTN2Q2oxR2RrUnpSOG5wcHdQQzBTYVhfY2NfWDJ2d2ptWWZNMlpNU3pjQkp6c1F2WE5XejhLT1pWcVJhMHlnTzBWU3BNMmxmLW1WNFo?oc=5",
+            "published_at": "Fri, 25 Sep 2026 07:04:00 GMT",
+            "publisher": "Investing.com 한국어",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑",
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFB0Y0Q1OE0wWnQxM2lzU0hxcW5jMEF5UWZpRnkxYWsyanlBczhxX0w0aVkxNnhEekR6eU9SV0xpaVlVVGduVzFvbjhyUTJ1VWhrQXBtb1Uyc0Y4OXVueFY3RzJaTWtSNUg3MzcweGFTaGw?oc=5",
+            "published_at": "Thu, 24 Sep 2026 17:23:52 GMT",
+            "publisher": "연합인포맥스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE15NnFSU3NlR0xxVllLa1M4VXk0dGFHZWRKVTZXSHNYV1ZGU1o1dTNINnAzMmJBT2dVZkpQUXhGR0pqNzM5Z2RpT0U5bTRMQ29XTlhxZXdJNUo3SGdMMEswMGlyVjFTbUcxMllyTQ?oc=5",
+            "published_at": "Fri, 25 Sep 2026 00:00:00 GMT",
+            "publisher": "인사이드비나",
+            "discovery_source": "google_news_rss"
+          }
+        ],
+        "handoff_queries": [
+          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+          "상폐 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "위기 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "국제유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "시총미달 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "속출 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "환율 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "동전주까지 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+        ]
+      },
+      "public_batch_market": {
+        "generated_at": "2026-09-25T16:30:18.702635+09:00",
+        "status": "unavailable",
+        "provider": "naver_public",
+        "exact_1m_bars": false,
+        "elapsed_minutes_from_previous": 228.41168275,
+        "interval_leaders": [],
+        "one_minute_samples_available": false,
+        "minute_amount_exact": false,
+        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
+        "minute_sample_ticker_count": 0,
+        "current_top50_count": 0,
+        "tracked_universe_count": 0,
+        "dropped_from_current_top50_count": 0,
+        "tracked_outside_top50_with_samples": 0,
+        "minute_samples_by_ticker": {},
+        "limitations": [
+          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
+          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
+          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
+          "최근 6개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+          "6분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+        ]
+      },
+      "market": {
+        "generated_at": "2026-09-25T16:30:29.957663+09:00",
+        "source_status": "toss_snapshot_unavailable",
+        "provider": "toss",
+        "fallback_used": false
+      },
+      "toss": {
+        "available": true,
+        "captured_at": "2026-09-25T12:40:55.854533+09:00",
+        "collector": {
+          "subscription_count": 0,
+          "rejected_count": 0,
+          "last_message_at": null,
+          "last_universe_refresh": "2026-09-25T12:40:55.854533+09:00"
+        }
+      },
+      "user_feedback": {
+        "pending_count": 0,
+        "latest_pending_comment_id": null
+      },
+      "git": {
+        "head_sha": "9a72a49ba1a028562b3cd95655f20292e378f27f",
+        "latest_commit_changed_files": [
+          "data/supervisor/state.json"
+        ]
+      },
+      "previous_workflow_run": {
+        "id": 36105613988,
+        "name": "GitHub Pages 즉시 배포",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-09-25T07:01:52Z",
+        "updated_at": "2026-09-25T07:02:30Z",
+        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36105613988",
+        "head_sha": "bf2f67a5d8b4b9aa24124a00f48797886a732101"
+      },
+      "hypothesis_verification": {
+        "due": []
+      },
+      "signals": [
+        "health:CRITICAL",
+        "discovery:degraded",
+        "market:toss_snapshot_unavailable"
+      ],
+      "research_questions": [
+        {
+          "question_id": "q-e7f6d3f25e6f13b9",
+          "kind": "system",
+          "subject": "discovery",
+          "question": "discovery의 'Google News 탐색 5/7개 그룹이 비어 있거나 오류' 문제가 반복되는 구조적 원인인가 일시적 센서 공백인가? 다음 관측에서 무엇으로 구분할 수 있는가?",
+          "priority": 5,
+          "evidence": [
+            "Google News 탐색 5/7개 그룹이 비어 있거나 오류"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-f4e037d78601a83d",
+          "kind": "system",
+          "subject": "macro",
+          "question": "macro의 '매크로 runtime은 생성됐지만 실제 시장값이 비어 있음' 문제가 반복되는 구조적 원인인가 일시적 센서 공백인가? 다음 관측에서 무엇으로 구분할 수 있는가?",
+          "priority": 5,
+          "evidence": [
+            "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-5c18348e47abe493",
+          "kind": "data_quality",
+          "subject": "minute_trading_value",
+          "question": "분 단위 거래대금이 근사치인 현재 관측에서 어떤 결론까지 상대 비교로 허용하고, 어떤 절대값 판단은 보류해야 하는가?",
+          "priority": 4,
+          "evidence": [
+            "price_x_minute_volume_scaled_to_interval_total",
+            "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+            "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
+            "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-1e299fc496332531",
+          "kind": "news",
+          "subject": "broad_fallback",
+          "question": "'엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
+          "priority": 3,
+          "evidence": [
+            "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
+            "KBS 뉴스"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-295722c4b258195f",
+          "kind": "emerging_topic",
+          "subject": "상폐",
+          "question": "'상폐' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
+          "priority": 3,
+          "evidence": [
+            "반복 키워드=상폐",
+            "기사=7, 매체=6"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-2e10d66f10b466c4",
+          "kind": "emerging_topic",
+          "subject": "국제유가",
+          "question": "'국제유가' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
+          "priority": 3,
+          "evidence": [
+            "반복 키워드=국제유가",
+            "기사=5, 매체=5"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-345f6ff132d1dcd3",
+          "kind": "news",
+          "subject": "broad_fallback",
+          "question": "'유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
+          "priority": 3,
+          "evidence": [
+            "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
+            "Investing.com 한국어"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-38d78009531714f1",
+          "kind": "news",
+          "subject": "broad_fallback",
+          "question": "'ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
+          "priority": 3,
+          "evidence": [
+            "ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’",
+            "인사이드비나"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-5fcdce8516563327",
+          "kind": "system",
+          "subject": "toss",
+          "question": "toss의 'Toss WebSocket 활성 구독 정보가 비어 있음' 문제가 반복되는 구조적 원인인가 일시적 센서 공백인가? 다음 관측에서 무엇으로 구분할 수 있는가?",
+          "priority": 3,
+          "evidence": [
+            "Toss WebSocket 활성 구독 정보가 비어 있음"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-61dc873c3db9dae2",
+          "kind": "news",
+          "subject": "broad_fallback",
+          "question": "'[속보]'시총미달 상폐' 코스닥서 속출'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
+          "priority": 3,
+          "evidence": [
+            "[속보]'시총미달 상폐' 코스닥서 속출",
+            "한경매거진&북"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-76d37f32ecff4aa5",
+          "kind": "news",
+          "subject": "broad_fallback",
+          "question": "'유럽 증시, 국제유가 하락에 힘입어 소폭 상승'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
+          "priority": 3,
+          "evidence": [
+            "유럽 증시, 국제유가 하락에 힘입어 소폭 상승",
+            "Investing.com 한국어"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-7eb7190576b013c2",
+          "kind": "emerging_topic",
+          "subject": "시총미달",
+          "question": "'시총미달' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
+          "priority": 3,
+          "evidence": [
+            "반복 키워드=시총미달",
+            "기사=4, 매체=4"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-8b8cdcdd1973b181",
+          "kind": "system",
+          "subject": "public_batch",
+          "question": "public_batch의 '6분 공개 시세 배치 상태: unavailable' 문제가 반복되는 구조적 원인인가 일시적 센서 공백인가? 다음 관측에서 무엇으로 구분할 수 있는가?",
+          "priority": 3,
+          "evidence": [
+            "6분 공개 시세 배치 상태: unavailable"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-929372ddee953299",
+          "kind": "emerging_topic",
+          "subject": "속출",
+          "question": "'속출' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
+          "priority": 3,
+          "evidence": [
+            "반복 키워드=속출",
+            "기사=4, 매체=4"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-9476dd96b4a37d4b",
+          "kind": "news",
+          "subject": "broad_fallback",
+          "question": "''시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
+          "priority": 3,
+          "evidence": [
+            "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
+            "BBS불교방송"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-94a4ee2784e33477",
+          "kind": "emerging_topic",
+          "subject": "위기",
+          "question": "'위기' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
+          "priority": 3,
+          "evidence": [
+            "반복 키워드=위기",
+            "기사=5, 매체=5"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-c216e48fc042b551",
+          "kind": "emerging_topic",
+          "subject": "환율",
+          "question": "'환율' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
+          "priority": 3,
+          "evidence": [
+            "반복 키워드=환율",
+            "기사=3, 매체=3"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-c89531e35b70012d",
+          "kind": "emerging_topic",
+          "subject": "동전주까지",
+          "question": "'동전주까지' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
+          "priority": 3,
+          "evidence": [
+            "반복 키워드=동전주까지",
+            "기사=3, 매체=3"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-cbd19d48198f6598",
+          "kind": "news",
+          "subject": "broad_fallback",
+          "question": "'美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
+          "priority": 3,
+          "evidence": [
+            "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
+            "yna.co.kr"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-d0175c771a79dfb6",
+          "kind": "emerging_topic",
+          "subject": "유가",
+          "question": "'유가' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
+          "priority": 3,
+          "evidence": [
+            "반복 키워드=유가",
+            "기사=7, 매체=6"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        },
+        {
+          "question_id": "q-d197112e0b472e4b",
+          "kind": "news",
+          "subject": "broad_fallback",
+          "question": "'예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
+          "priority": 3,
+          "evidence": [
+            "예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑",
+            "연합인포맥스"
+          ],
+          "parent_question_id": null,
+          "status": "open",
+          "learned_priority_bonus": 0
+        }
       ]
     }
   ]
