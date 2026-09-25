@@ -1,30 +1,55 @@
 {
   "schema_version": 1,
-  "batch_id": "supervisor-telegram-e2e-20260925T1912+0900",
-  "processed_at": "2026-09-25T19:12:00+09:00",
-  "observation_ids": [],
-  "expected_observation_count": 0,
-  "sensor_gap": 0,
-  "status": "attention",
+  "batch_id": "supervisor-20260925T2030+0900",
+  "processed_at": "2026-09-25T20:30:00+09:00",
+  "status": "changed",
   "notify": true,
+  "observation_ids": [
+    "obs-20260925T163147+0900-36108053575-1"
+  ],
   "summary": [
-    "Telegram 연결 자체는 정상임을 사용자가 실제 수신으로 확인했다.",
-    "Supervisor 결과 전달 경로를 기존 파일 직접 덮어쓰기 방식과 분리하는 새 경로를 테스트한다.",
-    "이 메시지가 도착하면 AI 결과 파일 → GitHub Action → canonical 저장 → Telegram 경로가 실제로 연결된 것이다."
+    "시장: 미국 정규장 전 AI 선택적 강세가 확인됐지만 고유가와 높은 장기금리가 동시에 부담인 충돌 장세다.",
+    "A 검증: 선물 상승과 주요 AI·반도체 프리마켓 강세는 확인됐다. Akamai의 Anthropic 116억달러 7년 계약도 회사 발표로 확인됐다.",
+    "오버나잇: 미 장기금리와 21:30 KST 내구재 지표, 유가·중동 공급위험, 22:30 KST 이후 AI 실제 거래대금 집중 순으로 확인한다.",
+    "버그: AI 결과 적용이 파일 mtime에 의존해 20:00 결과가 있어도 canonical 상태가 19:12에 남는 문제가 확인됐다.",
+    "수정: 적용 스크립트가 오래된 결과를 받으면 processed_at 기준 더 최신의 유효 결과를 찾아 canonical 상태의 역행을 막도록 수정했다.",
+    "미해결: 6분 센서 저장 관측이 16:31 이후 없어 A의 20:06 운영검증은 완료가 아니다. 스케줄 공백을 investigating으로 넘긴다."
+  ],
+  "market_narrative": [
+    "최근 시장은 AI 인프라 기대와 고유가·고금리 부담이 맞서고 있다. AI 관련 종목과 선물은 강하지만 5%대 미 장기금리 때문에 전면적 위험선호로 단정하기 어렵다.",
+    "유가는 미·이란 휴전 기대에 하락 압력을 받지만 사우디 공격에 따른 공급 위험이 남아 있어 외교 기대가 깨질 때 재상승하는지가 중요하다.",
+    "다음 한국 개장에서는 미국 AI 강세를 자동 연결하지 않고 국내 거래대금 상위 진입과 섹터 동조로 확인한다."
+  ],
+  "market_focus": [
+    {
+      "title": "미 장기금리·내구재",
+      "reason": "금리 기대가 성장주 할인율에 직접 연결"
+    },
+    {
+      "title": "유가·중동",
+      "reason": "휴전 기대와 공급충격 위험이 충돌"
+    },
+    {
+      "title": "AI 실제 수급",
+      "reason": "프리마켓 강세가 정규장 거래대금으로 이어지는지 확인"
+    }
+  ],
+  "invalidation_checks": [
+    "지표 뒤 미 10년물이 하락하고 Nasdaq 강세가 확대되면 금리 부담 해석을 낮춘다.",
+    "정규장 개장 뒤 AI·반도체 상대강도와 거래대금 집중이 사라지면 프리마켓 집중 가설을 폐기한다."
   ],
   "actions": [
-    "immutable AI result 파일 기반 적용 경로 추가",
-    "canonical latest-report/state 자동 동기화 workflow 추가",
-    "Telegram end-to-end 테스트 배치 생성"
+    "A 시장 해석 교차검증",
+    "canonical 결과 역행 방지 수정",
+    "6분 센서 공백을 investigating으로 재분류"
   ],
   "changed_paths": [
-    "scripts/supervisor_result_apply.py",
-    ".github/workflows/supervisor-result-apply.yml",
-    "data/supervisor/ai-results/supervisor-telegram-e2e-20260925T1912+0900.json"
+    "scripts/감독결과_적용.py"
   ],
   "next_checks": [
-    "workflow 실행 성공 여부 확인",
-    "latest-report/state batch 일치 확인",
-    "Telegram 실제 수신 확인"
+    "이번 batch가 canonical state/latest-report에 적용되는지 확인",
+    "20:36 이후 6분 sensor schedule 실행 확인",
+    "21:30 KST 내구재 발표 후 금리·Nasdaq 반응 확인",
+    "22:30 KST 정규장 AI·반도체 거래대금 확인"
   ]
 }
