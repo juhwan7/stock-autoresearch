@@ -257,6 +257,8 @@ def build_observation(
             "item_count": discovery.get("item_count"),
             "new_item_count": discovery.get("new_item_count"),
             "topic_counts": discovery.get("topic_counts"),
+            "trending_terms": discovery.get("trending_terms"),
+            "sector_selection": discovery.get("sector_selection"),
             "naver_indices": discovery.get("naver_indices"),
             "source_summary": discovery.get("source_summary"),
             "top_new_items": (discovery.get("new_items") or [])[:10],
