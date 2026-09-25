@@ -173,15 +173,16 @@ def main() -> int:
         print("이미 알린 감독 배치:", batch_id)
         return 0
 
-    # Telegram은 GitHub Issue 알림과 독립적으로 전송한다.
-    # Issue API 권한/일시 장애가 Telegram 전달까지 막아서는 안 된다.
-    issue_ok = post_issue(report)
+    # 이 marker는 Telegram 성공 뒤에만 생성한다.
+    # 따라서 Telegram 실패 시 같은 batch를 다음 실행에서 다시 시도할 수 있다.
     telegram_ok = send_telegram(report)
-
-    if not issue_ok:
-        print("GitHub Issue 감독 알림 미전송")
     if not telegram_ok:
-        print("Telegram 감독 알림 미전송")
+        print("Telegram 감독 알림 미전송 - 다음 실행에서 재시도 가능")
+        return 1
+
+    issue_ok = post_issue(report)
+    if not issue_ok:
+        print("Telegram 전송은 성공했지만 GitHub Issue 기록은 미전송")
     return 0
 
 
