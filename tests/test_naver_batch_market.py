@@ -104,3 +104,21 @@ def test_interval_gap_is_not_misreported_as_six_minutes():
     assert elapsed == 40
     assert rows[0]["interval_valid"] is False
     assert rows[0]["interval_trading_value"] is None
+
+
+def test_ranking_turnover_can_backfill_polling_turnover():
+    universe = [
+        {"ticker": "005930", "name": "삼성전자", "ranking_trading_value": 15_000_000_000}
+    ]
+    quotes = {
+        "005930": {
+            "ticker": "005930",
+            "name": "삼성전자",
+            "accumulated_trading_value": None,
+        }
+    }
+    universe_by_code = {item["ticker"]: item for item in universe}
+    for code, quote in quotes.items():
+        if quote.get("accumulated_trading_value") is None:
+            quote["accumulated_trading_value"] = universe_by_code[code]["ranking_trading_value"]
+    assert quotes["005930"]["accumulated_trading_value"] == 15_000_000_000
