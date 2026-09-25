@@ -100,3 +100,18 @@ python -m autoresearch risk-intel --mode dry-run
 - 수급이 뉴스보다 먼저였는지 뒤였는지 6분 관측 시계열로 확인한다.
 - 장 종료/다음 거래일에는 중요한 가설의 사후 결과를 확인해 어떤 질문·근거가 유용했는지 학습한다.
 - 매수·매도 추천이 아니라 시장 구조와 근거를 더 잘 이해하기 위한 질문이어야 한다.
+
+### 가설과 사후검증
+
+1시간 연구에서 중요한 결론은 가능한 경우 검증 가능한 가설로 변환한다. 단순 의견은 가설로 등록하지 않는다.
+
+가설에는 statement, question_ids, question_kinds, evidence_for, evidence_against, verification_checks, verify_after, expires_at을 둔다.
+
+- statement는 이후 데이터로 틀렸다고 판정할 수 있는 문장이어야 한다.
+- verify_after는 다음 6분, 장마감, 다음 거래일 등 실제 확인 가능한 시점을 사용한다.
+- verification_checks에는 어떤 관측이면 확인/반증인지 구체적으로 적는다.
+- 사후 판정은 confirmed / partially_confirmed / falsified / indeterminate를 사용한다.
+- falsified는 실패한 연구가 아니다. 좋은 질문이 잘못된 가설을 제거했다면 질문의 usefulness는 높게 평가할 수 있다.
+- confirmed만 많이 만드는 것을 목표로 하지 않는다. 반증 자료를 숨기거나 가설을 사후적으로 고쳐 적는 것을 금지한다.
+- 사후검증 결과는 원 질문 종류의 장기 품질 통계에 환류한다.
+- 질문 품질은 답변 가능성, 1차 근거 품질, 가설 생성 기여, 사후 확인/반증 가능성, 후속 연구 가치로 평가한다.
