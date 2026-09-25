@@ -490,6 +490,43 @@ class RegressionDetector:
         result["reason"] = reason
         return result
 
+    def _record_learning(self, evaluation: dict[str, Any], manifest: dict[str, Any]) -> None:
+        """평가가 끝난 변경의 결과를 장기 학습 기억으로 남긴다."""
+        status = str(evaluation.get("status") or "")
+        if status not in {"no_regression", "quarantined", "rolled_back"}:
+            return
+
+        change_id = str(manifest.get("change_id") or "")
+        if not change_id or manifest.get("learning_recorded"):
+            return
+
+        if status == "no_regression":
+            verdict = "유지"
+            lesson = "변경 후 관측에서 유의한 품질 회귀가 확인되지 않았다. 같은 문제를 다시 다룰 때 이 접근을 성공 후보 근거로 사용할 수 있다."
+        elif status == "rolled_back":
+            verdict = "롤백"
+            lesson = "변경 후 품질 회귀가 확인되어 기능 단위로 복원했다. 같은 구현을 그대로 반복하지 않는다."
+        else:
+            verdict = "격리"
+            lesson = "품질 악화 가능성은 있으나 원인 귀속 또는 안전한 자동 복원이 불충분하다. 같은 방향의 자동 변경 전에 추가 검증이 필요하다."
+
+        experiment = self.root / "docs" / "실험_기록.md"
+        experiment.parent.mkdir(parents=True, exist_ok=True)
+        with experiment.open("a", encoding="utf-8") as handle:
+            handle.write(
+                "\n## LEARN-" + change_id + " — " + str(manifest.get("title") or "자동 개선") + "\n\n"
+                + "가설: " + str(manifest.get("expected_benefit") or "프로젝트 품질 개선") + "\n\n"
+                + "변경: " + ", ".join(str(x) for x in manifest.get("paths", [])) + "\n\n"
+                + "평가 방법: 변경 후 품질 스냅샷을 변경 전 7일/30일 기준선과 비교.\n\n"
+                + "결과: " + json.dumps(evaluation, ensure_ascii=False) + "\n\n"
+                + "판정: " + verdict + "\n\n"
+                + "배운 점: " + lesson + "\n\n"
+                + "후속 작업: 다음 Evolution Scout가 이 기록을 읽고 동일 문제의 재시도 여부와 접근법을 결정한다.\n"
+            )
+
+        manifest["learning_recorded"] = True
+        manifest["learning_status"] = status
+
     def run(self) -> dict[str, Any]:
         now = datetime.now(timezone.utc)
         snapshot = self.capture_snapshot(now)
@@ -516,6 +553,9 @@ class RegressionDetector:
                 manifests,
             )
             evaluations.append(result)
+            self._record_learning(result, manifest)
+            if result.get("learning_status") or manifest.get("learning_recorded"):
+                _write_json(path, manifest)
             if result.get("status") == "rolled_back":
                 rolled_back += 1
                 if rolled_back >= rollback_limit:
