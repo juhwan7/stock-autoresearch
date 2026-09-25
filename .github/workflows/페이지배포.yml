@@ -7,6 +7,19 @@ on:
       - main
     paths:
       - "site/**"
+      - "reports/**"
+      - "data/supervisor/latest-report.json"
+      - "data/discovery/**"
+      - "data/market/**"
+      - "data/risk/**"
+      - "data/health/**"
+      - "data/regression/**"
+      - "data/providers/toss/**"
+      - "docs/사용자_도움_필요.md"
+      - "docs/AI_변경기록.md"
+      - "docs/결정_원장.md"
+      - "docs/아이디어_보드.md"
+      - "scripts/대시보드_생성.py"
       - ".github/workflows/페이지배포.yml"
 
 permissions:
@@ -27,6 +40,9 @@ jobs:
     steps:
       - name: 저장소 가져오기
         uses: actions/checkout@v4
+
+      - name: 최신 대시보드 데이터 생성
+        run: python scripts/대시보드_생성.py
 
       - name: GitHub Pages 설정
         uses: actions/configure-pages@v5
