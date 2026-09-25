@@ -289,6 +289,10 @@ def build_observation(
             "minute_amount_exact": public_batch.get("minute_amount_exact"),
             "minute_amount_method": public_batch.get("minute_amount_method"),
             "minute_sample_ticker_count": public_batch.get("minute_sample_ticker_count"),
+            "current_top50_count": public_batch.get("current_top50_count"),
+            "tracked_universe_count": public_batch.get("tracked_universe_count"),
+            "dropped_from_current_top50_count": public_batch.get("dropped_from_current_top50_count"),
+            "tracked_outside_top50_with_samples": public_batch.get("tracked_outside_top50_with_samples"),
             "minute_samples_by_ticker": {
                 str(ticker): rows[-6:]
                 for ticker, rows in (public_batch.get("minute_samples_by_ticker") or {}).items()
