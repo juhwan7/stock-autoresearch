@@ -22,7 +22,7 @@ def test_parse_google_news_rss():
     rows = parse_google_news_rss(xml, "semiconductor_ai")
     assert len(rows) == 1
     assert rows[0]["topic"] == "semiconductor_ai"
-    assert rows[0]["title"] == "반도체 뉴스 - 매체A"
+    assert rows[0]["title"] == "반도체 뉴스"
     assert rows[0]["publisher"] == "매체A"
 
 
