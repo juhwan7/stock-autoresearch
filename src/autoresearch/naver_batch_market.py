@@ -550,6 +550,26 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
             source_status = "polling_error"
             error = type(exc).__name__
 
+    ranking_fresh_today = any(
+        _quote_traded_today(quotes.get(str(item.get("ticker") or "")) or {}, now)
+        for item in current_top50
+    )
+    if not ranking_fresh_today:
+        # 휴장일·개장 전에는 이전 거래일 순위가 노출될 수 있으므로
+        # 오늘 Top50 신규 진입으로 기록하지 않는다. 이미 오늘 추적 중이던 종목만 유지한다.
+        current_top50 = []
+        tracked_universe = build_daily_tracked_universe([], previous, now)
+        codes = [
+            str(item.get("ticker") or "")
+            for item in tracked_universe
+            if item.get("ticker")
+        ]
+        quotes = {
+            code: quote
+            for code, quote in quotes.items()
+            if code in set(codes)
+        }
+
     universe_by_code = {
         str(item.get("ticker") or ""): item
         for item in tracked_universe
@@ -634,6 +654,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
         "mode": "six_minute_batch",
         "polling_mode": polling_mode,
         "universe_method": "daily_union_of_every_top50_entry",
+        "ranking_fresh_today": ranking_fresh_today,
         "current_top50_count": len(current_top50),
         "tracked_universe_count": len(tracked_universe),
         "dropped_from_current_top50_count": sum(
@@ -676,6 +697,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
         "limitations": [
             "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
             "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
+            "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
             "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
             "최근 6개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
             "6분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용",
