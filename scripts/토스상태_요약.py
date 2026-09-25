@@ -43,6 +43,10 @@ def summarize(snapshot: dict[str, Any]) -> dict[str, Any]:
         "source_mode": snapshot.get("source_mode"),
         "minute_amount_method": snapshot.get("minute_amount_method"),
         "ranking_count": len(snapshot.get("ranking", [])),
+        "ranking_fresh_today": snapshot.get("ranking_fresh_today"),
+        "current_top50_count": snapshot.get("current_top50_count"),
+        "tracked_universe_count": snapshot.get("tracked_universe_count"),
+        "dropped_from_current_top50_count": snapshot.get("dropped_from_current_top50_count"),
         "regular_ticker_count": len(regular) if isinstance(regular, dict) else 0,
         "premarket_ticker_count": len(premarket) if isinstance(premarket, dict) else 0,
         "postmarket_ticker_count": len(postmarket)
