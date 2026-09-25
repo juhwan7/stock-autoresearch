@@ -13,6 +13,7 @@ from .pipeline import Pipeline
 from .regression import RegressionDetector
 from .risk_engine import RiskEngine
 from .supervisor_queue import observe as supervisor_observe
+from .toss_batch_market import collect as toss_batch_market_collect
 from .toss_collector import main as toss_collector_main
 
 
@@ -83,6 +84,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     supervisor.add_argument("--root", default=".", help="저장소 루트")
 
+    toss_batch = sub.add_parser(
+        "toss-batch-market",
+        help="고정 IP 환경에서 Toss REST로 6분 시장 배치 수집",
+    )
+    toss_batch.add_argument("--root", default=".", help="저장소 루트")
+    toss_batch.add_argument("--limit", type=int, default=50, help="현재 거래대금 Top50")
+
     collector = sub.add_parser(
         "toss-collector",
         help="고정 IP 환경에서 Toss 실시간 체결 Collector 실행",
@@ -116,6 +124,8 @@ def main() -> None:
         result = market_discovery_collect(root)
     elif args.command == "supervisor-observe":
         result = supervisor_observe(root)
+    elif args.command == "toss-batch-market":
+        result = toss_batch_market_collect(root, limit=args.limit)
     elif args.command == "toss-collector":
         toss_collector_main(
             [
