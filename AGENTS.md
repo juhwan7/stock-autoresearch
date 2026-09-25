@@ -114,4 +114,7 @@ python -m autoresearch risk-intel --mode dry-run
 - falsified는 실패한 연구가 아니다. 좋은 질문이 잘못된 가설을 제거했다면 질문의 usefulness는 높게 평가할 수 있다.
 - confirmed만 많이 만드는 것을 목표로 하지 않는다. 반증 자료를 숨기거나 가설을 사후적으로 고쳐 적는 것을 금지한다.
 - 사후검증 결과는 원 질문 종류의 장기 품질 통계에 환류한다.
+- 1시간 배치 종료 시 구조화된 question_outcomes, hypotheses, hypothesis_verdicts, follow_up_questions를 학습 상태에 반영한다.
+- follow_up_questions는 다음 배치 질문 큐에 재투입한다. AI가 답변하면서 발견한 더 중요한 의문을 버리지 않는다.
+- latest-report.json에는 가능하면 learning_summary를 남겨 이번 배치에서 평가한 질문 수, 등록한 가설 수, 사후검증 수, 새 후속질문 수를 추적한다.
 - 질문 품질은 답변 가능성, 1차 근거 품질, 가설 생성 기여, 사후 확인/반증 가능성, 후속 연구 가치로 평가한다.
