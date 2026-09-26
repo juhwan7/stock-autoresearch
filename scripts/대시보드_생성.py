@@ -518,6 +518,7 @@ def main() -> None:
         "popular_reports": read_json(ROOT / "data" / "research" / "popular-reports.json"),
         "supervisor_latest": read_json(ROOT / "data" / "supervisor" / "latest-report.json"),
         "supervisor_timeline": supervisor_timeline(),
+        "supervisor_collaboration": read_json(ROOT / "data" / "supervisor" / "collaboration.json"),
         "supervisor_recent": read_json(ROOT / "data" / "supervisor" / "recent.json"),
         "market_issues": read_json(ROOT / "data" / "supervisor" / "market-issues.json"),
         "discovery": read_json(ROOT / "data" / "discovery" / "latest.json"),
