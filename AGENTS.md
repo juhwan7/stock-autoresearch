@@ -348,3 +348,14 @@ Supervisor 결과에는 가능한 경우 `news_issue_digest`를 구조화해 전
 - 이슈 목록의 기본 우선순위는 단순 최신순이 아니라 상태·심각도·시장 영향 가능성·가격 반영 여부·다음 트리거를 함께 본다.
 - `AI 대화`는 실제 `data/supervisor/ai-results/*.json`의 A/B/Recovery 필드만 렌더링하며 가짜 대화 문장을 생성하지 않는다.
 - A/B Supervisor는 UI를 자기진화 대상으로 보되 기능 수를 늘리는 것보다 사용자가 시장 핵심을 더 빨리 찾는지를 우선 검증한다.
+
+
+## 사용자 화면 한국어·구조화 표시 규칙
+
+- 사용자-facing Pages에서는 내부 JSON 객체, 배열, `[object Object]`, Python/JavaScript 객체 표현을 그대로 출력하지 않는다.
+- 원본 JSON 필드명과 enum은 데이터 계층에 유지하고, 화면에서는 공통 formatter를 통해 자연스러운 한국어 문장·목록·카드로 변환한다.
+- `NEW/ACTIVE/WATCHING/ESCALATING/EASING/RESOLVED`, `HIGH/MEDIUM/LOW`, `verification_pending/investigating/no_change/stale` 같은 내부 상태값은 화면에서 한국어로 표시한다.
+- 객체 구조가 예상과 달라도 `JSON.stringify`로 사용자 화면에 노출하지 않는다. 읽을 수 있는 필드를 선택하고, 불가능하면 `세부 내용을 구조화해 표시할 수 없습니다.`처럼 안전한 한국어 fallback을 사용한다.
+- `issue_id`, 내부 오류 코드, change_id 같은 개발자용 식별자는 기본 화면 제목·요약으로 사용하지 않는다. 꼭 필요하면 `개발자용 원본 정보` 접힘 영역에 둔다.
+- 페이지 eyebrow/kicker와 일반 소제목은 고유명사·표준 약어(AI, KOSPI, KOSDAQ, Nasdaq, S&P 500, DART, CPI, FOMC, USTR, NXT 등)를 제외하고 한국어를 기본으로 한다.
+- 새 상세보기 렌더러를 추가할 때는 실제 Supervisor/issue/risk/operations 데이터의 중첩 객체를 테스트해 원시 JSON과 영문 enum이 다시 노출되지 않는지 회귀검증한다.
