@@ -22,7 +22,12 @@ GitHub Actions의 10분 센서는 OpenAI API를 호출하지 않습니다. AI �
 <!-- AUTO-USER-ACTION:START -->
 ## 사용자 확인 필요
 
-- 현재 사람이 직접 처리해야 하는 필수 항목은 없습니다.
+- **Supervisor B 마지막 실행이 195분 전**
+  - 영향: 정각/30분 AI 중 한 축이 장시간 정지
+  - AI가 시도한 것: 상대 Supervisor와 복구감시가 stale 상태를 감지
+  - 자동 해결 불가 이유: GitHub는 ChatGPT 예약 작업 자체를 켤 권한이 없음
+  - 사용자가 할 일: ChatGPT 자동화 활성 상태를 확인하고 필요하면 다시 켜기
+  - 해결 확인: 70분 이내의 새 batch 확인
 <!-- AUTO-USER-ACTION:END -->
 
 ## 바로가기
