@@ -112,3 +112,14 @@ def test_supervisor_result_writer_retries_conflicts_and_fails_closed():
     assert "Supervisor result/canonical 저장에 3회 실패했습니다." in workflow
     assert "exit 1" in workflow
     assert "supervisor-result-apply" in workflow
+
+
+def test_supervisor_result_workflow_has_owner_only_issue_dispatch_bridge():
+    workflow = read(".github/workflows/감독결과_적용과_텔레그램.yml")
+    assert "issues:" in workflow
+    assert "types: [labeled]" in workflow
+    assert "supervisor-result-dispatch" in workflow
+    assert "github.actor == github.repository_owner" in workflow
+    assert "ISSUE_RESULT:" in workflow
+    assert "Close consumed dispatch issue" in workflow
+    assert 'gh issue close "$ISSUE_NUMBER"' in workflow
