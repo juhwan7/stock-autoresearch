@@ -111,12 +111,26 @@ def expected_supervisor_slots(
     ]
 
 
-def _observation_quality(item: Mapping[str, Any]) -> tuple[int, datetime]:
+def _observation_quality(item: Mapping[str, Any]) -> tuple[int, float, datetime]:
     validation = str((item.get("validation") or {}).get("status") or "")
     steps = item.get("steps") or {}
     successful_steps = sum(1 for value in steps.values() if value == "success")
     observed = _parse_datetime(item.get("observed_at")) or datetime.min.replace(tzinfo=KST)
-    return ((100 if validation == "ok" else 0) + successful_steps, observed)
+    slot = _observation_slot(item)
+    raw_delay = item.get("slot_delay_seconds")
+    try:
+        delay = float(raw_delay)
+    except (TypeError, ValueError):
+        delay = (
+            max(0.0, (observed - slot).total_seconds())
+            if slot is not None
+            else 999999.0
+        )
+    return (
+        (100 if validation == "ok" else 0) + successful_steps,
+        -delay,
+        observed,
+    )
 
 
 def build_supervisor_window(
@@ -325,7 +339,9 @@ def build_observation(
     run_attempt = str(env.get("GITHUB_RUN_ATTEMPT") or "1")
     head_sha = str(env.get("GITHUB_SHA") or "")
     suffix = (run_id + "-" + run_attempt) if run_id else (head_sha[:10] or "local")
-    slot_at = sensor_slot_start(now)
+    requested_slot = _parse_datetime(env.get("SENSOR_SLOT_AT"))
+    slot_at = sensor_slot_start(requested_slot or now)
+    slot_source = str(env.get("SENSOR_SLOT_SOURCE") or "observation_time")
     observation_id = now.strftime("obs-%Y%m%dT%H%M%S%z-") + suffix
 
     health_issues = []
@@ -395,6 +411,7 @@ def build_observation(
         "slot_at": slot_at.isoformat(),
         "slot_key": slot_at.strftime("%Y-%m-%dT%H:%M%z"),
         "sensor_interval_minutes": SENSOR_INTERVAL_MINUTES,
+        "slot_source": slot_source,
         "slot_delay_seconds": max(0.0, (now - slot_at).total_seconds()),
         "source": {
             "repository": env.get("GITHUB_REPOSITORY"),
