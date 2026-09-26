@@ -89,6 +89,11 @@ function indexCell(block) {
   if (!block || block.close == null) return "-";
   return '<strong>' + esc(num(block.close)) + '</strong><small class="' + tone(block.change_pct) + '">' + esc(signedPct(block.change_pct)) + '</small>';
 }
+function asArray(value) {
+  if (Array.isArray(value)) return value;
+  if (value == null || value === "") return [];
+  return [value];
+}
 function sessionCard(row, market) {
   if (market === "kr") {
     return '<div class="session-card"><div class="date"><span>' + esc(row.date || "-") + '</span><span>' + esc(row.status || "") + '</span></div>' +
@@ -120,15 +125,18 @@ function renderMetrics(data, krRows, usRows) {
 }
 function renderBrief(data) {
   const supervisor = data.supervisor_latest || {};
-  const rows = (supervisor.market_narrative || supervisor.summary || []).slice(0, 4);
+  const narrative = supervisor.market_narrative != null && supervisor.market_narrative !== ""
+    ? supervisor.market_narrative
+    : supervisor.summary;
+  const rows = asArray(narrative).slice(0, 4);
   setHTML("market-narrative", rows.length
     ? rows.map((x) => '<p class="brief-paragraph">' + esc(typeof x === "string" ? x : (x.text || x.summary || "")) + '</p>').join("")
     : empty("AI 시장 해설을 기다리는 중입니다."));
-  const focus = (supervisor.market_focus || []).slice(0, 5);
+  const focus = asArray(supervisor.market_focus).slice(0, 5);
   setHTML("market-focus", focus.length
     ? focus.map((x, i) => '<div class="mini-row"><strong>' + (i + 1) + '. ' + esc(typeof x === "string" ? x : (x.title || x.name || "확인 항목")) + '</strong><span>' + esc(typeof x === "string" ? "" : (x.reason || x.why || "")) + '</span></div>').join("")
     : empty("현재 우선 확인 항목이 없습니다."));
-  const invalid = (supervisor.invalidation_checks || supervisor.next_checks || []).slice(0, 4);
+  const invalid = asArray(supervisor.invalidation_checks || supervisor.next_checks).slice(0, 4);
   setHTML("market-invalidation", invalid.length
     ? invalid.map((x) => '<div class="mini-row"><span>' + esc(typeof x === "string" ? x : (x.check || x.title || x.reason || "")) + '</span></div>').join("")
     : empty("다음 관측에서 재검증합니다."));
