@@ -81,3 +81,28 @@ def test_dry_run_never_overwrites_live_latest(tmp_path):
         (tmp_path / "data/market/dry_run_latest.json").read_text(encoding="utf-8")
     )
     assert dry["mode"] == "dry-run"
+
+
+def test_runtime_points_to_recent_sessions_when_live_latest_missing(tmp_path, monkeypatch):
+    engine = make_engine(tmp_path, "live")
+    recent = tmp_path / "data/market/recent-sessions.json"
+    recent.parent.mkdir(parents=True, exist_ok=True)
+    recent.write_text(
+        json.dumps({"korea": [{"date": "2026-09-23"}]}),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(market_intel, "datetime", AfterCloseDateTime)
+    monkeypatch.setattr(
+        engine,
+        "_run_pullback_research",
+        lambda now: {"status": "not_due", "created": 0, "completed": 0},
+    )
+
+    engine.run()
+
+    runtime = json.loads(
+        (tmp_path / "data/market/runtime.json").read_text(encoding="utf-8")
+    )
+    assert runtime["last_valid_market_file"] is None
+    assert runtime["historical_fallback_file"] == "data/market/recent-sessions.json"
