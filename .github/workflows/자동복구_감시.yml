@@ -48,7 +48,7 @@ jobs:
         run: |
           python - <<'PY' > /tmp/recovery.env
           import json
-          from datetime import datetime, timezone
+          from datetime import datetime, timedelta, timezone
           from pathlib import Path
 
           STALE_AFTER_MINUTES = 25.0
@@ -72,7 +72,7 @@ jobs:
               return value if isinstance(value, dict) else {}
 
           now = datetime.now(timezone.utc)
-          kst = timezone.utc + __import__("datetime").timedelta(hours=9)
+          kst = timezone(timedelta(hours=9))
           local_now = now.astimezone(kst)
           recovery_slot = local_now.replace(
               minute=(local_now.minute // 10) * 10,
