@@ -941,8 +941,10 @@ def collect(
                 + max(int(item.get("delta") or 0), 0) * 4
             ),
         }
-        for item in trending_terms[:12]
-    ]
+        for item in trending_terms
+        if str(item.get("term") or "").strip() not in DYNAMIC_QUERY_STOPWORDS
+        and not re.fullmatch(r"\d+(?:일|월|년|건)?", str(item.get("term") or "").strip())
+    ][:12]
 
     ok_sources = sum(
         1
