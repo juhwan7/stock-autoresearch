@@ -50,7 +50,10 @@
 
 - 센서는 `:00/:10/:20/:30/:40/:50` 10분 슬롯 기준으로 관측을 저장한다. 실제 실행이 몇 분 늦으면 `observed_at`과 `slot_at`을 분리하고 지연을 남긴다.
 - workflow 시작 시 슬롯을 먼저 고정해 긴 수집이 다음 10분 경계를 넘어도 슬롯이 바뀌지 않게 한다. Recovery/heartbeat는 재실행할 슬롯을 `workflow_dispatch` 입력으로 명시하며 `slot_source`와 `slot_delay_seconds`로 지연 provenance를 남긴다.
-- 기본 cron을 놓친 경우 `.github/workflows/10분센서_보조복구.yml`이 `:05/:15/:25/:35/:45/:55`에 현재 슬롯 저장 여부와 활성 센서를 확인한다. 이미 저장됐거나 실행 중이면 아무것도 하지 않고, 둘 다 아니면 해당 슬롯만 재실행한다.
+- GitHub `schedule`은 실제 운영에서 수시간 공백이 관측됐고 GitHub 공식 문서상 고부하 때 지연·드롭될 수 있으므로 단독 트리거로 신뢰하지 않는다.
+- 센서 run은 종료 전에 다음 10분 경계까지 대기한 뒤, 그 슬롯이 아직 없고 다른 센서도 실행/대기 중이 아닐 때 다음 센서를 `workflow_dispatch`로 연결하는 self-chain을 1차 연속성 경로로 사용한다. repo variable `SENSOR_SELF_CHAIN_DISABLED=true`이면 긴급 중지할 수 있다.
+- 기본 cron을 놓치거나 self-chain이 끊긴 경우 `.github/workflows/10분센서_보조복구.yml`이 `:05/:15/:25/:35/:45/:55`에 현재 슬롯 저장 여부와 활성 센서를 확인한다. 이미 저장됐거나 실행 중이면 아무것도 하지 않고, 둘 다 아니면 해당 슬롯만 재실행한다.
+- 늦게 도착한 workflow_dispatch 입력이 이미 지난 슬롯이면 과거 관측을 가장하지 않고 현재 10분 슬롯으로 재기준하며 `slot_source=dispatch_input_rebased`로 provenance를 남긴다. `slot_start_delay_seconds`는 실행 시작 지연, `slot_delay_seconds`는 수집 완료 지연으로 분리한다.
 - 센서와 Recovery가 같은 main에 동시에 쓰면서 관측이 rebase 충돌로 폐기된 실운영 사례가 있었다. 운영 상태판 3개 파일(`data/operations/status.json`, `docs/운영_칸반.md`, `site/data/상태.json`)과 README 사용자조치 블록은 Recovery가 소유하며 센서는 로컬 검증에만 사용하고 commit하지 않는다. 핵심 observation commit의 rebase/push가 실패하면 성공으로 숨기지 않고 workflow failure로 남긴다.
 - GitHub Recovery schedule은 A/B 실제 실행(:07/:37)과 직접 겹치지 않도록 `:03/:18/:33/:48`로 분리한다.
 - B(:30)는 `:10/:20/:30`, A(:00)는 직전 `:40/:50/:00` 세 슬롯만 기본 입력으로 사용한다. 단순 최근 3개를 사용하지 않는다.
