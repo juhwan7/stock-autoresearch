@@ -119,16 +119,16 @@ def build_status(now: datetime | None = None) -> dict:
     discovery_age = age_minutes(discovery.get("generated_at"), now)
     issue_age = age_minutes(issue_digest.get("updated_at"), now)
     if discovery_age is None or discovery_age > 20:
-        cards.append(card("discovery-stale", "뉴스 discovery 신선도 저하", "조사 중", f"마지막 갱신 {discovery_age if discovery_age is not None else '미확인'}분 전", now, owner="6분 센서", verify_after="다음 6분"))
+        cards.append(card("discovery-stale", "뉴스 discovery 신선도 저하", "조사 중", f"마지막 갱신 {discovery_age if discovery_age is not None else '미확인'}분 전", now, owner="10분 센서", verify_after="다음 10분 슬롯"))
     else:
-        cards.append(card("discovery-ok", "뉴스 discovery 정상", "완료", f"{round(discovery_age)}분 전 갱신", now, owner="6분 센서"))
+        cards.append(card("discovery-ok", "뉴스 discovery 정상", "완료", f"{round(discovery_age)}분 전 갱신", now, owner="10분 센서"))
     if issue_age is None or issue_age > 70:
         cards.append(card("issue-digest-stale", "이슈 원장 갱신 지연", "검증 대기", f"마지막 갱신 {issue_age if issue_age is not None else '미확인'}분 전", now, owner="A/B", verify_after="다음 :00/:30"))
     else:
         cards.append(card("issue-digest-ok", "이슈 원장 정상", "완료", f"{round(issue_age)}분 전 갱신 · {len(issue_digest.get('issues') or [])}개", now, owner="A/B"))
 
     if not site_state_path.exists() or site_state_path.stat().st_size == 0:
-        cards.append(card("pages-data-empty", "Pages 상태 데이터 0 byte/누락", "수정 중", "대시보드가 비어 보일 수 있음", now, owner="6분 센서", verify_after="다음 대시보드 생성"))
+        cards.append(card("pages-data-empty", "Pages 상태 데이터 0 byte/누락", "수정 중", "대시보드가 비어 보일 수 있음", now, owner="10분 센서", verify_after="다음 대시보드 생성"))
     else:
         cards.append(card("pages-data-ok", "Pages 상태 데이터 정상", "완료", f"{site_state_path.stat().st_size} bytes", now, owner="Dashboard"))
 
