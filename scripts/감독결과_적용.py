@@ -648,7 +648,7 @@ def _collaboration_incident_title(incident_id: str, raw: dict) -> str:
 
 def _collaboration_status(value: object) -> str:
     raw = str(value or "investigating").strip().lower().replace("-", "_")
-    if raw in {"resolved", "done", "completed", "fixed", "closed"}:
+    if raw in {"resolved", "resolved_this_window", "done", "completed", "fixed", "closed", "no_change", "passed", "healthy", "normal", "reviewed"}:
         return "resolved"
     if raw in {"open", "active", "tracking"}:
         return "investigating"
@@ -739,14 +739,6 @@ def update_collaboration_state(result: dict, src: Path) -> None:
             upsert(raw, source_kind="supervisor_disagreement")
 
     resolved_statuses = {"resolved", "discarded", "closed", "completed"}
-    ordered = sorted(
-        incidents.values(),
-        key=lambda item: (
-            str(item.get("status") or "").lower() in resolved_statuses,
-            str(item.get("updated_at") or ""),
-        ),
-        reverse=False,
-    )
     # active first, and newest first inside each group
     ordered = sorted(
         ordered,
