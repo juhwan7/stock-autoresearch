@@ -664,19 +664,30 @@ def main() -> int:
                 processed_recent.append(item_id)
     state["processed_observation_ids_recent"] = processed_recent[-120:]
 
-    role = str(window_manifest.get("supervisor") or "A")
+    role = _supervisor_role(result.get("supervisor"))
+    is_regular_supervisor = (
+        role in {"A", "B"}
+        and str(result.get("batch_id") or "").startswith("supervisor-")
+    )
     state["last_feedback_handoff"] = {
         "batch_id": result["batch_id"],
         **feedback_handoff,
     }
-    state["last_a_window" if role == "A" else "last_b_window"] = {
-        "batch_id": result["batch_id"],
-        "window_start": result.get("observation_window_start"),
-        "window_end": result.get("observation_window_end"),
-        "observation_ids": observation_ids,
-        "missing_slots": result.get("missing_observation_slots") or [],
-        "complete": result.get("observation_window_complete"),
-    }
+    # Recovery/catch-up은 canonical 보고서를 갱신할 수 있지만 정규 A/B 실행 이력을
+    # 가장해서는 안 된다. last_a_window/last_b_window는 정규 Supervisor만 소유한다.
+    if is_regular_supervisor:
+        state["last_a_window" if role == "A" else "last_b_window"] = {
+            "batch_id": result["batch_id"],
+            "window_start": result.get("observation_window_start"),
+            "window_end": result.get("observation_window_end"),
+            "observation_ids": observation_ids,
+            "missing_slots": result.get("missing_observation_slots") or [],
+            "complete": result.get("observation_window_complete"),
+        }
+    else:
+        warnings.append("recovery/catch-up 결과는 정규 A/B window 포인터를 전진시키지 않음")
+        result["validation_warnings"] = warnings
+        REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if observation_ids and result.get("observation_window_complete"):
         state["last_processed_observation_id"] = observation_ids[-1]
         slots = result.get("observation_slots") or []
