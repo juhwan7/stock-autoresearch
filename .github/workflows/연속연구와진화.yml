@@ -111,6 +111,11 @@ jobs:
         continue-on-error: true
         run: python scripts/거대자금_수집.py
 
+      - name: Refresh recovery and Kanban status
+        id: operations
+        continue-on-error: true
+        run: python scripts/운영상태_생성.py
+
       - name: Build dashboard data
         id: dashboard
         continue-on-error: true
@@ -164,12 +169,14 @@ jobs:
           if [ -d data/providers/toss ]; then git add data/providers/toss; fi
           if [ -d data/providers/naver_batch ]; then git add data/providers/naver_batch; fi
           if [ -d data/health ]; then git add data/health; fi
+          if [ -d data/operations ]; then git add data/operations; fi
           if [ -d data/discovery ]; then git add data/discovery; fi
           if [ -d data/market ]; then git add data/market; fi
           if [ -d data/risk ]; then git add data/risk; fi
           if [ -d data/macro ]; then git add data/macro; fi
           if [ -d data/regression ]; then git add data/regression; fi
           if [ -d site ]; then git add site; fi
+          git add README.md docs/운영_칸반.md 2>/dev/null || true
 
           if git diff --cached --quiet; then
             echo "이번 6분 관측에는 저장할 변화가 없습니다."
