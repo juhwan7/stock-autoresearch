@@ -526,6 +526,27 @@ function renderDomesticLive(data, krRows) {
   const closeN=((close.summary||{}).sample_size||0), swingN=((swing.summary||{}).sample_size||0);
   setHTML("strategy-stats", '<div class="mini-list"><div class="mini-row"><strong>종가베팅 표본</strong><span>n=' + esc(closeN) + ' · ' + esc(close.reliability||"축적 중") + '</span></div><div class="mini-row"><strong>눌림스윙 표본</strong><span>n=' + esc(swingN) + ' · ' + esc(swing.reliability||"축적 중") + '</span></div></div>');
 }
+function renderOperations(data) {
+  const ops=data.operations||{};
+  setText("operations-status",ops.status||"UNKNOWN");
+  const cards=Array.isArray(ops.cards)?ops.cards:[];
+  const actions=Array.isArray(ops.user_actions)?ops.user_actions:[];
+  const sup=ops.supervisors||{};
+  const a=(sup.A||{}).processed_at,b=(sup.B||{}).processed_at;
+  setHTML("operations-summary",
+    '<strong>자가복구 상태 · '+esc(ops.status||"UNKNOWN")+'</strong>'+
+    '<div class="source-line">A '+esc(a?relativeTime(a):"미확인")+' · B '+esc(b?relativeTime(b):"미확인")+
+    ' · 뉴스 후보 '+esc((ops.news||{}).candidate_count??"-")+'건 · 이슈 '+esc((ops.news||{}).issue_count??"-")+'개'+
+    (actions.length?' · 사용자 확인 '+esc(actions.length)+'건':' · 사용자 확인 필요 없음')+'</div>'
+  );
+  const columns=["발견","조사 중","수정 중","검증 대기","사용자 확인 필요","완료"];
+  setHTML("operations-kanban",columns.map((name)=>{
+    const rows=cards.filter((x)=>String(x.state||"")===name);
+    return '<section class="ops-column"><h3>'+esc(name)+' <span>'+rows.length+'</span></h3><div class="ops-cards">'+
+      (rows.length?rows.map((x)=>'<div class="ops-card"><strong>'+esc(x.title||"상태")+'</strong><p>'+esc(x.impact||"")+'</p><small>담당 '+esc(x.owner||"자동화")+(x.verify_after?' · 다음 '+esc(x.verify_after):'')+'</small></div>').join(""):'<div class="ops-empty">없음</div>')+
+      '</div></section>';
+  }).join(""));
+}
 function renderSystem(data) {
   const provider=data.toss_provider||{}, runtime=data.market_runtime||{};
   const mode=provider.available?"TOSS LIVE":(runtime.provider==="kiwoom"?"KIWOOM FALLBACK":"WAITING");
@@ -571,6 +592,7 @@ async function load() {
   renderRisk(data);
   renderMacro(data);
   renderDomesticLive(data, krRows);
+  renderOperations(data);
   renderSystem(data);
 
   const holiday = (session.holiday_notes || []).find((x)=>x.market==="KR");
