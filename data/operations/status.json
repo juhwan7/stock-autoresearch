@@ -1,45 +1,61 @@
 {
-  "generated_at": "2026-09-26T20:26:52.913995+09:00",
-  "status": "needs_user_action",
+  "generated_at": "2026-09-26T23:55:21.334160+09:00",
+  "status": "investigating",
   "supervisors": {
     "A": {
-      "processed_at": "2026-09-26T20:00:00+09:00",
-      "batch_id": "supervisor-20260926T2000+0900",
+      "processed_at": "2026-09-26T22:07:00+09:00",
+      "batch_id": "supervisor-20260926T2207+0900-a22",
       "status": "verification_pending",
-      "path": "data/supervisor/ai-results/supervisor-20260926T2000+0900.json"
+      "path": "data/supervisor/ai-results/supervisor-20260926T2207+0900-a22.json",
+      "run_kind": "regular",
+      "window_complete": true,
+      "expected_observation_count": 3,
+      "received_observation_count": 3,
+      "missing_observation_slots": []
     },
     "B": {
-      "processed_at": "2026-09-26T16:30:00+09:00",
-      "batch_id": "supervisor-20260926T1630+0900",
+      "processed_at": "2026-09-26T23:37:00+09:00",
+      "batch_id": "supervisor-20260926T2330+0900-b37",
       "status": "verification_pending",
-      "path": "data/supervisor/ai-results/supervisor-20260926T1630+0900.json"
+      "path": "data/supervisor/ai-results/supervisor-20260926T2330+0900-b37.json",
+      "run_kind": "regular",
+      "window_complete": true,
+      "expected_observation_count": 3,
+      "received_observation_count": 3,
+      "missing_observation_slots": []
     }
   },
   "canonical": {
-    "last_batch_id": "supervisor-20260926T2000+0900",
-    "last_processed_at": "2026-09-26T20:00:00+09:00"
+    "last_batch_id": "supervisor-writer-e2e-20260926T2251+0900",
+    "last_processed_at": "2026-09-26T22:51:00+09:00"
   },
   "sensor_slot_coverage": {
-    "window_start": "2026-09-26T19:20:00+09:00",
-    "window_end": "2026-09-26T20:10:00+09:00",
+    "window_start": "2026-09-26T22:50:00+09:00",
+    "window_end": "2026-09-26T23:40:00+09:00",
     "expected_slot_count": 6,
-    "received_slot_count": 1,
+    "received_slot_count": 6,
     "received_slots": [
-      "2026-09-26T19:40:00+09:00"
+      "2026-09-26T22:50:00+09:00",
+      "2026-09-26T23:00:00+09:00",
+      "2026-09-26T23:10:00+09:00",
+      "2026-09-26T23:20:00+09:00",
+      "2026-09-26T23:30:00+09:00",
+      "2026-09-26T23:40:00+09:00"
     ],
-    "missing_slots": [
-      "2026-09-26T19:20:00+09:00",
-      "2026-09-26T19:30:00+09:00",
-      "2026-09-26T19:50:00+09:00",
-      "2026-09-26T20:00:00+09:00",
-      "2026-09-26T20:10:00+09:00"
-    ],
-    "coverage_ratio": 0.167,
-    "max_slot_delay_seconds": 329.6
+    "missing_slots": [],
+    "coverage_ratio": 1.0,
+    "max_slot_start_delay_seconds": 64.9,
+    "max_slot_delay_seconds": 102.6,
+    "trigger_event_counts": {
+      "workflow_dispatch": 6
+    },
+    "slot_source_counts": {
+      "dispatch_input": 6
+    }
   },
   "news": {
-    "discovery_generated_at": "2026-09-26T19:45:19.586459+09:00",
-    "candidate_count": 169,
+    "discovery_generated_at": "2026-09-26T23:50:56.168910+09:00",
+    "candidate_count": 145,
     "issue_updated_at": "2026-09-26T16:00:00+09:00",
     "issue_count": 34
   },
@@ -48,53 +64,51 @@
     "open_count": 24
   },
   "memory": {
-    "generated_at": "2026-09-26T20:00:00+09:00",
-    "latest_batch_id": "supervisor-20260926T2000+0900",
-    "latest_supervisor": "A",
-    "age_minutes": 26.9
+    "generated_at": "2026-09-26T22:51:00+09:00",
+    "latest_batch_id": "supervisor-writer-e2e-20260926T2251+0900",
+    "latest_supervisor": "B",
+    "age_minutes": 64.4
   },
   "cards": [
     {
-      "card_id": "supervisor-a-ok",
-      "title": "Supervisor A 정상",
+      "card_id": "supervisor-a-stale",
+      "title": "Supervisor A 108분 지연",
+      "state": "조사 중",
+      "impact": "다음 정규 사이클 누락 가능",
+      "last_checked": "2026-09-26T23:55:21.334160+09:00",
+      "owner": "Recovery",
+      "verify_after": "다음 30분 사이클"
+    },
+    {
+      "card_id": "supervisor-b-ok",
+      "title": "Supervisor B 정상",
       "state": "완료",
-      "impact": "마지막 27분 전",
-      "last_checked": "2026-09-26T20:26:52.913995+09:00",
-      "owner": "A"
+      "impact": "마지막 정규 실행 18분 전 · 3/3 window",
+      "last_checked": "2026-09-26T23:55:21.334160+09:00",
+      "owner": "B"
     },
     {
-      "card_id": "supervisor-b-critical",
-      "title": "Supervisor B 237분 정지",
-      "state": "사용자 확인 필요",
-      "impact": "이슈 상태가 오래될 수 있음",
-      "last_checked": "2026-09-26T20:26:52.913995+09:00",
-      "owner": "Recovery",
-      "verify_after": "즉시"
+      "card_id": "sensor-slot-coverage-ok",
+      "title": "10분 센서 슬롯 커버리지 정상",
+      "state": "완료",
+      "impact": "6/6 슬롯",
+      "last_checked": "2026-09-26T23:55:21.334160+09:00",
+      "owner": "10분 센서"
     },
     {
-      "card_id": "sensor-slot-coverage-poor",
-      "title": "10분 센서 슬롯 커버리지 낮음",
-      "state": "조사 중",
-      "impact": "1/6 슬롯 · GitHub schedule/저장 경로 점검 필요",
-      "last_checked": "2026-09-26T20:26:52.913995+09:00",
-      "owner": "Recovery",
-      "verify_after": "다음 Recovery 또는 10분 센서"
-    },
-    {
-      "card_id": "discovery-stale",
-      "title": "뉴스 discovery 신선도 저하",
-      "state": "조사 중",
-      "impact": "마지막 갱신 41.55545893333333분 전",
-      "last_checked": "2026-09-26T20:26:52.913995+09:00",
-      "owner": "10분 센서",
-      "verify_after": "다음 10분 슬롯"
+      "card_id": "discovery-ok",
+      "title": "뉴스 discovery 정상",
+      "state": "완료",
+      "impact": "4분 전 갱신",
+      "last_checked": "2026-09-26T23:55:21.334160+09:00",
+      "owner": "10분 센서"
     },
     {
       "card_id": "issue-digest-stale",
       "title": "이슈 원장 갱신 지연",
       "state": "검증 대기",
-      "impact": "마지막 갱신 266.88189991666667분 전",
-      "last_checked": "2026-09-26T20:26:52.913995+09:00",
+      "impact": "마지막 갱신 475.35556933333334분 전",
+      "last_checked": "2026-09-26T23:55:21.334160+09:00",
       "owner": "A/B",
       "verify_after": "다음 :00/:30"
     },
@@ -103,35 +117,25 @@
       "title": "Pages 상태 데이터 정상",
       "state": "완료",
       "impact": "1420731 bytes",
-      "last_checked": "2026-09-26T20:26:52.913995+09:00",
+      "last_checked": "2026-09-26T23:55:21.334160+09:00",
       "owner": "Dashboard"
     },
     {
       "card_id": "long-memory-ok",
       "title": "장기 AI 기억 정상",
       "state": "완료",
-      "impact": "27분 전 갱신 · A",
-      "last_checked": "2026-09-26T20:26:52.913995+09:00",
+      "impact": "64분 전 갱신 · B",
+      "last_checked": "2026-09-26T23:55:21.334160+09:00",
       "owner": "Memory"
     },
     {
       "card_id": "optional-news-credentials",
       "title": "선택형 뉴스·공시 API 미연결",
       "state": "완료",
-      "impact": "현재 공개 fallback으로 후보 169건 확보되어 필수 조치 아님",
-      "last_checked": "2026-09-26T20:26:52.913995+09:00",
+      "impact": "현재 공개 fallback으로 후보 145건 확보되어 필수 조치 아님",
+      "last_checked": "2026-09-26T23:55:21.334160+09:00",
       "owner": "Discovery"
     }
   ],
-  "user_actions": [
-    {
-      "id": "supervisor-b-critical",
-      "problem": "Supervisor B 마지막 실행이 237분 전",
-      "impact": "정각/30분 AI 중 한 축이 장시간 정지",
-      "attempted": "상대 Supervisor와 복구감시가 stale 상태를 감지",
-      "why_blocked": "GitHub는 ChatGPT 예약 작업 자체를 켤 권한이 없음",
-      "action": "ChatGPT 자동화 활성 상태를 확인하고 필요하면 다시 켜기",
-      "verify": "70분 이내의 새 batch 확인"
-    }
-  ]
+  "user_actions": []
 }
