@@ -349,6 +349,14 @@ def main() -> int:
     if not isinstance(result.get("next_checks"), list):
         result["next_checks"] = []
         warnings.append("next_checks 누락/형식오류를 빈 목록으로 복구")
+    if not isinstance(result.get("work_axes_reviewed"), list):
+        result["work_axes_reviewed"] = []
+        warnings.append("work_axes_reviewed 누락/형식오류를 빈 목록으로 복구")
+    if len(result.get("work_axes_reviewed") or []) < 5:
+        warnings.append("work_axes_reviewed가 운영헌장 기준 5개 미만 - 다음 Supervisor가 보완")
+    if not isinstance(result.get("feedback_to_other_supervisor"), list):
+        value = result.get("feedback_to_other_supervisor")
+        result["feedback_to_other_supervisor"] = [value] if value else []
     if not isinstance(result.get("changed_paths"), list) or not result.get("changed_paths"):
         try:
             source_path = str(src.relative_to(ROOT))
