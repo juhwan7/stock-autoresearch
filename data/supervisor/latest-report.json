@@ -1,30 +1,29 @@
 {
-  "batch_id": "supervisor-20260926T0630+0900",
-  "processed_at": "2026-09-26T06:30:00+09:00",
+  "batch_id": "manual-ai-20260926T1120+0900",
+  "processed_at": "2026-09-26T11:20:00+09:00",
   "notify": true,
   "observation_ids": [],
-  "status": "investigating",
+  "status": "verification_pending",
   "summary": [
-    "최근 30분 국내 신규 실거래 관측은 확인되지 않았고 토요일 장외이므로 국내 수급 숫자를 추정하지 않았다. 미국 25일 종가는 S&P500 +0.51%, Nasdaq +0.48%, Dow +0.93%로 확정됐다.",
-    "직전 :00 A 결과 파일은 최신 main의 ai-results 목록에서 확인되지 않았다. 따라서 존재하지 않는 A 해석을 가정하지 않고 최신 canonical 05:30 B를 기준으로 검증했다.",
-    "05:30 B의 'AI 선택적 강세+고금리·고유가 압박'은 대체로 유지하되, 25일 종가에서 10년물은 장중 다년 고점 뒤 유가 하락과 함께 안정됐고 주가지수도 상승폭을 확대했다. 금리 압박이 사라진 것은 아니지만 '장중 계속 악화'로 표현하면 과도하다.",
-    "Brent 25일 종가는 $104.32(-2.1%), WTI $92.41(-2.3%). 미·이란 휴전 기대가 위험 프리미엄을 낮췄지만 후티의 사우디 공격 위험이 남아 있어 중동 위험은 유지한다.",
-    "프로젝트: health.py의 false-CRITICAL 원인은 재확인했다. Google News broad fallback 성공을 severity에 반영하지 않고, _check_macro는 주말/장외에도 empty를 WARN 처리한다. 이전 쓰기 차단 이력이 있어 동일 코드패치 시도는 반복하지 않았다.",
-    "새 운영 이슈: 06:00 A 결과 부재를 investigating으로 추가했다. 다음 사이클은 A 자체 미실행인지 결과 commit/apply 실패인지 Actions에서 구분해야 한다."
+    "사용자 요청으로 AI Supervisor를 1회 수동 실행했다. 토요일 장외이므로 국내 Top50·신규 체결 부재는 장애로 판정하지 않았다.",
+    "AI가 최신 AGENTS.md, 연속 인수인계, 질문 큐, discovery, Health와 최근 Actions를 이어 읽었다.",
+    "직전 Health CRITICAL은 10:58에 생성된 구 로직 결과다. 이후 false-CRITICAL 수정 2건과 회귀테스트가 main에 반영됐고 프로젝트 검증 Actions가 모두 success였다.",
+    "Google News 세부 그룹 5개가 비어 있지만 broad fallback은 30건을 정상 확보했다. 새 로직에서는 이 경우 보조 NOTICE로 취급한다.",
+    "추가 개발을 억지로 만들지 않고 다음 6분 센서가 새 Health 코드를 실행해 실제 severity를 갱신하는지 사후검증하기로 했다."
   ],
   "actions": [
-    "최신 main의 ai-results와 canonical latest-report 확인",
-    "Reuters로 25일 미국장 최종 종가·채권·유가 종가 재검증",
-    "직전 blocked 코드패치는 같은 실패경로를 반복하지 않고 보류",
-    "06:00 A 결과 부재를 새 문제상태로 등록"
+    "최신 프로젝트 상태와 연속 인수인계 확인",
+    "Health false-CRITICAL 수정 및 회귀테스트 성공 여부 재확인",
+    "토요일 국내시장 공백을 정상 장외상태로 분리",
+    "이번 수동 AI 결과를 canonical latest-report에 저장"
   ],
   "changed_paths": [
-    "data/supervisor/ai-results/supervisor-20260926T0630+0900.json"
+    "data/supervisor/latest-report.json"
   ],
   "next_checks": [
-    "06:00 A workflow가 미실행/실패/결과 commit 누락 중 무엇인지 Actions에서 확인",
-    "다음 거래세션 전까지 10년물의 장중 고점 재돌파 여부와 Brent $100 하회 여부 확인",
-    "허용된 코드 편집 경로가 확인되면 Health false-CRITICAL 최소 패치+회귀테스트",
+    "다음 6분 감독 관측 실행 후 data/health/latest.json이 새 코드로 갱신되는지 확인",
+    "macro unavailable이 장외 NOTICE로 유지되는지 확인",
+    "Google News broad fallback 성공 시 google-news-degraded가 NOTICE로 유지되는지 확인",
     "다음 국내 실거래 세션에서 Toss subscription_count와 last_message_at 검증"
   ],
   "market_narrative": [
@@ -78,15 +77,15 @@
     },
     {
       "id": "macro-runtime-empty",
-      "status": "investigating",
-      "evidence": "health.py _check_macro가 장외/주말에도 values empty를 WARN 처리",
-      "verify_after": "after severity patch"
+      "status": "verification_pending",
+      "evidence": "주말/장외 empty를 NOTICE로 제한하는 코드와 테스트 main 반영, CI success",
+      "verify_after": "next six-minute health run"
     },
     {
       "id": "google-news-health-fallback-severity",
-      "status": "blocked",
-      "evidence": "health.py가 broad fallback 성공을 severity에 반영하지 않음; 기존 쓰기 차단 승계",
-      "verify_after": "when code edit is permitted"
+      "status": "verification_pending",
+      "evidence": "broad fallback 성공 시 NOTICE 처리 코드와 회귀테스트 main 반영, CI success",
+      "verify_after": "next six-minute health run"
     },
     {
       "id": "supervisor-a-0600-missing",
