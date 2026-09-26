@@ -118,7 +118,7 @@ def build_status(now: datetime | None = None) -> dict:
 
     discovery_age = age_minutes(discovery.get("generated_at"), now)
     issue_age = age_minutes(issue_digest.get("updated_at"), now)
-    if discovery_age is None or discovery_age > 20:
+    if discovery_age is None or discovery_age > 25:
         cards.append(card("discovery-stale", "뉴스 discovery 신선도 저하", "조사 중", f"마지막 갱신 {discovery_age if discovery_age is not None else '미확인'}분 전", now, owner="10분 센서", verify_after="다음 10분 슬롯"))
     else:
         cards.append(card("discovery-ok", "뉴스 discovery 정상", "완료", f"{round(discovery_age)}분 전 갱신", now, owner="10분 센서"))
