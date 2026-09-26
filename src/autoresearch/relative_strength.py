@@ -424,7 +424,357 @@ def summarize_market(
         "weakest": list(reversed(rows[-top_n:])),
         "distribution": _distribution(rows),
         "sources": source_urls,
+        "_universe": rows,
     }
+
+
+
+def parse_yahoo_spark(payload: Any) -> dict[str, list[dict[str, Any]]]:
+    """Yahoo spark 다종목 일봉 응답을 symbol -> 날짜/종가 배열로 정규화한다."""
+    spark = payload.get("spark", {}) if isinstance(payload, dict) else {}
+    results = spark.get("result", []) if isinstance(spark, dict) else []
+    parsed: dict[str, list[dict[str, Any]]] = {}
+    for item in results if isinstance(results, list) else []:
+        if not isinstance(item, dict):
+            continue
+        responses = item.get("response", [])
+        if not isinstance(responses, list) or not responses:
+            continue
+        response = responses[0] if isinstance(responses[0], dict) else {}
+        meta = response.get("meta", {}) if isinstance(response.get("meta"), dict) else {}
+        symbol = str(item.get("symbol") or meta.get("symbol") or "").strip().upper()
+        if not symbol:
+            continue
+        timestamps = response.get("timestamp", [])
+        indicators = response.get("indicators", {})
+        quotes = indicators.get("quote", []) if isinstance(indicators, dict) else []
+        quote = quotes[0] if isinstance(quotes, list) and quotes and isinstance(quotes[0], dict) else {}
+        closes = quote.get("close", [])
+        if not isinstance(timestamps, list) or not isinstance(closes, list):
+            continue
+        rows: list[dict[str, Any]] = []
+        for stamp, close in zip(timestamps, closes):
+            close_number = _number(close)
+            stamp_number = _number(stamp)
+            if close_number is None or close_number <= 0 or stamp_number is None:
+                continue
+            rows.append(
+                {
+                    "timestamp": int(stamp_number),
+                    "date": datetime.fromtimestamp(int(stamp_number), tz=timezone.utc).date().isoformat(),
+                    "close": close_number,
+                }
+            )
+        rows.sort(key=lambda x: int(x["timestamp"]))
+        if rows:
+            parsed[symbol] = rows
+    return parsed
+
+
+def _period_return(rows: list[dict[str, Any]], sessions: int) -> tuple[float | None, str | None]:
+    valid = [row for row in rows if _number(row.get("close")) not in (None, 0)]
+    if len(valid) < sessions + 1:
+        return None, valid[-1].get("date") if valid else None
+    latest = float(valid[-1]["close"])
+    base = float(valid[-(sessions + 1)]["close"])
+    if base <= 0:
+        return None, valid[-1].get("date")
+    return round((latest / base - 1.0) * 100.0, 6), valid[-1].get("date")
+
+
+def fetch_yahoo_daily_history(
+    symbols: list[str],
+    *,
+    batch_size: int = 20,
+) -> tuple[dict[str, list[dict[str, Any]]], list[str]]:
+    """다종목 spark를 묶어서 받아 5D/20D 계산용 일봉을 만든다."""
+    clean = []
+    seen: set[str] = set()
+    for symbol in symbols:
+        value = str(symbol or "").strip().upper()
+        if value and value not in seen:
+            clean.append(value)
+            seen.add(value)
+
+    collected: dict[str, list[dict[str, Any]]] = {}
+    errors: list[str] = []
+    for start in range(0, len(clean), max(1, batch_size)):
+        chunk = clean[start : start + max(1, batch_size)]
+        params = urllib.parse.urlencode(
+            {
+                "symbols": ",".join(chunk),
+                "range": "3mo",
+                "interval": "1d",
+                "indicators": "close",
+                "includeTimestamps": "true",
+                "includePrePost": "false",
+                "formatted": "false",
+            }
+        )
+        url = "https://query1.finance.yahoo.com/v7/finance/spark?" + params
+        try:
+            payload = _fetch_json(url, referer="https://finance.yahoo.com/")
+            collected.update(parse_yahoo_spark(payload))
+        except (
+            OSError,
+            TimeoutError,
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            json.JSONDecodeError,
+            ValueError,
+            KeyError,
+        ) as exc:
+            errors.append(f"{chunk[0]}..{chunk[-1]}: {exc}")
+    return collected, errors
+
+
+def _history_symbol(market: str, ticker: str) -> str:
+    if market == "KOSPI":
+        return f"{ticker}.KS"
+    return ticker
+
+
+def _period_source_url(symbol: str) -> str:
+    return "https://finance.yahoo.com/quote/" + urllib.parse.quote(symbol, safe="^.")
+
+
+def build_period_summary(
+    base_market: dict[str, Any],
+    histories: dict[str, list[dict[str, Any]]],
+    *,
+    market: str,
+    benchmark_symbol: str,
+    sessions: int,
+) -> dict[str, Any]:
+    benchmark_rows = histories.get(benchmark_symbol.upper(), [])
+    benchmark_return, benchmark_date = _period_return(benchmark_rows, sessions)
+    benchmark_base = base_market.get("benchmark", {}) if isinstance(base_market, dict) else {}
+    benchmark = {
+        "name": benchmark_base.get("name") or benchmark_symbol,
+        "symbol": benchmark_symbol,
+        "change_pct": benchmark_return,
+        "close": _number(benchmark_rows[-1].get("close")) if benchmark_rows else None,
+        "session": benchmark_date,
+        "source": "Yahoo Finance",
+        "source_url": _period_source_url(benchmark_symbol),
+    }
+
+    base_universe = base_market.get("_universe", []) if isinstance(base_market, dict) else []
+    stocks: list[dict[str, Any]] = []
+    for row in base_universe if isinstance(base_universe, list) else []:
+        ticker = str(row.get("ticker") or "").strip().upper()
+        if not ticker:
+            continue
+        symbol = _history_symbol(market, ticker)
+        change_pct, latest_date = _period_return(histories.get(symbol.upper(), []), sessions)
+        if change_pct is None:
+            continue
+        stocks.append(
+            {
+                "ticker": ticker,
+                "name": row.get("name") or ticker,
+                "change_pct": change_pct,
+                "price": row.get("price"),
+                "volume": row.get("volume"),
+                "market_cap": row.get("market_cap"),
+                "history_session": latest_date,
+                "source": "Yahoo Finance",
+            }
+        )
+
+    summary = summarize_market(
+        benchmark,
+        stocks,
+        market=market,
+        universe_label=base_market.get("universe_label") or market,
+        source_urls=[_period_source_url(benchmark_symbol)],
+    )
+    requested = len(base_universe) if isinstance(base_universe, list) else 0
+    coverage = len(stocks) / requested if requested else 0.0
+    summary["period"] = f"{sessions}D"
+    summary["requested_universe_count"] = requested
+    summary["history_coverage_ratio"] = round(coverage, 4)
+    if summary.get("status") == "ok" and coverage < 0.95:
+        summary["status"] = "partial"
+        summary["reason"] = f"일봉 확보율 {coverage * 100:.1f}%"
+    return summary
+
+
+def build_consistency(base_market: dict[str, Any]) -> dict[str, Any]:
+    one_day = {
+        str(row.get("ticker")): row
+        for row in base_market.get("_universe", [])
+        if isinstance(row, dict) and row.get("ticker")
+    }
+    five_block = (base_market.get("periods") or {}).get("5D") or {}
+    twenty_block = (base_market.get("periods") or {}).get("20D") or {}
+    five = {
+        str(row.get("ticker")): row
+        for row in five_block.get("_universe", [])
+        if isinstance(row, dict) and row.get("ticker")
+    }
+    twenty = {
+        str(row.get("ticker")): row
+        for row in twenty_block.get("_universe", [])
+        if isinstance(row, dict) and row.get("ticker")
+    }
+
+    common = sorted(set(one_day) & set(five) & set(twenty))
+    if not common:
+        return {
+            "status": "unavailable",
+            "coverage_count": 0,
+            "persistent_strong": [],
+            "persistent_weak": [],
+            "turning_strong": [],
+            "turning_weak": [],
+        }
+
+    rows: list[dict[str, Any]] = []
+    for ticker in common:
+        r1 = _number(one_day[ticker].get("relative_strength_pct"))
+        r5 = _number(five[ticker].get("relative_strength_pct"))
+        r20 = _number(twenty[ticker].get("relative_strength_pct"))
+        if r1 is None or r5 is None or r20 is None:
+            continue
+        rows.append(
+            {
+                "ticker": ticker,
+                "name": one_day[ticker].get("name") or ticker,
+                "market_cap": one_day[ticker].get("market_cap"),
+                "rs_1d": round(r1, 4),
+                "rs_5d": round(r5, 4),
+                "rs_20d": round(r20, 4),
+            }
+        )
+
+    persistent_strong = [row for row in rows if row["rs_1d"] > 0 and row["rs_5d"] > 0 and row["rs_20d"] > 0]
+    persistent_weak = [row for row in rows if row["rs_1d"] < 0 and row["rs_5d"] < 0 and row["rs_20d"] < 0]
+    turning_strong = [
+        row for row in rows
+        if row["rs_1d"] > 0 and (row["rs_5d"] <= 0 or row["rs_20d"] <= 0)
+    ]
+    turning_weak = [
+        row for row in rows
+        if row["rs_1d"] < 0 and (row["rs_5d"] >= 0 or row["rs_20d"] >= 0)
+    ]
+
+    persistent_strong.sort(key=lambda x: (x["rs_20d"], x["rs_5d"], x["rs_1d"]), reverse=True)
+    persistent_weak.sort(key=lambda x: (x["rs_20d"], x["rs_5d"], x["rs_1d"]))
+    turning_strong.sort(key=lambda x: (x["rs_1d"], x["rs_5d"]), reverse=True)
+    turning_weak.sort(key=lambda x: (x["rs_1d"], x["rs_5d"]))
+
+    requested = len(one_day)
+    coverage = len(rows) / requested if requested else 0.0
+    return {
+        "status": "ok" if coverage >= 0.95 else "partial",
+        "coverage_count": len(rows),
+        "coverage_ratio": round(coverage, 4),
+        "counts": {
+            "persistent_strong": len(persistent_strong),
+            "persistent_weak": len(persistent_weak),
+            "turning_strong": len(turning_strong),
+            "turning_weak": len(turning_weak),
+        },
+        "persistent_strong": persistent_strong[:30],
+        "persistent_weak": persistent_weak[:30],
+        "turning_strong": turning_strong[:30],
+        "turning_weak": turning_weak[:30],
+        "definition": {
+            "persistent_strong": "1D·5D·20D 모두 지수 대비 플러스",
+            "persistent_weak": "1D·5D·20D 모두 지수 대비 마이너스",
+            "turning_strong": "1D는 플러스지만 5D 또는 20D는 0 이하",
+            "turning_weak": "1D는 마이너스지만 5D 또는 20D는 0 이상",
+        },
+    }
+
+
+def _period_session_key(market_block: dict[str, Any]) -> str:
+    benchmark = market_block.get("benchmark", {}) if isinstance(market_block, dict) else {}
+    return "|".join(
+        [
+            str(benchmark.get("session") or ""),
+            str(benchmark.get("close") or ""),
+            str(market_block.get("universe_count") or ""),
+        ]
+    )
+
+
+def enrich_periods(
+    market_block: dict[str, Any],
+    previous_market: Any,
+    *,
+    market: str,
+    benchmark_symbol: str,
+    force: bool,
+    now: datetime,
+) -> dict[str, Any]:
+    if market_block.get("status") != "ok":
+        return market_block
+
+    session_key = _period_session_key(market_block)
+    previous_market = previous_market if isinstance(previous_market, dict) else {}
+    if (
+        not force
+        and previous_market.get("period_session_key") == session_key
+        and isinstance(previous_market.get("periods"), dict)
+    ):
+        market_block["periods"] = previous_market.get("periods")
+        market_block["consistency"] = previous_market.get("consistency")
+        market_block["period_session_key"] = session_key
+        market_block["periods_generated_at"] = previous_market.get("periods_generated_at")
+        market_block["period_history_cache_used"] = True
+        market_block["period_history_errors"] = previous_market.get("period_history_errors", [])
+        return market_block
+
+    universe = market_block.get("_universe", [])
+    symbols = [_history_symbol(market, str(row.get("ticker") or "")) for row in universe if row.get("ticker")]
+    symbols.append(benchmark_symbol)
+    histories, history_errors = fetch_yahoo_daily_history(symbols)
+    periods = {
+        "5D": build_period_summary(
+            market_block,
+            histories,
+            market=market,
+            benchmark_symbol=benchmark_symbol,
+            sessions=5,
+        ),
+        "20D": build_period_summary(
+            market_block,
+            histories,
+            market=market,
+            benchmark_symbol=benchmark_symbol,
+            sessions=20,
+        ),
+    }
+
+    if all(block.get("status") == "unavailable" for block in periods.values()) and previous_market.get("periods"):
+        periods = previous_market.get("periods")
+        consistency = previous_market.get("consistency")
+        history_errors.append("새 기간 데이터 확보 실패로 이전 기간 데이터 유지")
+        cache_used = True
+    else:
+        market_block["periods"] = periods
+        consistency = build_consistency(market_block)
+        cache_used = False
+
+    market_block["periods"] = periods
+    market_block["consistency"] = consistency
+    market_block["period_session_key"] = session_key
+    market_block["periods_generated_at"] = now.isoformat()
+    market_block["period_history_cache_used"] = cache_used
+    market_block["period_history_errors"] = history_errors[:20]
+    return market_block
+
+
+def _strip_internal_universe(market_block: dict[str, Any]) -> dict[str, Any]:
+    market_block.pop("_universe", None)
+    periods = market_block.get("periods")
+    if isinstance(periods, dict):
+        for block in periods.values():
+            if isinstance(block, dict):
+                block.pop("_universe", None)
+    return market_block
 
 
 def fetch_nasdaq(limit: int = UNIVERSE_LIMIT) -> dict[str, Any]:
@@ -588,14 +938,42 @@ def collect(
         errors.append({"market": "KOSPI", "error": str(exc)})
         kospi = _stale_copy(previous.get("kospi"), exc, "KOSPI")
 
+    try:
+        nasdaq = enrich_periods(
+            nasdaq,
+            previous.get("nasdaq"),
+            market="NASDAQ",
+            benchmark_symbol="^IXIC",
+            force=force,
+            now=now,
+        )
+    except Exception as exc:
+        errors.append({"market": "NASDAQ_PERIODS", "error": str(exc)})
+
+    try:
+        kospi = enrich_periods(
+            kospi,
+            previous.get("kospi"),
+            market="KOSPI",
+            benchmark_symbol="^KS11",
+            force=force,
+            now=now,
+        )
+    except Exception as exc:
+        errors.append({"market": "KOSPI_PERIODS", "error": str(exc)})
+
+    nasdaq = _strip_internal_universe(nasdaq)
+    kospi = _strip_internal_universe(kospi)
+
     result = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": now.isoformat(),
         "cache_used": False,
         "methodology": {
             "formula": "상대강도(%p) = 종목 등락률(%) - 기준지수 등락률(%)",
             "interpretation": "0보다 크면 같은 세션에서 지수보다 강했고, 0보다 작으면 지수보다 약했음을 뜻함",
-            "period": "latest_session",
+            "periods": ["1D", "5D", "20D"],
+            "historical_formula": "N거래일 수익률 = 최신 종가 / N거래일 전 종가 - 1",
             "universe_limit": limit,
             "ranking": "시가총액 상위 유니버스 내 상대강도 순",
             "not_investment_advice": True,
