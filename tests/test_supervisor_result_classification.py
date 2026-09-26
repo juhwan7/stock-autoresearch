@@ -69,3 +69,15 @@ def test_explicit_run_kind_is_forward_compatible_contract():
     assert infer_run_kind({"supervisor": "A", "run_kind": "regular"}) == "regular"
     assert infer_run_kind({"supervisor": "B", "run_kind": "test"}) == "test"
     assert infer_run_kind({"supervisor": "Recovery", "run_kind": "recovery"}) == "recovery"
+
+
+def test_regular_supervisor_may_review_e2e_without_becoming_test():
+    item = regular_b(
+        batch_id="supervisor-20260926T2330+0900-b37",
+        summary="직전 single-writer E2E 결과를 재검증했고 정규 B window는 3/3 정상",
+        actions=[
+            {"type": "continuity", "status": "resolved", "detail": "E2E 후속 검증"},
+            {"type": "testing_regression", "status": "passed"},
+        ],
+    )
+    assert infer_run_kind(item) == "regular"
