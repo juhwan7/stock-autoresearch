@@ -32,16 +32,19 @@
 ## 현재 열린 프로젝트 문제
 - recovery-sensor-dispatch-order — watchdog 상태 commit 완료 후 마지막 단계에서 sensor dispatch
 - news-origin-story-independence — origin_story_count/independent_primary_source_count 병렬 지표
-- 뉴스 discovery 신선도 저하 — 마지막 갱신 45.88092773333334분 전
+- Supervisor A 105분 지연 — 다음 사이클 누락 가능
+- Supervisor B 195분 정지 — 이슈 상태가 오래될 수 있음
+- 이슈 원장 갱신 지연 — 마지막 갱신 225.44281081666668분 전
+- 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 95.97614415분 전
 
 ## 최근 해결
 - 없음
 
 ## 운영 품질
-- operations: investigating
+- operations: needs_user_action
 - health: NOTICE
 - open questions: 24
-- 사용자 개입 필요: 0건
+- 사용자 개입 필요: 1건
 
 ## 기억 위치
 - 현재 상태 → memory/current/
