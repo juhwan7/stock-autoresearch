@@ -18,6 +18,11 @@ name: 10분 감독 관측 큐
 
 on:
   workflow_dispatch:
+    inputs:
+      slot_at:
+        description: "복구 실행에서 고정할 10분 슬롯 ISO 시각(선택)"
+        required: false
+        type: string
   push:
     branches:
       - main
@@ -40,6 +45,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      - name: Pin observation slot at workflow start
+        env:
+          REQUESTED_SLOT_AT: ${{ inputs.slot_at }}
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_ENV"
+          import os
+          from datetime import datetime, timedelta, timezone
+
+          KST = timezone(timedelta(hours=9))
+          requested = (os.getenv("REQUESTED_SLOT_AT") or "").strip()
+          now = datetime.now(KST)
+          if requested:
+              parsed = datetime.fromisoformat(requested.replace("Z", "+00:00"))
+              if parsed.tzinfo is None:
+                  parsed = parsed.replace(tzinfo=KST)
+              basis = parsed.astimezone(KST)
+              source = "dispatch_input"
+          else:
+              basis = now
+              source = "workflow_start"
+          slot = basis.replace(minute=(basis.minute // 10) * 10, second=0, microsecond=0)
+          print(f"SENSOR_SLOT_AT={slot.isoformat()}")
+          print(f"SENSOR_SLOT_SOURCE={source}")
+          PY
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 20
