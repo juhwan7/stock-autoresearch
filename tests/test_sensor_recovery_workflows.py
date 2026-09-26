@@ -53,3 +53,22 @@ def test_heavy_recovery_schedule_avoids_a_b_execution_minutes():
     workflow = read(".github/workflows/자동복구_감시.yml")
     assert 'cron: "3,18,33,48 * * * *"' in workflow
     assert 'cron: "7,22,37,52 * * * *"' not in workflow
+
+
+
+def test_sensor_self_chain_dispatches_next_slot_without_cron_dependency():
+    workflow = read(".github/workflows/연속연구와진화.yml")
+    assert "Keep 10-minute sensor chain alive" in workflow
+    assert "actions: write" in workflow
+    assert "SENSOR_SELF_CHAIN_DISABLED" in workflow
+    assert 'gh workflow run "연속연구와진화.yml"' in workflow
+    assert '-f slot_at="$NEXT_SLOT"' in workflow
+    assert "ACTIVE_OTHER_RUNS" in workflow
+    assert "NEXT_SLOT=" in workflow
+
+
+def test_stale_dispatch_is_rebased_instead_of_backfilling_old_slot():
+    workflow = read(".github/workflows/연속연구와진화.yml")
+    assert 'source = "dispatch_input_rebased"' in workflow
+    assert "requested_slot == current_slot" in workflow
+    assert "SENSOR_SLOT_START_DELAY_SECONDS=" in workflow
