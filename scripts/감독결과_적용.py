@@ -194,10 +194,27 @@ def update_news_issue_digest(result: dict) -> None:
         before = str(previous.get("status") or "")
         after = str(merged.get("status") or "")
         if not previous:
+            merged["status_changed_at"] = now
             history.append({"at": now, "from": None, "to": after or "WATCHING", "note": "first_detected"})
         elif before != after:
+            merged["status_changed_at"] = now
             history.append({"at": now, "from": before, "to": after, "note": str(item.get("change_reason") or "")})
-        merged["history"] = history[-80:]
+        elif not merged.get("status_changed_at"):
+            merged["status_changed_at"] = previous.get("last_updated") or previous.get("first_detected") or now
+
+        reference = merged.get("event_time") or merged.get("first_detected") or now
+        try:
+            ref_dt = datetime.fromisoformat(str(reference).replace("Z", "+00:00"))
+            now_dt_for_age = datetime.fromisoformat(str(now).replace("Z", "+00:00"))
+            if ref_dt.tzinfo is None:
+                ref_dt = ref_dt.replace(tzinfo=now_dt_for_age.tzinfo)
+            if now_dt_for_age.tzinfo is None:
+                now_dt_for_age = now_dt_for_age.replace(tzinfo=ref_dt.tzinfo)
+            merged["age_hours"] = round(max(0.0, (now_dt_for_age - ref_dt).total_seconds() / 3600.0), 1)
+        except (TypeError, ValueError):
+            merged["age_hours"] = None
+
+        merged["history"] = history[-120:]
         existing[issue_id] = merged
 
     def parse_time(value: object) -> datetime | None:
