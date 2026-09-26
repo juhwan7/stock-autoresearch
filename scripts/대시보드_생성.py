@@ -455,6 +455,7 @@ def main() -> None:
         "supervisor_recent": read_json(ROOT / "data" / "supervisor" / "recent.json"),
         "market_issues": read_json(ROOT / "data" / "supervisor" / "market-issues.json"),
         "discovery": read_json(ROOT / "data" / "discovery" / "latest.json"),
+        "news_issue_digest": read_json(ROOT / "data" / "news" / "issue-digest.json"),
         "quality_history": [
             {
                 "title": item.get("title"),
