@@ -1,0 +1,126 @@
+{
+  "batch_id": "recovery-a-20260926T1717+0900",
+  "processed_at": "2026-09-26T17:17:00+09:00",
+  "supervisor": "A",
+  "notify": true,
+  "status": "verification_pending",
+  "summary": [
+    "17:00 Supervisor A 정규 결과가 생성되지 않았고 직전 A(16:00)가 70분 기준을 넘겨, B 16:30 canonical과 16:22 센서 상태를 이어받아 17:00 구간을 안전 복구했다.",
+    "국내는 추석 휴장으로 새 현물 수급이 없으며 시장 판단은 미·이란/호르무즈→유가→미국 장기금리, 미중 월요일 후속 세부발표, 한국산 수입규제 후속을 우선한다.",
+    "장기기억 catalog는 16:30 생성으로 90분 이내이며 HOT memory도 16:30 canonical과 일치해 별도 기억 재생성은 하지 않았다."
+  ],
+  "market_narrative": "16:30 B의 핵심 해석을 유지한다. 휴장 중이므로 국내 지수·수급 숫자를 새 신호로 해석하지 않는다. 16:22 뉴스 센서는 165건이며 이란 휴전안 관련 재전송이 많아 기사 수를 독립 근거 수로 보지 않는다. 공식 미국 답변과 실제 호르무즈 통항이 확인되기 전까지 미·이란 상태는 ACTIVE/미확정으로 유지하고, 미중은 월요일 USTR·백악관 공식 세부문서 확인 전 확대 해석하지 않는다.",
+  "market_focus": [
+    {
+      "rank": 1,
+      "issue_id": "us-iran-hormuz-negotiation",
+      "reason": "호르무즈 통항과 군사상황이 유가·인플레이션 기대·미 장기금리·월요일 한국장 갭으로 직접 전달될 수 있다."
+    },
+    {
+      "rank": 2,
+      "issue_id": "global-long-bond-selloff",
+      "reason": "높은 미국 장기금리가 AI/성장주 위험선호의 지속성을 제약할 수 있어 유가와 함께 확인해야 한다."
+    },
+    {
+      "rank": 3,
+      "issue_id": "us-china-summit-trade-followup",
+      "reason": "정상회담 수사보다 월요일 USTR/백악관의 실제 관세·AI·희토류 정책 문서가 중요하다."
+    },
+    {
+      "rank": 4,
+      "issue_id": "korea-import-restrictions-2026h1",
+      "reason": "241건·신규조사25건은 확인됐지만 휴장이라 가격·수급 반응은 다음 거래일 검증이 필요하다."
+    }
+  ],
+  "invalidation_checks": [
+    "미국 정부의 이란안 공식 수용과 실제 호르무즈 정상통항이 확인되면 중동 위험을 EASING으로 낮춘다.",
+    "공식 거부·추가 군사행동·선박 공격과 함께 Brent/WTI 및 미 장기금리가 재상승하면 ESCALATING으로 올린다.",
+    "월요일 USTR/백악관 원문이 국내 보도의 300억달러 관세우대·AI 대화채널 세부를 확인하지 않으면 해당 세부는 미확인으로 유지하거나 제거한다.",
+    "AI 강세가 시장폭 확대로 이어지지 않고 장기금리가 재상승하면 위험선호 회복 해석의 강도를 낮춘다."
+  ],
+  "overnight_risks": [
+    {
+      "rank": 1,
+      "risk": "미·이란 공식 답변/호르무즈 실제 통항·주말 군사상황",
+      "status": "ACTIVE"
+    },
+    {
+      "rank": 2,
+      "risk": "Brent/WTI와 미국 10·30년 금리 재상승",
+      "status": "WATCHING"
+    },
+    {
+      "rank": 3,
+      "risk": "미중 월요일 무역 세부 발표",
+      "status": "WATCHING"
+    },
+    {
+      "rank": 4,
+      "risk": "월요일 한국장 재개 시 휴장 누적 뉴스의 갭 반영",
+      "status": "WATCHING"
+    }
+  ],
+  "actions": [
+    "누락된 17:00 A를 recovery A로 이어받았다.",
+    "직전 B 16:30, canonical state 16:30, discovery 16:22, issue digest 16:00, operations 17:08을 교차 확인했다.",
+    "장기기억 catalog 16:30 및 HOT memory 16:30 일치를 확인해 불필요한 재생성을 생략했다.",
+    "기존 verification_pending인 텍사스 데이터센터 중복 ID는 동일 실패 방법을 반복하지 않고 다음 canonical apply 검증 대상으로 유지했다."
+  ],
+  "changed_paths": [
+    "data/supervisor/ai-results/recovery-20260926T1717+0900.json"
+  ],
+  "next_checks": [
+    "recovery A가 canonical latest-report/state와 Telegram apply workflow에 정상 반영됐는지 확인한다.",
+    "다음 6분 센서가 16:22 이후 다시 갱신되는지 확인한다.",
+    "미·이란 미국 공식답변·호르무즈 실제 통항·주말 군사행동을 확인한다.",
+    "월요일 USTR/백악관 미중 세부 원문을 직접 확인한다.",
+    "텍사스 데이터센터 중복 issue_id가 다음 canonical apply에서 단일 ID로 병합되는지 확인한다."
+  ],
+  "project_improvement_signals": [
+    {
+      "change_id": "supervisor-a-missed-1700",
+      "status": "verification_pending",
+      "symptom": "17:00 A 정규 결과 부재",
+      "cause": "정규 실행 결과가 저장소 ai-results에 생성되지 않음",
+      "attempted": "17:17 recovery A 단일 catch-up 생성",
+      "result": "apply/Telegram workflow 완료 여부 확인 필요",
+      "verify_after": "즉시 workflow 완료 후"
+    },
+    {
+      "change_id": "sensor-freshness-1622",
+      "status": "verification_pending",
+      "symptom": "17:08 운영판에서 discovery가 45분 이상 경과",
+      "cause": "최근 센서 결과가 16:22에 머묾",
+      "attempted": "현재는 복구 결과에 stale 신호만 기록하고 센서 데이터를 임의 생성하지 않음",
+      "result": "다음 6분 workflow 실행 확인 필요",
+      "verify_after": "다음 6분"
+    },
+    {
+      "change_id": "issue-id-dedup-texas-dc",
+      "status": "verification_pending",
+      "symptom": "동일 텍사스 데이터센터 사건이 두 issue_id로 존재",
+      "cause": "서로 다른 배치의 별도 ID 등록",
+      "attempted": "직전 A/B의 안전검사 실패를 반복하지 않고 canonical apply 검증으로 이월",
+      "result": "데이터 직접 변조 없음",
+      "verify_after": "다음 canonical apply"
+    }
+  ],
+  "work_axes_reviewed": [
+    "Supervisor A/B 연속성·누락 여부",
+    "canonical state 신선도와 적용 상태",
+    "6분 discovery 센서 신선도·출처 상태",
+    "시장 이슈/오버나잇 위험과 반증 조건",
+    "장기기억 INDEX/current/catalog 신선도·일관성",
+    "운영 Kanban/복구 상태",
+    "Telegram apply 경로와 다음 검증",
+    "중복 issue_id 및 기존 실패방법 재시도 방지"
+  ],
+  "feedback_to_other_supervisor": "다음 B는 recovery A 적용 성공 여부를 먼저 확인하고, 센서가 새로 갱신됐다면 16:22 이후 변화만 비교하세요. 텍사스 중복 ID는 직전 안전검사에 막힌 동일 직접수정 방식을 반복하지 말고 canonical apply/alias 경로를 검증한 뒤 최소 수정하세요.",
+  "telegram_report": [
+    "① 복구: 17:00 A 결과가 없어 17:17에 recovery A로 공백을 이어받았습니다.",
+    "② 시장: 국내는 추석 휴장이라 새 수급은 없습니다. 핵심은 미·이란/호르무즈→유가→미 장기금리이며, 미중은 월요일 공식 세부발표 전까지 확대 해석하지 않습니다.",
+    "③ 데이터: 직전 B 16:30 canonical은 이어받았고 장기기억은 16:30 생성으로 정상 범위입니다. 뉴스 센서는 16:22 이후 갱신 여부를 다음 6분 실행에서 확인해야 합니다.",
+    "④ 개발/운영: 텍사스 데이터센터 중복 ID는 이전에 막힌 동일 수정법을 반복하지 않고 다음 canonical 적용에서 안전하게 검증합니다.",
+    "⑤ 다음 확인: recovery 적용·Telegram 성공, 센서 재갱신, 미·이란 공식답변/호르무즈, 월요일 미중 공식 문서입니다."
+  ]
+}
