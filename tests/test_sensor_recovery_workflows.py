@@ -82,3 +82,12 @@ def test_sensor_push_race_retries_only_nonconflicting_updates():
     assert "3회 재동기화 후에도 핵심 observation 저장에 실패했습니다." in workflow
     assert "git rebase --abort || true" in workflow
     assert "sleep $((ATTEMPT * 2))" in workflow
+
+
+
+def test_self_chain_catches_up_current_slot_after_long_sensor_run():
+    workflow = read(".github/workflows/연속연구와진화.yml")
+    assert 'raw_source_slot = (os.getenv("SENSOR_SLOT_AT") or "").strip()' in workflow
+    assert "expected_next = (" in workflow
+    assert "next_slot = max(expected_next, current_slot)" in workflow
+    assert "과거 슬롯을 backfill하지 않고 현재 슬롯을 즉시 이어" in workflow

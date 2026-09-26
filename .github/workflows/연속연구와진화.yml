@@ -271,12 +271,37 @@ jobs:
           set -euo pipefail
 
           python - <<'PY' > /tmp/next-sensor.env
+          import os
           from datetime import datetime, timedelta, timezone
 
           KST = timezone(timedelta(hours=9))
           now = datetime.now(KST)
           current_slot = now.replace(minute=(now.minute // 10) * 10, second=0, microsecond=0)
-          next_slot = current_slot + timedelta(minutes=10)
+
+          raw_source_slot = (os.getenv("SENSOR_SLOT_AT") or "").strip()
+          source_slot = None
+          if raw_source_slot:
+              try:
+                  parsed = datetime.fromisoformat(raw_source_slot.replace("Z", "+00:00"))
+                  if parsed.tzinfo is None:
+                      parsed = parsed.replace(tzinfo=KST)
+                  source_kst = parsed.astimezone(KST)
+                  source_slot = source_kst.replace(
+                      minute=(source_kst.minute // 10) * 10,
+                      second=0,
+                      microsecond=0,
+                  )
+              except ValueError:
+                  source_slot = None
+
+          expected_next = (
+              source_slot + timedelta(minutes=10)
+              if source_slot is not None
+              else current_slot
+          )
+          # 정상 실행은 source+10분을 기다린다. 실행이 10분 이상 길어졌다면
+          # 과거 슬롯을 backfill하지 않고 현재 슬롯을 즉시 이어 공백을 최소화한다.
+          next_slot = max(expected_next, current_slot)
           target = next_slot + timedelta(seconds=20)
           wait_seconds = max(0, int((target - now).total_seconds()))
           print(f"NEXT_SLOT={next_slot.isoformat()}")
