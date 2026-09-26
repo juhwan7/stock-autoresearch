@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-26T15:01:59.047858+00:00",
+  "generated_at": "2026-09-26T15:05:35.447864+00:00",
   "project": "Stock AutoResearch",
   "heartbeat": "10분",
   "reports": [
@@ -729,102 +729,244 @@
     }
   },
   "supervisor_latest": {
-    "batch_id": "supervisor-writer-e2e-20260926T2251+0900",
-    "processed_at": "2026-09-26T22:51:00+09:00",
+    "batch_id": "supervisor-20260926T2330+0900-b37",
+    "processed_at": "2026-09-26T23:37:00+09:00",
     "supervisor": "B",
     "notify": true,
     "status": "verification_pending",
-    "summary": "[테스트] Supervisor 단일-writer E2E 재검증",
-    "market_narrative": "시장 판단 변경 목적이 아닌 결과 전달·저장 경로 검증이다.",
+    "summary": "23:30 B canonical window는 23:10/23:20/23:30 정확히 3/3이다. 직전 A의 미·이란 ACTIVE 유지와 휴장 중 국내 수급 추정 금지는 타당하다. 반면 A가 news_issue_digest payload를 남겼음에도 canonical data/news/issue-digest.json은 16:00에 정지해 실제 병합 경로는 아직 미완료다. discovery degraded는 10→9→9로 지속되지만 failed=0, 기사 입력 147→146→145건이므로 전체 뉴스 장애로 확대해석하지 않는다.",
+    "market_narrative": "한국 현물은 추석 연휴로 신규 가격·수급 반응을 검증할 수 없다. 23:10~23:30 이란 기사군은 17건으로 유지됐고 공식 합의·통항 정상화 같은 독립 상태변화는 확인되지 않았다. 수입규제 군집은 24건으로 유지됐으며 independent_story_count_estimate=13은 제목 유사도 기반 추정이지 확정 원기사 수가 아니다. macro runtime은 세 슬롯 모두 실값이 없어 금리·유가·환율의 새 방향을 단정하지 않는다.",
     "market_focus": [
-      "Supervisor writer 안정성"
+      "미·이란 공식 답변·호르무즈 실제 통항",
+      "수입규제 241건의 KOTRA 원문·품목/국가 노출",
+      "다음 거래 가능 시점 macro 실값",
+      "월요일 USTR 공식 세부"
     ],
     "invalidation_checks": [
-      "main 결과·canonical·Telegram 중 하나라도 실패하면 미완료"
+      "공식 합의와 실제 통항 정상화가 확인되면 미·이란 위험을 낮춘다.",
+      "군사행동·통항 악화·공급차질이면 강화 검토.",
+      "KOTRA 원문상 노출이 제한적이면 광범위 수출 부담 해석을 낮춘다.",
+      "macro 실값 복구 전 기사량으로 가격 방향을 대체하지 않는다."
     ],
-    "overnight_risks": [],
+    "overnight_risks": [
+      {
+        "risk": "미·이란 협상 결렬/군사행동",
+        "severity": "HIGH",
+        "status": "ACTIVE"
+      },
+      {
+        "risk": "장기금리·에너지 비용",
+        "severity": "HIGH",
+        "status": "UNVERIFIED_LIVE_DATA"
+      }
+    ],
     "actions": [
       {
-        "type": "writer_e2e",
-        "status": "test",
-        "detail": "owner Issue → Action writer"
+        "type": "feedback_validation",
+        "status": "done",
+        "detail": "A handoff 검증: 슬롯·미이란·UI 수용, issue-digest 전진은 미완료 확인"
+      },
+      {
+        "type": "data_quality",
+        "status": "verification_pending",
+        "detail": "macro 실값 3슬롯 공백; 추정 금지"
+      },
+      {
+        "type": "news_validation",
+        "status": "done",
+        "detail": "기사수/매체수/독립스토리 추정치를 분리"
+      },
+      {
+        "type": "ui_ux",
+        "status": "no_change",
+        "detail": "새 카드보다 stale operations 상태 복구 우선"
       }
     ],
     "changed_paths": [
-      "data/supervisor/ai-results/supervisor-writer-e2e-20260926T2251+0900.json"
+      "data/supervisor/ai-results/supervisor-20260926T2330+0900-b37.json"
     ],
     "next_checks": [
-      "다음 정규 A/B 실운영 재확인"
+      "B apply 뒤 issue-digest updated_at 전진 확인",
+      "operations/status 20:26 stale 갱신 확인",
+      "다음 A는 23:40/23:50/00:00만 사용",
+      "macro provider 다음 거래 가능 구간 검증"
     ],
     "project_improvement_signals": [
       {
-        "id": "supervisor-single-writer",
+        "id": "issue-digest-apply-stale",
+        "status": "investigating",
+        "signal": "A payload와 달리 canonical digest 16:00 정지",
+        "verify_after": "이번 B apply 직후"
+      },
+      {
+        "id": "operations-status-stale",
+        "status": "investigating",
+        "signal": "operations status가 20:26으로 최신 B와 충돌",
+        "verify_after": "다음 refresh"
+      },
+      {
+        "id": "macro-runtime-empty",
         "status": "verification_pending",
-        "signal": "2차 E2E"
+        "signal": "23:10/20/30 모두 macro 실값 없음",
+        "verify_after": "다음 거래 가능 구간"
       }
     ],
     "work_axes_reviewed": [
       {
-        "axis": "result_transport",
-        "status": "test"
+        "axis": "직전_supervisor_비판",
+        "status": "reviewed",
+        "finding": "A 시장판단은 대체로 타당, digest 전진은 불일치",
+        "action": "부분 수용·반증",
+        "evidence": "A 결과+canonical digest",
+        "verify_after": "apply 직후"
       },
       {
-        "axis": "canonical_apply",
-        "status": "test"
+        "axis": "데이터_품질",
+        "status": "verification_pending",
+        "finding": "3/3 정상이나 macro 공백",
+        "action": "추정 금지",
+        "evidence": "세 health NOTICE",
+        "verify_after": "거래 가능 구간"
       },
       {
-        "axis": "memory",
-        "status": "test"
+        "axis": "뉴스_이슈",
+        "status": "reviewed",
+        "finding": "수입규제·이란 기사량만으로 상태변경 근거 없음",
+        "action": "NEW/ACTIVE 유지",
+        "evidence": "세 observations",
+        "verify_after": "다음 A"
       },
       {
-        "axis": "telegram",
-        "status": "test"
+        "axis": "공급자_fallback",
+        "status": "reviewed",
+        "finding": "국내 market은 휴장 처리",
+        "action": "장애 오판 금지",
+        "evidence": "outside_domestic_monitor_window",
+        "verify_after": "한국 거래일"
+      },
+      {
+        "axis": "테스트_회귀",
+        "status": "passed",
+        "finding": "compile/pytest/diff_check 모두 ok",
+        "action": "코드변경 없음",
+        "evidence": "validation",
+        "verify_after": "다음 A"
       },
       {
         "axis": "ui_ux",
-        "status": "no_change"
+        "status": "no_change",
+        "finding": "stale operations 카드가 오판 위험",
+        "action": "카드 증설 보류",
+        "evidence": "20:26 status vs 23:30 window",
+        "verify_after": "refresh"
       }
     ],
-    "feedback_received": [],
-    "feedback_resolved": [],
-    "feedback_disagreed": [],
-    "feedback_deferred": [],
-    "supervisor_disagreements": [],
+    "feedback_received": [
+      {
+        "from_batch": "supervisor-20260926T2300+0900-a23",
+        "item": "정확한 3/3, digest 전진, macro, degraded, 미이란, UI 검증"
+      }
+    ],
+    "feedback_resolved": [
+      {
+        "item": "슬롯 연속성",
+        "resolution": "3/3 완전"
+      },
+      {
+        "item": "미·이란 상태",
+        "resolution": "ACTIVE 유지"
+      },
+      {
+        "item": "UI 증설",
+        "resolution": "보류"
+      }
+    ],
+    "feedback_disagreed": [
+      {
+        "item": "issue-digest apply",
+        "reason": "현재 canonical은 16:00으로 전진하지 않음"
+      }
+    ],
+    "feedback_deferred": [
+      {
+        "item": "macro 최종판정",
+        "reason": "다음 거래 가능 구간 필요"
+      },
+      {
+        "item": "degraded 실질 누락률",
+        "reason": "원시 그룹 표본 추가 필요"
+      }
+    ],
+    "supervisor_disagreements": [
+      {
+        "disagreement_id": "disagree-20260926-2330-issue-digest",
+        "topic": "news_issue_digest canonical apply",
+        "a_position": "apply 후 전진 여부 확인",
+        "b_position": "23:37 현재 16:00이라 아직 성공 아님",
+        "status": "OPEN",
+        "evidence_needed": "B apply 후 digest와 workflow",
+        "verify_after": "B apply 직후"
+      }
+    ],
     "feedback_to_other_supervisor": [
-      "다음 A는 2차 E2E의 main 저장·canonical·Telegram 성공 상태를 확인"
+      "다음 A는 23:40/23:50/00:00만 사용.",
+      "B apply 후에도 issue-digest가 16:00이면 병합 후처리만 최소 수정.",
+      "operations/status가 20:26이면 stale 카드 경로 우선 복구.",
+      "macro 실값 전에는 가격 방향 추정 금지.",
+      "degraded를 전체 장애로 부풀리지 말고 중요 축 누락률 검증.",
+      "UI는 stale·중복 카드 정리 우선."
     ],
     "observation_ids": [
-      "obs-20260926T221105+0900-36244272338-1",
-      "obs-20260926T222114+0900-36244829917-1",
-      "obs-20260926T223400+0900-36245391080-1"
+      "obs-20260926T231108+0900-36247594421-1",
+      "obs-20260926T232119+0900-36248166493-1",
+      "obs-20260926T233103+0900-36248732704-1"
     ],
     "observation_slots": [
-      "2026-09-26T22:10:00+09:00",
-      "2026-09-26T22:20:00+09:00",
-      "2026-09-26T22:30:00+09:00"
+      "2026-09-26T23:10:00+09:00",
+      "2026-09-26T23:20:00+09:00",
+      "2026-09-26T23:30:00+09:00"
     ],
-    "observation_window_start": "2026-09-26T22:10:00+09:00",
-    "observation_window_end": "2026-09-26T22:30:00+09:00",
+    "observation_window_start": "2026-09-26T23:10:00+09:00",
+    "observation_window_end": "2026-09-26T23:30:00+09:00",
     "expected_observation_count": 3,
     "received_observation_count": 3,
     "missing_observation_slots": [],
     "observation_completeness_ratio": 1.0,
-    "telegram_report": [
-      "[테스트] Supervisor 단일-writer E2E 재검증입니다.",
-      "시장 판단 변경이 아닌 저장→canonical→memory→Telegram 연결 확인입니다."
+    "observation_details": [
+      {
+        "slot_at": "2026-09-26T23:10:00+09:00",
+        "slot_source": "dispatch_input",
+        "slot_delay_seconds": 68.136216
+      },
+      {
+        "slot_at": "2026-09-26T23:20:00+09:00",
+        "slot_source": "dispatch_input",
+        "slot_delay_seconds": 79.32402
+      },
+      {
+        "slot_at": "2026-09-26T23:30:00+09:00",
+        "slot_source": "dispatch_input",
+        "slot_delay_seconds": 63.179629
+      }
     ],
+    "telegram_report": [
+      "23:30 B: 23:10/20/30 센서 3/3 정상.",
+      "미·이란 ACTIVE 유지. 기사량만으로 완화하지 않았고 휴장 국내 수급도 추정하지 않았습니다.",
+      "A가 digest payload를 남겼지만 canonical 이슈 원장은 아직 16:00입니다. apply 후에도 그대로면 병합 경로 버그입니다.",
+      "operations 상태도 20:26 stale이라 새 UI보다 상태 신선도 복구가 우선입니다."
+    ],
+    "observation_window_complete": true,
+    "run_kind": "regular",
     "feedback_handoff": {
-      "source_batch_id": null,
-      "source_supervisor": null,
+      "source_batch_id": "supervisor-20260926T2300+0900-a23",
+      "source_supervisor": "A",
       "target_supervisor": "B",
-      "inbound_required": false,
-      "inbound_recorded": false,
+      "inbound_required": true,
+      "inbound_recorded": true,
       "outgoing_recorded": true,
       "complete": true
     },
-    "observation_window_complete": true,
     "validation_warnings": [
-      "changed_paths 누락을 현재 Supervisor 결과 경로로 복구",
       "최신 discovery에 새 뉴스가 있으나 news_issue_digest가 없어 뉴스 lifecycle 적용이 누락됨"
     ]
   },
@@ -942,7 +1084,7 @@
         "다음 A는 23:40/23:50/00:00만 사용",
         "macro provider 다음 거래 가능 구간 검증"
       ],
-      "observation_completeness_ratio": 1,
+      "observation_completeness_ratio": 1.0,
       "source_file": "data/supervisor/ai-results/supervisor-20260926T2330+0900-b37.json",
       "source_url": "https://github.com/juhwan7/stock-autoresearch/blob/main/data/supervisor/ai-results/supervisor-20260926T2330+0900-b37.json"
     },
@@ -33668,7 +33810,7 @@
     ]
   },
   "market_issues": {
-    "updated_at": "2026-09-26T22:51:00+09:00",
+    "updated_at": "2026-09-26T23:37:00+09:00",
     "issues": [
       {
         "issue_id": "middle-east-oil",
@@ -47342,7 +47484,7 @@
     }
   },
   "operations": {
-    "generated_at": "2026-09-27T00:01:58.906785+09:00",
+    "generated_at": "2026-09-27T00:05:35.307077+09:00",
     "status": "investigating",
     "supervisors": {
       "A": {
@@ -47369,8 +47511,8 @@
       }
     },
     "canonical": {
-      "last_batch_id": "supervisor-writer-e2e-20260926T2251+0900",
-      "last_processed_at": "2026-09-26T22:51:00+09:00"
+      "last_batch_id": "supervisor-20260926T2330+0900-b37",
+      "last_processed_at": "2026-09-26T23:37:00+09:00"
     },
     "sensor_slot_coverage": {
       "window_start": "2026-09-26T23:00:00+09:00",
@@ -47410,23 +47552,23 @@
       "generated_at": "2026-09-26T23:37:00+09:00",
       "latest_batch_id": "supervisor-20260926T2330+0900-b37",
       "latest_supervisor": "B",
-      "age_minutes": 25.0
+      "age_minutes": 28.6
     },
     "cards": [
       {
         "card_id": "supervisor-a-ok",
         "title": "Supervisor A 정상",
         "state": "완료",
-        "impact": "마지막 정규 실행 56분 전 · 3/3 window",
-        "last_checked": "2026-09-27T00:01:58.906785+09:00",
+        "impact": "마지막 정규 실행 60분 전 · 3/3 window",
+        "last_checked": "2026-09-27T00:05:35.307077+09:00",
         "owner": "A"
       },
       {
         "card_id": "supervisor-b-ok",
         "title": "Supervisor B 정상",
         "state": "완료",
-        "impact": "마지막 정규 실행 25분 전 · 3/3 window",
-        "last_checked": "2026-09-27T00:01:58.906785+09:00",
+        "impact": "마지막 정규 실행 29분 전 · 3/3 window",
+        "last_checked": "2026-09-27T00:05:35.307077+09:00",
         "owner": "B"
       },
       {
@@ -47434,23 +47576,23 @@
         "title": "10분 센서 슬롯 커버리지 정상",
         "state": "완료",
         "impact": "6/6 슬롯",
-        "last_checked": "2026-09-27T00:01:58.906785+09:00",
+        "last_checked": "2026-09-27T00:05:35.307077+09:00",
         "owner": "10분 센서"
       },
       {
         "card_id": "discovery-ok",
         "title": "뉴스 discovery 정상",
         "state": "완료",
-        "impact": "11분 전 갱신",
-        "last_checked": "2026-09-27T00:01:58.906785+09:00",
+        "impact": "15분 전 갱신",
+        "last_checked": "2026-09-27T00:05:35.307077+09:00",
         "owner": "10분 센서"
       },
       {
         "card_id": "issue-digest-stale",
         "title": "이슈 원장 갱신 지연",
         "state": "검증 대기",
-        "impact": "마지막 갱신 481.98177975분 전",
-        "last_checked": "2026-09-27T00:01:58.906785+09:00",
+        "impact": "마지막 갱신 485.58845128333337분 전",
+        "last_checked": "2026-09-27T00:05:35.307077+09:00",
         "owner": "A/B",
         "verify_after": "다음 :00/:30"
       },
@@ -47458,16 +47600,16 @@
         "card_id": "pages-data-ok",
         "title": "Pages 상태 데이터 정상",
         "state": "완료",
-        "impact": "2129822 bytes",
-        "last_checked": "2026-09-27T00:01:58.906785+09:00",
+        "impact": "2129749 bytes",
+        "last_checked": "2026-09-27T00:05:35.307077+09:00",
         "owner": "Dashboard"
       },
       {
         "card_id": "long-memory-ok",
         "title": "장기 AI 기억 정상",
         "state": "완료",
-        "impact": "25분 전 갱신 · B",
-        "last_checked": "2026-09-27T00:01:58.906785+09:00",
+        "impact": "29분 전 갱신 · B",
+        "last_checked": "2026-09-27T00:05:35.307077+09:00",
         "owner": "Memory"
       },
       {
@@ -47475,7 +47617,7 @@
         "title": "선택형 뉴스·공시 API 미연결",
         "state": "완료",
         "impact": "현재 공개 fallback으로 후보 145건 확보되어 필수 조치 아님",
-        "last_checked": "2026-09-27T00:01:58.906785+09:00",
+        "last_checked": "2026-09-27T00:05:35.307077+09:00",
         "owner": "Discovery"
       }
     ],
