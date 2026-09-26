@@ -140,3 +140,44 @@ def test_processed_pointer_excludes_old_observations(tmp_path):
         env={"GITHUB_RUN_ID": "99", "GITHUB_RUN_ATTEMPT": "1"},
     )
     assert observation["queue"]["pending_before_append"] == 1
+
+
+def test_recent_sessions_feed_supervisor_and_suppress_offhours_false_alarm(tmp_path):
+    write_json(
+        tmp_path / "data/market/runtime.json",
+        {
+            "generated_at": "2026-09-26T14:15:00+09:00",
+            "source_status": "outside_domestic_monitor_window",
+            "provider": "provider_chain",
+        },
+    )
+    write_json(
+        tmp_path / "data/market/recent-sessions.json",
+        {
+            "updated_at": "2026-09-26T12:50:00+09:00",
+            "basis": "verified_close",
+            "korea": [
+                {
+                    "date": "2026-09-23",
+                    "kospi": {"close": 7080.92, "change_pct": 0.90},
+                    "kosdaq": {"close": 844.48, "change_pct": 1.21},
+                    "flows_krw_100m": {"foreign": -5047, "institution": 3169},
+                },
+                {"date": "2026-09-22"},
+                {"date": "2026-09-21"},
+            ],
+            "us": [{"date": "2026-09-25"}],
+            "holiday_notes": [{"market": "KR", "reason": "추석 연휴"}],
+        },
+    )
+
+    observation = build_observation(
+        tmp_path,
+        now=datetime(2026, 9, 26, 14, 20, tzinfo=KST),
+        env={"GITHUB_RUN_ID": "100", "GITHUB_RUN_ATTEMPT": "1"},
+    )
+
+    assert observation["market"]["historical_fallback_available"] is True
+    assert len(observation["market_recent_sessions"]["korea"]) == 3
+    assert observation["market_recent_sessions"]["korea"][0]["date"] == "2026-09-23"
+    assert "market:outside_domestic_monitor_window" not in observation["signals"]
