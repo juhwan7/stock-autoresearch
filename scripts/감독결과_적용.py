@@ -20,6 +20,7 @@ RECENT_OBSERVATIONS = ROOT / "data/supervisor/recent.json"
 DISAGREEMENTS = ROOT / "data/supervisor/disagreements.json"
 DISCOVERY = ROOT / "data/discovery/latest.json"
 AI_RESULTS = ROOT / "data/supervisor/ai-results"
+COLLABORATION = ROOT / "data/supervisor/collaboration.json"
 
 
 def _read_json_dict(path: Path) -> dict:
@@ -608,6 +609,231 @@ def update_news_issue_digest(result: dict) -> None:
     NEWS_ISSUES.write_text(json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def _collaboration_incident_id(raw: dict) -> str:
+    raw_id = str(raw.get("id") or raw.get("incident_id") or raw.get("disagreement_id") or "").strip()
+    key = raw_id.lower().replace("_", "-")
+    topic = str(raw.get("topic") or raw.get("type") or "").lower().replace("_", "-")
+    combined = f"{key} {topic}"
+    if "issue-digest" in combined or "news-issue-digest" in combined:
+        return "issue-digest-apply"
+    if "macro-runtime" in combined or ("macro" in combined and ("empty" in combined or "data" in combined)):
+        return "macro-runtime-data"
+    if "sensor" in combined and any(token in combined for token in ("slot", "continuity", "heartbeat", "self-chain", "chain")):
+        return "sensor-continuity"
+    return raw_id
+
+
+def _collaboration_incident_title(incident_id: str, raw: dict) -> str:
+    explicit = str(raw.get("title") or "").strip()
+    if explicit:
+        return explicit
+    known = {
+        "sensor-continuity": "센서 연속성 장애",
+        "issue-digest-apply": "이슈 원장 갱신 지연",
+        "macro-runtime-data": "거시 데이터 실값 공백",
+    }
+    if incident_id in known:
+        return known[incident_id]
+    summary = str(
+        raw.get("signal")
+        or raw.get("finding")
+        or raw.get("topic")
+        or raw.get("detail")
+        or ""
+    ).strip()
+    if summary:
+        return summary.split("·", 1)[0][:72]
+    return incident_id or "협업 확인 항목"
+
+
+def _collaboration_status(value: object) -> str:
+    raw = str(value or "investigating").strip().lower().replace("-", "_")
+    if raw in {"resolved", "done", "completed", "fixed", "closed"}:
+        return "resolved"
+    if raw in {"open", "active", "tracking"}:
+        return "investigating"
+    if raw in {"verification_pending", "investigating", "blocked", "degraded", "stale"}:
+        return raw
+    return raw or "investigating"
+
+
+def update_collaboration_state(result: dict, src: Path) -> None:
+    """Merge A/B work into one shared incident state without inventing evidence."""
+    store = _read_json_dict(COLLABORATION)
+    existing_items = store.get("incidents") or []
+    if not isinstance(existing_items, list):
+        existing_items = []
+    incidents = {
+        str(item.get("incident_id")): item
+        for item in existing_items
+        if isinstance(item, dict) and item.get("incident_id")
+    }
+
+    now = str(result.get("processed_at") or "")
+    batch_id = str(result.get("batch_id") or "")
+    supervisor = str(result.get("supervisor") or "").upper()
+    try:
+        source_file = str(src.relative_to(ROOT))
+    except ValueError:
+        source_file = str(src)
+
+    def upsert(raw: dict, *, source_kind: str) -> None:
+        incident_id = _collaboration_incident_id(raw)
+        if not incident_id:
+            return
+        status = _collaboration_status(raw.get("status"))
+        summary = str(
+            raw.get("signal")
+            or raw.get("finding")
+            or raw.get("detail")
+            or raw.get("resolution")
+            or raw.get("topic")
+            or ""
+        ).strip()
+        evidence_raw = raw.get("evidence") or raw.get("evidence_needed") or []
+        if isinstance(evidence_raw, str):
+            evidence = [evidence_raw]
+        elif isinstance(evidence_raw, list):
+            evidence = [str(x) for x in evidence_raw if str(x).strip()]
+        else:
+            evidence = []
+
+        current = incidents.get(incident_id, {"incident_id": incident_id, "history": []})
+        current["title"] = _collaboration_incident_title(incident_id, raw)
+        current["status"] = status
+        current["summary"] = summary
+        current["owner"] = supervisor or current.get("owner")
+        current["verify_after"] = raw.get("verify_after") or current.get("verify_after")
+        current["evidence"] = evidence or current.get("evidence") or []
+        current["source_kind"] = source_kind
+        current["source_batch_id"] = batch_id
+        current["source_file"] = source_file
+        current["updated_at"] = now
+        if not current.get("first_seen"):
+            current["first_seen"] = now
+
+        history = current.get("history") or []
+        if not isinstance(history, list):
+            history = []
+        if not any(
+            isinstance(item, dict) and str(item.get("batch_id") or "") == batch_id
+            for item in history
+        ):
+            history.append(
+                {
+                    "at": now,
+                    "by": supervisor,
+                    "batch_id": batch_id,
+                    "status": status,
+                    "summary": summary,
+                }
+            )
+        current["history"] = history[-40:]
+        incidents[incident_id] = current
+
+    for raw in result.get("project_improvement_signals") or []:
+        if isinstance(raw, dict):
+            upsert(raw, source_kind="project_improvement_signal")
+    for raw in result.get("supervisor_disagreements") or []:
+        if isinstance(raw, dict):
+            upsert(raw, source_kind="supervisor_disagreement")
+
+    resolved_statuses = {"resolved", "discarded", "closed", "completed"}
+    ordered = sorted(
+        incidents.values(),
+        key=lambda item: (
+            str(item.get("status") or "").lower() in resolved_statuses,
+            str(item.get("updated_at") or ""),
+        ),
+        reverse=False,
+    )
+    # active first, and newest first inside each group
+    ordered = sorted(
+        ordered,
+        key=lambda item: (
+            str(item.get("status") or "").lower() in resolved_statuses,
+            -_parse_result_time(item.get("updated_at") or now).timestamp() if (item.get("updated_at") or now) else 0,
+        ),
+    )[:100]
+
+    active = [
+        item for item in ordered
+        if str(item.get("status") or "").lower() not in resolved_statuses
+    ]
+    resolved = [
+        item for item in ordered
+        if str(item.get("status") or "").lower() in resolved_statuses
+    ]
+
+    changed_paths = [
+        str(x) for x in (result.get("changed_paths") or []) if str(x).strip()
+    ]
+    result_only = bool(changed_paths) and all(
+        path.startswith("data/supervisor/ai-results/")
+        for path in changed_paths
+    )
+    last_turn = {
+        "batch_id": batch_id,
+        "processed_at": now,
+        "supervisor": supervisor,
+        "status": result.get("status"),
+        "summary": result.get("summary"),
+        "feedback_received": result.get("feedback_received") or [],
+        "feedback_resolved": result.get("feedback_resolved") or [],
+        "feedback_disagreed": result.get("feedback_disagreed") or [],
+        "feedback_deferred": result.get("feedback_deferred") or [],
+        "feedback_to_other_supervisor": result.get("feedback_to_other_supervisor") or [],
+        "changed_paths": changed_paths,
+        "change_kind": "result_only" if result_only else ("project_change" if changed_paths else "no_change"),
+        "next_checks": result.get("next_checks") or [],
+        "source_file": source_file,
+    }
+
+    timeline = store.get("timeline") or []
+    if not isinstance(timeline, list):
+        timeline = []
+    timeline = [
+        item for item in timeline
+        if not (isinstance(item, dict) and str(item.get("batch_id") or "") == batch_id)
+    ]
+    timeline.append(last_turn)
+    timeline.sort(key=lambda item: str(item.get("processed_at") or ""), reverse=True)
+
+    if active:
+        headline = f"A와 B가 {active[0].get('title') or '운영 문제'}를 공동 추적 중입니다."
+        if resolved:
+            headline += f" 최근 해결: {resolved[0].get('title')}."
+    else:
+        headline = "현재 열린 협업 incident가 없습니다. A와 B가 다음 관측과 개선 후보를 교차검증 중입니다."
+
+    active_statuses = {str(item.get("status") or "").lower() for item in active}
+    if "blocked" in active_statuses:
+        overall_status = "blocked"
+    elif "investigating" in active_statuses or "degraded" in active_statuses or "stale" in active_statuses:
+        overall_status = "investigating"
+    elif active:
+        overall_status = "verification_pending"
+    else:
+        overall_status = "healthy"
+
+    store = {
+        "schema_version": 1,
+        "updated_at": now,
+        "status": overall_status,
+        "headline": headline,
+        "active_incident_count": len(active),
+        "resolved_incident_count": len(resolved),
+        "incidents": ordered,
+        "last_turn": last_turn,
+        "timeline": timeline[:80],
+    }
+    COLLABORATION.parent.mkdir(parents=True, exist_ok=True)
+    COLLABORATION.write_text(
+        json.dumps(store, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         raise SystemExit("usage: python scripts/supervisor_result_apply.py <result.json>")
@@ -741,6 +967,7 @@ def main() -> int:
     update_market_session_history(result)
     update_popular_reports(result)
     update_news_issue_digest(result)
+    update_collaboration_state(result, src)
     REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     src.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     state = _read_json_dict(STATE)
