@@ -12,7 +12,7 @@
     <div>
       <p class="eyebrow">MARKET COMMAND CENTER</p>
       <h1>시장 한눈에 보기</h1>
-      <p class="lead">실시간 값이 비는 휴장일에도 최근 실제 3거래일을 기준으로 시장 흐름을 유지하고, 세부 정보는 성격별 화면으로 나눠 보여줍니다.</p>
+      <p class="lead">중요한 변화부터 보고, 세부 데이터는 필요할 때 펼칩니다. 휴장일에도 최근 실제 거래일을 기준으로 시장의 큰 흐름을 유지합니다.</p>
     </div>
     <div class="hero-side">
       <span class="pulse">6분 센서 · :00/:30 AI</span>
@@ -21,38 +21,60 @@
   </header>
 
   <nav class="page-tabs"><div class="wrap">
-  <a class="active" href="index.html">요약</a>
-  <a href="국내시장.html">국내시장</a>
-  <a href="거대자금.html">거대자금</a>
-  <a href="글로벌리스크.html">글로벌 · 리스크</a>
-  <a href="이슈추적.html">이슈 추적</a>
-  <a href="리서치.html">리서치</a>
-  <a href="시스템.html">시스템</a>
-  <a href="상대강도.html">상대강도</a>
-</div></nav>
+    <a class="active" href="index.html">요약</a>
+    <a href="국내시장.html">국내시장</a>
+    <a href="거대자금.html">거대자금</a>
+    <a href="글로벌리스크.html">글로벌 · 리스크</a>
+    <a href="이슈추적.html">이슈 추적</a>
+    <a href="리서치.html">리서치</a>
+    <a href="시스템.html">시스템</a>
+    <a href="상대강도.html">상대강도</a>
+  </div></nav>
 
   <main>
-    <section class="metrics" id="metrics"></section>
-    <div id="global-data-note"></div>
-
-    <section class="panel">
+    <section class="panel primary-panel">
       <div class="panel-head">
         <div><p class="kicker">AI MARKET CONTEXT</p><h2>지금 시장을 움직이는 것</h2></div>
         <span class="badge" id="market-brief-status">AI 해석 확인 중</span>
       </div>
       <div class="market-brief-layout">
         <article class="market-brief-story">
-          <p class="subhead">최근 시장 연결 해설</p>
+          <p class="subhead">현재 시장 연결 해설</p>
           <div id="market-narrative"></div>
         </article>
         <aside>
           <p class="subhead">지금 먼저 볼 것</p>
           <div id="market-focus" class="mini-list"></div>
-          <p class="subhead" style="margin-top:14px">해석을 바꿀 조건</p>
-          <div id="market-invalidation" class="mini-list"></div>
+          <details class="inline-disclosure" data-persist="home-invalidation">
+            <summary>해석을 바꿀 조건</summary>
+            <div id="market-invalidation" class="mini-list disclosure-content"></div>
+          </details>
         </aside>
       </div>
     </section>
+
+    <div id="global-data-note"></div>
+
+    <section class="grid two priority-grid">
+      <article class="panel priority-panel">
+        <div class="panel-head"><div><p class="kicker">ISSUE LIFECYCLE</p><h2>현재 시장 이슈</h2></div><a class="hero-button" href="이슈추적.html">전체 이슈</a></div>
+        <div id="market-issue-list" data-limit="5" class="mini-list"></div>
+      </article>
+      <article class="panel priority-panel">
+        <div class="panel-head"><div><p class="kicker">OVERNIGHT WATCH</p><h2>다음 리스크와 일정</h2></div><a class="hero-button" href="글로벌리스크.html">리스크 상세</a></div>
+        <div id="risk-events" data-limit="4"></div>
+      </article>
+    </section>
+
+    <details class="panel disclosure-panel" data-persist="home-key-numbers" open>
+      <summary>
+        <div><p class="kicker">MARKET SNAPSHOT</p><h2>시장 핵심 숫자</h2><p class="disclosure-hint">대표 지수·수급 등 핵심 값만 확인합니다.</p></div>
+        <span class="disclosure-toggle">펼침/접기</span>
+      </summary>
+      <div class="disclosure-body">
+        <section class="metrics" id="metrics"></section>
+      </div>
+    </details>
 
     <section class="grid two">
       <article class="panel">
@@ -67,26 +89,20 @@
       </article>
     </section>
 
-    <section class="grid two">
-      <article class="panel">
-        <div class="panel-head"><div><p class="kicker">ISSUE LIFECYCLE</p><h2>현재 시장 이슈</h2></div><a class="hero-button" href="이슈추적.html">전체 이슈</a></div>
-        <div id="market-issue-list" data-limit="5" class="mini-list"></div>
-      </article>
-      <article class="panel">
-        <div class="panel-head"><div><p class="kicker">OVERNIGHT WATCH</p><h2>다음 리스크와 일정</h2></div><a class="hero-button" href="글로벌리스크.html">리스크 상세</a></div>
-        <div id="risk-events"></div>
-      </article>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head"><div><p class="kicker">READING GUIDE</p><h2>이 화면에서 판단하는 순서</h2></div></div>
-      <div class="grid four">
-        <div class="mini-row"><strong>1. AI 해설</strong><span>무엇이 시장을 움직이는지 먼저 읽습니다.</span></div>
-        <div class="mini-row"><strong>2. 최근 3거래일</strong><span>하루 값이 아니라 지수·수급의 연속성을 봅니다.</span></div>
-        <div class="mini-row"><strong>3. 이슈·리스크</strong><span>현재 지속 중인 변수와 다음 예정 이벤트를 확인합니다.</span></div>
-        <div class="mini-row"><strong>4. 상세 화면</strong><span>국내 자금·글로벌·리서치·시스템을 필요할 때만 깊게 봅니다.</span></div>
+    <details class="panel disclosure-panel quiet-panel" data-persist="home-reading-guide">
+      <summary>
+        <div><p class="kicker">READING GUIDE</p><h2>이 화면에서 판단하는 순서</h2><p class="disclosure-hint">처음 사용할 때만 펼쳐보면 됩니다.</p></div>
+        <span class="disclosure-toggle">상세 보기</span>
+      </summary>
+      <div class="disclosure-body">
+        <div class="grid four">
+          <div class="mini-row"><strong>1. AI 해설</strong><span>무엇이 시장을 움직이는지 먼저 읽습니다.</span></div>
+          <div class="mini-row"><strong>2. 이슈·리스크</strong><span>지금 중요한 사건과 가까운 일정을 확인합니다.</span></div>
+          <div class="mini-row"><strong>3. 핵심 숫자·최근 거래일</strong><span>지수·수급의 연속성을 확인합니다.</span></div>
+          <div class="mini-row"><strong>4. 상세 화면</strong><span>국내·글로벌·리서치·시스템은 필요할 때 깊게 봅니다.</span></div>
+        </div>
       </div>
-    </section>
+    </details>
   </main>
 
   <footer><span>Stock AutoResearch</span><span id="updated">데이터 확인 중</span></footer>
