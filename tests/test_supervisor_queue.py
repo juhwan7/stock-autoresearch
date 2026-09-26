@@ -5,6 +5,9 @@ from autoresearch.supervisor_queue import (
     BATCH_SIZE,
     append_observation,
     build_observation,
+    build_supervisor_window,
+    expected_supervisor_slots,
+    sensor_slot_start,
 )
 
 
@@ -109,7 +112,7 @@ def test_append_observation_is_idempotent_and_tracks_pending(tmp_path):
     state = json.loads(
         (tmp_path / "data/supervisor/state.json").read_text(encoding="utf-8")
     )
-    assert state["batch_size"] == 10
+    assert state["batch_size"] == BATCH_SIZE
     assert state["last_processed_observation_id"] is None
 
 
@@ -119,7 +122,7 @@ def test_processed_pointer_excludes_old_observations(tmp_path):
         state_path,
         {
             "schema_version": 1,
-            "batch_size": 10,
+            "batch_size": BATCH_SIZE,
             "last_processed_observation_id": "obs-old",
         },
     )
@@ -181,3 +184,115 @@ def test_recent_sessions_feed_supervisor_and_suppress_offhours_false_alarm(tmp_p
     assert len(observation["market_recent_sessions"]["korea"]) == 3
     assert observation["market_recent_sessions"]["korea"][0]["date"] == "2026-09-23"
     assert "market:outside_domestic_monitor_window" not in observation["signals"]
+
+
+
+def test_sensor_slot_floor_and_supervisor_windows():
+    delayed = datetime(2026, 9, 26, 18, 22, 45, tzinfo=KST)
+    assert sensor_slot_start(delayed) == datetime(2026, 9, 26, 18, 20, tzinfo=KST)
+
+    b_slots = expected_supervisor_slots(
+        datetime(2026, 9, 26, 18, 30, tzinfo=KST),
+        "B",
+    )
+    assert [slot.strftime("%H:%M") for slot in b_slots] == ["18:10", "18:20", "18:30"]
+
+    a_slots = expected_supervisor_slots(
+        datetime(2026, 9, 26, 19, 0, tzinfo=KST),
+        "A",
+    )
+    assert [slot.strftime("%H:%M") for slot in a_slots] == ["18:40", "18:50", "19:00"]
+
+
+def test_supervisor_window_does_not_backfill_missing_slot():
+    observations = [
+        {
+            "observation_id": "obs-1810",
+            "observed_at": "2026-09-26T18:12:00+09:00",
+            "slot_at": "2026-09-26T18:10:00+09:00",
+            "validation": {"status": "ok"},
+        },
+        {
+            "observation_id": "obs-1830",
+            "observed_at": "2026-09-26T18:31:00+09:00",
+            "slot_at": "2026-09-26T18:30:00+09:00",
+            "validation": {"status": "ok"},
+        },
+        {
+            "observation_id": "obs-1800-old",
+            "observed_at": "2026-09-26T18:01:00+09:00",
+            "slot_at": "2026-09-26T18:00:00+09:00",
+            "validation": {"status": "ok"},
+        },
+    ]
+    manifest = build_supervisor_window(
+        observations,
+        processed_at=datetime(2026, 9, 26, 18, 30, tzinfo=KST),
+        supervisor="B",
+    )
+    assert manifest["observation_ids"] == ["obs-1810", "obs-1830"]
+    assert manifest["missing_slots"] == ["2026-09-26T18:20:00+09:00"]
+    assert manifest["received_observation_count"] == 2
+    assert manifest["complete"] is False
+
+
+def test_duplicate_slot_uses_better_canonical_observation():
+    observations = [
+        {
+            "observation_id": "obs-1820-bad",
+            "observed_at": "2026-09-26T18:20:30+09:00",
+            "slot_at": "2026-09-26T18:20:00+09:00",
+            "validation": {"status": "failed"},
+            "steps": {"market": "failure"},
+        },
+        {
+            "observation_id": "obs-1820-good",
+            "observed_at": "2026-09-26T18:23:00+09:00",
+            "slot_at": "2026-09-26T18:20:00+09:00",
+            "validation": {"status": "ok"},
+            "steps": {"market": "success", "discovery": "success"},
+        },
+        {
+            "observation_id": "obs-1810",
+            "observed_at": "2026-09-26T18:11:00+09:00",
+            "slot_at": "2026-09-26T18:10:00+09:00",
+            "validation": {"status": "ok"},
+        },
+        {
+            "observation_id": "obs-1830",
+            "observed_at": "2026-09-26T18:31:00+09:00",
+            "slot_at": "2026-09-26T18:30:00+09:00",
+            "validation": {"status": "ok"},
+        },
+    ]
+    manifest = build_supervisor_window(
+        observations,
+        processed_at=datetime(2026, 9, 26, 18, 30, tzinfo=KST),
+        supervisor="B",
+    )
+    assert manifest["observation_ids"] == ["obs-1810", "obs-1820-good", "obs-1830"]
+    assert manifest["complete"] is True
+
+
+def test_append_observation_writes_window_manifest_on_half_hour(tmp_path):
+    for minute, run_id in [(10, "10"), (20, "20"), (30, "30")]:
+        observation = build_observation(
+            tmp_path,
+            now=datetime(2026, 9, 26, 18, minute, 10, tzinfo=KST),
+            env={
+                "GITHUB_RUN_ID": run_id,
+                "GITHUB_RUN_ATTEMPT": "1",
+                "VALIDATION_STATUS": "ok",
+            },
+        )
+        append_observation(tmp_path, observation)
+
+    manifest = json.loads(
+        (tmp_path / "data/supervisor/windows/latest-B.json").read_text(encoding="utf-8")
+    )
+    assert manifest["complete"] is True
+    assert manifest["observation_slots"] == [
+        "2026-09-26T18:10:00+09:00",
+        "2026-09-26T18:20:00+09:00",
+        "2026-09-26T18:30:00+09:00",
+    ]
