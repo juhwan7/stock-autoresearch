@@ -135,4 +135,6 @@ def test_sensor_stages_only_sensor_owned_supervisor_files_and_cleans_before_reba
     assert "git add data/supervisor/latest-report.json" not in workflow
     assert "git add data/supervisor/state.json" not in workflow
     assert "git reset --hard HEAD" in workflow
-    assert workflow.index("git reset --hard HEAD") < workflow.index("git pull --rebase")
+    reset_index = workflow.index("git reset --hard HEAD")
+    rebase_index = workflow.index("if ! git pull --rebase; then", reset_index)
+    assert reset_index < rebase_index
