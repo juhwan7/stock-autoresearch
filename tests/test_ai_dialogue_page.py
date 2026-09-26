@@ -13,11 +13,20 @@ def test_ai_dialogue_page_uses_real_supervisor_timeline():
     js = JS.read_text(encoding="utf-8")
     generator = GENERATOR.read_text(encoding="utf-8")
     assert 'id="ai-dialogue"' in html
+    assert 'id="collaboration-headline"' in html
+    assert 'id="collaboration-active"' in html
+    assert 'id="collaboration-resolved"' in html
+    assert 'id="collaboration-change"' in html
+    assert 'id="collaboration-next"' in html
     assert "function renderAIDialogue(data)" in js
+    assert "function renderAICollaboration(data)" in js
+    assert "data.supervisor_collaboration" in js
     assert "data.supervisor_timeline" in js
     assert 'folder = ROOT / "data" / "supervisor" / "ai-results"' in generator
     assert "feedback_to_other_supervisor" in generator
     assert "supervisor_disagreements" in generator
+    assert '"supervisor_collaboration"' in generator
+    assert '"data" / "supervisor" / "collaboration.json"' in generator
 
 def test_supervisor_timeline_is_latest_first_and_only_real_supervisor_roles():
     namespace = runpy.run_path(str(GENERATOR))
