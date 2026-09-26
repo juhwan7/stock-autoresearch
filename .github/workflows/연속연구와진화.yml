@@ -1,4 +1,4 @@
-name: 6분 감독 관측 큐
+name: 10분 감독 관측 큐
 # workflow-change push is a smoke-test trigger only; scheduled runs remain canonical.
 # Freshness-filter smoke run: 2026-09-25.
 # Safe self-heal smoke run: Naver/Google/Market/Risk/Regression.
@@ -24,7 +24,7 @@ on:
     paths:
       - ".github/workflows/연속연구와진화.yml"
   schedule:
-    - cron: "*/6 * * * *"
+    - cron: "*/10 * * * *"
 
 permissions:
   contents: write
@@ -67,7 +67,7 @@ jobs:
             python scripts/토스상태_요약.py
           fi
 
-      - name: Collect public six-minute market batch
+      - name: Collect public ten-minute market batch
         id: public_batch
         continue-on-error: true
         run: python -m autoresearch naver-batch-market --limit 100
@@ -149,7 +149,7 @@ jobs:
 
           echo "compile=$COMPILE_STATUS pytest=$PYTEST_STATUS diff=$DIFF_STATUS validation=$VALIDATION_STATUS"
 
-      - name: Record 6-minute supervisor observation
+      - name: Record 10-minute supervisor observation
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TOSS_FETCH_STATUS: ${{ steps.fetch_toss.outcome }}
@@ -182,12 +182,12 @@ jobs:
           git add README.md docs/운영_칸반.md 2>/dev/null || true
 
           if git diff --cached --quiet; then
-            echo "이번 6분 관측에는 저장할 변화가 없습니다."
+            echo "이번 10분 관측에는 저장할 변화가 없습니다."
           else
-            git commit -m "observe: record 6-minute supervisor checkpoint"
+            git commit -m "observe: record 10-minute supervisor checkpoint"
 
             # 다른 AI/사용자 작업이 같은 시각 main을 갱신하면 생성 데이터는
-            # 줄 단위 병합보다 다음 6분 주기에 최신 입력으로 다시 만드는 편이 안전하다.
+            # 줄 단위 병합보다 다음 10분 주기에 최신 입력으로 다시 만드는 편이 안전하다.
             # 오래된 관측을 억지로 재베이스해 충돌 파일을 저장하지 않는다.
             if ! git pull --rebase; then
               echo "main 동시 갱신으로 관측 데이터가 충돌했습니다. 오래된 관측 커밋을 폐기하고 다음 주기에 재수집합니다."
