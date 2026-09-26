@@ -188,3 +188,18 @@ Supervisor는 같은 문제를 계속 관찰하는 AI가 아니라 문제를 끝
 - 변경이 없으면 억지 개발하지 않고 왜 변경하지 않았는지 짧게 설명한다.
 - 파일명·commit SHA·처리 관측 수 같은 개발자용 숫자는 핵심 설명 뒤의 보조 정보로 둔다.
 - 고위험 변경, 비밀정보, 결제·주문·자동매매, 사용자 승인이 필요한 외부 권한은 자동 확장하지 않는다.
+
+
+## 시장 이슈 생명주기 원장
+
+정각/30분 Supervisor는 현재 시황을 매번 새 글처럼 덮어쓰지 않는다. 중요한 리스크·호재·수급 이슈는 `issue_lifecycle_updates`로 상태 변화를 누적한다.
+
+- 상태: NEW / WATCHING / ACTIVE / ESCALATING / EASING / RESOLVED.
+- 최소 필드: issue_id, title, status, severity, direction, reason.
+- 가능하면 event_time(실제 사건 시각)과 processed_at/first_detected(시스템 최초 인지 시각)을 분리한다.
+- 지속 이슈는 다음 배치에서도 같은 issue_id를 재사용한다. 이름이 조금 달라졌다고 새 이슈를 만들지 않는다.
+- 강화·완화·해소에는 근거와 시각을 남긴다. RESOLVED에는 resolution_reason을 남긴다.
+- market_focus에서 빠졌다는 이유만으로 자동 RESOLVED 처리하지 않는다. 실제 반증·완화 근거가 있어야 한다.
+- 해소된 이슈도 삭제하지 않는다. 사용자가 언제 등장했고 언제 빠졌는지 볼 수 있도록 history를 보존한다.
+- 새 뉴스의 event_time이 오래됐는데 first_detected만 최근이면 '새 사건'으로 오해하지 않도록 두 시각을 함께 해석한다.
+- Telegram에는 가능하면 '신규/강화/지속/완화/해소 + 경과시간'을 쉬운 한국어로 표시한다.
