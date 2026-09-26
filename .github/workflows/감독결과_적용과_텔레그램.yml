@@ -100,7 +100,25 @@ jobs:
                   and Path(p).exists()
               ]
               if not candidates:
-                  raise SystemExit("no Supervisor AI result found in push")
+                  import subprocess
+                  try:
+                      diff_names = subprocess.check_output(
+                          ["git", "diff", "--name-only", "HEAD^", "HEAD"],
+                          text=True,
+                      ).splitlines()
+                  except subprocess.CalledProcessError:
+                      diff_names = subprocess.check_output(
+                          ["git", "show", "--pretty=", "--name-only", "HEAD"],
+                          text=True,
+                      ).splitlines()
+                  candidates = [
+                      Path(p) for p in diff_names
+                      if p.startswith("data/supervisor/ai-results/")
+                      and p.endswith(".json")
+                      and Path(p).exists()
+                  ]
+              if not candidates:
+                  raise SystemExit("no Supervisor AI result found in push or git diff")
               def processed_at(path):
                   try:
                       return json.loads(path.read_text(encoding="utf-8")).get("processed_at", "")

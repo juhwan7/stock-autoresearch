@@ -614,25 +614,24 @@ def main() -> int:
     src = Path(sys.argv[1])
     result = json.loads(src.read_text(encoding="utf-8"))
 
-    # The workflow historically selected by filesystem mtime. Checkout mtimes are
-    # not a reliable ordering signal, so an older result could be applied again.
-    # If that happens, recover by choosing the newest valid immutable result by
-    # its explicit processed_at timestamp. Never let canonical state move backward.
+    # 입력 파일과 실제 적용 batch를 몰래 바꾸지 않는다.
+    # push 단계가 정확한 immutable result를 선택하고 apply는 그 batch만 검증·적용한다.
+    # canonical보다 오래된 결과는 뒤로 되감지 않으며, 동일 batch 재적용만 idempotent하게 허용한다.
     current = json.loads(REPORT.read_text(encoding="utf-8")) if REPORT.exists() else {}
     current_at = str(current.get("processed_at") or "")
-    if str(result.get("processed_at") or "") <= current_at:
-        candidates = []
-        for path in (ROOT / "data/supervisor/ai-results").glob("*.json"):
-            try:
-                item = json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
-                continue
-            if item.get("notify") is True and str(item.get("processed_at") or "") > current_at:
-                candidates.append((str(item.get("processed_at")), path, item))
-        if candidates:
-            _, src, result = max(candidates, key=lambda row: row[0])
-        else:
-            raise SystemExit("no newer Supervisor result to apply")
+    current_batch = str(current.get("batch_id") or "")
+    result_at = str(result.get("processed_at") or "")
+    result_batch = str(result.get("batch_id") or "")
+    if current_at and result_at < current_at:
+        raise SystemExit(
+            f"stale Supervisor result refused: {result_batch} ({result_at}) < "
+            f"{current_batch} ({current_at})"
+        )
+    if current_at and result_at == current_at and current_batch and result_batch != current_batch:
+        raise SystemExit(
+            f"same-time Supervisor result conflicts with canonical: "
+            f"{result_batch} != {current_batch}"
+        )
 
     required = ("batch_id", "processed_at", "notify", "summary")
     missing = [k for k in required if k not in result]
