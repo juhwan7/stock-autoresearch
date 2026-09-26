@@ -368,7 +368,7 @@ def summarize_public_batch_market(root: Path) -> dict[str, Any]:
         "dropped_from_current_top50_count": snapshot.get("dropped_from_current_top50_count"),
         "tracked_outside_top50_with_samples": snapshot.get("tracked_outside_top50_with_samples"),
         "minute_samples_by_ticker": {
-            str(ticker): rows[-6:]
+            str(ticker): rows[-10:]
             for ticker, rows in (snapshot.get("minute_samples_by_ticker") or {}).items()
             if isinstance(rows, list)
         },
@@ -1038,7 +1038,7 @@ def collect(
         "sector_selection": {
             "mode": "dynamic",
             "fixed_sector_whitelist": False,
-            "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 1시간 AI가 주도 섹터를 선택",
+            "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택",
         },
         "rules": {
             "discovery_only": True,
