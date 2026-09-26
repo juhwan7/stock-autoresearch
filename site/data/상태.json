@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-26T15:20:50.723064+00:00",
+  "generated_at": "2026-09-26T16:04:46.556746+00:00",
   "project": "Stock AutoResearch",
   "heartbeat": "10분",
   "reports": [
@@ -729,30 +729,35 @@
     }
   },
   "supervisor_latest": {
-    "batch_id": "supervisor-20260927T0000+0900-a24",
-    "processed_at": "2026-09-27T00:09:11+09:00",
-    "supervisor": "A",
+    "batch_id": "supervisor-20260927T0030+0900-b35",
+    "processed_at": "2026-09-27T00:35:21+09:00",
+    "supervisor": "B",
     "notify": true,
     "status": "verification_pending",
-    "summary": "00:00 A canonical window는 23:40/23:50/00:00 중 23:40·23:50만 확보되어 2/3다. 00:00 슬롯을 과거값이나 00:10 이후 관측으로 대체하지 않았다. B가 지적한 operations/status stale은 00:05 갱신으로 해소됐지만 issue-digest는 여전히 16:00이라 lifecycle apply 문제는 계속 검증한다. 시장은 미·이란/호르무즈 ACTIVE와 한국 수입규제 NEW를 유지하며 휴장 중 가격·수급을 추정하지 않는다.",
-    "market_narrative": "한국 현물은 추석 연휴로 새 가격·외국인·기관 수급을 검증할 수 없다. 23:40~23:50 뉴스는 이란 16→17건, 수입규제 24→24건으로 기사량 자체의 상태변화 근거는 약하다. Reuters 최신 확인에서 이란은 공식 미국 답변을 기다리는 상태이고, 00:00 슬롯이 누락돼 단기 강화/완화를 확정하지 않는다.",
+    "summary": "00:30 B canonical window는 00:10/00:20/00:30 세 슬롯 모두 main에 없어 0/3이다. 과거 00:00 이전 관측이나 아직 존재하지 않는 :40 관측으로 보충하지 않았다. 직전 A가 재적용한 issue-digest는 00:09:11로 실제 전진해 해당 피드백은 해결됐지만, 센서 연속성은 00:00 이후 끊긴 상태라 시장 방향·뉴스 강화/완화 판단은 새로 확정하지 않는다.",
+    "market_narrative": "한국 현물은 추석 연휴라 새 가격·수급 검증 대상이 아니다. 최신 canonical discovery는 23:50에 멈춰 있고 이번 B window 관측이 0/3이므로 미·이란/호르무즈, 수입규제 등 기존 이슈의 상태를 기사량 변화만으로 승격·완화하지 않는다. independent_story_count_estimate는 제목 유사도 추정치로만 취급하며 독립 원기사 수로 확정하지 않는다.",
     "market_focus": [
+      "00:10/00:20/00:30 센서 연속 누락 원인과 self-chain/heartbeat 복구",
       "미·이란 공식 답변과 호르무즈 실제 통항",
-      "한국 수입규제 241건 중 철강·금속 113건(46.9%) 노출과 다음 거래일 반응",
-      "월요일 USTR 미중 무역협상 공식 세부",
-      "00:00 센서 슬롯 누락 원인과 다음 10분 self-chain 연속성"
+      "한국 수입규제 241건의 다음 거래일 업종 가격·수급 반응",
+      "macro runtime 실값의 다음 거래 가능 구간 검증"
     ],
     "invalidation_checks": [
-      "미국·이란 공식 합의와 실제 통항 정상화가 확인되면 위험을 낮춘다.",
-      "군사행동·통항 악화·공급차질이면 미·이란 위험 강화 검토.",
-      "수입규제 신규조사가 종료·철회되거나 실제 적용범위가 제한적이면 광범위 수출 부담 해석을 낮춘다.",
-      "00:00 누락 때문에 23:50 이후 뉴스 변화나 가격 방향을 이번 A 결론으로 확정하지 않는다."
+      "00:10/00:20/00:30 중 실제 canonical observation이 뒤늦게 main에 생성되면 다음 사이클에서 해당 슬롯 provenance를 재검증한다.",
+      "미국·이란 공식 합의와 실제 통항 정상화가 확인되면 기존 HIGH 위험을 낮춘다.",
+      "군사행동·통항 악화·공급차질의 1차/복수 독립근거가 확인되면 위험 강화 검토.",
+      "휴장 중 과거 지수값을 실시간 가격 변화로 해석하지 않는다."
     ],
     "overnight_risks": [
       {
         "risk": "미·이란 협상 결렬/호르무즈 공급차질",
         "severity": "HIGH",
-        "status": "ACTIVE"
+        "status": "ACTIVE_BUT_NO_NEW_WINDOW_EVIDENCE"
+      },
+      {
+        "risk": "센서 00:00 이후 연속 누락으로 새 시장 변화 미포착",
+        "severity": "HIGH",
+        "status": "VERIFICATION_PENDING"
       },
       {
         "risk": "장기금리·에너지 비용",
@@ -764,313 +769,346 @@
       {
         "type": "canonical_window",
         "status": "verification_pending",
-        "detail": "23:40/23:50만 사용, 00:00 누락; 대체 관측 금지"
+        "detail": "00:10/00:20/00:30만 요구했으나 0/3; 과거값/:40 보충 금지"
       },
       {
         "type": "feedback_validation",
-        "status": "done",
-        "detail": "B의 operations/status stale은 00:05 refresh로 해결, issue-digest stale은 미해결 확인"
+        "status": "resolved",
+        "detail": "A의 issue-digest 재적용 후 data/news/issue-digest.json updated_at가 00:09:11로 전진함"
       },
       {
-        "type": "news_validation",
-        "status": "done",
-        "detail": "이란·수입규제 기사수와 independent_story_count_estimate를 독립 원기사 확정치로 취급하지 않음"
-      },
-      {
-        "type": "issue_lifecycle",
-        "status": "verification_pending",
-        "detail": "기존 issue_id 2개를 유지한 payload로 canonical digest 병합 경로 재검증"
+        "type": "sensor_continuity",
+        "status": "investigating",
+        "detail": "queue에 2026-09-27 파일 자체가 없고 operations 00:20에도 00:00/00:10 누락 표시; 00:20/00:30도 결과 생성 시점 main에 없음"
       },
       {
         "type": "ui_ux",
         "status": "no_change",
-        "detail": "불완전 2/3 window에서 새 카드를 늘리지 않고 HIGH 위험/운영 stale만 기존 계층으로 표시"
+        "detail": "내부 장애 카드를 추가로 늘리지 않고 기존 센서 슬롯 coverage 카드 하나에서 연속 누락을 표현하는 편이 정보 중복이 적음"
+      },
+      {
+        "type": "code_change",
+        "status": "no_change",
+        "detail": "현재 결과만으로 self-chain 실패 원인을 특정할 수 없어 추측성 코드 수정은 보류"
       }
     ],
     "changed_paths": [
-      "data/supervisor/ai-results/supervisor-20260927T0000+0900-a24.json"
+      "data/supervisor/ai-results/supervisor-20260927T0030+0900-b35.json"
     ],
     "next_checks": [
-      "00:10 센서가 정상 self-chain되는지 확인하되 이번 A window에는 사용하지 않기",
-      "이번 apply 후 data/news/issue-digest.json updated_at가 00:09로 전진하는지 확인",
-      "다음 B는 00:10/00:20/00:30만 사용",
-      "macro 실값은 다음 거래 가능 구간에서 검증",
-      "월요일 USTR 공식 세부 원문 확인"
+      "다음 A는 00:40/00:50/01:00만 사용하고 이번 누락 슬롯을 끌어오지 말 것.",
+      "Recovery/다음 센서에서 00:00 이후 self-chain dispatch가 왜 생성되지 않았는지 workflow run과 heartbeat 경로를 확인할 것.",
+      "issue-digest 00:09 전진은 resolved로 유지하고 동일 stale 문제를 근거 없이 재조사하지 말 것.",
+      "macro 실값은 다음 거래 가능 구간까지 verification_pending 유지.",
+      "센서 복구 후 discovery generated_at와 source_summary를 다시 비교해 degraded 9가 실질 커버리지 손실인지 평가."
     ],
     "project_improvement_signals": [
       {
-        "id": "sensor-slot-0000-missing",
+        "id": "sensor-slot-0000-plus-continuity",
         "status": "investigating",
-        "signal": "00:09 현재 00:00 canonical observation이 main에 없음",
-        "verify_after": "00:10 이후 sensor/heartbeat 상태"
+        "signal": "00:00 누락 이후 이번 B의 00:10/00:20/00:30도 canonical queue에 없음",
+        "verify_after": "다음 Recovery/10분 센서 실행"
       },
       {
         "id": "issue-digest-apply-stale",
-        "status": "verification_pending",
-        "signal": "canonical digest가 16:00에 정지; 이번 A payload 적용 후 전진 여부 재검증",
-        "verify_after": "이번 A apply 직후"
+        "status": "resolved",
+        "signal": "A payload 적용 후 canonical digest updated_at가 2026-09-27T00:09:11+09:00로 전진",
+        "verify_after": "새 lifecycle 변화 발생 시"
       },
       {
         "id": "macro-runtime-empty",
         "status": "verification_pending",
-        "signal": "23:40/23:50 모두 macro 실값 없음",
+        "signal": "새 B 관측 자체가 없어 live macro 검증 불가",
         "verify_after": "다음 거래 가능 구간"
       }
     ],
     "work_axes_reviewed": [
       {
-        "axis": "데이터_품질_freshness",
+        "axis": "데이터_품질",
         "status": "verification_pending",
-        "finding": "00:00 슬롯 누락으로 2/3",
-        "action": "대체 관측 금지·원인 후속",
-        "evidence": "23:40/23:50 queue + 00:05 operations status",
-        "verify_after": "00:10 이후"
+        "finding": "B canonical window 0/3",
+        "action": "대체 관측 금지",
+        "evidence": "queue 2026-09-27 파일 부재 + operations/status 00:20",
+        "verify_after": "다음 센서"
+      },
+      {
+        "axis": "버그_연속성",
+        "status": "investigating",
+        "finding": "00:00 이후 센서 chain이 이어지지 않은 정황",
+        "action": "workflow/self-chain/heartbeat 실행기록을 Recovery 축으로 넘김",
+        "evidence": "sensor_slot_coverage + queue directory",
+        "verify_after": "다음 Recovery"
       },
       {
         "axis": "뉴스_이슈",
-        "status": "reviewed",
-        "finding": "이란·수입규제 기사량에 확정 상태변화 없음",
-        "action": "ACTIVE/NEW 유지",
-        "evidence": "23:40/23:50 discovery + Reuters/KOTRA 기반 교차검증",
-        "verify_after": "다음 B"
+        "status": "reviewed_limited",
+        "finding": "새 canonical observation이 없어 lifecycle 변화 판정 불가",
+        "action": "기존 상태 유지, 기사수 추정치로 승격 금지",
+        "evidence": "latest discovery 23:50",
+        "verify_after": "센서 복구 후"
       },
       {
-        "axis": "버그",
-        "status": "verification_pending",
-        "finding": "issue-digest 16:00 stale 지속",
-        "action": "이번 결과에 lifecycle payload 포함해 apply 경로 재검증",
+        "axis": "기존기능_실효성",
+        "status": "reviewed",
+        "finding": "issue-digest apply는 실제 00:09 전진해 복구 경로 유효",
+        "action": "resolved 처리",
         "evidence": "data/news/issue-digest.json",
-        "verify_after": "apply 직후"
-      },
-      {
-        "axis": "공급자_fallback",
-        "status": "reviewed",
-        "finding": "국내 현물은 휴장, macro 실값 없음; 뉴스 discovery는 failed=0/degraded=9",
-        "action": "휴장을 장애로 오판하지 않고 가격 추정 금지",
-        "evidence": "두 observation health/market",
-        "verify_after": "거래 가능 구간"
-      },
-      {
-        "axis": "테스트_회귀",
-        "status": "passed",
-        "finding": "23:40/23:50 compile·pytest·diff_check 모두 ok",
-        "action": "코드 변경 강제하지 않음",
-        "evidence": "observation validation",
-        "verify_after": "다음 센서"
+        "verify_after": "새 변화 시"
       },
       {
         "axis": "ui_ux",
         "status": "no_change",
-        "finding": "2/3 window에서 내부 품질카드 증설은 정보과다 위험",
-        "action": "HIGH 위험은 기존 메인, 상세 근거/history는 이슈추적에 유지",
-        "evidence": "현재 progressive disclosure 원칙",
-        "verify_after": "다음 B"
+        "finding": "연속 센서 누락마다 별도 카드를 만들면 중복·정보과다",
+        "action": "기존 coverage 카드에 집약 권고",
+        "evidence": "operations/status cards",
+        "verify_after": "상태판 다음 refresh"
       },
       {
         "axis": "구조_단순화",
         "status": "reviewed",
-        "finding": "operations stale은 refresh로 해결돼 별도 UI/복구 기능 추가 불필요",
-        "action": "추가 기능 대신 기존 refresh 경로 유지",
-        "evidence": "00:05 operations/status",
-        "verify_after": "다음 A"
+        "finding": "원인 미확정 상태에서 새 복구 레이어 추가는 중복 가능성",
+        "action": "기존 self-chain/:05 heartbeat/Recovery의 실제 실패 지점부터 확인",
+        "evidence": "운영헌장 복구 원칙",
+        "verify_after": "workflow run 확인"
+      },
+      {
+        "axis": "테스트_회귀",
+        "status": "not_applicable",
+        "finding": "코드 변경 없음; 새 observation validation도 없음",
+        "action": "추측성 테스트 결과 생성 금지",
+        "evidence": "0/3 window",
+        "verify_after": "다음 코드 변경 시"
       }
     ],
     "feedback_received": [
       {
-        "from_batch": "supervisor-20260926T2330+0900-b37",
-        "item": "23:40/23:50/00:00만 사용; digest/operations/macro/degraded/UI 확인"
+        "from_batch": "supervisor-20260927T0000+0900-a24",
+        "item": "00:30 B는 00:10/00:20/00:30만 사용하고 00:00 누락을 끌어오지 말 것."
+      },
+      {
+        "from_batch": "supervisor-20260927T0000+0900-a24",
+        "item": "A apply 후 issue-digest 전진 여부 확인."
+      },
+      {
+        "from_batch": "supervisor-20260927T0000+0900-a24",
+        "item": "00:00 누락의 self-chain/heartbeat 복구 확인."
+      },
+      {
+        "from_batch": "supervisor-20260927T0000+0900-a24",
+        "item": "macro 실값 전 방향 추정 금지 및 UI 카드 증설 자제."
       }
     ],
     "feedback_resolved": [
       {
-        "item": "operations/status stale",
-        "resolution": "00:05:35 generated_at로 전진해 해결"
+        "item": "issue-digest apply",
+        "resolution": "canonical digest updated_at가 00:09:11로 전진했고 operations status도 issue-digest-ok로 표시"
       },
       {
-        "item": "UI 증설 보류",
-        "resolution": "불완전 window에서 no_change 유지"
+        "item": "canonical window 규칙",
+        "resolution": "00:10/00:20/00:30 외 관측을 사용하지 않음"
+      },
+      {
+        "item": "UI 증설 자제",
+        "resolution": "새 카드/기능 변경 없음"
       }
     ],
     "feedback_disagreed": [],
     "feedback_deferred": [
       {
-        "item": "issue-digest apply",
-        "reason": "이번 A apply 직후 실제 파일 전진 확인 필요"
+        "item": "00:00 및 이후 sensor self-chain 원인",
+        "reason": "이번 시점 main에 00:10/00:20/00:30 관측 자체가 없어 원인 특정에 필요한 workflow 실행증거 부족"
       },
       {
         "item": "macro 최종판정",
-        "reason": "다음 거래 가능 구간 필요"
-      },
-      {
-        "item": "degraded 실질 누락률",
-        "reason": "failed=0이나 9개 축 degraded 지속; 다음 거래/뉴스 구간 표본 필요"
+        "reason": "휴장 및 새 관측 부재로 live 값 검증 불가"
       }
     ],
     "supervisor_disagreements": [
       {
         "disagreement_id": "disagree-20260926-2330-issue-digest",
         "topic": "news_issue_digest canonical apply",
-        "a_position": "이번 A에서 기존 issue_id payload를 다시 제공해 apply 경로가 실제 digest를 전진시키는지 검증",
-        "b_position": "23:37 기준 canonical digest 16:00으로 성공 아님",
-        "status": "OPEN",
-        "evidence_needed": "이번 A apply 후 data/news/issue-digest.json updated_at와 workflow 결과",
-        "verify_after": "A apply 직후"
+        "a_position": "A 재적용으로 digest 전진 검증",
+        "b_position": "23:37에는 stale이었으나 이번 B에서 00:09:11 전진을 확인",
+        "status": "RESOLVED",
+        "evidence_needed": "data/news/issue-digest.json updated_at=2026-09-27T00:09:11+09:00",
+        "verify_after": "새 lifecycle 변화 발생 시"
       }
     ],
     "feedback_to_other_supervisor": [
-      "00:30 B는 00:10/00:20/00:30만 사용하고 00:00 누락을 끌어오지 말 것.",
-      "이번 A apply 후 issue-digest updated_at가 전진했는지 반드시 확인하고, 안 되면 scripts/감독결과_적용.py 호출/commit 경로를 최소 수정할 것.",
-      "00:00 슬롯 누락이 self-chain 경계 문제인지 :05 heartbeat가 복구했는지 확인할 것.",
-      "macro 실값 전에는 유가·금리·환율 방향을 기사량으로 대체하지 말 것.",
-      "UI는 stale·중복 상태를 새 카드로 늘리기보다 기존 시스템/이슈추적 계층에서 정리할 것."
+      "다음 A는 00:40/00:50/01:00만 사용하고 이번 00:10/00:20/00:30 누락을 과거값으로 채우지 말 것.",
+      "센서 연속성 문제는 00:00 단일 누락이 아니라 00:30까지 이어진 것으로 보이므로 workflow self-chain/:05 heartbeat/Recovery 실행기록을 우선 확인할 것.",
+      "issue-digest apply stale은 00:09:11 전진으로 해결됐으니 동일 문제를 다시 처음부터 조사하지 말 것.",
+      "macro 실값과 휴장 중 가격·수급은 추정하지 말 것.",
+      "UI는 센서 누락별 새 카드 대신 기존 coverage 카드에 연속 누락 구간과 복구상태를 집약할 것."
     ],
-    "observation_ids": [
-      "obs-20260926T234101+0900-36249300909-1",
-      "obs-20260926T235116+0900-36249869562-1"
-    ],
-    "observation_slots": [
-      "2026-09-26T23:40:00+09:00",
-      "2026-09-26T23:50:00+09:00"
-    ],
-    "observation_window_start": "2026-09-26T23:40:00+09:00",
-    "observation_window_end": "2026-09-27T00:00:00+09:00",
+    "observation_ids": [],
+    "observation_slots": [],
+    "observation_window_start": "2026-09-27T00:10:00+09:00",
+    "observation_window_end": "2026-09-27T00:30:00+09:00",
     "expected_observation_count": 3,
-    "received_observation_count": 2,
+    "received_observation_count": 0,
     "missing_observation_slots": [
-      "2026-09-27T00:00:00+09:00"
+      "2026-09-27T00:10:00+09:00",
+      "2026-09-27T00:20:00+09:00",
+      "2026-09-27T00:30:00+09:00"
     ],
-    "observation_completeness_ratio": 0.667,
-    "observation_details": [
-      {
-        "slot_at": "2026-09-26T23:40:00+09:00",
-        "slot_source": "dispatch_input",
-        "slot_delay_seconds": 61.686081
-      },
-      {
-        "slot_at": "2026-09-26T23:50:00+09:00",
-        "slot_source": "dispatch_input",
-        "slot_delay_seconds": 76.093702
-      }
-    ],
-    "news_issue_digest": {
-      "issues": [
-        {
-          "issue_id": "us-iran-hormuz-negotiation",
-          "title": "미국·이란 협상과 호르무즈 해협 재개방",
-          "scope": "GLOBAL",
-          "category": "지정학·에너지",
-          "status": "ACTIVE",
-          "severity": "HIGH",
-          "impact": "MIXED",
-          "event_time": "2026-09-26",
-          "latest_update": "23:50까지 관련 기사군은 유지됐지만 Reuters 기준 이란은 미국의 공식 답변을 기다리는 상태이며 합의·통항 정상화는 확인되지 않았다.",
-          "summary": "협상 창구는 열려 있으나 합의 또는 최종 결렬로 확정할 단계는 아니다.",
-          "why_market_matters": "호르무즈 통항이 원유공급·유가·인플레이션 기대·미국 장기금리를 거쳐 글로벌 성장주와 한국장에 영향을 줄 수 있다.",
-          "transmission_path": [
-            "미·이란 협상",
-            "호르무즈 통항",
-            "Brent/WTI",
-            "인플레이션 기대",
-            "미국 장기금리",
-            "Nasdaq·한국 성장주"
-          ],
-          "affected_assets": [
-            "Brent",
-            "WTI",
-            "미국채",
-            "Nasdaq",
-            "KOSPI",
-            "정유",
-            "항공"
-          ],
-          "pricing_status": "PARTLY_PRICED",
-          "next_check": "미국 공식 답변, 실제 호르무즈 통항, 주말 군사행동",
-          "confirmed_facts": [
-            "Reuters는 이란이 미국의 공식 답변을 기다린다고 보도했다."
-          ],
-          "unconfirmed": [
-            "공식 최종 합의/결렬",
-            "실제 통항 정상화 일정"
-          ],
-          "sources": [
-            {
-              "publisher": "Reuters",
-              "title": "Iran awaits US move after WSJ report says Trump rejects peace plan",
-              "url": "https://www.reuters.com/world/middle-east/iran-awaits-us-move-after-wsj-report-says-trump-rejects-peace-plan-2026-09-26/"
-            }
-          ]
-        },
-        {
-          "issue_id": "korea-import-restrictions-2026h1",
-          "title": "한국산 제품 수입규제 241건·신규조사 증가",
-          "scope": "KOREA",
-          "category": "통상·수출규제",
-          "status": "NEW",
-          "severity": "MEDIUM",
-          "impact": "NEGATIVE",
-          "event_time": "2026-09-26T11:31:00+09:00",
-          "latest_update": "보고서 기반 세부 보도에서 철강·금속 113건(46.9%), 화학 37건, 플라스틱·고무 35건으로 노출이 구체화됐다. 휴장이라 시장반응은 미확인이다.",
-          "summary": "2026년 상반기 말 26개국의 한국 수출품 수입규제는 241건으로 직전 반기 230건보다 11건 늘었고 신규 조사 25건이 시작됐다.",
-          "why_market_matters": "철강·금속·화학 등 수출기업의 무역구제 비용과 시장접근성 부담으로 이어질 수 있으나 신규조사는 최종 규제 확정과 다르다.",
-          "transmission_path": [
-            "각국 무역구제 강화",
-            "반덤핑·상계관세·세이프가드 조사",
-            "수출 비용·시장접근성",
-            "한국 철강·화학"
-          ],
-          "affected_assets": [
-            "KOSPI 수출주",
-            "철강",
-            "금속",
-            "화학"
-          ],
-          "affected_korean_sectors": [
-            "철강·금속",
-            "화학",
-            "플라스틱·고무",
-            "수출주"
-          ],
-          "pricing_status": "EARLY",
-          "market_reaction": "한국 휴장으로 미확인",
-          "next_check": "KOTRA 원문 세부와 다음 거래일 관련 업종 가격·수급",
-          "confirmed_facts": [
-            "총 241건, 직전 반기 대비 11건 증가",
-            "신규 조사 25건",
-            "철강·금속 113건(46.9%), 화학 37건, 플라스틱·고무 35건"
-          ],
-          "unconfirmed": [
-            "개별 상장사 실적 영향",
-            "신규조사의 최종 규제 전환률"
-          ],
-          "invalidation_conditions": [
-            "조사 종료·철회 증가 또는 실제 적용범위 제한 시 부담 평가 하향"
-          ]
-        }
-      ]
-    },
+    "observation_completeness_ratio": 0.0,
+    "observation_details": [],
     "telegram_report": [
-      "00:00 A: 23:40/23:50/00:00 중 00:00이 없어 2/3입니다. 과거값이나 00:10 데이터로 채우지 않았습니다.",
-      "미·이란/호르무즈는 ACTIVE 유지. 공식 합의·통항 정상화는 아직 확인되지 않았습니다.",
-      "한국 수입규제 241건은 철강·금속 113건(46.9%) 비중이 확인됐지만 휴장이라 주가·수급 영향은 아직 미확인입니다.",
-      "B가 지적한 operations stale은 00:05 갱신으로 해결됐고, issue-digest 16:00 정지는 이번 lifecycle payload 적용 후 실제 전진 여부를 다시 검증합니다.",
-      "UI는 새 카드를 늘리지 않았습니다. 불완전 센서 상태에서는 핵심 위험을 앞에 두고 긴 근거는 기존 이슈추적 상세에 유지하는 편이 안전합니다."
+      "00:30 B: canonical 00:10/00:20/00:30이 모두 없어 0/3입니다. 과거 관측이나 :40 데이터로 채우지 않았습니다.",
+      "직전 A가 재적용한 issue-digest는 00:09:11로 실제 전진해 이 문제는 해결됐습니다.",
+      "반면 센서는 00:00 이후 연속성이 끊긴 정황이 강해 self-chain/:05 heartbeat/Recovery 실행경로 확인을 다음 최우선 작업으로 넘깁니다.",
+      "새 센서 근거가 없으므로 미·이란/호르무즈 등 시장 이슈의 강화·완화를 새로 단정하지 않았고 macro 방향도 추정하지 않았습니다.",
+      "UI/코드 변경은 하지 않았습니다. 원인 미확정 상태에서 카드나 복구 레이어를 더 추가하면 중복과 유지비만 늘 수 있습니다."
     ],
     "observation_window_complete": false,
     "run_kind": "regular",
     "feedback_handoff": {
-      "source_batch_id": "supervisor-20260926T2330+0900-b37",
-      "source_supervisor": "B",
-      "target_supervisor": "A",
+      "source_batch_id": "supervisor-20260927T0000+0900-a24",
+      "source_supervisor": "A",
+      "target_supervisor": "B",
       "inbound_required": true,
       "inbound_recorded": true,
       "outgoing_recorded": true,
       "complete": true
     },
     "validation_warnings": [
-      "정해진 10분 슬롯 3개가 모두 준비되지 않아 결과를 verification_pending으로 유지"
+      "정해진 10분 슬롯 3개가 모두 없어 결과를 verification_pending으로 유지",
+      "새 observation이 없어 compile/pytest/dry-run 결과를 이번 B가 새로 통과했다고 기록하지 않음",
+      "정해진 10분 슬롯 3개가 모두 준비되지 않아 결과를 verification_pending으로 유지",
+      "최신 discovery에 새 뉴스가 있으나 news_issue_digest가 없어 뉴스 lifecycle 적용이 누락됨"
     ]
   },
   "supervisor_timeline": [
+    {
+      "batch_id": "supervisor-20260927T0030+0900-b35",
+      "processed_at": "2026-09-27T00:35:21+09:00",
+      "supervisor": "B",
+      "status": "verification_pending",
+      "summary": "00:30 B canonical window는 00:10/00:20/00:30 세 슬롯 모두 main에 없어 0/3이다. 과거 00:00 이전 관측이나 아직 존재하지 않는 :40 관측으로 보충하지 않았다. 직전 A가 재적용한 issue-digest는 00:09:11로 실제 전진해 해당 피드백은 해결됐지만, 센서 연속성은 00:00 이후 끊긴 상태라 시장 방향·뉴스 강화/완화 판단은 새로 확정하지 않는다.",
+      "market_narrative": "한국 현물은 추석 연휴라 새 가격·수급 검증 대상이 아니다. 최신 canonical discovery는 23:50에 멈춰 있고 이번 B window 관측이 0/3이므로 미·이란/호르무즈, 수입규제 등 기존 이슈의 상태를 기사량 변화만으로 승격·완화하지 않는다. independent_story_count_estimate는 제목 유사도 추정치로만 취급하며 독립 원기사 수로 확정하지 않는다.",
+      "actions": [
+        {
+          "type": "canonical_window",
+          "status": "verification_pending",
+          "detail": "00:10/00:20/00:30만 요구했으나 0/3; 과거값/:40 보충 금지"
+        },
+        {
+          "type": "feedback_validation",
+          "status": "resolved",
+          "detail": "A의 issue-digest 재적용 후 data/news/issue-digest.json updated_at가 00:09:11로 전진함"
+        },
+        {
+          "type": "sensor_continuity",
+          "status": "investigating",
+          "detail": "queue에 2026-09-27 파일 자체가 없고 operations 00:20에도 00:00/00:10 누락 표시; 00:20/00:30도 결과 생성 시점 main에 없음"
+        },
+        {
+          "type": "ui_ux",
+          "status": "no_change",
+          "detail": "내부 장애 카드를 추가로 늘리지 않고 기존 센서 슬롯 coverage 카드 하나에서 연속 누락을 표현하는 편이 정보 중복이 적음"
+        },
+        {
+          "type": "code_change",
+          "status": "no_change",
+          "detail": "현재 결과만으로 self-chain 실패 원인을 특정할 수 없어 추측성 코드 수정은 보류"
+        }
+      ],
+      "feedback_received": [
+        {
+          "from_batch": "supervisor-20260927T0000+0900-a24",
+          "item": "00:30 B는 00:10/00:20/00:30만 사용하고 00:00 누락을 끌어오지 말 것."
+        },
+        {
+          "from_batch": "supervisor-20260927T0000+0900-a24",
+          "item": "A apply 후 issue-digest 전진 여부 확인."
+        },
+        {
+          "from_batch": "supervisor-20260927T0000+0900-a24",
+          "item": "00:00 누락의 self-chain/heartbeat 복구 확인."
+        },
+        {
+          "from_batch": "supervisor-20260927T0000+0900-a24",
+          "item": "macro 실값 전 방향 추정 금지 및 UI 카드 증설 자제."
+        }
+      ],
+      "feedback_resolved": [
+        {
+          "item": "issue-digest apply",
+          "resolution": "canonical digest updated_at가 00:09:11로 전진했고 operations status도 issue-digest-ok로 표시"
+        },
+        {
+          "item": "canonical window 규칙",
+          "resolution": "00:10/00:20/00:30 외 관측을 사용하지 않음"
+        },
+        {
+          "item": "UI 증설 자제",
+          "resolution": "새 카드/기능 변경 없음"
+        }
+      ],
+      "feedback_disagreed": [],
+      "feedback_deferred": [
+        {
+          "item": "00:00 및 이후 sensor self-chain 원인",
+          "reason": "이번 시점 main에 00:10/00:20/00:30 관측 자체가 없어 원인 특정에 필요한 workflow 실행증거 부족"
+        },
+        {
+          "item": "macro 최종판정",
+          "reason": "휴장 및 새 관측 부재로 live 값 검증 불가"
+        }
+      ],
+      "feedback_to_other_supervisor": [
+        "다음 A는 00:40/00:50/01:00만 사용하고 이번 00:10/00:20/00:30 누락을 과거값으로 채우지 말 것.",
+        "센서 연속성 문제는 00:00 단일 누락이 아니라 00:30까지 이어진 것으로 보이므로 workflow self-chain/:05 heartbeat/Recovery 실행기록을 우선 확인할 것.",
+        "issue-digest apply stale은 00:09:11 전진으로 해결됐으니 동일 문제를 다시 처음부터 조사하지 말 것.",
+        "macro 실값과 휴장 중 가격·수급은 추정하지 말 것.",
+        "UI는 센서 누락별 새 카드 대신 기존 coverage 카드에 연속 누락 구간과 복구상태를 집약할 것."
+      ],
+      "supervisor_disagreements": [
+        {
+          "disagreement_id": "disagree-20260926-2330-issue-digest",
+          "topic": "news_issue_digest canonical apply",
+          "a_position": "A 재적용으로 digest 전진 검증",
+          "b_position": "23:37에는 stale이었으나 이번 B에서 00:09:11 전진을 확인",
+          "status": "RESOLVED",
+          "evidence_needed": "data/news/issue-digest.json updated_at=2026-09-27T00:09:11+09:00",
+          "verify_after": "새 lifecycle 변화 발생 시"
+        }
+      ],
+      "project_improvement_signals": [
+        {
+          "id": "sensor-slot-0000-plus-continuity",
+          "status": "investigating",
+          "signal": "00:00 누락 이후 이번 B의 00:10/00:20/00:30도 canonical queue에 없음",
+          "verify_after": "다음 Recovery/10분 센서 실행"
+        },
+        {
+          "id": "issue-digest-apply-stale",
+          "status": "resolved",
+          "signal": "A payload 적용 후 canonical digest updated_at가 2026-09-27T00:09:11+09:00로 전진",
+          "verify_after": "새 lifecycle 변화 발생 시"
+        },
+        {
+          "id": "macro-runtime-empty",
+          "status": "verification_pending",
+          "signal": "새 B 관측 자체가 없어 live macro 검증 불가",
+          "verify_after": "다음 거래 가능 구간"
+        }
+      ],
+      "changed_paths": [
+        "data/supervisor/ai-results/supervisor-20260927T0030+0900-b35.json"
+      ],
+      "next_checks": [
+        "다음 A는 00:40/00:50/01:00만 사용하고 이번 누락 슬롯을 끌어오지 말 것.",
+        "Recovery/다음 센서에서 00:00 이후 self-chain dispatch가 왜 생성되지 않았는지 workflow run과 heartbeat 경로를 확인할 것.",
+        "issue-digest 00:09 전진은 resolved로 유지하고 동일 stale 문제를 근거 없이 재조사하지 말 것.",
+        "macro 실값은 다음 거래 가능 구간까지 verification_pending 유지.",
+        "센서 복구 후 discovery generated_at와 source_summary를 다시 비교해 degraded 9가 실질 커버리지 손실인지 평가."
+      ],
+      "observation_completeness_ratio": 0.0,
+      "source_file": "data/supervisor/ai-results/supervisor-20260927T0030+0900-b35.json",
+      "source_url": "https://github.com/juhwan7/stock-autoresearch/blob/main/data/supervisor/ai-results/supervisor-20260927T0030+0900-b35.json"
+    },
     {
       "batch_id": "supervisor-20260927T0000+0900-a24",
       "processed_at": "2026-09-27T00:09:11+09:00",
@@ -2426,7 +2464,7 @@
   ],
   "supervisor_recent": {
     "schema_version": 2,
-    "updated_at": "2026-09-26T23:51:16.093702+09:00",
+    "updated_at": "2026-09-27T01:01:20.715161+09:00",
     "batch_size": 3,
     "sensor_interval_minutes": 10,
     "observations": [
@@ -34023,11 +34061,736 @@
         "signals": [
           "discovery:degraded"
         ]
+      },
+      {
+        "schema_version": 2,
+        "observation_id": "obs-20260927T010120+0900-36253894411-1",
+        "observed_at": "2026-09-27T01:01:20.715161+09:00",
+        "slot_at": "2026-09-27T01:00:00+09:00",
+        "slot_key": "2026-09-27T01:00+0900",
+        "sensor_interval_minutes": 10,
+        "slot_source": "dispatch_input",
+        "slot_start_delay_seconds": 28.18,
+        "slot_delay_seconds": 80.715161,
+        "source": {
+          "repository": "juhwan7/stock-autoresearch",
+          "workflow": "10분 감독 관측 큐",
+          "event_name": "workflow_dispatch",
+          "run_id": "36253894411",
+          "run_attempt": "1",
+          "head_sha": "a8867ae0905dc9b58415b68647cc705e95aee5d7",
+          "ref_name": "main"
+        },
+        "queue": {
+          "batch_size": 3,
+          "pending_before_append": 2,
+          "last_processed_observation_id": "obs-20260926T233103+0900-36248732704-1",
+          "last_processed_slot": "2026-09-26T23:30:00+09:00",
+          "pending_after_append": 3
+        },
+        "validation": {
+          "status": "ok",
+          "compile": "ok",
+          "pytest": "ok",
+          "diff_check": "ok"
+        },
+        "steps": {
+          "toss_fetch": "success",
+          "toss_summary": "success",
+          "health": "success",
+          "dashboard": "success",
+          "market_discovery": "success",
+          "public_batch_market": "success",
+          "market_sensor_repair": "success",
+          "risk_sensor_repair": "success",
+          "regression_refresh": "success"
+        },
+        "health": {
+          "status": "NOTICE",
+          "generated_at": "2026-09-27T01:01:15.210403+09:00",
+          "issues": [
+            {
+              "component": "macro",
+              "code": "unavailable",
+              "severity": "NOTICE",
+              "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+            }
+          ]
+        },
+        "regression": {
+          "status": "COLLECTING",
+          "generated_at": "2026-09-26T16:01:14.591715+00:00",
+          "quarantine_count": 0,
+          "rolled_back_count": 0
+        },
+        "market_discovery": {
+          "generated_at": "2026-09-27T01:00:56.949297+09:00",
+          "item_count": 139,
+          "new_item_count": 19,
+          "topic_counts": {
+            "kr_policy_economy": 20,
+            "kr_diplomacy_summit": 29,
+            "kr_semiconductor_ai": 3,
+            "kr_energy_power": 1,
+            "global_market": 18,
+            "global_diplomacy_summit": 27,
+            "global_energy_middle_east": 1,
+            "us_china_trade_ai": 4,
+            "japan_boj_fx": 4,
+            "dynamic:트럼프": 4,
+            "dynamic:수입규제": 8,
+            "dynamic:멕시코": 2,
+            "dynamic:달러": 10,
+            "dynamic:이란": 6,
+            "dynamic:시진핑": 1,
+            "dynamic:이재명": 1
+          },
+          "trending_terms": [
+            {
+              "term": "대통령",
+              "count": 28,
+              "publisher_count": 19,
+              "independent_story_count_estimate": 28,
+              "syndication_ratio_estimate": 0.0,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 30,
+              "delta": -2,
+              "score": 75,
+              "examples": [
+                "경제협력에 ‘문화의 힘’ 더했다…이 대통령, 멕시코 순방 마무리",
+                "이 대통령, 멕시코 국빈 방문 막바지...'K-컬처' 열기 체감",
+                "이재명 대통령, 멕시코 국빈방문…교역·투자 확대·첨단산업 협력 기반 마련"
+              ]
+            },
+            {
+              "term": "트럼프",
+              "count": 26,
+              "publisher_count": 21,
+              "independent_story_count_estimate": 21,
+              "syndication_ratio_estimate": 0.192,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 29,
+              "delta": -3,
+              "score": 73,
+              "examples": [
+                "이 대통령 순방결산, 트럼프 회담·유엔서 '북미대화 재개' 강조…멕시코와 원유·방산 협력 강화",
+                "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
+                "\"트럼프, 이란의 '7일 계획' 거부\"...\"이란산 원유 유조선 미국으로 이동 중\""
+              ]
+            },
+            {
+              "term": "수입규제",
+              "count": 24,
+              "publisher_count": 19,
+              "independent_story_count_estimate": 13,
+              "syndication_ratio_estimate": 0.458,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 24,
+              "delta": 0,
+              "score": 67,
+              "examples": [
+                "상반기 한국제품 수입규제 241건…지난해 하반기보다 11건↑",
+                "보호무역 확산에 한국 수출품 수입규제 241건‥반년 새 11건 늘어",
+                "한국제품 수입규제 상반기 241건…작년 하반기보다 11건 늘어"
+              ]
+            },
+            {
+              "term": "241건",
+              "count": 21,
+              "publisher_count": 18,
+              "independent_story_count_estimate": 10,
+              "syndication_ratio_estimate": 0.524,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 21,
+              "delta": 0,
+              "score": 60,
+              "examples": [
+                "상반기 한국제품 수입규제 241건…지난해 하반기보다 11건↑",
+                "보호무역 확산에 한국 수출품 수입규제 241건‥반년 새 11건 늘어",
+                "한국제품 수입규제 상반기 241건…작년 하반기보다 11건 늘어"
+              ]
+            },
+            {
+              "term": "이란",
+              "count": 19,
+              "publisher_count": 13,
+              "independent_story_count_estimate": 14,
+              "syndication_ratio_estimate": 0.263,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 17,
+              "delta": 2,
+              "score": 53,
+              "examples": [
+                "\"이란 원유 실은 유조선, 미 해군에 나포돼 본토 입항 임박\"",
+                "[뉴욕마켓워치] 이란, 유화파가 주도권 잡았나…주식↑달러↓채권 혼조",
+                "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란"
+              ]
+            },
+            {
+              "term": "멕시코",
+              "count": 17,
+              "publisher_count": 15,
+              "independent_story_count_estimate": 16,
+              "syndication_ratio_estimate": 0.059,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 18,
+              "delta": -1,
+              "score": 49,
+              "examples": [
+                "경제협력에 ‘문화의 힘’ 더했다…이 대통령, 멕시코 순방 마무리",
+                "이 대통령, 멕시코 국빈 방문 막바지...'K-컬처' 열기 체감",
+                "한·멕시코 정상회담 확대회담 및 오찬"
+              ]
+            },
+            {
+              "term": "달러",
+              "count": 18,
+              "publisher_count": 12,
+              "independent_story_count_estimate": 16,
+              "syndication_ratio_estimate": 0.111,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 19,
+              "delta": -1,
+              "score": 48,
+              "examples": [
+                "애플에 사상 최대 57억 달러 배상 평결…”탭틱은 택션 햅틱 특허 침해”",
+                "Saudi Aramco, 1,000억 달러 가치의 독립 가스 부문 설립 검토",
+                "미중, 300억 달러 관세 인하 합의 및 AI 대화 개시"
+              ]
+            },
+            {
+              "term": "휴전안",
+              "count": 11,
+              "publisher_count": 9,
+              "independent_story_count_estimate": 7,
+              "syndication_ratio_estimate": 0.364,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 0,
+              "delta": 11,
+              "score": 42,
+              "examples": [
+                "트럼프, 이란 ‘7일 휴전안’ 거부…선거 후 폭격 가능성 열어놔",
+                "이란 휴전안 거부하고…‘트럼프 해협’ 띄웠다",
+                "이란 ‘7일 휴전안’ 거부한 트럼프 “선거 끝나면 다시 폭격” [지금뉴스]"
+              ]
+            },
+            {
+              "term": "국빈방문",
+              "count": 11,
+              "publisher_count": 9,
+              "independent_story_count_estimate": 6,
+              "syndication_ratio_estimate": 0.455,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 0,
+              "delta": 11,
+              "score": 42,
+              "examples": [
+                "이재명 대통령, 멕시코 국빈방문…교역·투자 확대·첨단산업 협력 기반 마련",
+                "멕시코 국빈방문 중 'K-팝' 댄스 현장 찾은 李대통령 내외",
+                "이재명 대통령 멕시코 국빈방문…'북미 공급망 교두보' 넓히고 K콘텐츠까지 외연 확장"
+              ]
+            },
+            {
+              "term": "무역",
+              "count": 14,
+              "publisher_count": 12,
+              "independent_story_count_estimate": 8,
+              "syndication_ratio_estimate": 0.429,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 14,
+              "delta": 0,
+              "score": 40,
+              "examples": [
+                "높아지는 세계 무역 장벽…韓 제품 수입규제 상반기 241건",
+                "이재명 대통령·셰인바움 대통령 정상회담 결실···무역·투자부터 AI·우주·국방까지 전방위 공조",
+                "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의"
+              ]
+            },
+            {
+              "term": "시진핑",
+              "count": 15,
+              "publisher_count": 10,
+              "independent_story_count_estimate": 9,
+              "syndication_ratio_estimate": 0.4,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 17,
+              "delta": -2,
+              "score": 40,
+              "examples": [
+                "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의",
+                "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의",
+                "트럼프 “중국도 만족할 것”, 시진핑 “안정 관계 발전”···무역 휴전 2달 연장"
+              ]
+            },
+            {
+              "term": "7일",
+              "count": 12,
+              "publisher_count": 10,
+              "independent_story_count_estimate": 9,
+              "syndication_ratio_estimate": 0.25,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 13,
+              "delta": -1,
+              "score": 34,
+              "examples": [
+                "\"트럼프, 이란의 '7일 계획' 거부\"...\"이란산 원유 유조선 미국으로 이동 중\"",
+                "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란",
+                "트럼프, 이란 ‘7일 휴전안’ 거부…선거 후 폭격 가능성 열어놔"
+              ]
+            },
+            {
+              "term": "트럼프와",
+              "count": 9,
+              "publisher_count": 7,
+              "independent_story_count_estimate": 3,
+              "syndication_ratio_estimate": 0.667,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 0,
+              "delta": 9,
+              "score": 34,
+              "examples": [
+                "유엔서 '한반도 평화' 재천명…트럼프와 깜짝 회담·韓 세일즈 외교 성과",
+                "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의",
+                "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의"
+              ]
+            },
+            {
+              "term": "논의",
+              "count": 12,
+              "publisher_count": 9,
+              "independent_story_count_estimate": 6,
+              "syndication_ratio_estimate": 0.5,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 15,
+              "delta": -3,
+              "score": 33,
+              "examples": [
+                "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
+                "이재명 대통령, 유엔 사무총장 면담…한반도 평화공존·한유엔 협력 논의",
+                "이재명 대통령, 한·호주 정상회담…에너지 공급망·방산 협력 논의"
+              ]
+            },
+            {
+              "term": "이재명",
+              "count": 13,
+              "publisher_count": 6,
+              "independent_story_count_estimate": 13,
+              "syndication_ratio_estimate": 0.0,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 12,
+              "delta": 1,
+              "score": 33,
+              "examples": [
+                "이재명 대통령, 멕시코 국빈방문…교역·투자 확대·첨단산업 협력 기반 마련",
+                "이재명 대통령 멕시코 국빈방문…'북미 공급망 교두보' 넓히고 K콘텐츠까지 외연 확장",
+                "[속보] 이재명 대통령 부부, 멕시코 K팝 팬들과 소통…‘한강 라면’도 시식"
+              ]
+            },
+            {
+              "term": "철강",
+              "count": 8,
+              "publisher_count": 8,
+              "independent_story_count_estimate": 6,
+              "syndication_ratio_estimate": 0.25,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 0,
+              "delta": 8,
+              "score": 32,
+              "examples": [
+                "보호무역 거세지자 한국 수출품 규제 241건…철강·금속에 집중",
+                "상반기 한국산 수입규제 241건…절반이 철강·금속",
+                "韓제품 수입규제 241건으로 늘었다…절반은 철강·금속"
+              ]
+            },
+            {
+              "term": "폭격",
+              "count": 8,
+              "publisher_count": 7,
+              "independent_story_count_estimate": 4,
+              "syndication_ratio_estimate": 0.5,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 0,
+              "delta": 8,
+              "score": 31,
+              "examples": [
+                "트럼프, 이란 ‘7일 휴전안’ 거부…선거 후 폭격 가능성 열어놔",
+                "이란 ‘7일 휴전안’ 거부한 트럼프 “선거 끝나면 다시 폭격” [지금뉴스]",
+                "\"트럼프, 이란 휴전안 거부…폭격 재개 가능성\""
+              ]
+            },
+            {
+              "term": "상반기",
+              "count": 10,
+              "publisher_count": 9,
+              "independent_story_count_estimate": 7,
+              "syndication_ratio_estimate": 0.3,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 10,
+              "delta": 0,
+              "score": 29,
+              "examples": [
+                "상반기 한국제품 수입규제 241건…지난해 하반기보다 11건↑",
+                "한국제품 수입규제 상반기 241건…작년 하반기보다 11건 늘어",
+                "높아지는 세계 무역 장벽…韓 제품 수입규제 상반기 241건"
+              ]
+            },
+            {
+              "term": "AI",
+              "count": 10,
+              "publisher_count": 8,
+              "independent_story_count_estimate": 5,
+              "syndication_ratio_estimate": 0.5,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 12,
+              "delta": -2,
+              "score": 28,
+              "examples": [
+                "이재명 대통령·셰인바움 대통령 정상회담 결실···무역·투자부터 AI·우주·국방까지 전방위 공조",
+                "미중, 300억 달러 관세 인하 합의 및 AI 대화 개시",
+                "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의"
+              ]
+            },
+            {
+              "term": "순방",
+              "count": 7,
+              "publisher_count": 6,
+              "independent_story_count_estimate": 7,
+              "syndication_ratio_estimate": 0.0,
+              "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+              "previous_count": 0,
+              "delta": 7,
+              "score": 27,
+              "examples": [
+                "경제협력에 ‘문화의 힘’ 더했다…이 대통령, 멕시코 순방 마무리",
+                "순방 마친 李대통령, ‘인사·사법·외교’ 시험대 직면",
+                "순방 외교 마무리...대북 정책 '험로' 예고"
+              ]
+            }
+          ],
+          "new_dart_filings": [],
+          "official_web_candidates": [],
+          "toss_market": {
+            "available": true,
+            "captured_at": "2026-09-26T23:25:08.111069+09:00",
+            "top_turnover": [],
+            "minute_burst_leaders": [],
+            "top10_share": null
+          },
+          "sector_selection": {
+            "mode": "dynamic",
+            "fixed_sector_whitelist": false,
+            "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택"
+          },
+          "naver_indices": {
+            "KOSPI": "7,080.92",
+            "KOSDAQ": "844.48",
+            "KOSPI200": "1,126.12"
+          },
+          "source_summary": {
+            "ok_or_partial": 18,
+            "failed": 0,
+            "degraded": 9
+          },
+          "top_new_items": [
+            {
+              "topic": "kr_policy_economy",
+              "title": "보호무역 거세지자 한국 수출품 규제 241건…철강·금속에 집중",
+              "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBqcnFUa3Bld3owSXRSWGZEQVNlblR1bjBNUTNYanVyVHFKQkZpUklleVBISEt6azluQS1xc1UyTGxicjk0cWFueThaTS1lbGZIbXJrSEhkVjQ1YldXeV9fNXpfSkJXQU9QWmtTRjBWNWM?oc=5",
+              "published_at": "Sat, 26 Sep 2026 02:49:39 GMT",
+              "publisher": "산경투데이",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "kr_diplomacy_summit",
+              "title": "멕시코 간 이 대통령 \"한-멕 경제협력 강화해야\"",
+              "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1VMmRHdW0tQ3JwUWpQZHRacmIyb21ES0huOE5sUjI0VlNLQzRlNkIxMV9NMUlZMXBaUE1jV0VrOS1xdzJVaWl4RmZRMngwclZwNHpySG5hY29jUFFzeTJ5SHNwc1VkcV9CS01fM3lIYW02VEl1?oc=5",
+              "published_at": "Sat, 26 Sep 2026 04:19:33 GMT",
+              "publisher": "busan.com",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "kr_diplomacy_summit",
+              "title": "장관 2명 낙마에 비서실장 사의까지… 李, 순방 뒤 ‘인사’ 다시 짠다",
+              "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFBVOVBlN1lzNGMxcjlXSG0wM2NkVTI1ZTFselBRWXcwODBvOGJxR1NlN2RFaF81UWkwYUx6N1E0bjNJY01CM2c?oc=5",
+              "published_at": "Sat, 26 Sep 2026 08:10:02 GMT",
+              "publisher": "v.daum.net",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "kr_semiconductor_ai",
+              "title": "[빅테크칼럼] “AI가 램을 삼켰다”…노트북·스마트폰 덮친 ‘램마겟돈’, 2027년까지 간다",
+              "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5LMGo1bzlzLVpqMDlRR1Raa0pTVVBYME9HQ2k2U09uNkdQd09ua0Rta1pSbi03ckExd3F4TE0tc091MklXN3V6aGhscHk5MW8ybG1LaGUweVN1MWthWUVLag?oc=5",
+              "published_at": "Sat, 26 Sep 2026 01:01:30 GMT",
+              "publisher": "뉴스스페이스",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "global_market",
+              "title": "Saudi Aramco, 1,000억 달러 가치의 독립 가스 부문 설립 검토",
+              "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5nODRlemFYdXdtZVZybTVrTWlrbnlqMUN1b1REMkpHSXBPdXZUbjF3cWVuVjFuZ0J3czVzOUlROHlvRTFzQ1BnSXl0bF9CNU5xTlJGMXhsVGhmNVVSVzZQWWFfdE1zVFQzVUJDWmFYVDc?oc=5",
+              "published_at": "Sat, 26 Sep 2026 15:41:00 GMT",
+              "publisher": "Investing.com 한국어",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "global_market",
+              "title": "\"미군 나포한 이란산 원유 선적 유조선 2척, 몇 주내 美 당도\"",
+              "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1jTG5ubTlERVMxWG42eHBDX1hkV0ZUZlJtVHQ5eVNWT20xLVdFUlBMYVJJN2U3VGR5eXlZMjFvS2tET1JmR0t0WXNuOFVWZHM?oc=5",
+              "published_at": "Sat, 26 Sep 2026 15:50:51 GMT",
+              "publisher": "v.daum.net",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "global_market",
+              "title": "고금리도 못 막았다...금 ‘장기 강세론’ 굳건한 까닭",
+              "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBjUFdsR0gzRjlERVRqd0d3cUEtMUduZ2tDaTZ1ZXJ2X0ZhdmI1VEtRNUNSSTgySkJDR0U2eGVnaXNwZnc2S3dENHVwUHlSc3EyaUtXZQ?oc=5",
+              "published_at": "Sat, 26 Sep 2026 12:03:01 GMT",
+              "publisher": "v.daum.net",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "global_market",
+              "title": "\"이란 원유 실은 유조선, 미 해군에 나포돼 본토 입항 임박\"",
+              "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5wRVBnazJEMDBpX1NKcWdRZGwxWHVyRGwzR0VEZUN0V0pqOF9xVm50SEMzU1E2VXNtS05TVVI2elNYYWtQaEk1dEFxa0R2UDktZUE1cEFVNThsOGfSAWBBVV95cUxQUERuby0zNU96M2NsZEthU0hnLXduODFTem1Jak1uUUtKeE1pZmp0YmliYWRTMEdGUzhOWWh2VTR1NG5JMGhkNGZFMDVPRE9oYUtnM1B1TGRUNmdFenJBejQ?oc=5",
+              "published_at": "Fri, 25 Sep 2026 23:58:47 GMT",
+              "publisher": "연합뉴스",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "global_market",
+              "title": "\"나스닥 신고가인데 신저가 종목 속출…확실한 주도주로 좁혀야\"",
+              "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1HOXdiYU1TbXNXOUNwU0JaTDFwTmxQeV9DdjlsQ1g1alBvVVhJRV9MWHNYRjRnQlpGVHlGZm1Ed05fd1FLTURoZE1tM3FrdE1Fb2JwN0hHWm1GUDBfV0E4NVQ4QWlzQXkxTUpjR3hycURkdk9BdnpibdIBeEFVX3lxTE1HOXdiYU1TbXNXOUNwU0JaTDFwTmxQeV9DdjlsQ1g1alBvVVhJRV9MWHNYRjRnQlpGVHlGZm1Ed05fd1FLTURoZE1tM3FrdE1Fb2JwN0hHWm1GUDBfV0E4NVQ4QWlzQXkxTUpjR3hycURkdk9BdnpibQ?oc=5",
+              "published_at": "Sat, 26 Sep 2026 15:05:00 GMT",
+              "publisher": "뉴시스",
+              "discovery_source": "google_news_rss"
+            },
+            {
+              "topic": "global_diplomacy_summit",
+              "title": "시진핑, 美 국빈방문 마치고 베이징 도착…트럼프와 무역·대만 등 논의 [미·중정상회담]",
+              "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBKMGozQ2JlSjZqWXRPbmxUZFR3enVsSEk4SU5xWGZxc2JBNGRSQU1LU1d0d2tjWXk1bkJ6ZldYdktQczlSZ0pTbWZwT3ZuSk0?oc=5",
+              "published_at": "Sat, 26 Sep 2026 08:29:04 GMT",
+              "publisher": "v.daum.net",
+              "discovery_source": "google_news_rss"
+            }
+          ],
+          "handoff_queries": [
+            "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+            "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+            "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+            "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+            "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "수입규제 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "241건 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "이란 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "멕시코 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "달러 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+            "휴전안 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+          ]
+        },
+        "public_batch_market": {
+          "generated_at": "2026-09-27T01:00:38.040276+09:00",
+          "status": "unavailable",
+          "provider": "naver_public",
+          "exact_1m_bars": false,
+          "elapsed_minutes_from_previous": null,
+          "interval_leaders": [],
+          "one_minute_samples_available": false,
+          "minute_amount_exact": false,
+          "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
+          "minute_sample_ticker_count": 0,
+          "current_top50_count": 0,
+          "tracked_universe_count": 0,
+          "dropped_from_current_top50_count": 0,
+          "tracked_outside_top50_with_samples": 0,
+          "minute_samples_by_ticker": {},
+          "limitations": [
+            "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+            "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
+            "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
+            "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
+            "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+            "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+          ]
+        },
+        "market": {
+          "generated_at": "2026-09-27T01:01:13.321355+09:00",
+          "source_status": "outside_domestic_monitor_window",
+          "provider": "provider_chain",
+          "fallback_used": null,
+          "historical_fallback_available": true
+        },
+        "market_recent_sessions": {
+          "updated_at": "2026-09-26T12:50:00+09:00",
+          "basis": "verified_close",
+          "korea": [
+            {
+              "date": "2026-09-23",
+              "status": "closed",
+              "kospi": {
+                "close": 7080.92,
+                "change_pct": 0.9
+              },
+              "kosdaq": {
+                "close": 844.48,
+                "change_pct": 1.21
+              },
+              "flows_krw_100m": {
+                "foreign": -5047,
+                "institution": 3169,
+                "individual": -14396
+              },
+              "note": "추석 연휴 직전 마지막 거래일",
+              "source": "연합뉴스/Investing.com"
+            },
+            {
+              "date": "2026-09-22",
+              "status": "closed",
+              "kospi": {
+                "close": 7017.91,
+                "change_pct": 0.15
+              },
+              "kosdaq": {
+                "close": 834.38,
+                "change_pct": -0.23
+              },
+              "flows_krw_100m": {
+                "foreign": 850,
+                "institution": -1190,
+                "individual": -16089
+              },
+              "note": "장중 2%대 상승 후 상승폭 축소",
+              "source": "연합뉴스"
+            },
+            {
+              "date": "2026-09-21",
+              "status": "closed",
+              "kospi": {
+                "close": 7007.72,
+                "change_pct": 1.65
+              },
+              "kosdaq": {
+                "close": 836.27,
+                "change_pct": 1.11
+              },
+              "flows_krw_100m": {
+                "foreign": -1603,
+                "institution": 14924,
+                "individual": -29790
+              },
+              "note": "반도체 강세로 7천선 회복",
+              "source": "연합뉴스"
+            }
+          ],
+          "us": [
+            {
+              "date": "2026-09-25",
+              "status": "closed",
+              "sp500": {
+                "close": 7743.41,
+                "change_pct": 0.51
+              },
+              "nasdaq": {
+                "close": 27068.72,
+                "change_pct": 0.48
+              },
+              "dow": {
+                "close": 51828.62,
+                "change_pct": 0.93
+              },
+              "note": "AI 기술주 강세",
+              "source": "Reuters/시장 종가 데이터"
+            },
+            {
+              "date": "2026-09-24",
+              "status": "closed",
+              "sp500": {
+                "close": 7704.13,
+                "change_pct": -0.02
+              },
+              "nasdaq": {
+                "close": 26939.37,
+                "change_pct": 0.01
+              },
+              "dow": {
+                "close": 51349.98,
+                "change_pct": -0.31
+              },
+              "note": "금리·유가 부담 속 혼조",
+              "source": "FRED/시장 종가 데이터"
+            },
+            {
+              "date": "2026-09-23",
+              "status": "closed",
+              "sp500": {
+                "close": 7706.03,
+                "change_pct": -0.75
+              },
+              "nasdaq": {
+                "close": 26936.04,
+                "change_pct": -1.13
+              },
+              "dow": {
+                "close": 51511.59,
+                "change_pct": -0.68
+              },
+              "note": "장기금리 상승으로 위험자산 압박",
+              "source": "FRED/시장 종가 데이터"
+            }
+          ],
+          "holiday_notes": [
+            {
+              "market": "KR",
+              "from": "2026-09-24",
+              "to": "2026-09-27",
+              "reason": "추석 연휴"
+            }
+          ]
+        },
+        "toss": {
+          "available": true,
+          "captured_at": "2026-09-26T23:25:08.111069+09:00",
+          "collector": {
+            "subscription_count": 0,
+            "rejected_count": 0,
+            "last_message_at": null,
+            "last_universe_refresh": "2026-09-26T23:25:08.111069+09:00"
+          }
+        },
+        "user_feedback": {
+          "pending_count": 0,
+          "latest_pending_comment_id": null
+        },
+        "git": {
+          "head_sha": "a8867ae0905dc9b58415b68647cc705e95aee5d7",
+          "latest_commit_changed_files": [
+            "\".github/workflows/\\354\\227\\260\\354\\206\\215\\354\\227\\260\\352\\265\\254\\354\\231\\200\\354\\247\\204\\355\\231\\224.yml\"",
+            "tests/test_sensor_recovery_workflows.py"
+          ]
+        },
+        "previous_workflow_run": {
+          "id": 36253793091,
+          "name": "10분 감독 관측 큐",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "created_at": "2026-09-26T15:58:36Z",
+          "updated_at": "2026-09-26T16:00:24Z",
+          "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36253793091",
+          "head_sha": "a8867ae0905dc9b58415b68647cc705e95aee5d7"
+        },
+        "hypothesis_verification": {
+          "due": []
+        },
+        "signals": [
+          "discovery:degraded",
+          "previous_workflow:cancelled"
+        ]
       }
     ]
   },
   "market_issues": {
-    "updated_at": "2026-09-27T00:09:11+09:00",
+    "updated_at": "2026-09-27T00:35:21+09:00",
     "issues": [
       {
         "issue_id": "middle-east-oil",
@@ -34132,7 +34895,7 @@
   },
   "discovery": {
     "schema_version": 1,
-    "generated_at": "2026-09-26T23:50:56.168910+09:00",
+    "generated_at": "2026-09-27T01:00:56.949297+09:00",
     "purpose": "10분 비AI 시장·뉴스 단서 센서. :00/:30 A/B Supervisor의 탐색 힌트이며 사실 확정 엔진이 아님.",
     "source_status": {
       "google_news:kr_market_broad": {
@@ -34152,12 +34915,12 @@
       },
       "google_news:kr_policy_economy": {
         "status": "ok",
-        "count": 19,
+        "count": 20,
         "auto_repair": null
       },
       "google_news:kr_diplomacy_summit": {
         "status": "ok",
-        "count": 30,
+        "count": 29,
         "auto_repair": null
       },
       "google_news:kr_semiconductor_ai": {
@@ -34182,7 +34945,7 @@
       },
       "google_news:global_market": {
         "status": "ok",
-        "count": 20,
+        "count": 18,
         "auto_repair": null
       },
       "google_news:global_diplomacy_summit": {
@@ -34198,7 +34961,7 @@
       "google_news:global_energy_middle_east": {
         "status": "ok",
         "count": 1,
-        "auto_repair": null
+        "auto_repair": "retry_without_when_filter"
       },
       "google_news:us_china_trade_ai": {
         "status": "ok",
@@ -34207,7 +34970,7 @@
       },
       "google_news:japan_boj_fx": {
         "status": "ok",
-        "count": 3,
+        "count": 4,
         "auto_repair": null
       },
       "google_news:europe_debt_ecb": {
@@ -34227,7 +34990,7 @@
       },
       "google_news:dynamic:트럼프": {
         "status": "ok",
-        "count": 7,
+        "count": 6,
         "term": "트럼프"
       },
       "google_news:dynamic:수입규제": {
@@ -34240,30 +35003,30 @@
         "count": 17,
         "term": "241건"
       },
-      "google_news:dynamic:달러": {
-        "status": "ok",
-        "count": 18,
-        "term": "달러"
-      },
       "google_news:dynamic:멕시코": {
         "status": "ok",
         "count": 6,
         "term": "멕시코"
       },
-      "google_news:dynamic:시진핑": {
+      "google_news:dynamic:달러": {
         "status": "ok",
-        "count": 7,
-        "term": "시진핑"
+        "count": 18,
+        "term": "달러"
       },
       "google_news:dynamic:이란": {
         "status": "ok",
-        "count": 10,
+        "count": 11,
         "term": "이란"
       },
-      "google_news:dynamic:논의": {
+      "google_news:dynamic:시진핑": {
         "status": "ok",
-        "count": 11,
-        "term": "논의"
+        "count": 4,
+        "term": "시진핑"
+      },
+      "google_news:dynamic:이재명": {
+        "status": "ok",
+        "count": 2,
+        "term": "이재명"
       },
       "naver_news_api": {
         "status": "needs_credentials"
@@ -34296,54 +35059,54 @@
       "KOSPI200": "1,126.12"
     },
     "topic_counts": {
-      "kr_policy_economy": 19,
-      "kr_diplomacy_summit": 30,
+      "kr_policy_economy": 20,
+      "kr_diplomacy_summit": 29,
       "kr_semiconductor_ai": 3,
       "kr_energy_power": 1,
-      "global_market": 20,
+      "global_market": 18,
       "global_diplomacy_summit": 27,
       "global_energy_middle_east": 1,
       "us_china_trade_ai": 4,
-      "japan_boj_fx": 3,
+      "japan_boj_fx": 4,
       "dynamic:트럼프": 4,
-      "dynamic:수입규제": 9,
-      "dynamic:달러": 10,
+      "dynamic:수입규제": 8,
       "dynamic:멕시코": 2,
-      "dynamic:시진핑": 2,
-      "dynamic:이란": 5,
-      "dynamic:논의": 5
+      "dynamic:달러": 10,
+      "dynamic:이란": 6,
+      "dynamic:시진핑": 1,
+      "dynamic:이재명": 1
     },
     "trending_terms": [
       {
-        "term": "트럼프",
-        "count": 29,
-        "publisher_count": 24,
-        "independent_story_count_estimate": 24,
-        "syndication_ratio_estimate": 0.172,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 28,
-        "delta": 1,
-        "score": 83,
-        "examples": [
-          "이 대통령 순방결산, 트럼프 회담·유엔서 '북미대화 재개' 강조…멕시코와 원유·방산 협력 강화",
-          "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
-          "\"트럼프, 이란의 '7일 계획' 거부\"...\"이란산 원유 유조선 미국으로 이동 중\""
-        ]
-      },
-      {
         "term": "대통령",
-        "count": 30,
-        "publisher_count": 20,
-        "independent_story_count_estimate": 30,
+        "count": 28,
+        "publisher_count": 19,
+        "independent_story_count_estimate": 28,
         "syndication_ratio_estimate": 0.0,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 29,
-        "delta": 1,
-        "score": 81,
+        "previous_count": 30,
+        "delta": -2,
+        "score": 75,
         "examples": [
           "경제협력에 ‘문화의 힘’ 더했다…이 대통령, 멕시코 순방 마무리",
           "이 대통령, 멕시코 국빈 방문 막바지...'K-컬처' 열기 체감",
           "이재명 대통령, 멕시코 국빈방문…교역·투자 확대·첨단산업 협력 기반 마련"
+        ]
+      },
+      {
+        "term": "트럼프",
+        "count": 26,
+        "publisher_count": 21,
+        "independent_story_count_estimate": 21,
+        "syndication_ratio_estimate": 0.192,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 29,
+        "delta": -3,
+        "score": 73,
+        "examples": [
+          "이 대통령 순방결산, 트럼프 회담·유엔서 '북미대화 재개' 강조…멕시코와 원유·방산 협력 강화",
+          "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
+          "\"트럼프, 이란의 '7일 계획' 거부\"...\"이란산 원유 유조선 미국으로 이동 중\""
         ]
       },
       {
@@ -34379,15 +35142,31 @@
         ]
       },
       {
-        "term": "멕시코",
-        "count": 18,
-        "publisher_count": 15,
-        "independent_story_count_estimate": 17,
-        "syndication_ratio_estimate": 0.056,
+        "term": "이란",
+        "count": 19,
+        "publisher_count": 13,
+        "independent_story_count_estimate": 14,
+        "syndication_ratio_estimate": 0.263,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 17,
-        "delta": 1,
-        "score": 52,
+        "delta": 2,
+        "score": 53,
+        "examples": [
+          "\"이란 원유 실은 유조선, 미 해군에 나포돼 본토 입항 임박\"",
+          "[뉴욕마켓워치] 이란, 유화파가 주도권 잡았나…주식↑달러↓채권 혼조",
+          "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란"
+        ]
+      },
+      {
+        "term": "멕시코",
+        "count": 17,
+        "publisher_count": 15,
+        "independent_story_count_estimate": 16,
+        "syndication_ratio_estimate": 0.059,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 18,
+        "delta": -1,
+        "score": 49,
         "examples": [
           "경제협력에 ‘문화의 힘’ 더했다…이 대통령, 멕시코 순방 마무리",
           "이 대통령, 멕시코 국빈 방문 막바지...'K-컬처' 열기 체감",
@@ -34396,90 +35175,58 @@
       },
       {
         "term": "달러",
-        "count": 19,
-        "publisher_count": 14,
-        "independent_story_count_estimate": 17,
-        "syndication_ratio_estimate": 0.105,
+        "count": 18,
+        "publisher_count": 12,
+        "independent_story_count_estimate": 16,
+        "syndication_ratio_estimate": 0.111,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 19,
-        "delta": 0,
-        "score": 52,
+        "delta": -1,
+        "score": 48,
         "examples": [
           "애플에 사상 최대 57억 달러 배상 평결…”탭틱은 택션 햅틱 특허 침해”",
-          "미국 기업 부채 4조 3천억 달러, 2027년부터 만기 도래",
+          "Saudi Aramco, 1,000억 달러 가치의 독립 가스 부문 설립 검토",
           "미중, 300억 달러 관세 인하 합의 및 AI 대화 개시"
         ]
       },
       {
-        "term": "이란",
-        "count": 17,
-        "publisher_count": 13,
-        "independent_story_count_estimate": 12,
-        "syndication_ratio_estimate": 0.294,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 16,
-        "delta": 1,
-        "score": 48,
-        "examples": [
-          "\"이란 원유 실은 유조선, 미 해군에 나포돼 곧 본토 입항\"",
-          "[뉴욕마켓워치] 이란, 유화파가 주도권 잡았나…주식↑달러↓채권 혼조",
-          "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란"
-        ]
-      },
-      {
-        "term": "시진핑",
-        "count": 17,
-        "publisher_count": 11,
-        "independent_story_count_estimate": 12,
-        "syndication_ratio_estimate": 0.294,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 18,
-        "delta": -1,
-        "score": 45,
-        "examples": [
-          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의",
-          "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의",
-          "\"시진핑, 美 국빈 방문 마치고 귀국…트럼프와 AI·무역 논의\""
-        ]
-      },
-      {
-        "term": "이재명",
-        "count": 12,
-        "publisher_count": 6,
-        "independent_story_count_estimate": 12,
-        "syndication_ratio_estimate": 0.0,
+        "term": "휴전안",
+        "count": 11,
+        "publisher_count": 9,
+        "independent_story_count_estimate": 7,
+        "syndication_ratio_estimate": 0.364,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 0,
-        "delta": 12,
+        "delta": 11,
+        "score": 42,
+        "examples": [
+          "트럼프, 이란 ‘7일 휴전안’ 거부…선거 후 폭격 가능성 열어놔",
+          "이란 휴전안 거부하고…‘트럼프 해협’ 띄웠다",
+          "이란 ‘7일 휴전안’ 거부한 트럼프 “선거 끝나면 다시 폭격” [지금뉴스]"
+        ]
+      },
+      {
+        "term": "국빈방문",
+        "count": 11,
+        "publisher_count": 9,
+        "independent_story_count_estimate": 6,
+        "syndication_ratio_estimate": 0.455,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 0,
+        "delta": 11,
         "score": 42,
         "examples": [
           "이재명 대통령, 멕시코 국빈방문…교역·투자 확대·첨단산업 협력 기반 마련",
-          "[속보] 이재명 대통령 부부, 멕시코 K팝 팬들과 소통…‘한강 라면’도 시식",
+          "멕시코 국빈방문 중 'K-팝' 댄스 현장 찾은 李대통령 내외",
           "이재명 대통령 멕시코 국빈방문…'북미 공급망 교두보' 넓히고 K콘텐츠까지 외연 확장"
-        ]
-      },
-      {
-        "term": "논의",
-        "count": 15,
-        "publisher_count": 11,
-        "independent_story_count_estimate": 10,
-        "syndication_ratio_estimate": 0.333,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 16,
-        "delta": -1,
-        "score": 41,
-        "examples": [
-          "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
-          "이재명 대통령, 유엔 사무총장 면담…한반도 평화공존·한유엔 협력 논의",
-          "이재명 대통령, 한·호주 정상회담…에너지 공급망·방산 협력 논의"
         ]
       },
       {
         "term": "무역",
         "count": 14,
         "publisher_count": 12,
-        "independent_story_count_estimate": 9,
-        "syndication_ratio_estimate": 0.357,
+        "independent_story_count_estimate": 8,
+        "syndication_ratio_estimate": 0.429,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 14,
         "delta": 0,
@@ -34491,15 +35238,31 @@
         ]
       },
       {
+        "term": "시진핑",
+        "count": 15,
+        "publisher_count": 10,
+        "independent_story_count_estimate": 9,
+        "syndication_ratio_estimate": 0.4,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 17,
+        "delta": -2,
+        "score": 40,
+        "examples": [
+          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의",
+          "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의",
+          "트럼프 “중국도 만족할 것”, 시진핑 “안정 관계 발전”···무역 휴전 2달 연장"
+        ]
+      },
+      {
         "term": "7일",
-        "count": 13,
-        "publisher_count": 11,
-        "independent_story_count_estimate": 10,
-        "syndication_ratio_estimate": 0.231,
+        "count": 12,
+        "publisher_count": 10,
+        "independent_story_count_estimate": 9,
+        "syndication_ratio_estimate": 0.25,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 13,
-        "delta": 0,
-        "score": 37,
+        "delta": -1,
+        "score": 34,
         "examples": [
           "\"트럼프, 이란의 '7일 계획' 거부\"...\"이란산 원유 유조선 미국으로 이동 중\"",
           "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란",
@@ -34507,99 +35270,83 @@
         ]
       },
       {
-        "term": "미중",
-        "count": 9,
-        "publisher_count": 9,
-        "independent_story_count_estimate": 9,
-        "syndication_ratio_estimate": 0.0,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 0,
-        "delta": 9,
-        "score": 36,
-        "examples": [
-          "미중, 300억 달러 관세 인하 합의 및 AI 대화 개시",
-          "미중 국빈 만찬 돌입…“좋은 회담” “새 무역 합의 도달”",
-          "미중 정상회담 '전략적 안정' 재확인…AI·무역·안보 평행선 관측"
-        ]
-      },
-      {
-        "term": "제품",
-        "count": 9,
-        "publisher_count": 8,
-        "independent_story_count_estimate": 7,
-        "syndication_ratio_estimate": 0.222,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 0,
-        "delta": 9,
-        "score": 35,
-        "examples": [
-          "한국 제품 수입규제 241건…지난해 하반기보다 11건 증가",
-          "글로벌 보호무역 확산…올해 상반기 韓 제품 수입규제 241건",
-          "[글로벌 통상] 한국 제품 수입규제 241건…보호무역 확산에 철강·화학업계 부담"
-        ]
-      },
-      {
-        "term": "11건",
+        "term": "트럼프와",
         "count": 9,
         "publisher_count": 7,
-        "independent_story_count_estimate": 2,
-        "syndication_ratio_estimate": 0.778,
+        "independent_story_count_estimate": 3,
+        "syndication_ratio_estimate": 0.667,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 0,
         "delta": 9,
         "score": 34,
         "examples": [
-          "상반기 한국제품 수입규제 241건…지난해 하반기보다 11건↑",
-          "보호무역 확산에 한국 수출품 수입규제 241건‥반년 새 11건 늘어",
-          "한국제품 수입규제 상반기 241건…작년 하반기보다 11건 늘어"
+          "유엔서 '한반도 평화' 재천명…트럼프와 깜짝 회담·韓 세일즈 외교 성과",
+          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의",
+          "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의"
         ]
       },
       {
-        "term": "AI",
+        "term": "논의",
         "count": 12,
-        "publisher_count": 8,
-        "independent_story_count_estimate": 7,
-        "syndication_ratio_estimate": 0.417,
+        "publisher_count": 9,
+        "independent_story_count_estimate": 6,
+        "syndication_ratio_estimate": 0.5,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 13,
-        "delta": -1,
+        "previous_count": 15,
+        "delta": -3,
+        "score": 33,
+        "examples": [
+          "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
+          "이재명 대통령, 유엔 사무총장 면담…한반도 평화공존·한유엔 협력 논의",
+          "이재명 대통령, 한·호주 정상회담…에너지 공급망·방산 협력 논의"
+        ]
+      },
+      {
+        "term": "이재명",
+        "count": 13,
+        "publisher_count": 6,
+        "independent_story_count_estimate": 13,
+        "syndication_ratio_estimate": 0.0,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 12,
+        "delta": 1,
+        "score": 33,
+        "examples": [
+          "이재명 대통령, 멕시코 국빈방문…교역·투자 확대·첨단산업 협력 기반 마련",
+          "이재명 대통령 멕시코 국빈방문…'북미 공급망 교두보' 넓히고 K콘텐츠까지 외연 확장",
+          "[속보] 이재명 대통령 부부, 멕시코 K팝 팬들과 소통…‘한강 라면’도 시식"
+        ]
+      },
+      {
+        "term": "철강",
+        "count": 8,
+        "publisher_count": 8,
+        "independent_story_count_estimate": 6,
+        "syndication_ratio_estimate": 0.25,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 0,
+        "delta": 8,
         "score": 32,
         "examples": [
-          "이재명 대통령·셰인바움 대통령 정상회담 결실···무역·투자부터 AI·우주·국방까지 전방위 공조",
-          "미중, 300억 달러 관세 인하 합의 및 AI 대화 개시",
-          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의"
+          "보호무역 거세지자 한국 수출품 규제 241건…철강·금속에 집중",
+          "상반기 한국산 수입규제 241건…절반이 철강·금속",
+          "韓제품 수입규제 241건으로 늘었다…절반은 철강·금속"
         ]
       },
       {
-        "term": "마치고",
+        "term": "폭격",
         "count": 8,
         "publisher_count": 7,
-        "independent_story_count_estimate": 3,
-        "syndication_ratio_estimate": 0.625,
+        "independent_story_count_estimate": 4,
+        "syndication_ratio_estimate": 0.5,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 0,
         "delta": 8,
         "score": 31,
         "examples": [
-          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의",
-          "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의",
-          "\"시진핑, 美 국빈 방문 마치고 귀국…트럼프와 AI·무역 논의\""
-        ]
-      },
-      {
-        "term": "정상회담",
-        "count": 8,
-        "publisher_count": 6,
-        "independent_story_count_estimate": 7,
-        "syndication_ratio_estimate": 0.125,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 0,
-        "delta": 8,
-        "score": 30,
-        "examples": [
-          "한·멕시코 정상회담 확대회담 및 오찬",
-          "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
-          "이재명 대통령, 한·멕시코 확대 정상회담 및 오찬…협력 분야 확대"
+          "트럼프, 이란 ‘7일 휴전안’ 거부…선거 후 폭격 가능성 열어놔",
+          "이란 ‘7일 휴전안’ 거부한 트럼프 “선거 끝나면 다시 폭격” [지금뉴스]",
+          "\"트럼프, 이란 휴전안 거부…폭격 재개 가능성\""
         ]
       },
       {
@@ -34615,23 +35362,39 @@
         "examples": [
           "상반기 한국제품 수입규제 241건…지난해 하반기보다 11건↑",
           "한국제품 수입규제 상반기 241건…작년 하반기보다 11건 늘어",
-          "글로벌 보호무역 확산…올해 상반기 韓 제품 수입규제 241건"
+          "높아지는 세계 무역 장벽…韓 제품 수입규제 상반기 241건"
         ]
       },
       {
-        "term": "거부",
+        "term": "AI",
         "count": 10,
-        "publisher_count": 9,
-        "independent_story_count_estimate": 6,
-        "syndication_ratio_estimate": 0.4,
+        "publisher_count": 8,
+        "independent_story_count_estimate": 5,
+        "syndication_ratio_estimate": 0.5,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 11,
-        "delta": -1,
-        "score": 29,
+        "previous_count": 12,
+        "delta": -2,
+        "score": 28,
         "examples": [
-          "\"트럼프, 이란의 '7일 계획' 거부\"...\"이란산 원유 유조선 미국으로 이동 중\"",
-          "트럼프, 이란 ‘7일 휴전안’ 거부…선거 후 폭격 가능성 열어놔",
-          "\"트럼프, 이란 휴전안 거부…폭격 재개 가능성\""
+          "이재명 대통령·셰인바움 대통령 정상회담 결실···무역·투자부터 AI·우주·국방까지 전방위 공조",
+          "미중, 300억 달러 관세 인하 합의 및 AI 대화 개시",
+          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의"
+        ]
+      },
+      {
+        "term": "순방",
+        "count": 7,
+        "publisher_count": 6,
+        "independent_story_count_estimate": 7,
+        "syndication_ratio_estimate": 0.0,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 0,
+        "delta": 7,
+        "score": 27,
+        "examples": [
+          "경제협력에 ‘문화의 힘’ 더했다…이 대통령, 멕시코 순방 마무리",
+          "순방 마친 李대통령, ‘인사·사법·외교’ 시험대 직면",
+          "순방 외교 마무리...대북 정책 '험로' 예고"
         ]
       }
     ],
@@ -34640,12 +35403,12 @@
     "official_web_candidates": [],
     "public_batch_market": {
       "available": false,
-      "generated_at": "2026-09-26T23:50:41.718612+09:00",
+      "generated_at": "2026-09-27T01:00:38.040276+09:00",
       "status": "unavailable",
       "provider": "naver_public",
       "exact_1m_bars": false,
       "amount_method": "cumulative_trading_value_delta",
-      "elapsed_minutes_from_previous": 10.07730925,
+      "elapsed_minutes_from_previous": null,
       "interval_leaders": [],
       "one_minute_samples_available": false,
       "minute_amount_exact": false,
@@ -34672,65 +35435,161 @@
       "minute_burst_leaders": [],
       "top10_share": null
     },
-    "item_count": 145,
+    "item_count": 139,
     "news_scan_target": 500,
     "query_group_count": 18,
-    "new_item_count": 7,
+    "new_item_count": 19,
     "new_items": [
       {
+        "topic": "kr_policy_economy",
+        "title": "보호무역 거세지자 한국 수출품 규제 241건…철강·금속에 집중",
+        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBqcnFUa3Bld3owSXRSWGZEQVNlblR1bjBNUTNYanVyVHFKQkZpUklleVBISEt6azluQS1xc1UyTGxicjk0cWFueThaTS1lbGZIbXJrSEhkVjQ1YldXeV9fNXpfSkJXQU9QWmtTRjBWNWM?oc=5",
+        "published_at": "Sat, 26 Sep 2026 02:49:39 GMT",
+        "publisher": "산경투데이",
+        "discovery_source": "google_news_rss"
+      },
+      {
         "topic": "kr_diplomacy_summit",
-        "title": "멕시코 '작은서울' 찾은 李대통령…스트레이 키즈 팬들과 하이파이브",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE40clVuczYzUmpaMV83YWtjV3NXdTl2bFloYjdDaHlaMUxuUS1DZUhiSEppTnZlai1KSVozdlE1V1NMNFlIbUdmdzVxVzVLaW8?oc=5",
-        "published_at": "Sat, 26 Sep 2026 01:05:30 GMT",
+        "title": "멕시코 간 이 대통령 \"한-멕 경제협력 강화해야\"",
+        "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1VMmRHdW0tQ3JwUWpQZHRacmIyb21ES0huOE5sUjI0VlNLQzRlNkIxMV9NMUlZMXBaUE1jV0VrOS1xdzJVaWl4RmZRMngwclZwNHpySG5hY29jUFFzeTJ5SHNwc1VkcV9CS01fM3lIYW02VEl1?oc=5",
+        "published_at": "Sat, 26 Sep 2026 04:19:33 GMT",
+        "publisher": "busan.com",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_diplomacy_summit",
+        "title": "장관 2명 낙마에 비서실장 사의까지… 李, 순방 뒤 ‘인사’ 다시 짠다",
+        "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFBVOVBlN1lzNGMxcjlXSG0wM2NkVTI1ZTFselBRWXcwODBvOGJxR1NlN2RFaF81UWkwYUx6N1E0bjNJY01CM2c?oc=5",
+        "published_at": "Sat, 26 Sep 2026 08:10:02 GMT",
+        "publisher": "v.daum.net",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_semiconductor_ai",
+        "title": "[빅테크칼럼] “AI가 램을 삼켰다”…노트북·스마트폰 덮친 ‘램마겟돈’, 2027년까지 간다",
+        "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5LMGo1bzlzLVpqMDlRR1Raa0pTVVBYME9HQ2k2U09uNkdQd09ua0Rta1pSbi03ckExd3F4TE0tc091MklXN3V6aGhscHk5MW8ybG1LaGUweVN1MWthWUVLag?oc=5",
+        "published_at": "Sat, 26 Sep 2026 01:01:30 GMT",
+        "publisher": "뉴스스페이스",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_market",
+        "title": "Saudi Aramco, 1,000억 달러 가치의 독립 가스 부문 설립 검토",
+        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5nODRlemFYdXdtZVZybTVrTWlrbnlqMUN1b1REMkpHSXBPdXZUbjF3cWVuVjFuZ0J3czVzOUlROHlvRTFzQ1BnSXl0bF9CNU5xTlJGMXhsVGhmNVVSVzZQWWFfdE1zVFQzVUJDWmFYVDc?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:41:00 GMT",
+        "publisher": "Investing.com 한국어",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_market",
+        "title": "\"미군 나포한 이란산 원유 선적 유조선 2척, 몇 주내 美 당도\"",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1jTG5ubTlERVMxWG42eHBDX1hkV0ZUZlJtVHQ5eVNWT20xLVdFUlBMYVJJN2U3VGR5eXlZMjFvS2tET1JmR0t0WXNuOFVWZHM?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:50:51 GMT",
         "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "global_market",
-        "title": "금 가격, 높은 금리 속 주간 2.1% 하락",
-        "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPMjZZSHlMSWd0SFVlWTdMTXUyOWRDX21fc210YlNPSGtzNVd0MXI0dzM2VWVsREJrb0xOS3FtakxvMU9EREtRRVdoZU9wQVB1OXFkQW1wY1F4RjBnV29tdDNFRlgtM0UtYlA4ZW1iQzd6VXRuMHpPNTdLM2xDTDRMNm14cy1FeTFoZ21KMlhBckhTTTZsOU11N1VNRWg3MVdjN3F4TEl1d3FJQkowR0I1cWJDbXo3M0hDalMtUTBuQUt5ZkZqSmJUODYyS0YzNlZQbnI3aXhMdDlRb3VFUXVfYVprajFKd0p2TkxRcWx4LXhjR19H?oc=5",
-        "published_at": "Sat, 26 Sep 2026 09:30:00 GMT",
-        "publisher": "idnfinancials.com",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_market",
         "title": "고금리도 못 막았다...금 ‘장기 강세론’ 굳건한 까닭",
-        "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFA1ZE1NeVpZbVpWcGxEbm1ib0Y4a2dXUWFVMkhaUFRUNHY1VGFSdWhmb1k0WmJJd19ybTgtV3Y0T05JY3RQb3c?oc=5",
+        "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBjUFdsR0gzRjlERVRqd0d3cUEtMUduZ2tDaTZ1ZXJ2X0ZhdmI1VEtRNUNSSTgySkJDR0U2eGVnaXNwZnc2S3dENHVwUHlSc3EyaUtXZQ?oc=5",
         "published_at": "Sat, 26 Sep 2026 12:03:01 GMT",
         "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "global_market",
-        "title": "미국 기업 부채 4조 3천억 달러, 2027년부터 만기 도래",
-        "url": "https://news.google.com/rss/articles/CBMiwgJBVV95cUxQM0lqT3NOUnliUmJpa2ExaDMzNC1LenZfZVZKemk2ZDZpVW9wazJ1NHhwM3RZdFd3VnBYaWpCbWtmZ0F3X0h2OV9iaDNGb0o2b2tYMGYzVHB3NmpiMVFOZ3RwLU5kY25FTlRFbzQ5cHdTOEZ3dmEwZGhWWVJxMXgycmpndHE1Q1R1WmpQam5FRFotM3U3OFRKX2xHRVFJN3B6S0t5TnlDZE1BcEhJR1V2amN2VXFieThROVhLRDNVYko5SFBVclBWX3QtbUplaDJFMkQyUk9JSEpUSUlxa3U2WmpxYW9KUno0dVRldFhxTmszUWpNcE5ZUzJDMXFSZ0lWSTJsRUdSdUlBeFpIREpha0Z2TXdhRWxEMktERGcxWktxRjgwZ2M2dFJvZnIwMXItWWlMcnVxdHVRQjRaYzZja0dn?oc=5",
-        "published_at": "Sat, 26 Sep 2026 09:35:00 GMT",
-        "publisher": "idnfinancials.com",
+        "title": "\"이란 원유 실은 유조선, 미 해군에 나포돼 본토 입항 임박\"",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5wRVBnazJEMDBpX1NKcWdRZGwxWHVyRGwzR0VEZUN0V0pqOF9xVm50SEMzU1E2VXNtS05TVVI2elNYYWtQaEk1dEFxa0R2UDktZUE1cEFVNThsOGfSAWBBVV95cUxQUERuby0zNU96M2NsZEthU0hnLXduODFTem1Jak1uUUtKeE1pZmp0YmliYWRTMEdGUzhOWWh2VTR1NG5JMGhkNGZFMDVPRE9oYUtnM1B1TGRUNmdFenJBejQ?oc=5",
+        "published_at": "Fri, 25 Sep 2026 23:58:47 GMT",
+        "publisher": "연합뉴스",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_market",
+        "title": "\"나스닥 신고가인데 신저가 종목 속출…확실한 주도주로 좁혀야\"",
+        "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1HOXdiYU1TbXNXOUNwU0JaTDFwTmxQeV9DdjlsQ1g1alBvVVhJRV9MWHNYRjRnQlpGVHlGZm1Ed05fd1FLTURoZE1tM3FrdE1Fb2JwN0hHWm1GUDBfV0E4NVQ4QWlzQXkxTUpjR3hycURkdk9BdnpibdIBeEFVX3lxTE1HOXdiYU1TbXNXOUNwU0JaTDFwTmxQeV9DdjlsQ1g1alBvVVhJRV9MWHNYRjRnQlpGVHlGZm1Ed05fd1FLTURoZE1tM3FrdE1Fb2JwN0hHWm1GUDBfV0E4NVQ4QWlzQXkxTUpjR3hycURkdk9BdnpibQ?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:05:00 GMT",
+        "publisher": "뉴시스",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "global_diplomacy_summit",
-        "title": "미중 국빈 만찬 돌입…“좋은 회담” “새 무역 합의 도달”",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5Tb1lIMzMzRlI4aVpObXJIR1JudjR5U0NKV19jWnhVQ01lZlNxLU9ZRVpzYXVzeUZkQUl2c09EOExrRXlNa3huZVlLOUdkWnFQTm5HNy0tZFFCc28?oc=5",
-        "published_at": "Sat, 26 Sep 2026 05:43:00 GMT",
-        "publisher": "KBS 뉴스",
+        "title": "시진핑, 美 국빈방문 마치고 베이징 도착…트럼프와 무역·대만 등 논의 [미·중정상회담]",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBKMGozQ2JlSjZqWXRPbmxUZFR3enVsSEk4SU5xWGZxc2JBNGRSQU1LU1d0d2tjWXk1bkJ6ZldYdktQczlSZ0pTbWZwT3ZuSk0?oc=5",
+        "published_at": "Sat, 26 Sep 2026 08:29:04 GMT",
+        "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
       {
-        "topic": "dynamic:트럼프",
-        "title": "트럼프 “이란 ‘7일 계획’ 거절했다”…유가 상승 압박↑",
-        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5FTVlYeTZrOTViVl9FLWxkLTBLQUlYUm5BTklSZzhuNXpNUG51QkVRWkxhVHcwUHd1N0xsUzJCY2tmSzhkQnQ3RU5mMFExYlNj?oc=5",
-        "published_at": "Sat, 26 Sep 2026 14:43:18 GMT",
-        "publisher": "문화일보",
+        "topic": "global_diplomacy_summit",
+        "title": "WSJ \"트럼프, 이란 '7일 휴전안' 거부…11월 중간선거 이후 폭격 재개\" - 머니투데이",
+        "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5VaDJGR0hILTNkWC1jbE80Y1NqU00tQnlLS181YlBYa2lsVVdYaTQxWExXYkx0ZktFRmdsdURvYV8xWWRkQ09nclkxR2tVVlV2dzMxeHRIc3kxZU8xcjVBaDZBN0xMeVFu0gFuQVVfeXFMTXB2MEFPNGJ5OWx3UmdGdkxReWhnRGFtMnh4SUFyb3RjbjB6eGJsN1pTWVV5bDBfbkhqSzRKTUo4ZU8xM2lZb09DeFV3YVl5TllJRmlwa0pIZ0JoWEQ4OGJVaWk0UlNIRHlna0pmclE?oc=5",
+        "published_at": "Sat, 26 Sep 2026 02:41:43 GMT",
+        "publisher": "mt.co.kr",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_diplomacy_summit",
+        "title": "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의",
+        "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1iU0dEcENrWUpKV1VaSnphSWF0SlV1X2ctVXVPWmdQUmVmMHhMOFppaXFaQWFvN3Q5UHp2by1PZDNnNjdwbXREWTU4dXlSeVpsMEhPS0FvSHlQUWhUUlB5VnNn?oc=5",
+        "published_at": "Sat, 26 Sep 2026 08:22:00 GMT",
+        "publisher": "미주중앙일보",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_diplomacy_summit",
+        "title": "공동성명도 기자회견도 없이… 미·중 정상회담 ‘빈손 의전 외교’",
+        "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNZmdaV0JUQ2FyazlYWV9nWTZpWWwxQ1RJSU1iTGlia3hLRXBUWkJKSGg5c0xQclhnX2VHTWtGdWx6T1hOSkR6QjZYVEppbXUwb1I0Yjd5eE4tc0JRLXVodmw2ZmoyaEJ0TExfSHdwbGJHYlBEandHOUcwbXE0d05hTlZLdXBvRDNtT004VW9zS2N3elpXNjNIX0JVdXRJdw?oc=5",
+        "published_at": "Fri, 25 Sep 2026 22:00:40 GMT",
+        "publisher": "조선일보",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "japan_boj_fx",
+        "title": "채권 수익률 상승, 일본 자금의 본국 송환을 막다",
+        "url": "https://news.google.com/rss/articles/CBMixAJBVV95cUxPMFF4cnpmUnh6ZFpJdzZuVXpEQ0VvbHREQ2FfcWcxc21EdHFLUmhuWEN2bzZnaWtKWFdhN3VHZ3ZNWDJwMFBPc09wMWlEVE1NS0lmbGR5T2s4Q0xTUDA1YzljZnFPQzJpeEk4LWlaUTNFdmxHX0JpQnBSbUQ4MUUtWEJwUjYwcFFrYWptVzVSeHNaTzI1T1l0dUtjRFJ4ZTRVX1NxWlBXR1hYNzJIWmV2c25OVnJfdmU1VkgwOU82WG50Vy1rVDFyUEFUX1cyd1ZXRjA0bzVkX3h1S25naFByTDVQckhZRzU4OGhDQnEtYW5haUlfSXVwalFYX0FpUEI3eVJsLWwxSGVWai13bWExQnRyclBJcUt1OTNDUWlhRDJaVXZSN0oySnRFV3ZLZnhfWDJkZHRLTWNXa29tSTlwTmxVNk8?oc=5",
+        "published_at": "Sat, 26 Sep 2026 06:00:00 GMT",
+        "publisher": "IDNFinancials",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "dynamic:달러",
+        "title": "[D-BIZ 암호화폐 뉴스] 바이낸스, 서클에 1억 달러 투자…5년 제휴로 USDC 확대 가속화",
+        "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE42NGljdllCeVBPZ201RDdzN2hPZ3lnTUxORFAtNHVwMF92b2JxUEJhbU0zYmJFbHJXdkxqMTBiOTU2TU5ZWGZRaW5zbTZJWi02aXNJMEhmRHJ4YXRkM0w3bm1iek1rTTI3dzdNMg?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:54:18 GMT",
+        "publisher": "데일리비즈온",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "dynamic:이란",
-        "title": "트럼프 “이란 ‘호르무즈 해협 재개방’ 제안 거절해” - 조선비즈",
-        "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPQTZ4dlNMTTNHaHJXdFZ4QWdKcUt2RkstMDBUSmsydjdqTHRBeXVnSDhqNDhJYmZkWDduRkJGYzlrc0UzeXJ5S2l1YURnd3F3NW8zY1FCdFBuSy1UWjQ1TjBkSi0yVHRnbU1tc2VsSm1LWXljRDZlNkZOYUlZVjNFQ3RRWERqY3BmSE95dnVsMGNrTkQzWEp1eWpjekZ4QdIBsgFBVV95cUxNREtCWlpTMzdLU0x3elFvcTNKSlNBZDlIQXlFWDVLRW00QUFpbW9ZSWt2SGVvNHRRY1B2OTJSX05vSnhscjd5aU1HMEdHNDFqN0ZmTk1JRlk3Z3FuWHhjSGt5cjZFdzRPaEpfWV9pdWw0NTZEMGlBemQwaElUbGNSYklycVhWV1JvRHhmWEJPQ2JaTmFhUWFfTXFJcXdpMy11d1Z4bEJDbVJ1TUx6MDNMY1lR?oc=5",
-        "published_at": "Sat, 26 Sep 2026 14:18:00 GMT",
+        "title": "이라크, 대이란 항공 제재 예외 인정 요구…美와 직접 협상",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9YbURWQmNkZTQtN1pDSGNHbHJWeF92by1iS0RJNUlJQTJpb3NmUG1rRXJ3M3o1UFdsNVMzamYtZVZXWmctcGZhaEpfVS04MkU?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:32:00 GMT",
+        "publisher": "v.daum.net",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "dynamic:이란",
+        "title": "이라크, 미국에 對이란 항공 제재 예외 인정 요구 - 조선비즈",
+        "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNVXVGOWNYclJsNlpqaXZ0T3RXSm4yOElvdjlEMVJSeThmdGFSdXlLM3pwNF9CR0NPN1dmS1JBc1N1VlhUZmhOQXhTMkJHLXhtUzhhUEZ4THNkakN1VTVNbEdtdVh1cFczczNaQkowaVpNWlMxRGhxMDlKM1I0enhPRV9YQVA4Wjkyb0hCcXJiTDhzcV9uWVByQjNMV1RtUdIBsgFBVV95cUxQUTA4a3ZxY241U2lOaHhtWU13SG9Bb2xuanJfbmxUQzFwOVBWRmQ4NnhYMU9xR2wtbTdScDY3YU5jTnFJQklKd2ZPVUJKN3ZQWHFFRS1GVzNMV2VPLThwcVRzNlpkNEx0MjFuaERKcVFwYXdMWlN6YzFicnVRWkRLV0M5cGprX0pMZXd3N180c1Q5WG5hMEkxVGdrVkxCT21sS3EtczlWMEZPLU5YampDSUZn?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:52:00 GMT",
         "publisher": "Chosunbiz",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "dynamic:이란",
+        "title": "'호르무즈 재개방' 협상 이란 외무, 30일까지 뉴욕 체류",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5sbWZycnZ6NnF0ekpxQ2ZCU1l2emtqMzJjTHVEQllfMTJSNkVQcXpCaVd3b3VoZW1mUDdwbkxKekdtdjJlaEFPT2JwbEdVYjctaGlETkQ0czI2UWs?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:47:43 GMT",
+        "publisher": "연합뉴스",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "dynamic:이재명",
+        "title": "이재명 대통령, 대한민국 투자 서밋 참석…“첨단산업 투자 기회 확대”",
+        "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBzOVEzVk1RcVBmaS1pRmZndHNBX2lkcHR0aDRjeWRKYUcxWUJCMHJJaDdzSmNPVGszakJ3dTdtVlM0ay1VcmZfcEpsUW1rR2REMDlYd1VpV29pSGdFVGZKSURybnByZw?oc=5",
+        "published_at": "Sat, 26 Sep 2026 12:15:28 GMT",
+        "publisher": "뉴뉴스",
         "discovery_source": "google_news_rss"
       }
     ],
@@ -34764,7 +35623,7 @@
         "title": "IMCO 위원장 \"EU 규제, 출신국 무관하게 적용\"…韓, IAA '동등 대우' 향방은 [MTN 인터뷰]",
         "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1wWVJFYTJZZHR5MnplYkRhRC0yRnh3NFcycVFvZk4tOWh5VlNnc08tb2tSUWw2b1d0eFVwSlhXUVZsOWo1dWg0dWdPYzRjSDAwMW5HaU54eHN3S0JEWkJIMjZsam4?oc=5",
         "published_at": "Sat, 26 Sep 2026 06:06:37 GMT",
-        "publisher": "MTN 머니투데이방송",
+        "publisher": "news.mtn.co.kr",
         "discovery_source": "google_news_rss"
       },
       {
@@ -34793,42 +35652,10 @@
       },
       {
         "topic": "kr_policy_economy",
-        "title": "보호무역 거세지자 한국 수출품 규제 241건…철강·금속에 집중",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBqcnFUa3Bld3owSXRSWGZEQVNlblR1bjBNUTNYanVyVHFKQkZpUklleVBISEt6azluQS1xc1UyTGxicjk0cWFueThaTS1lbGZIbXJrSEhkVjQ1YldXeV9fNXpfSkJXQU9QWmtTRjBWNWPSAXRBVV95cUxNZ0N6Z2hyaWRnN3hsbHEwYzdwcFBKSTBmTjFGNmJsdEdlX1c5d3lQNGc3NDViRDlJSW9sU24xR2VzVWFHWHhmVHdPLWg1WG1Hb1JqWDhzMUZXQllIdUxwRk1QUFl6bGN2TmVVT004RmhDQVNkVA?oc=5",
-        "published_at": "Sat, 26 Sep 2026 02:49:39 GMT",
-        "publisher": "산경투데이",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "kr_policy_economy",
-        "title": "글로벌 보호무역 확산…올해 상반기 韓 제품 수입규제 241건",
-        "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBVd3Q5Z05wQXQtc2J3T2hZV2ZHSEJGN3Z4LU0zNzRfSGE4eFhNMnFlczNJa2RUUnlxcGpHejBnZFp2U0RhUXRCTHNLTXhzN2FEbml2M0M1cWtYU2Q1ZTFjbVFkbjNDdVhiNmdqRdIBcEFVX3lxTE1Tdk9SZnNXMDd5OHE3UnpvQV9LYXRxZVBMYklkTFJheWM1Wjk3R3hwTjZqaEdySGdtLXctODBERk1YaUZBVlFURTNrbk8weVRPVXZqNF9vVlJFOElHQ1BFY1hYbFRVODFtWjI1WUVWRFM?oc=5",
-        "published_at": "Sat, 26 Sep 2026 03:37:55 GMT",
-        "publisher": "데일리굿뉴스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "kr_policy_economy",
-        "title": "[글로벌 통상] 한국 제품 수입규제 241건…보호무역 확산에 철강·화학업계 부담",
-        "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFByS0dZNzF6WHJsbmRCQlN6N1VUMzlEMVJjZ3FieGlGd1FmSVFqdk0tODFoYkZYUVJ4VHJleDJmb2VsN0VtMmg0elBiaHJULUZ0U0FYd1hOSmI5TFp5Nl9UTGtrMExxWmJNbnlxV1d3?oc=5",
-        "published_at": "Sat, 26 Sep 2026 05:41:45 GMT",
-        "publisher": "코리아포스트 한글판",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "kr_policy_economy",
-        "title": "한국산 제품 무역장벽 높아졌다…상반기 수입규제 241건",
-        "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQcHRmMjZtaXdpRFA1MzFsYV9yRzRjbEVUYTIxZG9iRFgwN2tDd08ycFJqS3RGcDFNLUgxTjdYT0tGcU1fNjk0dVZ2OFdNaWZRZ3BmTEVCYThudi15R2FXenp4YnZPaDIwZUY2eVJTWUN5ck9JZkFHdmF5T3Z5R0xoRQ?oc=5",
-        "published_at": "Sat, 26 Sep 2026 06:24:02 GMT",
-        "publisher": "edaily.co.kr",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "kr_policy_economy",
-        "title": "韓 수출 '비상'…상반기 수입규제 241건, 신규 조사 '폭증' : 경제",
-        "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE40X0N1WDc2MjhZdktzWEFkOTloSjNfU1VWeS1RamRfcVJBQ0Vra0RpWUxucnBhUkJtRlZTUVdLeVk2aU1oRWFCNUZn?oc=5",
-        "published_at": "Sat, 26 Sep 2026 03:14:00 GMT",
-        "publisher": "재경일보",
+        "title": "한국제품 수입규제 상반기 241건…작년 하반기보다 11건 늘어",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5xenF6WnRRR3JPTjlNdENsdFFmRTVmZkNDQ0JqOXRYdXFLY182XzZMNXBYbkwydnZ3U3pCdkxKMTZwTU9vU0M3U0QyWUFkQU0?oc=5",
+        "published_at": "Sat, 26 Sep 2026 02:32:55 GMT",
+        "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
       {
@@ -34837,6 +35664,14 @@
         "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9pVXBZYzlGR0xQS1pIc0UtVWNkWmFsVmVteFp6bDZDaUd0b2RhMG1tS2cxcUlHQndtUlQ2TlVtYkNBSkI3MnpPOGE5MA?oc=5",
         "published_at": "Sat, 26 Sep 2026 10:53:00 GMT",
         "publisher": "v.daum.net",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_policy_economy",
+        "title": "보호무역 거세지자 한국 수출품 규제 241건…철강·금속에 집중",
+        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBqcnFUa3Bld3owSXRSWGZEQVNlblR1bjBNUTNYanVyVHFKQkZpUklleVBISEt6azluQS1xc1UyTGxicjk0cWFueThaTS1lbGZIbXJrSEhkVjQ1YldXeV9fNXpfSkJXQU9QWmtTRjBWNWM?oc=5",
+        "published_at": "Sat, 26 Sep 2026 02:49:39 GMT",
+        "publisher": "산경투데이",
         "discovery_source": "google_news_rss"
       },
       {
@@ -34876,7 +35711,7 @@
         "title": "상반기 한국산 수입규제 241건…절반이 철강·금속",
         "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5BV2h4cnhuaU1PSnpqWDFWT2dIYnFENVZMWEhNbnRldThpZ2pGWVpwVS1GLXJITjlaYmdvTkpYOVZGbUkwMHo4U01FRjY1X200Si05TVd0U24?oc=5",
         "published_at": "Sat, 26 Sep 2026 08:59:33 GMT",
-        "publisher": "더트래커",
+        "publisher": "thetracker.co.kr",
         "discovery_source": "google_news_rss"
       },
       {
@@ -34888,11 +35723,43 @@
         "discovery_source": "google_news_rss"
       },
       {
+        "topic": "kr_policy_economy",
+        "title": "글로벌 보호무역 확산…올해 상반기 韓 제품 수입규제 241건",
+        "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBVd3Q5Z05wQXQtc2J3T2hZV2ZHSEJGN3Z4LU0zNzRfSGE4eFhNMnFlczNJa2RUUnlxcGpHejBnZFp2U0RhUXRCTHNLTXhzN2FEbml2M0M1cWtYU2Q1ZTFjbVFkbjNDdVhiNmdqRdIBcEFVX3lxTE1Tdk9SZnNXMDd5OHE3UnpvQV9LYXRxZVBMYklkTFJheWM1Wjk3R3hwTjZqaEdySGdtLXctODBERk1YaUZBVlFURTNrbk8weVRPVXZqNF9vVlJFOElHQ1BFY1hYbFRVODFtWjI1WUVWRFM?oc=5",
+        "published_at": "Sat, 26 Sep 2026 03:37:55 GMT",
+        "publisher": "데일리굿뉴스",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_policy_economy",
+        "title": "[글로벌 통상] 한국 제품 수입규제 241건…보호무역 확산에 철강·화학업계 부담",
+        "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFByS0dZNzF6WHJsbmRCQlN6N1VUMzlEMVJjZ3FieGlGd1FmSVFqdk0tODFoYkZYUVJ4VHJleDJmb2VsN0VtMmg0elBiaHJULUZ0U0FYd1hOSmI5TFp5Nl9UTGtrMExxWmJNbnlxV1d3?oc=5",
+        "published_at": "Sat, 26 Sep 2026 05:41:45 GMT",
+        "publisher": "코리아포스트 한글판",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_policy_economy",
+        "title": "한국산 제품 무역장벽 높아졌다…상반기 수입규제 241건",
+        "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQcHRmMjZtaXdpRFA1MzFsYV9yRzRjbEVUYTIxZG9iRFgwN2tDd08ycFJqS3RGcDFNLUgxTjdYT0tGcU1fNjk0dVZ2OFdNaWZRZ3BmTEVCYThudi15R2FXenp4YnZPaDIwZUY2eVJTWUN5ck9JZkFHdmF5T3Z5R0xoRQ?oc=5",
+        "published_at": "Sat, 26 Sep 2026 06:24:02 GMT",
+        "publisher": "edaily.co.kr",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_policy_economy",
+        "title": "韓 수출 '비상'…상반기 수입규제 241건, 신규 조사 '폭증' : 경제",
+        "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE40X0N1WDc2MjhZdktzWEFkOTloSjNfU1VWeS1RamRfcVJBQ0Vra0RpWUxucnBhUkJtRlZTUVdLeVk2aU1oRWFCNUZn?oc=5",
+        "published_at": "Sat, 26 Sep 2026 03:14:00 GMT",
+        "publisher": "재경일보",
+        "discovery_source": "google_news_rss"
+      },
+      {
         "topic": "kr_diplomacy_summit",
         "title": "경제협력에 ‘문화의 힘’ 더했다…이 대통령, 멕시코 순방 마무리",
         "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5hY24wQWlIN0ZWNE1LY0lJR0ZGWWx6cXRmclNINTJiWm1WdDMya3p3aWxaTWdIQkpnTVBTSW9STF9aSmN4eUpOSXdqUXhWNmdQcVZQLQ?oc=5",
         "published_at": "Sat, 26 Sep 2026 10:05:00 GMT",
-        "publisher": "news.jtbc.co.kr",
+        "publisher": "JTBC",
         "discovery_source": "google_news_rss"
       },
       {
@@ -34937,18 +35804,18 @@
       },
       {
         "topic": "kr_diplomacy_summit",
-        "title": "[속보] 이재명 대통령 부부, 멕시코 K팝 팬들과 소통…‘한강 라면’도 시식",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE4xajJBdG5RR0tEMVJoSmVzaEtYZUViSlJCQndrZmRBQ0pHQWJvUkJaU21YNkpnR2J3Skd1TjBRWDlRS251TDBPRGJmREthTVFZOUNRYjlmbDBybzA?oc=5",
-        "published_at": "Sat, 26 Sep 2026 10:01:32 GMT",
-        "publisher": "강원일보",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "kr_diplomacy_summit",
         "title": "이재명 대통령 멕시코 국빈방문…'북미 공급망 교두보' 넓히고 K콘텐츠까지 외연 확장",
         "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBXUHgzN0lvd3BhTV9fb3VvX0RKU0ZVWnU2VHpFMHIxYmpzUEdXb0g3dzJFVW94ckdLR2lqQ0h0OVFPTVlLU2ZnSXFRaks1cEZMbmcxTzUyWUhHWTNfMk15Rmp6RzZpNGFWYW5abGZB?oc=5",
         "published_at": "Sat, 26 Sep 2026 09:05:10 GMT",
         "publisher": "미디어인뉴스",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_diplomacy_summit",
+        "title": "[속보] 이재명 대통령 부부, 멕시코 K팝 팬들과 소통…‘한강 라면’도 시식",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE4xajJBdG5RR0tEMVJoSmVzaEtYZUViSlJCQndrZmRBQ0pHQWJvUkJaU21YNkpnR2J3Skd1TjBRWDlRS251TDBPRGJmREthTVFZOUNRYjlmbDBybzA?oc=5",
+        "published_at": "Sat, 26 Sep 2026 10:01:32 GMT",
+        "publisher": "강원일보",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35049,26 +35916,26 @@
       },
       {
         "topic": "kr_diplomacy_summit",
+        "title": "멕시코 간 이 대통령 \"한-멕 경제협력 강화해야\"",
+        "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1VMmRHdW0tQ3JwUWpQZHRacmIyb21ES0huOE5sUjI0VlNLQzRlNkIxMV9NMUlZMXBaUE1jV0VrOS1xdzJVaWl4RmZRMngwclZwNHpySG5hY29jUFFzeTJ5SHNwc1VkcV9CS01fM3lIYW02VEl1?oc=5",
+        "published_at": "Sat, 26 Sep 2026 04:19:33 GMT",
+        "publisher": "busan.com",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_diplomacy_summit",
         "title": "이 대통령, 멕시코 ‘작은 서울’ 찾아 동포와 인사…타코로 점심",
         "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE0tem01WEptSlhldXREMTZsQzBROWxIRk4ya2NFcEtoVmg1RGduQ1BoMkR2NzlwcUJsdktTSE1pVXZ2MUVQR2tDZ2hJMHoybWdxR09HUWJ0QTlGV0FLcGs4TkJLUWNJMnBtVHhN?oc=5",
         "published_at": "Sat, 26 Sep 2026 01:06:00 GMT",
-        "publisher": "한겨레",
+        "publisher": "hani.co.kr",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "kr_diplomacy_summit",
         "title": "장관 2명 낙마에 비서실장 사의까지… 李, 순방 뒤 ‘인사’ 다시 짠다",
-        "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE04Y1lLd2xvOGZsc0xDdmJ2R0VPS3dyd05EWE1jSjR4b0xuYVlXdlJvT3dIWWs4SzM5WHpPNndiNXZDSHdGLU13NUxsbUN2U00xMkRhVA?oc=5",
-        "published_at": "Sat, 26 Sep 2026 08:10:00 GMT",
+        "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFBVOVBlN1lzNGMxcjlXSG0wM2NkVTI1ZTFselBRWXcwODBvOGJxR1NlN2RFaF81UWkwYUx6N1E0bjNJY01CM2c?oc=5",
+        "published_at": "Sat, 26 Sep 2026 08:10:02 GMT",
         "publisher": "v.daum.net",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "kr_diplomacy_summit",
-        "title": "이 대통령, 멕시코 K-엑스포 찾아 국내기업 격려",
-        "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9yR0dwalhiOXlSajUxN3pQX1JXVmJKaDNPc1ZOazlNMVNzMlJiaWU5MDk4aURtQTd6bzJ3dklXMTNldGE5d08tVW1kS3hyem9Bc1p6YXNlWXRGbkVhbktONzVHV09kcGtS?oc=5",
-        "published_at": "Sat, 26 Sep 2026 12:27:54 GMT",
-        "publisher": "OBC 뉴스",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35077,6 +35944,14 @@
         "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1DSURCSG9MRHpXaFpNUDlxYmxWeC1XNUdDaFlhWk9LcFcyZXJjMHZvMUx0OEZTRHJaSnlmeEVTSEkxSUMyMDlsQjhteERpclBnUFZZcFVITWZpQkE?oc=5",
         "published_at": "Sat, 26 Sep 2026 02:29:33 GMT",
         "publisher": "경기일보",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "kr_diplomacy_summit",
+        "title": "이 대통령, 멕시코 K-엑스포 찾아 국내기업 격려",
+        "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9yR0dwalhiOXlSajUxN3pQX1JXVmJKaDNPc1ZOazlNMVNzMlJiaWU5MDk4aURtQTd6bzJ3dklXMTNldGE5d08tVW1kS3hyem9Bc1p6YXNlWXRGbkVhbktONzVHV09kcGtS?oc=5",
+        "published_at": "Sat, 26 Sep 2026 12:27:54 GMT",
+        "publisher": "OBC 뉴스",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35112,22 +35987,6 @@
         "discovery_source": "google_news_rss"
       },
       {
-        "topic": "kr_diplomacy_summit",
-        "title": "멕시코 'K엑스포' 찾은 李대통령…\"관세 얼마나 올랐나\"(종합)",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBCUjdqcWZnYUwybzl1QUVYRm1RRE1jM2RSbDU1S0lXOXpGdXluY1NSdHY0QmwzWFVud1RGVVNxSkdqLUhlbERicHQ4MEhnQUNUVkhSN0V5akFJSWvSAWBBVV95cUxQUG5xVWcwQlRKTk96T1pucHktT1FQSzZyUWotTFVsbkRRcVNiY3RoaHF3Z3QzbE5OUm9BR3htdVdDRWNDYXBjbzQwbHZiS3hLdzhrQnVRdlJ5NjFfdnFveXE?oc=5",
-        "published_at": "Sat, 26 Sep 2026 01:09:36 GMT",
-        "publisher": "연합뉴스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "kr_diplomacy_summit",
-        "title": "멕시코 '작은서울' 찾은 李대통령…스트레이 키즈 팬들과 하이파이브",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE40clVuczYzUmpaMV83YWtjV3NXdTl2bFloYjdDaHlaMUxuUS1DZUhiSEppTnZlai1KSVozdlE1V1NMNFlIbUdmdzVxVzVLaW8?oc=5",
-        "published_at": "Sat, 26 Sep 2026 01:05:30 GMT",
-        "publisher": "v.daum.net",
-        "discovery_source": "google_news_rss"
-      },
-      {
         "topic": "kr_semiconductor_ai",
         "title": "[추석 이후 증시] 황승택 센터장 \"AI인프라 투자 업종 유망. 기존 주도주 중심 대응\"",
         "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE41MmhaQ3d1VWM3NlA3Y2QtUFJxYkZrcnl4bUxwbTlYekE5Y1Vabkt6dDJHR2FhcGxPbEtxR2hLS0RlLUhLclY5SHoxQXJPZFRpb1U0ZWJzclRRVWFFZmdIYWZIeVBkQ3JM?oc=5",
@@ -35138,8 +35997,8 @@
       {
         "topic": "kr_semiconductor_ai",
         "title": "[빅테크칼럼] “AI가 램을 삼켰다”…노트북·스마트폰 덮친 ‘램마겟돈’, 2027년까지 간다",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE96N1AyQWd4VUh4S0ZrRGhRbG03SGZzUXlSMTlXYnV2VXpjQlpHT0NQTGZCeF9TbDZuUEZBTnBhRmJqQmpqby0zOXJPbjNTRHNMN3V1LUdkYWdGRkU?oc=5",
-        "published_at": "Fri, 25 Sep 2026 15:00:56 GMT",
+        "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5LMGo1bzlzLVpqMDlRR1Raa0pTVVBYME9HQ2k2U09uNkdQd09ua0Rta1pSbi03ckExd3F4TE0tc091MklXN3V6aGhscHk5MW8ybG1LaGUweVN1MWthWUVLag?oc=5",
+        "published_at": "Sat, 26 Sep 2026 01:01:30 GMT",
         "publisher": "뉴스스페이스",
         "discovery_source": "google_news_rss"
       },
@@ -35169,6 +36028,22 @@
       },
       {
         "topic": "global_market",
+        "title": "애플에 사상 최대 57억 달러 배상 평결…”탭틱은 택션 햅틱 특허 침해”",
+        "url": "https://news.google.com/rss/articles/CBMi6wJBVV95cUxOS1Z0X2ltS0FOYXZEYmVhZmxDTkFfc3plckVNYzhJcVhIdVFsZmtyQ0tDd0YwaTlOTHoxeDUzNjIxVmsydjdJRjVUWnRUWW9Na1h0UnBscEtrR3o5YjhyOWxwT19hNkFBd25PQXB6UkhNQkdYV2owSEpMc2tUbnltaTlTX0s1QVZSZkpEamo4UVc5SlNJeDRsdnBqaWhLV2l1NXppTVRfM0lCVmNoR1ZsTjJab2lqZENJcHctQnFXMmt1TFNtaE5aNmE2dTNidS1hTGhVQXg5b1RrZlpuQjBMUXcyMFVRSXgzQnlBdXpoOVZNeGM5OHNZaDJXSmFkaXdnQll5LVRZRUVqaTZCeXAxSnZya1JsUkFZS0FaTzU4SkQ3Vm1kalVTTmJlVUVZRDh6Y2xQRk9OclU5UjU1cnJldlpxQm52MG9JWVYtZnVud0ZxTGZ2bTNxOE1ZNDB6cnlWWmxsS2d2alZBMk0?oc=5",
+        "published_at": "Sat, 26 Sep 2026 10:33:29 GMT",
+        "publisher": "ipdaily.co.kr",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_market",
+        "title": "Saudi Aramco, 1,000억 달러 가치의 독립 가스 부문 설립 검토",
+        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5nODRlemFYdXdtZVZybTVrTWlrbnlqMUN1b1REMkpHSXBPdXZUbjF3cWVuVjFuZ0J3czVzOUlROHlvRTFzQ1BnSXl0bF9CNU5xTlJGMXhsVGhmNVVSVzZQWWFfdE1zVFQzVUJDWmFYVDc?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:41:00 GMT",
+        "publisher": "Investing.com 한국어",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_market",
         "title": "“NYSE·나스닥 러브콜 받아도 한국 먼저”…딥엑스, 내년 IPO 준비 검토",
         "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFAwRlZKbVFaTmxlaWdmaXVNUEg1bkVVczFPa0VtSUtGTldSczJ2VnJiYk5LOVU3Q2VtcEZpOUZ2QTNUUEx3MHlVdzBZR3BrY0JVTFE?oc=5",
         "published_at": "Sat, 26 Sep 2026 12:27:35 GMT",
@@ -35177,33 +36052,9 @@
       },
       {
         "topic": "global_market",
-        "title": "금 가격, 높은 금리 속 주간 2.1% 하락",
-        "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPMjZZSHlMSWd0SFVlWTdMTXUyOWRDX21fc210YlNPSGtzNVd0MXI0dzM2VWVsREJrb0xOS3FtakxvMU9EREtRRVdoZU9wQVB1OXFkQW1wY1F4RjBnV29tdDNFRlgtM0UtYlA4ZW1iQzd6VXRuMHpPNTdLM2xDTDRMNm14cy1FeTFoZ21KMlhBckhTTTZsOU11N1VNRWg3MVdjN3F4TEl1d3FJQkowR0I1cWJDbXo3M0hDalMtUTBuQUt5ZkZqSmJUODYyS0YzNlZQbnI3aXhMdDlRb3VFUXVfYVprajFKd0p2TkxRcWx4LXhjR19H?oc=5",
-        "published_at": "Sat, 26 Sep 2026 09:30:00 GMT",
-        "publisher": "idnfinancials.com",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_market",
-        "title": "비트코인 84,000달러 선 유지, 채권 수익률 상승이 규제 진전 효과 상쇄",
-        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE0yWEpYX2ljRi1RUnk0aG5lUE5QaE1oaEZjV1hfNmdWTU82QnF6cUNPWEoxUDJkSmM2MkVGdENqSEFIdUtIYlRtb2hNaWhfZ2szRkJzVXlCMVdkZkJCQUtRNk9Bblk4MG9YUE5yanhTZXJKdjQ?oc=5",
-        "published_at": "Sat, 26 Sep 2026 04:54:00 GMT",
-        "publisher": "Investing.com 한국어",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_market",
-        "title": "애플에 사상 최대 57억 달러 배상 평결…”탭틱은 택션 햅틱 특허 침해”",
-        "url": "https://news.google.com/rss/articles/CBMi6wJBVV95cUxOS1Z0X2ltS0FOYXZEYmVhZmxDTkFfc3plckVNYzhJcVhIdVFsZmtyQ0tDd0YwaTlOTHoxeDUzNjIxVmsydjdJRjVUWnRUWW9Na1h0UnBscEtrR3o5YjhyOWxwT19hNkFBd25PQXB6UkhNQkdYV2owSEpMc2tUbnltaTlTX0s1QVZSZkpEamo4UVc5SlNJeDRsdnBqaWhLV2l1NXppTVRfM0lCVmNoR1ZsTjJab2lqZENJcHctQnFXMmt1TFNtaE5aNmE2dTNidS1hTGhVQXg5b1RrZlpuQjBMUXcyMFVRSXgzQnlBdXpoOVZNeGM5OHNZaDJXSmFkaXdnQll5LVRZRUVqaTZCeXAxSnZya1JsUkFZS0FaTzU4SkQ3Vm1kalVTTmJlVUVZRDh6Y2xQRk9OclU5UjU1cnJldlpxQm52MG9JWVYtZnVud0ZxTGZ2bTNxOE1ZNDB6cnlWWmxsS2d2alZBMk0?oc=5",
-        "published_at": "Sat, 26 Sep 2026 10:33:29 GMT",
-        "publisher": "IPDaily",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_market",
-        "title": "고금리도 못 막았다...금 ‘장기 강세론’ 굳건한 까닭",
-        "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFA1ZE1NeVpZbVpWcGxEbm1ib0Y4a2dXUWFVMkhaUFRUNHY1VGFSdWhmb1k0WmJJd19ybTgtV3Y0T05JY3RQb3c?oc=5",
-        "published_at": "Sat, 26 Sep 2026 12:03:01 GMT",
+        "title": "\"미군 나포한 이란산 원유 선적 유조선 2척, 몇 주내 美 당도\"",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1jTG5ubTlERVMxWG42eHBDX1hkV0ZUZlJtVHQ5eVNWT20xLVdFUlBMYVJJN2U3VGR5eXlZMjFvS2tET1JmR0t0WXNuOFVWZHM?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:50:51 GMT",
         "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
@@ -35217,10 +36068,18 @@
       },
       {
         "topic": "global_market",
-        "title": "미국 기업 부채 4조 3천억 달러, 2027년부터 만기 도래",
-        "url": "https://news.google.com/rss/articles/CBMiwgJBVV95cUxQM0lqT3NOUnliUmJpa2ExaDMzNC1LenZfZVZKemk2ZDZpVW9wazJ1NHhwM3RZdFd3VnBYaWpCbWtmZ0F3X0h2OV9iaDNGb0o2b2tYMGYzVHB3NmpiMVFOZ3RwLU5kY25FTlRFbzQ5cHdTOEZ3dmEwZGhWWVJxMXgycmpndHE1Q1R1WmpQam5FRFotM3U3OFRKX2xHRVFJN3B6S0t5TnlDZE1BcEhJR1V2amN2VXFieThROVhLRDNVYko5SFBVclBWX3QtbUplaDJFMkQyUk9JSEpUSUlxa3U2WmpxYW9KUno0dVRldFhxTmszUWpNcE5ZUzJDMXFSZ0lWSTJsRUdSdUlBeFpIREpha0Z2TXdhRWxEMktERGcxWktxRjgwZ2M2dFJvZnIwMXItWWlMcnVxdHVRQjRaYzZja0dn?oc=5",
-        "published_at": "Sat, 26 Sep 2026 09:35:00 GMT",
-        "publisher": "idnfinancials.com",
+        "title": "비트코인 84,000달러 선 유지, 채권 수익률 상승이 규제 진전 효과 상쇄",
+        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE0yWEpYX2ljRi1RUnk0aG5lUE5QaE1oaEZjV1hfNmdWTU82QnF6cUNPWEoxUDJkSmM2MkVGdENqSEFIdUtIYlRtb2hNaWhfZ2szRkJzVXlCMVdkZkJCQUtRNk9Bblk4MG9YUE5yanhTZXJKdjQ?oc=5",
+        "published_at": "Sat, 26 Sep 2026 04:54:00 GMT",
+        "publisher": "Investing.com 한국어",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_market",
+        "title": "고금리도 못 막았다...금 ‘장기 강세론’ 굳건한 까닭",
+        "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBjUFdsR0gzRjlERVRqd0d3cUEtMUduZ2tDaTZ1ZXJ2X0ZhdmI1VEtRNUNSSTgySkJDR0U2eGVnaXNwZnc2S3dENHVwUHlSc3EyaUtXZQ?oc=5",
+        "published_at": "Sat, 26 Sep 2026 12:03:01 GMT",
+        "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35249,6 +36108,14 @@
       },
       {
         "topic": "global_market",
+        "title": "\"이란 원유 실은 유조선, 미 해군에 나포돼 본토 입항 임박\"",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5wRVBnazJEMDBpX1NKcWdRZGwxWHVyRGwzR0VEZUN0V0pqOF9xVm50SEMzU1E2VXNtS05TVVI2elNYYWtQaEk1dEFxa0R2UDktZUE1cEFVNThsOGfSAWBBVV95cUxQUERuby0zNU96M2NsZEthU0hnLXduODFTem1Jak1uUUtKeE1pZmp0YmliYWRTMEdGUzhOWWh2VTR1NG5JMGhkNGZFMDVPRE9oYUtnM1B1TGRUNmdFenJBejQ?oc=5",
+        "published_at": "Fri, 25 Sep 2026 23:58:47 GMT",
+        "publisher": "연합뉴스",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_market",
         "title": "\"난 S&P500, 넌 테슬라?\"…세대별 '주식모으기' 살펴보니",
         "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBsaDhFMEZrRWdQbm5fdkpVTERSVE1ZaHlfVllheDZGSGtXd1ZIbzFOdDdfTmxfbWZEOUxYRkZrSkdTRTJxdm9nVHF6N0VFbjdaUGxTVk1qZ05HdFdCeGlRTU9DWEVUQS1lZlE?oc=5",
         "published_at": "Fri, 25 Sep 2026 23:00:03 GMT",
@@ -35257,10 +36124,10 @@
       },
       {
         "topic": "global_market",
-        "title": "\"이란 원유 실은 유조선, 미 해군에 나포돼 곧 본토 입항\"",
-        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBBWXRCYWFJMFhpOTcwUWRoRDVsczRneDVRdy1yb1Boa3kyNU1HVHluVE9PcnA4RHNYNEl0Nnp2N3dhbm5BWThPWUwxa0VGVDg0dWVmVFRCRDFDVkYtZWJIazBnNnIzdHM?oc=5",
-        "published_at": "Sat, 26 Sep 2026 00:41:00 GMT",
-        "publisher": "연합뉴스TV",
+        "title": "\"나스닥 신고가인데 신저가 종목 속출…확실한 주도주로 좁혀야\"",
+        "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1HOXdiYU1TbXNXOUNwU0JaTDFwTmxQeV9DdjlsQ1g1alBvVVhJRV9MWHNYRjRnQlpGVHlGZm1Ed05fd1FLTURoZE1tM3FrdE1Fb2JwN0hHWm1GUDBfV0E4NVQ4QWlzQXkxTUpjR3hycURkdk9BdnpibdIBeEFVX3lxTE1HOXdiYU1TbXNXOUNwU0JaTDFwTmxQeV9DdjlsQ1g1alBvVVhJRV9MWHNYRjRnQlpGVHlGZm1Ed05fd1FLTURoZE1tM3FrdE1Fb2JwN0hHWm1GUDBfV0E4NVQ4QWlzQXkxTUpjR3hycURkdk9BdnpibQ?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:05:00 GMT",
+        "publisher": "뉴시스",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35273,22 +36140,6 @@
       },
       {
         "topic": "global_market",
-        "title": "YYForce, 2026년 상반기 실적 발표…매출 26.8% 증가한 3,270만 달러 기록",
-        "url": "https://news.google.com/rss/articles/CBMi_AJBVV95cUxQbU41cGRGb0ZEM3h0RzJrZEwxaHhsWVhpMUpaNXpjWlpSNTl3RXpYcWd6MzNHLW5wR00wQlRhbk9HakpyNGdrY3BGVVFOVXgtNEFBU2JseXp2al9JV1pnT28yNFZubzJ2dkZ5YmdJbEFaV0xxaGl3LXhnNDlWa3RpdHhWRGVSTnV3LS1pM0YxNVdqOUVHcjYwWXk5VjdpTzBZRG90ekpYTTNZWWJHemFZWmRxQXRjeG11N29BQUc4a0hCbGVCTUZqUHRJYVF4enQ2WGZlZGswWXMyUVNheGRmZUp3Y3VBV2J1TDM5b3FlZWh1OVlVQWxVOEVkR2RrWU5Za1FCWEFQTHIzakU4S2lpQ2pGbHZwczc3NWNjb1ktVmdsMFNiQk5jcDAyOE5EdlBWMlI1Rko0UWxnaFZUU043WEc2bHVVbVNUZWJERGtSYU5iTWNZTWxCdzJtdWhUOURJZzhHdU1rQjZsY09tNDVqbWVsS3l0blJLWTlXMA?oc=5",
-        "published_at": "Sat, 26 Sep 2026 11:10:24 GMT",
-        "publisher": "GlobeNewswire",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_market",
-        "title": "오늘 금가격(금값) 폭락... “금시세 추락은 19년 만에 최고치 찍은 '이것' 때문”",
-        "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9Rbmd2ejZ1a3Rrem5jMFZReE9UNlA5UTM0UllidTE5Q0xBcEhGZ285VnBBUkJBVzRWcnBPaHNjV0VxbHhUbDNWa1IzSFpSVHppUVJrQUNn?oc=5",
-        "published_at": "Sat, 26 Sep 2026 05:32:00 GMT",
-        "publisher": "wikitree.co.kr",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_market",
         "title": "[뉴욕마켓워치] 이란, 유화파가 주도권 잡았나…주식↑달러↓채권 혼조",
         "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE00c0doeEVNMGltTlc5ZldJT2dLV012Wmpjb2NjdWlZeVZXU2RaTlF0RWwyV1FZeThvZTBtM3JabGVrS0ZpaVRNMldlcC1CVlJqdmlnaXlzUmFETmRlU3NFZ3BSXzZNdUJGbjJKbGpkWEg?oc=5",
         "published_at": "Fri, 25 Sep 2026 23:20:00 GMT",
@@ -35297,26 +36148,18 @@
       },
       {
         "topic": "global_market",
-        "title": "블룸버그 \"이란산 원유 운반 유조선, 미 해군에 나포돼 미국으로 향해\"",
-        "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE0wdDQzMnVWY0pOY2JiSXgtQ0t0bm96a3RTV2VCaXJkLV8wSEZBWGl5b3gzckRrSExGaVB6WHdNMjRFaGZQY1ZGdDctZkU?oc=5",
-        "published_at": "Sat, 26 Sep 2026 01:12:45 GMT",
-        "publisher": "대구MBC",
+        "title": "오늘 금가격(금값) 폭락... “금시세 추락은 19년 만에 최고치 찍은 '이것' 때문”",
+        "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9Rbmd2ejZ1a3Rrem5jMFZReE9UNlA5UTM0UllidTE5Q0xBcEhGZ285VnBBUkJBVzRWcnBPaHNjV0VxbHhUbDNWa1IzSFpSVHppUVJrQUNn?oc=5",
+        "published_at": "Sat, 26 Sep 2026 05:32:00 GMT",
+        "publisher": "위키트리",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "global_market",
-        "title": "[논평] 대미투자 2,000 억 달러, 미국의 시간표가 아니라 대한민국의 시간표로",
-        "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTE1LVG9xcTFSajQ3empDTmNOVk1JVVZ0ckptRWtMWmZ4UjF1WmRTc1ZrdHFfXzk0TDRLQ1drQ01HSE1zTUd2?oc=5",
-        "published_at": "Sat, 26 Sep 2026 11:58:00 GMT",
-        "publisher": "다경뉴스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_market",
-        "title": "S&P500·나스닥…美 대표지수 ETF로 몰리는 자금",
-        "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBKeHYxMEE4MkxGY210SUR2elhTSzdRVXJSemFPV0JLelZTT2tDbllveFRmZUJVTG5wTFlCSjZpRjhLNUNDZHBGc0ZjcXJReFNsVHJraGhiVWlqMTROSU5fVXVCSGVOWHU2?oc=5",
-        "published_at": "Sat, 26 Sep 2026 02:29:03 GMT",
-        "publisher": "ebn.co.kr",
+        "title": "YYForce, 2026년 상반기 실적 발표…매출 26.8% 증가한 3,270만 달러 기록",
+        "url": "https://news.google.com/rss/articles/CBMi_AJBVV95cUxQbU41cGRGb0ZEM3h0RzJrZEwxaHhsWVhpMUpaNXpjWlpSNTl3RXpYcWd6MzNHLW5wR00wQlRhbk9HakpyNGdrY3BGVVFOVXgtNEFBU2JseXp2al9JV1pnT28yNFZubzJ2dkZ5YmdJbEFaV0xxaGl3LXhnNDlWa3RpdHhWRGVSTnV3LS1pM0YxNVdqOUVHcjYwWXk5VjdpTzBZRG90ekpYTTNZWWJHemFZWmRxQXRjeG11N29BQUc4a0hCbGVCTUZqUHRJYVF4enQ2WGZlZGswWXMyUVNheGRmZUp3Y3VBV2J1TDM5b3FlZWh1OVlVQWxVOEVkR2RrWU5Za1FCWEFQTHIzakU4S2lpQ2pGbHZwczc3NWNjb1ktVmdsMFNiQk5jcDAyOE5EdlBWMlI1Rko0UWxnaFZUU043WEc2bHVVbVNUZWJERGtSYU5iTWNZTWxCdzJtdWhUOURJZzhHdU1rQjZsY09tNDVqbWVsS3l0blJLWTlXMA?oc=5",
+        "published_at": "Sat, 26 Sep 2026 11:10:24 GMT",
+        "publisher": "GlobeNewswire",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35340,7 +36183,7 @@
         "title": "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란",
         "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1fdlJSdmtEbDdqWHJLMkQ1S1p2SFJxamN0WFA5TXVwendVeEhfR3U0OE9rQ0I2bUFCZS1VM1Vocldrd3pOMlVMbUVLM1p6Z0dkZ29oVg?oc=5",
         "published_at": "Sat, 26 Sep 2026 09:50:00 GMT",
-        "publisher": "news.jtbc.co.kr",
+        "publisher": "JTBC",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35348,7 +36191,7 @@
         "title": "트럼프, 이란 ‘7일 휴전안’ 거부…선거 후 폭격 가능성 열어놔",
         "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9KZ1JZTldVdmZFTkQ2SmIwNmtrQl9haVBtRmhsQWNCbUtTXzFVbjB1N2lSZzIydnAzZGhZdFNaQTZaV3ZfRzRxSmZncjBUNUZ0NGJqRllGX1dUbGRSN3dhcllXbVJmQXdHejVzR1FuaEZCMGs?oc=5",
         "published_at": "Sat, 26 Sep 2026 02:58:00 GMT",
-        "publisher": "한겨레",
+        "publisher": "hani.co.kr",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35361,18 +36204,18 @@
       },
       {
         "topic": "global_diplomacy_summit",
-        "title": "\"시진핑, 美 국빈 방문 마치고 귀국…트럼프와 AI·무역 논의\"",
-        "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE8yQ1hiVW11MGg4Xy13TWM2U2stZVJkZFVtUUFwckVkaW85YWw4TDBJUV9SamdMeTEzOFAteEx5d1MwMldRaWRzaTJ3SDd4LWxrODZsOWs3cEtQR3VaTFHSAWNBVV95cUxPZVdjUDhLckwzVnJDQzJ1cm93UkJyRkROQlZVMDFaeVNwTEN2VjBZU0I1XzgxdWp6M0F2UTdsM2psVFFFVloyU2lfcGp5cXJQb2Y1b1BzaGxuQmU4akpVZEhMVVE?oc=5",
-        "published_at": "Sat, 26 Sep 2026 09:21:01 GMT",
-        "publisher": "뉴스1",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_diplomacy_summit",
         "title": "트럼프 “중국도 만족할 것”, 시진핑 “안정 관계 발전”···무역 휴전 2달 연장",
         "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5JbjVscEs2Z3FBVUZGbE81bVU3eU9oSUFCN0lyNzBXRC02aGtMSHcyWEhuQTVRX1o3UDdReEZIek5FX2RHQWVPem9kMHNQMl92V0xYS09nSVBPd9IBX0FVX3lxTE1pRXZ2aGNYblY3MTQzcHFldU9nNTBWd0RyUnlJN2VTTWNOSnRVWEVJdU81UGt0ZUtUcFU0QWN5dGRWUTF6eGROQUlZNWRDWDd1eWlhR29qYXYzLTI3MDVz?oc=5",
         "published_at": "Sat, 26 Sep 2026 00:35:00 GMT",
         "publisher": "경향신문",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_diplomacy_summit",
+        "title": "\"시진핑, 美 국빈 방문 마치고 귀국…트럼프와 AI·무역 논의\"",
+        "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE8yQ1hiVW11MGg4Xy13TWM2U2stZVJkZFVtUUFwckVkaW85YWw4TDBJUV9SamdMeTEzOFAteEx5d1MwMldRaWRzaTJ3SDd4LWxrODZsOWs3cEtQR3VaTFHSAWNBVV95cUxPZVdjUDhLckwzVnJDQzJ1cm93UkJyRkROQlZVMDFaeVNwTEN2VjBZU0I1XzgxdWp6M0F2UTdsM2psVFFFVloyU2lfcGp5cXJQb2Y1b1BzaGxuQmU4akpVZEhMVVE?oc=5",
+        "published_at": "Sat, 26 Sep 2026 09:21:01 GMT",
+        "publisher": "뉴스1",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35433,10 +36276,10 @@
       },
       {
         "topic": "global_diplomacy_summit",
-        "title": "시진핑, 美 국빈방문 마치고 베이징 도착…트럼프와 무역·대만 논의",
-        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9LNUx2Nm91NXl3TW1tbWI1QUVwY1BzdHZ3ZVhZV1pEUklYWjNKWmxKVHd6dkFDM182d2lVVlNiT1FMbC1vRHEzRGNTVlVobG5FS2pZQmJ5cFpXd0dQSTcyUGxUaXdKX1JwMWUycVd1QTNmRjDSAXNBVV95cUxPSzVMdjZvdTV5d01tbW1iNUFFcGNQc3R2d2VYWVdaRFJJWFozSlpsSlR3enZBQzNfNndpVVZTYk9RTGwtb0RxM0RjU1ZVaGxuRUtqWUJieXBaV3dHUEk3MlBsVGl3Sl9ScDFlMnFXdUEzZkYw?oc=5",
-        "published_at": "Sat, 26 Sep 2026 08:47:35 GMT",
-        "publisher": "대전일보",
+        "title": "시진핑, 美 국빈방문 마치고 베이징 도착…트럼프와 무역·대만 등 논의 [미·중정상회담]",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBKMGozQ2JlSjZqWXRPbmxUZFR3enVsSEk4SU5xWGZxc2JBNGRSQU1LU1d0d2tjWXk1bkJ6ZldYdktQczlSZ0pTbWZwT3ZuSk0?oc=5",
+        "published_at": "Sat, 26 Sep 2026 08:29:04 GMT",
+        "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35457,9 +36300,25 @@
       },
       {
         "topic": "global_diplomacy_summit",
+        "title": "시진핑, 美 국빈방문 마치고 베이징 도착…트럼프와 무역·대만 논의",
+        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9LNUx2Nm91NXl3TW1tbWI1QUVwY1BzdHZ3ZVhZV1pEUklYWjNKWmxKVHd6dkFDM182d2lVVlNiT1FMbC1vRHEzRGNTVlVobG5FS2pZQmJ5cFpXd0dQSTcyUGxUaXdKX1JwMWUycVd1QTNmRjDSAXNBVV95cUxPSzVMdjZvdTV5d01tbW1iNUFFcGNQc3R2d2VYWVdaRFJJWFozSlpsSlR3enZBQzNfNndpVVZTYk9RTGwtb0RxM0RjU1ZVaGxuRUtqWUJieXBaV3dHUEk3MlBsVGl3Sl9ScDFlMnFXdUEzZkYw?oc=5",
+        "published_at": "Sat, 26 Sep 2026 08:47:35 GMT",
+        "publisher": "대전일보",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_diplomacy_summit",
         "title": "트럼프·시진핑 2박 3일 회담 마무리…28일 무역협상 성적표 공개",
         "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFB5cnRNeUVNTkxhaENFa0Q3V1BJUUd3Z0dVTHk3SDFyaWVVYWNRNWhsMWY3M2RHN3h1ckctZzhCdXhPdFI0WXFkNGhoZw?oc=5",
         "published_at": "Sat, 26 Sep 2026 04:52:00 GMT",
+        "publisher": "v.daum.net",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "global_diplomacy_summit",
+        "title": "미중 정상회담 '전략적 안정' 재확인…AI·무역·안보 평행선 관측",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1VbnpfWm1JNDNCTHlQQUZwMGdWSUZZTzFndFRtVHNYVkNHcDF0TWRud3VhaUpQSk1OSFp1OUxETXN6SWxMMHN5TDhsNUdYeGc?oc=5",
+        "published_at": "Sat, 26 Sep 2026 00:03:01 GMT",
         "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
@@ -35473,26 +36332,18 @@
       },
       {
         "topic": "global_diplomacy_summit",
-        "title": "미중 정상회담 '전략적 안정' 재확인…AI·무역·안보 평행선 관측",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1VbnpfWm1JNDNCTHlQQUZwMGdWSUZZTzFndFRtVHNYVkNHcDF0TWRud3VhaUpQSk1OSFp1OUxETXN6SWxMMHN5TDhsNUdYeGc?oc=5",
-        "published_at": "Sat, 26 Sep 2026 00:03:01 GMT",
-        "publisher": "v.daum.net",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_diplomacy_summit",
         "title": "[미중 정상회담] 백악관 “미중, 300억 달러 규모 상품 관세우대 합의… ‘초지능’ 대화채널 구축”",
         "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5PMktaT29tYkNTb2dfaUhIUG9OZl9pMWdidDYzYjY3a2E2SlJJak4xc016WTRfWW1NT2pBbmRHekY2WTdhZmdBU2ZNNkhFOThoQ3hPWVhVRmxvUlpURlgzc2V2MEZjVHI1d3c?oc=5",
         "published_at": "Sat, 26 Sep 2026 06:31:03 GMT",
-        "publisher": "newscj.com",
+        "publisher": "천지일보",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "global_diplomacy_summit",
-        "title": "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란",
-        "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5makYya2FWRXFJSkxFMjEzcnRzLXIxN2lxYTNySGhFRWxBenhMRzRJX0VrUjhBYUU2SnpZaUVMbS1ENHBfTkd2bnlFRG9sOXUwV0E?oc=5",
-        "published_at": "Sat, 26 Sep 2026 11:06:06 GMT",
-        "publisher": "news.jtbc.co.kr",
+        "title": "WSJ \"트럼프, 이란 '7일 휴전안' 거부…11월 중간선거 이후 폭격 재개\" - 머니투데이",
+        "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5VaDJGR0hILTNkWC1jbE80Y1NqU00tQnlLS181YlBYa2lsVVdYaTQxWExXYkx0ZktFRmdsdURvYV8xWWRkQ09nclkxR2tVVlV2dzMxeHRIc3kxZU8xcjVBaDZBN0xMeVFu0gFuQVVfeXFMTXB2MEFPNGJ5OWx3UmdGdkxReWhnRGFtMnh4SUFyb3RjbjB6eGJsN1pTWVV5bDBfbkhqSzRKTUo4ZU8xM2lZb09DeFV3YVl5TllJRmlwa0pIZ0JoWEQ4OGJVaWk0UlNIRHlna0pmclE?oc=5",
+        "published_at": "Sat, 26 Sep 2026 02:41:43 GMT",
+        "publisher": "mt.co.kr",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35505,34 +36356,26 @@
       },
       {
         "topic": "global_diplomacy_summit",
-        "title": "[미중정상회담] 트럼프 \"엄청난 진전\" 시진핑 \"새 무역 합의, 전세계 경제에 희소식\"…美中, '갈등' 대신 '전략적 휴전' 연장",
-        "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE45ZHMyWmYySER0VkVZeW9LNWZVVUhwTHY0dUUzdER0MWUzZGVPazZVa056SUxEanFUaTJxWTJEdXJmdkFIVmdCU09ON29zNTN4dzFHY0loSlRMQlJ3elJuWFk4OW9NODlrSXloVlFn?oc=5",
-        "published_at": "Sat, 26 Sep 2026 09:08:38 GMT",
-        "publisher": "폴리뉴스 Polinews",
+        "title": "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란",
+        "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5makYya2FWRXFJSkxFMjEzcnRzLXIxN2lxYTNySGhFRWxBenhMRzRJX0VrUjhBYUU2SnpZaUVMbS1ENHBfTkd2bnlFRG9sOXUwV0E?oc=5",
+        "published_at": "Sat, 26 Sep 2026 11:06:06 GMT",
+        "publisher": "JTBC",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "global_diplomacy_summit",
-        "title": "트럼프, 이란이 제시한 ‘7일 계획’ 거부…휴전안에 회의적",
-        "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1NMmpONkNfQkUwbE1rUFZfWWZtVTJqd0s0b29tU0oybGNjRXVIWUZvSmlkcUFuX01nRXY1T1Q3SjhkbVpwMDd3QlgxSHRpYWNkSnRSSXFwb1V0bFJuSVl1V3BUT2doWTlrN0U4?oc=5",
-        "published_at": "Sat, 26 Sep 2026 02:26:31 GMT",
-        "publisher": "BBS불교방송",
+        "title": "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의",
+        "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1iU0dEcENrWUpKV1VaSnphSWF0SlV1X2ctVXVPWmdQUmVmMHhMOFppaXFaQWFvN3Q5UHp2by1PZDNnNjdwbXREWTU4dXlSeVpsMEhPS0FvSHlQUWhUUlB5VnNn?oc=5",
+        "published_at": "Sat, 26 Sep 2026 08:22:00 GMT",
+        "publisher": "미주중앙일보",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "global_diplomacy_summit",
-        "title": "시진핑 美 방문 마치고 귀국...28일 미중 무역협상 결과 발표",
-        "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9kM3pEdGVGek1RTHhFMnJJOEx0SXd4U3RueUd0V0NYRE5EQ1VRVHRXaXA1MWE2Nm5MU1VmV21OLWNNYkRtN3JyUUxEWWFlWjIwWTRPakpZNEEtT2t3QVlLY1dTWlUwWXJYeEFjMnBLRWhVX2laRE13?oc=5",
-        "published_at": "Fri, 25 Sep 2026 20:37:53 GMT",
-        "publisher": "서울신문",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "global_diplomacy_summit",
-        "title": "트럼프, 이란 ‘7일 휴전’ 제안 거부…중간선거 후 폭격 재개 예상",
-        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9rNkxkenBud1JfRmc0RE9sczliMEMwU1FNa2lkNXFIaktyc0hTSHh2V2k3Z05Pa0U3dmtxaU9XamgzdHY3R0phNUlxYmFreHJBdC0zNmNOay1NNVRtV2Z0NVJzY1YtSDFpSUxPVnZPTERBMTDSAWZBVV95cUxOX01ySlF5VTc4djFodTNYYXBBNHdaS1haVDdzd2N4NzJ3X3VkakxYTzZHQjNHZUVoMG8zZjMyZ2JDaUZYRkhQSTROMkdQb1dMbTY1d2x3X0lxNjYwV2Iyck1SOXphSWc?oc=5",
-        "published_at": "Sat, 26 Sep 2026 02:20:00 GMT",
-        "publisher": "동아일보",
+        "title": "공동성명도 기자회견도 없이… 미·중 정상회담 ‘빈손 의전 외교’",
+        "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNZmdaV0JUQ2FyazlYWV9nWTZpWWwxQ1RJSU1iTGlia3hLRXBUWkJKSGg5c0xQclhnX2VHTWtGdWx6T1hOSkR6QjZYVEppbXUwb1I0Yjd5eE4tc0JRLXVodmw2ZmoyaEJ0TExfSHdwbGJHYlBEandHOUcwbXE0d05hTlZLdXBvRDNtT004VW9zS2N3elpXNjNIX0JVdXRJdw?oc=5",
+        "published_at": "Fri, 25 Sep 2026 22:00:40 GMT",
+        "publisher": "조선일보",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35593,10 +36436,18 @@
       },
       {
         "topic": "japan_boj_fx",
+        "title": "채권 수익률 상승, 일본 자금의 본국 송환을 막다",
+        "url": "https://news.google.com/rss/articles/CBMixAJBVV95cUxPMFF4cnpmUnh6ZFpJdzZuVXpEQ0VvbHREQ2FfcWcxc21EdHFLUmhuWEN2bzZnaWtKWFdhN3VHZ3ZNWDJwMFBPc09wMWlEVE1NS0lmbGR5T2s4Q0xTUDA1YzljZnFPQzJpeEk4LWlaUTNFdmxHX0JpQnBSbUQ4MUUtWEJwUjYwcFFrYWptVzVSeHNaTzI1T1l0dUtjRFJ4ZTRVX1NxWlBXR1hYNzJIWmV2c25OVnJfdmU1VkgwOU82WG50Vy1rVDFyUEFUX1cyd1ZXRjA0bzVkX3h1S25naFByTDVQckhZRzU4OGhDQnEtYW5haUlfSXVwalFYX0FpUEI3eVJsLWwxSGVWai13bWExQnRyclBJcUt1OTNDUWlhRDJaVXZSN0oySnRFV3ZLZnhfWDJkZHRLTWNXa29tSTlwTmxVNk8?oc=5",
+        "published_at": "Sat, 26 Sep 2026 06:00:00 GMT",
+        "publisher": "IDNFinancials",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "japan_boj_fx",
         "title": "금은 왜 엔화를 주목해야 하는가? 엔화가 금에 미치는 영향에 대한 상세 분석",
         "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQX1lVejlNUV96N1hLeEpTbVktUV9DbjNDcU1hUWZ3bW1sNDNpOU5UcGNpZGNOa3dVMVVxZS1sc3o3MzJxMWpyQmRZNmNjS0ozdFZ3ZDI4SWFwQ29Oc3pkak9SY09VX0YteG1lcWpXajJiQi0xdmNQS3RJRzFtRHQwbENJNER0VnA4UU9idG5hZzBrZTZ0eDdKaV9OTkUxcDVqVjQ4cGRiT3U?oc=5",
         "published_at": "Sat, 26 Sep 2026 02:20:26 GMT",
-        "publisher": "tradingkey.com",
+        "publisher": "TradingKey",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35689,18 +36540,26 @@
       },
       {
         "topic": "dynamic:수입규제",
-        "title": "한국제품 수입규제 상반기 241건…작년 하반기보다 11건 늘어",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5xenF6WnRRR3JPTjlNdENsdFFmRTVmZkNDQ0JqOXRYdXFLY182XzZMNXBYbkwydnZ3U3pCdkxKMTZwTU9vU0M3U0QyWUFkQU0?oc=5",
-        "published_at": "Sat, 26 Sep 2026 02:32:55 GMT",
-        "publisher": "v.daum.net",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "dynamic:수입규제",
         "title": "韓 겨냥 수입규제 반년 만에 241건···'철강·금속' 절반 육박",
         "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE83MjVnZHJXNW5DTWM5S1hPWVR5T05TZGM3US02ZHRpNHdQd0x6VkM5NWtEempnaUdJZS1tTlc5S0lZWE1vNkw4d0RMOURtOEp3M1hjZFlRV1RmVVJmSDN3OWJtRnhPNXJGSlg40gFrQVVfeXFMTzcyNWdkclc1bkNNYzlLWE9ZVHlPTlNkYzdRLTZkdGk0d1B3THpWQzk1a0R6amdpR0llLW1OVzlLSVlYTW82TDh3REw5RG04SnczWGNkWVFXVGZVUmZIM3c5Ym1GeE81ckZKWDg?oc=5",
         "published_at": "Sat, 26 Sep 2026 06:18:14 GMT",
         "publisher": "현대경제신문",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "dynamic:멕시코",
+        "title": "李대통령 \"멕시코와 포괄적 무역협정 논의 조속히 재개해야\" |",
+        "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5heVYzQ0J5VHkxdG5hYVZBZ1QyVmtOZjd6YmI2UXhuUWhrcC1lbVlQNzNMcWlRRE1TOTZTa1h3UmItOTNDZGluZmdMaEl3dG9TZWM0eDVhR2dIdGNQb19TcmJTVm5lU0VHazR5clo5ZUMtUVBC?oc=5",
+        "published_at": "Sat, 26 Sep 2026 07:53:12 GMT",
+        "publisher": "연합인포맥스",
+        "discovery_source": "google_news_rss"
+      },
+      {
+        "topic": "dynamic:멕시코",
+        "title": "李대통령, 멕시코 K-엑스포서 '관세'부터 물었다…K소비재 중남미 공략 점검",
+        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5yRW1uR2lSdE5NX3dDX1pyODd5RjZHZm9MeWRUYm5UdERqU1VXVHdTSFJVckNOUm9Ya0FFN1Rub2RDdEhkUW50V2xpTzJjVHhfWEliMllWV3dSOHlfaHlhc2pIdDJTU1FqSkRJS0FiWkE?oc=5",
+        "published_at": "Sat, 26 Sep 2026 07:55:44 GMT",
+        "publisher": "연합인포맥스",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35729,10 +36588,10 @@
       },
       {
         "topic": "dynamic:달러",
-        "title": "원/달러 1,350원대 하락…항공주 웃고 해운·수출주는 실적 부담",
-        "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE4yYk9OdEhFeDk3UWlQUi1NdVNzQzdRSElEOTZWRjJvWHlrc3hLUGV3cmNlZjZLbVNueHYyYnNsYWN3eENPbV8yLWo4a3RYOE1DYzFPYXUzVG4yc05jaUhRelhJeU84YjNvYWljVnBPRTI3MkpN0gF0QVVfeXFMTjJiT050SEV4OTdRaVBSLU11U3NDN1FISUQ5NlZGMm9YeWtzeEtQZXdyY2VmNkttU254djJic2xhY3d4Q09tXzItajhrdFg4TUNjMU9hdTNUbjJzTmNpSFF6WEl5TzhiM29haWNWcE9FMjcySk0?oc=5",
-        "published_at": "Sat, 26 Sep 2026 02:17:43 GMT",
-        "publisher": "산경투데이",
+        "title": "[D-BIZ 암호화폐 뉴스] 바이낸스, 서클에 1억 달러 투자…5년 제휴로 USDC 확대 가속화",
+        "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE42NGljdllCeVBPZ201RDdzN2hPZ3lnTUxORFAtNHVwMF92b2JxUEJhbU0zYmJFbHJXdkxqMTBiOTU2TU5ZWGZRaW5zbTZJWi02aXNJMEhmRHJ4YXRkM0w3bm1iek1rTTI3dzdNMg?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:54:18 GMT",
+        "publisher": "데일리비즈온",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35769,10 +36628,10 @@
       },
       {
         "topic": "dynamic:달러",
-        "title": "美·中, AI 대화채널 첫 가동…300억 달러 관세 낮춘다",
-        "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9tVjFjZnhwWl92Zm1tNm9vTGxpZkxMZkZ1WnJLY1VwNjV5dV9zcGp0cVc1Z3pLX0tyLWlnaDg3U2pNdjZTcUxMLVVzRnp3YmF3SkFMVEo5R05iZXJNS2RKeHR4VnI?oc=5",
-        "published_at": "Sat, 26 Sep 2026 06:53:50 GMT",
-        "publisher": "서울경제TV",
+        "title": "원/달러 1,350원대 하락…항공주 웃고 해운·수출주는 실적 부담",
+        "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE4yYk9OdEhFeDk3UWlQUi1NdVNzQzdRSElEOTZWRjJvWHlrc3hLUGV3cmNlZjZLbVNueHYyYnNsYWN3eENPbV8yLWo4a3RYOE1DYzFPYXUzVG4yc05jaUhRelhJeU84YjNvYWljVnBPRTI3MkpN0gF0QVVfeXFMTjJiT050SEV4OTdRaVBSLU11U3NDN1FISUQ5NlZGMm9YeWtzeEtQZXdyY2VmNkttU254djJic2xhY3d4Q09tXzItajhrdFg4TUNjMU9hdTNUbjJzTmNpSFF6WEl5TzhiM29haWNWcE9FMjcySk0?oc=5",
+        "published_at": "Sat, 26 Sep 2026 02:17:43 GMT",
+        "publisher": "산경투데이",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35780,39 +36639,23 @@
         "title": "달러 환테크 1,000만 원, 환율 5% 하락하면 이자 받아도 손실",
         "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5mNU5GLVk5c1JBS29mVzRWdW52a05ocDhqSFhYV0U2R2dnSkNTbV83QlpsaHdjallhWUFzaDhSaTAybXJSc0ItdkNscDFIR1ZZd3l6Y242M3JQUFdzdl9lRHNDdW1xb2vSAWtBVV95cUxNV09RYU15cmF3Z24tMTdVXzJzcXZuWnhsM1pRSzQxbnd0RWRvS0JBemVvV20wVldUZFdDRUJNVDBVaUdOb1JiSE5UOTNRanJwd1ROd0Mwd1hrQmFRdXBLVHluSWRXT3dsdEZaQQ?oc=5",
         "published_at": "Sat, 26 Sep 2026 11:08:25 GMT",
-        "publisher": "cwtr.co.kr",
+        "publisher": "창원특례신문",
         "discovery_source": "google_news_rss"
       },
       {
-        "topic": "dynamic:멕시코",
-        "title": "李대통령 \"멕시코와 포괄적 무역협정 논의 조속히 재개해야\" |",
-        "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5heVYzQ0J5VHkxdG5hYVZBZ1QyVmtOZjd6YmI2UXhuUWhrcC1lbVlQNzNMcWlRRE1TOTZTa1h3UmItOTNDZGluZmdMaEl3dG9TZWM0eDVhR2dIdGNQb19TcmJTVm5lU0VHazR5clo5ZUMtUVBC?oc=5",
-        "published_at": "Sat, 26 Sep 2026 07:53:12 GMT",
-        "publisher": "연합인포맥스",
+        "topic": "dynamic:이란",
+        "title": "이라크, 대이란 항공 제재 예외 인정 요구…美와 직접 협상",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9YbURWQmNkZTQtN1pDSGNHbHJWeF92by1iS0RJNUlJQTJpb3NmUG1rRXJ3M3o1UFdsNVMzamYtZVZXWmctcGZhaEpfVS04MkU?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:32:00 GMT",
+        "publisher": "v.daum.net",
         "discovery_source": "google_news_rss"
       },
       {
-        "topic": "dynamic:멕시코",
-        "title": "李대통령, 멕시코 K-엑스포서 '관세'부터 물었다…K소비재 중남미 공략 점검",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5yRW1uR2lSdE5NX3dDX1pyODd5RjZHZm9MeWRUYm5UdERqU1VXVHdTSFJVckNOUm9Ya0FFN1Rub2RDdEhkUW50V2xpTzJjVHhfWEliMllWV3dSOHlfaHlhc2pIdDJTU1FqSkRJS0FiWkE?oc=5",
-        "published_at": "Sat, 26 Sep 2026 07:55:44 GMT",
-        "publisher": "연합인포맥스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "dynamic:시진핑",
-        "title": "트럼프·시진핑, AI대화 구축 합의…\"국제수로 통행료 안 돼\"(종합)",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1nMlh3ZUhZenU3MFliNlpWSGROVkdzSHEzaVlHQ0QtRUJKYm9DcTJwREN1TFBQVFdJTVRfdHNUY2x1Nmc2SGt5V3pUbnoyNGpEUXNTR0FuLTdsbVHSAWBBVV95cUxPUTJjcV94bExXSjJtc3ZsNzBYT1VSdktsQUhVdm1pTTlGdi1JUlhpVVM5bGo5Ql9sdm5jRl9LTVEzLTBPRDNFZGpIOWRzSVFIX3YyYmZJM2RqQ0xISl9XX2Y?oc=5",
-        "published_at": "Sat, 26 Sep 2026 06:04:03 GMT",
-        "publisher": "연합뉴스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "dynamic:시진핑",
-        "title": "\"찡그린 표정 지우려고\"…트럼프, 中시진핑 방미 사진에 AI 합성 논란",
-        "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBTWmZ2WldDdHU3N0VPMmtBRjBfVmRGUXVmcG5pRzFRT005LTdTa1p4dHVSM0M1Qjllbm4zQ1h5QThrc2pKYnptVkFuOFVfWG9mdEtZSk1CM2TSAV5BVV95cUxPU0NTam04UUtPSnNZU1B2THVzQ0lHenZuM2tpeEtOcDYyTG1GSXQ5UGNCY0JOX01rT05odWktLTlRNWlfR2d2Z2FFNFpaSFFtRExfRlo2ZW8xRmZoOUNn?oc=5",
-        "published_at": "Sat, 26 Sep 2026 13:12:17 GMT",
-        "publisher": "뉴스1",
+        "topic": "dynamic:이란",
+        "title": "이라크, 미국에 對이란 항공 제재 예외 인정 요구 - 조선비즈",
+        "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNVXVGOWNYclJsNlpqaXZ0T3RXSm4yOElvdjlEMVJSeThmdGFSdXlLM3pwNF9CR0NPN1dmS1JBc1N1VlhUZmhOQXhTMkJHLXhtUzhhUEZ4THNkakN1VTVNbEdtdVh1cFczczNaQkowaVpNWlMxRGhxMDlKM1I0enhPRV9YQVA4Wjkyb0hCcXJiTDhzcV9uWVByQjNMV1RtUdIBsgFBVV95cUxQUTA4a3ZxY241U2lOaHhtWU13SG9Bb2xuanJfbmxUQzFwOVBWRmQ4NnhYMU9xR2wtbTdScDY3YU5jTnFJQklKd2ZPVUJKN3ZQWHFFRS1GVzNMV2VPLThwcVRzNlpkNEx0MjFuaERKcVFwYXdMWlN6YzFicnVRWkRLV0M5cGprX0pMZXd3N180c1Q5WG5hMEkxVGdrVkxCT21sS3EtczlWMEZPLU5YampDSUZn?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:52:00 GMT",
+        "publisher": "Chosunbiz",
         "discovery_source": "google_news_rss"
       },
       {
@@ -35825,14 +36668,6 @@
       },
       {
         "topic": "dynamic:이란",
-        "title": "이란 최고안보회의 “항공 제재에 군사 보복 안해”",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9TLTlTWk15LW9GeTNnNXdYRnpjU2IzVThDMzl5R2wtQ0NGSkx2d1pKMzFNWF9FTkU4MnJIYU0zSEx0RVZkZzNaUUNMX09kUXFIdW9wdTVLZnRUSTQ?oc=5",
-        "published_at": "Sat, 26 Sep 2026 13:41:00 GMT",
-        "publisher": "KBS 뉴스",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "dynamic:이란",
         "title": "日언론 \"中, 이란에 '美경제제재 동참 안해' 입장 전달\"",
         "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1ndVN0ZFlscVFBdFhwYlloVTdFUWtGaTFqMFQwODVZUWkydHkxN19CUVpjblpMWUQwUzk4OC1yRGdwMUt4cUFTRWxiU2tSWVNOQk5tZjhhaG9IVVXSAWBBVV95cUxORVkxYS1RTHU4WTRNQmVjZVNuTWoxV2U1OUM0TmFVVkxnOExlTmZ5V2VjVVZXTDNjSFM2VTlGSzAyTzhlQWNGdkRXYjk5NzBwSUwwNTZLdjNlek9udFRjT1o?oc=5",
         "published_at": "Sat, 26 Sep 2026 09:21:24 GMT",
@@ -35841,58 +36676,34 @@
       },
       {
         "topic": "dynamic:이란",
-        "title": "日언론 “中, 이란에 ‘美경제제재 동참 안해’ 입장 전달”",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE50VnA3RTlJbWQ3cmIwY083Mk5qNVNJU2VPNkF2U3JPbWVtQmhndll4RnVrNGpSOWhhQjU5WnFyLWNrYUlleHR2WnBRMlBTSG9ZTHVmSjB6WHlLOEk?oc=5",
-        "published_at": "Sat, 26 Sep 2026 09:59:00 GMT",
-        "publisher": "KBS 뉴스",
+        "title": "'호르무즈 재개방' 협상 이란 외무, 30일까지 뉴욕 체류",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5sbWZycnZ6NnF0ekpxQ2ZCU1l2emtqMzJjTHVEQllfMTJSNkVQcXpCaVd3b3VoZW1mUDdwbkxKekdtdjJlaEFPT2JwbEdVYjctaGlETkQ0czI2UWs?oc=5",
+        "published_at": "Sat, 26 Sep 2026 15:47:43 GMT",
+        "publisher": "연합뉴스",
         "discovery_source": "google_news_rss"
       },
       {
         "topic": "dynamic:이란",
-        "title": "\"中, 이란에 '美 제재 따르지 않을 것' 입장 전달\"",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE4wYjFwaTFoM2ZGd1lEMlNvTDc4ZEo4NHdYQ0NiNzBBR0hVZ1dkdHJwTWxQUHhfb1JSY2ZIZzBzUTktSzVveHpZT0JFaU5nbUU?oc=5",
-        "published_at": "Sat, 26 Sep 2026 11:07:04 GMT",
-        "publisher": "v.daum.net",
+        "title": "이란 최고안보회의 “항공 제재에 군사 보복 안해”",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9TLTlTWk15LW9GeTNnNXdYRnpjU2IzVThDMzl5R2wtQ0NGSkx2d1pKMzFNWF9FTkU4MnJIYU0zSEx0RVZkZzNaUUNMX09kUXFIdW9wdTVLZnRUSTQ?oc=5",
+        "published_at": "Sat, 26 Sep 2026 13:41:00 GMT",
+        "publisher": "KBS 뉴스",
         "discovery_source": "google_news_rss"
       },
       {
-        "topic": "dynamic:논의",
-        "title": "이 대통령 \"한·멕 무역협정 논의 조속히 재개…기업 도전 뒷받침\"",
-        "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9icXpsSkhVZkxhVjBRc2VhanZaWklZUlpEOXJVai0ydkt0YTRaVHF0Y2FEZ3c5S3QwVnVrZW1MQ0hMY2xYa3R3eDc0VkhiVWY0eno3eUJRZ2JWbXV0WmlHOE1FbDBjaDItZVVtZQ?oc=5",
-        "published_at": "Sat, 26 Sep 2026 10:31:47 GMT",
-        "publisher": "정책브리핑",
+        "topic": "dynamic:시진핑",
+        "title": "트럼프·시진핑, AI대화 구축 합의…\"국제수로 통행료 안 돼\"(종합)",
+        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1nMlh3ZUhZenU3MFliNlpWSGROVkdzSHEzaVlHQ0QtRUJKYm9DcTJwREN1TFBQVFdJTVRfdHNUY2x1Nmc2SGt5V3pUbnoyNGpEUXNTR0FuLTdsbVHSAWBBVV95cUxPUTJjcV94bExXSjJtc3ZsNzBYT1VSdktsQUhVdm1pTTlGdi1JUlhpVVM5bGo5Ql9sdm5jRl9LTVEzLTBPRDNFZGpIOWRzSVFIX3YyYmZJM2RqQ0xISl9XX2Y?oc=5",
+        "published_at": "Sat, 26 Sep 2026 06:04:03 GMT",
+        "publisher": "연합뉴스",
         "discovery_source": "google_news_rss"
       },
       {
-        "topic": "dynamic:논의",
-        "title": "시진핑, 美국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1fWEV1TjUwMl9jeVVXTk8wSl9EZ3FRWUlSbmJKUTdVNHVCcFZtQ2VpdGJNbUkzcnhOVXV5bThzYXJ4TU1RbFZlNjBFQ0RkOWc?oc=5",
-        "published_at": "Sat, 26 Sep 2026 07:54:04 GMT",
-        "publisher": "v.daum.net",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "dynamic:논의",
-        "title": "靑 \"한·멕 무역협정, CEPA 의미\"…관세도 논의 테이블에",
-        "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9NOFdjWmFtWWNKU2VOeFhRMTBuZ3VhZzB1XzJNX1ZVMFVFRy1PYktmcy1uM1dEUmk0cndfNktTY1B0Y3JSa2hvVGtrRVJRLTBFellxMFJjZzMtbk5ORHB6eThsRUpEU0U?oc=5",
-        "published_at": "Sat, 26 Sep 2026 02:44:00 GMT",
-        "publisher": "연합뉴스TV",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "dynamic:논의",
-        "title": "李대통령 “한-멕시코 무역협정 논의 재개”…부석순·BTS 노래 재생도",
-        "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFB1X3lnNWFpZDB4YWNqeDFOVVRESjBZSjF6cmFicWJJYnZiZmtlSmpNeU9zdmZjREhoRERrNWZqV21Bci1pVHpOenYxQWhOUQ?oc=5",
-        "published_at": "Sat, 26 Sep 2026 03:57:46 GMT",
-        "publisher": "전자신문",
-        "discovery_source": "google_news_rss"
-      },
-      {
-        "topic": "dynamic:논의",
-        "title": "멕시코서 경제·문화 협력 주력...\"무역협정 논의 조속 재개\"",
-        "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBXUVVRQmJKRnRYTHN5bzhhaTdxb295aHZFdkJmNWN6SWlOWjltM0ZMc2dHR2pJU3RudnYwTERWemJQLWZLN3ZOTF84ajBkdXFuTHRqZlU0U3oxSndPOGc?oc=5",
-        "published_at": "Sat, 26 Sep 2026 03:17:00 GMT",
-        "publisher": "YTN",
+        "topic": "dynamic:이재명",
+        "title": "이재명 대통령, 대한민국 투자 서밋 참석…“첨단산업 투자 기회 확대”",
+        "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBzOVEzVk1RcVBmaS1pRmZndHNBX2lkcHR0aDRjeWRKYUcxWUJCMHJJaDdzSmNPVGszakJ3dTdtVlM0ay1VcmZfcEpsUW1rR2REMDlYd1VpV29pSGdFVGZKSURybnByZw?oc=5",
+        "published_at": "Sat, 26 Sep 2026 12:15:28 GMT",
+        "publisher": "뉴뉴스",
         "discovery_source": "google_news_rss"
       }
     ],
@@ -35901,43 +36712,43 @@
       "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
       "한국 증시 오늘 새 공시 수주 계약 정책 변화",
       "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
-      "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+      "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "수입규제 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "241건 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+      "이란 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "멕시코 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
       "달러 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "이란 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-      "시진핑 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+      "휴전안 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
     ],
     "dynamic_query_terms": [
       "트럼프",
       "수입규제",
       "241건",
-      "달러",
       "멕시코",
-      "시진핑",
+      "달러",
       "이란",
-      "논의"
+      "시진핑",
+      "이재명"
     ],
     "hot_topic_candidates": [
       {
         "term": "트럼프",
-        "count": 29,
-        "publisher_count": 24,
-        "independent_story_count_estimate": 24,
-        "syndication_ratio_estimate": 0.172,
+        "count": 26,
+        "publisher_count": 21,
+        "independent_story_count_estimate": 21,
+        "syndication_ratio_estimate": 0.192,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 28,
-        "delta": 1,
-        "score": 83,
+        "previous_count": 29,
+        "delta": -3,
+        "score": 73,
         "examples": [
           "이 대통령 순방결산, 트럼프 회담·유엔서 '북미대화 재개' 강조…멕시코와 원유·방산 협력 강화",
           "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
           "\"트럼프, 이란의 '7일 계획' 거부\"...\"이란산 원유 유조선 미국으로 이동 중\""
         ],
-        "article_velocity": 1,
-        "hot_score": 153
+        "article_velocity": 0,
+        "hot_score": 131
       },
       {
         "term": "수입규제",
@@ -35958,119 +36769,101 @@
         "hot_score": 101
       },
       {
-        "term": "멕시코",
-        "count": 18,
-        "publisher_count": 15,
-        "independent_story_count_estimate": 17,
-        "syndication_ratio_estimate": 0.056,
+        "term": "이란",
+        "count": 19,
+        "publisher_count": 13,
+        "independent_story_count_estimate": 14,
+        "syndication_ratio_estimate": 0.263,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 17,
-        "delta": 1,
-        "score": 52,
+        "delta": 2,
+        "score": 53,
+        "examples": [
+          "\"이란 원유 실은 유조선, 미 해군에 나포돼 본토 입항 임박\"",
+          "[뉴욕마켓워치] 이란, 유화파가 주도권 잡았나…주식↑달러↓채권 혼조",
+          "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란"
+        ],
+        "article_velocity": 2,
+        "hot_score": 95
+      },
+      {
+        "term": "멕시코",
+        "count": 17,
+        "publisher_count": 15,
+        "independent_story_count_estimate": 16,
+        "syndication_ratio_estimate": 0.059,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 18,
+        "delta": -1,
+        "score": 49,
         "examples": [
           "경제협력에 ‘문화의 힘’ 더했다…이 대통령, 멕시코 순방 마무리",
           "이 대통령, 멕시코 국빈 방문 막바지...'K-컬처' 열기 체감",
           "한·멕시코 정상회담 확대회담 및 오찬"
         ],
-        "article_velocity": 1,
-        "hot_score": 103
+        "article_velocity": 0,
+        "hot_score": 95
       },
       {
         "term": "달러",
-        "count": 19,
-        "publisher_count": 14,
-        "independent_story_count_estimate": 17,
-        "syndication_ratio_estimate": 0.105,
+        "count": 18,
+        "publisher_count": 12,
+        "independent_story_count_estimate": 16,
+        "syndication_ratio_estimate": 0.111,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 19,
-        "delta": 0,
-        "score": 52,
+        "delta": -1,
+        "score": 48,
         "examples": [
           "애플에 사상 최대 57억 달러 배상 평결…”탭틱은 택션 햅틱 특허 침해”",
-          "미국 기업 부채 4조 3천억 달러, 2027년부터 만기 도래",
+          "Saudi Aramco, 1,000억 달러 가치의 독립 가스 부문 설립 검토",
           "미중, 300억 달러 관세 인하 합의 및 AI 대화 개시"
         ],
         "article_velocity": 0,
-        "hot_score": 98
+        "hot_score": 90
       },
       {
-        "term": "이란",
-        "count": 17,
-        "publisher_count": 13,
-        "independent_story_count_estimate": 12,
-        "syndication_ratio_estimate": 0.294,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 16,
-        "delta": 1,
-        "score": 48,
-        "examples": [
-          "\"이란 원유 실은 유조선, 미 해군에 나포돼 곧 본토 입항\"",
-          "[뉴욕마켓워치] 이란, 유화파가 주도권 잡았나…주식↑달러↓채권 혼조",
-          "‘7일 휴전’ 거부한 트럼프…선거 후 재공격? 불붙는 미·이란"
-        ],
-        "article_velocity": 1,
-        "hot_score": 83
-      },
-      {
-        "term": "시진핑",
-        "count": 17,
-        "publisher_count": 11,
-        "independent_story_count_estimate": 12,
-        "syndication_ratio_estimate": 0.294,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 18,
-        "delta": -1,
-        "score": 45,
-        "examples": [
-          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의",
-          "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의",
-          "\"시진핑, 美 국빈 방문 마치고 귀국…트럼프와 AI·무역 논의\""
-        ],
-        "article_velocity": 0,
-        "hot_score": 75
-      },
-      {
-        "term": "이재명",
-        "count": 12,
-        "publisher_count": 6,
-        "independent_story_count_estimate": 12,
-        "syndication_ratio_estimate": 0.0,
+        "term": "휴전안",
+        "count": 11,
+        "publisher_count": 9,
+        "independent_story_count_estimate": 7,
+        "syndication_ratio_estimate": 0.364,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 0,
-        "delta": 12,
+        "delta": 11,
+        "score": 42,
+        "examples": [
+          "트럼프, 이란 ‘7일 휴전안’ 거부…선거 후 폭격 가능성 열어놔",
+          "이란 휴전안 거부하고…‘트럼프 해협’ 띄웠다",
+          "이란 ‘7일 휴전안’ 거부한 트럼프 “선거 끝나면 다시 폭격” [지금뉴스]"
+        ],
+        "article_velocity": 11,
+        "hot_score": 94
+      },
+      {
+        "term": "국빈방문",
+        "count": 11,
+        "publisher_count": 9,
+        "independent_story_count_estimate": 6,
+        "syndication_ratio_estimate": 0.455,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 0,
+        "delta": 11,
         "score": 42,
         "examples": [
           "이재명 대통령, 멕시코 국빈방문…교역·투자 확대·첨단산업 협력 기반 마련",
-          "[속보] 이재명 대통령 부부, 멕시코 K팝 팬들과 소통…‘한강 라면’도 시식",
+          "멕시코 국빈방문 중 'K-팝' 댄스 현장 찾은 李대통령 내외",
           "이재명 대통령 멕시코 국빈방문…'북미 공급망 교두보' 넓히고 K콘텐츠까지 외연 확장"
         ],
-        "article_velocity": 12,
-        "hot_score": 108
-      },
-      {
-        "term": "논의",
-        "count": 15,
-        "publisher_count": 11,
-        "independent_story_count_estimate": 10,
-        "syndication_ratio_estimate": 0.333,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 16,
-        "delta": -1,
-        "score": 41,
-        "examples": [
-          "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
-          "이재명 대통령, 유엔 사무총장 면담…한반도 평화공존·한유엔 협력 논의",
-          "이재명 대통령, 한·호주 정상회담…에너지 공급망·방산 협력 논의"
-        ],
-        "article_velocity": 0,
-        "hot_score": 67
+        "article_velocity": 11,
+        "hot_score": 91
       },
       {
         "term": "무역",
         "count": 14,
         "publisher_count": 12,
-        "independent_story_count_estimate": 9,
-        "syndication_ratio_estimate": 0.357,
+        "independent_story_count_estimate": 8,
+        "syndication_ratio_estimate": 0.429,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
         "previous_count": 14,
         "delta": 0,
@@ -36081,61 +36874,79 @@
           "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의"
         ],
         "article_velocity": 0,
-        "hot_score": 65
+        "hot_score": 62
       },
       {
-        "term": "미중",
-        "count": 9,
-        "publisher_count": 9,
+        "term": "시진핑",
+        "count": 15,
+        "publisher_count": 10,
         "independent_story_count_estimate": 9,
-        "syndication_ratio_estimate": 0.0,
+        "syndication_ratio_estimate": 0.4,
         "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 0,
-        "delta": 9,
-        "score": 36,
+        "previous_count": 17,
+        "delta": -2,
+        "score": 40,
         "examples": [
-          "미중, 300억 달러 관세 인하 합의 및 AI 대화 개시",
-          "미중 국빈 만찬 돌입…“좋은 회담” “새 무역 합의 도달”",
-          "미중 정상회담 '전략적 안정' 재확인…AI·무역·안보 평행선 관측"
-        ],
-        "article_velocity": 9,
-        "hot_score": 90
-      },
-      {
-        "term": "제품",
-        "count": 9,
-        "publisher_count": 8,
-        "independent_story_count_estimate": 7,
-        "syndication_ratio_estimate": 0.222,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 0,
-        "delta": 9,
-        "score": 35,
-        "examples": [
-          "한국 제품 수입규제 241건…지난해 하반기보다 11건 증가",
-          "글로벌 보호무역 확산…올해 상반기 韓 제품 수입규제 241건",
-          "[글로벌 통상] 한국 제품 수입규제 241건…보호무역 확산에 철강·화학업계 부담"
-        ],
-        "article_velocity": 9,
-        "hot_score": 82
-      },
-      {
-        "term": "AI",
-        "count": 12,
-        "publisher_count": 8,
-        "independent_story_count_estimate": 7,
-        "syndication_ratio_estimate": 0.417,
-        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-        "previous_count": 13,
-        "delta": -1,
-        "score": 32,
-        "examples": [
-          "이재명 대통령·셰인바움 대통령 정상회담 결실···무역·투자부터 AI·우주·국방까지 전방위 공조",
-          "미중, 300억 달러 관세 인하 합의 및 AI 대화 개시",
-          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의"
+          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의",
+          "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의",
+          "트럼프 “중국도 만족할 것”, 시진핑 “안정 관계 발전”···무역 휴전 2달 연장"
         ],
         "article_velocity": 0,
-        "hot_score": 49
+        "hot_score": 62
+      },
+      {
+        "term": "트럼프와",
+        "count": 9,
+        "publisher_count": 7,
+        "independent_story_count_estimate": 3,
+        "syndication_ratio_estimate": 0.667,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 0,
+        "delta": 9,
+        "score": 34,
+        "examples": [
+          "유엔서 '한반도 평화' 재천명…트럼프와 깜짝 회담·韓 세일즈 외교 성과",
+          "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의",
+          "시진핑, 美 국빈방문 마치고 귀국…트럼프와 무역·대만·AI 논의"
+        ],
+        "article_velocity": 9,
+        "hot_score": 68
+      },
+      {
+        "term": "논의",
+        "count": 12,
+        "publisher_count": 9,
+        "independent_story_count_estimate": 6,
+        "syndication_ratio_estimate": 0.5,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 15,
+        "delta": -3,
+        "score": 33,
+        "examples": [
+          "이재명 대통령, 트럼프 대통령과 한·미 정상회담…대미투자·안보 현안 논의",
+          "이재명 대통령, 유엔 사무총장 면담…한반도 평화공존·한유엔 협력 논의",
+          "이재명 대통령, 한·호주 정상회담…에너지 공급망·방산 협력 논의"
+        ],
+        "article_velocity": 0,
+        "hot_score": 48
+      },
+      {
+        "term": "이재명",
+        "count": 13,
+        "publisher_count": 6,
+        "independent_story_count_estimate": 13,
+        "syndication_ratio_estimate": 0.0,
+        "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+        "previous_count": 12,
+        "delta": 1,
+        "score": 33,
+        "examples": [
+          "이재명 대통령, 멕시코 국빈방문…교역·투자 확대·첨단산업 협력 기반 마련",
+          "이재명 대통령 멕시코 국빈방문…'북미 공급망 교두보' 넓히고 K콘텐츠까지 외연 확장",
+          "[속보] 이재명 대통령 부부, 멕시코 K팝 팬들과 소통…‘한강 라면’도 시식"
+        ],
+        "article_velocity": 1,
+        "hot_score": 68
       }
     ],
     "sector_selection": {
@@ -38430,7 +39241,7 @@
   },
   "relative_strength": {
     "schema_version": 2,
-    "generated_at": "2026-09-26T23:50:45.724717+09:00",
+    "generated_at": "2026-09-27T01:00:43.160928+09:00",
     "cache_used": false,
     "methodology": {
       "formula": "상대강도(%p) = 종목 등락률(%) - 기준지수 등락률(%)",
@@ -47139,7 +47950,7 @@
     "errors": []
   },
   "market_runtime": {
-    "generated_at": "2026-09-26T23:51:09.004070+09:00",
+    "generated_at": "2026-09-27T01:01:13.321355+09:00",
     "source_status": "outside_domestic_monitor_window",
     "provider": "provider_chain",
     "provider_captured_at": null,
@@ -47167,13 +47978,13 @@
     "last_universe_refresh": "2026-09-26T23:25:08.111069+09:00",
     "fetch_runtime": {
       "status": "ok",
-      "fetched_at": "2026-09-26T14:50:40.886039+00:00",
+      "fetched_at": "2026-09-26T16:00:37.228793+00:00",
       "captured_at": "2026-09-26T23:25:08.111069+09:00",
       "error": null
     }
   },
   "risk": {
-    "generated_at": "2026-09-26T23:51:09.713225+09:00",
+    "generated_at": "2026-09-27T01:01:13.946536+09:00",
     "risk_level": "LOW",
     "event_risk_level": "LOW",
     "macro_risk_level": "LOW",
@@ -47196,7 +48007,7 @@
       "note": "BLS 08:30 ET 발표를 KST로 환산",
       "resolved_datetime_kst": "2026-10-02T21:30:00+09:00",
       "time_unknown": false,
-      "hours_to_event": 141.65,
+      "hours_to_event": 140.48,
       "phase": "FUTURE",
       "risk_level": "LOW",
       "trade_window": "AFTER_NXT_CLOSE"
@@ -47221,7 +48032,7 @@
         "note": "BLS 08:30 ET 발표를 KST로 환산",
         "resolved_datetime_kst": "2026-10-02T21:30:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 141.65,
+        "hours_to_event": 140.48,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "AFTER_NXT_CLOSE"
@@ -47242,7 +48053,7 @@
         "official_url": "https://www.federalreserve.gov/monetarypolicy.htm",
         "resolved_datetime_kst": "2026-10-08T03:00:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 267.15,
+        "hours_to_event": 265.98,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "KOREA_TRADING_HOURS"
@@ -47266,7 +48077,7 @@
         "note": "BLS 08:30 ET 발표를 KST로 환산",
         "resolved_datetime_kst": "2026-10-14T21:30:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 429.65,
+        "hours_to_event": 428.48,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "AFTER_NXT_CLOSE"
@@ -47287,7 +48098,7 @@
         "official_url": "https://www.bls.gov/schedule/2026/10_sched_list.htm",
         "resolved_datetime_kst": "2026-10-15T21:30:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 453.65,
+        "hours_to_event": 452.48,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "AFTER_NXT_CLOSE"
@@ -47310,7 +48121,7 @@
         "note": "공식 일정에서 날짜 확인. 정확한 발표 시각은 확정 자료가 있을 때 갱신.",
         "resolved_datetime_kst": "2026-10-22T09:00:00+09:00",
         "time_unknown": true,
-        "hours_to_event": 609.15,
+        "hours_to_event": 607.98,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "UNKNOWN_TIME"
@@ -47334,14 +48145,14 @@
         "note": "10월 27~28일 회의. 정책 발표 시점은 통상 14:00 ET 기준 fallback.",
         "resolved_datetime_kst": "2026-10-29T03:00:00+09:00",
         "time_unknown": false,
-        "hours_to_event": 771.15,
+        "hours_to_event": 769.98,
         "phase": "FUTURE",
         "risk_level": "LOW",
         "trade_window": "KOREA_TRADING_HOURS"
       }
     ],
     "macro": {
-      "captured_at": "2026-09-26T23:51:09.713225+09:00",
+      "captured_at": "2026-09-27T01:01:13.946536+09:00",
       "values": {},
       "sources": [],
       "unknowns": [
@@ -47423,7 +48234,7 @@
       "risk_level": "LOW",
       "single_biggest_risk": {
         "title": "미국 고용보고서",
-        "why": "141.65시간 후 · AFTER_NXT_CLOSE",
+        "why": "140.48시간 후 · AFTER_NXT_CLOSE",
         "severity": 5
       },
       "summary": "현재 확인 가능한 입력 기준 대형 Overnight Risk는 제한적.",
@@ -47435,7 +48246,7 @@
     }
   },
   "macro_matrix": {
-    "captured_at": "2026-09-26T23:51:09.713225+09:00",
+    "captured_at": "2026-09-27T01:01:13.946536+09:00",
     "source_mode": "unavailable",
     "known_count": 2,
     "total_count": 26,
@@ -47684,7 +48495,7 @@
     ]
   },
   "risk_runtime": {
-    "generated_at": "2026-09-26T23:51:09.713225+09:00",
+    "generated_at": "2026-09-27T01:01:13.946536+09:00",
     "dirty": false,
     "semantic_hash": "9210755795b9502d510d64304953da026abff40904c0b814bd98d43e778cac2c",
     "previous_hash": "9210755795b9502d510d64304953da026abff40904c0b814bd98d43e778cac2c",
@@ -47693,7 +48504,7 @@
     "macro_source": "unavailable"
   },
   "health": {
-    "generated_at": "2026-09-26T23:51:10.954784+09:00",
+    "generated_at": "2026-09-27T01:01:15.210403+09:00",
     "status": "NOTICE",
     "issue_count": 1,
     "issues": [
@@ -47703,15 +48514,15 @@
         "severity": "NOTICE",
         "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
         "recovery": "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
-        "consecutive": "51"
+        "consecutive": "52"
       }
     ],
     "consecutive": {
-      "macro:unavailable": 51
+      "macro:unavailable": 52
     }
   },
   "operations": {
-    "generated_at": "2026-09-27T00:20:50.576841+09:00",
+    "generated_at": "2026-09-27T01:04:46.411432+09:00",
     "status": "investigating",
     "supervisors": {
       "A": {
@@ -47728,49 +48539,48 @@
         ]
       },
       "B": {
-        "processed_at": "2026-09-26T23:37:00+09:00",
-        "batch_id": "supervisor-20260926T2330+0900-b37",
+        "processed_at": "2026-09-27T00:35:21+09:00",
+        "batch_id": "supervisor-20260927T0030+0900-b35",
         "status": "verification_pending",
-        "path": "data/supervisor/ai-results/supervisor-20260926T2330+0900-b37.json",
+        "path": "data/supervisor/ai-results/supervisor-20260927T0030+0900-b35.json",
         "run_kind": "regular",
-        "window_complete": true,
+        "window_complete": false,
         "expected_observation_count": 3,
-        "received_observation_count": 3,
-        "missing_observation_slots": []
+        "received_observation_count": 0,
+        "missing_observation_slots": [
+          "2026-09-27T00:10:00+09:00",
+          "2026-09-27T00:20:00+09:00",
+          "2026-09-27T00:30:00+09:00"
+        ]
       }
     },
     "canonical": {
-      "last_batch_id": "supervisor-20260927T0000+0900-a24",
-      "last_processed_at": "2026-09-27T00:09:11+09:00"
+      "last_batch_id": "supervisor-20260927T0030+0900-b35",
+      "last_processed_at": "2026-09-27T00:35:21+09:00"
     },
     "sensor_slot_coverage": {
-      "window_start": "2026-09-26T23:20:00+09:00",
-      "window_end": "2026-09-27T00:10:00+09:00",
+      "window_start": "2026-09-27T00:00:00+09:00",
+      "window_end": "2026-09-27T00:50:00+09:00",
       "expected_slot_count": 6,
-      "received_slot_count": 4,
-      "received_slots": [
-        "2026-09-26T23:20:00+09:00",
-        "2026-09-26T23:30:00+09:00",
-        "2026-09-26T23:40:00+09:00",
-        "2026-09-26T23:50:00+09:00"
-      ],
+      "received_slot_count": 0,
+      "received_slots": [],
       "missing_slots": [
         "2026-09-27T00:00:00+09:00",
-        "2026-09-27T00:10:00+09:00"
+        "2026-09-27T00:10:00+09:00",
+        "2026-09-27T00:20:00+09:00",
+        "2026-09-27T00:30:00+09:00",
+        "2026-09-27T00:40:00+09:00",
+        "2026-09-27T00:50:00+09:00"
       ],
-      "coverage_ratio": 0.667,
-      "max_slot_start_delay_seconds": 30.4,
-      "max_slot_delay_seconds": 79.3,
-      "trigger_event_counts": {
-        "workflow_dispatch": 4
-      },
-      "slot_source_counts": {
-        "dispatch_input": 4
-      }
+      "coverage_ratio": 0.0,
+      "max_slot_start_delay_seconds": null,
+      "max_slot_delay_seconds": null,
+      "trigger_event_counts": {},
+      "slot_source_counts": {}
     },
     "news": {
-      "discovery_generated_at": "2026-09-26T23:50:56.168910+09:00",
-      "candidate_count": 145,
+      "discovery_generated_at": "2026-09-27T01:00:56.949297+09:00",
+      "candidate_count": 139,
       "issue_updated_at": "2026-09-27T00:09:11+09:00",
       "issue_count": 34
     },
@@ -47779,10 +48589,10 @@
       "open_count": 24
     },
     "memory": {
-      "generated_at": "2026-09-27T00:09:11+09:00",
-      "latest_batch_id": "supervisor-20260927T0000+0900-a24",
-      "latest_supervisor": "A",
-      "age_minutes": 11.7
+      "generated_at": "2026-09-27T00:35:21+09:00",
+      "latest_batch_id": "supervisor-20260927T0030+0900-b35",
+      "latest_supervisor": "B",
+      "age_minutes": 29.4
     },
     "cards": [
       {
@@ -47790,76 +48600,76 @@
         "title": "Supervisor A 정규 window 검증 대기",
         "state": "검증 대기",
         "impact": "최근 정규 결과 2/3 슬롯 · 누락 슬롯은 과거값으로 보충하지 않음",
-        "last_checked": "2026-09-27T00:20:50.576841+09:00",
+        "last_checked": "2026-09-27T01:04:46.411432+09:00",
         "owner": "A",
         "verify_after": "다음 정규 A/B 사이클"
       },
       {
-        "card_id": "supervisor-b-ok",
-        "title": "Supervisor B 정상",
-        "state": "완료",
-        "impact": "마지막 정규 실행 44분 전 · 3/3 window",
-        "last_checked": "2026-09-27T00:20:50.576841+09:00",
-        "owner": "B"
-      },
-      {
-        "card_id": "sensor-slot-coverage-degraded",
-        "title": "10분 센서 슬롯 일부 누락",
+        "card_id": "supervisor-b-window-incomplete",
+        "title": "Supervisor B 정규 window 검증 대기",
         "state": "검증 대기",
-        "impact": "4/6 슬롯 · 누락 2026-09-27T00:00:00+09:00, 2026-09-27T00:10:00+09:00",
-        "last_checked": "2026-09-27T00:20:50.576841+09:00",
-        "owner": "Recovery",
-        "verify_after": "다음 10분 슬롯"
+        "impact": "최근 정규 결과 0/3 슬롯 · 누락 슬롯은 과거값으로 보충하지 않음",
+        "last_checked": "2026-09-27T01:04:46.411432+09:00",
+        "owner": "B",
+        "verify_after": "다음 정규 A/B 사이클"
       },
       {
-        "card_id": "discovery-stale",
-        "title": "뉴스 discovery 신선도 저하",
+        "card_id": "sensor-slot-coverage-poor",
+        "title": "10분 센서 슬롯 커버리지 낮음",
         "state": "조사 중",
-        "impact": "마지막 갱신 29.906798849999998분 전",
-        "last_checked": "2026-09-27T00:20:50.576841+09:00",
-        "owner": "10분 센서",
-        "verify_after": "다음 10분 슬롯"
+        "impact": "0/6 슬롯 · GitHub schedule/저장 경로 점검 필요",
+        "last_checked": "2026-09-27T01:04:46.411432+09:00",
+        "owner": "Recovery",
+        "verify_after": "다음 Recovery 또는 10분 센서"
+      },
+      {
+        "card_id": "discovery-ok",
+        "title": "뉴스 discovery 정상",
+        "state": "완료",
+        "impact": "4분 전 갱신",
+        "last_checked": "2026-09-27T01:04:46.411432+09:00",
+        "owner": "10분 센서"
       },
       {
         "card_id": "issue-digest-ok",
         "title": "이슈 원장 정상",
         "state": "완료",
-        "impact": "12분 전 갱신 · 34개",
-        "last_checked": "2026-09-27T00:20:50.576841+09:00",
+        "impact": "56분 전 갱신 · 34개",
+        "last_checked": "2026-09-27T01:04:46.411432+09:00",
         "owner": "A/B"
       },
       {
         "card_id": "pages-data-ok",
         "title": "Pages 상태 데이터 정상",
         "state": "완료",
-        "impact": "2136037 bytes",
-        "last_checked": "2026-09-27T00:20:50.576841+09:00",
+        "impact": "2148817 bytes",
+        "last_checked": "2026-09-27T01:04:46.411432+09:00",
         "owner": "Dashboard"
       },
       {
         "card_id": "long-memory-ok",
         "title": "장기 AI 기억 정상",
         "state": "완료",
-        "impact": "12분 전 갱신 · A",
-        "last_checked": "2026-09-27T00:20:50.576841+09:00",
+        "impact": "29분 전 갱신 · B",
+        "last_checked": "2026-09-27T01:04:46.411432+09:00",
         "owner": "Memory"
       },
       {
         "card_id": "optional-news-credentials",
         "title": "선택형 뉴스·공시 API 미연결",
         "state": "완료",
-        "impact": "현재 공개 fallback으로 후보 145건 확보되어 필수 조치 아님",
-        "last_checked": "2026-09-27T00:20:50.576841+09:00",
+        "impact": "현재 공개 fallback으로 후보 139건 확보되어 필수 조치 아님",
+        "last_checked": "2026-09-27T01:04:46.411432+09:00",
         "owner": "Discovery"
       }
     ],
     "user_actions": []
   },
   "regression": {
-    "generated_at": "2026-09-26T14:51:10.342773+00:00",
+    "generated_at": "2026-09-26T16:01:14.591715+00:00",
     "status": "COLLECTING",
     "snapshot": {
-      "timestamp": "2026-09-26T14:51:10.342773+00:00",
+      "timestamp": "2026-09-26T16:01:14.591715+00:00",
       "overall_quality": 94.0,
       "research_quality": null,
       "health_score": 90.0,
@@ -47867,12 +48677,12 @@
       "health_status": "NOTICE"
     },
     "baseline_summary": {
-      "overall_7d": 76.24,
-      "overall_30d": 76.24,
+      "overall_7d": 76.58,
+      "overall_30d": 76.58,
       "research_7d": null,
       "research_30d": null,
-      "samples_7d": 51,
-      "samples_30d": 51
+      "samples_7d": 52,
+      "samples_30d": 52
     },
     "evaluations": [],
     "active_change_count": 0,
