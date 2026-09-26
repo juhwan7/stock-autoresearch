@@ -39,6 +39,32 @@ function relativeTime(value) {
   if (minutes < 1440) return (minutes / 60).toFixed(minutes < 600 ? 1 : 0) + "시간 전";
   return (minutes / 1440).toFixed(1) + "일 전";
 }
+
+function issueTemporalLabel(issue) {
+  const status = String(issue.status || "WATCHING").toUpperCase();
+  const statusWord = {NEW:"등장",WATCHING:"관찰",ACTIVE:"지속",ESCALATING:"강화",EASING:"완화",RESOLVED:"해소"}[status] || status;
+  const startRaw = issue.event_time || issue.first_detected || "";
+  const start = new Date(startRaw);
+  const statusAt = new Date(issue.status_changed_at || issue.last_updated || startRaw);
+  const now = Date.now();
+  if (Number.isNaN(start.getTime())) return statusWord + " 시각 미확인";
+  const hours = Math.max(0, (now - start.getTime()) / 3600000);
+  const statusHours = Number.isNaN(statusAt.getTime()) ? null : Math.max(0, (now - statusAt.getTime()) / 3600000);
+  if (hours < 24) {
+    if (status === "ACTIVE" || status === "WATCHING") return (hours < 1 ? Math.max(1, Math.round(hours * 60)) + "분" : Math.round(hours) + "시간") + "째 " + statusWord + " 중";
+    if (statusHours !== null && statusHours < 24) return relativeTime(issue.status_changed_at || issue.last_updated || startRaw) + " " + statusWord;
+    return relativeTime(startRaw) + " 시작";
+  }
+  const date = new Intl.DateTimeFormat("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric"}).format(start);
+  const days = Math.max(1, Math.floor(hours / 24) + 1);
+  if (status === "RESOLVED") return date + " 시작 · " + relativeTime(issue.status_changed_at || issue.last_updated || startRaw) + " 해소";
+  return date + " 시작 · " + days + "일째 " + (status === "ACTIVE" ? "지속" : "추적");
+}
+function issueLatestUpdateLabel(issue) {
+  const latest = issue.last_updated || issue.first_detected || issue.event_time;
+  if (!latest) return "업데이트 시각 미확인";
+  return "추가 소식 · " + relativeTime(latest);
+}
 function compoundPct(rows, key) {
   if (!rows.length) return null;
   let acc = 1;
@@ -262,7 +288,7 @@ function renderIssueTracker(data) {
   let activeScope="ALL";
   let activeImpact="ALL";
   let activeAge="7";
-  let activeSort="priority";
+  let activeSort="updated";
   let query="";
   const issueTime = (x, key) => {
     const raw = x[key] || "";
@@ -290,7 +316,7 @@ function renderIssueTracker(data) {
     const statusRank={ESCALATING:0,NEW:1,ACTIVE:2,WATCHING:3,EASING:4,RESOLVED:5};
     const severityRank={CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3};
     filtered.sort((a,b)=>{
-      if(activeSort==="updated") return (issueTime(b,"last_updated")||issueTime(b,"first_detected"))-(issueTime(a,"last_updated")||issueTime(a,"first_detected"));
+      if(activeSort==="updated") return Math.max(issueTime(b,"last_updated"),issueTime(b,"event_time"),issueTime(b,"first_detected"))-Math.max(issueTime(a,"last_updated"),issueTime(a,"event_time"),issueTime(a,"first_detected"));
       if(activeSort==="event") return issueTime(b,"event_time")-issueTime(a,"event_time");
       if(activeSort==="detected") return issueTime(b,"first_detected")-issueTime(a,"first_detected");
       const sr=(statusRank[String(a.status||"WATCHING").toUpperCase()]??9)-(statusRank[String(b.status||"WATCHING").toUpperCase()]??9);
@@ -318,7 +344,7 @@ function renderIssueTracker(data) {
           '<strong>' + esc(x.title||x.issue_id||"이슈") + '</strong></div><p>' + esc(x.summary||x.reason||"") + '</p></div>' +
         '<div class="issue-summary-meta"><span>' + esc(x.scope==="KOREA"?"국내":"글로벌") + '</span><span>' + esc(x.category||"") + '</span><b>' + esc(x.severity||"") + '</b>' +
         '<span>' + esc(issuePricingLabel(x.pricing_status)) + '</span><span>출처 ' + esc(x.source_count ?? (x.sources||[]).length) + '개</span>' +
-        '<small>사건 ' + esc(x.event_time||"미확인") + '<br>첫 감지 ' + esc(x.first_detected?relativeTime(x.first_detected):"미확인") + ' · 최근 ' + esc(x.last_updated?relativeTime(x.last_updated):"미확인") + '</small></div></summary>' +
+        '<small><b>' + esc(issueTemporalLabel(x)) + '</b><br>' + esc(issueLatestUpdateLabel(x)) + ' · 최초 감지 ' + esc(x.first_detected?relativeTime(x.first_detected):"미확인") + '</small></div></summary>' +
         '<div class="issue-expanded">' +
           '<div class="issue-explain-grid">' +
             '<section><h3>어떤 이슈인가</h3><p>' + esc(x.summary||"") + '</p></section>' +
