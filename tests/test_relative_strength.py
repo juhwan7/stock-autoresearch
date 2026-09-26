@@ -81,10 +81,10 @@ def test_parse_kospi_json_list_and_benchmark():
         {
             "stocks": [
                 {
-                    "itemCode": "005930",
-                    "stockName": "삼성전자",
-                    "closePrice": "100,000",
-                    "fluctuationsRatio": "+2.50",
+                    "itemcode": "005930",
+                    "itemname": "삼성전자",
+                    "nowPrice": "100,000",
+                    "prevChangeRate": "+2.50",
                     "marketSum": "5000000",
                     "accumulatedTradingVolume": "10,000,000",
                 },
