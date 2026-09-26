@@ -278,12 +278,31 @@ def main() -> int:
         else:
             raise SystemExit("no newer Supervisor result to apply")
 
-    required = ("batch_id", "processed_at", "notify", "summary", "actions", "changed_paths", "next_checks")
+    required = ("batch_id", "processed_at", "notify", "summary")
     missing = [k for k in required if k not in result]
     if missing:
         raise SystemExit("missing fields: " + ", ".join(missing))
     if result.get("notify") is not True:
         raise SystemExit("Supervisor result must have notify=true")
+
+    # 보조 필드 하나가 빠졌다는 이유로 canonical 적용과 Telegram 전체를 중단하지 않는다.
+    # 핵심 식별/시간/알림/요약은 엄격히 검증하되, 실행 메타데이터는 안전한 기본값으로 복구한다.
+    warnings = list(result.get("validation_warnings") or [])
+    if not isinstance(result.get("actions"), list):
+        result["actions"] = []
+        warnings.append("actions 누락/형식오류를 빈 목록으로 복구")
+    if not isinstance(result.get("next_checks"), list):
+        result["next_checks"] = []
+        warnings.append("next_checks 누락/형식오류를 빈 목록으로 복구")
+    if not isinstance(result.get("changed_paths"), list) or not result.get("changed_paths"):
+        try:
+            source_path = str(src.relative_to(ROOT))
+        except ValueError:
+            source_path = str(src)
+        result["changed_paths"] = [source_path]
+        warnings.append("changed_paths 누락을 현재 Supervisor 결과 경로로 복구")
+    if warnings:
+        result["validation_warnings"] = warnings
     observation_ids = result.get("observation_ids") or []
     update_issue_lifecycle(result)
     update_market_session_history(result)
