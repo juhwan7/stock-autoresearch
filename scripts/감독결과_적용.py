@@ -583,6 +583,12 @@ def main() -> int:
     REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     state = _read_json_dict(STATE)
     state["schema_version"] = max(int(state.get("schema_version") or 1), 2)
+    state["batch_size"] = 3
+    state["sensor_interval_minutes"] = 10
+    state.setdefault("last_processed_slot", None)
+    state.setdefault("processed_observation_ids_recent", [])
+    state.setdefault("last_a_window", None)
+    state.setdefault("last_b_window", None)
     state["last_batch_id"] = result["batch_id"]
     state["last_processed_at"] = result["processed_at"]
     processed_recent = [

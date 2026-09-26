@@ -282,6 +282,8 @@ def test_main_recovers_missing_observation_ids_from_complete_slot_window(tmp_pat
     assert applied["observation_completeness_ratio"] == 1.0
     assert state["last_processed_observation_id"] == "obs-1830"
     assert state["last_processed_slot"] == "2026-09-26T18:30:00+09:00"
+    assert state["batch_size"] == 3
+    assert state["sensor_interval_minutes"] == 10
     assert state["last_b_window"]["complete"] is True
 
 
