@@ -481,11 +481,12 @@ class HealthWatchdog:
                 )
             ]
         if not isinstance(data.get("values"), dict) or not data.get("values"):
+            severity = "WARN" if _kr_market_monitor_window(now) else "NOTICE"
             return [
                 self._issue(
                     "macro",
                     "unavailable",
-                    "WARN",
+                    severity,
                     "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
                     "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
                 )
@@ -536,13 +537,19 @@ class HealthWatchdog:
             if str(x.get("status")) in {"empty", "error"}
         ]
         if google and len(empty_google) >= max(3, (len(google) + 1) // 2):
+            fallback = source_status.get("google_news:broad_fallback")
+            fallback_ok = (
+                isinstance(fallback, dict)
+                and str(fallback.get("status")) == "ok"
+                and int(fallback.get("count") or 0) > 0
+            )
             issues.append(
                 self._issue(
                     "discovery",
                     "google-news-degraded",
-                    "WARN",
+                    "NOTICE" if fallback_ok else "WARN",
                     f"Google News 탐색 {len(empty_google)}/{len(google)}개 그룹이 비어 있거나 오류",
-                    "6분 센서가 when 필터 제거 + broad fallback을 자동 재시도. 반복되면 1시간 AI가 검색식/소스를 수정",
+                    "broad fallback이 성공하면 보조 경보로 유지. fallback까지 실패하면 검색식/소스를 수정",
                 )
             )
 
