@@ -171,16 +171,99 @@ function renderFlow(krRows) {
   }
 }
 function renderIssues(data) {
-  const store = data.market_issues || {};
+  const digest = data.news_issue_digest || {};
+  const store = (digest.issues || []).length ? digest : (data.market_issues || {});
   const rank = {ESCALATING:0,NEW:1,ACTIVE:2,WATCHING:3,EASING:4,RESOLVED:5};
   const rows = (store.issues || []).slice().sort((a,b)=>(rank[a.status]??9)-(rank[b.status]??9));
   const limit = $("market-issue-list")?.dataset.limit ? Number($("market-issue-list").dataset.limit) : rows.length;
   setHTML("market-issue-list", rows.length ? rows.slice(0,limit).map((x) => {
     const status = String(x.status || "WATCHING").toUpperCase();
     const label = {NEW:"신규",WATCHING:"관찰",ACTIVE:"지속",ESCALATING:"강화",EASING:"완화",RESOLVED:"해소"}[status] || status;
-    return '<div class="mini-row" data-level="' + esc(status) + '"><strong>[' + esc(label) + '] ' + esc(x.title || x.issue_id || "이슈") + '</strong><span>' + esc(x.reason || "") + '</span><small>첫 감지 ' + esc(x.first_detected ? relativeTime(x.first_detected) : "미확인") + ' · 최근 ' + esc(x.last_seen ? relativeTime(x.last_seen) : "미확인") + '</small></div>';
+    return '<div class="mini-row" data-level="' + esc(status) + '"><strong>[' + esc(label) + '] ' + esc(x.title || x.issue_id || "이슈") + '</strong><span>' + esc(x.reason || x.summary || "") + '</span><small>사건 ' + esc(x.event_time || "미확인") + ' · 첫 감지 ' + esc(x.first_detected ? relativeTime(x.first_detected) : "미확인") + ' · 최근 ' + esc((x.last_updated || x.last_seen) ? relativeTime(x.last_updated || x.last_seen) : "미확인") + '</small></div>';
   }).join("") : empty("누적된 시장 이슈가 아직 없습니다."));
 }
+
+function renderIssueTracker(data) {
+  const root = $("issue-full-list");
+  if (!root) return;
+  const store = data.news_issue_digest || {};
+  const rows = (store.issues || []).slice();
+  const statusLabel = {NEW:"등장",WATCHING:"관찰",ACTIVE:"지속",ESCALATING:"강화",EASING:"완화",RESOLVED:"해소"};
+  const statuses = ["ALL","NEW","ESCALATING","ACTIVE","WATCHING","EASING","RESOLVED"];
+
+  setText("issue-updated", store.updated_at ? "갱신 · " + relativeTime(store.updated_at) : "데이터 없음");
+  setText("issue-total-count", rows.length + "개");
+  const scan = store.scan_summary || {};
+  setHTML("issue-scan-summary",
+    '<strong>:00/:30 전체 뉴스 이슈화</strong><div class="source-line">' +
+    esc(scan.note || "최신 뉴스 후보를 넓게 수집한 뒤 중복 기사·단순 재탕·시장 연관성이 낮은 항목을 제거하고 사건 단위로 묶습니다.") +
+    (scan.target_articles ? " · 후보 목표 " + esc(scan.target_articles) + "건" : "") +
+    " · 표시 최대 " + esc(store.max_issues || 100) + "개 · 해소 이슈 최소 " + esc(store.retention_days || 7) + "일 보존</div>"
+  );
+
+  const counts = {};
+  rows.forEach((x) => { const s=String(x.status||"WATCHING").toUpperCase(); counts[s]=(counts[s]||0)+1; });
+  setHTML("issue-tracker-counts", ["NEW","ESCALATING","ACTIVE","WATCHING","EASING","RESOLVED"].map((s) =>
+    '<div class="issue-count-card" data-level="' + s + '"><span>' + esc(statusLabel[s]) + '</span><strong>' + esc(counts[s] || 0) + '</strong></div>'
+  ).join(""));
+  setHTML("issue-status-filters", statuses.map((s,i) =>
+    '<button type="button" class="issue-filter' + (i===0?" active":"") + '" data-status="' + s + '">' + esc(s==="ALL"?"전체":statusLabel[s]) + '</button>'
+  ).join(""));
+
+  let activeStatus="ALL";
+  let query="";
+  const render = () => {
+    const filtered = rows.filter((x) => {
+      const s=String(x.status||"WATCHING").toUpperCase();
+      if (activeStatus!=="ALL" && s!==activeStatus) return false;
+      if (!query) return true;
+      const hay=[x.title,x.summary,x.category,x.scope,x.why_market_matters,(x.affected_assets||[]).join(" "),(x.transmission_path||[]).join(" ")].join(" ").toLowerCase();
+      return hay.includes(query);
+    });
+    root.innerHTML = filtered.length ? filtered.map((x) => {
+      const status=String(x.status||"WATCHING").toUpperCase();
+      const sources=(x.sources||[]).map((s) =>
+        '<a class="issue-source" href="' + esc(s.url||"#") + '" target="_blank" rel="noreferrer"><strong>' + esc(s.publisher||"출처") + '</strong><span>' + esc(s.title||s.url||"") + '</span></a>'
+      ).join("");
+      const history=(x.history||[]).slice().reverse().map((h) =>
+        '<div class="issue-history-row"><time>' + esc(h.at||h.event_time||"") + '</time><strong>' + esc((h.from?statusLabel[String(h.from).toUpperCase()]+" → ":"") + (statusLabel[String(h.to||status).toUpperCase()]||h.to||status)) + '</strong><span>' + esc(h.note||"") + '</span></div>'
+      ).join("");
+      const facts=(x.confirmed_facts||x.evidence||[]);
+      const unknowns=(x.unconfirmed||x.unknowns||[]);
+      return '<details class="issue-detail" data-level="' + esc(status) + '">' +
+        '<summary><div class="issue-summary-main"><div class="issue-title-line"><span class="issue-status">' + esc(statusLabel[status]||status) + '</span><strong>' + esc(x.title||x.issue_id||"이슈") + '</strong></div><p>' + esc(x.summary||x.reason||"") + '</p></div>' +
+        '<div class="issue-summary-meta"><span>' + esc(x.scope||"") + '</span><span>' + esc(x.category||"") + '</span><b>' + esc(x.severity||"") + '</b><small>사건 ' + esc(x.event_time||"미확인") + '<br>최근 ' + esc(x.last_updated?relativeTime(x.last_updated):"미확인") + '</small></div></summary>' +
+        '<div class="issue-expanded">' +
+          '<div class="issue-explain-grid">' +
+            '<section><h3>어떤 이슈인가</h3><p>' + esc(x.summary||"") + '</p></section>' +
+            '<section><h3>왜 시장에 중요한가</h3><p>' + esc(x.why_market_matters||"시장 영향 경로를 추가 확인 중입니다.") + '</p></section>' +
+            '<section><h3>현재 진행 상황</h3><p>' + esc(x.change_reason||x.next_check||"다음 :00/:30 사이클에서 새 근거를 확인합니다.") + '</p></section>' +
+            '<section><h3>다음 확인</h3><p>' + esc(x.next_check||"추가 확인 항목 없음") + '</p></section>' +
+          '</div>' +
+          '<div class="issue-detail-grid">' +
+            '<section><h3>전달 경로</h3><div class="issue-tags">' + (x.transmission_path||[]).map((v)=>'<span>'+esc(v)+'</span>').join("") + '</div></section>' +
+            '<section><h3>영향 자산·섹터</h3><div class="issue-tags">' + (x.affected_assets||[]).map((v)=>'<span>'+esc(v)+'</span>').join("") + '</div></section>' +
+            '<section><h3>확인된 사실·근거</h3>' + (facts.length?'<ul>'+facts.map((v)=>'<li>'+esc(typeof v==="string"?v:(v.text||v.claim||JSON.stringify(v)))+'</li>').join("")+'</ul>':'<p class="muted">구조화된 사실 목록을 추가 확인 중입니다.</p>') + '</section>' +
+            '<section><h3>미확인·반증 조건</h3>' + (unknowns.length?'<ul>'+unknowns.map((v)=>'<li>'+esc(typeof v==="string"?v:(v.text||JSON.stringify(v)))+'</li>').join("")+'</ul>':'<p class="muted">현재 별도 미확인 항목 없음</p>') + '</section>' +
+          '</div>' +
+          '<section class="issue-history"><h3>상태 변경 기록</h3>' + (history||'<div class="issue-history-row"><time>'+esc(x.first_detected||x.event_time||"")+'</time><strong>'+esc(statusLabel[status]||status)+'</strong><span>현재 저장된 첫 상태</span></div>') + '</section>' +
+          '<section class="issue-sources"><h3>출처</h3>' + (sources||'<p class="muted">출처 링크 추가 확인 중</p>') + '</section>' +
+        '</div></details>';
+    }).join("") : empty("조건에 맞는 이슈가 없습니다.");
+  };
+  render();
+
+  const search=$("issue-search");
+  if (search) search.addEventListener("input",()=>{query=search.value.trim().toLowerCase();render();});
+  const filters=$("issue-status-filters");
+  if (filters) filters.addEventListener("click",(event)=>{
+    const button=event.target.closest("[data-status]"); if(!button) return;
+    activeStatus=button.dataset.status||"ALL";
+    filters.querySelectorAll(".issue-filter").forEach((x)=>x.classList.toggle("active",x===button));
+    render();
+  });
+}
+
 function renderResearch(data) {
   const supervisor = data.supervisor_latest || {};
   setText("supervisor-status", supervisor.status || "NO DATA");
@@ -319,6 +402,7 @@ async function load() {
   renderSessionTables(session, krRows, usRows);
   renderFlow(krRows);
   renderIssues(data);
+  renderIssueTracker(data);
   renderResearch(data);
   renderRisk(data);
   renderMacro(data);
