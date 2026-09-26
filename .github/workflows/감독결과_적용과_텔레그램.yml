@@ -1,6 +1,12 @@
 name: Supervisor 결과 적용 및 Telegram
 
 on:
+  workflow_dispatch:
+    inputs:
+      supervisor_result:
+        description: "Supervisor A/B 결과 JSON. 직접 main 쓰기가 막힐 때 Action 단일 writer가 저장·적용합니다."
+        required: true
+        type: string
   push:
     branches: [main]
     paths:
@@ -28,37 +34,80 @@ jobs:
           cache: pip
       - name: Install
         run: pip install -e ".[dev]"
-      - name: Find pushed AI result
+
+      - name: Receive or find Supervisor result
         id: result
         shell: bash
+        env:
+          DISPATCH_RESULT: ${{ inputs.supervisor_result }}
         run: |
           RESULT="$(python - <<'PY'
-          import json, os
+          import json
+          import os
+          import re
           from pathlib import Path
 
-          event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
-          changed = []
-          for commit in event.get("commits", []):
-              changed.extend(commit.get("added", []))
-              changed.extend(commit.get("modified", []))
-          candidates = [
-              Path(p) for p in changed
-              if p.startswith("data/supervisor/ai-results/") and p.endswith(".json") and Path(p).exists()
-          ]
-          if not candidates:
-              candidates = list(Path("data/supervisor/ai-results").glob("*.json"))
-          if not candidates:
-              raise SystemExit("no Supervisor AI result found")
+          root = Path("data/supervisor/ai-results")
+          root.mkdir(parents=True, exist_ok=True)
+          raw = (os.environ.get("DISPATCH_RESULT") or "").strip()
 
-          def processed_at(path):
+          if raw:
               try:
-                  return json.loads(path.read_text(encoding="utf-8")).get("processed_at", "")
-              except Exception:
-                  return ""
-          print(max(candidates, key=processed_at))
+                  payload = json.loads(raw)
+              except json.JSONDecodeError as exc:
+                  raise SystemExit(f"invalid supervisor_result JSON: {exc}")
+              if not isinstance(payload, dict):
+                  raise SystemExit("supervisor_result must be a JSON object")
+
+              required = ("batch_id", "processed_at", "supervisor", "notify", "summary", "feedback_to_other_supervisor")
+              missing = [key for key in required if key not in payload]
+              if missing:
+                  raise SystemExit("missing required fields: " + ", ".join(missing))
+              batch_id = str(payload.get("batch_id") or "").strip()
+              if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._+:-]{5,159}", batch_id):
+                  raise SystemExit("unsafe or invalid batch_id")
+              supervisor = str(payload.get("supervisor") or "").strip().upper()
+              if supervisor not in {"A", "B"}:
+                  raise SystemExit("supervisor must be A or B")
+              if payload.get("notify") is not True:
+                  raise SystemExit("notify must be true")
+              if not payload.get("feedback_to_other_supervisor"):
+                  raise SystemExit("feedback_to_other_supervisor must not be empty")
+
+              path = root / f"{batch_id}.json"
+              serialized = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+              if path.exists():
+                  existing = json.loads(path.read_text(encoding="utf-8"))
+                  if existing != payload:
+                      raise SystemExit(f"batch_id already exists with different content: {batch_id}")
+              else:
+                  path.write_text(serialized, encoding="utf-8")
+              print(path)
+          else:
+              event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
+              changed = []
+              for commit in event.get("commits", []):
+                  changed.extend(commit.get("added", []))
+                  changed.extend(commit.get("modified", []))
+              candidates = [
+                  Path(p) for p in changed
+                  if p.startswith("data/supervisor/ai-results/")
+                  and p.endswith(".json")
+                  and Path(p).exists()
+              ]
+              if not candidates:
+                  raise SystemExit("no Supervisor AI result found in push")
+              def processed_at(path):
+                  try:
+                      return json.loads(path.read_text(encoding="utf-8")).get("processed_at", "")
+                  except Exception:
+                      return ""
+              print(max(candidates, key=processed_at))
           PY
           )"
           echo "path=$RESULT" >> "$GITHUB_OUTPUT"
+          echo "Supervisor result: $RESULT"
+
       - name: Apply result to canonical state
         run: python scripts/감독결과_적용.py "${{ steps.result.outputs.path }}"
 
@@ -76,28 +125,57 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
+          result_path = Path("${{ steps.result.outputs.path }}")
+          source = json.loads(result_path.read_text(encoding="utf-8"))
           r=json.loads(Path("data/supervisor/latest-report.json").read_text())
           s=json.loads(Path("data/supervisor/state.json").read_text())
-          assert r["batch_id"] == s["last_batch_id"]
+          assert source["batch_id"] == r["batch_id"] == s["last_batch_id"]
           assert r["processed_at"] == s["last_processed_at"]
           assert r["notify"] is True
-          print("canonical supervisor state verified")
+          assert result_path.name == f'{source["batch_id"]}.json'
+          print("Supervisor result and canonical state verified")
           PY
-      - name: Commit canonical state
+
+      - name: Commit result and canonical state as one writer
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/supervisor/latest-report.json data/supervisor/state.json data/supervisor/market-issues.json data/market/recent-sessions.json data/research/popular-reports.json data/news/issue-digest.json
+          git add "${{ steps.result.outputs.path }}"
+          git add data/supervisor/latest-report.json data/supervisor/state.json data/supervisor/market-issues.json data/supervisor/disagreements.json data/market/recent-sessions.json data/research/popular-reports.json data/news/issue-digest.json
           if [ -d data/news/archive ]; then git add data/news/archive; fi
           if [ -d memory ]; then git add memory; fi
           if git diff --cached --quiet; then
-            echo "No canonical changes"
+            echo "No Supervisor result/canonical changes"
           else
-            git commit -m "Supervisor 결과 반영: canonical 상태·이슈 타임라인 갱신"
-            git pull --rebase origin main
-            git push origin HEAD:main
+            git commit -m "Supervisor 결과 반영: 단일 writer 저장·canonical 갱신"
+            for ATTEMPT in 1 2 3; do
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                echo "Supervisor result/canonical 저장 성공"
+                break
+              fi
+              git rebase --abort || true
+              if [ "$ATTEMPT" -eq 3 ]; then
+                echo "Supervisor result/canonical 저장에 3회 실패했습니다." >&2
+                exit 1
+              fi
+              sleep $((ATTEMPT * 2))
+            done
           fi
+
+      - name: Verify persisted result on main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          RESULT_PATH="${{ steps.result.outputs.path }}"
+          LOCAL_BATCH="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["batch_id"])' "$RESULT_PATH")"
+          gh api "repos/$GH_REPO/contents/$RESULT_PATH?ref=main" --jq '.content' | tr -d '\n' | base64 -d > /tmp/persisted-result.json
+          REMOTE_BATCH="$(python -c 'import json; print(json.load(open("/tmp/persisted-result.json", encoding="utf-8"))["batch_id"])')"
+          test "$LOCAL_BATCH" = "$REMOTE_BATCH"
+          echo "main result persistence verified: $REMOTE_BATCH"
+
       - name: Send Telegram result
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
