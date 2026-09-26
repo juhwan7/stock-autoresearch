@@ -146,6 +146,8 @@ def test_topic_relevance_filters_sports_noise_but_keeps_market_news():
     assert is_market_relevant_news_item("한미 정상회담에서 전략투자 협력 논의", "kr_diplomacy_summit") is True
 
 
-def test_dynamic_topic_requires_its_own_emerging_term():
+def test_dynamic_topic_requires_its_own_emerging_term_and_market_context():
     assert is_market_relevant_news_item("이란 휴전 협상 새 제안", "dynamic:이란") is True
     assert is_market_relevant_news_item("미국채 금리 상승", "dynamic:이란") is False
+    assert is_market_relevant_news_item("멕시코 K-POP 팬들과 기념촬영", "dynamic:멕시코") is False
+    assert is_market_relevant_news_item("멕시코 무역협정 투자 협상", "dynamic:멕시코") is True
