@@ -131,6 +131,7 @@ def test_main_recovers_missing_changed_paths_without_blocking_apply(tmp_path, mo
     module.POPULAR_REPORTS = tmp_path / "popular-reports.json"
     module.NEWS_ISSUES = tmp_path / "issue-digest.json"
     module.AI_RESULTS = tmp_path / "data/supervisor/ai-results"
+    module.COLLABORATION = tmp_path / "collaboration.json"
     module.AI_RESULTS.mkdir(parents=True, exist_ok=True)
     module.STATE.write_text("{}", encoding="utf-8")
 
@@ -229,6 +230,7 @@ def _configure_apply_paths(module, tmp_path):
     module.RECENT_OBSERVATIONS = tmp_path / "recent.json"
     module.DISAGREEMENTS = tmp_path / "disagreements.json"
     module.AI_RESULTS = tmp_path / "data/supervisor/ai-results"
+    module.COLLABORATION = tmp_path / "collaboration.json"
     module.AI_RESULTS.mkdir(parents=True, exist_ok=True)
     module.STATE.write_text("{}", encoding="utf-8")
 
@@ -651,3 +653,100 @@ def test_apply_refuses_older_result_instead_of_silently_switching_batch(tmp_path
 
     canonical = json.loads(module.REPORT.read_text(encoding="utf-8"))
     assert canonical["batch_id"] == "supervisor-20260927T0000+0900-a24"
+
+
+
+def test_collaboration_state_merges_sensor_aliases_and_keeps_history(tmp_path):
+    module = load_module()
+    module.COLLABORATION = tmp_path / "collaboration.json"
+    first_path = tmp_path / "a.json"
+    second_path = tmp_path / "b.json"
+
+    first = {
+        "batch_id": "supervisor-a-0000",
+        "processed_at": "2026-09-27T00:09:11+09:00",
+        "supervisor": "A",
+        "status": "verification_pending",
+        "summary": "00:00 슬롯 누락",
+        "project_improvement_signals": [
+            {
+                "id": "sensor-slot-0000-missing",
+                "status": "investigating",
+                "signal": "00:00 canonical observation 누락",
+                "verify_after": "다음 센서",
+            },
+            {
+                "id": "issue-digest-apply-stale",
+                "status": "verification_pending",
+                "signal": "이슈 원장 전진 여부 확인 필요",
+            },
+        ],
+        "changed_paths": ["data/supervisor/ai-results/supervisor-a-0000.json"],
+        "next_checks": ["00:10 이후 확인"],
+    }
+    second = {
+        "batch_id": "supervisor-b-0030",
+        "processed_at": "2026-09-27T00:35:21+09:00",
+        "supervisor": "B",
+        "status": "verification_pending",
+        "summary": "00:10/00:20/00:30도 누락",
+        "project_improvement_signals": [
+            {
+                "id": "sensor-slot-0000-plus-continuity",
+                "status": "investigating",
+                "signal": "00:30까지 센서 연속성 이상",
+                "verify_after": "Recovery 실행",
+            },
+            {
+                "id": "issue-digest-apply-stale",
+                "status": "resolved",
+                "signal": "00:09:11까지 실제 전진 확인",
+            },
+        ],
+        "changed_paths": ["data/supervisor/ai-results/supervisor-b-0030.json"],
+        "next_checks": ["self-chain/heartbeat 확인"],
+    }
+
+    first_path.write_text(json.dumps(first, ensure_ascii=False), encoding="utf-8")
+    second_path.write_text(json.dumps(second, ensure_ascii=False), encoding="utf-8")
+    module.update_collaboration_state(first, first_path)
+    module.update_collaboration_state(second, second_path)
+
+    stored = json.loads(module.COLLABORATION.read_text(encoding="utf-8"))
+    by_id = {x["incident_id"]: x for x in stored["incidents"]}
+    assert set(by_id) == {"sensor-continuity", "issue-digest-apply"}
+    assert by_id["sensor-continuity"]["status"] == "investigating"
+    assert len(by_id["sensor-continuity"]["history"]) == 2
+    assert by_id["issue-digest-apply"]["status"] == "resolved"
+    assert stored["active_incident_count"] == 1
+    assert stored["resolved_incident_count"] == 1
+    assert stored["last_turn"]["batch_id"] == "supervisor-b-0030"
+    assert stored["last_turn"]["change_kind"] == "result_only"
+
+
+def test_collaboration_state_does_not_turn_no_change_into_active_incident(tmp_path):
+    module = load_module()
+    module.COLLABORATION = tmp_path / "collaboration.json"
+    source = tmp_path / "result.json"
+    result = {
+        "batch_id": "supervisor-a-stable",
+        "processed_at": "2026-09-27T01:00:00+09:00",
+        "supervisor": "A",
+        "status": "ok",
+        "summary": "변경 필요 없음",
+        "project_improvement_signals": [
+            {
+                "id": "ui-review-stable",
+                "status": "no_change",
+                "signal": "현재 UI 구조 유지가 더 안전",
+            }
+        ],
+        "changed_paths": [],
+        "next_checks": [],
+    }
+    source.write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
+    module.update_collaboration_state(result, source)
+    stored = json.loads(module.COLLABORATION.read_text(encoding="utf-8"))
+    assert stored["active_incident_count"] == 0
+    assert stored["resolved_incident_count"] == 1
+    assert stored["status"] == "healthy"
