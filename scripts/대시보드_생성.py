@@ -66,23 +66,45 @@ def report_metadata(path: Path) -> dict:
         "industries": industries[:12],
         "stocks": stocks[:20],
         "preview": preview,
+        "content": text[:18000],
     }
 
 
+def inferred_report_time(path: Path, title: str, generated_at: str) -> str:
+    if generated_at:
+        return generated_at
+    source = f"{path.stem} {title}"
+    date_match = re.search(r"(20\d{2}-\d{2}-\d{2})", source)
+    if not date_match:
+        return ""
+    day = date_match.group(1)
+    tail = source[date_match.end():]
+    time_matches = re.findall(r"(?<!\d)([01]\d|2[0-3])(?::?([0-5]\d))(?!\d)", tail)
+    hour, minute = time_matches[-1] if time_matches else ("00", "00")
+    return f"{day}T{hour}:{minute}:00+09:00"
+
+
 def recent_reports(limit: int = 100) -> list[dict]:
-    files = sorted((ROOT / "reports").rglob("*.md"), reverse=True)[:limit]
+    files = list((ROOT / "reports").rglob("*.md"))
     repo = os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch")
     result = []
     for path in files:
+        title = title_of(path)
         meta = report_metadata(path)
         result.append(
             {
-                "title": title_of(path),
+                "title": title,
                 "file": str(path.relative_to(ROOT / "reports")),
                 "github_url": f"https://github.com/{repo}/blob/main/{path.relative_to(ROOT)}",
+                "sort_at": inferred_report_time(path, title, meta.get("generated_at", "")),
                 **meta,
             }
         )
+    result.sort(key=lambda item: item.get("sort_at") or "", reverse=True)
+    result = result[:limit]
+    for index, item in enumerate(result):
+        if index >= 20:
+            item.pop("content", None)
     return result
 
 
