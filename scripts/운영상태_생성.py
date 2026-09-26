@@ -75,17 +75,41 @@ def sensor_slot_coverage(now: datetime, *, slot_count: int = 6) -> dict:
         if key not in expected_keys:
             continue
         current = received.get(key)
-        current_delay = float((current or {}).get("slot_delay_seconds") or 999999)
-        candidate_delay = float(item.get("slot_delay_seconds") or 0)
-        if current is None or candidate_delay < current_delay:
+        current_start_delay = float(
+            (current or {}).get("slot_start_delay_seconds")
+            or (current or {}).get("slot_delay_seconds")
+            or 999999
+        )
+        candidate_start_delay = float(
+            item.get("slot_start_delay_seconds")
+            or item.get("slot_delay_seconds")
+            or 0
+        )
+        if current is None or candidate_start_delay < current_start_delay:
             received[key] = item
 
     received_slots = [slot.isoformat() for slot in expected if slot.isoformat() in received]
     missing_slots = [slot.isoformat() for slot in expected if slot.isoformat() not in received]
-    delays = [
+    start_delays = [
+        float(
+            (received.get(slot) or {}).get("slot_start_delay_seconds")
+            or (received.get(slot) or {}).get("slot_delay_seconds")
+            or 0
+        )
+        for slot in received_slots
+    ]
+    completion_delays = [
         float((received.get(slot) or {}).get("slot_delay_seconds") or 0)
         for slot in received_slots
     ]
+    event_counts: dict[str, int] = {}
+    slot_source_counts: dict[str, int] = {}
+    for slot in received_slots:
+        item = received.get(slot) or {}
+        event_name = str((item.get("source") or {}).get("event_name") or "unknown")
+        slot_source = str(item.get("slot_source") or "legacy")
+        event_counts[event_name] = event_counts.get(event_name, 0) + 1
+        slot_source_counts[slot_source] = slot_source_counts.get(slot_source, 0) + 1
     ratio = round(len(received_slots) / slot_count, 3) if slot_count else 0.0
     return {
         "window_start": expected[0].isoformat() if expected else None,
@@ -95,7 +119,14 @@ def sensor_slot_coverage(now: datetime, *, slot_count: int = 6) -> dict:
         "received_slots": received_slots,
         "missing_slots": missing_slots,
         "coverage_ratio": ratio,
-        "max_slot_delay_seconds": round(max(delays), 1) if delays else None,
+        "max_slot_start_delay_seconds": (
+            round(max(start_delays), 1) if start_delays else None
+        ),
+        "max_slot_delay_seconds": (
+            round(max(completion_delays), 1) if completion_delays else None
+        ),
+        "trigger_event_counts": event_counts,
+        "slot_source_counts": slot_source_counts,
     }
 
 
