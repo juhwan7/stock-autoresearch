@@ -1,8 +1,8 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-27T00:09:11+09:00
-> latest batch: supervisor-20260927T0000+0900-a24
-> Supervisor: A · 상태 verification_pending
+> 자동 갱신: 2026-09-27T00:35:21+09:00
+> latest batch: supervisor-20260927T0030+0900-b35
+> Supervisor: B · 상태 verification_pending
 > 이번 작업축: 7개
 
 ## 시작할 때 읽기
@@ -14,10 +14,10 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
+- 00:10/00:20/00:30 센서 연속 누락 원인과 self-chain/heartbeat 복구
 - 미·이란 공식 답변과 호르무즈 실제 통항
-- 한국 수입규제 241건 중 철강·금속 113건(46.9%) 노출과 다음 거래일 반응
-- 월요일 USTR 미중 무역협상 공식 세부
-- 00:00 센서 슬롯 누락 원인과 다음 10분 self-chain 연속성
+- 한국 수입규제 241건의 다음 거래일 업종 가격·수급 반응
+- macro runtime 실값의 다음 거래 가능 구간 검증
 
 ## 활성 시장 이슈
 - 이란 전쟁 여파로 EU 에너지 가격 위기 경고 — NEW
@@ -30,15 +30,14 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- sensor-slot-0000-missing — investigating
-- issue-digest-apply-stale — verification_pending
+- sensor-slot-0000-plus-continuity — investigating
 - macro-runtime-empty — verification_pending
 - Supervisor A 정규 window 검증 대기 — 최근 정규 결과 2/3 슬롯 · 누락 슬롯은 과거값으로 보충하지 않음
 - 10분 센서 슬롯 일부 누락 — 4/6 슬롯 · 누락 2026-09-27T00:00:00+09:00, 2026-09-27T00:10:00+09:00
 - 뉴스 discovery 신선도 저하 — 마지막 갱신 29.906798849999998분 전
 
 ## 최근 해결
-- 없음
+- issue-digest-apply-stale — resolved
 
 ## 운영 품질
 - operations: investigating

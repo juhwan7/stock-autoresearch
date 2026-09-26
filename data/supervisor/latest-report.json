@@ -1,28 +1,33 @@
 {
-  "batch_id": "supervisor-20260927T0000+0900-a24",
-  "processed_at": "2026-09-27T00:09:11+09:00",
-  "supervisor": "A",
+  "batch_id": "supervisor-20260927T0030+0900-b35",
+  "processed_at": "2026-09-27T00:35:21+09:00",
+  "supervisor": "B",
   "notify": true,
   "status": "verification_pending",
-  "summary": "00:00 A canonical window는 23:40/23:50/00:00 중 23:40·23:50만 확보되어 2/3다. 00:00 슬롯을 과거값이나 00:10 이후 관측으로 대체하지 않았다. B가 지적한 operations/status stale은 00:05 갱신으로 해소됐지만 issue-digest는 여전히 16:00이라 lifecycle apply 문제는 계속 검증한다. 시장은 미·이란/호르무즈 ACTIVE와 한국 수입규제 NEW를 유지하며 휴장 중 가격·수급을 추정하지 않는다.",
-  "market_narrative": "한국 현물은 추석 연휴로 새 가격·외국인·기관 수급을 검증할 수 없다. 23:40~23:50 뉴스는 이란 16→17건, 수입규제 24→24건으로 기사량 자체의 상태변화 근거는 약하다. Reuters 최신 확인에서 이란은 공식 미국 답변을 기다리는 상태이고, 00:00 슬롯이 누락돼 단기 강화/완화를 확정하지 않는다.",
+  "summary": "00:30 B canonical window는 00:10/00:20/00:30 세 슬롯 모두 main에 없어 0/3이다. 과거 00:00 이전 관측이나 아직 존재하지 않는 :40 관측으로 보충하지 않았다. 직전 A가 재적용한 issue-digest는 00:09:11로 실제 전진해 해당 피드백은 해결됐지만, 센서 연속성은 00:00 이후 끊긴 상태라 시장 방향·뉴스 강화/완화 판단은 새로 확정하지 않는다.",
+  "market_narrative": "한국 현물은 추석 연휴라 새 가격·수급 검증 대상이 아니다. 최신 canonical discovery는 23:50에 멈춰 있고 이번 B window 관측이 0/3이므로 미·이란/호르무즈, 수입규제 등 기존 이슈의 상태를 기사량 변화만으로 승격·완화하지 않는다. independent_story_count_estimate는 제목 유사도 추정치로만 취급하며 독립 원기사 수로 확정하지 않는다.",
   "market_focus": [
+    "00:10/00:20/00:30 센서 연속 누락 원인과 self-chain/heartbeat 복구",
     "미·이란 공식 답변과 호르무즈 실제 통항",
-    "한국 수입규제 241건 중 철강·금속 113건(46.9%) 노출과 다음 거래일 반응",
-    "월요일 USTR 미중 무역협상 공식 세부",
-    "00:00 센서 슬롯 누락 원인과 다음 10분 self-chain 연속성"
+    "한국 수입규제 241건의 다음 거래일 업종 가격·수급 반응",
+    "macro runtime 실값의 다음 거래 가능 구간 검증"
   ],
   "invalidation_checks": [
-    "미국·이란 공식 합의와 실제 통항 정상화가 확인되면 위험을 낮춘다.",
-    "군사행동·통항 악화·공급차질이면 미·이란 위험 강화 검토.",
-    "수입규제 신규조사가 종료·철회되거나 실제 적용범위가 제한적이면 광범위 수출 부담 해석을 낮춘다.",
-    "00:00 누락 때문에 23:50 이후 뉴스 변화나 가격 방향을 이번 A 결론으로 확정하지 않는다."
+    "00:10/00:20/00:30 중 실제 canonical observation이 뒤늦게 main에 생성되면 다음 사이클에서 해당 슬롯 provenance를 재검증한다.",
+    "미국·이란 공식 합의와 실제 통항 정상화가 확인되면 기존 HIGH 위험을 낮춘다.",
+    "군사행동·통항 악화·공급차질의 1차/복수 독립근거가 확인되면 위험 강화 검토.",
+    "휴장 중 과거 지수값을 실시간 가격 변화로 해석하지 않는다."
   ],
   "overnight_risks": [
     {
       "risk": "미·이란 협상 결렬/호르무즈 공급차질",
       "severity": "HIGH",
-      "status": "ACTIVE"
+      "status": "ACTIVE_BUT_NO_NEW_WINDOW_EVIDENCE"
+    },
+    {
+      "risk": "센서 00:00 이후 연속 누락으로 새 시장 변화 미포착",
+      "severity": "HIGH",
+      "status": "VERIFICATION_PENDING"
     },
     {
       "risk": "장기금리·에너지 비용",
@@ -34,309 +39,213 @@
     {
       "type": "canonical_window",
       "status": "verification_pending",
-      "detail": "23:40/23:50만 사용, 00:00 누락; 대체 관측 금지"
+      "detail": "00:10/00:20/00:30만 요구했으나 0/3; 과거값/:40 보충 금지"
     },
     {
       "type": "feedback_validation",
-      "status": "done",
-      "detail": "B의 operations/status stale은 00:05 refresh로 해결, issue-digest stale은 미해결 확인"
+      "status": "resolved",
+      "detail": "A의 issue-digest 재적용 후 data/news/issue-digest.json updated_at가 00:09:11로 전진함"
     },
     {
-      "type": "news_validation",
-      "status": "done",
-      "detail": "이란·수입규제 기사수와 independent_story_count_estimate를 독립 원기사 확정치로 취급하지 않음"
-    },
-    {
-      "type": "issue_lifecycle",
-      "status": "verification_pending",
-      "detail": "기존 issue_id 2개를 유지한 payload로 canonical digest 병합 경로 재검증"
+      "type": "sensor_continuity",
+      "status": "investigating",
+      "detail": "queue에 2026-09-27 파일 자체가 없고 operations 00:20에도 00:00/00:10 누락 표시; 00:20/00:30도 결과 생성 시점 main에 없음"
     },
     {
       "type": "ui_ux",
       "status": "no_change",
-      "detail": "불완전 2/3 window에서 새 카드를 늘리지 않고 HIGH 위험/운영 stale만 기존 계층으로 표시"
+      "detail": "내부 장애 카드를 추가로 늘리지 않고 기존 센서 슬롯 coverage 카드 하나에서 연속 누락을 표현하는 편이 정보 중복이 적음"
+    },
+    {
+      "type": "code_change",
+      "status": "no_change",
+      "detail": "현재 결과만으로 self-chain 실패 원인을 특정할 수 없어 추측성 코드 수정은 보류"
     }
   ],
   "changed_paths": [
-    "data/supervisor/ai-results/supervisor-20260927T0000+0900-a24.json"
+    "data/supervisor/ai-results/supervisor-20260927T0030+0900-b35.json"
   ],
   "next_checks": [
-    "00:10 센서가 정상 self-chain되는지 확인하되 이번 A window에는 사용하지 않기",
-    "이번 apply 후 data/news/issue-digest.json updated_at가 00:09로 전진하는지 확인",
-    "다음 B는 00:10/00:20/00:30만 사용",
-    "macro 실값은 다음 거래 가능 구간에서 검증",
-    "월요일 USTR 공식 세부 원문 확인"
+    "다음 A는 00:40/00:50/01:00만 사용하고 이번 누락 슬롯을 끌어오지 말 것.",
+    "Recovery/다음 센서에서 00:00 이후 self-chain dispatch가 왜 생성되지 않았는지 workflow run과 heartbeat 경로를 확인할 것.",
+    "issue-digest 00:09 전진은 resolved로 유지하고 동일 stale 문제를 근거 없이 재조사하지 말 것.",
+    "macro 실값은 다음 거래 가능 구간까지 verification_pending 유지.",
+    "센서 복구 후 discovery generated_at와 source_summary를 다시 비교해 degraded 9가 실질 커버리지 손실인지 평가."
   ],
   "project_improvement_signals": [
     {
-      "id": "sensor-slot-0000-missing",
+      "id": "sensor-slot-0000-plus-continuity",
       "status": "investigating",
-      "signal": "00:09 현재 00:00 canonical observation이 main에 없음",
-      "verify_after": "00:10 이후 sensor/heartbeat 상태"
+      "signal": "00:00 누락 이후 이번 B의 00:10/00:20/00:30도 canonical queue에 없음",
+      "verify_after": "다음 Recovery/10분 센서 실행"
     },
     {
       "id": "issue-digest-apply-stale",
-      "status": "verification_pending",
-      "signal": "canonical digest가 16:00에 정지; 이번 A payload 적용 후 전진 여부 재검증",
-      "verify_after": "이번 A apply 직후"
+      "status": "resolved",
+      "signal": "A payload 적용 후 canonical digest updated_at가 2026-09-27T00:09:11+09:00로 전진",
+      "verify_after": "새 lifecycle 변화 발생 시"
     },
     {
       "id": "macro-runtime-empty",
       "status": "verification_pending",
-      "signal": "23:40/23:50 모두 macro 실값 없음",
+      "signal": "새 B 관측 자체가 없어 live macro 검증 불가",
       "verify_after": "다음 거래 가능 구간"
     }
   ],
   "work_axes_reviewed": [
     {
-      "axis": "데이터_품질_freshness",
+      "axis": "데이터_품질",
       "status": "verification_pending",
-      "finding": "00:00 슬롯 누락으로 2/3",
-      "action": "대체 관측 금지·원인 후속",
-      "evidence": "23:40/23:50 queue + 00:05 operations status",
-      "verify_after": "00:10 이후"
+      "finding": "B canonical window 0/3",
+      "action": "대체 관측 금지",
+      "evidence": "queue 2026-09-27 파일 부재 + operations/status 00:20",
+      "verify_after": "다음 센서"
+    },
+    {
+      "axis": "버그_연속성",
+      "status": "investigating",
+      "finding": "00:00 이후 센서 chain이 이어지지 않은 정황",
+      "action": "workflow/self-chain/heartbeat 실행기록을 Recovery 축으로 넘김",
+      "evidence": "sensor_slot_coverage + queue directory",
+      "verify_after": "다음 Recovery"
     },
     {
       "axis": "뉴스_이슈",
-      "status": "reviewed",
-      "finding": "이란·수입규제 기사량에 확정 상태변화 없음",
-      "action": "ACTIVE/NEW 유지",
-      "evidence": "23:40/23:50 discovery + Reuters/KOTRA 기반 교차검증",
-      "verify_after": "다음 B"
+      "status": "reviewed_limited",
+      "finding": "새 canonical observation이 없어 lifecycle 변화 판정 불가",
+      "action": "기존 상태 유지, 기사수 추정치로 승격 금지",
+      "evidence": "latest discovery 23:50",
+      "verify_after": "센서 복구 후"
     },
     {
-      "axis": "버그",
-      "status": "verification_pending",
-      "finding": "issue-digest 16:00 stale 지속",
-      "action": "이번 결과에 lifecycle payload 포함해 apply 경로 재검증",
+      "axis": "기존기능_실효성",
+      "status": "reviewed",
+      "finding": "issue-digest apply는 실제 00:09 전진해 복구 경로 유효",
+      "action": "resolved 처리",
       "evidence": "data/news/issue-digest.json",
-      "verify_after": "apply 직후"
-    },
-    {
-      "axis": "공급자_fallback",
-      "status": "reviewed",
-      "finding": "국내 현물은 휴장, macro 실값 없음; 뉴스 discovery는 failed=0/degraded=9",
-      "action": "휴장을 장애로 오판하지 않고 가격 추정 금지",
-      "evidence": "두 observation health/market",
-      "verify_after": "거래 가능 구간"
-    },
-    {
-      "axis": "테스트_회귀",
-      "status": "passed",
-      "finding": "23:40/23:50 compile·pytest·diff_check 모두 ok",
-      "action": "코드 변경 강제하지 않음",
-      "evidence": "observation validation",
-      "verify_after": "다음 센서"
+      "verify_after": "새 변화 시"
     },
     {
       "axis": "ui_ux",
       "status": "no_change",
-      "finding": "2/3 window에서 내부 품질카드 증설은 정보과다 위험",
-      "action": "HIGH 위험은 기존 메인, 상세 근거/history는 이슈추적에 유지",
-      "evidence": "현재 progressive disclosure 원칙",
-      "verify_after": "다음 B"
+      "finding": "연속 센서 누락마다 별도 카드를 만들면 중복·정보과다",
+      "action": "기존 coverage 카드에 집약 권고",
+      "evidence": "operations/status cards",
+      "verify_after": "상태판 다음 refresh"
     },
     {
       "axis": "구조_단순화",
       "status": "reviewed",
-      "finding": "operations stale은 refresh로 해결돼 별도 UI/복구 기능 추가 불필요",
-      "action": "추가 기능 대신 기존 refresh 경로 유지",
-      "evidence": "00:05 operations/status",
-      "verify_after": "다음 A"
+      "finding": "원인 미확정 상태에서 새 복구 레이어 추가는 중복 가능성",
+      "action": "기존 self-chain/:05 heartbeat/Recovery의 실제 실패 지점부터 확인",
+      "evidence": "운영헌장 복구 원칙",
+      "verify_after": "workflow run 확인"
+    },
+    {
+      "axis": "테스트_회귀",
+      "status": "not_applicable",
+      "finding": "코드 변경 없음; 새 observation validation도 없음",
+      "action": "추측성 테스트 결과 생성 금지",
+      "evidence": "0/3 window",
+      "verify_after": "다음 코드 변경 시"
     }
   ],
   "feedback_received": [
     {
-      "from_batch": "supervisor-20260926T2330+0900-b37",
-      "item": "23:40/23:50/00:00만 사용; digest/operations/macro/degraded/UI 확인"
+      "from_batch": "supervisor-20260927T0000+0900-a24",
+      "item": "00:30 B는 00:10/00:20/00:30만 사용하고 00:00 누락을 끌어오지 말 것."
+    },
+    {
+      "from_batch": "supervisor-20260927T0000+0900-a24",
+      "item": "A apply 후 issue-digest 전진 여부 확인."
+    },
+    {
+      "from_batch": "supervisor-20260927T0000+0900-a24",
+      "item": "00:00 누락의 self-chain/heartbeat 복구 확인."
+    },
+    {
+      "from_batch": "supervisor-20260927T0000+0900-a24",
+      "item": "macro 실값 전 방향 추정 금지 및 UI 카드 증설 자제."
     }
   ],
   "feedback_resolved": [
     {
-      "item": "operations/status stale",
-      "resolution": "00:05:35 generated_at로 전진해 해결"
+      "item": "issue-digest apply",
+      "resolution": "canonical digest updated_at가 00:09:11로 전진했고 operations status도 issue-digest-ok로 표시"
     },
     {
-      "item": "UI 증설 보류",
-      "resolution": "불완전 window에서 no_change 유지"
+      "item": "canonical window 규칙",
+      "resolution": "00:10/00:20/00:30 외 관측을 사용하지 않음"
+    },
+    {
+      "item": "UI 증설 자제",
+      "resolution": "새 카드/기능 변경 없음"
     }
   ],
   "feedback_disagreed": [],
   "feedback_deferred": [
     {
-      "item": "issue-digest apply",
-      "reason": "이번 A apply 직후 실제 파일 전진 확인 필요"
+      "item": "00:00 및 이후 sensor self-chain 원인",
+      "reason": "이번 시점 main에 00:10/00:20/00:30 관측 자체가 없어 원인 특정에 필요한 workflow 실행증거 부족"
     },
     {
       "item": "macro 최종판정",
-      "reason": "다음 거래 가능 구간 필요"
-    },
-    {
-      "item": "degraded 실질 누락률",
-      "reason": "failed=0이나 9개 축 degraded 지속; 다음 거래/뉴스 구간 표본 필요"
+      "reason": "휴장 및 새 관측 부재로 live 값 검증 불가"
     }
   ],
   "supervisor_disagreements": [
     {
       "disagreement_id": "disagree-20260926-2330-issue-digest",
       "topic": "news_issue_digest canonical apply",
-      "a_position": "이번 A에서 기존 issue_id payload를 다시 제공해 apply 경로가 실제 digest를 전진시키는지 검증",
-      "b_position": "23:37 기준 canonical digest 16:00으로 성공 아님",
-      "status": "OPEN",
-      "evidence_needed": "이번 A apply 후 data/news/issue-digest.json updated_at와 workflow 결과",
-      "verify_after": "A apply 직후"
+      "a_position": "A 재적용으로 digest 전진 검증",
+      "b_position": "23:37에는 stale이었으나 이번 B에서 00:09:11 전진을 확인",
+      "status": "RESOLVED",
+      "evidence_needed": "data/news/issue-digest.json updated_at=2026-09-27T00:09:11+09:00",
+      "verify_after": "새 lifecycle 변화 발생 시"
     }
   ],
   "feedback_to_other_supervisor": [
-    "00:30 B는 00:10/00:20/00:30만 사용하고 00:00 누락을 끌어오지 말 것.",
-    "이번 A apply 후 issue-digest updated_at가 전진했는지 반드시 확인하고, 안 되면 scripts/감독결과_적용.py 호출/commit 경로를 최소 수정할 것.",
-    "00:00 슬롯 누락이 self-chain 경계 문제인지 :05 heartbeat가 복구했는지 확인할 것.",
-    "macro 실값 전에는 유가·금리·환율 방향을 기사량으로 대체하지 말 것.",
-    "UI는 stale·중복 상태를 새 카드로 늘리기보다 기존 시스템/이슈추적 계층에서 정리할 것."
+    "다음 A는 00:40/00:50/01:00만 사용하고 이번 00:10/00:20/00:30 누락을 과거값으로 채우지 말 것.",
+    "센서 연속성 문제는 00:00 단일 누락이 아니라 00:30까지 이어진 것으로 보이므로 workflow self-chain/:05 heartbeat/Recovery 실행기록을 우선 확인할 것.",
+    "issue-digest apply stale은 00:09:11 전진으로 해결됐으니 동일 문제를 다시 처음부터 조사하지 말 것.",
+    "macro 실값과 휴장 중 가격·수급은 추정하지 말 것.",
+    "UI는 센서 누락별 새 카드 대신 기존 coverage 카드에 연속 누락 구간과 복구상태를 집약할 것."
   ],
-  "observation_ids": [
-    "obs-20260926T234101+0900-36249300909-1",
-    "obs-20260926T235116+0900-36249869562-1"
-  ],
-  "observation_slots": [
-    "2026-09-26T23:40:00+09:00",
-    "2026-09-26T23:50:00+09:00"
-  ],
-  "observation_window_start": "2026-09-26T23:40:00+09:00",
-  "observation_window_end": "2026-09-27T00:00:00+09:00",
+  "observation_ids": [],
+  "observation_slots": [],
+  "observation_window_start": "2026-09-27T00:10:00+09:00",
+  "observation_window_end": "2026-09-27T00:30:00+09:00",
   "expected_observation_count": 3,
-  "received_observation_count": 2,
+  "received_observation_count": 0,
   "missing_observation_slots": [
-    "2026-09-27T00:00:00+09:00"
+    "2026-09-27T00:10:00+09:00",
+    "2026-09-27T00:20:00+09:00",
+    "2026-09-27T00:30:00+09:00"
   ],
-  "observation_completeness_ratio": 0.667,
-  "observation_details": [
-    {
-      "slot_at": "2026-09-26T23:40:00+09:00",
-      "slot_source": "dispatch_input",
-      "slot_delay_seconds": 61.686081
-    },
-    {
-      "slot_at": "2026-09-26T23:50:00+09:00",
-      "slot_source": "dispatch_input",
-      "slot_delay_seconds": 76.093702
-    }
-  ],
-  "news_issue_digest": {
-    "issues": [
-      {
-        "issue_id": "us-iran-hormuz-negotiation",
-        "title": "미국·이란 협상과 호르무즈 해협 재개방",
-        "scope": "GLOBAL",
-        "category": "지정학·에너지",
-        "status": "ACTIVE",
-        "severity": "HIGH",
-        "impact": "MIXED",
-        "event_time": "2026-09-26",
-        "latest_update": "23:50까지 관련 기사군은 유지됐지만 Reuters 기준 이란은 미국의 공식 답변을 기다리는 상태이며 합의·통항 정상화는 확인되지 않았다.",
-        "summary": "협상 창구는 열려 있으나 합의 또는 최종 결렬로 확정할 단계는 아니다.",
-        "why_market_matters": "호르무즈 통항이 원유공급·유가·인플레이션 기대·미국 장기금리를 거쳐 글로벌 성장주와 한국장에 영향을 줄 수 있다.",
-        "transmission_path": [
-          "미·이란 협상",
-          "호르무즈 통항",
-          "Brent/WTI",
-          "인플레이션 기대",
-          "미국 장기금리",
-          "Nasdaq·한국 성장주"
-        ],
-        "affected_assets": [
-          "Brent",
-          "WTI",
-          "미국채",
-          "Nasdaq",
-          "KOSPI",
-          "정유",
-          "항공"
-        ],
-        "pricing_status": "PARTLY_PRICED",
-        "next_check": "미국 공식 답변, 실제 호르무즈 통항, 주말 군사행동",
-        "confirmed_facts": [
-          "Reuters는 이란이 미국의 공식 답변을 기다린다고 보도했다."
-        ],
-        "unconfirmed": [
-          "공식 최종 합의/결렬",
-          "실제 통항 정상화 일정"
-        ],
-        "sources": [
-          {
-            "publisher": "Reuters",
-            "title": "Iran awaits US move after WSJ report says Trump rejects peace plan",
-            "url": "https://www.reuters.com/world/middle-east/iran-awaits-us-move-after-wsj-report-says-trump-rejects-peace-plan-2026-09-26/"
-          }
-        ]
-      },
-      {
-        "issue_id": "korea-import-restrictions-2026h1",
-        "title": "한국산 제품 수입규제 241건·신규조사 증가",
-        "scope": "KOREA",
-        "category": "통상·수출규제",
-        "status": "NEW",
-        "severity": "MEDIUM",
-        "impact": "NEGATIVE",
-        "event_time": "2026-09-26T11:31:00+09:00",
-        "latest_update": "보고서 기반 세부 보도에서 철강·금속 113건(46.9%), 화학 37건, 플라스틱·고무 35건으로 노출이 구체화됐다. 휴장이라 시장반응은 미확인이다.",
-        "summary": "2026년 상반기 말 26개국의 한국 수출품 수입규제는 241건으로 직전 반기 230건보다 11건 늘었고 신규 조사 25건이 시작됐다.",
-        "why_market_matters": "철강·금속·화학 등 수출기업의 무역구제 비용과 시장접근성 부담으로 이어질 수 있으나 신규조사는 최종 규제 확정과 다르다.",
-        "transmission_path": [
-          "각국 무역구제 강화",
-          "반덤핑·상계관세·세이프가드 조사",
-          "수출 비용·시장접근성",
-          "한국 철강·화학"
-        ],
-        "affected_assets": [
-          "KOSPI 수출주",
-          "철강",
-          "금속",
-          "화학"
-        ],
-        "affected_korean_sectors": [
-          "철강·금속",
-          "화학",
-          "플라스틱·고무",
-          "수출주"
-        ],
-        "pricing_status": "EARLY",
-        "market_reaction": "한국 휴장으로 미확인",
-        "next_check": "KOTRA 원문 세부와 다음 거래일 관련 업종 가격·수급",
-        "confirmed_facts": [
-          "총 241건, 직전 반기 대비 11건 증가",
-          "신규 조사 25건",
-          "철강·금속 113건(46.9%), 화학 37건, 플라스틱·고무 35건"
-        ],
-        "unconfirmed": [
-          "개별 상장사 실적 영향",
-          "신규조사의 최종 규제 전환률"
-        ],
-        "invalidation_conditions": [
-          "조사 종료·철회 증가 또는 실제 적용범위 제한 시 부담 평가 하향"
-        ]
-      }
-    ]
-  },
+  "observation_completeness_ratio": 0.0,
+  "observation_details": [],
   "telegram_report": [
-    "00:00 A: 23:40/23:50/00:00 중 00:00이 없어 2/3입니다. 과거값이나 00:10 데이터로 채우지 않았습니다.",
-    "미·이란/호르무즈는 ACTIVE 유지. 공식 합의·통항 정상화는 아직 확인되지 않았습니다.",
-    "한국 수입규제 241건은 철강·금속 113건(46.9%) 비중이 확인됐지만 휴장이라 주가·수급 영향은 아직 미확인입니다.",
-    "B가 지적한 operations stale은 00:05 갱신으로 해결됐고, issue-digest 16:00 정지는 이번 lifecycle payload 적용 후 실제 전진 여부를 다시 검증합니다.",
-    "UI는 새 카드를 늘리지 않았습니다. 불완전 센서 상태에서는 핵심 위험을 앞에 두고 긴 근거는 기존 이슈추적 상세에 유지하는 편이 안전합니다."
+    "00:30 B: canonical 00:10/00:20/00:30이 모두 없어 0/3입니다. 과거 관측이나 :40 데이터로 채우지 않았습니다.",
+    "직전 A가 재적용한 issue-digest는 00:09:11로 실제 전진해 이 문제는 해결됐습니다.",
+    "반면 센서는 00:00 이후 연속성이 끊긴 정황이 강해 self-chain/:05 heartbeat/Recovery 실행경로 확인을 다음 최우선 작업으로 넘깁니다.",
+    "새 센서 근거가 없으므로 미·이란/호르무즈 등 시장 이슈의 강화·완화를 새로 단정하지 않았고 macro 방향도 추정하지 않았습니다.",
+    "UI/코드 변경은 하지 않았습니다. 원인 미확정 상태에서 카드나 복구 레이어를 더 추가하면 중복과 유지비만 늘 수 있습니다."
   ],
   "observation_window_complete": false,
   "run_kind": "regular",
   "feedback_handoff": {
-    "source_batch_id": "supervisor-20260926T2330+0900-b37",
-    "source_supervisor": "B",
-    "target_supervisor": "A",
+    "source_batch_id": "supervisor-20260927T0000+0900-a24",
+    "source_supervisor": "A",
+    "target_supervisor": "B",
     "inbound_required": true,
     "inbound_recorded": true,
     "outgoing_recorded": true,
     "complete": true
   },
   "validation_warnings": [
-    "정해진 10분 슬롯 3개가 모두 준비되지 않아 결과를 verification_pending으로 유지"
+    "정해진 10분 슬롯 3개가 모두 없어 결과를 verification_pending으로 유지",
+    "새 observation이 없어 compile/pytest/dry-run 결과를 이번 B가 새로 통과했다고 기록하지 않음",
+    "정해진 10분 슬롯 3개가 모두 준비되지 않아 결과를 verification_pending으로 유지",
+    "최신 discovery에 새 뉴스가 있으나 news_issue_digest가 없어 뉴스 lifecycle 적용이 누락됨"
   ]
 }
