@@ -214,15 +214,28 @@ async function load() {
         const views = Number(x.views);
         const viewsText = Number.isFinite(views) ? views.toLocaleString("ko-KR") + "회" : "조회수 미확인";
         const url = x.report_url || ((popularReports.ranking_source || {}).url) || "#";
-        return `<a class="popular-report-card" href="${esc(url)}" target="_blank" rel="noreferrer">
+        const analysis = x.analysis || {};
+        const ready = String(analysis.status || "").startsWith("ready");
+        const analysisHtml = ready
+          ? `<div class="report-analysis">
+              <div><b>핵심 주장</b><p>${esc(analysis.core || x.summary || "")}</p></div>
+              <div><b>근거·재료</b><p>${esc(analysis.evidence || "근거 보강 중")}</p></div>
+              <div><b>시장과 연결</b><p>${esc(analysis.market_link || "")}</p></div>
+              <div><b>반론·확인할 점</b><p>${esc(analysis.countercheck || "")}</p></div>
+            </div>`
+          : `<div class="report-analysis-pending"><strong>AI 분석 대기</strong><span>원문/PDF를 실제로 읽고 확인한 뒤 요약합니다. 제목만 보고 분석하지 않습니다.</span></div>`;
+        return `<article class="popular-report-card">
           <div class="popular-rank">${esc(x.display_order || (popularItems.indexOf(x) + 1))}</div>
           <div class="popular-report-main">
             <div class="popular-report-meta"><span>${esc(x.company || "")}</span><span>${esc(x.broker || "")}</span><span>${esc(x.report_date || "")}</span></div>
             <strong>${esc(x.title || "")}</strong>
-            <p>${esc(x.summary || "")}</p>
+            ${analysisHtml}
             <div class="popular-report-foot"><span>${esc(x.theme || "")}</span><b>${esc(viewsText)}</b></div>
+            <div class="popular-report-actions">
+              <a href="${esc(url)}" target="_blank" rel="noreferrer">원문/PDF 보기 ↗</a>
+            </div>
           </div>
-        </a>`;
+        </article>`;
       }).join("")
     : "<p class='muted'>인기 리포트 데이터를 수집 중입니다.</p>";
 
