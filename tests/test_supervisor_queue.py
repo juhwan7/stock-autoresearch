@@ -296,3 +296,40 @@ def test_append_observation_writes_window_manifest_on_half_hour(tmp_path):
         "2026-09-26T18:20:00+09:00",
         "2026-09-26T18:30:00+09:00",
     ]
+
+
+
+def test_pending_count_recovers_from_processed_slot_when_id_was_replaced(tmp_path):
+    write_json(
+        tmp_path / "data/supervisor/state.json",
+        {
+            "schema_version": 2,
+            "batch_size": BATCH_SIZE,
+            "last_processed_observation_id": "obs-1830-old",
+            "last_processed_slot": "2026-09-26T18:30:00+09:00",
+        },
+    )
+    write_json(
+        tmp_path / "data/supervisor/recent.json",
+        {
+            "schema_version": 2,
+            "observations": [
+                {
+                    "observation_id": "obs-1830-replacement",
+                    "observed_at": "2026-09-26T18:33:00+09:00",
+                    "slot_at": "2026-09-26T18:30:00+09:00",
+                },
+                {
+                    "observation_id": "obs-1840",
+                    "observed_at": "2026-09-26T18:41:00+09:00",
+                    "slot_at": "2026-09-26T18:40:00+09:00",
+                },
+            ],
+        },
+    )
+    observation = build_observation(
+        tmp_path,
+        now=datetime(2026, 9, 26, 18, 50, tzinfo=KST),
+        env={"GITHUB_RUN_ID": "pending-slot", "GITHUB_RUN_ATTEMPT": "1"},
+    )
+    assert observation["queue"]["pending_before_append"] == 1
