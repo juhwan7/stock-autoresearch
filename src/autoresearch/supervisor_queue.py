@@ -14,7 +14,7 @@ from .hypothesis_learning import due_hypotheses
 
 
 KST = timezone(timedelta(hours=9))
-BATCH_SIZE = 10
+BATCH_SIZE = 3
 RECENT_LIMIT = 120
 SENSOR_INTERVAL_MINUTES = 10
 SUPERVISOR_WINDOW_SIZE = 3
