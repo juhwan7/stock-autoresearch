@@ -215,15 +215,24 @@ async function load() {
         const viewsText = Number.isFinite(views) ? views.toLocaleString("ko-KR") + "회" : "조회수 미확인";
         const url = x.report_url || ((popularReports.ranking_source || {}).url) || "#";
         const analysis = x.analysis || {};
-        const ready = String(analysis.status || "").startsWith("ready");
+        const status = String(analysis.status || "");
+        const ready = status === "ready_source_read";
+        const summaryOnly = status === "summary_only_needs_source_read";
         const analysisHtml = ready
           ? `<div class="report-analysis">
+              <div class="report-analysis-status ready">원문 확인 완료 · AI 분석</div>
               <div><b>핵심 주장</b><p>${esc(analysis.core || x.summary || "")}</p></div>
-              <div><b>근거·재료</b><p>${esc(analysis.evidence || "근거 보강 중")}</p></div>
+              <div><b>근거·재료</b><p>${esc(analysis.evidence || "")}</p></div>
               <div><b>시장과 연결</b><p>${esc(analysis.market_link || "")}</p></div>
               <div><b>반론·확인할 점</b><p>${esc(analysis.countercheck || "")}</p></div>
             </div>`
-          : `<div class="report-analysis-pending"><strong>AI 분석 대기</strong><span>원문/PDF를 실제로 읽고 확인한 뒤 요약합니다. 제목만 보고 분석하지 않습니다.</span></div>`;
+          : summaryOnly
+            ? `<div class="report-analysis summary-only">
+                <div class="report-analysis-status partial">1차 요약 · 원문 직접 확인 대기</div>
+                <div><b>현재 확인된 요약</b><p>${esc(analysis.core || x.summary || "")}</p></div>
+                <div><b>다음 작업</b><p>원문/PDF를 직접 읽은 뒤 근거·시장 연결·반론을 보강합니다.</p></div>
+              </div>`
+            : `<div class="report-analysis-pending"><strong>AI 분석 대기</strong><span>원문/PDF를 실제로 읽고 확인한 뒤 핵심 주장·근거·시장 연결·반론을 정리합니다. 제목만 보고 분석하지 않습니다.</span></div>`;
         return `<article class="popular-report-card">
           <div class="popular-rank">${esc(x.display_order || (popularItems.indexOf(x) + 1))}</div>
           <div class="popular-report-main">
