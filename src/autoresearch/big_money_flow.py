@@ -100,7 +100,7 @@ def parse_kofia_main(html: str, *, today: date | None = None) -> dict[str, dict[
     for key, spec in METRIC_SPECS.items():
         label = re.escape(spec["label"])
         if key == "total_fund_nav":
-            label = r"\\s펀드\\s+순자산"
+            label = r"\s펀드\s+순자산"
         unit = re.escape(spec["unit"])
         pattern = re.compile(
             rf"{label}.{{0,140}}?{unit}\s*\|\s*(\d{{2}}/\d{{2}})\s*"
