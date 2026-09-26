@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import sys
 from pathlib import Path
 
 
@@ -116,3 +117,37 @@ def test_news_issue_digest_caps_at_100_and_tracks_status_change(tmp_path):
     assert changed["status"] == "ESCALATING"
     assert changed["history"][-1]["from"] == "WATCHING"
     assert changed["history"][-1]["to"] == "ESCALATING"
+
+
+def test_main_recovers_missing_changed_paths_without_blocking_apply(tmp_path, monkeypatch):
+    module = load_module()
+    module.REPORT = tmp_path / "latest-report.json"
+    module.STATE = tmp_path / "state.json"
+    module.ISSUES = tmp_path / "market-issues.json"
+    module.RECENT_SESSIONS = tmp_path / "recent-sessions.json"
+    module.POPULAR_REPORTS = tmp_path / "popular-reports.json"
+    module.NEWS_ISSUES = tmp_path / "issue-digest.json"
+    module.STATE.write_text("{}", encoding="utf-8")
+
+    result_path = tmp_path / "supervisor-result.json"
+    result_path.write_text(
+        json.dumps(
+            {
+                "batch_id": "supervisor-test",
+                "processed_at": "2026-09-26T15:00:00+09:00",
+                "notify": True,
+                "summary": ["변화 적음"],
+                "actions": ["검증"],
+                "next_checks": ["다음 확인"],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(sys, "argv", ["감독결과_적용.py", str(result_path)])
+    assert module.main() == 0
+
+    applied = json.loads(module.REPORT.read_text(encoding="utf-8"))
+    assert applied["changed_paths"] == [str(result_path)]
+    assert any("changed_paths" in x for x in applied["validation_warnings"])
