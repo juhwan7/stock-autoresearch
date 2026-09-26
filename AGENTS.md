@@ -387,3 +387,20 @@ Supervisor 결과는 시장 정규 사이클과 진단용 결과를 구분한다
 - test/E2E는 writer·Telegram 경로를 검증할 수 있지만 시장 canonical, 이슈 원장, A/B 피드백 연속성을 전진시키지 않는다.
 - Recovery는 별도 복구 이력으로 남기며 정규 A/B 성공으로 가장하지 않는다.
 - README에는 분 단위 stale·사용자 조치 상세를 자동 삽입하지 않는다. 실시간 상태는 GitHub Pages `시스템`, `data/operations/status.json`, `docs/운영_칸반.md`, 필요 시 Telegram이 담당한다.
+
+
+## A/B 상호 생존 감시와 자동복구 불변식
+
+A와 B는 각 정규 사이클 시작 시 상대 Supervisor의 생존 상태를 먼저 확인한다. 저장소 내부에서는 `data/supervisor/collaboration.json.supervisor_health`, 최신 `windows/latest-A|B.json`, immutable `ai-results`, `state.json`, 최근 Actions를 함께 보고, ChatGPT 예약 실행 환경에서는 상대 automation의 enabled/최근 실행 상태까지 함께 확인한다.
+
+- complete canonical window가 있는데 대응 regular result가 없으면 `missing_result`이다. 저장소 근거만으로 원인을 단정하지 말고 automation disabled 여부와 최근 실행/Actions를 확인해 `automation_disabled`, `schedule_missed`, `result_write_failed`, `unknown` 중 하나로 분류한다.
+- result가 있는데 state pointer/canonical이 전진하지 않았으면 `unapplied` / `canonical_apply_failed`로 분리한다. 분석을 다시 하지 말고 기존 immutable result 재적용을 우선한다.
+- create_file/update_file/connector safety block/Git push 1회 실패/Telegram 실패/Pages 실패/verification_pending만으로 A 또는 B를 비활성화하지 않는다. `disable_supervisor=false`가 기본 불변식이다.
+- ChatGPT GitHub direct write가 한 번 차단되면 같은 create_file을 반복하지 않는다. 검증된 `[Supervisor Result] Issue → Action single-writer → result 저장 → canonical → memory → main 재조회 → Telegram` 경로를 우선한다.
+- 상대 automation이 disabled이고 Secret/OAuth/계정권한 같은 사용자 조치가 필요하지 않으며 검증된 fallback이 존재하면 살아 있는 Supervisor가 즉시 원인을 기록하고 상대 automation을 기존 스케줄 그대로 재활성화한다.
+- 상대가 현재 실행 중/queued이거나 canonical writer가 동작 중이면 중복 재시작·동시 writer를 만들지 않는다.
+- `operations/status.json` 하나가 stale하다는 이유만으로 Supervisor를 중단하지 않는다. automation 상태, Actions, ai-results, state, window를 교차검증한다.
+- 동일 장애가 반복되면 `memory/lessons`와 collaboration incident에 성공한 fallback을 축적하고 다음에는 그 fallback을 먼저 사용한다.
+- 한쪽이 blocked여도 다른 쪽의 시장 연구·UI 검토·데이터 품질 작업은 계속한다. 둘이 서로 기다리며 함께 멈추는 상태를 허용하지 않는다.
+
+복구 완료 판정은 단순 enabled 전환이 아니라 `automation enabled → 다음 정규 실행 → 올바른 3-slot window → ai-results 저장 → canonical/state/latest-report → memory → Telegram`까지 확인한 뒤 내린다.
