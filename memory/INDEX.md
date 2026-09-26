@@ -33,7 +33,7 @@
 - issue-digest-apply-stale — investigating
 - operations-status-stale — investigating
 - macro-runtime-empty — verification_pending
-- 이슈 원장 갱신 지연 — 마지막 갱신 481.98177975분 전
+- 이슈 원장 갱신 지연 — 마지막 갱신 485.58845128333337분 전
 
 ## 최근 해결
 - 없음
