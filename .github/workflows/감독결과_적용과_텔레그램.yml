@@ -12,7 +12,7 @@ on:
     paths:
       - "data/supervisor/ai-results/*.json"
   issues:
-    types: [labeled]
+    types: [opened]
 
 permissions:
   contents: write
@@ -24,7 +24,7 @@ concurrency:
 
 jobs:
   apply-and-notify:
-    if: github.event_name != 'issues' || (github.event.label.name == 'supervisor-result-dispatch' && github.actor == github.repository_owner)
+    if: github.event_name != 'issues' || (startsWith(github.event.issue.title, '[Supervisor Result]') && github.actor == github.repository_owner)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
