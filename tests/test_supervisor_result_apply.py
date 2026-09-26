@@ -750,3 +750,88 @@ def test_collaboration_state_does_not_turn_no_change_into_active_incident(tmp_pa
     assert stored["active_incident_count"] == 0
     assert stored["resolved_incident_count"] == 1
     assert stored["status"] == "healthy"
+
+
+def test_supervisor_health_detects_complete_window_without_result_and_never_disables(tmp_path):
+    module = load_module()
+    module.AI_RESULTS = tmp_path / "data/supervisor/ai-results"
+    module.WINDOWS = tmp_path / "data/supervisor/windows"
+    module.STATE = tmp_path / "data/supervisor/state.json"
+    module.AI_RESULTS.mkdir(parents=True)
+    module.WINDOWS.mkdir(parents=True)
+    module.STATE.parent.mkdir(parents=True, exist_ok=True)
+    module.STATE.write_text(json.dumps({}, ensure_ascii=False), encoding="utf-8")
+
+    module.WINDOWS.joinpath("latest-B.json").write_text(
+        json.dumps(
+            {
+                "supervisor": "B",
+                "anchor_at": "2026-09-27T06:30:00+09:00",
+                "window_end": "2026-09-27T06:30:00+09:00",
+                "complete": True,
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    module.WINDOWS.joinpath("latest-A.json").write_text(
+        json.dumps(
+            {
+                "supervisor": "A",
+                "anchor_at": "2026-09-27T06:00:00+09:00",
+                "window_end": "2026-09-27T06:00:00+09:00",
+                "complete": True,
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    a_result = {
+        "batch_id": "supervisor-20260927T0600+0900-a30",
+        "processed_at": "2026-09-27T06:07:00+09:00",
+        "supervisor": "A",
+        "run_kind": "regular",
+        "notify": True,
+        "summary": "A",
+        "observation_ids": ["a1", "a2", "a3"],
+        "observation_slots": [
+            "2026-09-27T05:40:00+09:00",
+            "2026-09-27T05:50:00+09:00",
+            "2026-09-27T06:00:00+09:00",
+        ],
+        "observation_window_start": "2026-09-27T05:40:00+09:00",
+        "observation_window_end": "2026-09-27T06:00:00+09:00",
+        "expected_observation_count": 3,
+        "received_observation_count": 3,
+        "missing_observation_slots": [],
+        "observation_window_complete": True,
+    }
+    module.AI_RESULTS.joinpath("a.json").write_text(
+        json.dumps(a_result, ensure_ascii=False), encoding="utf-8"
+    )
+
+    health = module._supervisor_health_snapshot()
+    assert health["B"]["status"] == "missing_result"
+    assert health["B"]["cause"] == "unknown"
+    assert health["B"]["preferred_recovery"] == "check_automation_then_issue_action_single_writer"
+    assert health["B"]["disable_supervisor"] is False
+    assert health["A"]["status"] == "unapplied"
+
+    module.STATE.write_text(
+        json.dumps({"last_a_window": {"batch_id": a_result["batch_id"]}}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    health = module._supervisor_health_snapshot()
+    assert health["A"]["status"] == "healthy"
+    assert health["A"]["canonical_applied"] is True
+
+
+def test_supervisor_result_continuity_aliases_merge_per_role():
+    module = load_module()
+    assert module._collaboration_incident_id(
+        {"id": "supervisor-b-result-continuity"}
+    ) == "supervisor-b-continuity"
+    assert module._collaboration_incident_id(
+        {"id": "supervisor-a-result-missing"}
+    ) == "supervisor-a-continuity"
