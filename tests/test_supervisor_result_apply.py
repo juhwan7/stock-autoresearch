@@ -1,5 +1,7 @@
 import importlib.util
 import json
+
+import pytest
 import sys
 from pathlib import Path
 
@@ -605,3 +607,47 @@ def test_window_state_from_legacy_regular_result_infers_complete_from_three_slot
     }
     state = module._window_state_from_result(legacy)
     assert state["complete"] is True
+
+
+def test_apply_refuses_older_result_instead_of_silently_switching_batch(tmp_path, monkeypatch):
+    module = load_module()
+    _configure_apply_paths(module, tmp_path)
+    module.RECENT_OBSERVATIONS.write_text(
+        json.dumps(_window_observations(), ensure_ascii=False),
+        encoding="utf-8",
+    )
+    module.REPORT.write_text(
+        json.dumps(
+            {
+                "batch_id": "supervisor-20260927T0000+0900-a24",
+                "processed_at": "2026-09-27T00:09:11+09:00",
+                "supervisor": "A",
+                "notify": True,
+                "summary": "newer canonical",
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    older = tmp_path / "older.json"
+    older.write_text(
+        json.dumps(
+            {
+                "batch_id": "supervisor-20260926T2330+0900-b37",
+                "processed_at": "2026-09-26T23:37:00+09:00",
+                "supervisor": "B",
+                "notify": True,
+                "summary": "older",
+                "feedback_to_other_supervisor": ["next"],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(sys, "argv", ["감독결과_적용.py", str(older)])
+    with pytest.raises(SystemExit, match="stale Supervisor result refused"):
+        module.main()
+
+    canonical = json.loads(module.REPORT.read_text(encoding="utf-8"))
+    assert canonical["batch_id"] == "supervisor-20260927T0000+0900-a24"
