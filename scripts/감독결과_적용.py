@@ -103,7 +103,8 @@ def main() -> int:
     if result.get("notify") is not True:
         raise SystemExit("Supervisor result must have notify=true")
     observation_ids = result.get("observation_ids") or []
-    update_issue_lifecycle(result)\n    REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    update_issue_lifecycle(result)
+    REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     state = json.loads(STATE.read_text(encoding="utf-8"))
     state["last_batch_id"] = result["batch_id"]
     state["last_processed_at"] = result["processed_at"]
