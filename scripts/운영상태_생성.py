@@ -132,16 +132,26 @@ def build_status(now: datetime | None = None) -> dict:
 
     source_status = discovery.get("source_status") or {}
     needs_credentials = [name for name, value in source_status.items() if isinstance(value, dict) and value.get("status") == "needs_credentials"]
-    if needs_credentials:
+    candidate_count = int(discovery.get("item_count") or 0)
+    if needs_credentials and candidate_count < 20:
         user_actions.append({
-            "id": "optional-news-credentials",
-            "problem": "일부 보조 뉴스/공시 API 자격증명 없음",
-            "impact": "Google RSS 등 fallback은 계속 작동하지만 탐색 범위가 줄어들 수 있음",
-            "attempted": "키 없는 공개 소스와 broad fallback 유지",
-            "why_blocked": "API Secret은 사용자가 GitHub Secrets에 직접 등록해야 함",
-            "action": "필요 시 NAVER_CLIENT_ID/NAVER_CLIENT_SECRET/DART_API_KEY 등록",
-            "verify": "source_status가 needs_credentials에서 ok로 전환",
+            "id": "news-credentials-required",
+            "problem": "뉴스/공시 탐색 커버리지가 낮고 일부 보조 API 자격증명도 없음",
+            "impact": "핵심 이슈 누락 가능성이 커짐",
+            "attempted": "키 없는 Google RSS·공개 소스와 broad fallback 사용",
+            "why_blocked": "추가 API Secret은 사용자가 GitHub Secrets에 직접 등록해야 함",
+            "action": "NAVER_CLIENT_ID/NAVER_CLIENT_SECRET/DART_API_KEY 중 필요한 자격증명 등록",
+            "verify": "후보 뉴스가 20건 이상 안정적으로 수집되고 source coverage가 회복",
         })
+    elif needs_credentials:
+        cards.append(card(
+            "optional-news-credentials",
+            "선택형 뉴스·공시 API 미연결",
+            "완료",
+            f"현재 공개 fallback으로 후보 {candidate_count}건 확보되어 필수 조치 아님",
+            now,
+            owner="Discovery",
+        ))
 
     for issue in health.get("issues") or []:
         if not isinstance(issue, dict):
