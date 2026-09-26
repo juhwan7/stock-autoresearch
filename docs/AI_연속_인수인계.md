@@ -265,3 +265,14 @@ Supervisor의 GitHub 쓰기 요청 하나가 실패하거나 실행 전 안전�
 - 수정: recovery/catch-up 결과는 canonical 보고서는 갱신할 수 있어도 정규 `last_a_window`/`last_b_window`를 전진시키지 못하도록 apply를 제한했다.
 - macro: `data/macro/current.json`과 risk runtime은 빈 정상값이 아니라 `source_mode=unavailable`, 원인 `6분 sensor에 연결된 실시간 매크로 provider가 없음`을 명시한다. 과거값으로 보충하지 않는다.
 - 검증 대기: 다음 정규 A/B가 실제 `news_issue_digest`를 포함해 원장을 갱신하는지, 정규 B 성공 후에만 `last_b_window`가 이동하는지 확인한다.
+
+
+## 사용자 화면 한국어·구조화 표시 규칙
+
+- 사용자-facing Pages에서는 내부 JSON 객체, 배열, `[object Object]`, Python/JavaScript 객체 표현을 그대로 출력하지 않는다.
+- 원본 JSON 필드명과 enum은 데이터 계층에 유지하고, 화면에서는 공통 formatter를 통해 자연스러운 한국어 문장·목록·카드로 변환한다.
+- `NEW/ACTIVE/WATCHING/ESCALATING/EASING/RESOLVED`, `HIGH/MEDIUM/LOW`, `verification_pending/investigating/no_change/stale` 같은 내부 상태값은 화면에서 한국어로 표시한다.
+- 객체 구조가 예상과 달라도 `JSON.stringify`로 사용자 화면에 노출하지 않는다. 읽을 수 있는 필드를 선택하고, 불가능하면 `세부 내용을 구조화해 표시할 수 없습니다.`처럼 안전한 한국어 fallback을 사용한다.
+- `issue_id`, 내부 오류 코드, change_id 같은 개발자용 식별자는 기본 화면 제목·요약으로 사용하지 않는다. 꼭 필요하면 `개발자용 원본 정보` 접힘 영역에 둔다.
+- 페이지 eyebrow/kicker와 일반 소제목은 고유명사·표준 약어(AI, KOSPI, KOSDAQ, Nasdaq, S&P 500, DART, CPI, FOMC, USTR, NXT 등)를 제외하고 한국어를 기본으로 한다.
+- 새 상세보기 렌더러를 추가할 때는 실제 Supervisor/issue/risk/operations 데이터의 중첩 객체를 테스트해 원시 JSON과 영문 enum이 다시 노출되지 않는지 회귀검증한다.

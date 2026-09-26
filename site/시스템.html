@@ -7,7 +7,7 @@
 </head>
 <body>
 <header class="hero">
-  <div><p class="eyebrow">SYSTEM & DATA HEALTH</p><h1>시스템</h1><p class="lead">현재 이상과 복구 상태만 먼저 보여주고, 공급자·회귀·AI 변경 로그 같은 운영 상세는 필요할 때 펼칩니다.</p></div>
+  <div><p class="eyebrow">시스템·데이터 상태</p><h1>시스템</h1><p class="lead">현재 이상과 복구 상태만 먼저 보여주고, 공급자·회귀·AI 변경 로그 같은 운영 상세는 필요할 때 펼칩니다.</p></div>
   <div class="hero-side"><span class="pulse">운영 상태 전용</span></div>
 </header>
 <nav class="page-tabs">
@@ -25,12 +25,12 @@
   </nav>
 <main>
   <section class="panel primary-panel">
-    <div class="panel-head"><div><p class="kicker">HEALTH WATCHDOG</p><h2>현재 시스템 이상</h2></div><span class="health-badge" id="health-status">확인 중</span></div>
+    <div class="panel-head"><div><p class="kicker">운영 상태 점검</p><h2>현재 시스템 이상</h2></div><span class="health-badge" id="health-status">확인 중</span></div>
     <div id="health-issues" class="health-list"></div>
   </section>
 
   <section class="panel">
-    <div class="panel-head"><div><p class="kicker">RECOVERY STATUS</p><h2>자동복구 상태</h2></div><span class="badge" id="operations-status">확인 중</span></div>
+    <div class="panel-head"><div><p class="kicker">복구 상태</p><h2>자동복구 상태</h2></div><span class="badge" id="operations-status">확인 중</span></div>
     <div id="operations-summary" class="notice"></div>
     <details class="inline-disclosure" data-persist="system-recovery-kanban">
       <summary>복구 Kanban 상세 보기</summary>
@@ -40,7 +40,7 @@
 
   <details class="panel disclosure-panel" data-persist="system-provider">
     <summary>
-      <div><p class="kicker">DATA PROVIDER</p><h2>데이터 공급자 상태</h2><p class="disclosure-hint">수집 경로·구독·1분 거래대금 방식을 확인합니다.</p></div>
+      <div><p class="kicker">데이터 공급자</p><h2>데이터 공급자 상태</h2><p class="disclosure-hint">수집 경로·구독·1분 거래대금 방식을 확인합니다.</p></div>
       <span class="disclosure-toggle">상세 보기</span>
     </summary>
     <div class="disclosure-body"><div id="provider-status" class="provider-grid"></div></div>
@@ -49,7 +49,7 @@
   <section class="grid two disclosure-grid">
     <details class="panel disclosure-panel" data-persist="system-regression">
       <summary>
-        <div><p class="kicker">REGRESSION GUARD</p><h2>기능 단위 회귀 탐지</h2></div>
+        <div><p class="kicker">회귀 검사</p><h2>기능 단위 회귀 탐지</h2></div>
         <div class="summary-actions"><span class="regression-badge" id="regression-status">확인 중</span><span class="disclosure-toggle">상세 보기</span></div>
       </summary>
       <div class="disclosure-body"><div id="regression-summary" class="regression-summary"></div><div id="regression-evals" class="mini-list" style="margin-top:12px"></div></div>
@@ -57,7 +57,7 @@
 
     <details class="panel disclosure-panel" data-persist="system-recent-changes">
       <summary>
-        <div><p class="kicker">CHANGE MANIFEST</p><h2>최근 AI 변경</h2></div>
+        <div><p class="kicker">최근 변경 기록</p><h2>최근 AI 변경</h2></div>
         <span class="disclosure-toggle">상세 보기</span>
       </summary>
       <div class="disclosure-body"><div id="recent-changes" class="timeline"></div></div>
@@ -66,7 +66,7 @@
 
   <details class="panel disclosure-panel quiet-panel" data-persist="system-evolution">
     <summary>
-      <div><p class="kicker">EVOLUTION</p><h2>AI 진화 타임라인</h2><p class="disclosure-hint">과거 판단과 실험 흐름을 확인합니다.</p></div>
+      <div><p class="kicker">자기진화</p><h2>AI 진화 타임라인</h2><p class="disclosure-hint">과거 판단과 실험 흐름을 확인합니다.</p></div>
       <span class="disclosure-toggle">상세 보기</span>
     </summary>
     <div class="disclosure-body"><div id="ticks" class="timeline"></div></div>
@@ -74,17 +74,17 @@
 
   <section class="grid two disclosure-grid">
     <details class="panel disclosure-panel text-panel" data-persist="system-decisions">
-      <summary><div><p class="kicker">DECISIONS</p><h2>결정 원장</h2></div><span class="disclosure-toggle">상세 보기</span></summary>
+      <summary><div><p class="kicker">결정 기록</p><h2>결정 원장</h2></div><span class="disclosure-toggle">상세 보기</span></summary>
       <div class="disclosure-body"><pre id="decisions"></pre></div>
     </details>
     <details class="panel disclosure-panel text-panel" data-persist="system-help">
-      <summary><div><p class="kicker">HUMAN INPUT</p><h2>사용자 도움이 필요한 일</h2></div><span class="disclosure-toggle">상세 보기</span></summary>
+      <summary><div><p class="kicker">사용자 확인</p><h2>사용자 도움이 필요한 일</h2></div><span class="disclosure-toggle">상세 보기</span></summary>
       <div class="disclosure-body"><pre id="help"></pre></div>
     </details>
   </section>
 
   <details class="panel disclosure-panel text-panel quiet-panel" data-persist="system-changelog">
-    <summary><div><p class="kicker">AI CHANGELOG</p><h2>AI가 실제로 바꾼 것</h2></div><span class="disclosure-toggle">상세 보기</span></summary>
+    <summary><div><p class="kicker">AI 변경 기록</p><h2>AI가 실제로 바꾼 것</h2></div><span class="disclosure-toggle">상세 보기</span></summary>
     <div class="disclosure-body"><pre id="changelog"></pre></div>
   </details>
 </main>
