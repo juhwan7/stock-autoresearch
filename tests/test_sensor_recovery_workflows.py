@@ -103,6 +103,7 @@ def test_supervisor_result_workflow_has_dispatch_single_writer_fallback():
     assert 'git add "${{ steps.result.outputs.path }}"' in workflow
     assert "Commit result and canonical state as one writer" in workflow
     assert "Verify persisted result on main" in workflow
+    assert "if [ -f data/supervisor/disagreements.json ]" in workflow
 
 
 def test_supervisor_result_writer_retries_conflicts_and_fails_closed():
