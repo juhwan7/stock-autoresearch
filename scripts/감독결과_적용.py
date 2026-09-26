@@ -19,6 +19,7 @@ NEWS_ISSUES = ROOT / "data/news/issue-digest.json"
 RECENT_OBSERVATIONS = ROOT / "data/supervisor/recent.json"
 DISAGREEMENTS = ROOT / "data/supervisor/disagreements.json"
 DISCOVERY = ROOT / "data/discovery/latest.json"
+AI_RESULTS = ROOT / "data/supervisor/ai-results"
 
 
 def _read_json_dict(path: Path) -> dict:
@@ -148,7 +149,7 @@ def _latest_regular_result(
     before_at: str | None = None,
     exclude_batch_id: str | None = None,
 ) -> dict:
-    folder = ROOT / "data" / "supervisor" / "ai-results"
+    folder = AI_RESULTS
     rows: list[tuple[str, dict]] = []
     for path in folder.glob("*.json"):
         item = _read_json_dict(path)
