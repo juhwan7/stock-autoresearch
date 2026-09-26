@@ -245,6 +245,39 @@ function renderIssues(data) {
   }).join("") : empty("누적된 시장 이슈가 아직 없습니다."));
 }
 
+function issueHotScore(issue) {
+  const statusScore = {ESCALATING:24,NEW:20,ACTIVE:14,WATCHING:8,EASING:3,RESOLVED:0}[String(issue.status||"WATCHING").toUpperCase()] || 0;
+  const severityScore = {CRITICAL:18,HIGH:12,MEDIUM:6,LOW:2}[String(issue.severity||"LOW").toUpperCase()] || 0;
+  const velocity = Math.max(0, Number(issue.article_velocity || 0));
+  const publishers = Math.max(0, Number(issue.publisher_count || issue.source_count || 0));
+  const articles = Math.max(0, Number(issue.article_count || 0));
+  const official = (issue.confirmed_facts||[]).length ? 5 : 0;
+  const reaction = [issue.market_reaction,issue.foreign_flow_reaction,issue.institution_flow_reaction,issue.turnover_reaction].filter(Boolean).length * 3;
+  const recencyRaw = issue.last_updated || issue.event_time || issue.first_detected;
+  const recencyHours = recencyRaw ? Math.max(0,(Date.now()-new Date(recencyRaw).getTime())/3600000) : 999;
+  const recency = recencyHours <= 1 ? 18 : recencyHours <= 6 ? 12 : recencyHours <= 24 ? 6 : 0;
+  return statusScore + severityScore + velocity*4 + publishers*2 + Math.min(articles,20) + official + reaction + recency;
+}
+function renderHotIssues(data) {
+  const root=$("hot-issue-list");
+  if(!root) return;
+  const rows=((data.news_issue_digest||{}).issues||[])
+    .filter((x)=>String(x.status||"").toUpperCase()!=="RESOLVED")
+    .map((x)=>({...x,_hotScore:issueHotScore(x)}))
+    .sort((a,b)=>b._hotScore-a._hotScore || String(b.last_updated||"").localeCompare(String(a.last_updated||"")))
+    .slice(0,10);
+  root.innerHTML=rows.length?rows.map((x,i)=>{
+    const status=String(x.status||"WATCHING").toUpperCase();
+    const publishers=Number(x.publisher_count||x.source_count||0);
+    const articles=Number(x.article_count||0);
+    const velocity=Number(x.article_velocity||0);
+    return '<a class="hot-issue-card" href="#issue-'+esc(x.issue_id||i)+'" data-level="'+esc(status)+'">'+
+      '<div class="hot-rank">'+(i+1)+'</div><div><div class="hot-head"><strong>🔥 '+esc(x.title||"이슈")+'</strong><span>'+esc(issueTemporalLabel(x))+'</span></div>'+
+      '<p>'+esc(x.latest_update||x.summary||"")+'</p>'+
+      '<small>관련 기사 '+esc(articles||"-")+'건 · 매체 '+esc(publishers||"-")+'개 · 최근 증가 +'+esc(Math.max(0,velocity))+' · '+esc(status)+'</small>'+
+      '</div></a>';
+  }).join(""):empty("급부상 이슈 점수를 계산할 데이터가 아직 부족합니다.");
+}
 function renderIssueTracker(data) {
   const root = $("issue-full-list");
   if (!root) return;
@@ -337,7 +370,7 @@ function renderIssueTracker(data) {
       ).join("");
       const facts=(x.confirmed_facts||x.evidence||[]);
       const unknowns=(x.unconfirmed||x.unknowns||[]);
-      return '<details class="issue-detail" data-level="' + esc(status) + '" data-impact="' + esc(impact) + '">' +
+      return '<details id="issue-' + esc(x.issue_id||"unknown") + '" class="issue-detail" data-level="' + esc(status) + '" data-impact="' + esc(impact) + '">' +
         '<summary><div class="issue-summary-main"><div class="issue-title-line">' +
           '<span class="issue-status">' + esc(statusLabel[status]||status) + '</span>' +
           '<span class="issue-impact ' + impact.toLowerCase() + '">' + esc(issueImpactLabel(x.impact)) + '</span>' +
@@ -532,6 +565,7 @@ async function load() {
   renderSessionTables(session, krRows, usRows);
   renderFlow(krRows);
   renderIssues(data);
+  renderHotIssues(data);
   renderIssueTracker(data);
   renderResearch(data);
   renderRisk(data);
