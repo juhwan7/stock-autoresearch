@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-26T19:48:35.330484+09:00",
+  "generated_at": "2026-09-26T20:18:44.073733+09:00",
   "status": "needs_user_action",
   "supervisors": {
     "A": {
-      "processed_at": "2026-09-26T18:00:00+09:00",
-      "batch_id": "supervisor-20260926T1800+0900",
+      "processed_at": "2026-09-26T20:00:00+09:00",
+      "batch_id": "supervisor-20260926T2000+0900",
       "status": "verification_pending",
-      "path": "data/supervisor/ai-results/supervisor-20260926T1800+0900.json"
+      "path": "data/supervisor/ai-results/supervisor-20260926T2000+0900.json"
     },
     "B": {
       "processed_at": "2026-09-26T16:30:00+09:00",
@@ -16,8 +16,26 @@
     }
   },
   "canonical": {
-    "last_batch_id": "recovery-20260926T1809+0900-b1730",
-    "last_processed_at": "2026-09-26T18:09:28+09:00"
+    "last_batch_id": "supervisor-20260926T2000+0900",
+    "last_processed_at": "2026-09-26T20:00:00+09:00"
+  },
+  "sensor_slot_coverage": {
+    "window_start": "2026-09-26T19:10:00+09:00",
+    "window_end": "2026-09-26T20:00:00+09:00",
+    "expected_slot_count": 6,
+    "received_slot_count": 1,
+    "received_slots": [
+      "2026-09-26T19:40:00+09:00"
+    ],
+    "missing_slots": [
+      "2026-09-26T19:10:00+09:00",
+      "2026-09-26T19:20:00+09:00",
+      "2026-09-26T19:30:00+09:00",
+      "2026-09-26T19:50:00+09:00",
+      "2026-09-26T20:00:00+09:00"
+    ],
+    "coverage_ratio": 0.167,
+    "max_slot_delay_seconds": 329.6
   },
   "news": {
     "discovery_generated_at": "2026-09-26T19:45:19.586459+09:00",
@@ -30,44 +48,53 @@
     "open_count": 24
   },
   "memory": {
-    "generated_at": "2026-09-26T18:09:28+09:00",
-    "latest_batch_id": "recovery-20260926T1809+0900-b1730",
-    "latest_supervisor": "Recovery-B",
-    "age_minutes": 99.1
+    "generated_at": "2026-09-26T20:00:00+09:00",
+    "latest_batch_id": "supervisor-20260926T2000+0900",
+    "latest_supervisor": "A",
+    "age_minutes": 18.7
   },
   "cards": [
     {
-      "card_id": "supervisor-a-stale",
-      "title": "Supervisor A 109분 지연",
-      "state": "조사 중",
-      "impact": "다음 사이클 누락 가능",
-      "last_checked": "2026-09-26T19:48:35.330484+09:00",
-      "owner": "Recovery",
-      "verify_after": "다음 30분 사이클"
+      "card_id": "supervisor-a-ok",
+      "title": "Supervisor A 정상",
+      "state": "완료",
+      "impact": "마지막 19분 전",
+      "last_checked": "2026-09-26T20:18:44.073733+09:00",
+      "owner": "A"
     },
     {
       "card_id": "supervisor-b-critical",
-      "title": "Supervisor B 199분 정지",
+      "title": "Supervisor B 229분 정지",
       "state": "사용자 확인 필요",
       "impact": "이슈 상태가 오래될 수 있음",
-      "last_checked": "2026-09-26T19:48:35.330484+09:00",
+      "last_checked": "2026-09-26T20:18:44.073733+09:00",
       "owner": "Recovery",
       "verify_after": "즉시"
     },
     {
-      "card_id": "discovery-ok",
-      "title": "뉴스 discovery 정상",
-      "state": "완료",
-      "impact": "3분 전 갱신",
-      "last_checked": "2026-09-26T19:48:35.330484+09:00",
-      "owner": "10분 센서"
+      "card_id": "sensor-slot-coverage-poor",
+      "title": "10분 센서 슬롯 커버리지 낮음",
+      "state": "조사 중",
+      "impact": "1/6 슬롯 · GitHub schedule/저장 경로 점검 필요",
+      "last_checked": "2026-09-26T20:18:44.073733+09:00",
+      "owner": "Recovery",
+      "verify_after": "다음 Recovery 또는 10분 센서"
+    },
+    {
+      "card_id": "discovery-stale",
+      "title": "뉴스 discovery 신선도 저하",
+      "state": "조사 중",
+      "impact": "마지막 갱신 33.40812123333333분 전",
+      "last_checked": "2026-09-26T20:18:44.073733+09:00",
+      "owner": "10분 센서",
+      "verify_after": "다음 10분 슬롯"
     },
     {
       "card_id": "issue-digest-stale",
       "title": "이슈 원장 갱신 지연",
       "state": "검증 대기",
-      "impact": "마지막 갱신 228.5888414분 전",
-      "last_checked": "2026-09-26T19:48:35.330484+09:00",
+      "impact": "마지막 갱신 258.73456221666663분 전",
+      "last_checked": "2026-09-26T20:18:44.073733+09:00",
       "owner": "A/B",
       "verify_after": "다음 :00/:30"
     },
@@ -75,32 +102,31 @@
       "card_id": "pages-data-ok",
       "title": "Pages 상태 데이터 정상",
       "state": "완료",
-      "impact": "1391529 bytes",
-      "last_checked": "2026-09-26T19:48:35.330484+09:00",
+      "impact": "1423199 bytes",
+      "last_checked": "2026-09-26T20:18:44.073733+09:00",
       "owner": "Dashboard"
     },
     {
-      "card_id": "long-memory-stale",
-      "title": "장기 AI 기억 갱신 지연",
-      "state": "검증 대기",
-      "impact": "마지막 기억 갱신 99.12217473333334분 전",
-      "last_checked": "2026-09-26T19:48:35.330484+09:00",
-      "owner": "Memory",
-      "verify_after": "다음 :00/:30 또는 Recovery"
+      "card_id": "long-memory-ok",
+      "title": "장기 AI 기억 정상",
+      "state": "완료",
+      "impact": "19분 전 갱신 · A",
+      "last_checked": "2026-09-26T20:18:44.073733+09:00",
+      "owner": "Memory"
     },
     {
       "card_id": "optional-news-credentials",
       "title": "선택형 뉴스·공시 API 미연결",
       "state": "완료",
       "impact": "현재 공개 fallback으로 후보 169건 확보되어 필수 조치 아님",
-      "last_checked": "2026-09-26T19:48:35.330484+09:00",
+      "last_checked": "2026-09-26T20:18:44.073733+09:00",
       "owner": "Discovery"
     }
   ],
   "user_actions": [
     {
       "id": "supervisor-b-critical",
-      "problem": "Supervisor B 마지막 실행이 199분 전",
+      "problem": "Supervisor B 마지막 실행이 229분 전",
       "impact": "정각/30분 AI 중 한 축이 장시간 정지",
       "attempted": "상대 Supervisor와 복구감시가 stale 상태를 감지",
       "why_blocked": "GitHub는 ChatGPT 예약 작업 자체를 켤 권한이 없음",
