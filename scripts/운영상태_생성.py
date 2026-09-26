@@ -178,6 +178,7 @@ def build_status(now: datetime | None = None) -> dict:
     issue_digest = read_json(ROOT / "data" / "news" / "issue-digest.json")
     health = read_json(ROOT / "data" / "health" / "latest.json")
     state = read_json(ROOT / "data" / "supervisor" / "state.json")
+    collaboration = read_json(ROOT / "data" / "supervisor" / "collaboration.json")
     queue = read_json(ROOT / "data" / "supervisor" / "question_queue.json")
     memory_catalog = read_json(MEMORY_CATALOG)
     slot_coverage = sensor_slot_coverage(now)
@@ -186,31 +187,40 @@ def build_status(now: datetime | None = None) -> dict:
     cards: list[dict] = []
     user_actions: list[dict] = []
 
+    supervisor_health = collaboration.get("supervisor_health") or {}
+    failure_patterns = collaboration.get("failure_patterns") or []
+
     for name in ("A", "B"):
         row = supervisors.get(name) or {}
         age = age_minutes(row.get("processed_at"), now)
+        health_row = supervisor_health.get(name) if isinstance(supervisor_health, dict) else {}
+        health_row = health_row if isinstance(health_row, dict) else {}
+        preferred_recovery = str(
+            health_row.get("preferred_recovery")
+            or "check_live_automation_then_issue_action_single_writer"
+        )
         if age is None:
-            cards.append(card(f"supervisor-{name.lower()}-missing", f"Supervisor {name} 결과 없음", "사용자 확인 필요", "정각/30분 AI 연속성이 끊길 수 있음", now, owner="Recovery"))
-            user_actions.append({
-                "id": f"supervisor-{name.lower()}-missing",
-                "problem": f"Supervisor {name} 결과 파일을 찾지 못함",
-                "impact": "AI 시장 해석/이슈 갱신 누락 가능",
-                "attempted": "다른 Supervisor와 Recovery가 상태를 이어받도록 설계",
-                "why_blocked": "ChatGPT 예약 작업 자체의 계정 실행상태는 GitHub Action이 직접 재활성화할 수 없음",
-                "action": "ChatGPT 자동화에서 해당 Supervisor가 활성화되어 있는지 확인",
-                "verify": f"새 Supervisor {name} batch가 생성되고 canonical state에 반영",
-            })
+            cards.append(card(
+                f"supervisor-{name.lower()}-missing",
+                f"Supervisor {name} 결과 없음 · 자동복구 대상",
+                "조사 중",
+                "저장소만으로 예약 disabled 여부를 단정하지 않고 상대 Supervisor가 live automation/Actions와 교차확인",
+                now,
+                owner="A/B 상호복구",
+                verify_after="상대 Supervisor 다음 정규 사이클",
+                preferred_recovery=preferred_recovery,
+            ))
         elif age > 150:
-            cards.append(card(f"supervisor-{name.lower()}-critical", f"Supervisor {name} {round(age)}분 정지", "사용자 확인 필요", "이슈 상태가 오래될 수 있음", now, owner="Recovery", verify_after="즉시"))
-            user_actions.append({
-                "id": f"supervisor-{name.lower()}-critical",
-                "problem": f"Supervisor {name} 마지막 실행이 {round(age)}분 전",
-                "impact": "정각/30분 AI 중 한 축이 장시간 정지",
-                "attempted": "상대 Supervisor와 복구감시가 stale 상태를 감지",
-                "why_blocked": "GitHub는 ChatGPT 예약 작업 자체를 켤 권한이 없음",
-                "action": "ChatGPT 자동화 활성 상태를 확인하고 필요하면 다시 켜기",
-                "verify": "70분 이내의 새 batch 확인",
-            })
+            cards.append(card(
+                f"supervisor-{name.lower()}-critical",
+                f"Supervisor {name} {round(age)}분 정규 결과 공백",
+                "수정 중",
+                "단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음",
+                now,
+                owner="A/B 상호복구",
+                verify_after="상대 Supervisor 복구 직후 또는 다음 정규 사이클",
+                preferred_recovery=preferred_recovery,
+            ))
         elif age > 70:
             cards.append(card(f"supervisor-{name.lower()}-stale", f"Supervisor {name} {round(age)}분 지연", "조사 중", "다음 정규 사이클 누락 가능", now, owner="Recovery", verify_after="다음 30분 사이클"))
         elif not row.get("window_complete"):
@@ -352,6 +362,8 @@ def build_status(now: datetime | None = None) -> dict:
         "generated_at": now.isoformat(),
         "status": "needs_user_action" if user_actions else ("investigating" if any(x["state"] in {"조사 중", "수정 중", "검증 대기"} for x in cards) else "normal"),
         "supervisors": supervisors,
+        "supervisor_health": supervisor_health,
+        "supervisor_failure_patterns": failure_patterns[:20] if isinstance(failure_patterns, list) else [],
         "canonical": {
             "last_batch_id": state.get("last_batch_id"),
             "last_processed_at": state.get("last_processed_at"),
