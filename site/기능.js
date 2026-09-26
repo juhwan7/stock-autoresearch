@@ -105,6 +105,79 @@ async function load() {
     </table></div>`
     : "<p class='muted'>한국 최근 거래일 데이터가 아직 없습니다.</p>";
 
+  const latestKorea = koreaRows[0] || null;
+  const latestFlows = (latestKorea || {}).flows_krw_100m || {};
+  const foreign3 = koreaRows.reduce((sum, row) => sum + Number((row.flows_krw_100m || {}).foreign || 0), 0);
+  const institution3 = koreaRows.reduce((sum, row) => sum + Number((row.flows_krw_100m || {}).institution || 0), 0);
+
+  function flowTone(value) {
+    const n = Number(value);
+    return Number.isFinite(n) ? (n > 0 ? "flow-buy" : n < 0 ? "flow-sell" : "flow-flat") : "flow-flat";
+  }
+
+  function flowLabel(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "미확인";
+    if (n > 0) return "순매수";
+    if (n < 0) return "순매도";
+    return "중립";
+  }
+
+  const flowStatus = $("investor-flow-status");
+  if (flowStatus) {
+    flowStatus.textContent = latestKorea
+      ? `${latestKorea.date} 종가 기준`
+      : "수급 데이터 없음";
+  }
+
+  const flowCards = $("investor-flow-cards");
+  if (flowCards) {
+    flowCards.innerHTML = latestKorea ? [
+      ["외국인", latestFlows.foreign, "최근 거래일"],
+      ["기관", latestFlows.institution, "최근 거래일"],
+      ["외국인 3일 누적", foreign3, "최근 3거래일"],
+      ["기관 3일 누적", institution3, "최근 3거래일"],
+    ].map(([label, value, period]) =>
+      `<div class="investor-flow-card ${flowTone(value)}">
+        <span>${esc(label)}</span>
+        <strong>${esc(flowEok(value))}</strong>
+        <small>${esc(flowLabel(value))} · ${esc(period)}</small>
+      </div>`
+    ).join("") : "<p class='muted'>확인된 외국인·기관 수급 데이터가 없습니다.</p>";
+  }
+
+  const flowHistory = $("investor-flow-history");
+  if (flowHistory) {
+    flowHistory.innerHTML = koreaRows.length ? koreaRows.map((row) => {
+      const flows = row.flows_krw_100m || {};
+      return `<div class="investor-flow-row">
+        <strong>${esc(row.date || "-")}</strong>
+        <span class="${flowTone(flows.foreign)}">외국인 ${esc(flowEok(flows.foreign))}</span>
+        <span class="${flowTone(flows.institution)}">기관 ${esc(flowEok(flows.institution))}</span>
+      </div>`;
+    }).join("") : "<p class='muted'>최근 거래일 수급 이력이 없습니다.</p>";
+  }
+
+  const flowReading = $("investor-flow-reading");
+  if (flowReading) {
+    if (!latestKorea) {
+      flowReading.innerHTML = "<p class='muted'>수급 데이터를 기다리는 중입니다.</p>";
+    } else {
+      const f = Number(latestFlows.foreign || 0);
+      const i = Number(latestFlows.institution || 0);
+      let headline = "외국인·기관 수급이 엇갈립니다.";
+      if (f > 0 && i > 0) headline = "외국인·기관이 함께 순매수했습니다.";
+      if (f < 0 && i < 0) headline = "외국인·기관이 함께 순매도했습니다.";
+      const detail = f * i < 0
+        ? "한쪽 매수를 다른 주체 매도가 상쇄하는 구조라 지수 상승만으로 수급 확산을 단정하기 어렵습니다."
+        : (f > 0 && i > 0
+          ? "두 주체의 동반 매수가 이어지는지 거래대금·시장폭과 함께 확인합니다."
+          : "동반 매도가 이어지면 지수보다 개별 종목 체감이 더 약할 수 있어 다음 거래일 지속 여부를 확인합니다.");
+      flowReading.innerHTML =
+        `<strong>${esc(headline)}</strong><p>${esc(detail)}</p><small>출처: ${esc(latestKorea.source || "미확인")} · 휴장일에는 마지막 거래일 종가 수급을 표시합니다.</small>`;
+    }
+  }
+
   const usRows = (sessionHistory.us || []).slice(0, 3);
   const usBox = $("us-session-history");
   if (usBox) usBox.innerHTML = usRows.length ? `
