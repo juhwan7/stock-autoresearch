@@ -232,11 +232,15 @@ function renderIssueTracker(data) {
   setText("issue-updated", store.updated_at ? "갱신 · " + relativeTime(store.updated_at) : "데이터 없음");
   setText("issue-total-count", rows.length + "개");
   const scan = store.scan_summary || {};
+  const discovery = data.discovery || {};
+  const liveArticleCount = Number(discovery.item_count);
+  const liveGroupCount = Number(discovery.query_group_count);
   setHTML("issue-scan-summary",
     '<strong>:00/:30 전체 뉴스 이슈화</strong><div class="source-line">' +
     esc(scan.note || "최신 뉴스 후보를 넓게 수집한 뒤 중복 기사·단순 재탕·시장 연관성이 낮은 항목을 제거하고 사건 단위로 묶습니다.") +
-    (scan.target_articles ? " · 후보 목표 " + esc(scan.target_articles) + "건" : "") +
-    " · 표시 최대 " + esc(store.max_issues || 100) + "개 · 해소 이슈 최소 " + esc(store.retention_days || 7) + "일 보존</div>"
+    (Number.isFinite(liveArticleCount) ? " · 현재 센서 후보 " + esc(liveArticleCount) + "건" : (scan.actual_articles ? " · 직전 후보 " + esc(scan.actual_articles) + "건" : "")) +
+    (Number.isFinite(liveGroupCount) ? " · 검색축 " + esc(liveGroupCount) + "개" : "") +
+    " · 최대 수집 " + esc(scan.target_articles || discovery.news_scan_target || 500) + "건 · 이슈 최대 " + esc(store.max_issues || 100) + "개 · 해소 이슈 최소 " + esc(store.retention_days || 7) + "일 보존</div>"
   );
 
   const counts = {};
@@ -257,8 +261,16 @@ function renderIssueTracker(data) {
   let activeStatus="ALL";
   let activeScope="ALL";
   let activeImpact="ALL";
+  let activeAge="7";
+  let activeSort="priority";
   let query="";
+  const issueTime = (x, key) => {
+    const raw = x[key] || "";
+    const d = new Date(raw);
+    return Number.isNaN(d.getTime()) ? 0 : d.getTime();
+  };
   const render = () => {
+    const nowMs = Date.now();
     const filtered = rows.filter((x) => {
       const s=String(x.status||"WATCHING").toUpperCase();
       const scope=String(x.scope||"GLOBAL").toUpperCase();
@@ -266,10 +278,28 @@ function renderIssueTracker(data) {
       if (activeStatus!=="ALL" && s!==activeStatus) return false;
       if (activeScope!=="ALL" && scope!==activeScope) return false;
       if (activeImpact!=="ALL" && impact!==activeImpact) return false;
+      if (activeAge!=="ALL") {
+        const days=Number(activeAge);
+        const eventMs=issueTime(x,"event_time") || issueTime(x,"last_updated") || issueTime(x,"first_detected");
+        if (eventMs && nowMs-eventMs > days*86400000) return false;
+      }
       if (!query) return true;
       const hay=[x.title,x.summary,x.category,x.scope,x.why_market_matters,x.pricing_status,(x.affected_assets||[]).join(" "),(x.transmission_path||[]).join(" ")].join(" ").toLowerCase();
       return hay.includes(query);
     });
+    const statusRank={ESCALATING:0,NEW:1,ACTIVE:2,WATCHING:3,EASING:4,RESOLVED:5};
+    const severityRank={CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3};
+    filtered.sort((a,b)=>{
+      if(activeSort==="updated") return (issueTime(b,"last_updated")||issueTime(b,"first_detected"))-(issueTime(a,"last_updated")||issueTime(a,"first_detected"));
+      if(activeSort==="event") return issueTime(b,"event_time")-issueTime(a,"event_time");
+      if(activeSort==="detected") return issueTime(b,"first_detected")-issueTime(a,"first_detected");
+      const sr=(statusRank[String(a.status||"WATCHING").toUpperCase()]??9)-(statusRank[String(b.status||"WATCHING").toUpperCase()]??9);
+      if(sr) return sr;
+      const sev=(severityRank[String(a.severity||"LOW").toUpperCase()]??9)-(severityRank[String(b.severity||"LOW").toUpperCase()]??9);
+      if(sev) return sev;
+      return (issueTime(b,"last_updated")||0)-(issueTime(a,"last_updated")||0);
+    });
+    setText("issue-total-count", filtered.length + "개 / 전체 " + rows.length + "개");
     root.innerHTML = filtered.length ? filtered.map((x) => {
       const status=String(x.status||"WATCHING").toUpperCase();
       const impact=issueImpactGroup(x.impact);
@@ -332,6 +362,10 @@ function renderIssueTracker(data) {
     impactFilters.querySelectorAll(".issue-filter").forEach((x)=>x.classList.toggle("active",x===button));
     render();
   });
+  const ageFilter=$("issue-age-filter");
+  if(ageFilter) ageFilter.addEventListener("change",()=>{activeAge=ageFilter.value||"7";render();});
+  const sortFilter=$("issue-sort");
+  if(sortFilter) sortFilter.addEventListener("change",()=>{activeSort=sortFilter.value||"priority";render();});
 }
 
 function renderResearch(data) {
