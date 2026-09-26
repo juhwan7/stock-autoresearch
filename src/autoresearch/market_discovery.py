@@ -22,12 +22,14 @@ QUERY_GROUPS: list[tuple[str, str]] = [
     ("kr_market_broad", "한국 증시 코스피 코스닥 주도주 거래대금 급등 공시"),
     ("kr_market_flow", "한국 증시 외국인 기관 수급 거래대금 상승률 상위"),
     ("kr_corporate_events", "한국 기업 공시 수주 계약 투자 실적 신규상장"),
-    ("kr_policy_economy", "한국 정부 경제 정책 세제 금융 규제 산업 지원 증시"),
+    ("kr_policy_economy", "(한국 경제정책 OR 금융정책 OR 산업정책 OR 세제 OR 규제)"),
+    ("kr_diplomacy_summit", "(이재명 OR 한국 대통령) (정상회담 OR 순방 OR 국빈방문 OR 유엔 OR 고위급회담)"),
     ("kr_semiconductor_ai", "한국 반도체 HBM AI 데이터센터 삼성전자 SK하이닉스 수출"),
     ("kr_energy_power", "한국 전력 원전 가스 석유 배터리 전력망 데이터센터 에너지"),
     ("kr_bio_health", "한국 바이오 제약 임상 허가 기술수출 CDMO 의료"),
     ("kr_defense_shipbuilding", "한국 방산 조선 수주 수출 항공 우주 로봇"),
-    ("global_market", "미국 증시 나스닥 S&P500 미국채 금리 달러 환율 원자재"),
+    ("global_market", "(나스닥 OR S&P500 OR 미국채 OR 달러 OR 원유 OR 금)"),
+    ("global_diplomacy_summit", "(트럼프 OR 시진핑 OR 정상회담 OR 유엔총회) (관세 OR 무역 OR 제재 OR 휴전 OR 투자 OR 에너지)"),
     ("us_macro_rates", "미국 연준 금리 물가 고용 PCE CPI 국채금리 경기"),
     ("global_energy_middle_east", "이란 호르무즈 사우디 후티 중동 유가 원유 LNG 공급"),
     ("us_china_trade_ai", "미국 중국 트럼프 시진핑 관세 무역 AI 반도체 수출규제 대만"),
@@ -36,6 +38,17 @@ QUERY_GROUPS: list[tuple[str, str]] = [
     ("global_ai_tech", "Meta Muse Nvidia Microsoft OpenAI AI agent semiconductor data center"),
     ("commodities_shipping_supplychain", "구리 금 원유 LNG 운임 해운 공급망 물류 원자재 가격"),
 ]
+
+
+LOW_QUALITY_TITLE_TERMS = {
+    "카지노", "토토", "바카라", "슬롯", "도박", "사설토토", "배팅사이트",
+}
+
+
+def is_low_quality_news_item(title: str, publisher: str | None = None) -> bool:
+    """시장 뉴스 검색에 섞이는 명백한 도박/SEO 스팸을 센서 단계에서 제거한다."""
+    haystack = f"{title} {publisher or ''}".lower()
+    return any(term.lower() in haystack for term in LOW_QUALITY_TITLE_TERMS)
 
 STOPWORDS = {
     "한국", "증시", "주식", "시장", "코스피", "코스닥", "관련", "전망", "급등", "급락",
@@ -83,7 +96,7 @@ def parse_google_news_rss(xml_text: str, topic: str, limit: int = 10) -> list[di
         source = _clean_text(item.findtext("source"))
         if source and title.endswith(" - " + source):
             title = title[: -(len(source) + 3)].strip()
-        if not title or not link:
+        if not title or not link or is_low_quality_news_item(title, source):
             continue
         rows.append(
             {
