@@ -1952,6 +1952,7 @@ class MarketIntelEngine:
         data_cfg = self.cfg.get("data", {})
         latest = self.root / data_cfg.get("latest_file", "data/market/latest.json")
         runtime = self.root / data_cfg.get("runtime_file", "data/market/runtime.json")
+        recent_sessions = self.root / "data" / "market" / "recent-sessions.json"
         dry_run_file = self.root / data_cfg.get(
             "dry_run_file", "data/market/dry_run_latest.json"
         )
@@ -1982,7 +1983,16 @@ class MarketIntelEngine:
                         ),
                         "market_status": quantitative.get("status"),
                         "reason": source_state.get("reason") or quantitative.get("reason"),
-                        "last_valid_market_file": str(latest.relative_to(self.root)),
+                        "last_valid_market_file": (
+                            str(latest.relative_to(self.root))
+                            if latest.exists()
+                            else None
+                        ),
+                        "historical_fallback_file": (
+                            str(recent_sessions.relative_to(self.root))
+                            if recent_sessions.exists()
+                            else None
+                        ),
                     },
                     ensure_ascii=False,
                     indent=2,
