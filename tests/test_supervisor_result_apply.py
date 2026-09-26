@@ -835,3 +835,103 @@ def test_supervisor_result_continuity_aliases_merge_per_role():
     assert module._collaboration_incident_id(
         {"id": "supervisor-a-result-missing"}
     ) == "supervisor-a-continuity"
+
+
+def test_live_regular_result_promotes_sibling_health_and_failure_pattern(tmp_path):
+    module = load_module()
+    module.ROOT = tmp_path
+    module.AI_RESULTS = tmp_path / "data/supervisor/ai-results"
+    module.WINDOWS = tmp_path / "data/supervisor/windows"
+    module.STATE = tmp_path / "data/supervisor/state.json"
+    module.COLLABORATION = tmp_path / "data/supervisor/collaboration.json"
+    module.AI_RESULTS.mkdir(parents=True)
+    module.WINDOWS.mkdir(parents=True)
+    module.STATE.parent.mkdir(parents=True, exist_ok=True)
+
+    a_result = {
+        "batch_id": "supervisor-20260927T0700+0900-a31",
+        "processed_at": "2026-09-27T07:07:00+09:00",
+        "supervisor": "A",
+        "run_kind": "regular",
+        "notify": True,
+        "summary": "A healthy",
+        "feedback_to_other_supervisor": ["B continuity check"],
+        "observation_ids": ["a1", "a2", "a3"],
+        "observation_slots": [
+            "2026-09-27T06:40:00+09:00",
+            "2026-09-27T06:50:00+09:00",
+            "2026-09-27T07:00:00+09:00",
+        ],
+        "observation_window_start": "2026-09-27T06:40:00+09:00",
+        "observation_window_end": "2026-09-27T07:00:00+09:00",
+        "expected_observation_count": 3,
+        "received_observation_count": 3,
+        "missing_observation_slots": [],
+        "observation_window_complete": True,
+        "project_improvement_signals": [],
+        "changed_paths": ["data/supervisor/ai-results/supervisor-20260927T0700+0900-a31.json"],
+        "next_checks": [],
+    }
+    source = module.AI_RESULTS / "supervisor-20260927T0700+0900-a31.json"
+    source.write_text(json.dumps(a_result, ensure_ascii=False), encoding="utf-8")
+
+    module.WINDOWS.joinpath("latest-A.json").write_text(
+        json.dumps({"window_end": "2026-09-27T07:00:00+09:00", "complete": True}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    module.WINDOWS.joinpath("latest-B.json").write_text(
+        json.dumps({"window_end": "2026-09-27T06:30:00+09:00", "complete": True}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    module.STATE.write_text(
+        json.dumps({"last_a_window": {"batch_id": a_result["batch_id"]}}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    module.update_collaboration_state(a_result, source)
+    stored = json.loads(module.COLLABORATION.read_text(encoding="utf-8"))
+    by_id = {x["incident_id"]: x for x in stored["incidents"]}
+
+    assert "supervisor-b-continuity" in by_id
+    assert by_id["supervisor-b-continuity"]["status"] == "investigating"
+    assert stored["supervisor_health"]["A"]["status"] == "healthy"
+    assert stored["supervisor_health"]["B"]["status"] == "missing_result"
+    pattern = next(
+        x for x in stored["failure_patterns"]
+        if x["failure_pattern"] == "supervisor_b_unknown"
+    )
+    assert pattern["occurrences"] == 1
+    assert pattern["disable_supervisor"] is False
+    assert pattern["preferred_recovery"] == "check_automation_then_issue_action_single_writer"
+    assert stored["recovery_policy"]["disable_on_single_failure"] is False
+
+
+def test_failure_pattern_counts_unique_batches_only(tmp_path):
+    module = load_module()
+    store = {}
+    health = {
+        "B": {
+            "status": "missing_result",
+            "cause": "result_write_failed",
+            "preferred_recovery": "issue_action_single_writer",
+            "last_expected_anchor": "2026-09-27T06:30:00+09:00",
+        }
+    }
+    first = {
+        "batch_id": "supervisor-a-1",
+        "processed_at": "2026-09-27T07:07:00+09:00",
+        "project_improvement_signals": [],
+    }
+    patterns = module._update_failure_patterns(store, result=first, supervisor_health=health)
+    store["failure_patterns"] = patterns
+    patterns = module._update_failure_patterns(store, result=first, supervisor_health=health)
+    assert patterns[0]["occurrences"] == 1
+
+    second = {
+        "batch_id": "supervisor-a-2",
+        "processed_at": "2026-09-27T08:07:00+09:00",
+        "project_improvement_signals": [],
+    }
+    patterns = module._update_failure_patterns(store, result=second, supervisor_health=health)
+    assert patterns[0]["occurrences"] == 2
+    assert patterns[0]["disable_supervisor"] is False
