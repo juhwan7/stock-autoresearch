@@ -1,113 +1,32 @@
 {
-  "batch_id": "supervisor-20260926T1130+0900",
-  "processed_at": "2026-09-26T11:30:00+09:00",
+  "batch_id": "supervisor-20260926T1300+0900",
+  "processed_at": "2026-09-26T13:00:00+09:00",
   "notify": true,
-  "supervisor": "B",
+  "supervisor": "A",
   "status": "verification_pending",
   "summary": [
-    "토요일 국내 휴장으로 최근 30분 신규 거래대금·등락률 변화 없음. 정상 휴장으로 판단.",
-    "25일 미국장은 AI 기술주 매수로 S&P500 +0.51%, Nasdaq +0.48%, Dow +0.93%. 고유가와 최근 장기금리 급등은 경계 요인.",
-    "Brent는 2.1% 하락한 104.32달러. 미·이란 긴장 완화 기대가 반영됐지만 공급 차질 위험은 남아 '완화됐지만 해소되지 않음'.",
-    "23일 한국장은 KOSPI +1.21%, 주요 반도체가 주도. 다음 개장에서는 거래대금과 상승 종목 수의 확산 여부가 핵심.",
-    "시장 우선 UI·모바일 가독성 개선은 프로젝트 검증과 최종 Pages 배포가 모두 성공."
-  ],
-  "market_narrative": [
-    "23일 한국장은 KOSPI +1.21%로 7,080.92. 반도체 매수가 주도.",
-    "24일 미국장은 중동 불확실성으로 유가·금리가 올라 S&P500 -0.02%, Nasdaq +0.01%, Dow -0.31% 혼조.",
-    "25일 미국장은 AI 기술주 매수로 S&P500 +0.51%, Nasdaq +0.48%, Dow +0.93%.",
-    "Brent는 25일 -2.1%인 104.32달러. 유가 위험은 완화됐지만 해소되지 않음.",
-    "다음 한국장은 미국 AI 강세의 국내 거래대금·시장폭 확산과 주말 유가·금리 변화가 핵심."
-  ],
-  "market_focus": [
-    {
-      "title": "중동·유가",
-      "reason": "Brent 100달러 위, 주말 헤드라인 민감도 높음"
-    },
-    {
-      "title": "미국 장기금리",
-      "reason": "AI·성장주 밸류에이션과 국내 반도체 갭에 연결"
-    },
-    {
-      "title": "AI/반도체 시장폭",
-      "reason": "다음 개장 Top50 거래대금과 상승 종목 수 확산 확인"
-    },
-    {
-      "title": "canonical 동기화",
-      "reason": "latest-report 11:20, state 06:30으로 현재 불일치"
-    }
-  ],
-  "invalidation_checks": [
-    "Brent 재급등 또는 공급 차질 현실화 시 유가 완화 판단 폐기.",
-    "미 10년물 최근 고점 재돌파 시 금리 위험 우선.",
-    "다음 한국장에서 거래대금·상승 종목 수가 확산되지 않으면 시장 전체 위험선호 회복으로 판단하지 않음.",
-    "결과 적용 뒤 state와 latest-report batch가 같지 않으면 canonical 동기화 장애 유지.",
-    "새 Health에서도 장외 macro empty와 broad fallback 성공이 CRITICAL이면 false-CRITICAL 문제 재개방."
+    "국내 휴장으로 최근 30분 신규 체결 변화 없음.",
+    "9/23 KOSPI 등락률을 +0.90%로 정정.",
+    "미국 장기금리 위험은 완화가 아니라 강화로 판단."
   ],
   "actions": [
-    "직전 canonical과 최근 main/Actions 검토.",
-    "Reuters·한국시장 보도로 시장 해석 반증.",
-    "Pages UI 개선의 프로젝트 검증·배포 success 확인.",
-    "Health 수정은 새 실운영 스냅샷 전까지 verification_pending 유지.",
-    "state/latest-report 불일치를 결과 적용 후 재검증 대상으로 등록."
+    "직전 B와 최신 main을 이어받아 시장 수치와 UI 상태를 검증.",
+    "최근 3거래일 화면과 메뉴 수정의 CI/Pages 성공을 확인."
   ],
-  "changed_paths": [],
-  "problem_states": [
-    {
-      "id": "six-minute-sensor-gap",
-      "status": "resolved",
-      "evidence": "토요일 휴장",
-      "verify_after": null
-    },
-    {
-      "id": "supervisor-result-trigger-selection",
-      "status": "blocked",
-      "evidence": "기존 상태 승계",
-      "verify_after": "when workflow edit is permitted"
-    },
-    {
-      "id": "toss-live-message-receipt",
-      "status": "verification_pending",
-      "evidence": "휴장",
-      "verify_after": "next domestic live trading session"
-    },
-    {
-      "id": "macro-runtime-empty",
-      "status": "verification_pending",
-      "evidence": "코드·테스트·CI 성공, 현재 health는 수정 전 스냅샷",
-      "verify_after": "next six-minute health run"
-    },
-    {
-      "id": "google-news-health-fallback-severity",
-      "status": "verification_pending",
-      "evidence": "코드·테스트·CI 성공, 현재 health는 수정 전 스냅샷",
-      "verify_after": "next six-minute health run"
-    },
-    {
-      "id": "supervisor-a-0600-missing",
-      "status": "investigating",
-      "evidence": "최근 Actions에서도 미확인",
-      "verify_after": "next A workflow inspection"
-    },
-    {
-      "id": "canonical-state-report-mismatch",
-      "status": "verification_pending",
-      "evidence": "latest-report=11:20, state=06:30",
-      "verify_after": "after this result apply"
-    }
+  "changed_paths": [
+    "data/supervisor/ai-results/supervisor-20260926T1300+0900.json"
   ],
   "next_checks": [
-    "결과 적용 후 state/latest-report batch 동기화 확인",
-    "다음 Health NOTICE 전환 확인",
-    "주말 중동·유가 및 미국 장기금리 추적",
-    "다음 한국장 Toss 수신·Top50 이탈 추적 검증",
-    "다음 A에서 과거3일→향후3일 시장 타임라인 갱신"
+    "다음 Health 산출물 확인.",
+    "주말 유가·장기금리 추적.",
+    "다음 한국장 거래대금·시장폭·외국인 수급 확인."
   ],
   "telegram_report": [
-    "① 최근 30분: 한국장은 토요일 휴장이라 새 수급 변화가 없습니다. 25일 미국장은 AI주 중심 상승이었습니다.",
-    "② A 검증: AI 강세+금리/유가 경계 해석은 유지. 유가는 2.1% 내려 '완화됐지만 여전히 높음'으로 수정합니다.",
-    "③ 핵심 위험: 주말 중동·유가 1순위, 미국 장기금리 2순위. 다음 한국장 시장폭 확산을 확인합니다.",
-    "④ 버그: 새 코드 버그를 억지로 만들지 않았고 canonical state/report 불일치를 새 검증 문제로 등록했습니다.",
-    "⑤ UI: 시장 우선·모바일 가독성 변경은 테스트와 Pages 배포 모두 성공했습니다.",
-    "⑥ 다음 A: 새 Health NOTICE 전환, canonical 동기화, 주말 유가·금리, 다음 Toss 실거래 수신을 확인합니다."
+    "① 최근 30분: 국내 휴장으로 새 수급 변화는 없습니다.",
+    "② 핵심 위험: 미국 장기금리와 중동·유가입니다.",
+    "③ 새 판단: 25일 미국 주식은 AI 중심 반등이지만 금리 부담은 강화됐습니다.",
+    "④ 정정: 9/23 KOSPI는 +0.90%, KOSDAQ은 +1.21%입니다.",
+    "⑤ 검증: 최근 3거래일 UI와 Pages 배포가 정상입니다.",
+    "⑥ 다음 B: 금리·유가와 새 Health 상태를 재확인하세요."
   ]
 }
