@@ -29,3 +29,27 @@ def test_heavy_recovery_dispatches_with_explicit_slot():
     workflow = read(".github/workflows/자동복구_감시.yml")
     assert "RECOVERY_SLOT_AT=" in workflow
     assert '-f slot_at="$RECOVERY_SLOT_AT"' in workflow
+
+
+
+def test_sensor_commit_excludes_recovery_owned_status_files():
+    workflow = read(".github/workflows/연속연구와진화.yml")
+    assert "git add data/operations" not in workflow
+    assert "git add README.md docs/운영_칸반.md" not in workflow
+    assert "git restore --staged site/data/상태.json" in workflow
+    assert "data/operations/status.json" in workflow
+    assert "docs/운영_칸반.md" in workflow
+    assert "site/data/상태.json" in workflow
+
+
+def test_sensor_persist_conflict_is_a_real_workflow_failure():
+    workflow = read(".github/workflows/연속연구와진화.yml")
+    assert "observation 저장 실패를 숨기지 않고 workflow를 실패 처리합니다." in workflow
+    assert "핵심 observation 저장에 실패했습니다." in workflow
+    assert workflow.count("exit 1") >= 2
+
+
+def test_heavy_recovery_schedule_avoids_a_b_execution_minutes():
+    workflow = read(".github/workflows/자동복구_감시.yml")
+    assert 'cron: "3,18,33,48 * * * *"' in workflow
+    assert 'cron: "7,22,37,52 * * * *"' not in workflow
