@@ -520,6 +520,36 @@ def recent_items(
     return result
 
 
+def estimate_independent_story_count(titles: list[str]) -> int:
+    """Estimate independent story families from headline similarity.
+
+    This is intentionally an estimate, not a claim about journalistic origin.
+    Primary-source independence still requires Supervisor verification.
+    """
+    clusters: list[set[str]] = []
+    stop = {str(x).lower() for x in STOPWORDS}
+    for title in titles:
+        tokens = {
+            token.lower()
+            for token in _title_tokens(title)
+            if token.lower() not in stop
+        }
+        if not tokens:
+            continue
+        matched = False
+        for existing in clusters:
+            union = tokens | existing
+            intersection = tokens & existing
+            jaccard = len(intersection) / len(union) if union else 0.0
+            containment = len(intersection) / min(len(tokens), len(existing))
+            if jaccard >= 0.55 or (len(intersection) >= 3 and containment >= 0.72):
+                matched = True
+                break
+        if not matched:
+            clusters.append(tokens)
+    return len(clusters)
+
+
 def extract_trending_terms(
     items: list[dict[str, Any]],
     previous: dict[str, Any] | None = None,
@@ -536,6 +566,7 @@ def extract_trending_terms(
     counts: dict[str, int] = {}
     publishers: dict[str, set[str]] = {}
     examples: dict[str, list[str]] = {}
+    story_titles: dict[str, list[str]] = {}
     for item in items:
         title = str(item.get("title") or "")
         publisher = str(item.get("publisher") or "")
@@ -547,12 +578,18 @@ def extract_trending_terms(
             bucket = examples.setdefault(token, [])
             if title and title not in bucket and len(bucket) < 3:
                 bucket.append(title)
+            story_bucket = story_titles.setdefault(token, [])
+            if title and title not in story_bucket and len(story_bucket) < 100:
+                story_bucket.append(title)
 
     ranked: list[dict[str, Any]] = []
     for term, count in counts.items():
         if count < 2:
             continue
         publisher_count = len(publishers.get(term, set()))
+        independent_story_count = estimate_independent_story_count(
+            story_titles.get(term, [])
+        )
         previous_count = previous_counts.get(term, 0)
         delta = count - previous_count
         score = (count * 2) + publisher_count + max(delta, 0)
@@ -561,6 +598,12 @@ def extract_trending_terms(
                 "term": term,
                 "count": count,
                 "publisher_count": publisher_count,
+                "independent_story_count_estimate": independent_story_count,
+                "syndication_ratio_estimate": round(
+                    max(0.0, 1.0 - (independent_story_count / count)),
+                    3,
+                ) if count else 0.0,
+                "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
                 "previous_count": previous_count,
                 "delta": delta,
                 "score": score,
@@ -601,7 +644,7 @@ def build_dynamic_handoff_queries(
 
 
 def _append_discovery_archive(root: Path, snapshot: dict[str, Any]) -> None:
-    """6분 센서의 커버리지/핫키워드 통계를 일별 JSONL로 장기 보존한다."""
+    """10분 센서의 커버리지/핫키워드 통계를 일별 JSONL로 장기 보존한다."""
     generated = _published_datetime(str(snapshot.get("generated_at") or ""))
     if generated is None:
         try:
@@ -713,7 +756,7 @@ def collect(
             }
 
 
-    # 직전 센서에서 새로 부상한 키워드는 다음 6분 주기의 독립 검색축으로 자동 승격한다.
+    # 직전 센서에서 새로 부상한 키워드는 다음 10분 주기의 독립 검색축으로 자동 승격한다.
     # 고정 키워드만 장기간 보는 문제를 막고, 생소한 기업·국가·인물도 반복 등장하면 따라간다.
     dynamic_terms = [
         str(item.get("term") or "").strip()
@@ -936,8 +979,9 @@ def collect(
             **item,
             "article_velocity": max(int(item.get("delta") or 0), 0),
             "hot_score": (
-                int(item.get("count") or 0) * 2
-                + int(item.get("publisher_count") or 0) * 3
+                int(item.get("count") or 0)
+                + int(item.get("publisher_count") or 0) * 2
+                + int(item.get("independent_story_count_estimate") or 0) * 3
                 + max(int(item.get("delta") or 0), 0) * 4
             ),
         }
@@ -965,7 +1009,7 @@ def collect(
     snapshot = {
         "schema_version": 1,
         "generated_at": now.isoformat(),
-        "purpose": "6분 비AI 시장·뉴스 단서 센서. 1시간 ChatGPT 심층리서치의 탐색 힌트이며 사실 확정 엔진이 아님.",
+        "purpose": "10분 비AI 시장·뉴스 단서 센서. :00/:30 A/B Supervisor의 탐색 힌트이며 사실 확정 엔진이 아님.",
         "source_status": source_status,
         "source_summary": {
             "ok_or_partial": ok_sources,
@@ -999,11 +1043,11 @@ def collect(
         "rules": {
             "discovery_only": True,
             "confirm_material_claims_with_primary_sources": True,
-            "canonical_trade_data": "정확 1분봉은 Toss/KRX/broker 우선. 기본 no-Pi 모드는 네이버 공개 6분 누적 거래대금 차분",
+            "canonical_trade_data": "정확 1분봉은 Toss/KRX/broker 우선. 기본 no-Pi 모드는 네이버 공개 10분 누적 거래대금 차분",
             "portal_news_role": "discovery_and_cross_check",
             "dart_role": "official_filing_primary_source",
             "official_web_candidates_role": "candidate_only_verify_domain_before_claim",
-            "public_batch_role": "기본 no-Pi 센서. 6분마다 최근 6개 분 단위 표본을 받아 1분 거래대금을 근사하고, 누적 거래대금 차분으로 합계를 교차검증. minute_amount_exact=false이므로 정확 체결합계로 표현하지 않음",
+            "public_batch_role": "기본 no-Pi 센서. 10분마다 최근 10개 분 단위 표본을 받아 1분 거래대금을 근사하고, 누적 거래대금 차분으로 합계를 교차검증. minute_amount_exact=false이므로 정확 체결합계로 표현하지 않음",
             "toss_role": "선택 연결 시 정확한 체결·1분 거래대금 보강",
         },
     }
