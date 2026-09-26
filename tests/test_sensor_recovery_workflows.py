@@ -124,3 +124,17 @@ def test_supervisor_result_workflow_has_owner_only_issue_dispatch_bridge():
     assert "ISSUE_RESULT:" in workflow
     assert "Close consumed dispatch issue" in workflow
     assert 'gh issue close "$ISSUE_NUMBER"' in workflow
+
+
+def test_sensor_stages_only_sensor_owned_supervisor_files_and_cleans_before_rebase():
+    workflow = read(".github/workflows/연속연구와진화.yml")
+    assert "git add data/supervisor\n" not in workflow
+    assert "git add data/supervisor/recent.json" in workflow
+    assert "git add data/supervisor/queue" in workflow
+    assert "git add data/supervisor/windows" in workflow
+    assert "git add data/supervisor/latest-report.json" not in workflow
+    assert "git add data/supervisor/state.json" not in workflow
+    assert "git reset --hard HEAD" in workflow
+    reset_index = workflow.index("git reset --hard HEAD")
+    rebase_index = workflow.index("if ! git pull --rebase; then", reset_index)
+    assert reset_index < rebase_index
