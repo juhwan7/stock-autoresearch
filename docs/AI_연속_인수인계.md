@@ -56,6 +56,8 @@
 - canonical apply는 ID가 queue에 존재하고 해당 3슬롯 window와 일치할 때만 처리 pointer를 전진시킨다.
 - 상대 Supervisor 피드백 처리 상태와 A/B 의견충돌은 구조화해 다음 사이클에 넘긴다. 충돌은 후속 증거로 검증하기 전 임의로 삭제하지 않는다.
 - 센서 뉴스의 `independent_story_count_estimate`는 제목 유사도 기반 복제 가능성 추정치일 뿐 독립 1차 출처 수 확정값이 아니다. 중요 이슈는 A/B가 원기사·공식 자료를 직접 검증한다.
+- `data/operations/status.json`은 최근 1시간 완료 슬롯 6개의 수신률·누락 슬롯·최대 지연을 `sensor_slot_coverage`로 기록한다. 최신 timestamp 하나만 보지 말고 슬롯 커버리지로 GitHub schedule 누락을 감지한다.
+- 직전 상대 Supervisor가 피드백을 남겼으면 다음 결과는 `feedback_received`로 실제 인수 사실을 남겨야 한다. 반대로 다음 상대에게 넘길 `feedback_to_other_supervisor`도 비우지 않는다. 둘 중 필요한 항목이 빠지면 canonical apply가 `verification_pending`으로 표시한다.
 
 ## 2026-09-26 자율진화·장기기억 운영 강화
 
