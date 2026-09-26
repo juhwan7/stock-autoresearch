@@ -117,6 +117,29 @@ function eventCard(event) {
     (level ? '<span class="event-level">' + esc(level) + '</span>' : '') +
     '</div>';
 }
+function initPersistentDetails() {
+  document.querySelectorAll("details[data-persist]").forEach((node) => {
+    const id = String(node.dataset.persist || "").trim();
+    if (!id) return;
+    const key = "stock-autoresearch:details:" + location.pathname + ":" + id;
+    const toggle = node.querySelector(":scope > summary .disclosure-toggle");
+    const syncLabel = () => {
+      if (toggle) toggle.textContent = node.open ? "접기" : "상세 보기";
+    };
+    try {
+      const saved = localStorage.getItem(key);
+      if (saved === "open") node.open = true;
+      if (saved === "closed") node.open = false;
+    } catch (_) {}
+    syncLabel();
+    node.addEventListener("toggle", () => {
+      syncLabel();
+      try {
+        localStorage.setItem(key, node.open ? "open" : "closed");
+      } catch (_) {}
+    });
+  });
+}
 function issueTemporalLabel(issue) {
   const status = String(issue.status || "WATCHING").toUpperCase();
   const statusWord = {NEW:"등장",WATCHING:"관찰",ACTIVE:"지속",ESCALATING:"강화",EASING:"완화",RESOLVED:"해소"}[status] || status;
@@ -742,7 +765,9 @@ function renderRisk(data) {
   if ($("risk-level")) $("risk-level").dataset.level = level;
   setHTML("risk-summary", '<div class="regime"><strong>' + esc(evaln.summary || "리스크 입력을 확인 중입니다.") + '</strong><p>' + esc(((evaln.single_biggest_risk || {}).title) || "확정된 단일 대형 리스크 없음") + '</p><small>' + esc(((evaln.single_biggest_risk || {}).why) || "") + '</small></div>');
   const upcomingEvents = asArray(risk.upcoming_events);
-  setHTML("risk-events", upcomingEvents.length ? '<div class="event-list">' + upcomingEvents.slice(0,8).map(eventCard).join("") + '</div>' : empty("예정 이벤트 없음"));
+  const riskEventsNode = $("risk-events");
+  const riskEventsLimit = Math.max(1, Number((riskEventsNode && riskEventsNode.dataset.limit) || 8));
+  setHTML("risk-events", upcomingEvents.length ? '<div class="event-list">' + upcomingEvents.slice(0,riskEventsLimit).map(eventCard).join("") + '</div>' : empty("예정 이벤트 없음"));
   setHTML("next-checks", (supervisor.next_checks || []).length ? (supervisor.next_checks || []).slice(0,8).map((x)=>'<div class="mini-row"><span>' + esc(typeof x === "string" ? x : (x.title || x.check || "")) + '</span></div>').join("") : empty("다음 확인 항목 없음"));
 }
 function renderMacro(data) {
@@ -865,6 +890,7 @@ async function load() {
 
   setText("updated","갱신 " + (data.generated_at ? new Date(data.generated_at).toLocaleString("ko-KR") : "미확인"));
 }
+initPersistentDetails();
 load().catch((error)=>{
   document.body.insertAdjacentHTML("beforeend",'<div style="position:fixed;z-index:99;left:12px;right:12px;bottom:12px;padding:14px;background:#7f1d1d;color:white;border-radius:10px;font:12px/1.5 system-ui">대시보드 오류: ' + esc(error.message) + '</div>');
 });
