@@ -369,6 +369,7 @@ def main() -> None:
         "changelog": section_tail(ROOT / "docs" / "AI_변경기록.md"),
         "market": market,
         "market_recent_sessions": read_json(ROOT / "data" / "market" / "recent-sessions.json"),
+        "relative_strength": read_json(ROOT / "data" / "market" / "relative-strength.json"),
         "market_runtime": read_json(ROOT / "data" / "market" / "runtime.json"),
         "toss_provider": toss_provider_status(),
         "risk": risk,
@@ -406,6 +407,10 @@ def main() -> None:
     }
     (DATA / "상태.json").write_text(
         json.dumps(status, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    (DATA / "상대강도.json").write_text(
+        json.dumps(status.get("relative_strength") or {}, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
 
