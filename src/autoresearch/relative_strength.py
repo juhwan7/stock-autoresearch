@@ -180,78 +180,142 @@ def parse_nasdaq_benchmark(payload: Any) -> dict[str, Any]:
     }
 
 
-def parse_kospi_market_sum(html_text: str) -> list[dict[str, Any]]:
+def _walk_dicts(value: Any):
+    if isinstance(value, dict):
+        yield value
+        for child in value.values():
+            yield from _walk_dicts(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from _walk_dicts(child)
+
+
+def parse_kospi_market_payload(payload: Any) -> list[dict[str, Any]]:
+    """네이버증권 KOSPI 시총순 JSON 목록을 상대강도 입력으로 정규화한다."""
     parsed: list[dict[str, Any]] = []
-    blocks = re.findall(r"<tr[^>]*>(.*?)</tr>", html_text, flags=re.IGNORECASE | re.DOTALL)
-    for block in blocks:
-        code_match = re.search(r"/item/main\.naver\?code=(\d{6})", block)
-        name_match = re.search(
-            r"<a[^>]*href=[\"'][^\"]*?/item/main\.naver\?code=\d{6}[^\"']*[\"'][^>]*>(.*?)</a>",
-            block,
-            flags=re.IGNORECASE | re.DOTALL,
+    seen: set[str] = set()
+    for row in _walk_dicts(payload):
+        code = str(
+            _first(row, "itemCode", "itemcode", "stockCode", "code", "cd") or ""
+        ).strip().upper()
+        if not re.fullmatch(r"\d{6}", code) or code in seen:
+            continue
+
+        price_block = row.get("price") if isinstance(row.get("price"), dict) else row
+        change_pct = _number(
+            _first(
+                price_block,
+                "fluctuationsRatio",
+                "changeRate",
+                "percentageChange",
+                "changePercent",
+                "rate",
+                "cr",
+            )
         )
-        if not code_match or not name_match:
+        if change_pct is None:
             continue
-        cells = [
-            _strip_html(cell)
-            for cell in re.findall(r"<td[^>]*>(.*?)</td>", block, flags=re.IGNORECASE | re.DOTALL)
-        ]
-        if len(cells) < 10:
-            continue
-        change_pct = _number(cells[4])
-        market_cap_eok = _number(cells[6])
-        if change_pct is None or market_cap_eok is None:
-            continue
+
+        name = str(
+            _first(row, "stockName", "itemName", "itemname", "name", "nm") or code
+        ).strip()
+        market_cap = _number(
+            _first(
+                row,
+                "marketValue",
+                "marketSum",
+                "marketCap",
+                "marketCapitalization",
+                "marketValueAmount",
+            )
+        )
         parsed.append(
             {
-                "ticker": code_match.group(1),
-                "name": _strip_html(name_match.group(1)),
+                "ticker": code,
+                "name": name,
                 "change_pct": change_pct,
-                "price": _number(cells[2]),
-                "market_cap": market_cap_eok * 100_000_000,
-                "volume": _number(cells[9]),
-                "source": "Naver Finance",
+                "price": _number(
+                    _first(
+                        price_block,
+                        "closePrice",
+                        "currentPrice",
+                        "lastPrice",
+                        "lastSalePrice",
+                        "nv",
+                    )
+                ),
+                "market_cap": market_cap,
+                "volume": _number(
+                    _first(
+                        price_block,
+                        "accumulatedTradingVolume",
+                        "tradingVolume",
+                        "volume",
+                        "accQuant",
+                        "aq",
+                    )
+                ),
+                "source": "Naver Stock",
             }
         )
+        seen.add(code)
     return parsed
 
 
-def parse_kospi_benchmark(html_text: str) -> dict[str, Any]:
+def parse_kospi_benchmark(payload: Any) -> dict[str, Any]:
+    """네이버증권 통합 지표/폴링 응답에서 KOSPI 값을 보수적으로 추출한다."""
+    candidates: list[dict[str, Any]] = []
+    if isinstance(payload, dict):
+        domestic = payload.get("domesticIndex")
+        if isinstance(domestic, dict):
+            direct = domestic.get("KOSPI")
+            if isinstance(direct, dict):
+                candidates.append(direct)
+
+    for row in _walk_dicts(payload):
+        code = str(
+            _first(row, "itemCode", "reutersCode", "symbol", "code") or ""
+        ).strip().upper()
+        if code == "KOSPI":
+            candidates.append(row)
+
     rate = None
-    match = re.search(
-        r'id=[\"\']change_value_and_rate[\"\'][^>]*>(.*?)</span>',
-        html_text,
-        flags=re.IGNORECASE | re.DOTALL,
-    )
-    if match:
-        text = _strip_html(match.group(1))
-        rate_match = re.search(r"([+-]?\d+(?:\.\d+)?)\s*%", text)
-        if rate_match:
-            rate = _number(rate_match.group(1))
-    if rate is None:
-        for candidate in re.findall(r"([+-]?\d+(?:\.\d+)?)\s*%", _strip_html(html_text)):
-            value = _number(candidate)
-            if value is not None and -30 <= value <= 30:
-                rate = value
-                break
-
     close = None
-    close_match = re.search(
-        r'id=[\"\']now_value[\"\'][^>]*>(.*?)</span>',
-        html_text,
-        flags=re.IGNORECASE | re.DOTALL,
-    )
-    if close_match:
-        close = _number(_strip_html(close_match.group(1)))
-
     session = None
-    time_match = re.search(
-        r'<span[^>]*id=[\"\']time[\"\'][^>]*>(.*?)</span>',
-        html_text,
-        flags=re.IGNORECASE | re.DOTALL,
-    )
-    if time_match:
-        session = _strip_html(time_match.group(1))
+    for row in candidates:
+        price_block = row.get("price") if isinstance(row.get("price"), dict) else row
+        rate = _number(
+            _first(
+                price_block,
+                "fluctuationsRatio",
+                "changeRate",
+                "percentageChange",
+                "changePercent",
+                "percentChange",
+                "rate",
+                "cr",
+            )
+        )
+        close = _number(
+            _first(
+                price_block,
+                "currentPrice",
+                "closePrice",
+                "lastPrice",
+                "lastSalePrice",
+                "nv",
+            )
+        )
+        session = _first(
+            price_block,
+            "localTradedAt",
+            "lastTradeTimestamp",
+            "lastTradeTime",
+            "tradeTime",
+            "baseDateTime",
+        ) or _first(row, "localTradedAt", "baseDateTime")
+        if rate is not None:
+            break
 
     return {
         "name": "KOSPI",
@@ -259,8 +323,8 @@ def parse_kospi_benchmark(html_text: str) -> dict[str, Any]:
         "change_pct": rate,
         "close": close,
         "session": session,
-        "source": "Naver Finance",
-        "source_url": "https://finance.naver.com/sise/sise_index.naver?code=KOSPI",
+        "source": "Naver Stock",
+        "source_url": "https://stock.naver.com/market/index/KOSPI",
     }
 
 
@@ -309,6 +373,20 @@ def summarize_market(
             "reason": "지수 등락률을 확인하지 못해 상대강도를 계산하지 않음",
             "sources": source_urls,
             "stocks": [],
+        }
+
+    if not stocks:
+        return {
+            "status": "unavailable",
+            "market": market,
+            "universe_label": universe_label,
+            "benchmark": benchmark,
+            "universe_count": 0,
+            "reason": "비교 종목 목록을 확인하지 못해 상대강도를 계산하지 않음",
+            "sources": source_urls,
+            "strongest": [],
+            "weakest": [],
+            "distribution": [],
         }
 
     rows: list[dict[str, Any]] = []
@@ -380,16 +458,30 @@ def fetch_nasdaq(limit: int = UNIVERSE_LIMIT) -> dict[str, Any]:
 
 
 def fetch_kospi(limit: int = UNIVERSE_LIMIT) -> dict[str, Any]:
-    per_page = 50
+    per_page = 100
     pages = max(1, math.ceil(limit / per_page))
     rows: list[dict[str, Any]] = []
     seen: set[str] = set()
-    for page in range(1, pages + 1):
-        url = (
-            "https://finance.naver.com/sise/sise_market_sum.naver?"
-            + urllib.parse.urlencode({"sosok": 0, "page": page})
+    list_source = "https://stock.naver.com/market/stock/kr/stocklist/capitalization"
+
+    for page in range(pages):
+        params = urllib.parse.urlencode(
+            {
+                "tradeType": "KRX",
+                "marketType": "KOSPI",
+                "orderType": "marketSum",
+                "startIdx": page,
+                "pageSize": per_page,
+            }
         )
-        for item in parse_kospi_market_sum(_fetch_text(url)):
+        payload = _fetch_json(
+            "https://stock.naver.com/api/domestic/market/stock/default?" + params,
+            referer=list_source,
+        )
+        page_rows = parse_kospi_market_payload(payload)
+        if not page_rows:
+            break
+        for item in page_rows:
             ticker = str(item.get("ticker") or "")
             if not ticker or ticker in seen:
                 continue
@@ -400,16 +492,32 @@ def fetch_kospi(limit: int = UNIVERSE_LIMIT) -> dict[str, Any]:
         if len(rows) >= limit:
             break
 
-    benchmark_url = "https://finance.naver.com/sise/sise_index.naver?code=KOSPI"
-    benchmark = parse_kospi_benchmark(_fetch_text(benchmark_url))
-    rows.sort(key=lambda x: float(x.get("market_cap") or 0), reverse=True)
+    indicator_url = (
+        "https://stock.naver.com/api/securityService/integration/v1/indicators?"
+        + urllib.parse.urlencode({"domesticIndexCodes": "KOSPI"})
+    )
+    benchmark = parse_kospi_benchmark(
+        _fetch_json(
+            indicator_url,
+            referer="https://stock.naver.com/market",
+        )
+    )
+
+    if benchmark.get("change_pct") is None:
+        benchmark = parse_kospi_benchmark(
+            _fetch_json(
+                "https://stock.naver.com/api/polling/domestic/index?itemCodes=KOSPI",
+                referer="https://stock.naver.com/market",
+            )
+        )
+
     return summarize_market(
         benchmark,
         rows[:limit],
         market="KOSPI",
         universe_label=f"KOSPI 시가총액 상위 {limit}개",
         source_urls=[
-            "https://finance.naver.com/sise/sise_market_sum.naver?sosok=0",
+            list_source,
             benchmark["source_url"],
         ],
     )
