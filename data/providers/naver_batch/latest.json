@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-26T16:22:16.753400+09:00",
+  "generated_at": "2026-09-26T19:44:59.785523+09:00",
   "status": "unavailable",
   "source_status": "ok",
   "error": null,
   "provider": "naver_public",
-  "mode": "six_minute_batch",
+  "mode": "ten_minute_batch",
   "polling_mode": "stock_naver_polling",
   "universe_method": "daily_union_of_every_top50_entry",
   "ranking_fresh_today": false,
@@ -16,7 +16,7 @@
   "current_top50": [],
   "universe_count": 0,
   "quote_count": 0,
-  "elapsed_minutes_from_previous": 25.702287416666664,
+  "elapsed_minutes_from_previous": 202.71720205000003,
   "exact_1m_bars": false,
   "one_minute_samples_available": false,
   "minute_amount_exact": false,
@@ -26,15 +26,15 @@
   "tracked_outside_top50_with_samples": 0,
   "minute_sample_errors": {},
   "minute_samples_by_ticker": {},
-  "interpretation": "직전 관측과 현재 누적 거래대금의 차이로 최근 약 6분 총 거래대금을 계산한다. 동시에 네이버 시간별 시세에서 최근 6개 분 단위 거래량 표본을 받아 가격×분당 거래량으로 1분 거래대금을 근사하고, 가능하면 6분 누적 거래대금 차분 합계에 맞춰 보정한다. 따라서 6개의 1분 표본은 사용할 수 있지만 정확한 체결대금 합산값은 아니다.",
+  "interpretation": "직전 관측과 현재 누적 거래대금의 차이로 최근 약 10분 총 거래대금을 계산한다. 동시에 네이버 시간별 시세에서 최근 10개 분 단위 거래량 표본을 받아 가격×분당 거래량으로 1분 거래대금을 근사하고, 가능하면 10분 누적 거래대금 차분 합계에 맞춰 보정한다. 따라서 10개의 1분 표본은 사용할 수 있지만 정확한 체결대금 합산값은 아니다.",
   "stocks": [],
   "interval_leaders": [],
   "limitations": [
     "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
-    "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
+    "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
     "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
     "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
-    "최근 6개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
-    "6분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+    "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+    "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
   ]
 }
