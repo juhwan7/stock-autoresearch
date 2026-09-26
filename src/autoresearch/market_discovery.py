@@ -20,11 +20,21 @@ USER_AGENT = "Mozilla/5.0 (compatible; StockAutoResearch/1.0; +https://github.co
 
 QUERY_GROUPS: list[tuple[str, str]] = [
     ("kr_market_broad", "한국 증시 코스피 코스닥 주도주 거래대금 급등 공시"),
-    ("kr_market_flow", "한국 증시 외국인 기관 거래대금 상승률 상위"),
+    ("kr_market_flow", "한국 증시 외국인 기관 수급 거래대금 상승률 상위"),
     ("kr_corporate_events", "한국 기업 공시 수주 계약 투자 실적 신규상장"),
-    ("global_market", "미국 증시 나스닥 S&P500 미국채 금리 환율 원자재 한국 증시"),
-    ("policy_geopolitics", "한국 미국 중국 일본 정책 관세 규제 공급망 지정학 증시"),
-    ("emerging_trends", "한국 주식 산업 신기술 공급망 수주 테마 시장 트렌드"),
+    ("kr_policy_economy", "한국 정부 경제 정책 세제 금융 규제 산업 지원 증시"),
+    ("kr_semiconductor_ai", "한국 반도체 HBM AI 데이터센터 삼성전자 SK하이닉스 수출"),
+    ("kr_energy_power", "한국 전력 원전 가스 석유 배터리 전력망 데이터센터 에너지"),
+    ("kr_bio_health", "한국 바이오 제약 임상 허가 기술수출 CDMO 의료"),
+    ("kr_defense_shipbuilding", "한국 방산 조선 수주 수출 항공 우주 로봇"),
+    ("global_market", "미국 증시 나스닥 S&P500 미국채 금리 달러 환율 원자재"),
+    ("us_macro_rates", "미국 연준 금리 물가 고용 PCE CPI 국채금리 경기"),
+    ("global_energy_middle_east", "이란 호르무즈 사우디 후티 중동 유가 원유 LNG 공급"),
+    ("us_china_trade_ai", "미국 중국 트럼프 시진핑 관세 무역 AI 반도체 수출규제 대만"),
+    ("japan_boj_fx", "일본 BOJ 금리 엔화 환율 일본증시 캐리트레이드"),
+    ("europe_debt_ecb", "유럽 ECB 프랑스 독일 국채 금리 재정 인플레이션 증시"),
+    ("global_ai_tech", "Meta Muse Nvidia Microsoft OpenAI AI agent semiconductor data center"),
+    ("commodities_shipping_supplychain", "구리 금 원유 LNG 운임 해운 공급망 물류 원자재 가격"),
 ]
 
 STOPWORDS = {
@@ -571,7 +581,7 @@ def collect(
             )
             xml_text = fetcher("https://news.google.com/rss/search?" + params)
             rows = recent_items(
-                parse_google_news_rss(xml_text, topic, limit=12),
+                parse_google_news_rss(xml_text, topic, limit=30),
                 now,
                 hours=48,
             )
@@ -590,7 +600,7 @@ def collect(
                     "https://news.google.com/rss/search?" + fallback_params
                 )
                 rows = recent_items(
-                    parse_google_news_rss(fallback_xml, topic, limit=20),
+                    parse_google_news_rss(fallback_xml, topic, limit=40),
                     now,
                     hours=72,
                 )
@@ -675,9 +685,14 @@ def collect(
             "한국 증시 주도주 거래대금",
             "한국 기업 공시 수주 계약",
             "코스피 코스닥 정책 산업",
+            "반도체 HBM AI 데이터센터",
+            "원전 전력망 배터리 에너지",
+            "방산 조선 로봇 우주",
+            "바이오 제약 임상 기술수출",
+            "미국 증시 유가 금리 환율 한국 영향",
         ]:
             try:
-                naver_news_rows.extend(fetch_naver_news(query, display=20))
+                naver_news_rows.extend(fetch_naver_news(query, display=50))
             except (
                 OSError,
                 TimeoutError,
@@ -757,7 +772,7 @@ def collect(
         deduped.append(item)
     # 개별 source가 fallback에서 72시간 창을 사용했다면 마지막 병합 단계에서
     # 다시 36시간으로 잘라 수집 건수를 0으로 만드는 모순을 피한다.
-    deduped = recent_items(deduped, now, hours=72)[:100]
+    deduped = recent_items(deduped, now, hours=72)[:500]
 
     new_items = [item for item in deduped if _item_key(item) not in previous_keys]
     topic_counts: dict[str, int] = {}
@@ -843,6 +858,8 @@ def collect(
         "public_batch_market": public_batch_market,
         "toss_market": toss_market,
         "item_count": len(deduped),
+        "news_scan_target": 500,
+        "query_group_count": len(QUERY_GROUPS),
         "new_item_count": len(new_items),
         "new_items": new_items[:20],
         "items": deduped,
