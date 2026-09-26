@@ -16,6 +16,7 @@ POPULAR_REPORTS = ROOT / "data/research/popular-reports.json"
 NEWS_ISSUES = ROOT / "data/news/issue-digest.json"
 RECENT_OBSERVATIONS = ROOT / "data/supervisor/recent.json"
 DISAGREEMENTS = ROOT / "data/supervisor/disagreements.json"
+DISCOVERY = ROOT / "data/discovery/latest.json"
 
 
 def _read_json_dict(path: Path) -> dict:
@@ -634,6 +635,26 @@ def main() -> int:
         warnings.append("changed_paths 누락을 현재 Supervisor 결과 경로로 복구")
     feedback_handoff = validate_feedback_handoff(current, result, warnings)
     window_manifest = normalize_observation_window(result, warnings)
+
+    # discovery가 실제 새 기사 입력을 확보했는데 정규 A/B가 issue lifecycle
+    # payload를 생략하면 digest가 조용히 멈춘다. timestamp를 조작하지 않고
+    # 해당 Supervisor 결과 자체를 미완료로 표시해 다음 사이클이 원인을 이어받게 한다.
+    discovery = _read_json_dict(DISCOVERY)
+    discovery_has_new_news = (
+        int(discovery.get("item_count") or 0) > 0
+        and int(discovery.get("new_item_count") or 0) > 0
+        and int((discovery.get("source_summary") or {}).get("ok_or_partial") or 0) > 0
+    )
+    is_regular_result = (
+        _supervisor_role(result.get("supervisor")) in {"A", "B"}
+        and str(result.get("batch_id") or "").startswith("supervisor-")
+    )
+    if discovery_has_new_news and is_regular_result and not isinstance(result.get("news_issue_digest"), dict):
+        warnings.append(
+            "최신 discovery에 새 뉴스가 있으나 news_issue_digest가 없어 뉴스 lifecycle 적용이 누락됨"
+        )
+        if str(result.get("status") or "") != "blocked":
+            result["status"] = "verification_pending"
     if warnings:
         result["validation_warnings"] = warnings
     observation_ids = list(result.get("observation_ids") or [])
