@@ -58,15 +58,15 @@ def _contains_test_signal(payload: Mapping[str, Any]) -> bool:
 
     if any(token in batch for token in ("-e2e", "e2e-", "-test", "test-", "telegram-format")):
         return True
-    if "[테스트]" in summary_text or " e2e" in summary_lower or summary_lower.startswith("test"):
+    summary_stripped = summary_text.strip()
+    if summary_stripped.startswith("[테스트]") or summary_lower.strip().startswith("test"):
         return True
 
     for item in payload.get("actions") or []:
         if not isinstance(item, Mapping):
             continue
         status = str(item.get("status") or "").lower()
-        action_type = str(item.get("type") or "").lower()
-        if status == "test" or "e2e" in action_type or action_type.endswith("_test"):
+        if status == "test":
             return True
     return False
 
