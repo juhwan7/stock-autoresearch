@@ -1,113 +1,123 @@
 {
-  "batch_id": "supervisor-20260926T1500+0900",
-  "processed_at": "2026-09-26T15:00:26+09:00",
+  "batch_id": "recovery-b-20260926T1550+0900",
+  "processed_at": "2026-09-26T15:50:00+09:00",
   "notify": true,
-  "supervisor": "A",
+  "supervisor": "B",
   "status": "verification_pending",
   "summary": [
-    "국내는 추석 연휴 휴장이라 신규 수급 신호가 없고, 미국 9월25일장은 AI 매수세로 상승했지만 장기금리·중동 에너지 위험이 동시에 남아 있다.",
-    "9월25일 Brent는 $104.32(-2.1%), WTI는 $92.41(-2.3%)로 내려 미·이란 휴전·호르무즈 재개방 기대가 공급위험을 일부 완화했지만, 9월26일 이란은 미국의 공식 답변을 기다리는 상태라 협상 타결로 확정할 수 없다.",
-    "뉴스 센서 최신 배치는 목표 500건 대비 실제 22건만 확보했고 16개 검색축 중 9개가 empty/degraded였다. 따라서 이번 배치는 센서 22건 전체를 훑은 뒤 Reuters 추가 검색으로 글로벌·국내 누락을 보강했다."
+    "15:30 Supervisor B 예약 실행 뒤 저장소에 새 B 결과가 남지 않은 공백을 복구했다. 직전 A(15:00) canonical과 15:47의 6분 센서 207건을 이어받았다.",
+    "뉴스 수집 병목은 직전 A의 22건에서 207건으로 크게 개선됐고, 고정 검색축 외 동적 검색까지 작동한다. 스포츠·게임·일반어 오염을 줄이는 관련성 필터와 동적 검색어 정제를 추가했다.",
+    "미·이란은 이란이 호르무즈 재개방 제안에 대한 미국의 공식 답변을 기다리는 상태라 협상 타결 또는 최종 결렬로 확정하지 않는다. 미중 정상회담도 큰 공개 돌파구가 제한적이었고 미국 측 세부 무역결과 발표를 추가 확인한다."
   ],
-  "market_narrative": "주말 기준 핵심은 AI 위험선호 회복과 에너지·채권 리스크의 충돌이다. 9월25일 미국 증시는 Microsoft 등 AI 관련주 매수로 상승했고 글로벌·미국 주식형펀드도 유입 전환했다. 동시에 장기금리는 최근 급등 뒤 유가 하락 덕분에 일부 안정됐을 뿐 높은 수준이 부담이다. 중동은 호르무즈 재개방 협상 기대가 유가를 낮췄지만 9월26일 현재 공식 합의가 확인되지 않아 월요일 한국장에는 협상 결과와 주말 군사행동이 가장 큰 갭 리스크다. 국내는 휴장 중이므로 9월23일 수급을 새 신호처럼 재사용하지 않는다.",
+  "market_narrative": "국내는 휴장이라 새로운 한국 수급을 만들거나 과거 9월23일 수급을 당일 신호처럼 해석하지 않는다. 현재 오버나잇 핵심은 미·이란/호르무즈 진행상황, 높은 장기금리, AI 위험선호의 지속 여부다. 뉴스 센서는 15:47 기준 207건까지 회복돼 시장 이슈 탐색 범위가 크게 넓어졌지만, 센서 기사는 후보이므로 Supervisor가 공식자료·Reuters 등으로 사건 단위 교차검증한다.",
   "market_focus": [
     {
       "rank": 1,
       "issue_id": "us-iran-hormuz-negotiation",
-      "reason": "월요일 갭 방향에 직접 연결될 수 있는 주말 이벤트. 협상 진전이면 유가·금리 부담 완화, 결렬/공격이면 반대."
+      "reason": "미국 공식 답변과 실제 호르무즈 통항 변화가 유가·인플레이션·장기금리·월요일 한국장 갭 위험으로 바로 전달될 수 있다."
     },
     {
       "rank": 2,
       "issue_id": "us-yields-oil-growth",
-      "reason": "AI 매수세가 살아 있어도 장기금리가 재상승하면 성장주 밸류에이션 압박이 재개될 수 있음."
+      "reason": "AI 강세가 이어져도 높은 장기금리 재상승은 성장주 할인율 부담을 다시 키울 수 있다."
     },
     {
       "rank": 3,
-      "issue_id": "meta-muse-ai-demand",
-      "reason": "Muse 채택·수익화 기대가 AI 소프트웨어/반도체 위험선호를 지지하지만 보안 취약점 후속 리스크가 동반됨."
-    },
-    {
-      "rank": 4,
       "issue_id": "us-china-trade-truce",
-      "reason": "무역휴전 연장은 단기 충돌 위험을 낮추지만 정상회담의 큰 돌파구는 제한적이어서 기술통제·대만 변수는 잔존."
-    },
-    {
-      "rank": 5,
-      "issue_id": "skhynix-solidigm-ipo",
-      "reason": "SK하이닉스 자회사 가치 재평가 재료지만 IPO는 검토 단계이므로 확정 호재로 취급하면 안 됨."
+      "reason": "정상회담 자체보다 월요일 공개 예정인 무역협상 세부내용과 AI·반도체·대만 관련 후속조치가 다음 확인 포인트다."
     }
   ],
   "invalidation_checks": [
-    "미국·이란 공식 합의가 나오지 않거나 추가 군사행동/후티의 사우디 공격이 확대되면 '유가 부담 완화' 판단을 즉시 무효화한다.",
-    "Brent가 9월25일 종가 $104.32에서 다시 급등하고 미 10년·30년 금리가 동반 상승하면 AI 위험선호보다 인플레이션·금리 부담을 우선한다.",
-    "AI 관련주 상승이 소수 대형주에만 머물고 주식형펀드 유입이 다음 주 재차 유출로 바뀌면 'AI 위험선호 확산' 판단을 낮춘다.",
-    "Solidigm IPO는 SEC 제출·회사 공식 결정 전까지 검토 단계로 유지한다.",
-    "CXMT G5 양산은 생산량·수율·DRAM 가격 영향이 확인되기 전 한국 메모리 실적 악화로 단정하지 않는다."
+    "미·이란 공식 합의 및 실제 호르무즈 통항 정상화가 확인되면 현재의 HIGH 오버나잇 위험을 낮춘다. 반대로 군사행동 재개나 통항 악화가 확인되면 위험을 강화한다.",
+    "미국 장기금리가 유가 하락에도 다시 급등하면 AI 위험선호보다 할인율 부담을 우선한다.",
+    "미중 후속 세부합의에서 관세·AI/반도체 수출통제에 실질 변화가 확인되지 않으면 정상회담을 새로운 대형 호재로 확대 해석하지 않는다.",
+    "뉴스 센서 후보 수가 많아도 서로 다른 신뢰 출처와 시장 반응이 없으면 핫이슈로 승격하지 않는다."
   ],
   "overnight_risks": [
     {
       "severity": "HIGH",
-      "title": "미·이란 협상/호르무즈",
+      "title": "미·이란 협상과 호르무즈",
       "check": "미국 공식 답변, 실제 통항 변화, 주말 군사행동"
     },
     {
       "severity": "HIGH",
-      "title": "중동 공급시설·사우디 공격",
-      "check": "후티 공격 확대와 원유시설/수송 차질"
-    },
-    {
-      "severity": "HIGH",
       "title": "미국 장기금리",
-      "check": "유가 반등과 함께 10년·30년 금리가 다시 뛰는지"
+      "check": "유가·인플레이션 기대와 10년·30년물 재상승 여부"
     },
     {
       "severity": "MEDIUM",
-      "title": "미중 후속조치",
-      "check": "관세·AI/반도체 수출통제·대만 관련 후속 발표"
+      "title": "미중 정상회담 후속 세부안",
+      "check": "월요일 무역협상 세부 발표, 관세·AI·반도체·대만 후속조치"
     },
     {
       "severity": "MEDIUM",
-      "title": "엔화·엔캐리",
-      "check": "USD/JPY 급변과 일본 당국 개입 신호"
+      "title": "AI 위험선호 지속성",
+      "check": "대형주 편중 여부와 다음 거래일 시장폭·반도체 동조"
     }
   ],
   "actions": [
-    "data/discovery/latest.json의 실제 22개 뉴스 후보를 전부 점검했다. 500건 목표는 이번 배치에서 충족되지 않았음을 명시했다.",
-    "Reuters 최신 보도로 미·이란/호르무즈, 유가, 미국 증시·채권, 미중 정상회담, Meta Muse 보안, 프랑스 재정, 한국은행, Solidigm IPO, CXMT를 교차검증했다.",
-    "뉴스 센서에서 시장과 무관한 Calgary Roughnecks 발행 항목 2건이 us_macro_rates/japan_boj_fx로 섞인 오염을 새 버그로 확인했다. 자동 코드 수정은 안전검사에 막혀 이번 배치에서는 변경하지 않고 B의 수정 대상으로 넘긴다."
+    "누락된 15:30 B를 recovery batch로 이어받아 canonical/Telegram 파이프라인을 즉시 재가동한다.",
+    "6분 뉴스 센서 커버리지를 22건에서 207건까지 확대한 최신 실행을 확인했다.",
+    "동적 검색어에서 대통령·7일·가능성 등 일반어를 제외하고 시장/정책 맥락을 함께 요구하도록 필터를 강화했다.",
+    "A/B 상호감시, :15 Recovery 자동화, 15분 GitHub Recovery watchdog, README 사용자확인, 운영 Kanban, 뉴스/이슈 일별 archive를 추가했다."
+  ],
+  "changed_paths": [
+    "src/autoresearch/market_discovery.py",
+    "scripts/감독결과_적용.py",
+    "scripts/운영상태_생성.py",
+    ".github/workflows/자동복구_감시.yml",
+    ".github/workflows/연속연구와진화.yml",
+    ".github/workflows/감독결과_적용과_텔레그램.yml",
+    "site/이슈추적.html",
+    "site/기능.js",
+    "site/시스템.html",
+    "site/스타일.css",
+    "README.md",
+    "AGENTS.md",
+    "docs/AI_연속_인수인계.md"
+  ],
+  "next_checks": [
+    "다음 6분 센서에서 동적 키워드+시장맥락 필터가 멕시코 K-POP 같은 주변기사를 제거하는지 실운영 확인한다.",
+    "다음 A(:00)는 이 recovery B가 canonical state/latest-report와 Telegram workflow에 정상 반영됐는지 먼저 확인한다.",
+    "미·이란 공식 미국 답변과 호르무즈 실제 통항을 재확인한다.",
+    "미중 무역협상 세부 발표가 예정대로 공개되는지와 한국 반도체·수출주 전달경로를 확인한다."
   ],
   "project_improvement_signals": [
     {
-      "change_id": "news-source-noise-filter",
-      "status": "investigating",
-      "symptom": "Calgary Roughnecks의 시장 무관 제목이 매크로/일본 검색 결과와 trending_terms에 유입됨",
-      "cause": "Google News 검색어 오염에 대한 publisher/title relevance 필터 부재",
-      "attempted": "해당 출처 제외 최소 수정 시도",
-      "result": "자동 안전검사에 의해 코드 변경 호출이 차단되어 저장소 변경 없음",
-      "next_action": "B가 일반적인 topic-title relevance score 또는 신뢰 출처 allow/deny 규칙으로 안전하게 구현하고 테스트"
+      "change_id": "supervisor-b-missed-result",
+      "status": "verification_pending",
+      "symptom": "15:30 예약 실행 후 새 B ai-result 부재",
+      "cause": "예약 실행은 확인됐으나 저장소 결과 생성까지 완료되지 않음",
+      "attempted": "현재 세션에서 recovery B batch 생성",
+      "result": "canonical/Telegram workflow 발동 후 성공 여부 확인 필요",
+      "verify_after": "즉시 workflow 완료 후"
     },
     {
       "change_id": "news-coverage-target-gap",
-      "status": "investigating",
-      "symptom": "news_scan_target=500이나 실제 item_count=22, 16개 검색축 중 9개 empty/degraded",
-      "cause": "복합 검색어가 지나치게 좁고 일부 Google News RSS 결과가 비어 있음",
-      "next_action": "검색축별 2~3개 짧은 독립 질의 fan-out 및 source coverage health를 추가하고 휴장/비휴장과 무관하게 뉴스는 계속 수집되는지 검증"
+      "status": "resolved",
+      "symptom": "직전 A에서 뉴스 후보 22건",
+      "cause": "검색축과 검색어가 지나치게 좁고 일부 RSS empty",
+      "attempted": "외교 검색축 추가, 동적 키워드 fan-out, fallback 유지",
+      "result": "15:47 실운영 센서 207건",
+      "verify_after": "다음 6분"
+    },
+    {
+      "change_id": "news-topic-noise",
+      "status": "verification_pending",
+      "symptom": "스포츠/게임/주변 외교 기사 일부 혼입",
+      "cause": "검색 결과 제목과 topic 맥락 검증 부족",
+      "attempted": "topic relevance 및 dynamic term+market context 필터 추가",
+      "result": "자동테스트 성공, 다음 live sensor 확인 필요",
+      "verify_after": "다음 6분"
     }
   ],
-  "next_checks": [
-    "15:30 B는 9월26일 미·이란 공식 답변 및 호르무즈 관련 새 보도를 최우선 재검증한다.",
-    "뉴스 수집 22/500 병목을 쿼리 fan-out 방식으로 개선할 수 있는지 테스트하고, 스팸/비시장 제목 필터를 회귀테스트와 함께 구현한다.",
-    "유가 하락이 채권금리 안정으로 실제 이어지는지 미국 10년·30년물과 함께 재확인한다.",
-    "Meta Muse 보안 취약점의 공식 패치/규제 후속과 Solidigm 회사 공식 입장을 확인한다."
-  ],
   "news_issue_digest": {
-    "updated_at": "2026-09-26T15:00:26+09:00",
+    "updated_at": "2026-09-26T15:50:00+09:00",
     "scan_summary": {
       "target_articles": 500,
-      "actual_articles": 22,
-      "query_group_count": 16,
-      "degraded_or_empty_groups": 9,
-      "note": "센서 22건 전체를 검토했고 부족한 글로벌·국내 범주는 Reuters 추가 검색으로 보강. 목표 500건은 미달."
+      "actual_articles": 207,
+      "query_group_count": 18,
+      "note": "15:47 센서 207건을 사건 후보로 사용. 고정 검색축 외 동적 검색이 작동하며 중복/무관 기사는 사건화 전에 제거한다."
     },
     "issues": [
       {
@@ -119,15 +129,16 @@
         "severity": "HIGH",
         "impact": "MIXED",
         "event_time": "2026-09-26",
-        "summary": "이란은 호르무즈 재개방 제안에 대한 미국의 공식 답변을 기다리고 있다. 트럼프가 제안을 거부했다는 보도가 있으나 공식 미국 답변 여부는 별도 확인이 필요하다.",
-        "why_market_matters": "협상 진전은 유가·인플레이션·장기금리 부담을 낮출 수 있고 결렬·군사행동은 반대 충격을 만들 수 있다.",
+        "latest_update": "이란은 호르무즈 재개방·전쟁 종료 제안에 대한 미국의 공식 답변을 기다리고 있다. WSJ의 트럼프 거부 보도는 있으나 Reuters 기준 공식 미국 답변은 아직 별도 확인이 필요하다.",
+        "summary": "미·이란 협상은 계속 열려 있으나 합의 또는 최종 결렬로 확정할 단계는 아니다.",
+        "why_market_matters": "호르무즈 통항 여부가 원유 공급·유가·인플레이션 기대·미국 장기금리를 거쳐 글로벌 성장주와 한국장 갭에 영향을 줄 수 있다.",
         "transmission_path": [
           "미·이란 협상",
           "호르무즈 통항",
           "Brent/WTI",
           "인플레이션 기대",
           "미국 장기금리",
-          "Nasdaq·한국 반도체"
+          "Nasdaq·한국 성장주"
         ],
         "affected_assets": [
           "Brent",
@@ -139,12 +150,10 @@
           "항공"
         ],
         "pricing_status": "PARTLY_PRICED",
-        "pricing_reason": "9월25일 Brent -2.1%, WTI -2.3%로 휴전 기대가 일부 반영됐으나 협상은 미확정.",
-        "next_check": "미국 공식 답변, 호르무즈 실제 통항, 주말 군사행동",
+        "next_check": "미국 공식 답변, 실제 호르무즈 통항, 주말 군사행동",
         "confirmed_facts": [
-          "미·이란은 단계적 호르무즈 재개방 방안을 논의했다.",
-          "9월25일 Brent $104.32(-2.1%), WTI $92.41(-2.3%)로 마감했다.",
-          "9월26일 이란은 미국 공식 답변을 기다리고 있다고 밝혔다."
+          "이란은 미국의 공식 답변을 기다리고 있다고 Reuters에 밝혔다.",
+          "이란 제안은 호르무즈 재개방과 광범위한 전투 종료를 포함한다."
         ],
         "unconfirmed": [
           "미국이 이란 제안을 최종 공식 거부했는지 여부",
@@ -155,120 +164,24 @@
             "publisher": "Reuters",
             "title": "Iran awaits US move after WSJ report says Trump rejects peace plan",
             "url": "https://www.reuters.com/world/middle-east/iran-awaits-us-move-after-wsj-report-says-trump-rejects-peace-plan-2026-09-26/"
-          },
-          {
-            "publisher": "Reuters",
-            "title": "Oil prices slide about 2% as US, Iran explore path out of war",
-            "url": "https://www.reuters.com/business/energy/oil-prices-fall-markets-look-iran-truce-remain-wary-attacks-oil-facilities-2026-09-25/"
-          }
-        ]
-      },
-      {
-        "issue_id": "us-yields-oil-growth",
-        "title": "AI 강세와 고금리·에너지 부담의 줄다리기",
-        "scope": "GLOBAL",
-        "category": "매크로",
-        "status": "ACTIVE",
-        "severity": "HIGH",
-        "impact": "MIXED",
-        "event_time": "2026-09-25",
-        "summary": "미국 증시는 AI 관련주 매수로 상승했지만 높은 장기금리와 에너지 비용은 여전히 밸류에이션 부담이다. 유가 하락이 9월25일 채권금리를 일부 안정시켰다.",
-        "why_market_matters": "월요일 한국 반도체·성장주의 갭과 지속성은 미국 AI 강세뿐 아니라 장기금리 방향을 같이 봐야 한다.",
-        "transmission_path": [
-          "유가",
-          "인플레이션 기대",
-          "미국채 금리",
-          "AI 대형주",
-          "한국 반도체"
-        ],
-        "affected_assets": [
-          "US10Y",
-          "US30Y",
-          "Nasdaq",
-          "SOX",
-          "삼성전자",
-          "SK하이닉스"
-        ],
-        "pricing_status": "ACTIVE_MARKET_DRIVER",
-        "next_check": "Brent 재상승, 미국 10년·30년물, AI 상승 시장폭",
-        "confirmed_facts": [
-          "9월25일 S&P500 +0.51%, Nasdaq +0.48%, Dow +0.93%.",
-          "Reuters는 유가 하락이 미국 국채금리 안정에 도움을 줬다고 보도했다."
-        ],
-        "sources": [
-          {
-            "publisher": "Reuters",
-            "title": "Wall Street ends higher as investors buy AI stocks; Microsoft rallies",
-            "url": "https://www.reuters.com/business/wall-st-futures-gain-ai-enthusiasm-eases-worries-over-higher-oil-prices-yields-2026-09-25/"
-          },
-          {
-            "publisher": "Reuters",
-            "title": "Battered bonds draw support from falling oil prices",
-            "url": "https://www.reuters.com/world/china/global-markets-warpup-1-pix-2026-09-25/"
-          }
-        ]
-      },
-      {
-        "issue_id": "meta-muse-ai-demand",
-        "title": "Meta Muse 수익화 기대와 보안 리스크 동시 확대",
-        "scope": "GLOBAL",
-        "category": "AI·빅테크",
-        "status": "ACTIVE",
-        "severity": "MEDIUM",
-        "impact": "POSITIVE_WITH_RISK",
-        "event_time": "2026-09-25",
-        "summary": "Muse의 빠른 채택과 수익화 기대가 AI 투자심리를 지지하는 가운데 보안 취약점 발견 후 Meta가 안전경고를 강화했다.",
-        "why_market_matters": "AI 수요가 인프라에서 소비자 에이전트로 확장되는 신호지만 보안·개인정보 문제가 규제와 밸류에이션 리스크가 될 수 있다.",
-        "transmission_path": [
-          "Muse 채택",
-          "AI 수익화 기대",
-          "Meta",
-          "AI 소프트웨어",
-          "반도체"
-        ],
-        "affected_assets": [
-          "Meta",
-          "Nasdaq",
-          "AI 소프트웨어",
-          "반도체"
-        ],
-        "pricing_status": "PARTLY_PRICED",
-        "next_check": "보안 패치·공식 설명, 유지율, 유료 전환",
-        "confirmed_facts": [
-          "Reuters는 Muse가 출시 12일 만에 280만 다운로드를 기록했다고 보도했다.",
-          "9월25일 Reuters는 보안 취약점 발견 뒤 Meta가 안전경고를 강화했다고 보도했다."
-        ],
-        "unconfirmed": [
-          "취약점의 규제·실제 사용자 피해 확산 여부",
-          "장기 유료전환율"
-        ],
-        "sources": [
-          {
-            "publisher": "Reuters",
-            "title": "Meta bolsters Muse safety warning after security vulnerability found",
-            "url": "https://www.reuters.com/technology/meta-bolsters-muse-safety-warning-after-security-vulnerability-found-information-2026-09-25/"
-          },
-          {
-            "publisher": "Reuters",
-            "title": "Wall Street expects Meta's AI agent to shape into a new revenue engine",
-            "url": "https://www.reuters.com/business/wall-street-expects-metas-ai-agent-shape-into-new-revenue-engine-2026-09-22/"
           }
         ]
       },
       {
         "issue_id": "us-china-trade-truce",
-        "title": "트럼프·시진핑 회담 이후 미중 무역휴전 연장",
+        "title": "트럼프·시진핑 회담 이후 미중 무역휴전·후속 협상",
         "scope": "GLOBAL",
         "category": "미중·무역",
         "status": "ACTIVE",
         "severity": "MEDIUM",
         "impact": "MIXED",
         "event_time": "2026-09-25",
-        "summary": "미중은 무역휴전을 두 달 연장했지만 정상회담에서 큰 공개 돌파구는 제한적이었다.",
-        "why_market_matters": "관세 재충돌 위험은 낮아졌지만 반도체·AI 수출통제와 대만 변수는 한국 기술·수출주에 계속 영향을 줄 수 있다.",
+        "latest_update": "3일간 정상회담은 큰 공개 돌파구 없이 마무리됐고, 미국 무역대표부는 무역협상 결과 세부내용을 월요일 공개할 예정이라고 밝혔다.",
+        "summary": "무역휴전 관리 기조는 이어지지만 AI·대만·기술규제 등 핵심 쟁점의 큰 공개 타결은 확인되지 않았다.",
+        "why_market_matters": "후속 관세·AI/반도체 수출통제·대만 관련 조치가 한국 반도체와 수출주에 직접 전달될 수 있다.",
         "transmission_path": [
-          "무역휴전",
-          "관세 불확실성",
+          "미중 협상",
+          "관세·기술규제",
           "글로벌 교역",
           "반도체 공급망",
           "한국 수출주"
@@ -276,232 +189,40 @@
         "affected_assets": [
           "반도체",
           "자동차",
-          "2차전지",
-          "KRW"
+          "KRW",
+          "KOSPI"
         ],
-        "pricing_status": "PARTLY_PRICED",
-        "next_check": "관세·수출통제 후속조치, 대만 관련 발표",
+        "pricing_status": "WATCHING_FOLLOWUP",
+        "next_check": "월요일 미국 측 무역협상 세부 발표, AI·반도체 수출통제, 대만 관련 후속",
         "confirmed_facts": [
-          "미중은 기존 무역휴전을 두 달 연장했다.",
-          "Reuters는 정상회담에서 큰 공개 돌파구가 제한적이었다고 평가했다."
+          "정상회담은 큰 공개 돌파구 없이 종료됐다.",
+          "미국 무역대표부는 협상 결과 세부내용을 월요일 공개할 예정이라고 밝혔다."
+        ],
+        "unconfirmed": [
+          "후속 발표에 한국 수출주에 직접 영향을 줄 새로운 관세·기술규제 변화가 포함될지 여부"
         ],
         "sources": [
-          {
-            "publisher": "Reuters",
-            "title": "Five takeaways from Trump's summit with Xi in Washington",
-            "url": "https://www.reuters.com/world/china/four-takeaways-trumps-summit-with-xi-washington-2026-09-24/"
-          },
           {
             "publisher": "Reuters",
             "title": "Trump, Xi end summit with tea, tour of US archives - and little sign of progress",
             "url": "https://www.reuters.com/world/china/trump-wrap-up-xi-summit-with-tour-us-archives-2026-09-25/"
-          }
-        ]
-      },
-      {
-        "issue_id": "global-equity-fund-ai-inflows",
-        "title": "AI 낙관론으로 글로벌·미국 주식형펀드 유입 전환",
-        "scope": "GLOBAL",
-        "category": "글로벌 수급",
-        "status": "ACTIVE",
-        "severity": "MEDIUM",
-        "impact": "POSITIVE_WITH_RISK",
-        "event_time": "2026-09-25",
-        "summary": "글로벌 주식형펀드는 2주 유출을 끝내고 7월 초 이후 가장 큰 유입을 기록했고 미국 주식형펀드도 5주 만에 순유입으로 전환했다.",
-        "why_market_matters": "AI 낙관론이 가격뿐 아니라 실제 펀드 플로우로 확산되는지 보여주는 보조지표다.",
-        "transmission_path": [
-          "AI 낙관론",
-          "주식형펀드 유입",
-          "위험선호",
-          "시장폭"
-        ],
-        "affected_assets": [
-          "글로벌 주식",
-          "Nasdaq",
-          "AI·반도체"
-        ],
-        "pricing_status": "ACTIVE_MARKET_DRIVER",
-        "next_check": "다음 주 펀드플로우 지속성, 시장폭, 채권금리",
-        "confirmed_facts": [
-          "Reuters는 글로벌 주식형펀드가 2주 유출 후 순유입 전환했다고 보도했다.",
-          "미국 주식형펀드는 5주 만에 첫 유입을 기록했다."
-        ],
-        "sources": [
-          {
-            "publisher": "Reuters",
-            "title": "Global equity funds snap two-week outflow as AI optimism returns",
-            "url": "https://www.reuters.com/world/china/global-markets-flows-graphic-2026-09-25/"
           },
           {
             "publisher": "Reuters",
-            "title": "US equity funds post first inflow in five weeks on renewed AI optimism",
-            "url": "https://www.reuters.com/business/us-equity-funds-post-first-inflow-five-weeks-renewed-ai-optimism-2026-09-25/"
-          }
-        ]
-      },
-      {
-        "issue_id": "skhynix-solidigm-ipo",
-        "title": "SK하이닉스 Solidigm, 최대 1,500억달러 가치 IPO 검토",
-        "scope": "KOREA",
-        "category": "반도체·기업가치",
-        "status": "ACTIVE",
-        "severity": "MEDIUM",
-        "impact": "POSITIVE_WITH_RISK",
-        "event_time": "2026-09-25",
-        "summary": "Reuters는 Solidigm이 이르면 2027년 IPO를 검토하며 최대 1,500억달러 가치가 거론된다고 관계자를 인용해 보도했다.",
-        "why_market_matters": "자회사 가치 부각은 SK하이닉스 재평가 논리가 될 수 있지만 상장 구조·지분희석·자금사용은 미확정이다.",
-        "transmission_path": [
-          "IPO 검토",
-          "자회사 가치 부각",
-          "SK하이닉스 기업가치"
-        ],
-        "affected_assets": [
-          "SK하이닉스",
-          "NAND"
-        ],
-        "pricing_status": "EARLY",
-        "next_check": "회사 공식 입장, SEC 제출, 공모구조",
-        "confirmed_facts": [
-          "Reuters는 Solidigm이 이르면 2027년 IPO를 검토 중이라고 세 명의 관계자를 인용해 보도했다."
-        ],
-        "unconfirmed": [
-          "IPO 최종 결정",
-          "정확한 기업가치·공모규모"
-        ],
-        "sources": [
-          {
-            "publisher": "Reuters",
-            "title": "SK Hynix's Solidigm weighs IPO that could value the unit at up to $150 billion, sources say",
-            "url": "https://www.reuters.com/world/sk-hynixs-solidigm-weighs-ipo-that-could-value-the-unit-up-150-billion-sources-2026-09-25/"
-          }
-        ]
-      },
-      {
-        "issue_id": "france-debt-risk",
-        "title": "프랑스 재정·국채 위험이 유럽 금융시장 변수로 부상",
-        "scope": "GLOBAL",
-        "category": "유럽·채권",
-        "status": "ACTIVE",
-        "severity": "MEDIUM",
-        "impact": "NEGATIVE",
-        "event_time": "2026-09-25",
-        "summary": "프랑스 중앙은행 총재가 국채위기를 피해야 한다고 경고했고 2026년 정부부채는 GDP의 119.3%로 예상된다.",
-        "why_market_matters": "프랑스 국채 스트레스가 유럽 금리와 글로벌 위험회피로 번질 경우 성장주에 간접 부담이다.",
-        "transmission_path": [
-          "프랑스 재정",
-          "프랑스-독일 스프레드",
-          "유럽 금리",
-          "글로벌 위험선호"
-        ],
-        "affected_assets": [
-          "프랑스 국채",
-          "유럽 은행",
-          "EUR",
-          "글로벌 성장주"
-        ],
-        "pricing_status": "WATCH",
-        "next_check": "프랑스-독일 스프레드, 예산안, 신용등급 변화",
-        "confirmed_facts": [
-          "Reuters는 프랑스 중앙은행 총재가 국채위기 방지를 촉구했다고 보도했다.",
-          "프랑스 재무부는 2026년 부채를 GDP의 119.3%로 예상했다."
-        ],
-        "sources": [
-          {
-            "publisher": "Reuters",
-            "title": "France can't count on ECB to fix debt woes",
-            "url": "https://www.reuters.com/business/finance/france-cant-count-ecb-fix-debt-woes-central-bank-chief-says-2026-09-25/"
-          }
-        ]
-      },
-      {
-        "issue_id": "bok-rate-path",
-        "title": "한국은행 추가 금리인상은 물가·성장·금융안정 확인 후 판단",
-        "scope": "KOREA",
-        "category": "금리·통화정책",
-        "status": "WATCHING",
-        "severity": "MEDIUM",
-        "impact": "MIXED",
-        "event_time": "2026-09-22",
-        "summary": "한국은행 금통위원은 향후 금리 인상 여부를 물가·성장·금융안정을 평가해 결정하겠다고 밝혔다.",
-        "why_market_matters": "국내 성장주 밸류에이션·원화·채권·금융주에 영향을 주므로 미국 금리와 함께 봐야 한다.",
-        "transmission_path": [
-          "국내 물가·성장",
-          "한국은행",
-          "KRW·국고채",
-          "KOSPI 밸류에이션"
-        ],
-        "affected_assets": [
-          "KRW",
-          "국고채",
-          "성장주",
-          "은행",
-          "KOSPI"
-        ],
-        "pricing_status": "WATCH",
-        "next_check": "한국 CPI, 성장지표, 다음 금통위",
-        "confirmed_facts": [
-          "Reuters는 한국은행 금통위원이 데이터에 따라 향후 인상 여부를 결정하겠다고 말했다고 보도했다."
-        ],
-        "sources": [
-          {
-            "publisher": "Reuters",
-            "title": "Bank of Korea to assess inflation, growth for rate hikes, board member says",
-            "url": "https://www.reuters.com/world/asia-pacific/bank-korea-assess-inflation-growth-rate-hikes-board-member-says-2026-09-22/"
-          }
-        ]
-      },
-      {
-        "issue_id": "cxmt-gen5-memory",
-        "title": "중국 CXMT 5세대 DRAM 플랫폼 양산",
-        "scope": "GLOBAL",
-        "category": "반도체·중국",
-        "status": "ACTIVE",
-        "severity": "MEDIUM",
-        "impact": "NEGATIVE_OVERHANG",
-        "event_time": "2026-09-20",
-        "summary": "CXMT는 G5 DRAM 플랫폼과 24Gb LPDDR5X 제품의 양산 진입을 발표했다.",
-        "why_market_matters": "중국 DRAM 생산성 확대는 중장기 범용 메모리 공급경쟁 변수지만 실제 가격 영향은 생산량·수율 확인이 필요하다.",
-        "transmission_path": [
-          "CXMT G5 양산",
-          "중국 DRAM 공급",
-          "범용 메모리 가격·점유율",
-          "한국 메모리"
-        ],
-        "affected_assets": [
-          "삼성전자",
-          "SK하이닉스",
-          "Micron",
-          "DRAM 장비·소재"
-        ],
-        "pricing_status": "PARTLY_PRICED",
-        "next_check": "생산량·수율, DRAM 현물·계약가격",
-        "confirmed_facts": [
-          "Reuters는 G5 플랫폼이 양산에 들어갔고 웨이퍼당 총 다이 생산이 이전 세대보다 최소 50% 늘어난다고 전했다."
-        ],
-        "unconfirmed": [
-          "월간 생산량·수율",
-          "단기 DRAM 가격 영향"
-        ],
-        "sources": [
-          {
-            "publisher": "Reuters",
-            "title": "China's CXMT says new memory-chip platform enters mass production",
-            "url": "https://www.reuters.com/world/asia-pacific/chinas-cxmt-says-new-memory-chip-platform-enters-mass-production-2026-09-20/"
+            "title": "Details on US, China trade talks to come on Monday, says Greer",
+            "url": "https://www.reuters.com/world/china/details-us-china-trade-talks-come-monday-says-greer-2026-09-25/"
           }
         ]
       }
     ]
   },
   "telegram_report": [
-    "① 최근 30분: 국내는 추석 연휴 휴장이라 새 체결·수급 변화가 없습니다. 미국 9/25장은 S&P500 +0.51%, Nasdaq +0.48%, Dow +0.93%로 AI 관련주 매수가 지수를 지지했습니다.",
-    "② 핵심 이슈/오버나잇: 미·이란 협상이 1순위입니다. 9/25 Brent는 $104.32(-2.1%), WTI는 $92.41(-2.3%)로 내려 휴전 기대가 일부 반영됐지만 9/26 현재 이란은 미국의 공식 답변을 기다리고 있어 타결로 확정할 수 없습니다. 주말 결렬·공격 재개면 월요일 유가·금리·한국 성장주 갭 리스크가 커집니다.",
-    "③ A 새 판단: 현재 시장은 'AI 위험선호 회복 vs 높은 장기금리·에너지 위험'의 줄다리기입니다. 글로벌·미국 주식형펀드가 유입 전환해 AI 강세가 수급으로도 번지는 신호가 있지만 금리 재상승 시 무효화될 수 있습니다.",
-    "④ 프로젝트 점검: 6분 뉴스 센서는 최대 500건 목표지만 이번 최신 배치는 실제 22건뿐이고 16개 검색축 중 9개가 비거나 약했습니다. 또 시장과 무관한 출처 2건이 매크로/일본 뉴스에 섞이는 오염을 발견했습니다. 자동 코드 수정 시도는 안전검사에 막혀 저장소는 건드리지 않았고 B가 쿼리 fan-out+관련성 필터 방식으로 이어서 수정하도록 남겼습니다.",
-    "⑤ 검증: 센서 22건은 전부 훑었고 부족한 범주는 Reuters 최신 자료로 추가 교차검증했습니다. 국내 휴장 데이터는 새 수급처럼 해석하지 않았습니다.",
-    "⑥ B에게: 미·이란 공식 답변/호르무즈, 유가와 미 장기금리 동행, 뉴스 22/500 수집 병목, 비시장 기사 오염 필터를 우선 반증·수정하세요.",
-    "보조정보: batch supervisor-20260926T1500+0900"
-  ],
-  "changed_paths": [
-    "data/supervisor/ai-results/supervisor-20260926T1500+0900.json"
+    "① 최근 30분: 국내는 휴장이라 새 한국 수급은 없습니다. 뉴스 센서는 직전 A의 22건에서 최신 207건까지 회복됐고 동적 이슈 검색이 작동 중입니다.",
+    "② A 해석 검증: AI 위험선호와 중동·장기금리의 줄다리기라는 큰 틀은 유지합니다. 다만 미·이란은 공식 미국 답변이 확인되지 않아 타결·결렬 어느 쪽도 확정하지 않습니다.",
+    "③ 가장 중요한 이슈: 1순위 미·이란/호르무즈, 2순위 미국 장기금리, 3순위 미중 정상회담 후속 세부발표입니다.",
+    "④ 버그/복구: 15:30 B 결과 파일이 생성되지 않은 공백을 발견해 recovery B로 즉시 이어받았습니다. 뉴스 주제 오염 필터와 동적 검색어 정제도 실제 코드·테스트에 반영했습니다.",
+    "⑤ 기능/UI: 이슈를 최근 발생/업데이트순으로 표시하고 상대시간, 핫이슈 Top10, 사건별 추가소식, 운영 Kanban, README 사용자확인, 15분 Recovery watchdog, 일별 archive를 추가했습니다. 최신 6분 센서와 프로젝트 검증은 성공했습니다.",
+    "⑥ 다음 A: 이 recovery B가 canonical/Telegram에 적용됐는지, 새 동적 뉴스 필터가 실데이터에서도 주변기사를 제거하는지, 미·이란 공식 답변과 미중 월요일 세부발표를 다시 확인하세요.",
+    "보조정보: batch recovery-b-20260926T1550+0900"
   ]
 }
