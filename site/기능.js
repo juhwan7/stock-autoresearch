@@ -933,6 +933,87 @@ function renderHomeResearch(data) {
   ).join("") : empty("연결된 최신 리서치를 준비 중입니다.");
 }
 
+
+function collaborationIncidentCard(item, resolved = false) {
+  const x = asObject(item);
+  const history = asArray(x.history).filter((row) => row && typeof row === "object").slice().reverse();
+  const evidence = asArray(x.evidence).map(readableItem).filter(Boolean);
+  const status = displayStatusLabel(x.status || (resolved ? "RESOLVED" : "INVESTIGATING"));
+  const meta = [
+    x.owner ? "담당 " + displayText(x.owner) : "",
+    x.updated_at ? relativeTime(x.updated_at) : "",
+    x.verify_after ? "다음 확인 " + displayText(x.verify_after) : ""
+  ].filter(Boolean).join(" · ");
+  const detail = [
+    researchSection("현재 확인", x.summary || "상세 판단이 기록되지 않았습니다."),
+    researchSection("근거", evidence),
+    history.length ? '<section class="research-section"><h3>진행 이력</h3><div class="collaboration-history">' +
+      history.slice(0,12).map((row) => {
+        const by = String(row.by || "AI").toUpperCase();
+        const note = readableItem(row.summary || row.note || row.status || "");
+        return '<div class="collaboration-history-row"><time>' + esc(researchDateLabel({generated_at:row.at})) +
+          '</time><strong>' + esc(by) + '</strong><span>' + esc(note) + '</span></div>';
+      }).join("") + '</div></section>' : "",
+    x.source_file ? '<details class="inline-disclosure"><summary>개발자용 원본 정보</summary><div class="source-line">' + esc(x.source_file) + '</div></details>' : ""
+  ].join("");
+  return '<details class="collaboration-incident" data-state="' + esc(String(x.status || "")) + '">' +
+    '<summary><div><strong>' + esc(x.title || "협업 확인 항목") + '</strong><p>' + esc(shortText(x.summary || "", 220)) +
+    '</p><small>' + esc(meta) + '</small></div><span class="collaboration-state">' + esc(status) + '</span></summary>' +
+    '<div class="collaboration-incident-detail">' + detail + '</div></details>';
+}
+
+function renderAICollaboration(data) {
+  const collaboration = asObject(data.supervisor_collaboration);
+  if (!$("collaboration-headline")) return;
+  if (!Object.keys(collaboration).length) {
+    setText("collaboration-headline", "공유 협업 상태가 아직 생성되지 않았습니다. 아래 실제 A/B 실행 기록을 확인할 수 있습니다.");
+    setText("collaboration-status", "준비 중");
+    setHTML("collaboration-active", empty("활성 incident 없음"));
+    setHTML("collaboration-resolved", empty("해결 이력 없음"));
+    setHTML("collaboration-change", empty("변경 기록 없음"));
+    setHTML("collaboration-next", empty("다음 검증 없음"));
+    return;
+  }
+
+  const incidents = asArray(collaboration.incidents).filter((x) => x && typeof x === "object");
+  const resolvedStates = new Set(["resolved","discarded","closed","completed"]);
+  const active = incidents.filter((x) => !resolvedStates.has(String(x.status || "").toLowerCase()));
+  const resolved = incidents.filter((x) => resolvedStates.has(String(x.status || "").toLowerCase()));
+  const last = asObject(collaboration.last_turn);
+
+  setText("collaboration-headline", collaboration.headline || "A와 B가 공유 상태를 기준으로 프로젝트를 교차검증하고 있습니다.");
+  setText("collaboration-status", displayStatusLabel(collaboration.status || "UNKNOWN"));
+  setText("collaboration-updated", collaboration.updated_at ? "최근 회의 " + relativeTime(collaboration.updated_at) : "갱신 시각 미확인");
+  setText("collaboration-active-count", active.length + "건");
+  setText("collaboration-resolved-count", resolved.length + "건");
+
+  setHTML("collaboration-active", active.length
+    ? active.slice(0,6).map((x) => collaborationIncidentCard(x, false)).join("")
+    : '<div class="notice">현재 열린 협업 incident가 없습니다.</div>');
+  setHTML("collaboration-resolved", resolved.length
+    ? resolved.slice(0,4).map((x) => collaborationIncidentCard(x, true)).join("")
+    : '<div class="notice">최근 해결된 incident가 없습니다.</div>');
+
+  const changed = asArray(last.changed_paths).map(readableItem).filter(Boolean);
+  let changeTitle = "코드·UI 변경 없음";
+  let changeDetail = "현재 구조 유지가 더 안전하다고 판단했습니다.";
+  if (last.change_kind === "result_only") {
+    changeTitle = "운영 결과 기록만 갱신";
+    changeDetail = "Supervisor 결과 JSON만 저장됐으며 코드·UI 변경으로 계산하지 않습니다.";
+  } else if (last.change_kind === "project_change") {
+    changeTitle = changed.length + "개 경로 변경";
+    changeDetail = changed.slice(0,6).join(" · ");
+  }
+  setHTML("collaboration-change",
+    '<div class="collaboration-summary-card"><strong>' + esc(changeTitle) + '</strong><p>' + esc(changeDetail) + '</p>' +
+    (last.supervisor ? '<small>Supervisor ' + esc(last.supervisor) + ' · ' + esc(last.processed_at ? relativeTime(last.processed_at) : "시각 미확인") + '</small>' : '') + '</div>');
+
+  const next = asArray(last.next_checks).map(readableItem).filter(Boolean);
+  setHTML("collaboration-next", next.length
+    ? '<div class="collaboration-next-list">' + next.slice(0,6).map((x) => '<div class="mini-row"><span>' + esc(x) + '</span></div>').join("") + '</div>'
+    : '<div class="notice">현재 별도 다음 검증 항목이 없습니다.</div>');
+}
+
 function renderAIDialogue(data) {
   const root = $("ai-dialogue");
   if (!root) return;
@@ -1128,6 +1209,7 @@ async function load() {
   renderIssueTracker(data);
   renderResearch(data);
   renderHomeResearch(data);
+  renderAICollaboration(data);
   renderAIDialogue(data);
   renderRisk(data);
   renderMacro(data);
