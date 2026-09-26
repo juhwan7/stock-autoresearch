@@ -292,3 +292,17 @@ Supervisor 결과에는 가능한 경우 `news_issue_digest`를 구조화해 전
 - 사용자가 페이지 안의 분석만 읽어도 핵심을 이해할 수 있어야 하며, 더 깊이 보고 싶을 때만 원문으로 이동하도록 한다.
 - 새 인기 리포트가 들어오면 먼저 30개 목록에 추가할 수 있지만, 원문을 읽기 전에는 분석 완료로 표시하지 않는다.
 - Supervisor는 최신 발행 인기 리포트부터 분석 대기 항목을 채워 나가며, 오래된 항목이 30개 밖으로 밀려나면 추가 분석 우선순위에서도 제외한다.
+
+## 장기 무인 운영·자동복구
+
+이 프로젝트는 며칠짜리 실험이 아니라 1년 이상 사람 개입 없이 계속 관측·연구할 수 있는 구조를 목표로 한다.
+
+- 6분 센서는 최신 뉴스·시장 데이터와 운영상태를 수집하고 `data/discovery/archive/YYYY-MM-DD.jsonl`에 커버리지·핫키워드 통계를 일별 보존한다.
+- Supervisor A(:00)와 B(:30)는 시작할 때 직전 상대 Supervisor의 최근 실행, immutable 결과 파일, canonical 반영, Telegram workflow를 확인한다. 상대가 누락됐으면 해당 30분 구간을 이어받아 복구하고 blocked 하나 때문에 멈추지 않는다.
+- ChatGPT Recovery(:15)는 A/B 중 하나가 70분 이상 비거나 적용 실패가 있으면 fallback Supervisor catch-up을 시도한다. GitHub Recovery workflow는 15분마다 discovery·Pages·운영 상태를 감시하고 6분 센서 stale 시 workflow를 재실행한다.
+- 사람이 직접 해결해야 하는 권한·Secret·결제·계정 UI 문제만 README의 `사용자 확인 필요`에 올린다. 공개 fallback으로 정상 운영 중인 선택형 API 미연결은 필수 사용자조치로 승격하지 않는다.
+- `docs/운영_칸반.md`와 `data/operations/status.json`을 운영 상태의 기준으로 사용한다. 상태는 발견/조사 중/수정 중/검증 대기/사용자 확인 필요/완료로 보여주되, 내부 문제 상태 normal/investigating/verification_pending/resolved/blocked+verify_after와 연결한다.
+- 이슈는 event_time, first_detected, last_updated, status_changed_at을 분리한다. 24시간 안에서는 분/시간 경과를, 그 이상은 시작일과 추적 일수를 사용자 화면에 표시한다.
+- 같은 사건의 후속 기사와 공식 발표는 같은 issue_id에 sources/history/latest_update로 병합한다. 같은 기사 재전송은 새 이슈가 아니다.
+- 이슈 상태와 Supervisor 판단은 `data/news/archive/YYYY-MM-DD.jsonl`에 일별 보존하며 index는 최근 일자를 가리킨다.
+- 복구 자동화는 주문·자동매매·결제·Secret 노출·고위험 권한확장을 절대 수행하지 않는다.
