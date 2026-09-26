@@ -22,12 +22,7 @@ GitHub Actions의 6분 센서는 OpenAI API를 호출하지 않습니다. AI 판
 <!-- AUTO-USER-ACTION:START -->
 ## 사용자 확인 필요
 
-- **일부 보조 뉴스/공시 API 자격증명 없음**
-  - 영향: Google RSS 등 fallback은 계속 작동하지만 탐색 범위가 줄어들 수 있음
-  - AI가 시도한 것: 키 없는 공개 소스와 broad fallback 유지
-  - 자동 해결 불가 이유: API Secret은 사용자가 GitHub Secrets에 직접 등록해야 함
-  - 사용자가 할 일: 필요 시 NAVER_CLIENT_ID/NAVER_CLIENT_SECRET/DART_API_KEY 등록
-  - 해결 확인: source_status가 needs_credentials에서 ok로 전환
+- 현재 사람이 직접 처리해야 하는 필수 항목은 없습니다.
 <!-- AUTO-USER-ACTION:END -->
 
 ## 바로가기
