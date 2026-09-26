@@ -401,6 +401,7 @@ A와 B는 각 정규 사이클 시작 시 상대 Supervisor의 생존 상태를 
 - 상대가 현재 실행 중/queued이거나 canonical writer가 동작 중이면 중복 재시작·동시 writer를 만들지 않는다.
 - `operations/status.json` 하나가 stale하다는 이유만으로 Supervisor를 중단하지 않는다. automation 상태, Actions, ai-results, state, window를 교차검증한다.
 - 동일 장애가 반복되면 `memory/lessons`와 collaboration incident에 성공한 fallback을 축적하고 다음에는 그 fallback을 먼저 사용한다.
+- `data/supervisor/collaboration.json.failure_patterns`에 반복 원인별 `occurrences`, `preferred_recovery`, `disable_supervisor=false`, `last_verified`를 누적한다. 같은 batch 재적용은 횟수를 중복 증가시키지 않으며, 같은 원인이 재발하면 새 해결책부터 만들지 말고 저장된 `preferred_recovery`를 먼저 검증·사용한다.
 - 한쪽이 blocked여도 다른 쪽의 시장 연구·UI 검토·데이터 품질 작업은 계속한다. 둘이 서로 기다리며 함께 멈추는 상태를 허용하지 않는다.
 
 복구 완료 판정은 단순 enabled 전환이 아니라 `automation enabled → 다음 정규 실행 → 올바른 3-slot window → ai-results 저장 → canonical/state/latest-report → memory → Telegram`까지 확인한 뒤 내린다.
