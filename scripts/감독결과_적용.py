@@ -70,28 +70,44 @@ def normalize_observation_window(result: dict, warnings: list[str]) -> dict:
         if valid_ids:
             warnings.append("observation_ids 누락을 10분 슬롯 window에서 복구")
 
+    manifest_id_to_slot = {
+        str(item_id): str(slot)
+        for item_id, slot in zip(
+            manifest.get("observation_ids") or [],
+            manifest.get("observation_slots") or [],
+        )
+    }
     actual_slots: list[str] = []
     for item_id in valid_ids:
         item = known.get(item_id) or {}
-        slot = item.get("slot_at")
+        slot = item.get("slot_at") or manifest_id_to_slot.get(item_id)
         if slot:
             actual_slots.append(str(slot))
 
     expected_slots = list(manifest.get("expected_slots") or [])
-    if valid_ids and set(actual_slots) != set(manifest.get("observation_slots") or []):
+    manifest_slots = list(manifest.get("observation_slots") or [])
+    ids_match_window = bool(valid_ids) and (
+        len(valid_ids) == len(manifest.get("observation_ids") or [])
+        and actual_slots == manifest_slots
+    )
+    if valid_ids and not ids_match_window:
         warnings.append(
             "Supervisor가 사용한 observation_ids가 정해진 3개 슬롯 window와 일치하지 않음"
         )
 
     result["observation_ids"] = valid_ids
-    result["observation_slots"] = actual_slots or list(manifest.get("observation_slots") or [])
+    result["observation_slots"] = actual_slots or manifest_slots
     result["observation_window_start"] = manifest.get("window_start")
     result["observation_window_end"] = manifest.get("window_end")
     result["expected_observation_count"] = manifest.get("expected_observation_count", 3)
     result["received_observation_count"] = len(valid_ids)
     result["missing_observation_slots"] = list(manifest.get("missing_slots") or [])
     result["observation_completeness_ratio"] = manifest.get("completeness_ratio", 0)
-    result["observation_window_complete"] = bool(manifest.get("complete")) and not unknown
+    result["observation_window_complete"] = (
+        bool(manifest.get("complete"))
+        and not unknown
+        and ids_match_window
+    )
 
     if not result["observation_window_complete"]:
         warnings.append(
