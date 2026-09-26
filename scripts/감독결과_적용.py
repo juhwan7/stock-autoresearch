@@ -9,6 +9,7 @@ REPORT = ROOT / "data/supervisor/latest-report.json"
 STATE = ROOT / "data/supervisor/state.json"
 ISSUES = ROOT / "data/supervisor/market-issues.json"
 RECENT_SESSIONS = ROOT / "data/market/recent-sessions.json"
+POPULAR_REPORTS = ROOT / "data/research/popular-reports.json"
 
 def update_issue_lifecycle(result: dict) -> None:
     """Persist explicit market issue state transitions without deleting history."""
@@ -97,6 +98,29 @@ def update_market_session_history(result: dict) -> None:
         RECENT_SESSIONS.write_text(json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def update_popular_reports(result: dict) -> None:
+    payload = result.get("popular_reports")
+    if not isinstance(payload, dict):
+        return
+    items = payload.get("items")
+    if not isinstance(items, list) or not items:
+        return
+    cleaned = []
+    for item in items[:20]:
+        if not isinstance(item, dict):
+            continue
+        if not item.get("title") or not item.get("broker"):
+            continue
+        cleaned.append(item)
+    if not cleaned:
+        return
+    payload = dict(payload)
+    payload["items"] = cleaned
+    payload["updated_at"] = str(result.get("processed_at") or payload.get("updated_at") or "")
+    POPULAR_REPORTS.parent.mkdir(parents=True, exist_ok=True)
+    POPULAR_REPORTS.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         raise SystemExit("usage: python scripts/supervisor_result_apply.py <result.json>")
@@ -132,6 +156,7 @@ def main() -> int:
     observation_ids = result.get("observation_ids") or []
     update_issue_lifecycle(result)
     update_market_session_history(result)
+    update_popular_reports(result)
     REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     state = json.loads(STATE.read_text(encoding="utf-8"))
     state["last_batch_id"] = result["batch_id"]
