@@ -9,11 +9,15 @@
 1. `AGENTS.md`
 2. `docs/문서_지도.md`
 3. **이 문서**
-4. `docs/사용자_목적.md`
-5. `docs/사용자_피드백.md`
-6. `docs/결정_원장.md`
-7. `data/supervisor/latest-report.json`
-8. `data/supervisor/state.json` 및 기존 Supervisor 큐/최근 관측
+4. `memory/INDEX.md`
+5. `memory/current/현재상태.md`
+6. `memory/current/다음확인사항.md`
+7. `docs/자율진화_운영헌장.md`
+8. `docs/사용자_목적.md`
+9. `docs/사용자_피드백.md`
+10. `docs/결정_원장.md`
+11. `data/supervisor/latest-report.json`
+12. `data/supervisor/state.json` 및 기존 Supervisor 큐/최근 관측
 
 채팅 원문 전체를 GitHub에 복제하는 문서가 아니다. 프로젝트 판단에 필요한 사용자 요구, 결정 이유, 실패, 검증 결과, 미완료 작업과 다음 시작점을 손실 없이 구조화해 누적한다. Secret·토큰·개인정보는 기록하지 않는다.
 
@@ -41,6 +45,16 @@
 - 누락 backfill은 provenance와 exact/estimated를 유지한다.
 - 정확도 우선순위는 Toss/KRX/증권사 정확 체결합계 > Naver 누적 거래대금 차분 > 가격×거래량 근사다.
 - 6분 센서는 OpenAI API 없이 동작해야 한다.
+
+## 2026-09-26 자율진화·장기기억 운영 강화
+
+- A(:00)는 탐색·개발형, B(:30)는 비판·검증·정리형으로 역할을 분리한다.
+- 매 :00/:30 실행은 최소 5개의 서로 다른 작업축을 실제 검토한다. 변경 개수 자체는 목표가 아니며 no_change·삭제·통합·단순화도 정상 결과다.
+- 결과 JSON에는 가능하면 `work_axes_reviewed`를 5개 이상 남기고, `feedback_to_other_supervisor`로 다음 상대 Supervisor가 이어받을 비판·질문을 구조화한다.
+- 사용자가 기술적으로 반드시 개입해야 하는 Secret/OAuth/결제/계정권한 문제는 우회하지 않고 blocked로 기록한다. 그 blocker 때문에 나머지 시장 연구·개발을 멈추지 않는다.
+- GitHub의 `memory/`를 A/B/Recovery의 외부 두뇌로 사용한다. 시작 시 HOT memory만 읽고, 필요한 과거만 WARM/COLD에서 검색한다.
+- Supervisor canonical 결과 적용 시 `scripts/장기기억_갱신.py`가 INDEX, current, Supervisor 실행기록, 일간 snapshot, catalog를 갱신한다.
+- 기능 삭제·실패·가설 반증도 장기학습 자산으로 취급한다.
 
 ## 2026-09-25 현재 연속 Supervisor 구조
 
