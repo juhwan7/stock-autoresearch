@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-27T02:21:00.140385+09:00",
+  "generated_at": "2026-09-27T02:34:04.815979+09:00",
   "status": "NOTICE",
-  "issue_count": 1,
+  "issue_count": 2,
   "issues": [
     {
       "component": "macro",
@@ -9,10 +9,19 @@
       "severity": "NOTICE",
       "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
       "recovery": "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
-      "consecutive": "60"
+      "consecutive": "61"
+    },
+    {
+      "component": "discovery",
+      "code": "google-news-degraded",
+      "severity": "NOTICE",
+      "message": "Google News 탐색 27/27개 그룹이 비어 있거나 오류",
+      "recovery": "broad fallback이 성공하면 보조 경보로 유지. fallback까지 실패하면 검색식/소스를 수정",
+      "consecutive": "1"
     }
   ],
   "consecutive": {
-    "macro:unavailable": 60
+    "discovery:google-news-degraded": 1,
+    "macro:unavailable": 61
   }
 }

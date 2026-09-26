@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-09-27T02:21:05.612050+09:00",
+  "updated_at": "2026-09-27T02:34:08.966446+09:00",
   "batch_size": 3,
   "sensor_interval_minutes": 10,
   "observations": [
@@ -38146,6 +38146,324 @@
       "signals": [
         "discovery:degraded"
       ]
+    },
+    {
+      "schema_version": 2,
+      "observation_id": "obs-20260927T023408+0900-36259260030-1",
+      "observed_at": "2026-09-27T02:34:08.966446+09:00",
+      "slot_at": "2026-09-27T02:30:00+09:00",
+      "slot_key": "2026-09-27T02:30+0900",
+      "sensor_interval_minutes": 10,
+      "slot_source": "dispatch_input",
+      "slot_start_delay_seconds": 28.349,
+      "slot_delay_seconds": 248.966446,
+      "source": {
+        "repository": "juhwan7/stock-autoresearch",
+        "workflow": "10분 감독 관측 큐",
+        "event_name": "workflow_dispatch",
+        "run_id": "36259260030",
+        "run_attempt": "1",
+        "head_sha": "ce0755b8b7242b72afb1bdab56804a49099ea7ff",
+        "ref_name": "main"
+      },
+      "queue": {
+        "batch_size": 3,
+        "pending_before_append": 11,
+        "last_processed_observation_id": "obs-20260926T233103+0900-36248732704-1",
+        "last_processed_slot": "2026-09-26T23:30:00+09:00",
+        "pending_after_append": 12
+      },
+      "validation": {
+        "status": "ok",
+        "compile": "ok",
+        "pytest": "ok",
+        "diff_check": "ok"
+      },
+      "steps": {
+        "toss_fetch": "success",
+        "toss_summary": "success",
+        "health": "success",
+        "dashboard": "success",
+        "market_discovery": "success",
+        "public_batch_market": "success",
+        "market_sensor_repair": "success",
+        "risk_sensor_repair": "success",
+        "regression_refresh": "success"
+      },
+      "health": {
+        "status": "NOTICE",
+        "generated_at": "2026-09-27T02:34:04.815979+09:00",
+        "issues": [
+          {
+            "component": "macro",
+            "code": "unavailable",
+            "severity": "NOTICE",
+            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+          },
+          {
+            "component": "discovery",
+            "code": "google-news-degraded",
+            "severity": "NOTICE",
+            "message": "Google News 탐색 27/27개 그룹이 비어 있거나 오류"
+          }
+        ]
+      },
+      "regression": {
+        "status": "COLLECTING",
+        "generated_at": "2026-09-26T17:34:04.412092+00:00",
+        "quarantine_count": 0,
+        "rolled_back_count": 0
+      },
+      "market_discovery": {
+        "generated_at": "2026-09-27T02:30:44.238370+09:00",
+        "item_count": 0,
+        "new_item_count": 0,
+        "topic_counts": {},
+        "trending_terms": [],
+        "new_dart_filings": [],
+        "official_web_candidates": [],
+        "toss_market": {
+          "available": true,
+          "captured_at": "2026-09-26T23:25:08.111069+09:00",
+          "top_turnover": [],
+          "minute_burst_leaders": [],
+          "top10_share": null
+        },
+        "sector_selection": {
+          "mode": "dynamic",
+          "fixed_sector_whitelist": false,
+          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택"
+        },
+        "naver_indices": {
+          "KOSPI": "7,080.92",
+          "KOSDAQ": "844.48",
+          "KOSPI200": "1,126.12"
+        },
+        "source_summary": {
+          "ok_or_partial": 1,
+          "failed": 27,
+          "degraded": 0
+        },
+        "top_new_items": [],
+        "handoff_queries": [
+          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+          "미국 증시 금리 환율 원자재 변화 한국 증시 영향"
+        ]
+      },
+      "public_batch_market": {
+        "generated_at": "2026-09-27T02:30:39.128885+09:00",
+        "status": "unavailable",
+        "provider": "naver_public",
+        "exact_1m_bars": false,
+        "elapsed_minutes_from_previous": 10.022119083333333,
+        "interval_leaders": [],
+        "one_minute_samples_available": false,
+        "minute_amount_exact": false,
+        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
+        "minute_sample_ticker_count": 0,
+        "current_top50_count": 0,
+        "tracked_universe_count": 0,
+        "dropped_from_current_top50_count": 0,
+        "tracked_outside_top50_with_samples": 0,
+        "minute_samples_by_ticker": {},
+        "limitations": [
+          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
+          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
+          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
+          "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+          "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+        ]
+      },
+      "market": {
+        "generated_at": "2026-09-27T02:34:03.556679+09:00",
+        "source_status": "outside_domestic_monitor_window",
+        "provider": "provider_chain",
+        "fallback_used": null,
+        "historical_fallback_available": true
+      },
+      "market_recent_sessions": {
+        "updated_at": "2026-09-26T12:50:00+09:00",
+        "basis": "verified_close",
+        "korea": [
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "kospi": {
+              "close": 7080.92,
+              "change_pct": 0.9
+            },
+            "kosdaq": {
+              "close": 844.48,
+              "change_pct": 1.21
+            },
+            "flows_krw_100m": {
+              "foreign": -5047,
+              "institution": 3169,
+              "individual": -14396
+            },
+            "note": "추석 연휴 직전 마지막 거래일",
+            "source": "연합뉴스/Investing.com"
+          },
+          {
+            "date": "2026-09-22",
+            "status": "closed",
+            "kospi": {
+              "close": 7017.91,
+              "change_pct": 0.15
+            },
+            "kosdaq": {
+              "close": 834.38,
+              "change_pct": -0.23
+            },
+            "flows_krw_100m": {
+              "foreign": 850,
+              "institution": -1190,
+              "individual": -16089
+            },
+            "note": "장중 2%대 상승 후 상승폭 축소",
+            "source": "연합뉴스"
+          },
+          {
+            "date": "2026-09-21",
+            "status": "closed",
+            "kospi": {
+              "close": 7007.72,
+              "change_pct": 1.65
+            },
+            "kosdaq": {
+              "close": 836.27,
+              "change_pct": 1.11
+            },
+            "flows_krw_100m": {
+              "foreign": -1603,
+              "institution": 14924,
+              "individual": -29790
+            },
+            "note": "반도체 강세로 7천선 회복",
+            "source": "연합뉴스"
+          }
+        ],
+        "us": [
+          {
+            "date": "2026-09-25",
+            "status": "closed",
+            "sp500": {
+              "close": 7743.41,
+              "change_pct": 0.51
+            },
+            "nasdaq": {
+              "close": 27068.72,
+              "change_pct": 0.48
+            },
+            "dow": {
+              "close": 51828.62,
+              "change_pct": 0.93
+            },
+            "note": "AI 기술주 강세",
+            "source": "Reuters/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-24",
+            "status": "closed",
+            "sp500": {
+              "close": 7704.13,
+              "change_pct": -0.02
+            },
+            "nasdaq": {
+              "close": 26939.37,
+              "change_pct": 0.01
+            },
+            "dow": {
+              "close": 51349.98,
+              "change_pct": -0.31
+            },
+            "note": "금리·유가 부담 속 혼조",
+            "source": "FRED/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "sp500": {
+              "close": 7706.03,
+              "change_pct": -0.75
+            },
+            "nasdaq": {
+              "close": 26936.04,
+              "change_pct": -1.13
+            },
+            "dow": {
+              "close": 51511.59,
+              "change_pct": -0.68
+            },
+            "note": "장기금리 상승으로 위험자산 압박",
+            "source": "FRED/시장 종가 데이터"
+          }
+        ],
+        "holiday_notes": [
+          {
+            "market": "KR",
+            "from": "2026-09-24",
+            "to": "2026-09-27",
+            "reason": "추석 연휴"
+          }
+        ]
+      },
+      "toss": {
+        "available": true,
+        "captured_at": "2026-09-26T23:25:08.111069+09:00",
+        "collector": {
+          "subscription_count": 0,
+          "rejected_count": 0,
+          "last_message_at": null,
+          "last_universe_refresh": "2026-09-26T23:25:08.111069+09:00"
+        }
+      },
+      "user_feedback": {
+        "pending_count": 0,
+        "latest_pending_comment_id": null
+      },
+      "git": {
+        "head_sha": "ce0755b8b7242b72afb1bdab56804a49099ea7ff",
+        "latest_commit_changed_files": [
+          "data/discovery/archive/2026-09-27.jsonl",
+          "data/discovery/archive/index.json",
+          "data/discovery/latest.json",
+          "data/health/latest.json",
+          "data/health/state.json",
+          "data/macro/current.json",
+          "data/market/runtime.json",
+          "data/providers/naver_batch/history.json",
+          "data/providers/naver_batch/latest.json",
+          "data/providers/toss/fetch_runtime.json",
+          "data/providers/toss/status.json",
+          "data/regression/history/2026-09-26.jsonl",
+          "data/regression/latest.json",
+          "data/risk/calendar_live.json",
+          "data/risk/latest.json",
+          "data/risk/runtime.json",
+          "data/risk/state.json",
+          "data/supervisor/queue/2026-09-27.jsonl",
+          "data/supervisor/recent.json"
+        ]
+      },
+      "previous_workflow_run": {
+        "id": 36258672458,
+        "name": "10분 감독 관측 큐",
+        "event": "workflow_dispatch",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-09-26T17:20:22Z",
+        "updated_at": "2026-09-26T17:30:25Z",
+        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36258672458",
+        "head_sha": "ec9b4d36c59808d1f8c8aec6b67020f0bdd6676f"
+      },
+      "hypothesis_verification": {
+        "due": []
+      },
+      "signals": []
     }
   ]
 }
