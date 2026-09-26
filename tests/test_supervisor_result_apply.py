@@ -583,3 +583,25 @@ def test_reconcile_regular_windows_repairs_legacy_test_and_recovery_pointers(tmp
     assert state["last_b_window"]["batch_id"] == regular_b["batch_id"]
     assert state["last_a_window"]["complete"] is True
     assert state["last_b_window"]["complete"] is True
+
+
+def test_window_state_from_legacy_regular_result_infers_complete_from_three_slots():
+    module = load_module()
+    legacy = {
+        "batch_id": "supervisor-20260926T2300+0900-a23",
+        "processed_at": "2026-09-26T23:05:50+09:00",
+        "supervisor": "A",
+        "observation_ids": ["a1", "a2", "a3"],
+        "observation_slots": [
+            "2026-09-26T22:40:00+09:00",
+            "2026-09-26T22:50:00+09:00",
+            "2026-09-26T23:00:00+09:00",
+        ],
+        "observation_window_start": "2026-09-26T22:40:00+09:00",
+        "observation_window_end": "2026-09-26T23:00:00+09:00",
+        "expected_observation_count": 3,
+        "received_observation_count": 3,
+        "missing_observation_slots": [],
+    }
+    state = module._window_state_from_result(legacy)
+    assert state["complete"] is True

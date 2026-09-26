@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from autoresearch.supervisor_queue import build_supervisor_window
-from autoresearch.supervisor_result import infer_run_kind, is_regular_supervisor_result, supervisor_role as classified_supervisor_role
+from autoresearch.supervisor_result import infer_run_kind, is_regular_supervisor_result, regular_window_complete, supervisor_role as classified_supervisor_role
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "data/supervisor/latest-report.json"
@@ -174,7 +174,7 @@ def _window_state_from_result(item: dict) -> dict:
         "window_end": item.get("observation_window_end"),
         "observation_ids": list(item.get("observation_ids") or []),
         "missing_slots": list(item.get("missing_observation_slots") or []),
-        "complete": bool(item.get("observation_window_complete")),
+        "complete": regular_window_complete(item),
     }
 
 
