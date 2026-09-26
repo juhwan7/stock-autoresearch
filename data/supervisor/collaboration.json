@@ -1,26 +1,27 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-27T00:35:21+09:00",
-  "status": "investigating",
-  "headline": "A와 B가 센서 연속성 장애를 공동 추적 중입니다. 최근 해결: 이슈 원장 갱신 지연.",
+  "updated_at": "2026-09-27T02:30:00+09:00",
+  "status": "verification_pending",
+  "headline": "센서 관측은 다시 3/3 연속으로 들어오고 있습니다. 복구 원인과 재발 여부는 다음 A/B가 검증하며, 이슈 원장 갱신 지연은 해결 상태를 유지합니다.",
   "active_incident_count": 2,
   "resolved_incident_count": 1,
   "incidents": [
     {
       "incident_id": "sensor-continuity",
       "title": "센서 연속성 장애",
-      "status": "investigating",
-      "summary": "00:00 이후 00:10/00:20/00:30 정규 관측까지 누락되어 self-chain, :05 heartbeat, Recovery 실행경로 확인이 필요함",
-      "owner": "B",
-      "verify_after": "다음 Recovery/10분 센서 실행",
+      "status": "verification_pending",
+      "summary": "00:35 이후 센서 관측이 재개되어 A 01:40/01:50/02:00과 B 02:10/02:20/02:30 window가 각각 3/3으로 확인됐다. 데이터 연속성은 복구 관측됐지만 self-chain/:05 heartbeat/Recovery 중 실제 원인과 재발 여부는 다음 Supervisor가 검증해야 한다.",
+      "owner": "A/B",
+      "verify_after": "다음 정규 Supervisor A/B에서 복구 경로와 재발 여부 확인",
       "evidence": [
-        "B canonical window 00:10/00:20/00:30 = 0/3"
+        "data/supervisor/windows/latest-A.json: 01:40/01:50/02:00 = 3/3 complete",
+        "data/supervisor/windows/latest-B.json: 02:10/02:20/02:30 = 3/3 complete"
       ],
       "source_kind": "project_improvement_signal",
       "source_batch_id": "supervisor-20260927T0030+0900-b35",
       "source_file": "data/supervisor/ai-results/supervisor-20260927T0030+0900-b35.json",
       "first_seen": "2026-09-27T00:09:11+09:00",
-      "updated_at": "2026-09-27T00:35:21+09:00",
+      "updated_at": "2026-09-27T02:30:00+09:00",
       "history": [
         {
           "at": "2026-09-27T00:09:11+09:00",
@@ -35,6 +36,13 @@
           "batch_id": "supervisor-20260927T0030+0900-b35",
           "status": "investigating",
           "summary": "00:10/00:20/00:30도 0/3으로 연속성 장애 범위 확대 확인"
+        },
+        {
+          "at": "2026-09-27T02:30:00+09:00",
+          "by": "SYSTEM",
+          "batch_id": "system-sensor-recovery-observed-0230",
+          "status": "verification_pending",
+          "summary": "01:40~02:30의 연속 A/B window가 모두 3/3으로 다시 확보됨. 복구는 관측됐으나 원인·재발 검증은 미완료."
         }
       ]
     },
