@@ -1,0 +1,120 @@
+{
+  "batch_id": "recovery-20260926T2235+0900-b22",
+  "processed_at": "2026-09-26T22:35:00+09:00",
+  "notify": true,
+  "status": "verification_pending",
+  "summary": "22:30 Supervisor B 정규 결과가 main에 없고 last_b_window도 null이다. 22:07 A canonical과 장기기억은 freshness 기준 내라 재생성하지 않고 최신 canonical+sensor 상태로 누락 B 구간을 catch-up한다.",
+  "market_narrative": "한국 휴장 상태이며 새 국내 체결 검증은 없다. 새 공식 확정 근거가 없어 직전 canonical의 핵심 위험 해석을 유지하되 22:30 discovery의 뉴스 소스 HTTPError 때문에 신규 방향전환은 확정하지 않는다.",
+  "market_focus": [
+    "미·이란 공식답변과 호르무즈 통항",
+    "Brent/WTI와 미국 장기금리",
+    "월요일 미중 공식 정책문서",
+    "다음 한국장 수급"
+  ],
+  "invalidation_checks": [
+    "미국 공식 수용+호르무즈 정상통항+유가/금리 하락 시 중동위험 완화",
+    "공식 거부/군사행동+유가/금리 상승 시 위험 강화",
+    "다음 B가 정상 생성되면 연속성 회복"
+  ],
+  "overnight_risks": [
+    "미·이란/호르무즈",
+    "유가·미 장기금리",
+    "미중 후속문서"
+  ],
+  "actions": [
+    {
+      "type": "continuity",
+      "status": "recovery",
+      "detail": "22:30 B 누락 catch-up"
+    },
+    {
+      "type": "canonical",
+      "status": "healthy",
+      "detail": "22:07 A 3/3, 70분 이내"
+    },
+    {
+      "type": "memory",
+      "status": "healthy",
+      "detail": "catalog 22:07, 90분 이내"
+    },
+    {
+      "type": "issue_digest",
+      "status": "stale",
+      "detail": "16:00 이후 미갱신"
+    },
+    {
+      "type": "provider",
+      "status": "investigating",
+      "detail": "22:30 discovery 다수 HTTPError"
+    }
+  ],
+  "changed_paths": [
+    "data/supervisor/ai-results/recovery-20260926T2235+0900.json"
+  ],
+  "next_checks": [
+    "apply/Telegram 성공",
+    "23:00 A/23:30 B",
+    "last_b_window",
+    "issue-digest 갱신",
+    "macro runtime 값"
+  ],
+  "project_improvement_signals": [
+    {
+      "id": "b-continuity",
+      "status": "verification_pending",
+      "signal": "last_b_window null"
+    },
+    {
+      "id": "issue-digest-stale",
+      "status": "verification_pending",
+      "signal": "discovery 22:30 대비 digest 16:00"
+    },
+    {
+      "id": "macro-runtime-empty",
+      "status": "investigating",
+      "signal": "직전 A에서 값 공백"
+    }
+  ],
+  "work_axes_reviewed": [
+    {
+      "axis": "supervisor_continuity",
+      "status": "recovery"
+    },
+    {
+      "axis": "canonical_freshness",
+      "status": "healthy"
+    },
+    {
+      "axis": "long_term_memory",
+      "status": "healthy"
+    },
+    {
+      "axis": "news_lifecycle",
+      "status": "stale"
+    },
+    {
+      "axis": "provider_fallback",
+      "status": "investigating"
+    },
+    {
+      "axis": "macro_data_quality",
+      "status": "investigating"
+    },
+    {
+      "axis": "ui_ux",
+      "status": "no_change"
+    }
+  ],
+  "feedback_to_other_supervisor": [
+    "23:00 A는 정규 슬롯만 사용",
+    "23:30 B와 last_b_window 복귀 확인",
+    "issue-digest stale 확인",
+    "macro와 discovery 장애를 별개 검증"
+  ],
+  "telegram_report": [
+    "22:30 정규 B가 없어 복구했습니다.",
+    "22:07 A canonical과 장기기억은 freshness 기준 내라 재생성하지 않았습니다.",
+    "discovery는 22:30까지 갱신됐지만 issue-digest는 16:00으로 stale입니다.",
+    "다음 확인은 apply/Telegram, 23:00 A·23:30 B, macro 값과 issue-digest 갱신입니다."
+  ]
+}
