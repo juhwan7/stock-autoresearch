@@ -3,6 +3,7 @@ from autoresearch.market_discovery import (
     extract_naver_index_basic,
     extract_naver_indices,
     extract_trending_terms,
+    is_low_quality_news_item,
     parse_google_news_rss,
     recent_items,
     summarize_toss_market,
@@ -109,3 +110,29 @@ def test_extract_naver_index_basic_from_new_json_shape():
     assert extract_naver_index_basic({"closePrice": "3,421.55"}) == "3,421.55"
     assert extract_naver_index_basic({"close": 842.1}) == "842.1"
     assert extract_naver_index_basic({}) is None
+
+
+def test_google_news_parser_filters_obvious_gambling_spam():
+    xml = """<?xml version="1.0"?>
+    <rss><channel>
+      <item>
+        <title>처음 읽는 게임 정보에서 찾을 카지노 핵심 내용 - 스팸매체</title>
+        <link>https://example.com/spam</link>
+        <pubDate>Fri, 25 Sep 2026 00:30:00 GMT</pubDate>
+        <source>스팸매체</source>
+      </item>
+      <item>
+        <title>한미 정상회담에서 전략투자 논의 - 연합뉴스</title>
+        <link>https://example.com/real</link>
+        <pubDate>Fri, 25 Sep 2026 00:31:00 GMT</pubDate>
+        <source>연합뉴스</source>
+      </item>
+    </channel></rss>
+    """
+    rows = parse_google_news_rss(xml, "kr_diplomacy_summit")
+    assert [row["title"] for row in rows] == ["한미 정상회담에서 전략투자 논의"]
+
+
+def test_low_quality_title_filter_covers_common_gambling_spam():
+    assert is_low_quality_news_item("바카라 유출 정보", "낯선매체") is True
+    assert is_low_quality_news_item("미중 정상회담 무역휴전 연장", "연합뉴스") is False
