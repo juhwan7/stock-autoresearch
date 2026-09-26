@@ -131,6 +131,48 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
+        shell: bash
         run: |
-          echo "10분 센서 또는 discovery가 25분 이상 stale입니다. recovery commit 이후 센서를 재실행합니다."
+          ACTIVE_SENSOR_RUNS=$(gh run list \
+            --workflow "연속연구와진화.yml" \
+            --repo "$GH_REPO" \
+            --limit 20 \
+            --json status \
+            --jq '[.[] | select(.status == "queued" or .status == "in_progress")] | length' 2>/dev/null || echo 0)
+
+          if [ "${ACTIVE_SENSOR_RUNS:-0}" -gt 0 ]; then
+            echo "이미 실행 중/대기 중인 10분 센서가 ${ACTIVE_SENSOR_RUNS}개 있어 중복 dispatch를 생략합니다."
+            exit 0
+          fi
+
+          # stale 판정 이후 다른 센서가 정상 저장을 끝냈을 수도 있으므로
+          # dispatch 직전에 main의 최신 canonical observation을 다시 확인한다.
+          if gh api "repos/$GH_REPO/contents/data/supervisor/recent.json?ref=main" \
+            --jq '.content' 2>/dev/null | tr -d '\n' | base64 -d > /tmp/latest-recent.json 2>/dev/null; then
+            SENSOR_IS_FRESH=$(python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          try:
+              payload = json.loads(Path("/tmp/latest-recent.json").read_text(encoding="utf-8"))
+              observations = payload.get("observations") or []
+              latest = observations[-1] if observations and isinstance(observations[-1], dict) else {}
+              value = latest.get("slot_at") or latest.get("observed_at")
+              stamp = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+              if stamp.tzinfo is None:
+                  stamp = stamp.replace(tzinfo=timezone.utc)
+              age = max(0.0, (datetime.now(timezone.utc) - stamp.astimezone(timezone.utc)).total_seconds() / 60)
+              print("true" if age <= 25 else "false")
+          except Exception:
+              print("false")
+          PY
+          )
+            if [ "$SENSOR_IS_FRESH" = "true" ]; then
+              echo "stale 판정 이후 main에 신선한 10분 observation이 저장되어 복구 dispatch를 생략합니다."
+              exit 0
+            fi
+          fi
+
+          echo "10분 센서와 main observation이 모두 stale이고 활성 센서도 없습니다. recovery commit 이후 센서를 재실행합니다."
           gh workflow run "연속연구와진화.yml" --repo "$GH_REPO" || true
