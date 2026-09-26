@@ -10,6 +10,7 @@ KST = timezone(timedelta(hours=9))
 OUT = ROOT / "data" / "operations" / "status.json"
 KANBAN = ROOT / "docs" / "운영_칸반.md"
 README = ROOT / "README.md"
+MEMORY_CATALOG = ROOT / "memory" / "catalog.json"
 
 README_START = "<!-- AUTO-USER-ACTION:START -->"
 README_END = "<!-- AUTO-USER-ACTION:END -->"
@@ -79,6 +80,7 @@ def build_status(now: datetime | None = None) -> dict:
     health = read_json(ROOT / "data" / "health" / "latest.json")
     state = read_json(ROOT / "data" / "supervisor" / "state.json")
     queue = read_json(ROOT / "data" / "supervisor" / "question_queue.json")
+    memory_catalog = read_json(MEMORY_CATALOG)
     site_state_path = ROOT / "site" / "data" / "상태.json"
 
     cards: list[dict] = []
@@ -129,6 +131,37 @@ def build_status(now: datetime | None = None) -> dict:
         cards.append(card("pages-data-empty", "Pages 상태 데이터 0 byte/누락", "수정 중", "대시보드가 비어 보일 수 있음", now, owner="6분 센서", verify_after="다음 대시보드 생성"))
     else:
         cards.append(card("pages-data-ok", "Pages 상태 데이터 정상", "완료", f"{site_state_path.stat().st_size} bytes", now, owner="Dashboard"))
+
+    memory_age = age_minutes(memory_catalog.get("generated_at"), now)
+    if not memory_catalog:
+        cards.append(card(
+            "long-memory-missing",
+            "장기 AI 기억 미생성",
+            "수정 중",
+            "A/B가 과거 시행착오를 빠르게 이어받지 못할 수 있음",
+            now,
+            owner="Memory",
+            verify_after="다음 Supervisor canonical 적용",
+        ))
+    elif memory_age is None or memory_age > 90:
+        cards.append(card(
+            "long-memory-stale",
+            "장기 AI 기억 갱신 지연",
+            "검증 대기",
+            f"마지막 기억 갱신 {memory_age if memory_age is not None else '미확인'}분 전",
+            now,
+            owner="Memory",
+            verify_after="다음 :00/:30 또는 Recovery",
+        ))
+    else:
+        cards.append(card(
+            "long-memory-ok",
+            "장기 AI 기억 정상",
+            "완료",
+            f"{round(memory_age)}분 전 갱신 · {memory_catalog.get('latest_supervisor') or 'Recovery'}",
+            now,
+            owner="Memory",
+        ))
 
     source_status = discovery.get("source_status") or {}
     needs_credentials = [name for name, value in source_status.items() if isinstance(value, dict) and value.get("status") == "needs_credentials"]
@@ -185,6 +218,12 @@ def build_status(now: datetime | None = None) -> dict:
         "question_queue": {
             "updated_at": queue.get("updated_at"),
             "open_count": queue.get("open_count"),
+        },
+        "memory": {
+            "generated_at": memory_catalog.get("generated_at"),
+            "latest_batch_id": memory_catalog.get("latest_batch_id"),
+            "latest_supervisor": memory_catalog.get("latest_supervisor"),
+            "age_minutes": None if memory_age is None else round(memory_age, 1),
         },
         "cards": cards,
         "user_actions": user_actions,
