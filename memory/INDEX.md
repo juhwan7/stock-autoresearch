@@ -1,9 +1,9 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-26T22:35:00+09:00
-> latest batch: recovery-20260926T2235+0900-b22
-> Supervisor: Recovery · 상태 verification_pending
-> 이번 작업축: 7개
+> 자동 갱신: 2026-09-26T22:51:00+09:00
+> latest batch: supervisor-writer-e2e-20260926T2251+0900
+> Supervisor: B · 상태 verification_pending
+> 이번 작업축: 5개
 
 ## 시작할 때 읽기
 
@@ -14,10 +14,7 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
-- 미·이란 공식답변과 호르무즈 통항
-- Brent/WTI와 미국 장기금리
-- 월요일 미중 공식 정책문서
-- 다음 한국장 수급
+- Supervisor writer 안정성
 
 ## 활성 시장 이슈
 - 이란 전쟁 여파로 EU 에너지 가격 위기 경고 — NEW
@@ -30,9 +27,7 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- b-continuity — verification_pending
-- issue-digest-stale — verification_pending
-- macro-runtime-empty — investigating
+- supervisor-single-writer — verification_pending
 - Supervisor B 237분 정지 — 이슈 상태가 오래될 수 있음
 - 10분 센서 슬롯 커버리지 낮음 — 1/6 슬롯 · GitHub schedule/저장 경로 점검 필요
 - 뉴스 discovery 신선도 저하 — 마지막 갱신 41.55545893333333분 전
