@@ -224,12 +224,21 @@ def _pending_feedback(root: Path) -> tuple[int, str | None]:
 def _pending_after(
     observations: list[dict[str, Any]],
     last_processed_id: str | None,
+    last_processed_slot: str | None = None,
 ) -> int:
-    if not last_processed_id:
-        return len(observations)
-    for index, item in enumerate(observations):
-        if item.get("observation_id") == last_processed_id:
-            return len(observations) - index - 1
+    if last_processed_id:
+        for index, item in enumerate(observations):
+            if item.get("observation_id") == last_processed_id:
+                return len(observations) - index - 1
+
+    processed_slot = _parse_datetime(last_processed_slot)
+    if processed_slot is not None:
+        return sum(
+            1
+            for item in observations
+            if (_observation_slot(item) is not None)
+            and _observation_slot(item) > processed_slot
+        )
     return len(observations)
 
 
@@ -296,6 +305,7 @@ def build_observation(
         recent = []
     state = _read_json(supervisor_dir / "state.json")
     last_processed_id = state.get("last_processed_observation_id")
+    last_processed_slot = state.get("last_processed_slot")
 
     health = _read_json(root / "data" / "health" / "latest.json")
     regression = _read_json(root / "data" / "regression" / "latest.json")
@@ -372,7 +382,11 @@ def build_observation(
     if previous_run.get("conclusion") in {"failure", "cancelled", "timed_out"}:
         signals.append("previous_workflow:" + str(previous_run.get("conclusion")))
 
-    pending_before = _pending_after(recent, str(last_processed_id) if last_processed_id else None)
+    pending_before = _pending_after(
+        recent,
+        str(last_processed_id) if last_processed_id else None,
+        str(last_processed_slot) if last_processed_slot else None,
+    )
 
     return {
         "schema_version": 2,
@@ -394,6 +408,7 @@ def build_observation(
             "batch_size": BATCH_SIZE,
             "pending_before_append": pending_before,
             "last_processed_observation_id": last_processed_id,
+            "last_processed_slot": last_processed_slot,
         },
         "validation": {
             "status": validation_status,
@@ -549,9 +564,11 @@ def append_observation(
     recent = recent[-RECENT_LIMIT:]
     state = _read_json(state_path)
     last_processed = state.get("last_processed_observation_id")
+    last_processed_slot = state.get("last_processed_slot")
     pending_after = _pending_after(
         recent,
         str(last_processed) if last_processed else None,
+        str(last_processed_slot) if last_processed_slot else None,
     )
     observation["queue"]["pending_after_append"] = pending_after
 
