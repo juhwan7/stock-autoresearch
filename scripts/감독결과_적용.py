@@ -5,6 +5,8 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
+from autoresearch.supervisor_queue import build_supervisor_window
+
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "data/supervisor/latest-report.json"
 STATE = ROOT / "data/supervisor/state.json"
@@ -12,6 +14,201 @@ ISSUES = ROOT / "data/supervisor/market-issues.json"
 RECENT_SESSIONS = ROOT / "data/market/recent-sessions.json"
 POPULAR_REPORTS = ROOT / "data/research/popular-reports.json"
 NEWS_ISSUES = ROOT / "data/news/issue-digest.json"
+RECENT_OBSERVATIONS = ROOT / "data/supervisor/recent.json"
+DISAGREEMENTS = ROOT / "data/supervisor/disagreements.json"
+
+
+def _read_json_dict(path: Path) -> dict:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _parse_result_time(value: object) -> datetime:
+    parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        raise ValueError("processed_at must include timezone")
+    return parsed
+
+
+def normalize_observation_window(result: dict, warnings: list[str]) -> dict:
+    recent_payload = _read_json_dict(RECENT_OBSERVATIONS)
+    observations = recent_payload.get("observations") or []
+    if not isinstance(observations, list):
+        observations = []
+    processed_at = _parse_result_time(result.get("processed_at"))
+    supervisor = str(result.get("supervisor") or "A")
+    manifest = build_supervisor_window(
+        [x for x in observations if isinstance(x, dict)],
+        processed_at=processed_at,
+        supervisor=supervisor,
+    )
+
+    known = {
+        str(item.get("observation_id")): item
+        for item in observations
+        if isinstance(item, dict) and item.get("observation_id")
+    }
+    provided = result.get("observation_ids")
+    if not isinstance(provided, list):
+        provided = []
+    provided = [str(x) for x in provided if str(x).strip()]
+    unknown = [item_id for item_id in provided if item_id not in known]
+
+    if unknown:
+        warnings.append(
+            "queue에 없는 observation_ids가 있어 처리 포인터를 이동하지 않음: "
+            + ", ".join(unknown[:5])
+        )
+        valid_ids: list[str] = []
+    elif provided:
+        valid_ids = provided
+    else:
+        valid_ids = list(manifest.get("observation_ids") or [])
+        if valid_ids:
+            warnings.append("observation_ids 누락을 10분 슬롯 window에서 복구")
+
+    manifest_id_to_slot = {
+        str(item_id): str(slot)
+        for item_id, slot in zip(
+            manifest.get("observation_ids") or [],
+            manifest.get("observation_slots") or [],
+        )
+    }
+    actual_slots: list[str] = []
+    for item_id in valid_ids:
+        item = known.get(item_id) or {}
+        slot = item.get("slot_at") or manifest_id_to_slot.get(item_id)
+        if slot:
+            actual_slots.append(str(slot))
+
+    expected_slots = list(manifest.get("expected_slots") or [])
+    manifest_slots = list(manifest.get("observation_slots") or [])
+    ids_match_window = bool(valid_ids) and (
+        len(valid_ids) == len(manifest.get("observation_ids") or [])
+        and actual_slots == manifest_slots
+    )
+    if valid_ids and not ids_match_window:
+        warnings.append(
+            "Supervisor가 사용한 observation_ids가 정해진 3개 슬롯 window와 일치하지 않음"
+        )
+
+    selected_slots = actual_slots or manifest_slots
+    selected_slot_set = set(selected_slots)
+    selected_missing = [
+        slot for slot in expected_slots
+        if slot not in selected_slot_set
+    ]
+    expected_count = int(manifest.get("expected_observation_count") or 3)
+    selected_expected_count = sum(
+        1 for slot in selected_slots
+        if slot in set(expected_slots)
+    )
+
+    result["observation_ids"] = valid_ids
+    result["observation_slots"] = selected_slots
+    result["observation_window_start"] = manifest.get("window_start")
+    result["observation_window_end"] = manifest.get("window_end")
+    result["expected_observation_count"] = expected_count
+    result["received_observation_count"] = len(valid_ids)
+    result["missing_observation_slots"] = selected_missing
+    result["observation_completeness_ratio"] = round(
+        selected_expected_count / expected_count,
+        3,
+    ) if expected_count else 0.0
+    result["observation_window_complete"] = (
+        bool(manifest.get("complete"))
+        and not unknown
+        and ids_match_window
+        and not selected_missing
+    )
+
+    if not result["observation_window_complete"]:
+        warnings.append(
+            "정해진 10분 슬롯 3개가 모두 준비되지 않아 결과를 verification_pending으로 유지"
+        )
+        if str(result.get("status") or "") not in {"blocked"}:
+            result["status"] = "verification_pending"
+
+    return manifest
+
+
+def update_supervisor_disagreements(result: dict) -> None:
+    incoming = result.get("supervisor_disagreements") or []
+    if not isinstance(incoming, list) or not incoming:
+        return
+    store = _read_json_dict(DISAGREEMENTS)
+    existing = {
+        str(item.get("disagreement_id")): item
+        for item in (store.get("items") or [])
+        if isinstance(item, dict) and item.get("disagreement_id")
+    }
+    now = str(result.get("processed_at") or "")
+    supervisor = str(result.get("supervisor") or "")
+    batch_id = str(result.get("batch_id") or "")
+
+    for raw in incoming:
+        if not isinstance(raw, dict):
+            continue
+        disagreement_id = str(raw.get("disagreement_id") or "").strip()
+        topic = str(raw.get("topic") or "").strip()
+        if not disagreement_id or not topic:
+            continue
+        current = existing.get(disagreement_id, {"disagreement_id": disagreement_id, "history": []})
+        previous_status = current.get("status")
+        current.update(
+            {
+                "topic": topic,
+                "a_position": raw.get("a_position", current.get("a_position")),
+                "b_position": raw.get("b_position", current.get("b_position")),
+                "status": raw.get("status") or current.get("status") or "open",
+                "evidence_needed": raw.get("evidence_needed") or current.get("evidence_needed") or [],
+                "verify_after": raw.get("verify_after") or current.get("verify_after"),
+                "resolution": raw.get("resolution") or current.get("resolution"),
+                "updated_at": now,
+                "updated_by": supervisor,
+                "last_batch_id": batch_id,
+            }
+        )
+        if not current.get("first_seen"):
+            current["first_seen"] = now
+        history = current.setdefault("history", [])
+        history.append(
+            {
+                "at": now,
+                "by": supervisor,
+                "batch_id": batch_id,
+                "status_from": previous_status,
+                "status_to": current.get("status"),
+                "note": raw.get("note") or raw.get("resolution") or "",
+            }
+        )
+        current["history"] = history[-30:]
+        existing[disagreement_id] = current
+
+    items = sorted(
+        existing.values(),
+        key=lambda item: str(item.get("updated_at") or ""),
+        reverse=True,
+    )[:100]
+    DISAGREEMENTS.parent.mkdir(parents=True, exist_ok=True)
+    DISAGREEMENTS.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "updated_at": now,
+                "open_count": sum(1 for item in items if item.get("status") not in {"resolved", "discarded"}),
+                "items": items,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
 
 def update_issue_lifecycle(result: dict) -> None:
     """Persist explicit market issue state transitions without deleting history."""
@@ -357,6 +554,16 @@ def main() -> int:
     if not isinstance(result.get("feedback_to_other_supervisor"), list):
         value = result.get("feedback_to_other_supervisor")
         result["feedback_to_other_supervisor"] = [value] if value else []
+    for key in (
+        "feedback_received",
+        "feedback_resolved",
+        "feedback_disagreed",
+        "feedback_deferred",
+    ):
+        if not isinstance(result.get(key), list):
+            result[key] = []
+    if not isinstance(result.get("supervisor_disagreements"), list):
+        result["supervisor_disagreements"] = []
     if not isinstance(result.get("changed_paths"), list) or not result.get("changed_paths"):
         try:
             source_path = str(src.relative_to(ROOT))
@@ -364,19 +571,44 @@ def main() -> int:
             source_path = str(src)
         result["changed_paths"] = [source_path]
         warnings.append("changed_paths 누락을 현재 Supervisor 결과 경로로 복구")
+    window_manifest = normalize_observation_window(result, warnings)
     if warnings:
         result["validation_warnings"] = warnings
-    observation_ids = result.get("observation_ids") or []
+    observation_ids = list(result.get("observation_ids") or [])
+    update_supervisor_disagreements(result)
     update_issue_lifecycle(result)
     update_market_session_history(result)
     update_popular_reports(result)
     update_news_issue_digest(result)
     REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    state = json.loads(STATE.read_text(encoding="utf-8"))
+    state = _read_json_dict(STATE)
+    state["schema_version"] = max(int(state.get("schema_version") or 1), 2)
     state["last_batch_id"] = result["batch_id"]
     state["last_processed_at"] = result["processed_at"]
-    if observation_ids:
+    processed_recent = [
+        str(x)
+        for x in (state.get("processed_observation_ids_recent") or [])
+        if str(x).strip()
+    ]
+    if result.get("observation_window_complete"):
+        for item_id in observation_ids:
+            if item_id not in processed_recent:
+                processed_recent.append(item_id)
+    state["processed_observation_ids_recent"] = processed_recent[-120:]
+
+    role = str(window_manifest.get("supervisor") or "A")
+    state["last_a_window" if role == "A" else "last_b_window"] = {
+        "batch_id": result["batch_id"],
+        "window_start": result.get("observation_window_start"),
+        "window_end": result.get("observation_window_end"),
+        "observation_ids": observation_ids,
+        "missing_slots": result.get("missing_observation_slots") or [],
+        "complete": result.get("observation_window_complete"),
+    }
+    if observation_ids and result.get("observation_window_complete"):
         state["last_processed_observation_id"] = observation_ids[-1]
+        slots = result.get("observation_slots") or []
+        state["last_processed_slot"] = slots[-1] if slots else result.get("observation_window_end")
     STATE.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("applied", result["batch_id"])
     return 0

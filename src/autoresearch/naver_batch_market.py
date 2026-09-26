@@ -151,7 +151,7 @@ def fetch_recent_minute_samples(
     ticker: str,
     now: datetime,
     *,
-    limit: int = 6,
+    limit: int = 10,
 ) -> list[dict[str, Any]]:
     params = urllib.parse.urlencode(
         {
@@ -176,7 +176,7 @@ def calibrate_minute_samples(
     samples: list[dict[str, Any]],
     interval_total: float | None,
 ) -> list[dict[str, Any]]:
-    """1분 가격×거래량 근사치를 6분 누적 거래대금 차분에 맞춰 보정한다."""
+    """1분 가격×거래량 근사치를 10분 누적 거래대금 차분에 맞춰 보정한다."""
     rows = [dict(item) for item in samples]
     raw_sum = sum(
         float(item.get("raw_trading_value_estimate") or 0)
@@ -525,7 +525,7 @@ def archive_session_snapshot(
     *,
     keep: int = 5,
 ) -> str | None:
-    """실제 거래가 확인된 날의 최신 6분 시장 스냅샷을 날짜별로 보존한다."""
+    """실제 거래가 확인된 날의 최신 10분 시장 스냅샷을 날짜별로 보존한다."""
     if not snapshot.get("ranking_fresh_today"):
         return None
     if not snapshot.get("tracked_universe"):
@@ -654,7 +654,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
         if not _quote_traded_today(quote, now):
             continue
         try:
-            raw_samples = fetch_recent_minute_samples(code, now, limit=6)
+            raw_samples = fetch_recent_minute_samples(code, now, limit=10)
             interval_total = _number(
                 (interval_by_ticker.get(code) or {}).get("interval_trading_value")
             )
@@ -681,7 +681,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
         "source_status": source_status,
         "error": error,
         "provider": "naver_public",
-        "mode": "six_minute_batch",
+        "mode": "ten_minute_batch",
         "polling_mode": polling_mode,
         "universe_method": "daily_union_of_every_top50_entry",
         "ranking_fresh_today": ranking_fresh_today,
@@ -717,20 +717,20 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
         "minute_sample_errors": minute_sample_errors,
         "minute_samples_by_ticker": minute_samples_by_ticker,
         "interpretation": (
-            "직전 관측과 현재 누적 거래대금의 차이로 최근 약 6분 총 거래대금을 계산한다. "
-            "동시에 네이버 시간별 시세에서 최근 6개 분 단위 거래량 표본을 받아 가격×분당 거래량으로 "
-            "1분 거래대금을 근사하고, 가능하면 6분 누적 거래대금 차분 합계에 맞춰 보정한다. "
-            "따라서 6개의 1분 표본은 사용할 수 있지만 정확한 체결대금 합산값은 아니다."
+            "직전 관측과 현재 누적 거래대금의 차이로 최근 약 10분 총 거래대금을 계산한다. "
+            "동시에 네이버 시간별 시세에서 최근 10개 분 단위 거래량 표본을 받아 가격×분당 거래량으로 "
+            "1분 거래대금을 근사하고, 가능하면 10분 누적 거래대금 차분 합계에 맞춰 보정한다. "
+            "따라서 10개의 1분 표본은 사용할 수 있지만 정확한 체결대금 합산값은 아니다."
         ),
         "stocks": interval_rows,
         "interval_leaders": valid_rows[:20],
         "limitations": [
             "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
-            "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
+            "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
             "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
             "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
-            "최근 6개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
-            "6분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용",
+            "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+            "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용",
         ],
     }
     _write_json(latest_path, snapshot)

@@ -8,7 +8,7 @@ on:
     paths:
       - ".github/workflows/자동복구_감시.yml"
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "7,22,37,52 * * * *"
 
 permissions:
   contents: write
@@ -42,11 +42,8 @@ jobs:
       - name: Build recovery status
         run: python scripts/운영상태_생성.py
 
-      - name: Check sensor freshness and self-heal
+      - name: Check 10-minute sensor freshness
         id: recover
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
         shell: bash
         run: |
           python - <<'PY' > /tmp/recovery.env
@@ -54,30 +51,44 @@ jobs:
           from datetime import datetime, timezone
           from pathlib import Path
 
+          STALE_AFTER_MINUTES = 25.0
+
           def parse(value):
               if not value:
                   return None
               try:
-                  return datetime.fromisoformat(str(value).replace("Z","+00:00"))
+                  parsed = datetime.fromisoformat(str(value).replace("Z","+00:00"))
               except ValueError:
                   return None
+              if parsed.tzinfo is None:
+                  parsed = parsed.replace(tzinfo=timezone.utc)
+              return parsed.astimezone(timezone.utc)
 
-          path=Path("data/discovery/latest.json")
-          try:
-              data=json.loads(path.read_text(encoding="utf-8"))
-          except Exception:
-              data={}
-          dt=parse(data.get("generated_at"))
-          now=datetime.now(timezone.utc)
-          age=99999 if dt is None else max(0,(now-dt.astimezone(timezone.utc)).total_seconds()/60)
-          print(f"DISCOVERY_AGE_MINUTES={age:.1f}")
-          print("RECOVER_SENSOR=true" if age>20 else "RECOVER_SENSOR=false")
+          def read_json(path):
+              try:
+                  value = json.loads(Path(path).read_text(encoding="utf-8"))
+              except Exception:
+                  return {}
+              return value if isinstance(value, dict) else {}
+
+          now = datetime.now(timezone.utc)
+          discovery = read_json("data/discovery/latest.json")
+          recent = read_json("data/supervisor/recent.json")
+          observations = recent.get("observations") or []
+          latest_observation = observations[-1] if observations and isinstance(observations[-1], dict) else {}
+
+          discovery_at = parse(discovery.get("generated_at"))
+          sensor_at = parse(latest_observation.get("slot_at") or latest_observation.get("observed_at"))
+          discovery_age = 99999 if discovery_at is None else max(0, (now-discovery_at).total_seconds()/60)
+          sensor_age = 99999 if sensor_at is None else max(0, (now-sensor_at).total_seconds()/60)
+
+          should_recover = discovery_age > STALE_AFTER_MINUTES or sensor_age > STALE_AFTER_MINUTES
+          print(f"DISCOVERY_AGE_MINUTES={discovery_age:.1f}")
+          print(f"SENSOR_AGE_MINUTES={sensor_age:.1f}")
+          print(f"RECOVER_SENSOR={'true' if should_recover else 'false'}")
           PY
           cat /tmp/recovery.env >> "$GITHUB_ENV"
-          if grep -q 'RECOVER_SENSOR=true' /tmp/recovery.env; then
-            echo "Discovery가 20분 이상 stale입니다. 6분 센서를 workflow_dispatch로 재실행합니다."
-            gh workflow run "연속연구와진화.yml" --repo "$GH_REPO" || true
-          fi
+          cat /tmp/recovery.env
 
       - name: Rebuild dashboard after recovery status
         run: python scripts/대시보드_생성.py
@@ -114,3 +125,12 @@ jobs:
             exit 0
           fi
           git push origin HEAD:main || echo "다음 복구 주기에서 다시 저장합니다."
+
+      - name: Dispatch stale 10-minute sensor after recovery commit
+        if: env.RECOVER_SENSOR == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          echo "10분 센서 또는 discovery가 25분 이상 stale입니다. recovery commit 이후 센서를 재실행합니다."
+          gh workflow run "연속연구와진화.yml" --repo "$GH_REPO" || true

@@ -62,10 +62,10 @@ def test_extract_polling_quotes_supports_new_and_legacy_fields():
     assert quotes["000660"]["accumulated_trading_value"] == 7000000000
 
 
-def test_build_interval_rows_calculates_six_minute_delta():
-    now = datetime(2026, 9, 28, 10, 6, tzinfo=KST)
+def test_build_interval_rows_calculates_ten_minute_delta():
+    now = datetime(2026, 9, 28, 10, 10, tzinfo=KST)
     previous = {
-        "generated_at": (now - timedelta(minutes=6)).isoformat(),
+        "generated_at": (now - timedelta(minutes=10)).isoformat(),
         "stocks": [
             {
                 "ticker": "005930",
@@ -77,17 +77,17 @@ def test_build_interval_rows_calculates_six_minute_delta():
         "005930": {
             "ticker": "005930",
             "name": "삼성전자",
-            "accumulated_trading_value": 13_600_000_000,
+            "accumulated_trading_value": 16_000_000_000,
         }
     }
     rows, elapsed = build_interval_rows(current, previous, now)
-    assert elapsed == 6
-    assert rows[0]["interval_trading_value"] == 3_600_000_000
+    assert elapsed == 10
+    assert rows[0]["interval_trading_value"] == 6_000_000_000
     assert rows[0]["per_minute_average_trading_value"] == 600_000_000
     assert rows[0]["interval_valid"] is True
 
 
-def test_interval_gap_is_not_misreported_as_six_minutes():
+def test_interval_gap_is_not_misreported_as_ten_minutes():
     now = datetime(2026, 9, 28, 11, 0, tzinfo=KST)
     previous = {
         "generated_at": (now - timedelta(minutes=40)).isoformat(),
@@ -147,7 +147,7 @@ def test_parse_time_quote_rows_builds_minute_volume_and_amount():
     assert rows[-1]["raw_trading_value_estimate"] == 6_000_000
 
 
-def test_calibrate_minute_samples_matches_six_minute_total():
+def test_calibrate_minute_samples_matches_ten_minute_total():
     rows = [
         {"time": "10:01", "raw_trading_value_estimate": 100.0},
         {"time": "10:02", "raw_trading_value_estimate": 200.0},
@@ -160,15 +160,15 @@ def test_calibrate_minute_samples_matches_six_minute_total():
 
 
 def test_daily_tracked_universe_keeps_stock_after_it_drops_below_top50():
-    now = datetime(2026, 9, 28, 10, 6, tzinfo=KST)
+    now = datetime(2026, 9, 28, 10, 10, tzinfo=KST)
     previous = {
-        "generated_at": (now - timedelta(minutes=6)).isoformat(),
+        "generated_at": (now - timedelta(minutes=10)).isoformat(),
         "tracked_universe": [
             {
                 "ticker": "005930",
                 "name": "삼성전자",
                 "first_top50_at": (now - timedelta(minutes=30)).isoformat(),
-                "last_top50_at": (now - timedelta(minutes=6)).isoformat(),
+                "last_top50_at": (now - timedelta(minutes=10)).isoformat(),
                 "last_top50_rank": 47,
                 "in_current_top50": True,
                 "current_rank": 47,
@@ -203,7 +203,7 @@ def test_daily_tracked_universe_resets_on_new_day():
 def test_stale_same_day_universe_is_not_carried_forward():
     now = datetime(2026, 9, 25, 11, 45, tzinfo=KST)
     previous = {
-        "generated_at": (now - timedelta(minutes=6)).isoformat(),
+        "generated_at": (now - timedelta(minutes=10)).isoformat(),
         "ranking_fresh_today": False,
         "tracked_universe": [
             {"ticker": "005930", "name": "삼성전자", "last_top50_rank": 1}

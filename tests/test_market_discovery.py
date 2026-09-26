@@ -3,6 +3,7 @@ from autoresearch.market_discovery import (
     extract_naver_index_basic,
     extract_naver_indices,
     extract_trending_terms,
+    estimate_independent_story_count,
     is_low_quality_news_item,
     is_market_relevant_news_item,
     parse_google_news_rss,
@@ -151,3 +152,26 @@ def test_dynamic_topic_requires_its_own_emerging_term_and_market_context():
     assert is_market_relevant_news_item("미국채 금리 상승", "dynamic:이란") is False
     assert is_market_relevant_news_item("멕시코 K-POP 팬들과 기념촬영", "dynamic:멕시코") is False
     assert is_market_relevant_news_item("멕시코 무역협정 투자 협상", "dynamic:멕시코") is True
+
+
+
+def test_independent_story_estimate_collapses_similar_syndication():
+    titles = [
+        "이란 호르무즈 재개방 제안 미국 답변 대기",
+        "미국 답변 대기 이란 호르무즈 재개방 제안",
+        "연준 금리 경로 물가 지표에 달려",
+    ]
+    assert estimate_independent_story_count(titles) == 2
+
+
+def test_trending_terms_expose_story_independence_estimate():
+    items = [
+        {"title": "조선 수주 확대 기대", "publisher": "매체A"},
+        {"title": "조선 수주 확대 기대감 커져", "publisher": "매체B"},
+        {"title": "조선 해외 수주 신규 계약", "publisher": "매체C"},
+    ]
+    trends = extract_trending_terms(items, {})
+    ship = next(item for item in trends if item["term"] == "조선")
+    assert "independent_story_count_estimate" in ship
+    assert "syndication_ratio_estimate" in ship
+    assert ship["source_independence_method"].startswith("headline_similarity")

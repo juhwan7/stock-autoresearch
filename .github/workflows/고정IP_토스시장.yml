@@ -1,9 +1,9 @@
-name: 고정 IP 토스 6분 시장 데이터
+name: 고정 IP 토스 10분 시장 데이터
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/6 * * * *"
+    - cron: "*/10 * * * *"
 
 permissions:
   contents: write
@@ -55,7 +55,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "저장할 Toss 시장 변화가 없습니다."
           else
-            git commit -m "observe: record Toss 6-minute market batch"
+            git commit -m "observe: record Toss 10-minute market batch"
             git pull --rebase
             git push
           fi
