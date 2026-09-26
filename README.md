@@ -33,7 +33,10 @@ GitHub Actions의 6분 센서는 OpenAI API를 호출하지 않습니다. AI 판
 ## 바로가기
 
 - **대시보드:** https://juhwan7.github.io/stock-autoresearch/
-- **지수 대비 상대강도:** https://juhwan7.github.io/stock-autoresearch/상대강도.html\n- **시장 거대자금 흐름:** https://juhwan7.github.io/stock-autoresearch/거대자금.html
+- **이슈 추적:** https://juhwan7.github.io/stock-autoresearch/이슈추적.html
+- **시스템/Kanban:** https://juhwan7.github.io/stock-autoresearch/시스템.html
+- **지수 대비 상대강도:** https://juhwan7.github.io/stock-autoresearch/상대강도.html
+- **시장 거대자금 흐름:** https://juhwan7.github.io/stock-autoresearch/거대자금.html
 - [문서 지도](docs/문서_지도.md)
 - [사용자 목적](docs/사용자_목적.md)
 - [시스템 구조](docs/시스템_구조.md)
