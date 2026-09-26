@@ -68,6 +68,10 @@ Stock AutoResearch는 단순 뉴스 요약기가 아니라 다음 두 가지를 
 
 A(:00)는 탐색·개발, B(:30)는 비판·검증·정리 역할을 우선한다. 다음 Supervisor는 직전 상대 Supervisor의 결론·수정·반증·실패를 이어받는다. 매 :00/:30 사이클은 서로 다른 최소 5개 작업축을 실제 검토하되 5개 변경을 억지로 만들지는 않는다.
 
+각 Supervisor의 시장 입력은 "최근 3개"가 아니라 **정해진 3개 10분 슬롯**이다. B(:30)는 :10/:20/:30, A(:00)는 직전 :40/:50/:00만 사용한다. 누락 슬롯은 오래된 관측으로 채우지 않는다. 결과 JSON에는 실제 사용한 `observation_ids`, `observation_slots`, window 시작/끝, 예상/수신 개수, completeness를 남긴다. 3/3이 아니거나 ID가 해당 window와 다르면 canonical pointer를 전진시키지 않는다.
+
+상대 Supervisor의 `feedback_to_other_supervisor`를 시작 시 읽고 `feedback_received`, `feedback_resolved`, `feedback_disagreed`, `feedback_deferred`로 처리 결과를 남긴다. A/B의 판단이 충돌하면 한쪽 결론을 지우지 말고 `supervisor_disagreements`에 쟁점, A/B 입장, 필요한 증거, verify_after를 남겨 후속 관측으로 판정한다.
+
 UI/UX는 선택적 장식 작업이 아니다. 매 :00/:30 사이클에서 `ui_ux`를 최소 5개 작업축 중 하나로 반드시 검토한다. 새 데이터·기능이 사용자-facing이면 backend에서 끝내지 말고 어느 Pages 화면에서 어떤 정보 계층으로 보여줄지 함께 판단한다. 기본 화면은 중요한 것을 먼저 보여주고 상세는 `details/summary` 또는 전문 페이지로 내려보낸다.
 
 자동 변경은 테스트를 통과해야 하며, 고위험 영역은 제안으로만 남긴다. 실용 가치가 낮은 기능은 통합·단순화·격리·삭제도 개선으로 본다.
