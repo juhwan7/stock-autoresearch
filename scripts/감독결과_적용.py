@@ -21,6 +21,7 @@ DISAGREEMENTS = ROOT / "data/supervisor/disagreements.json"
 DISCOVERY = ROOT / "data/discovery/latest.json"
 AI_RESULTS = ROOT / "data/supervisor/ai-results"
 COLLABORATION = ROOT / "data/supervisor/collaboration.json"
+WINDOWS = ROOT / "data/supervisor/windows"
 
 
 def _read_json_dict(path: Path) -> dict:
@@ -186,6 +187,81 @@ def _reconcile_regular_windows(state: dict) -> None:
         if not item:
             continue
         state["last_a_window" if role == "A" else "last_b_window"] = _window_state_from_result(item)
+
+
+def _time_at_or_none(value: object) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return _parse_result_time(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _supervisor_health_snapshot() -> dict[str, dict]:
+    """Compare canonical windows, immutable regular results, and state pointers.
+
+    Repository data cannot know ChatGPT automation enabled/disabled state, so a
+    complete window without a matching result is classified as missing_result
+    with cause=unknown. The live A/B automation must combine this evidence with
+    automation state and recent Actions before choosing automation_disabled,
+    schedule_missed, or result_write_failed.
+    """
+    state = _read_json_dict(STATE)
+    health: dict[str, dict] = {}
+    for role in ("A", "B"):
+        window = _read_json_dict(WINDOWS / f"latest-{role}.json")
+        latest = _latest_regular_result(role=role)
+        window_end = str(window.get("window_end") or window.get("anchor_at") or "")
+        result_end = str(latest.get("observation_window_end") or "")
+        window_at = _time_at_or_none(window_end)
+        result_at = _time_at_or_none(result_end)
+        result_covers_window = bool(
+            window_at and result_at and result_at >= window_at
+        )
+        pointer = state.get("last_a_window" if role == "A" else "last_b_window")
+        pointer = pointer if isinstance(pointer, dict) else {}
+        canonical_applied = bool(
+            latest
+            and result_covers_window
+            and str(pointer.get("batch_id") or "") == str(latest.get("batch_id") or "")
+        )
+        window_complete = bool(window.get("complete"))
+        if window_complete and not result_covers_window:
+            status = "missing_result"
+            cause = "unknown"
+            recovery = "check_automation_then_issue_action_single_writer"
+        elif latest and result_covers_window and not canonical_applied:
+            status = "unapplied"
+            cause = "canonical_apply_failed"
+            recovery = "reapply_existing_result_do_not_rerun_analysis"
+        elif latest and not regular_window_complete(latest):
+            status = "verification_pending"
+            cause = "sensor_window_incomplete"
+            recovery = "wait_for_next_canonical_window_no_backfill"
+        elif window_complete and canonical_applied:
+            status = "healthy"
+            cause = None
+            recovery = "none"
+        else:
+            status = "verification_pending"
+            cause = "unknown"
+            recovery = "inspect_window_and_recent_actions"
+
+        health[role] = {
+            "enabled": None,
+            "last_expected_anchor": window_end or None,
+            "latest_window_complete": window_complete,
+            "last_result_batch": latest.get("batch_id"),
+            "last_result_at": latest.get("processed_at"),
+            "last_result_window_end": result_end or None,
+            "canonical_applied": canonical_applied,
+            "status": status,
+            "cause": cause,
+            "preferred_recovery": recovery,
+            "disable_supervisor": False,
+        }
+    return health
 
 
 def validate_feedback_handoff(
@@ -620,6 +696,11 @@ def _collaboration_incident_id(raw: dict) -> str:
         return "macro-runtime-data"
     if "sensor" in combined and any(token in combined for token in ("slot", "continuity", "heartbeat", "self-chain", "chain")):
         return "sensor-continuity"
+    if "supervisor" in combined and any(token in combined for token in ("continuity", "result-missing", "missing-result", "result-write")):
+        if "supervisor-a" in combined or " a " in f" {combined} ":
+            return "supervisor-a-continuity"
+        if "supervisor-b" in combined or " b " in f" {combined} ":
+            return "supervisor-b-continuity"
     return raw_id
 
 
@@ -738,6 +819,30 @@ def update_collaboration_state(result: dict, src: Path) -> None:
         if isinstance(raw, dict):
             upsert(raw, source_kind="supervisor_disagreement")
 
+    supervisor_health = _supervisor_health_snapshot()
+    for role, item in supervisor_health.items():
+        if item.get("status") == "healthy":
+            continue
+        upsert(
+            {
+                "id": f"supervisor-{role.lower()}-continuity",
+                "status": "investigating" if item.get("status") in {"missing_result", "unapplied"} else item.get("status"),
+                "signal": (
+                    f"Supervisor {role} 상태={item.get('status')} · "
+                    f"expected={item.get('last_expected_anchor')} · "
+                    f"result={item.get('last_result_batch') or '없음'}"
+                ),
+                "verify_after": "상대 Supervisor의 다음 정규 사이클 또는 복구 직후",
+                "evidence": [
+                    f"latest_window_complete={item.get('latest_window_complete')}",
+                    f"canonical_applied={item.get('canonical_applied')}",
+                    f"cause={item.get('cause') or 'none'}",
+                    f"preferred_recovery={item.get('preferred_recovery')}",
+                ],
+            },
+            source_kind="supervisor_health",
+        )
+
     resolved_statuses = {"resolved", "discarded", "closed", "completed"}
     # active first, and newest first inside each group
     ordered = sorted(
@@ -818,6 +923,7 @@ def update_collaboration_state(result: dict, src: Path) -> None:
         "incidents": ordered,
         "last_turn": last_turn,
         "timeline": timeline[:80],
+        "supervisor_health": supervisor_health,
     }
     COLLABORATION.parent.mkdir(parents=True, exist_ok=True)
     COLLABORATION.write_text(
@@ -959,7 +1065,6 @@ def main() -> int:
     update_market_session_history(result)
     update_popular_reports(result)
     update_news_issue_digest(result)
-    update_collaboration_state(result, src)
     REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     src.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     state = _read_json_dict(STATE)
@@ -1009,6 +1114,7 @@ def main() -> int:
         slots = result.get("observation_slots") or []
         state["last_processed_slot"] = slots[-1] if slots else result.get("observation_window_end")
     STATE.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    update_collaboration_state(result, src)
     print("applied", result["batch_id"])
     return 0
 
