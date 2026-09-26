@@ -367,6 +367,7 @@ def main() -> None:
         "help_needed": section_tail(ROOT / "docs" / "사용자_도움_필요.md"),
         "changelog": section_tail(ROOT / "docs" / "AI_변경기록.md"),
         "market": market,
+        "market_recent_sessions": read_json(ROOT / "data" / "market" / "recent-sessions.json"),
         "market_runtime": read_json(ROOT / "data" / "market" / "runtime.json"),
         "toss_provider": toss_provider_status(),
         "risk": risk,
