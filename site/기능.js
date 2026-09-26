@@ -160,6 +160,7 @@ function issueTemporalLabel(issue) {
   if (status === "RESOLVED") return date + " 시작 · " + relativeTime(issue.status_changed_at || issue.last_updated || startRaw) + " 해소";
   return date + " 시작 · " + days + "일째 " + (status === "ACTIVE" ? "지속" : "추적");
 }
+// ISSUE_RECENCY_HELPERS_START
 function parseIssueTimestamp(value) {
   const raw = String(value || "").trim();
   if (!raw || !/^\d{4}-\d{2}-\d{2}(?:[T\s].*)?$/.test(raw)) return 0;
@@ -196,6 +197,7 @@ function compareIssueRecency(a,b) {
   if (diff) return diff;
   return String(a.issue_id || "").localeCompare(String(b.issue_id || ""), "ko");
 }
+// ISSUE_RECENCY_HELPERS_END
 function issueLatestUpdateLabel(issue) {
   const latest = issueLatestActivity(issue);
   if (!latest.ms) return "최근 변화 시각 미확인";
