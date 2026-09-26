@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-09-26T14:45:00+09:00",
+  "source": {
+    "name": "금융투자협회 자본시장통계 FreeSIS",
+    "url": "https://freesis.kofia.or.kr/stat/main.do",
+    "status": "official_primary",
+    "note": "공개 메인 통계의 최신 발표값을 사용합니다. 지표별 기준일은 서로 다를 수 있습니다."
+  },
+  "metrics": {
+    "investor_deposit": {"label":"투자자예탁금","group":"liquidity","description":"증권계좌에 대기 중인 투자자 예탁금","reported_date":"2026-09-22","reported_unit":"백만원","reported_value":100982555,"reported_change":2843942,"change_pct":2.9,"value_krw_100m":1009825.55,"change_krw_100m":28439.42,"quality":"official_public_summary"},
+    "credit_financing": {"label":"신용융자","group":"leverage","description":"주식 매수를 위해 사용된 신용융자 잔고","reported_date":"2026-09-22","reported_unit":"백만원","reported_value":32819168,"reported_change":-236317,"change_pct":-0.71,"value_krw_100m":328191.68,"change_krw_100m":-2363.17,"quality":"official_public_summary"},
+    "cma_balance": {"label":"CMA잔고","group":"liquidity","description":"CMA 계좌 잔고","reported_date":"2026-09-22","reported_unit":"백만원","reported_value":105635781,"reported_change":2564136,"change_pct":2.49,"value_krw_100m":1056357.81,"change_krw_100m":25641.36,"quality":"official_public_summary"},
+    "equity_fund_nav": {"label":"주식형펀드 순자산","group":"fund","description":"주식형펀드 순자산","reported_date":"2026-09-22","reported_unit":"억원","reported_value":3921769,"reported_change":14692,"change_pct":0.38,"value_krw_100m":3921769,"change_krw_100m":14692,"quality":"official_public_summary"},
+    "total_fund_nav": {"label":"펀드 순자산","group":"fund","description":"전체 펀드 순자산","reported_date":"2026-09-22","reported_unit":"억원","reported_value":15608006,"reported_change":-19168,"change_pct":-0.12,"value_krw_100m":15608006,"change_krw_100m":-19168,"quality":"official_public_summary"}
+  },
+  "derived": {"credit_to_deposit_pct":32.5,"equity_fund_share_pct":25.13},
+  "history": [{"observed_at":"2026-09-26T14:45:00+09:00","metrics":{
+    "investor_deposit":{"reported_date":"2026-09-22","value_krw_100m":1009825.55,"change_krw_100m":28439.42,"change_pct":2.9},
+    "credit_financing":{"reported_date":"2026-09-22","value_krw_100m":328191.68,"change_krw_100m":-2363.17,"change_pct":-0.71},
+    "cma_balance":{"reported_date":"2026-09-22","value_krw_100m":1056357.81,"change_krw_100m":25641.36,"change_pct":2.49},
+    "equity_fund_nav":{"reported_date":"2026-09-22","value_krw_100m":3921769,"change_krw_100m":14692,"change_pct":0.38},
+    "total_fund_nav":{"reported_date":"2026-09-22","value_krw_100m":15608006,"change_krw_100m":-19168,"change_pct":-0.12}
+  }}],
+  "extensions": [
+    {"key":"mmf","label":"MMF 규모","status":"adapter_pending","official_path":"펀드 > 주제 > MMF현황 > 기간MMF규모","reason":"공식 통계 항목은 확인했지만 안정적인 자동수집 어댑터를 아직 연결하지 않았습니다."},
+    {"key":"equity_fund_flow","label":"주식형펀드 자금유출입","status":"adapter_pending","official_path":"펀드 > 설정통계 > 기간자금유출입","reason":"순자산 증감과 실제 자금유입을 분리하기 위해 별도 연결이 필요합니다."},
+    {"key":"etf","label":"ETF 규모·자금흐름","status":"adapter_pending","official_path":"펀드 > 주제 > ETF현황 > 회사별ETF규모","reason":"ETF 잔고와 순유입을 구분할 수 있는 자동수집 경로를 추가 검증 중입니다."},
+    {"key":"rp","label":"RP 대고객 잔고","status":"adapter_pending","official_path":"단기자금 > RP > 대고객 종류별 매매잔고","reason":"대기성 단기자금 보조지표로 추가할 예정이며 현재 숫자는 표시하지 않습니다."}
+  ]
+}
