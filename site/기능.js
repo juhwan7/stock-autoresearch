@@ -130,7 +130,7 @@ function researchDateValue(item) {
 }
 function researchDateLabel(item) {
   const x = asObject(item);
-  const raw = x.published_at || x.report_datetime || x.generated_at || x.created_at || x.sort_at || x.report_date || x.date || "";
+  const raw = x.published_at || x.report_datetime || x.generated_at || x.created_at || x.updated_at || x.sort_at || x.report_date || x.date || "";
   if (raw) return String(raw).replace("T", " ").replace(/\+09:00$|Z$/, "").slice(0, 16);
   const source = [x.title, x.file].filter(Boolean).join(" ");
   const day = source.match(/20\d{2}-\d{2}-\d{2}/);
