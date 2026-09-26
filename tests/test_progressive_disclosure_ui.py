@@ -18,8 +18,10 @@ AGENTS = ROOT / "AGENTS.md"
 
 def test_home_prioritizes_context_before_detail():
     html = INDEX.read_text(encoding="utf-8")
-    assert html.index("지금 시장을 움직이는 것") < html.index("현재 시장 이슈")
-    assert html.index("현재 시장 이슈") < html.index("시장 핵심 숫자")
+    assert html.index("지금 시장을 움직이는 것") < html.index("지금 시장을 움직이는 핵심 이슈")
+    assert html.index("지금 시장을 움직이는 핵심 이슈") < html.index("앞으로 시장을 움직일 트리거")
+    assert html.index("앞으로 시장을 움직일 트리거") < html.index("현재 주목해야 할 리서치")
+    assert html.index("현재 주목해야 할 리서치") < html.index("시장 핵심 숫자")
     assert 'id="risk-events" data-limit="4"' in html
     assert 'data-persist="home-key-numbers"' in html
     assert 'data-persist="home-reading-guide"' in html
