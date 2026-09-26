@@ -291,3 +291,46 @@ Supervisor 결과는 시장 정규 사이클과 진단용 결과를 구분한다
 - test/E2E는 writer·Telegram 경로를 검증할 수 있지만 시장 canonical, 이슈 원장, A/B 피드백 연속성을 전진시키지 않는다.
 - Recovery는 별도 복구 이력으로 남기며 정규 A/B 성공으로 가장하지 않는다.
 - README에는 분 단위 stale·사용자 조치 상세를 자동 삽입하지 않는다. 실시간 상태는 GitHub Pages `시스템`, `data/operations/status.json`, `docs/운영_칸반.md`, 필요 시 Telegram이 담당한다.
+
+
+## A ↔ B 공유 incident 작업기억
+
+두 Supervisor의 협업은 긴 로그를 서로 다시 읽는 방식에만 의존하지 않는다. `data/supervisor/collaboration.json`을 공통 작업기억으로 사용한다.
+
+흐름은 다음과 같다.
+
+```text
+Supervisor A/B immutable result
+        ↓
+scripts/감독결과_적용.py
+        ↓
+data/supervisor/collaboration.json
+        ↓
+다음 Supervisor가 활성 incident·해결 이력·다음 검증을 먼저 읽음
+        ↓
+GitHub Pages AI 대화 화면
+```
+
+공유 상태의 핵심 필드는 다음과 같다.
+
+- `status`, `headline`: 현재 공동 작업의 사용자용 요약
+- `incidents`: 활성·해결 문제의 canonical 목록
+- `incident_id`: 같은 문제를 여러 카드로 만들지 않기 위한 식별자
+- `first_seen`, `updated_at`: 최초 발견과 최근 갱신 시각
+- `summary`, `evidence`, `verify_after`: 확인된 내용과 다음 검증 조건
+- `history`: A/B가 같은 문제를 어떤 순서로 검토·수정·재검증했는지 기록
+- `last_turn`: 가장 최근 Supervisor의 받은 의견·해결·보류·다음 전달·실제 변경
+- `timeline`: 최근 협업 turn의 짧은 연속 기록
+
+운영 원칙:
+
+1. 같은 원인의 증상은 새 incident를 계속 생성하지 않고 기존 incident에 history로 누적한다.
+2. resolved는 삭제하지 않고 최근 해결 이력으로 유지하되 새 증거가 없으면 재조사하지 않는다.
+3. `verification_pending`은 verify_after가 충족되기 전까지 억지 수정하지 않는다.
+4. disagreement는 한쪽 의견을 지우지 않고 필요한 증거와 함께 같은 흐름에 남긴다.
+5. 실제 코드·workflow·UI 변경과 Supervisor 결과 JSON 저장만 있었던 실행을 구분한다.
+6. 테스트/E2E 결과는 정규 A/B 공동 상태를 전진시키지 않는다.
+7. 사용자 화면은 `현재 활성 문제 → 최근 해결 → 실제 변경 → 다음 검증 → A↔B 상세 타임라인 → 원본 JSON` 순서로 보여준다.
+8. 데이터가 없으면 없다고 표시하며 과거값·미래값으로 현재 슬롯을 정상처럼 만들지 않는다.
+
+2026-09-27 00:35 B의 센서 0/3, issue-digest 해결, macro 검증 보류 사례는 최초 bootstrap history로 보존한다. 이후 실제 센서가 다시 들어왔더라도 과거 00:35 상태를 최신 현재 상태로 덮어쓰지 않고 다음 정규 Supervisor가 새 근거로 동일 incident를 갱신한다.
