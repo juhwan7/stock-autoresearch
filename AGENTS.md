@@ -62,11 +62,25 @@ Stock AutoResearch는 단순 뉴스 요약기가 아니라 다음 두 가지를 
 
 ## 자기진화
 
-`docs/사용자_목적.md`와 `docs/자기진화_규칙.md`를 최상위 제약으로 취급한다.
+`docs/사용자_목적.md`, `docs/자기진화_규칙.md`, `docs/자율진화_운영헌장.md`를 최상위 제약으로 취급한다.
 
 개선은 많을수록 좋은 것이 아니다. 변경하지 않는 편이 낫다면 이유를 기록하고 변경하지 않는다.
 
-자동 변경은 테스트를 통과해야 하며, 고위험 영역은 제안으로만 남긴다.
+A(:00)는 탐색·개발, B(:30)는 비판·검증·정리 역할을 우선한다. 다음 Supervisor는 직전 상대 Supervisor의 결론·수정·반증·실패를 이어받는다. 매 :00/:30 사이클은 서로 다른 최소 5개 작업축을 실제 검토하되 5개 변경을 억지로 만들지는 않는다.
+
+자동 변경은 테스트를 통과해야 하며, 고위험 영역은 제안으로만 남긴다. 실용 가치가 낮은 기능은 통합·단순화·격리·삭제도 개선으로 본다.
+
+### GitHub 장기 기억
+
+모든 Supervisor/Recovery/프로젝트 관리 AI는 시작할 때 `memory/INDEX.md`와 `memory/current/현재상태.md`, `memory/current/다음확인사항.md`가 존재하면 HOT memory로 먼저 읽는다.
+
+원칙은 **기록은 풍부하게, 시작 시 읽기는 작게, 필요할 때 깊게 검색한다**이다.
+
+- HOT: `memory/INDEX.md`, `memory/current/*`, `docs/AI_연속_인수인계.md`
+- WARM: 현재 문제와 관련된 `memory/project/`, `memory/market/`, `memory/research/`, `memory/lessons/`
+- COLD: 반복 문제·과거 비교가 필요할 때만 `memory/supervisors/`, `memory/snapshots/`, `memory/archive/`
+
+새 해결책을 만들기 전에 관련 실패·교훈·삭제 기록이 있는지 검색한다. 기능을 삭제해도 삭제 이유와 재도입 조건까지 기억에서 지우지 않는다.
 
 ## 개발·검증
 
