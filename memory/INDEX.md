@@ -1,9 +1,9 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-26T22:51:00+09:00
-> latest batch: supervisor-writer-e2e-20260926T2251+0900
+> 자동 갱신: 2026-09-26T23:37:00+09:00
+> latest batch: supervisor-20260926T2330+0900-b37
 > Supervisor: B · 상태 verification_pending
-> 이번 작업축: 5개
+> 이번 작업축: 6개
 
 ## 시작할 때 읽기
 
@@ -14,7 +14,10 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
-- Supervisor writer 안정성
+- 미·이란 공식 답변·호르무즈 실제 통항
+- 수입규제 241건의 KOTRA 원문·품목/국가 노출
+- 다음 거래 가능 시점 macro 실값
+- 월요일 USTR 공식 세부
 
 ## 활성 시장 이슈
 - 이란 전쟁 여파로 EU 에너지 가격 위기 경고 — NEW
@@ -27,20 +30,20 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- supervisor-single-writer — verification_pending
-- Supervisor B 237분 정지 — 이슈 상태가 오래될 수 있음
-- 10분 센서 슬롯 커버리지 낮음 — 1/6 슬롯 · GitHub schedule/저장 경로 점검 필요
-- 뉴스 discovery 신선도 저하 — 마지막 갱신 41.55545893333333분 전
-- 이슈 원장 갱신 지연 — 마지막 갱신 266.88189991666667분 전
+- issue-digest-apply-stale — investigating
+- operations-status-stale — investigating
+- macro-runtime-empty — verification_pending
+- Supervisor A 108분 지연 — 다음 정규 사이클 누락 가능
+- 이슈 원장 갱신 지연 — 마지막 갱신 475.35556933333334분 전
 
 ## 최근 해결
 - 없음
 
 ## 운영 품질
-- operations: needs_user_action
+- operations: investigating
 - health: NOTICE
 - open questions: 24
-- 사용자 개입 필요: 1건
+- 사용자 개입 필요: 0건
 
 ## 기억 위치
 - 현재 상태 → memory/current/
