@@ -167,8 +167,20 @@ jobs:
             echo "이번 6분 관측에는 저장할 변화가 없습니다."
           else
             git commit -m "observe: record 6-minute supervisor checkpoint"
-            git pull --rebase
-            git push
+
+            # 다른 AI/사용자 작업이 같은 시각 main을 갱신하면 생성 데이터는
+            # 줄 단위 병합보다 다음 6분 주기에 최신 입력으로 다시 만드는 편이 안전하다.
+            # 오래된 관측을 억지로 재베이스해 충돌 파일을 저장하지 않는다.
+            if ! git pull --rebase; then
+              echo "main 동시 갱신으로 관측 데이터가 충돌했습니다. 오래된 관측 커밋을 폐기하고 다음 주기에 재수집합니다."
+              git rebase --abort || true
+              exit 0
+            fi
+
+            if ! git push; then
+              echo "push 직전 main이 다시 갱신되었습니다. 이번 관측은 저장하지 않고 다음 주기에 최신 상태로 재수집합니다."
+              exit 0
+            fi
           fi
 
       - name: Surface validation failure
