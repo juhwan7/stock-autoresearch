@@ -34,10 +34,8 @@
 - supervisor-b-result-continuity — investigating
 - news-fixed-axis-empty — verification_pending
 - macro-runtime-empty — verification_pending
-- Supervisor A 209분 정지 — 이슈 상태가 오래될 수 있음
-- Supervisor B 183분 정지 — 이슈 상태가 오래될 수 있음
-- 이슈 원장 갱신 지연 — 마지막 갱신 209.3548093166667분 전
-- 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 183.18814265분 전
+- Supervisor B 362분 정지 — 이슈 상태가 오래될 수 있음
+- 이슈 원장 갱신 지연 — 마지막 갱신 388.40326988333334분 전
 
 ## 최근 해결
 - sensor-continuity — resolved
@@ -46,7 +44,7 @@
 - operations: needs_user_action
 - health: NOTICE
 - open questions: 24
-- 사용자 개입 필요: 2건
+- 사용자 개입 필요: 1건
 
 ## 기억 위치
 - 현재 상태 → memory/current/
