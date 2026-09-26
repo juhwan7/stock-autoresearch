@@ -32,18 +32,19 @@
 ## 현재 열린 프로젝트 문제
 - sensor-slot-0000-plus-continuity — investigating
 - macro-runtime-empty — verification_pending
-- Supervisor A 정규 window 검증 대기 — 최근 정규 결과 2/3 슬롯 · 누락 슬롯은 과거값으로 보충하지 않음
-- Supervisor B 정규 window 검증 대기 — 최근 정규 결과 0/3 슬롯 · 누락 슬롯은 과거값으로 보충하지 않음
-- 10분 센서 슬롯 커버리지 낮음 — 0/6 슬롯 · GitHub schedule/저장 경로 점검 필요
+- Supervisor A 209분 정지 — 이슈 상태가 오래될 수 있음
+- Supervisor B 183분 정지 — 이슈 상태가 오래될 수 있음
+- 이슈 원장 갱신 지연 — 마지막 갱신 209.3548093166667분 전
+- 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 183.18814265분 전
 
 ## 최근 해결
 - issue-digest-apply-stale — resolved
 
 ## 운영 품질
-- operations: investigating
+- operations: needs_user_action
 - health: NOTICE
 - open questions: 24
-- 사용자 개입 필요: 0건
+- 사용자 개입 필요: 2건
 
 ## 기억 위치
 - 현재 상태 → memory/current/
