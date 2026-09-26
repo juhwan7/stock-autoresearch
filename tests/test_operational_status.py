@@ -241,3 +241,75 @@ def test_update_readme_never_injects_live_incident_details(tmp_path):
         "user_actions": [{"problem": "Supervisor B 마지막 실행이 237분 전"}],
     })
     assert module.README.read_text(encoding="utf-8") == original
+
+
+def test_very_stale_supervisor_is_auto_recovery_not_user_action(tmp_path):
+    module = load_module()
+    prepare(module, tmp_path)
+    write_json(tmp_path / "data/discovery/latest.json", {
+        "generated_at": "2026-09-27T07:14:00+09:00", "item_count": 100, "source_status": {}
+    })
+    write_json(tmp_path / "data/news/issue-digest.json", {
+        "updated_at": "2026-09-27T07:00:00+09:00", "issues": []
+    })
+    write_json(tmp_path / "data/health/latest.json", {"issues": []})
+    write_json(tmp_path / "data/supervisor/state.json", {})
+    write_json(tmp_path / "data/supervisor/question_queue.json", {})
+    write_json(tmp_path / "data/supervisor/collaboration.json", {
+        "supervisor_health": {
+            "A": {"status": "healthy", "preferred_recovery": "none"},
+            "B": {
+                "status": "missing_result",
+                "cause": "unknown",
+                "preferred_recovery": "check_automation_then_issue_action_single_writer",
+                "disable_supervisor": False,
+            },
+        },
+        "failure_patterns": [
+            {
+                "failure_pattern": "supervisor_b_result_write_failed",
+                "occurrences": 2,
+                "preferred_recovery": "issue_action_single_writer",
+                "disable_supervisor": False,
+            }
+        ],
+    })
+    write_json(tmp_path / "data/supervisor/ai-results/a.json", {
+        "supervisor": "A",
+        "processed_at": "2026-09-27T07:00:00+09:00",
+        "batch_id": "a",
+        "run_kind": "regular",
+        "observation_slots": [
+            "2026-09-27T06:40:00+09:00",
+            "2026-09-27T06:50:00+09:00",
+            "2026-09-27T07:00:00+09:00",
+        ],
+        "expected_observation_count": 3,
+        "received_observation_count": 3,
+        "missing_observation_slots": [],
+        "observation_window_complete": True,
+    })
+    write_json(tmp_path / "data/supervisor/ai-results/b.json", {
+        "supervisor": "B",
+        "processed_at": "2026-09-27T03:30:00+09:00",
+        "batch_id": "b",
+        "run_kind": "regular",
+        "observation_slots": [
+            "2026-09-27T03:10:00+09:00",
+            "2026-09-27T03:20:00+09:00",
+            "2026-09-27T03:30:00+09:00",
+        ],
+        "expected_observation_count": 3,
+        "received_observation_count": 3,
+        "missing_observation_slots": [],
+        "observation_window_complete": True,
+    })
+
+    status = module.build_status(datetime.fromisoformat("2026-09-27T07:15:00+09:00"))
+    card = next(x for x in status["cards"] if x["card_id"] == "supervisor-b-critical")
+    assert card["state"] == "수정 중"
+    assert card["owner"] == "A/B 상호복구"
+    assert card["preferred_recovery"] == "check_automation_then_issue_action_single_writer"
+    assert not any(x["id"].startswith("supervisor-b-") for x in status["user_actions"])
+    assert status["supervisor_health"]["B"]["status"] == "missing_result"
+    assert status["supervisor_failure_patterns"][0]["disable_supervisor"] is False
