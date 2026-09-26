@@ -481,6 +481,7 @@ def main() -> None:
         "macro_matrix": macro_matrix(market, risk),
         "risk_runtime": read_json(ROOT / "data" / "risk" / "runtime.json"),
         "health": read_json(ROOT / "data" / "health" / "latest.json"),
+        "operations": read_json(ROOT / "data" / "operations" / "status.json"),
         "regression": read_json(ROOT / "data" / "regression" / "latest.json"),
         "quarantine": read_json(ROOT / "data" / "regression" / "quarantine.json"),
         "docs_links": [
