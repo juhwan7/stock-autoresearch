@@ -7,6 +7,68 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "data/supervisor/latest-report.json"
 STATE = ROOT / "data/supervisor/state.json"
+ISSUES = ROOT / "data/supervisor/market-issues.json"
+
+def update_issue_lifecycle(result: dict) -> None:
+    """Persist explicit market issue state transitions without deleting history."""
+    store = json.loads(ISSUES.read_text(encoding="utf-8")) if ISSUES.exists() else {"issues": []}
+    issues = {str(x.get("issue_id")): x for x in store.get("issues", []) if x.get("issue_id")}
+    now = str(result.get("processed_at") or "")
+    for change in result.get("issue_lifecycle_updates") or []:
+        issue_id = str(change.get("issue_id") or "").strip()
+        title = str(change.get("title") or "").strip()
+        status = str(change.get("status") or "WATCHING").upper()
+        if not issue_id or not title:
+            continue
+        current = issues.get(issue_id)
+        if current is None:
+            current = {
+                "issue_id": issue_id,
+                "title": title,
+                "first_seen": change.get("event_time") or now,
+                "first_detected": now,
+                "promoted_at": now if status in {"ACTIVE", "ESCALATING"} else None,
+                "resolved_at": None,
+                "history": [],
+            }
+            issues[issue_id] = current
+        previous = current.get("status")
+        current.update({
+            "title": title,
+            "status": status,
+            "severity": change.get("severity", current.get("severity", "WATCH")),
+            "direction": change.get("direction", current.get("direction", "neutral")),
+            "last_seen": now,
+            "event_time": change.get("event_time") or current.get("event_time"),
+            "reason": change.get("reason") or current.get("reason"),
+            "evidence": change.get("evidence") or current.get("evidence", []),
+            "affected_assets": change.get("affected_assets") or current.get("affected_assets", []),
+            "invalidation_conditions": change.get("invalidation_conditions") or current.get("invalidation_conditions", []),
+        })
+        if status in {"ACTIVE", "ESCALATING"} and not current.get("promoted_at"):
+            current["promoted_at"] = now
+        if status == "RESOLVED":
+            current["resolved_at"] = change.get("resolved_at") or now
+            current["resolution_reason"] = change.get("resolution_reason") or change.get("reason")
+        elif previous == "RESOLVED" and status != "RESOLVED":
+            current["resolved_at"] = None
+            current["resolution_reason"] = None
+        if previous != status or change.get("note"):
+            current.setdefault("history", []).append({
+                "at": now,
+                "event_time": change.get("event_time"),
+                "from": previous,
+                "to": status,
+                "note": change.get("note") or change.get("reason") or "",
+            })
+            current["history"] = current["history"][-100:]
+    store["updated_at"] = now
+    store["issues"] = sorted(
+        issues.values(),
+        key=lambda x: (x.get("status") == "RESOLVED", str(x.get("last_seen") or "")),
+    )
+    ISSUES.write_text(json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
 
 def main() -> int:
     if len(sys.argv) != 2:
@@ -41,7 +103,7 @@ def main() -> int:
     if result.get("notify") is not True:
         raise SystemExit("Supervisor result must have notify=true")
     observation_ids = result.get("observation_ids") or []
-    REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    update_issue_lifecycle(result)\n    REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     state = json.loads(STATE.read_text(encoding="utf-8"))
     state["last_batch_id"] = result["batch_id"]
     state["last_processed_at"] = result["processed_at"]
