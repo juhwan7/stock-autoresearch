@@ -226,6 +226,8 @@ def _configure_apply_paths(module, tmp_path):
     module.NEWS_ISSUES = tmp_path / "issue-digest.json"
     module.RECENT_OBSERVATIONS = tmp_path / "recent.json"
     module.DISAGREEMENTS = tmp_path / "disagreements.json"
+    module.AI_RESULTS = tmp_path / "data/supervisor/ai-results"
+    module.AI_RESULTS.mkdir(parents=True, exist_ok=True)
     module.STATE.write_text("{}", encoding="utf-8")
 
 
