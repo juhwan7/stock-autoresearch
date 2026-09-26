@@ -131,3 +131,21 @@ footer{display:flex;justify-content:space-between;gap:12px;padding:12px 0 32px;c
 .issue-sources{display:flex;flex-direction:column;gap:7px}.issue-source{display:grid;grid-template-columns:90px 1fr;gap:10px;padding:9px 10px;border:1px solid #e1e7ef;border-radius:10px;background:#fff}.issue-source strong{font-size:10px}.issue-source span{font-size:10px;color:#6f7d91;line-height:1.45}
 @media(max-width:1050px){.issue-count-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.issue-controls{align-items:stretch;flex-direction:column}.issue-controls input{min-width:0;width:100%}.issue-detail>summary{grid-template-columns:1fr}.issue-summary-meta{justify-content:flex-start}.issue-summary-meta small{text-align:left}.issue-explain-grid,.issue-detail-grid{grid-template-columns:1fr}}
 @media(max-width:680px){.issue-main{width:min(100% - 20px,1700px)}.issue-count-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.issue-history-row{grid-template-columns:1fr}.issue-source{grid-template-columns:1fr}}
+
+
+/* Issue intelligence filters and impact badges */
+.issue-filter-stack{display:grid;gap:8px;min-width:min(680px,100%)}
+.issue-filter-stack>div{display:grid;grid-template-columns:46px minmax(0,1fr);gap:8px;align-items:center}
+.issue-filter-label{font-size:10px;font-weight:900;color:#748197}
+.issue-impact{display:inline-flex;align-items:center;padding:4px 7px;border-radius:999px;font-size:9px;font-weight:900;white-space:nowrap}
+.issue-impact.positive{background:#eef9f2;color:#176b43;border:1px solid #c9ead7}
+.issue-impact.negative{background:#fff1f3;color:#ad314b;border:1px solid #f0c3cc}
+.issue-impact.mixed{background:#fff8e8;color:#88610b;border:1px solid #eedda7}
+.issue-mini-head{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.issue-mini-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.issue-detail[data-impact="POSITIVE"]{box-shadow:inset 3px 0 0 #5fad7f}
+.issue-detail[data-impact="NEGATIVE"]{box-shadow:inset 3px 0 0 #d86a7d}
+.issue-detail[data-impact="MIXED"]{box-shadow:inset 3px 0 0 #d7ad4f}
+.issue-summary-meta span{white-space:nowrap}
+@media(max-width:1050px){.issue-filter-stack{min-width:0;width:100%}}
+@media(max-width:680px){.issue-filter-stack>div{grid-template-columns:1fr}.issue-mini-head,.issue-mini-meta{flex-direction:column}}
