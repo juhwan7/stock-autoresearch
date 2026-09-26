@@ -337,8 +337,112 @@ def macro_matrix(market: dict, risk: dict) -> dict:
     }
 
 
+
+def market_with_recent_session_fallback(
+    market: dict,
+    recent_sessions: dict,
+    runtime: dict,
+) -> dict:
+    """휴장/실시간 공백에도 최근 실제 거래일을 시장 컨텍스트로 유지한다."""
+    quantitative = market.get("quantitative", {}) if isinstance(market, dict) else {}
+    if market and quantitative.get("status") == "ok":
+        return market
+
+    korea = recent_sessions.get("korea", []) if isinstance(recent_sessions, dict) else []
+    if not isinstance(korea, list) or not korea:
+        return market if isinstance(market, dict) else {}
+
+    rows = [row for row in korea[:3] if isinstance(row, dict)]
+    if not rows:
+        return market if isinstance(market, dict) else {}
+
+    latest = rows[0]
+    flows = latest.get("flows_krw_100m", {}) if isinstance(latest, dict) else {}
+    foreign = flows.get("foreign")
+    institution = flows.get("institution")
+
+    if isinstance(foreign, (int, float)) and isinstance(institution, (int, float)):
+        if foreign > 0 and institution > 0:
+            flow_text = "외국인·기관 동반 순매수"
+        elif foreign < 0 and institution < 0:
+            flow_text = "외국인·기관 동반 순매도"
+        else:
+            flow_text = "외국인·기관 수급 엇갈림"
+    else:
+        flow_text = "외국인·기관 수급 미확인"
+
+    overview = {}
+    for label, key in (("KOSPI", "kospi"), ("KOSDAQ", "kosdaq")):
+        block = latest.get(key, {}) if isinstance(latest.get(key), dict) else {}
+        overview[label] = {
+            "index": block.get("close"),
+            "change_pct": block.get("change_pct"),
+            "rising": None,
+            "flat": None,
+            "falling": None,
+            "advance_ratio": None,
+        }
+
+    return {
+        "generated_at": recent_sessions.get("updated_at"),
+        "mode": "historical_fallback",
+        "source": {
+            "source": "recent_sessions",
+            "provider": recent_sessions.get("basis") or "verified_close",
+            "status": "historical_fallback",
+            "reason": runtime.get("reason")
+            or "실시간 시장 데이터가 없어 최근 실제 거래일 3개를 사용",
+            "market_overview": overview,
+            "flows_krw_100m": flows,
+            "session_dates": [row.get("date") for row in rows],
+            "historical_session_count": len(rows),
+        },
+        "quantitative": {
+            "status": "historical_fallback",
+            "stock_count": 0,
+            "historical_session_count": len(rows),
+            "historical_sessions": rows,
+            "reason": "휴장/장외 실시간 공백: 최근 3거래일 종가·지수·투자자 수급으로 분석 유지",
+        },
+        "strategy_stats": market.get("strategy_stats", {}) if isinstance(market, dict) else {},
+        "event_update": market.get("event_update", {}) if isinstance(market, dict) else {},
+        "interpretation": {
+            "regime_name": "휴장 · 최근 거래일 기준",
+            "confidence": "medium",
+            "one_line": (
+                f"{latest.get('date', '최근 거래일')} 기준 "
+                f"KOSPI {latest.get('kospi', {}).get('change_pct', '-')}%, "
+                f"KOSDAQ {latest.get('kosdaq', {}).get('change_pct', '-')}% · {flow_text}. "
+                "장중 분봉·Top50은 과거 원본이 보존된 범위에서만 사용합니다."
+            ),
+            "evidence": [
+                {
+                    "date": row.get("date"),
+                    "kospi_change_pct": (row.get("kospi") or {}).get("change_pct"),
+                    "kosdaq_change_pct": (row.get("kosdaq") or {}).get("change_pct"),
+                    "flows_krw_100m": row.get("flows_krw_100m", {}),
+                }
+                for row in rows
+            ],
+            "unknowns": ["과거 1분 Top50 전체 원본이 저장되지 않은 거래일은 분봉 재구성 불가"],
+        },
+        "historical_fallback": {
+            "active": True,
+            "basis": recent_sessions.get("basis"),
+            "updated_at": recent_sessions.get("updated_at"),
+            "sessions": rows,
+        },
+        "semantic_state": {},
+        "semantic_hash": "",
+        "ai_dirty": False,
+    }
+
+
 def main() -> None:
     market = read_json(ROOT / "data" / "market" / "latest.json")
+    recent_sessions = read_json(ROOT / "data" / "market" / "recent-sessions.json")
+    market_runtime = read_json(ROOT / "data" / "market" / "runtime.json")
+    market = market_with_recent_session_fallback(market, recent_sessions, market_runtime)
     risk = read_json(ROOT / "data" / "risk" / "latest.json")
     reports = recent_reports()
     status = {
@@ -368,9 +472,9 @@ def main() -> None:
         "help_needed": section_tail(ROOT / "docs" / "사용자_도움_필요.md"),
         "changelog": section_tail(ROOT / "docs" / "AI_변경기록.md"),
         "market": market,
-        "market_recent_sessions": read_json(ROOT / "data" / "market" / "recent-sessions.json"),
+        "market_recent_sessions": recent_sessions,
         "relative_strength": read_json(ROOT / "data" / "market" / "relative-strength.json"),
-        "market_runtime": read_json(ROOT / "data" / "market" / "runtime.json"),
+        "market_runtime": market_runtime,
         "toss_provider": toss_provider_status(),
         "risk": risk,
         "macro_matrix": macro_matrix(market, risk),
