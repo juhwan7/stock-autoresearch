@@ -129,6 +129,13 @@ def update_popular_reports(result: dict) -> None:
         candidate.update(item)
         if previous:
             candidate["views"] = max(int(previous.get("views") or 0), int(item.get("views") or 0))
+        analysis = candidate.get("analysis") if isinstance(candidate.get("analysis"), dict) else {}
+        if analysis.get("status") == "ready_source_read":
+            required_analysis = ("core", "evidence", "market_link", "countercheck", "source_url", "analyzed_at")
+            if any(not analysis.get(field) for field in required_analysis):
+                analysis = dict(analysis)
+                analysis["status"] = "pending_source_read"
+                candidate["analysis"] = analysis
         merged[key] = candidate
 
     items = sorted(
