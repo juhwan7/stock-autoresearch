@@ -1,9 +1,9 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-26T16:30:00+09:00
-> latest batch: supervisor-20260926T1630+0900
-> Supervisor: B · 상태 verification_pending
-> 이번 작업축: 0개
+> 자동 갱신: 2026-09-26T17:17:00+09:00
+> latest batch: recovery-a-20260926T1717+0900
+> Supervisor: A · 상태 verification_pending
+> 이번 작업축: 8개
 
 ## 시작할 때 읽기
 
@@ -14,10 +14,10 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
-- us-iran-hormuz-negotiation — 유가→인플레이션 기대→미 장기금리→한국 성장주/운송·화학 원가로 가장 직접적인 전달경로
-- us-china-summit-trade-followup — 회담 수사보다 정책 문서가 한국 반도체·수출주 전달경로를 결정
-- korea-import-restrictions-2026h1 — 241건/신규조사25건은 확인됐지만 휴장이라 가격반응 미검증
-- korea-mexico-summit-2026-09 — 정상회담 자체보다 후속 통상·수주 연결 확인 필요
+- us-iran-hormuz-negotiation — 호르무즈 통항과 군사상황이 유가·인플레이션 기대·미 장기금리·월요일 한국장 갭으로 직접 전달될 수 있다.
+- global-long-bond-selloff — 높은 미국 장기금리가 AI/성장주 위험선호의 지속성을 제약할 수 있어 유가와 함께 확인해야 한다.
+- us-china-summit-trade-followup — 정상회담 수사보다 월요일 USTR/백악관의 실제 관세·AI·희토류 정책 문서가 중요하다.
+- korea-import-restrictions-2026h1 — 241건·신규조사25건은 확인됐지만 휴장이라 가격·수급 반응은 다음 거래일 검증이 필요하다.
 
 ## 활성 시장 이슈
 - 이란 전쟁 여파로 EU 에너지 가격 위기 경고 — NEW
@@ -30,14 +30,16 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- news-cluster-source-independence — cluster에 origin_story_count/independent_primary_source_count를 추가해 publisher_count와 분리
-- issue-id-dedup-texas-dc — 기존 ACTIVE id를 canonical로 정하고 audit id history를 병합
+- verification_pending
+- verification_pending
+- verification_pending
+- 뉴스 discovery 신선도 저하 — 마지막 갱신 45.88092773333334분 전
 
 ## 최근 해결
 - 없음
 
 ## 운영 품질
-- operations: normal
+- operations: investigating
 - health: NOTICE
 - open questions: 24
 - 사용자 개입 필요: 0건
