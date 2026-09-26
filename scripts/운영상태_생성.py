@@ -41,6 +41,64 @@ def age_minutes(value: object, now: datetime) -> float | None:
     return None if dt is None else max(0.0, (now - dt).total_seconds() / 60)
 
 
+def sensor_slot_coverage(now: datetime, *, slot_count: int = 6) -> dict:
+    recent = read_json(ROOT / "data" / "supervisor" / "recent.json")
+    observations = recent.get("observations") or []
+    if not isinstance(observations, list):
+        observations = []
+
+    current_slot = now.replace(
+        minute=(now.minute // 10) * 10,
+        second=0,
+        microsecond=0,
+    )
+    end_slot = current_slot - timedelta(minutes=10)
+    expected = [
+        end_slot - timedelta(minutes=10 * offset)
+        for offset in range(slot_count - 1, -1, -1)
+    ]
+    expected_keys = {slot.isoformat() for slot in expected}
+
+    received: dict[str, dict] = {}
+    for item in observations:
+        if not isinstance(item, dict):
+            continue
+        stamp = parse_time(item.get("slot_at") or item.get("observed_at"))
+        if stamp is None:
+            continue
+        slot = stamp.replace(
+            minute=(stamp.minute // 10) * 10,
+            second=0,
+            microsecond=0,
+        )
+        key = slot.isoformat()
+        if key not in expected_keys:
+            continue
+        current = received.get(key)
+        current_delay = float((current or {}).get("slot_delay_seconds") or 999999)
+        candidate_delay = float(item.get("slot_delay_seconds") or 0)
+        if current is None or candidate_delay < current_delay:
+            received[key] = item
+
+    received_slots = [slot.isoformat() for slot in expected if slot.isoformat() in received]
+    missing_slots = [slot.isoformat() for slot in expected if slot.isoformat() not in received]
+    delays = [
+        float((received.get(slot) or {}).get("slot_delay_seconds") or 0)
+        for slot in received_slots
+    ]
+    ratio = round(len(received_slots) / slot_count, 3) if slot_count else 0.0
+    return {
+        "window_start": expected[0].isoformat() if expected else None,
+        "window_end": expected[-1].isoformat() if expected else None,
+        "expected_slot_count": slot_count,
+        "received_slot_count": len(received_slots),
+        "received_slots": received_slots,
+        "missing_slots": missing_slots,
+        "coverage_ratio": ratio,
+        "max_slot_delay_seconds": round(max(delays), 1) if delays else None,
+    }
+
+
 def latest_supervisors() -> dict[str, dict]:
     result: dict[str, dict] = {}
     folder = ROOT / "data" / "supervisor" / "ai-results"
@@ -81,6 +139,7 @@ def build_status(now: datetime | None = None) -> dict:
     state = read_json(ROOT / "data" / "supervisor" / "state.json")
     queue = read_json(ROOT / "data" / "supervisor" / "question_queue.json")
     memory_catalog = read_json(MEMORY_CATALOG)
+    slot_coverage = sensor_slot_coverage(now)
     site_state_path = ROOT / "site" / "data" / "상태.json"
 
     cards: list[dict] = []
@@ -115,6 +174,40 @@ def build_status(now: datetime | None = None) -> dict:
             cards.append(card(f"supervisor-{name.lower()}-stale", f"Supervisor {name} {round(age)}분 지연", "조사 중", "다음 사이클 누락 가능", now, owner="Recovery", verify_after="다음 30분 사이클"))
         else:
             cards.append(card(f"supervisor-{name.lower()}-ok", f"Supervisor {name} 정상", "완료", f"마지막 {round(age)}분 전", now, owner=name))
+
+    coverage_ratio = float(slot_coverage.get("coverage_ratio") or 0)
+    coverage_text = (
+        f"{slot_coverage.get('received_slot_count')}/{slot_coverage.get('expected_slot_count')} 슬롯"
+    )
+    if coverage_ratio >= 0.83:
+        cards.append(card(
+            "sensor-slot-coverage-ok",
+            "10분 센서 슬롯 커버리지 정상",
+            "완료",
+            coverage_text,
+            now,
+            owner="10분 센서",
+        ))
+    elif coverage_ratio >= 0.5:
+        cards.append(card(
+            "sensor-slot-coverage-degraded",
+            "10분 센서 슬롯 일부 누락",
+            "검증 대기",
+            coverage_text + " · 누락 " + ", ".join(slot_coverage.get("missing_slots") or []),
+            now,
+            owner="Recovery",
+            verify_after="다음 10분 슬롯",
+        ))
+    else:
+        cards.append(card(
+            "sensor-slot-coverage-poor",
+            "10분 센서 슬롯 커버리지 낮음",
+            "조사 중",
+            coverage_text + " · GitHub schedule/저장 경로 점검 필요",
+            now,
+            owner="Recovery",
+            verify_after="다음 Recovery 또는 10분 센서",
+        ))
 
     discovery_age = age_minutes(discovery.get("generated_at"), now)
     issue_age = age_minutes(issue_digest.get("updated_at"), now)
@@ -209,6 +302,7 @@ def build_status(now: datetime | None = None) -> dict:
             "last_batch_id": state.get("last_batch_id"),
             "last_processed_at": state.get("last_processed_at"),
         },
+        "sensor_slot_coverage": slot_coverage,
         "news": {
             "discovery_generated_at": discovery.get("generated_at"),
             "candidate_count": discovery.get("item_count"),
