@@ -1,9 +1,9 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-26T23:37:00+09:00
-> latest batch: supervisor-20260926T2330+0900-b37
-> Supervisor: B · 상태 verification_pending
-> 이번 작업축: 6개
+> 자동 갱신: 2026-09-27T00:09:11+09:00
+> latest batch: supervisor-20260927T0000+0900-a24
+> Supervisor: A · 상태 verification_pending
+> 이번 작업축: 7개
 
 ## 시작할 때 읽기
 
@@ -14,10 +14,10 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
-- 미·이란 공식 답변·호르무즈 실제 통항
-- 수입규제 241건의 KOTRA 원문·품목/국가 노출
-- 다음 거래 가능 시점 macro 실값
-- 월요일 USTR 공식 세부
+- 미·이란 공식 답변과 호르무즈 실제 통항
+- 한국 수입규제 241건 중 철강·금속 113건(46.9%) 노출과 다음 거래일 반응
+- 월요일 USTR 미중 무역협상 공식 세부
+- 00:00 센서 슬롯 누락 원인과 다음 10분 self-chain 연속성
 
 ## 활성 시장 이슈
 - 이란 전쟁 여파로 EU 에너지 가격 위기 경고 — NEW
@@ -30,8 +30,8 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- issue-digest-apply-stale — investigating
-- operations-status-stale — investigating
+- sensor-slot-0000-missing — investigating
+- issue-digest-apply-stale — verification_pending
 - macro-runtime-empty — verification_pending
 - 이슈 원장 갱신 지연 — 마지막 갱신 485.58845128333337분 전
 
