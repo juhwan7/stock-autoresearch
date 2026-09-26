@@ -20,6 +20,7 @@ def test_parse_kofia_main_normalizes_units():
     assert metrics["investor_deposit"]["value_krw_100m"] == 1009825.55
     assert metrics["credit_financing"]["change_krw_100m"] == -2363.17
     assert metrics["equity_fund_nav"]["value_krw_100m"] == 3921769.0
+    assert metrics["total_fund_nav"]["value_krw_100m"] == 15608006.0
 
 
 def test_build_payload_derives_ratios_and_history():
