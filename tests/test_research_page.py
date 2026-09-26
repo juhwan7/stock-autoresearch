@@ -17,9 +17,9 @@ DASHBOARD_SCRIPT = ROOT / "scripts" / "대시보드_생성.py"
 def test_research_sections_are_in_requested_order():
     html = RESEARCH_HTML.read_text(encoding="utf-8")
     headings = [
-        "최근 인기 증권 리포트 30개",
         "최신 AI 심층 리서치",
         "시장 이슈 관련 리서치",
+        "최근 인기 증권 리포트 30개",
         "새 공시",
         "프로젝트 최근 리포트",
         "리서치 입력 소스 상태",
