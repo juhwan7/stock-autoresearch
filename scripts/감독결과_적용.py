@@ -10,6 +10,7 @@ STATE = ROOT / "data/supervisor/state.json"
 ISSUES = ROOT / "data/supervisor/market-issues.json"
 RECENT_SESSIONS = ROOT / "data/market/recent-sessions.json"
 POPULAR_REPORTS = ROOT / "data/research/popular-reports.json"
+NEWS_ISSUES = ROOT / "data/news/issue-digest.json"
 
 def update_issue_lifecycle(result: dict) -> None:
     """Persist explicit market issue state transitions without deleting history."""
@@ -159,6 +160,65 @@ def update_popular_reports(result: dict) -> None:
     POPULAR_REPORTS.parent.mkdir(parents=True, exist_ok=True)
     POPULAR_REPORTS.write_text(json.dumps(next_store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+def update_news_issue_digest(result: dict) -> None:
+    payload = result.get("news_issue_digest")
+    if not isinstance(payload, dict):
+        return
+    incoming = payload.get("issues")
+    if not isinstance(incoming, list):
+        return
+
+    store = json.loads(NEWS_ISSUES.read_text(encoding="utf-8")) if NEWS_ISSUES.exists() else {"issues": []}
+    existing = {
+        str(item.get("issue_id")): item
+        for item in store.get("issues", [])
+        if isinstance(item, dict) and item.get("issue_id")
+    }
+    now = str(result.get("processed_at") or payload.get("updated_at") or "")
+
+    for item in incoming:
+        if not isinstance(item, dict):
+            continue
+        issue_id = str(item.get("issue_id") or "").strip()
+        title = str(item.get("title") or "").strip()
+        if not issue_id or not title:
+            continue
+        previous = existing.get(issue_id, {})
+        merged = dict(previous)
+        merged.update(item)
+        if not merged.get("first_detected"):
+            merged["first_detected"] = now
+        merged["last_updated"] = now
+        history = list(previous.get("history") or [])
+        before = str(previous.get("status") or "")
+        after = str(merged.get("status") or "")
+        if not previous:
+            history.append({"at": now, "from": None, "to": after or "WATCHING", "note": "first_detected"})
+        elif before != after:
+            history.append({"at": now, "from": before, "to": after, "note": str(item.get("change_reason") or "")})
+        merged["history"] = history[-80:]
+        existing[issue_id] = merged
+
+    def issue_rank(item: dict) -> tuple:
+        status_rank = {"ESCALATING": 0, "NEW": 1, "ACTIVE": 2, "WATCHING": 3, "EASING": 4, "RESOLVED": 5}
+        severity_rank = {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3}
+        return (
+            status_rank.get(str(item.get("status") or "").upper(), 9),
+            severity_rank.get(str(item.get("severity") or "").upper(), 9),
+            str(item.get("last_updated") or ""),
+        )
+
+    items = sorted(existing.values(), key=issue_rank)
+    active = [x for x in items if str(x.get("status") or "").upper() != "RESOLVED"]
+    resolved = [x for x in items if str(x.get("status") or "").upper() == "RESOLVED"]
+    store.update({k: v for k, v in payload.items() if k != "issues"})
+    store["updated_at"] = now
+    store["issues"] = (active + resolved)[:30]
+    store["max_issues"] = 30
+    NEWS_ISSUES.parent.mkdir(parents=True, exist_ok=True)
+    NEWS_ISSUES.write_text(json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         raise SystemExit("usage: python scripts/supervisor_result_apply.py <result.json>")
@@ -195,6 +255,7 @@ def main() -> int:
     update_issue_lifecycle(result)
     update_market_session_history(result)
     update_popular_reports(result)
+    update_news_issue_digest(result)
     REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     state = json.loads(STATE.read_text(encoding="utf-8"))
     state["last_batch_id"] = result["batch_id"]
