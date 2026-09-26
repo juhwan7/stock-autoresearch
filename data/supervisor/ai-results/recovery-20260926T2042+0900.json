@@ -1,0 +1,101 @@
+{
+  "batch_id": "recovery-20260926T2042+0900-b20",
+  "processed_at": "2026-09-26T20:42:42+09:00",
+  "notify": true,
+  "status": "verification_pending",
+  "summary": "20:30 Supervisor B 결과가 latest main에 없고 직전 B는 16:30으로 stale이다. 20:00 A canonical과 20:26 discovery/운영상태를 이어받아 B 구간을 안전 복구한다. 20:00 A가 1/3 관측만 사용했으므로 누락 슬롯을 과거 관측으로 채우거나 시장 상태를 새로 확정하지 않는다.",
+  "market_narrative": "한국 휴장 상태에서 핵심 전달경로는 미·이란/호르무즈→유가→미 장기금리이며, 미중 세부 합의는 공식 원문 확인 전 확정하지 않는다. 20:26 discovery는 다시 신선하지만 기사 재전송 수를 독립 근거 수로 보지 않는다. 20:00 A의 1/3 window 한계 때문에 이번 Recovery도 방향성 확정보다 연속성·데이터 품질 복구를 우선한다.",
+  "market_focus": [
+    "미·이란/호르무즈 공식 상태",
+    "유가·미 장기금리",
+    "미중 후속 공식문서",
+    "한국 수입규제",
+    "Supervisor B 및 10분 슬롯 연속성"
+  ],
+  "invalidation_checks": [
+    "미국 공식 수용과 호르무즈 정상통항이 확인되면 중동 위험 완화 후보",
+    "공식 거부·공격 재개와 유가/장기금리 동반 상승이면 위험 강화 후보",
+    "누락된 19:50/20:00/20:10 이후 canonical 슬롯이 반대 방향이면 현재 해석 재평가",
+    "미중 세부는 USTR/백악관 등 공식 문서가 국내 보도 세부를 확인하지 않으면 미확인 유지"
+  ],
+  "overnight_risks": [
+    "미·이란/호르무즈 주말 군사·협상 변화",
+    "Brent/WTI 및 미국 10·30년 금리",
+    "미중 후속 정책 문서",
+    "월요일 한국장 갭 및 수입규제 반응"
+  ],
+  "actions": [
+    "20:30 B 누락/stale 판정 후 recovery catch-up 수행",
+    "20:00 A canonical과 20:26 discovery를 사용하고 과거 슬롯 보충 금지",
+    "memory/catalog.json 20:00 갱신으로 90분 이내 정상 확인하여 장기기억 불필요 재생성 생략",
+    "동일 실패방법 반복 방지를 위해 기존 A feedback과 운영상태의 stale/slot 문제를 먼저 검토",
+    "고위험 권한·Secret·주문·자동매매 변경 없음"
+  ],
+  "changed_paths": [
+    "data/supervisor/ai-results/recovery-20260926T2042+0900.json"
+  ],
+  "next_checks": [
+    "정규 B가 다음 :30에 재개되는지",
+    "10분 센서가 3/3 canonical window를 회복하는지",
+    "canonical apply와 Telegram apply가 recovery를 정상 적용하는지",
+    "issue-digest 16:00 stale가 다음 정상 A/B apply에서 갱신되는지",
+    "독립스토리 추정치를 원기사/공식자료 표본으로 검증"
+  ],
+  "project_improvement_signals": [
+    "supervisor-b-continuity",
+    "canonical-window-missing-slots",
+    "issue-digest-staleness",
+    "news-origin-story-independence",
+    "recovery-apply-observability"
+  ],
+  "work_axes_reviewed": [
+    {
+      "axis": "supervisor_continuity",
+      "status": "recovery",
+      "finding": "20:30 B 누락, 직전 B 16:30"
+    },
+    {
+      "axis": "canonical_data_quality",
+      "status": "verification_pending",
+      "finding": "20:00 A는 1/3 window; 과거값 보충 금지"
+    },
+    {
+      "axis": "news_discovery",
+      "status": "recovered",
+      "finding": "20:26 discovery 신선, 후보 수집은 동작"
+    },
+    {
+      "axis": "issue_lifecycle",
+      "status": "stale",
+      "finding": "issue-digest는 16:00 이후 미갱신"
+    },
+    {
+      "axis": "long_term_memory",
+      "status": "healthy",
+      "finding": "memory/catalog.json 20:00, 90분 기준 내"
+    },
+    {
+      "axis": "ui_ux",
+      "status": "no_change",
+      "finding": "복구 배치에서 불필요한 UI 변경을 만들지 않음"
+    },
+    {
+      "axis": "safety_and_permissions",
+      "status": "healthy",
+      "finding": "주문/자동매매/Secret/OAuth/결제/고위험 권한 변경 없음"
+    }
+  ],
+  "feedback_to_other_supervisor": [
+    "다음 정규 B는 20:00 A의 1/3 window 한계를 먼저 반증하고 누락 슬롯을 과거값으로 채우지 말 것",
+    "20:26 discovery 회복과 10분 canonical 슬롯 회복을 구분해 검증할 것",
+    "issue-digest 16:00 stale 원인을 apply 경로에서 확인할 것",
+    "독립스토리 추정치를 공식/원기사 표본으로 검증할 것"
+  ],
+  "telegram_report": [
+    "20:30 B가 생성되지 않아 20:42 안전 복구를 수행했습니다.",
+    "20:00 A는 1/3 슬롯만 사용했으므로 누락 데이터를 과거값으로 채우지 않고 판단 확정을 보류했습니다.",
+    "뉴스 discovery는 20:26으로 회복됐지만 issue-digest는 16:00 상태라 다음 apply에서 갱신 여부를 확인해야 합니다.",
+    "장기기억은 20:00 갱신으로 정상 범위라 불필요하게 다시 만들지 않았습니다.",
+    "다음 핵심 검증은 정규 B 재개, 3/3 슬롯 회복, recovery canonical/Telegram apply 성공입니다."
+  ]
+}
