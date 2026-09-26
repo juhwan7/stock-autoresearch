@@ -198,6 +198,41 @@ async function load() {
     ? holidayRows.map(x => `${x.market === "KR" ? "한국" : x.market}: ${x.from}~${x.to} ${x.reason || "휴장"}`).join(" · ")
     : "휴장 정보 없음";
 
+  const popularReports = data.popular_reports || {};
+  const popularUpdated = $("popular-reports-updated");
+  const snapshotAt = ((popularReports.ranking_source || {}).snapshot_at) || popularReports.updated_at;
+  if (popularUpdated) popularUpdated.textContent = snapshotAt ? "기준 · " + relativeTime(snapshotAt) : "데이터 없음";
+
+  const popularItems = (popularReports.items || []).slice(0, 10);
+  const popularList = $("popular-report-list");
+  if (popularList) popularList.innerHTML = popularItems.length
+    ? popularItems.map((x) => {
+        const views = Number(x.views);
+        const viewsText = Number.isFinite(views) ? views.toLocaleString("ko-KR") + "회" : "조회수 미확인";
+        const url = x.report_url || ((popularReports.ranking_source || {}).url) || "#";
+        return `<a class="popular-report-card" href="${esc(url)}" target="_blank" rel="noreferrer">
+          <div class="popular-rank">#${esc(x.rank || "")}</div>
+          <div class="popular-report-main">
+            <div class="popular-report-meta"><span>${esc(x.company || "")}</span><span>${esc(x.broker || "")}</span><span>${esc(x.report_date || "")}</span></div>
+            <strong>${esc(x.title || "")}</strong>
+            <p>${esc(x.summary || "")}</p>
+            <div class="popular-report-foot"><span>${esc(x.theme || "")}</span><b>${esc(viewsText)}</b></div>
+          </div>
+        </a>`;
+      }).join("")
+    : "<p class='muted'>인기 리포트 데이터를 수집 중입니다.</p>";
+
+  const themeRows = (popularReports.theme_summary || []).slice(0, 6);
+  const themeBox = $("popular-theme-summary");
+  if (themeBox) themeBox.innerHTML = themeRows.length
+    ? themeRows.map((x) => `<div class="mini-row"><strong>${esc(x.theme || "")} · ${esc(x.count || 0)}건</strong><span>${esc(x.note || "")}</span></div>`).join("")
+    : "<p class='muted'>주제별 관심도를 계산 중입니다.</p>";
+
+  const popularSource = $("popular-research-source");
+  if (popularSource && (popularReports.ranking_source || {}).url) {
+    popularSource.href = popularReports.ranking_source.url;
+  }
+
   const supervisor = data.supervisor_latest || {};
   const discovery = data.discovery || {};
   const supervisorStatus = $("supervisor-status");
