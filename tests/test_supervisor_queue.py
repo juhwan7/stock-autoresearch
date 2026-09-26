@@ -389,3 +389,83 @@ def test_equal_quality_duplicate_slot_prefers_lower_delay():
         supervisor="B",
     )
     assert manifest["observation_ids"] == ["obs-1810", "obs-ontime", "obs-1830"]
+
+
+
+def test_observation_records_start_delay_trigger_and_ten_minute_samples(tmp_path):
+    write_json(
+        tmp_path / "data/providers/naver_batch/latest.json",
+        {
+            "generated_at": "2026-09-26T18:20:00+09:00",
+            "minute_samples_by_ticker": {
+                "005930": [
+                    {"time": f"18:{minute:02d}", "minute_trading_value": minute}
+                    for minute in range(9, 21)
+                ]
+            },
+        },
+    )
+    observation = build_observation(
+        tmp_path,
+        now=datetime(2026, 9, 26, 18, 21, 30, tzinfo=KST),
+        env={
+            "GITHUB_RUN_ID": "slot-delay",
+            "GITHUB_RUN_ATTEMPT": "1",
+            "GITHUB_EVENT_NAME": "workflow_dispatch",
+            "SENSOR_SLOT_AT": "2026-09-26T18:20:00+09:00",
+            "SENSOR_SLOT_SOURCE": "dispatch_input",
+            "SENSOR_SLOT_START_DELAY_SECONDS": "20.5",
+        },
+    )
+    assert observation["slot_start_delay_seconds"] == 20.5
+    assert observation["slot_delay_seconds"] == 90.0
+    assert observation["source"]["event_name"] == "workflow_dispatch"
+    samples = observation["public_batch_market"]["minute_samples_by_ticker"]["005930"]
+    assert len(samples) == 10
+    assert samples[0]["time"] == "18:11"
+    assert samples[-1]["time"] == "18:20"
+
+
+def test_equal_quality_duplicate_prefers_lower_start_delay_before_completion_delay():
+    observations = [
+        {
+            "observation_id": "obs-start-late",
+            "observed_at": "2026-09-26T18:21:00+09:00",
+            "slot_at": "2026-09-26T18:20:00+09:00",
+            "slot_start_delay_seconds": 180,
+            "slot_delay_seconds": 60,
+            "validation": {"status": "ok"},
+            "steps": {"market": "success"},
+        },
+        {
+            "observation_id": "obs-start-ontime",
+            "observed_at": "2026-09-26T18:24:00+09:00",
+            "slot_at": "2026-09-26T18:20:00+09:00",
+            "slot_start_delay_seconds": 20,
+            "slot_delay_seconds": 240,
+            "validation": {"status": "ok"},
+            "steps": {"market": "success"},
+        },
+        {
+            "observation_id": "obs-1810",
+            "observed_at": "2026-09-26T18:11:00+09:00",
+            "slot_at": "2026-09-26T18:10:00+09:00",
+            "validation": {"status": "ok"},
+        },
+        {
+            "observation_id": "obs-1830",
+            "observed_at": "2026-09-26T18:31:00+09:00",
+            "slot_at": "2026-09-26T18:30:00+09:00",
+            "validation": {"status": "ok"},
+        },
+    ]
+    manifest = build_supervisor_window(
+        observations,
+        processed_at=datetime(2026, 9, 26, 18, 30, tzinfo=KST),
+        supervisor="B",
+    )
+    assert manifest["observation_ids"] == [
+        "obs-1810",
+        "obs-start-ontime",
+        "obs-1830",
+    ]
