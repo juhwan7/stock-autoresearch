@@ -61,6 +61,9 @@ jobs:
           echo "path=$RESULT" >> "$GITHUB_OUTPUT"
       - name: Apply result to canonical state
         run: python scripts/감독결과_적용.py "${{ steps.result.outputs.path }}"
+      - name: Archive issue lifecycle
+        run: python scripts/이슈원장_아카이브.py "${{ steps.result.outputs.path }}"
+
       - name: Validate
         run: |
           python -m py_compile scripts/감독결과_적용.py scripts/감독결과_알림.py
@@ -80,6 +83,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/supervisor/latest-report.json data/supervisor/state.json data/supervisor/market-issues.json data/market/recent-sessions.json data/research/popular-reports.json data/news/issue-digest.json
+          if [ -d data/news/archive ]; then git add data/news/archive; fi
           if git diff --cached --quiet; then
             echo "No canonical changes"
           else
