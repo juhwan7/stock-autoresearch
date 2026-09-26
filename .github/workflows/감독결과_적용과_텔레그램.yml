@@ -161,7 +161,11 @@ jobs:
               assert source["batch_id"] == r["batch_id"] == s["last_batch_id"]
               assert r["processed_at"] == s["last_processed_at"]
               assert r["notify"] is True
-              print("Supervisor result and canonical state verified")
+              collaboration = json.loads(Path("data/supervisor/collaboration.json").read_text(encoding="utf-8"))
+              assert collaboration.get("schema_version") == 1
+              assert collaboration.get("last_turn", {}).get("batch_id") == source["batch_id"]
+              assert isinstance(collaboration.get("incidents"), list)
+              print("Supervisor result, canonical state and collaboration state verified")
           assert result_path.name == f'{source["batch_id"]}.json'
           PY
 
@@ -171,7 +175,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "${{ steps.result.outputs.path }}"
-          git add data/supervisor/latest-report.json data/supervisor/state.json data/supervisor/market-issues.json data/market/recent-sessions.json data/research/popular-reports.json data/news/issue-digest.json
+          git add data/supervisor/latest-report.json data/supervisor/state.json data/supervisor/collaboration.json data/supervisor/market-issues.json data/market/recent-sessions.json data/research/popular-reports.json data/news/issue-digest.json
           if [ -f data/supervisor/latest-test-report.json ]; then git add data/supervisor/latest-test-report.json; fi
           if [ -f data/supervisor/disagreements.json ]; then git add data/supervisor/disagreements.json; fi
           if [ -d data/news/archive ]; then git add data/news/archive; fi
