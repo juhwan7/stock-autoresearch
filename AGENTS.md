@@ -167,6 +167,16 @@ python -m autoresearch risk-intel --mode dry-run
 외부 서비스 신규 연결도 실제 연구 병목을 해결한다면 설계·구현 후보에 포함한다. 인증 없이 준비 가능한 코드·테스트·문서는 먼저 만들 수 있다. API Key/Secret/OAuth/결제/GitHub 권한처럼 사용자 계정 승인이 필요한 단계에서는 서비스명·자격증명 이름·최소 권한·용도·비용 여부·설정 위치를 명시해 사용자에게 요청하고, 승인/등록 뒤 검증을 계속한다. 비밀 값은 저장소·Issue·로그에 기록하지 않는다.\n\n프로젝트 관리 AI는 승인된 외부 연결을 이후 일반 기능처럼 Health/회귀검증/실패복구 대상으로 관리한다. 서비스 장애나 API 변경이 발생하면 fallback 또는 교체 후보를 조사한다. 주문·송금·결제 실행 권한은 자동 확장 대상에서 제외한다.
 
 
+### 뉴스 이슈 원장 연속성
+
+정규 A/B Supervisor는 최신 `data/discovery/latest.json`과 `data/news/issue-digest.json`을 함께 읽는다.
+
+- discovery가 실제 기사 입력을 확보했고(`item_count > 0`) 새 기사 또는 의미 있는 상태 변화가 있으면 결과 JSON의 `news_issue_digest`를 생략하지 않는다.
+- `news_issue_digest.issues`에는 새 사건뿐 아니라 기존 사건의 강화·완화·해소처럼 실제로 바뀐 항목을 포함한다. apply가 `issue_id` 기준으로 기존 history와 병합한다.
+- discovery 파일의 생성시각만 최신이고 뉴스 소스가 실패했거나 `item_count=0`이면 이를 정상 뉴스 수집으로 보지 않는다. 이 경우 digest timestamp를 억지로 전진시키지 말고 provider 장애를 `project_improvement_signals`과 `next_checks`에 남긴다.
+- 최신 discovery에 의미 있는 새 입력이 있는데 정규 Supervisor 결과에 `news_issue_digest`가 없으면 해당 사이클은 뉴스 lifecycle 미완료로 간주한다.
+- 과거 digest를 그대로 복사하거나 timestamp만 바꾸는 방식으로 freshness를 만들지 않는다.
+
 ### 공급자 누락 선제 대응
 
 Toss가 연결되어 있다는 사실만으로 데이터가 완전하다고 가정하지 않는다. 거래일 장중에는 Toss 결과를 Naver 공개 배치, 사용 가능한 Kiwoom/KRX 등 독립 경로와 비교한다.
