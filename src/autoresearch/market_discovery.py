@@ -74,7 +74,8 @@ TOPIC_RELEVANCE_TERMS: dict[str, tuple[str, ...]] = {
 GENERAL_MARKET_RELEVANCE_TERMS = (
     "증시","주가","금리","국채","환율","달러","유가","원유","관세","무역","수출","공시","수주","계약",
     "반도체","AI","데이터센터","전력","원전","방산","조선","바이오","제약","정상회담","제재","휴전",
-    "전쟁","공격","미사일","정전","파업","항만","공급망","인플레이션","고용","중앙은행","연준","BOJ","ECB",
+    "전쟁","공격","폭격","미사일","정전","파업","항만","공급망","인플레이션","고용","중앙은행","연준","BOJ","ECB",
+    "협정","협상","투자","수입규제","수출통제","국빈","순방",
 )
 DYNAMIC_QUERY_STOPWORDS = {"대통령","가능성","계획","거부","7일","재개","선거","진전","없이","찾은","관련","오늘","내일"}
 
@@ -85,7 +86,9 @@ def is_market_relevant_news_item(title: str, topic: str) -> bool:
         return False
     if topic.startswith("dynamic:"):
         term = topic.split(":", 1)[1].strip()
-        return bool(term and term.lower() in text.lower())
+        if not term or term.lower() not in text.lower():
+            return False
+        return any(context.lower() in text.lower() for context in GENERAL_MARKET_RELEVANCE_TERMS)
     terms = TOPIC_RELEVANCE_TERMS.get(topic, GENERAL_MARKET_RELEVANCE_TERMS)
     return any(term.lower() in text.lower() for term in terms)
 
