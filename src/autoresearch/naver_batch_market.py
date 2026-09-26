@@ -14,6 +14,7 @@ from typing import Any
 KST = timezone(timedelta(hours=9))
 LATEST = Path("data/providers/naver_batch/latest.json")
 HISTORY = Path("data/providers/naver_batch/history.json")
+SESSION_ARCHIVE = Path("data/providers/naver_batch/sessions")
 USER_AGENT = "Mozilla/5.0 (compatible; StockAutoResearch/1.0; +https://github.com/juhwan7/stock-autoresearch)"
 
 
@@ -516,6 +517,30 @@ def build_interval_rows(
     return rows, elapsed_minutes
 
 
+
+def archive_session_snapshot(
+    root: Path,
+    snapshot: dict[str, Any],
+    now: datetime,
+    *,
+    keep: int = 5,
+) -> str | None:
+    """실제 거래가 확인된 날의 최신 6분 시장 스냅샷을 날짜별로 보존한다."""
+    if not snapshot.get("ranking_fresh_today"):
+        return None
+    if not snapshot.get("tracked_universe"):
+        return None
+
+    folder = root / SESSION_ARCHIVE
+    folder.mkdir(parents=True, exist_ok=True)
+    path = folder / (now.astimezone(KST).strftime("%Y-%m-%d") + ".json")
+    _write_json(path, snapshot)
+
+    files = sorted(folder.glob("????-??-??.json"), reverse=True)
+    for old in files[max(1, keep):]:
+        old.unlink(missing_ok=True)
+    return str(path.relative_to(root))
+
 def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict[str, Any]:
     now = now or datetime.now(KST)
     if now.tzinfo is None:
@@ -709,6 +734,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
         ],
     }
     _write_json(latest_path, snapshot)
+    session_archive = archive_session_snapshot(root, snapshot, now)
 
     history = _read_json(history_path)
     snapshots = history.get("snapshots", [])
@@ -751,4 +777,5 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
         "valid_interval_count": len(valid_rows),
         "elapsed_minutes": elapsed_minutes,
         "latest": str(LATEST),
+        "session_archive": session_archive,
     }
