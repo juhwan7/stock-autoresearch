@@ -1,8 +1,8 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-26T20:42:42+09:00
-> latest batch: recovery-20260926T2042+0900-b20
-> Supervisor: Recovery · 상태 verification_pending
+> 자동 갱신: 2026-09-26T22:07:00+09:00
+> latest batch: supervisor-20260926T2207+0900-a22
+> Supervisor: A · 상태 verification_pending
 > 이번 작업축: 7개
 
 ## 시작할 때 읽기
@@ -14,11 +14,10 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
-- 미·이란/호르무즈 공식 상태
-- 유가·미 장기금리
-- 미중 후속 공식문서
-- 한국 수입규제
-- Supervisor B 및 10분 슬롯 연속성
+- us-iran-hormuz-negotiation — 유가→인플레이션 기대→미 장기금리→Nasdaq/한국 성장주 전달경로
+- us-yields-oil-growth — AI 위험선호 지속 여부를 결정할 핵심 상쇄 변수
+- us-china-trade-truce — 센서의 300억달러 관세우대·AI 대화 보도는 공식 세부문서 확인 전 확정 금지
+- korea-import-restrictions-2026h1 — 뉴스는 확산됐지만 휴장이라 가격반응 미검증
 
 ## 활성 시장 이슈
 - 이란 전쟁 여파로 EU 에너지 가격 위기 경고 — NEW
@@ -31,11 +30,10 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- supervisor-b-continuity
-- canonical-window-missing-slots
-- issue-digest-staleness
-- news-origin-story-independence
-- recovery-apply-observability
+- canonical-window-recovery — verification_pending
+- macro-runtime-empty — investigating
+- discovery-source-degradation — investigating
+- news-origin-story-independence — verification_pending
 - Supervisor B 237분 정지 — 이슈 상태가 오래될 수 있음
 - 10분 센서 슬롯 커버리지 낮음 — 1/6 슬롯 · GitHub schedule/저장 경로 점검 필요
 - 뉴스 discovery 신선도 저하 — 마지막 갱신 41.55545893333333분 전
