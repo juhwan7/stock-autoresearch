@@ -187,6 +187,29 @@ def update_news_issue_digest(result: dict) -> None:
         previous = existing.get(issue_id, {})
         merged = dict(previous)
         merged.update(item)
+
+        # 같은 사건의 후속 기사/공식자료는 URL 기준으로 합치고 중복을 제거한다.
+        source_map: dict[str, dict] = {}
+        for source in list(previous.get("sources") or []) + list(item.get("sources") or []):
+            if not isinstance(source, dict):
+                continue
+            key = str(source.get("url") or "").strip() or (
+                str(source.get("publisher") or "") + "|" + str(source.get("title") or "")
+            )
+            if key:
+                source_map[key] = source
+        if source_map:
+            merged["sources"] = list(source_map.values())[-60:]
+            merged["source_count"] = len({
+                str(source.get("publisher") or source.get("url") or "")
+                for source in merged["sources"]
+                if source.get("publisher") or source.get("url")
+            })
+            if not item.get("article_count"):
+                merged["article_count"] = max(
+                    int(previous.get("article_count") or 0),
+                    len(merged["sources"]),
+                )
         if not merged.get("first_detected"):
             merged["first_detected"] = now
         merged["last_updated"] = now
@@ -199,8 +222,23 @@ def update_news_issue_digest(result: dict) -> None:
         elif before != after:
             merged["status_changed_at"] = now
             history.append({"at": now, "from": before, "to": after, "note": str(item.get("change_reason") or "")})
-        elif not merged.get("status_changed_at"):
-            merged["status_changed_at"] = previous.get("last_updated") or previous.get("first_detected") or now
+        else:
+            changed_update = (
+                str(item.get("latest_update") or "").strip()
+                and str(item.get("latest_update") or "").strip() != str(previous.get("latest_update") or "").strip()
+            ) or (
+                str(item.get("summary") or "").strip()
+                and str(item.get("summary") or "").strip() != str(previous.get("summary") or "").strip()
+            )
+            if changed_update:
+                history.append({
+                    "at": now,
+                    "from": before or after or "WATCHING",
+                    "to": after or before or "WATCHING",
+                    "note": "추가 소식 · " + str(item.get("latest_update") or item.get("change_reason") or "내용 갱신"),
+                })
+            if not merged.get("status_changed_at"):
+                merged["status_changed_at"] = previous.get("last_updated") or previous.get("first_detected") or now
 
         reference = merged.get("event_time") or merged.get("first_detected") or now
         try:
