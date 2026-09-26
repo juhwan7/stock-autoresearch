@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from autoresearch.naver_batch_market import (
     KST,
+    archive_session_snapshot,
     build_daily_tracked_universe,
     build_interval_rows,
     calibrate_minute_samples,
@@ -210,3 +211,44 @@ def test_stale_same_day_universe_is_not_carried_forward():
     }
     tracked = build_daily_tracked_universe([], previous, now)
     assert tracked == []
+
+
+def test_archive_session_snapshot_keeps_only_recent_actual_sessions(tmp_path):
+    for day in [21, 22, 23, 28, 29, 30]:
+        now = datetime(2026, 9, day, 15, 30, tzinfo=KST)
+        snapshot = {
+            "generated_at": now.isoformat(),
+            "ranking_fresh_today": True,
+            "tracked_universe": [{"ticker": "005930"}],
+            "current_top50": [{"ticker": "005930", "current_rank": 1}],
+            "stocks": [{"ticker": "005930", "day_return_pct": 1.0}],
+            "minute_samples_by_ticker": {"005930": [{"time": "15:29"}]},
+        }
+        archive_session_snapshot(tmp_path, snapshot, now, keep=5)
+
+    folder = tmp_path / "data/providers/naver_batch/sessions"
+    files = sorted(x.name for x in folder.glob("*.json"))
+    assert files == [
+        "2026-09-22.json",
+        "2026-09-23.json",
+        "2026-09-28.json",
+        "2026-09-29.json",
+        "2026-09-30.json",
+    ]
+    saved = json.loads((folder / "2026-09-30.json").read_text(encoding="utf-8"))
+    assert saved["current_top50"][0]["ticker"] == "005930"
+
+
+def test_archive_session_snapshot_ignores_holiday_stale_ranking(tmp_path):
+    now = datetime(2026, 9, 26, 15, 30, tzinfo=KST)
+    result = archive_session_snapshot(
+        tmp_path,
+        {
+            "generated_at": now.isoformat(),
+            "ranking_fresh_today": False,
+            "tracked_universe": [],
+        },
+        now,
+    )
+    assert result is None
+    assert not (tmp_path / "data/providers/naver_batch/sessions").exists()
