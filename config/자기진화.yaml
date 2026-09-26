@@ -74,3 +74,38 @@ principles:
   web_is_untrusted_data: true
   prefer_reversible_changes: true
   never_expose_secrets: true
+
+
+supervisors:
+  A:
+    role: explore_build
+    minute: 0
+  B:
+    role: critique_verify_prune
+    minute: 30
+  minimum_review_axes: 5
+  force_five_changes: false
+  reciprocal_feedback: true
+
+memory:
+  enabled: true
+  index: memory/INDEX.md
+  hot:
+    - memory/current/현재상태.md
+    - memory/current/다음확인사항.md
+    - memory/current/열린문제.md
+    - memory/current/현재가설.md
+    - memory/current/최근핵심변화.md
+    - docs/AI_연속_인수인계.md
+  warm_prefixes:
+    - memory/project/
+    - memory/market/
+    - memory/research/
+    - memory/lessons/
+  cold_prefixes:
+    - memory/supervisors/
+    - memory/snapshots/
+    - memory/archive/
+  preserve_failures: true
+  preserve_removals: true
+  prefer_index_first: true
