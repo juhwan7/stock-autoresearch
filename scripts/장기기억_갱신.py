@@ -6,6 +6,8 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
 
+from autoresearch.supervisor_result import infer_run_kind
+
 ROOT = Path(__file__).resolve().parents[1]
 MEMORY = ROOT / "memory"
 CURRENT = MEMORY / "current"
@@ -25,6 +27,16 @@ def read_json(path: Path) -> dict[str, Any]:
     except (OSError, json.JSONDecodeError):
         return {}
     return value if isinstance(value, dict) else {}
+
+
+def latest_regular_report() -> dict[str, Any]:
+    rows: list[tuple[str, dict[str, Any]]] = []
+    for path in AI_RESULTS.glob("*.json"):
+        item = read_json(path)
+        if infer_run_kind(item) != "regular":
+            continue
+        rows.append((str(item.get("processed_at") or ""), item))
+    return max(rows, key=lambda row: row[0])[1] if rows else {}
 
 
 def as_list(value: Any) -> list[Any]:
@@ -410,8 +422,18 @@ def catalog(report: dict[str, Any]) -> None:
 
 def main() -> int:
     report = read_json(REPORT)
+    if infer_run_kind(report) != "regular":
+        regular = latest_regular_report()
+        if not regular:
+            print("장기기억 갱신 건너뜀: test/Recovery만 있고 정규 A/B 결과가 없음")
+            return 0
+        print(
+            "장기기억 HOT 상태는 test/Recovery가 아닌 최신 정규 A/B 결과를 사용:",
+            regular.get("batch_id"),
+        )
+        report = regular
     if not report:
-        print("장기기억 갱신 건너뜀: canonical Supervisor 결과 없음")
+        print("장기기억 갱신 건너뜀: 정규 Supervisor 결과 없음")
         return 0
 
     operations = read_json(OPERATIONS)

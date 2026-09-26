@@ -263,7 +263,7 @@ Supervisor의 GitHub 쓰기 요청 하나가 실패하거나 실행 전 안전�
 - 확인: `data/news/issue-digest.json`은 센서가 직접 쓰지 않고 정규 Supervisor 결과의 `news_issue_digest`를 `scripts/감독결과_적용.py`가 병합할 때 갱신된다. 18:00 이후 정규 A 결과들이 이 필드를 생략해 16:00에서 멈췄다.
 - 수정: 건강한 discovery에 새 기사가 있는데 정규 A/B가 `news_issue_digest`를 생략하면 apply가 validation warning과 `verification_pending`을 남긴다. AGENTS에도 같은 계약을 추가했다.
 - 수정: recovery/catch-up 결과는 canonical 보고서는 갱신할 수 있어도 정규 `last_a_window`/`last_b_window`를 전진시키지 못하도록 apply를 제한했다.
-- macro: `data/macro/current.json`과 risk runtime은 빈 정상값이 아니라 `source_mode=unavailable`, 원인 `6분 sensor에 연결된 실시간 매크로 provider가 없음`을 명시한다. 과거값으로 보충하지 않는다.
+- macro: `data/macro/current.json`과 risk runtime은 빈 정상값이 아니라 `source_mode=unavailable`, 원인 `10분 sensor에 연결된 실시간 매크로 provider가 없음`을 명시한다. 과거값으로 보충하지 않는다.
 - 검증 대기: 다음 정규 A/B가 실제 `news_issue_digest`를 포함해 원장을 갱신하는지, 정규 B 성공 후에만 `last_b_window`가 이동하는지 확인한다.
 
 
@@ -276,3 +276,18 @@ Supervisor의 GitHub 쓰기 요청 하나가 실패하거나 실행 전 안전�
 - `issue_id`, 내부 오류 코드, change_id 같은 개발자용 식별자는 기본 화면 제목·요약으로 사용하지 않는다. 꼭 필요하면 `개발자용 원본 정보` 접힘 영역에 둔다.
 - 페이지 eyebrow/kicker와 일반 소제목은 고유명사·표준 약어(AI, KOSPI, KOSDAQ, Nasdaq, S&P 500, DART, CPI, FOMC, USTR, NXT 등)를 제외하고 한국어를 기본으로 한다.
 - 새 상세보기 렌더러를 추가할 때는 실제 Supervisor/issue/risk/operations 데이터의 중첩 객체를 테스트해 원시 JSON과 영문 enum이 다시 노출되지 않는지 회귀검증한다.
+
+
+## Supervisor 결과 종류와 정규 A/B 연속성
+
+Supervisor 결과는 시장 정규 사이클과 진단용 결과를 구분한다.
+
+- 권장 필드 `run_kind`: `regular` / `test` / `recovery`.
+- 새 정규 A/B 결과는 가능하면 `run_kind=regular`을 명시한다.
+- writer E2E, Telegram E2E, format test 등은 `run_kind=test`로 저장한다.
+- Recovery/catch-up은 `run_kind=recovery`로 저장한다.
+- 과거 파일에 `run_kind`가 없으면 역할, 정규 3슬롯 window, test action/summary 등을 함께 사용해 호환 판정한다. 파일명 하나만으로 판정하지 않는다.
+- A/B liveness, `last_a_window`/`last_b_window`, 상호 피드백 선행 결과는 **정규 regular 결과만** 사용한다.
+- test/E2E는 writer·Telegram 경로를 검증할 수 있지만 시장 canonical, 이슈 원장, A/B 피드백 연속성을 전진시키지 않는다.
+- Recovery는 별도 복구 이력으로 남기며 정규 A/B 성공으로 가장하지 않는다.
+- README에는 분 단위 stale·사용자 조치 상세를 자동 삽입하지 않는다. 실시간 상태는 GitHub Pages `시스템`, `data/operations/status.json`, `docs/운영_칸반.md`, 필요 시 Telegram이 담당한다.

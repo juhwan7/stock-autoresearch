@@ -17,8 +17,12 @@ ISSUE_NUMBER = 1
 
 
 def read_report() -> dict[str, Any]:
+    requested = os.environ.get("SUPERVISOR_RESULT_PATH", "").strip()
+    path = Path(requested) if requested else REPORT_PATH
+    if requested and not path.is_absolute():
+        path = ROOT / path
     try:
-        value = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+        value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return {}
     return value if isinstance(value, dict) else {}

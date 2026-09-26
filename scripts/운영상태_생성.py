@@ -5,6 +5,8 @@ import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from autoresearch.supervisor_result import infer_run_kind, regular_window_complete
+
 ROOT = Path(__file__).resolve().parents[1]
 KST = timezone(timedelta(hours=9))
 OUT = ROOT / "data" / "operations" / "status.json"
@@ -131,10 +133,13 @@ def sensor_slot_coverage(now: datetime, *, slot_count: int = 6) -> dict:
 
 
 def latest_supervisors() -> dict[str, dict]:
+    """Return only real regular A/B runs; test/E2E/Recovery never count as liveness."""
     result: dict[str, dict] = {}
     folder = ROOT / "data" / "supervisor" / "ai-results"
     for path in folder.glob("*.json"):
         data = read_json(path)
+        if infer_run_kind(data) != "regular":
+            continue
         supervisor = str(data.get("supervisor") or "").upper()
         if supervisor not in {"A", "B"}:
             continue
@@ -145,6 +150,11 @@ def latest_supervisors() -> dict[str, dict]:
                 "batch_id": data.get("batch_id"),
                 "status": data.get("status"),
                 "path": str(path.relative_to(ROOT)),
+                "run_kind": "regular",
+                "window_complete": regular_window_complete(data),
+                "expected_observation_count": data.get("expected_observation_count", 3),
+                "received_observation_count": data.get("received_observation_count"),
+                "missing_observation_slots": data.get("missing_observation_slots") or [],
             }
     return result
 
@@ -202,9 +212,22 @@ def build_status(now: datetime | None = None) -> dict:
                 "verify": "70분 이내의 새 batch 확인",
             })
         elif age > 70:
-            cards.append(card(f"supervisor-{name.lower()}-stale", f"Supervisor {name} {round(age)}분 지연", "조사 중", "다음 사이클 누락 가능", now, owner="Recovery", verify_after="다음 30분 사이클"))
+            cards.append(card(f"supervisor-{name.lower()}-stale", f"Supervisor {name} {round(age)}분 지연", "조사 중", "다음 정규 사이클 누락 가능", now, owner="Recovery", verify_after="다음 30분 사이클"))
+        elif not row.get("window_complete"):
+            expected = int(row.get("expected_observation_count") or 3)
+            received = row.get("received_observation_count")
+            received_text = "미확인" if received is None else str(received)
+            cards.append(card(
+                f"supervisor-{name.lower()}-window-incomplete",
+                f"Supervisor {name} 정규 window 검증 대기",
+                "검증 대기",
+                f"최근 정규 결과 {received_text}/{expected} 슬롯 · 누락 슬롯은 과거값으로 보충하지 않음",
+                now,
+                owner=name,
+                verify_after="다음 정규 A/B 사이클",
+            ))
         else:
-            cards.append(card(f"supervisor-{name.lower()}-ok", f"Supervisor {name} 정상", "완료", f"마지막 {round(age)}분 전", now, owner=name))
+            cards.append(card(f"supervisor-{name.lower()}-ok", f"Supervisor {name} 정상", "완료", f"마지막 정규 실행 {round(age)}분 전 · 3/3 window", now, owner=name))
 
     coverage_ratio = float(slot_coverage.get("coverage_ratio") or 0)
     coverage_text = (
@@ -379,31 +402,8 @@ def render_kanban(status: dict) -> str:
 
 
 def update_readme(status: dict) -> None:
-    try:
-        text = README.read_text(encoding="utf-8")
-    except OSError:
-        return
-    actions = status.get("user_actions") or []
-    if actions:
-        body = ["## 사용자 확인 필요", ""]
-        for item in actions:
-            body += [
-                f"- **{item.get('problem')}**",
-                f"  - 영향: {item.get('impact')}",
-                f"  - AI가 시도한 것: {item.get('attempted')}",
-                f"  - 자동 해결 불가 이유: {item.get('why_blocked')}",
-                f"  - 사용자가 할 일: {item.get('action')}",
-                f"  - 해결 확인: {item.get('verify')}",
-            ]
-    else:
-        body = ["## 사용자 확인 필요", "", "- 현재 사람이 직접 처리해야 하는 필수 항목은 없습니다."]
-    block = README_START + "\n" + "\n".join(body) + "\n" + README_END
-    if README_START in text and README_END in text:
-        text = re.sub(re.escape(README_START) + r".*?" + re.escape(README_END), block, text, flags=re.S)
-    else:
-        insert_at = text.find("\n## 바로가기")
-        text = (text[:insert_at] + "\n\n" + block + "\n" + text[insert_at:]) if insert_at >= 0 else text + "\n\n" + block + "\n"
-    README.write_text(text, encoding="utf-8")
+    """README는 프로젝트 소개 문서다. 실시간 장애 상세는 시스템/운영 Kanban에서만 표시한다."""
+    return None
 
 
 def main() -> None:
@@ -411,7 +411,6 @@ def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(status, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     KANBAN.write_text(render_kanban(status), encoding="utf-8")
-    update_readme(status)
     print(json.dumps({"status": status["status"], "cards": len(status["cards"]), "user_actions": len(status["user_actions"])}, ensure_ascii=False))
 
 

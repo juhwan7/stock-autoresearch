@@ -122,6 +122,7 @@ def test_news_issue_digest_caps_at_100_and_tracks_status_change(tmp_path):
 def test_main_recovers_missing_changed_paths_without_blocking_apply(tmp_path, monkeypatch):
     module = load_module()
     module.REPORT = tmp_path / "latest-report.json"
+    module.TEST_REPORT = tmp_path / "latest-test-report.json"
     module.STATE = tmp_path / "state.json"
     module.ISSUES = tmp_path / "market-issues.json"
     module.RECENT_SESSIONS = tmp_path / "recent-sessions.json"
@@ -133,8 +134,10 @@ def test_main_recovers_missing_changed_paths_without_blocking_apply(tmp_path, mo
     result_path.write_text(
         json.dumps(
             {
-                "batch_id": "supervisor-test",
+                "batch_id": "supervisor-20260926T1500+0900",
                 "processed_at": "2026-09-26T15:00:00+09:00",
+                "supervisor": "A",
+                "run_kind": "regular",
                 "notify": True,
                 "summary": ["변화 적음"],
                 "actions": ["검증"],
@@ -450,3 +453,57 @@ def test_feedback_handoff_requires_outgoing_feedback_for_regular_supervisor():
     assert handoff["outgoing_recorded"] is False
     assert handoff["complete"] is False
     assert result["status"] == "verification_pending"
+
+
+def test_e2e_result_is_isolated_from_regular_canonical_state(tmp_path, monkeypatch):
+    module = load_module()
+    _configure_apply_paths(module, tmp_path)
+    module.RECENT_OBSERVATIONS.write_text(
+        json.dumps(_window_observations(), ensure_ascii=False),
+        encoding="utf-8",
+    )
+    canonical = {
+        "batch_id": "supervisor-20260926T1800+0900",
+        "processed_at": "2026-09-26T18:00:00+09:00",
+        "supervisor": "A",
+        "run_kind": "regular",
+        "notify": True,
+        "summary": "정규 A",
+        "feedback_to_other_supervisor": ["다음 B가 검증"],
+    }
+    module.REPORT.write_text(json.dumps(canonical, ensure_ascii=False), encoding="utf-8")
+    module.STATE.write_text(
+        json.dumps({"last_batch_id": canonical["batch_id"], "last_processed_at": canonical["processed_at"]}),
+        encoding="utf-8",
+    )
+    result_path = tmp_path / "supervisor-writer-e2e-20260926T1831+0900.json"
+    result_path.write_text(
+        json.dumps(
+            {
+                "batch_id": "supervisor-writer-e2e-20260926T1831+0900",
+                "processed_at": "2026-09-26T18:31:00+09:00",
+                "supervisor": "B",
+                "notify": True,
+                "summary": "[테스트] 단일 writer E2E",
+                "actions": [{"type": "writer_e2e", "status": "test"}],
+                "feedback_to_other_supervisor": ["테스트 후속"],
+                "observation_ids": ["obs-1810", "obs-1820", "obs-1830"],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(sys, "argv", ["감독결과_적용.py", str(result_path)])
+    assert module.main() == 0
+
+    stored_canonical = json.loads(module.REPORT.read_text(encoding="utf-8"))
+    stored_state = json.loads(module.STATE.read_text(encoding="utf-8"))
+    stored_test = json.loads(module.TEST_REPORT.read_text(encoding="utf-8"))
+    source = json.loads(result_path.read_text(encoding="utf-8"))
+
+    assert stored_canonical["batch_id"] == canonical["batch_id"]
+    assert stored_state["last_batch_id"] == canonical["batch_id"]
+    assert stored_test["batch_id"] == "supervisor-writer-e2e-20260926T1831+0900"
+    assert stored_test["run_kind"] == "test"
+    assert source["run_kind"] == "test"

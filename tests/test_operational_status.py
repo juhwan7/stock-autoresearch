@@ -49,10 +49,10 @@ def test_optional_credentials_are_not_user_action_when_public_coverage_is_health
     write_json(tmp_path / "data/supervisor/state.json", {})
     write_json(tmp_path / "data/supervisor/question_queue.json", {})
     write_json(tmp_path / "data/supervisor/ai-results/a.json", {
-        "supervisor": "A", "processed_at": "2026-09-26T15:00:00+09:00", "batch_id": "a"
+        "supervisor": "A", "processed_at": "2026-09-26T15:00:00+09:00", "batch_id": "a", "run_kind": "regular"
     })
     write_json(tmp_path / "data/supervisor/ai-results/b.json", {
-        "supervisor": "B", "processed_at": "2026-09-26T15:30:00+09:00", "batch_id": "b"
+        "supervisor": "B", "processed_at": "2026-09-26T15:30:00+09:00", "batch_id": "b", "run_kind": "regular"
     })
 
     status = module.build_status(datetime.fromisoformat("2026-09-26T15:40:00+09:00"))
@@ -74,10 +74,10 @@ def test_stale_supervisor_is_put_on_kanban_without_stopping_other_checks(tmp_pat
     write_json(tmp_path / "data/supervisor/state.json", {})
     write_json(tmp_path / "data/supervisor/question_queue.json", {})
     write_json(tmp_path / "data/supervisor/ai-results/a.json", {
-        "supervisor": "A", "processed_at": "2026-09-26T15:00:00+09:00", "batch_id": "a"
+        "supervisor": "A", "processed_at": "2026-09-26T15:00:00+09:00", "batch_id": "a", "run_kind": "regular"
     })
     write_json(tmp_path / "data/supervisor/ai-results/b.json", {
-        "supervisor": "B", "processed_at": "2026-09-26T13:30:00+09:00", "batch_id": "b"
+        "supervisor": "B", "processed_at": "2026-09-26T13:30:00+09:00", "batch_id": "b", "run_kind": "regular"
     })
 
     status = module.build_status(datetime.fromisoformat("2026-09-26T15:40:00+09:00"))
@@ -171,13 +171,73 @@ def test_build_status_surfaces_poor_sensor_slot_coverage(tmp_path):
         ]
     })
     write_json(tmp_path / "data/supervisor/ai-results/a.json", {
-        "supervisor": "A", "processed_at": "2026-09-26T16:00:00+09:00", "batch_id": "a"
+        "supervisor": "A", "processed_at": "2026-09-26T16:00:00+09:00", "batch_id": "a", "run_kind": "regular"
     })
     write_json(tmp_path / "data/supervisor/ai-results/b.json", {
-        "supervisor": "B", "processed_at": "2026-09-26T15:30:00+09:00", "batch_id": "b"
+        "supervisor": "B", "processed_at": "2026-09-26T15:30:00+09:00", "batch_id": "b", "run_kind": "regular"
     })
 
     status = module.build_status(datetime.fromisoformat("2026-09-26T16:04:00+09:00"))
     card = next(x for x in status["cards"] if x["card_id"] == "sensor-slot-coverage-poor")
     assert card["state"] == "조사 중"
     assert status["sensor_slot_coverage"]["coverage_ratio"] == 0.167
+
+
+def test_latest_supervisor_ignores_newer_e2e_and_recovery_results(tmp_path):
+    module = load_module()
+    prepare(module, tmp_path)
+    folder = tmp_path / "data/supervisor/ai-results"
+    write_json(folder / "regular-b.json", {
+        "supervisor": "B",
+        "run_kind": "regular",
+        "processed_at": "2026-09-26T16:30:00+09:00",
+        "batch_id": "supervisor-20260926T1630+0900",
+        "observation_window_start": "2026-09-26T16:10:00+09:00",
+        "observation_window_end": "2026-09-26T16:30:00+09:00",
+        "observation_slots": [
+            "2026-09-26T16:10:00+09:00",
+            "2026-09-26T16:20:00+09:00",
+            "2026-09-26T16:30:00+09:00",
+        ],
+        "expected_observation_count": 3,
+        "received_observation_count": 3,
+        "missing_observation_slots": [],
+        "observation_window_complete": True,
+    })
+    write_json(folder / "writer-e2e.json", {
+        "supervisor": "B",
+        "processed_at": "2026-09-26T22:51:00+09:00",
+        "batch_id": "supervisor-writer-e2e-20260926T2251+0900",
+        "summary": "[테스트] writer E2E",
+        "actions": [{"type": "writer_e2e", "status": "test"}],
+        "observation_window_start": "2026-09-26T22:10:00+09:00",
+        "observation_window_end": "2026-09-26T22:30:00+09:00",
+        "observation_slots": [
+            "2026-09-26T22:10:00+09:00",
+            "2026-09-26T22:20:00+09:00",
+            "2026-09-26T22:30:00+09:00",
+        ],
+    })
+    write_json(folder / "recovery.json", {
+        "supervisor": "Recovery-B",
+        "processed_at": "2026-09-26T23:00:00+09:00",
+        "batch_id": "recovery-20260926T2300+0900",
+        "run_kind": "recovery",
+    })
+
+    latest = module.latest_supervisors()
+    assert latest["B"]["batch_id"] == "supervisor-20260926T1630+0900"
+    assert latest["B"]["run_kind"] == "regular"
+    assert latest["B"]["window_complete"] is True
+
+
+def test_update_readme_never_injects_live_incident_details(tmp_path):
+    module = load_module()
+    prepare(module, tmp_path)
+    original = "# Project\n\n프로젝트 소개\n"
+    module.README.write_text(original, encoding="utf-8")
+    module.update_readme({
+        "status": "needs_user_action",
+        "user_actions": [{"problem": "Supervisor B 마지막 실행이 237분 전"}],
+    })
+    assert module.README.read_text(encoding="utf-8") == original

@@ -6,9 +6,11 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from autoresearch.supervisor_queue import build_supervisor_window
+from autoresearch.supervisor_result import infer_run_kind, is_regular_supervisor_result, supervisor_role as classified_supervisor_role
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "data/supervisor/latest-report.json"
+TEST_REPORT = ROOT / "data/supervisor/latest-test-report.json"
 STATE = ROOT / "data/supervisor/state.json"
 ISSUES = ROOT / "data/supervisor/market-issues.json"
 RECENT_SESSIONS = ROOT / "data/market/recent-sessions.json"
@@ -137,12 +139,28 @@ def normalize_observation_window(result: dict, warnings: list[str]) -> dict:
 
 
 def _supervisor_role(value: object) -> str | None:
-    text = str(value or "").strip().upper()
-    if text == "B" or text.endswith("-B") or text.startswith("B-"):
-        return "B"
-    if text == "A" or text.endswith("-A") or text.startswith("A-"):
-        return "A"
-    return None
+    return classified_supervisor_role(value)
+
+
+def _latest_regular_result(
+    *,
+    before_at: str | None = None,
+    exclude_batch_id: str | None = None,
+) -> dict:
+    folder = ROOT / "data" / "supervisor" / "ai-results"
+    rows: list[tuple[str, dict]] = []
+    for path in folder.glob("*.json"):
+        item = _read_json_dict(path)
+        if not is_regular_supervisor_result(item):
+            continue
+        batch_id = str(item.get("batch_id") or "")
+        processed_at = str(item.get("processed_at") or "")
+        if exclude_batch_id and batch_id == exclude_batch_id:
+            continue
+        if before_at and processed_at >= before_at:
+            continue
+        rows.append((processed_at, item))
+    return max(rows, key=lambda row: row[0])[1] if rows else {}
 
 
 def validate_feedback_handoff(
@@ -633,8 +651,36 @@ def main() -> int:
             source_path = str(src)
         result["changed_paths"] = [source_path]
         warnings.append("changed_paths 누락을 현재 Supervisor 결과 경로로 복구")
-    feedback_handoff = validate_feedback_handoff(current, result, warnings)
+    # 과거 정규 결과는 window 메타가 비어 있고 apply 단계에서 복구되는 경우가 있다.
+    # 먼저 정규 3슬롯을 정규화한 뒤 run_kind를 판정한다.
     window_manifest = normalize_observation_window(result, warnings)
+    run_kind = infer_run_kind(result)
+    result["run_kind"] = run_kind
+    if run_kind == "unknown":
+        warnings.append("Supervisor result run_kind를 정규/test/recovery로 확정하지 못함")
+
+    previous_regular = (
+        _latest_regular_result(
+            before_at=str(result.get("processed_at") or ""),
+            exclude_batch_id=str(result.get("batch_id") or ""),
+        )
+        if run_kind == "regular"
+        else {}
+    )
+    if run_kind == "regular":
+        feedback_handoff = validate_feedback_handoff(previous_regular, result, warnings)
+    else:
+        feedback_handoff = {
+            "source_batch_id": None,
+            "source_supervisor": None,
+            "target_supervisor": _supervisor_role(result.get("supervisor")),
+            "inbound_required": False,
+            "inbound_recorded": bool(result.get("feedback_received")),
+            "outgoing_recorded": bool(result.get("feedback_to_other_supervisor")),
+            "complete": True,
+            "run_kind": run_kind,
+        }
+        result["feedback_handoff"] = feedback_handoff
 
     # discovery가 실제 새 기사 입력을 확보했는데 정규 A/B가 issue lifecycle
     # payload를 생략하면 digest가 조용히 멈춘다. timestamp를 조작하지 않고
@@ -645,10 +691,7 @@ def main() -> int:
         and int(discovery.get("new_item_count") or 0) > 0
         and int((discovery.get("source_summary") or {}).get("ok_or_partial") or 0) > 0
     )
-    is_regular_result = (
-        _supervisor_role(result.get("supervisor")) in {"A", "B"}
-        and str(result.get("batch_id") or "").startswith("supervisor-")
-    )
+    is_regular_result = is_regular_supervisor_result(result)
     if discovery_has_new_news and is_regular_result and not isinstance(result.get("news_issue_digest"), dict):
         warnings.append(
             "최신 discovery에 새 뉴스가 있으나 news_issue_digest가 없어 뉴스 lifecycle 적용이 누락됨"
@@ -658,12 +701,25 @@ def main() -> int:
     if warnings:
         result["validation_warnings"] = warnings
     observation_ids = list(result.get("observation_ids") or [])
+
+    # 테스트/E2E는 writer·Telegram 경로를 검증할 수 있지만 시장 canonical,
+    # A/B 피드백, 이슈 원장과 정규 생존 상태를 오염시키면 안 된다.
+    if run_kind == "test":
+        warnings.append("test/E2E 결과는 정규 canonical과 A/B 실행 이력을 전진시키지 않음")
+        result["validation_warnings"] = warnings
+        TEST_REPORT.parent.mkdir(parents=True, exist_ok=True)
+        TEST_REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        src.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print("applied test", result["batch_id"])
+        return 0
+
     update_supervisor_disagreements(result)
     update_issue_lifecycle(result)
     update_market_session_history(result)
     update_popular_reports(result)
     update_news_issue_digest(result)
     REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    src.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     state = _read_json_dict(STATE)
     state["schema_version"] = max(int(state.get("schema_version") or 1), 2)
     state["batch_size"] = 3
@@ -686,14 +742,17 @@ def main() -> int:
     state["processed_observation_ids_recent"] = processed_recent[-120:]
 
     role = _supervisor_role(result.get("supervisor"))
-    is_regular_supervisor = (
-        role in {"A", "B"}
-        and str(result.get("batch_id") or "").startswith("supervisor-")
-    )
-    state["last_feedback_handoff"] = {
-        "batch_id": result["batch_id"],
-        **feedback_handoff,
-    }
+    is_regular_supervisor = is_regular_supervisor_result(result)
+    if is_regular_supervisor:
+        state["last_feedback_handoff"] = {
+            "batch_id": result["batch_id"],
+            **feedback_handoff,
+        }
+    elif run_kind == "recovery":
+        state["last_recovery_batch"] = {
+            "batch_id": result["batch_id"],
+            "processed_at": result.get("processed_at"),
+        }
     # Recovery/catch-up은 canonical 보고서를 갱신할 수 있지만 정규 A/B 실행 이력을
     # 가장해서는 안 된다. last_a_window/last_b_window는 정규 Supervisor만 소유한다.
     if is_regular_supervisor:
@@ -706,7 +765,7 @@ def main() -> int:
             "complete": result.get("observation_window_complete"),
         }
     else:
-        warnings.append("recovery/catch-up 결과는 정규 A/B window 포인터를 전진시키지 않음")
+        warnings.append(f"{run_kind} 결과는 정규 A/B window 포인터를 전진시키지 않음")
         result["validation_warnings"] = warnings
         REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if observation_ids and result.get("observation_window_complete"):
