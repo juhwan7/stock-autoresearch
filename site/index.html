@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Stock AutoResearch 자율 연구·진화 대시보드">
-  <title>Stock AutoResearch</title>
+  <meta name="description" content="Stock AutoResearch 시장 요약 대시보드">
+  <title>시장 요약 · Stock AutoResearch</title>
   <link rel="stylesheet" href="스타일.css">
 </head>
 <body>
@@ -12,365 +12,84 @@
     <div>
       <p class="eyebrow">MARKET COMMAND CENTER</p>
       <h1>시장 한눈에 보기</h1>
-      <p class="lead">지금 시장을 움직이는 이슈와 실제 자금 흐름을 먼저 보여줍니다. 세부 시스템 정보는 아래에서 확인할 수 있습니다.</p>
-      <div class="hero-actions">
-        <a class="hero-button primary" href="https://github.com/juhwan7/stock-autoresearch/blob/main/README.md" target="_blank" rel="noreferrer">프로젝트 README</a>
-        <a class="hero-button" href="https://github.com/juhwan7/stock-autoresearch" target="_blank" rel="noreferrer">GitHub 저장소</a>
-        <a class="hero-button" href="https://github.com/juhwan7/stock-autoresearch/issues/1" target="_blank" rel="noreferrer">AI 알림·피드백</a>
-      </div>
+      <p class="lead">실시간 값이 비는 휴장일에도 최근 실제 3거래일을 기준으로 시장 흐름을 유지하고, 세부 정보는 성격별 화면으로 나눠 보여줍니다.</p>
     </div>
-    <div class="pulse"><span></span> 6분 센서 · :00/:30 AI</div>
+    <div class="hero-side">
+      <span class="pulse">6분 센서 · :00/:30 AI</span>
+      <a class="hero-button" href="https://github.com/juhwan7/stock-autoresearch" target="_blank" rel="noreferrer">GitHub</a>
+    </div>
   </header>
 
-  <nav class="dash-nav">
-    <a href="#market-brief">지금 시장</a>
-    <a href="#issue-lifecycle">이슈 타임라인</a>
-    <a href="#three-session-history">3거래일</a>
-    <a href="#investor-flow">외국인·기관</a>
-    <a href="#market">거래대금</a>
-    <a href="상대강도.html">상대강도</a>
-    <a href="#risk">리스크</a>
-    <a href="#latest-ai">최신 AI</a>
-    <a href="#macro">매크로</a>
-    <a href="#popular-reports">인기 리포트</a>
-    <a href="#health">시스템</a>
+  <nav class="page-tabs">
+    <div class="wrap">
+      <a class="active" href="index.html">요약</a>
+      <a href="국내시장.html">국내시장</a>
+      <a href="글로벌리스크.html">글로벌 · 리스크</a>
+      <a href="리서치.html">리서치 · 이슈</a>
+      <a href="시스템.html">시스템</a>
+      <a href="상대강도.html">상대강도</a>
+    </div>
   </nav>
 
   <main>
     <section class="metrics" id="metrics"></section>
+    <div id="global-data-note"></div>
 
-    <section class="panel market-brief-panel" id="market-brief">
+    <section class="panel">
       <div class="panel-head">
-        <div>
-          <p class="kicker">AI MARKET CONTEXT · 3 SESSIONS</p>
-          <h2>지금 시장을 움직이는 것</h2>
-        </div>
-        <span class="badge" id="market-brief-status">:00/:30 AI 해석</span>
+        <div><p class="kicker">AI MARKET CONTEXT</p><h2>지금 시장을 움직이는 것</h2></div>
+        <span class="badge" id="market-brief-status">AI 해석 확인 중</span>
       </div>
       <div class="market-brief-layout">
         <article class="market-brief-story">
-          <p class="subhead">오늘 + 직전 2거래일 연결 해설</p>
+          <p class="subhead">최근 시장 연결 해설</p>
           <div id="market-narrative"></div>
         </article>
-        <aside class="market-brief-side">
+        <aside>
           <p class="subhead">지금 먼저 볼 것</p>
           <div id="market-focus" class="mini-list"></div>
-          <p class="subhead brief-gap">해석이 틀렸다고 볼 조건</p>
+          <p class="subhead" style="margin-top:14px">해석을 바꿀 조건</p>
           <div id="market-invalidation" class="mini-list"></div>
         </aside>
       </div>
-      <div class="market-brief-hint">아래 오버나잇 리스크와 6분 데이터는 이 해석의 근거입니다. 숫자 변화가 설명과 달라지면 다음 AI가 해석을 다시 수정합니다.</div>
-    </section>
-
-    <section class="panel" id="issue-lifecycle">
-      <div class="panel-head">
-        <div><p class="kicker">MARKET ISSUE LIFECYCLE</p><h2>이슈가 언제 생기고 사라졌나</h2></div>
-        <span class="badge">NEW → ACTIVE → EASING → RESOLVED</span>
-      </div>
-      <p class="lead">현재 중요한 이슈를 시간축으로 누적합니다. 목록에서 사라졌다고 자동 해소하지 않고, 근거가 확인된 상태 변화만 기록합니다.</p>
-      <div id="market-issue-list" class="mini-list"></div>
-    </section>
-
-    <section class="panel" id="three-session-history">
-      <div class="panel-head">
-        <div>
-          <p class="kicker">3-SESSION MARKET MEMORY</p>
-          <h2>최근 3거래일 값 비교</h2>
-        </div>
-        <span class="badge" id="three-session-updated">확인 중</span>
-      </div>
-      <p class="lead">하루 값만 보지 않고 최근 3거래일의 지수와 수급을 나란히 봅니다. 휴장일은 억지로 채우지 않고 각 시장의 실제 최근 거래일을 사용합니다.</p>
-      <div class="session-history-grid">
-        <div>
-          <p class="subhead">한국 · 최근 3거래일</p>
-          <div id="korea-session-history"></div>
-        </div>
-        <div>
-          <p class="subhead">미국 · 최근 3거래일</p>
-          <div id="us-session-history"></div>
-        </div>
-      </div>
-      <div id="session-holiday-note" class="market-brief-hint"></div>
-    </section>
-
-    <section class="panel popular-reports-panel" id="popular-reports">
-      <div class="panel-head">
-        <div>
-          <p class="kicker">POPULAR BROKER RESEARCH</p>
-          <h2>지금 많이 보는 증권 리포트</h2>
-        </div>
-        <span class="badge" id="popular-reports-updated">확인 중</span>
-      </div>
-      <p class="lead">사람들이 많이 본 리포트 30개를 유지하고, 원문/PDF를 먼저 읽어 핵심 주장·근거·시장 연결·반론을 페이지 안에서 정리합니다. 더 깊이 보고 싶을 때만 카드 아래 원문 링크를 열면 됩니다.</p>
-      <div id="popular-report-list" class="popular-report-list"></div>
-      <div class="popular-report-source-row">
-        <span>최신 발행일 우선 · 같은 날짜는 조회수 높은 순</span>
-        <a id="popular-research-source" class="hero-button" href="https://stock.naver.com/research" target="_blank" rel="noreferrer">인기 리포트 원목록 ↗</a>
-      </div>
-    </section>
-
-    <section class="panel latest-ai-panel" id="latest-ai">
-      <div class="panel-head">
-        <div>
-          <p class="kicker">LATEST AI DEEP RESEARCH</p>
-          <h2>최신 AI 심층 리서치</h2>
-        </div>
-        <span class="badge" id="supervisor-status">확인 중</span>
-      </div>
-      <div class="latest-ai-grid">
-        <div class="latest-ai-summary">
-          <div id="supervisor-summary" class="mini-list"></div>
-          <a id="supervisor-report-link" class="hero-button primary" href="#" target="_blank" rel="noreferrer">전체 리서치 읽기 ↗</a>
-        </div>
-        <div>
-          <p class="subhead">현재 동적 트렌드</p>
-          <div id="dynamic-trends" class="mini-list"></div>
-        </div>
-        <div>
-          <p class="subhead">새 DART 공시</p>
-          <div id="new-filings" class="mini-list"></div>
-        </div>
-        <div>
-          <p class="subhead">6분 센서 소스</p>
-          <div id="discovery-sources" class="mini-list"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel risk-panel" id="risk">
-      <div class="panel-head">
-        <div>
-          <p class="kicker">OVERNIGHT RISK VETO</p>
-          <h2>종가베팅 시황 리스크</h2>
-        </div>
-        <span class="risk-badge" id="risk-level">확인 중</span>
-      </div>
-      <div class="overnight-command">
-        <div class="overnight-head">
-          <div>
-            <p class="subhead">오늘 밤 우선 확인</p>
-            <strong>오버나잇 리스크 우선순위</strong>
-          </div>
-          <span class="badge" id="overnight-coverage">데이터 확인 중</span>
-        </div>
-        <div id="overnight-risk-list" class="overnight-risk-list"></div>
-      </div>
-      <div class="flow-board">
-        <div>
-          <p class="subhead">6분 자금 흐름</p>
-          <div id="six-minute-flow" class="flow-timeline"></div>
-        </div>
-        <div>
-          <p class="subhead">AI 해석 · 왜 움직이나</p>
-          <div id="overnight-interpretation" class="interpretation-box"></div>
-        </div>
-      </div>
-      <div class="risk-grid">
-        <div class="risk-main" id="risk-summary"></div>
-        <div>
-          <p class="subhead">다음 중요 일정</p>
-          <div id="risk-events" class="mini-list"></div>
-        </div>
-        <div>
-          <p class="subhead">매크로 경고</p>
-          <div id="risk-macro" class="mini-list"></div>
-        </div>
-        <div>
-          <p class="subhead">관련 문서</p>
-          <div id="docs-links" class="mini-list"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel market-panel" id="market">
-      <div class="panel-head">
-        <div>
-          <p class="kicker">KOREA MARKET TAPE</p>
-          <h2>국내시장 장세</h2>
-        </div>
-        <span class="badge" id="market-status">데이터 확인 중</span>
-      </div>
-      <div class="market-summary" id="market-summary"></div>
-      <section class="investor-flow-board" id="investor-flow">
-        <div class="investor-flow-head">
-          <div>
-            <p class="subhead">외국인 · 기관 수급 동향</p>
-            <strong>누가 시장에 돈을 넣고 빼는지</strong>
-          </div>
-          <span class="badge" id="investor-flow-status">수급 확인 중</span>
-        </div>
-        <div id="investor-flow-cards" class="investor-flow-cards"></div>
-        <div class="investor-flow-bottom">
-          <div>
-            <p class="subhead">최근 3거래일</p>
-            <div id="investor-flow-history" class="investor-flow-history"></div>
-          </div>
-          <div>
-            <p class="subhead">수급 해석</p>
-            <div id="investor-flow-reading" class="investor-flow-reading"></div>
-          </div>
-        </div>
-      </section>
-      <div class="nxt-strip">
-        <div class="subhead">NXT 애프터마켓 15:40~20:00</div>
-        <div id="nxt-after" class="nxt-list"></div>
-      </div>
-      <div class="grid four compact-grid">
-        <div>
-          <p class="subhead">거래대금 Burst</p>
-          <div id="burst-leaders" class="mini-list"></div>
-        </div>
-        <div>
-          <p class="subhead">신규주 흐름</p>
-          <div id="new-listings" class="mini-list"></div>
-        </div>
-        <div>
-          <p class="subhead">동조 수급</p>
-          <div id="coflow-groups" class="mini-list"></div>
-        </div>
-        <div>
-          <p class="subhead">전략 통계</p>
-          <div id="strategy-stats" class="mini-list"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel macro-panel" id="macro">
-      <div class="panel-head">
-        <div>
-          <p class="kicker">CROSS-ASSET MACRO</p>
-          <h2>매크로 상태판</h2>
-        </div>
-        <div class="macro-head-meta">
-          <span class="badge" id="macro-regime">UNKNOWN</span>
-          <span class="badge" id="macro-coverage">0/0</span>
-        </div>
-      </div>
-      <div class="macro-summary">
-        <div>
-          <p class="subhead">전달 경로</p>
-          <div id="macro-paths" class="mini-list"></div>
-        </div>
-        <div>
-          <p class="subhead">충돌 신호</p>
-          <div id="macro-conflicts" class="mini-list"></div>
-        </div>
-      </div>
-      <div id="macro-groups" class="macro-groups"></div>
-    </section>
-
-    <section class="panel health-panel" id="health">
-      <div class="panel-head">
-        <div>
-          <p class="kicker">HEALTH WATCHDOG</p>
-          <h2>시스템 상태</h2>
-        </div>
-        <span class="health-badge" id="health-status">확인 중</span>
-      </div>
-      <div class="provider-strip">
-        <div class="subhead">DATA PROVIDER</div>
-        <div id="provider-status" class="provider-grid"></div>
-      </div>
-      <div id="health-issues" class="health-list"></div>
-    </section>
-
-    <section class="panel" id="evolution">
-      <div class="panel-head"><div><p class="kicker">EVOLUTION</p><h2>AI 진화 타임라인</h2></div></div>
-      <div id="ticks" class="timeline"></div>
     </section>
 
     <section class="grid two">
-      <article class="panel regression-panel" id="regression">
-        <div class="panel-head">
-          <div><p class="kicker">REGRESSION GUARD</p><h2>기능 단위 회귀 탐지</h2></div>
-          <span class="regression-badge" id="regression-status">확인 중</span>
-        </div>
-        <div id="regression-summary" class="regression-summary"></div>
-        <div class="subhead">최근 평가</div>
-        <div id="regression-evals" class="mini-list"></div>
-      </article>
-
       <article class="panel">
-        <div class="panel-head"><div><p class="kicker">CHANGE MANIFEST</p><h2>최근 AI 변경</h2></div></div>
-        <div id="recent-changes" class="timeline"></div>
+        <div class="panel-head"><div><p class="kicker">KOREA · 3 SESSIONS</p><h2>한국 최근 3거래일</h2></div><a class="hero-button" href="국내시장.html">상세 보기</a></div>
+        <div id="quick-korea-summary" class="summary-strip"></div>
+        <div id="quick-korea-sessions" class="quick-sessions"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><p class="kicker">US · 3 SESSIONS</p><h2>미국 최근 3거래일</h2></div><a class="hero-button" href="글로벌리스크.html">상세 보기</a></div>
+        <div id="quick-us-summary" class="summary-strip"></div>
+        <div id="quick-us-sessions" class="quick-sessions"></div>
       </article>
     </section>
 
-    <section class="panel" id="idea-board">
-      <div class="panel-head"><div><p class="kicker">IDEA LIFECYCLE</p><h2>채택·실험·보류 아이디어 칸반</h2></div></div>
-      <div id="ideas-kanban" class="kanban"></div>
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-head"><div><p class="kicker">ISSUE LIFECYCLE</p><h2>현재 시장 이슈</h2></div><a class="hero-button" href="리서치.html">전체 이슈</a></div>
+        <div id="market-issue-list" data-limit="5" class="mini-list"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><p class="kicker">OVERNIGHT WATCH</p><h2>다음 리스크와 일정</h2></div><a class="hero-button" href="글로벌리스크.html">리스크 상세</a></div>
+        <div id="risk-events"></div>
+      </article>
     </section>
 
-    <section class="grid three">
-      <article class="panel text-panel"><p class="kicker">DECISIONS</p><h2>결정 원장</h2><pre id="decisions"></pre></article>
-      <article class="panel text-panel"><p class="kicker">IDEAS</p><h2>아이디어</h2><pre id="ideas"></pre></article>
-      <article class="panel text-panel attention"><p class="kicker">HUMAN INPUT</p><h2>사용자 도움이 필요한 일</h2><pre id="help"></pre></article>
-    </section>
-
-    <section class="panel about-panel" id="about">
-      <div class="panel-head">
-        <div>
-          <p class="kicker">PROJECT GUIDE</p>
-          <h2>이 프로젝트는 무엇을 하나요?</h2>
-        </div>
-        <span class="badge">AI 자율 연구 시스템</span>
+    <section class="panel">
+      <div class="panel-head"><div><p class="kicker">READING GUIDE</p><h2>이 화면에서 판단하는 순서</h2></div></div>
+      <div class="grid four">
+        <div class="mini-row"><strong>1. AI 해설</strong><span>무엇이 시장을 움직이는지 먼저 읽습니다.</span></div>
+        <div class="mini-row"><strong>2. 최근 3거래일</strong><span>하루 값이 아니라 지수·수급의 연속성을 봅니다.</span></div>
+        <div class="mini-row"><strong>3. 이슈·리스크</strong><span>현재 지속 중인 변수와 다음 예정 이벤트를 확인합니다.</span></div>
+        <div class="mini-row"><strong>4. 상세 화면</strong><span>국내 자금·글로벌·리서치·시스템을 필요할 때만 깊게 봅니다.</span></div>
       </div>
-      <p class="about-lead">사용자가 매번 주제를 지정하지 않아도 시장에서 조사할 가치가 있는 변화를 찾고, 근거를 검증하고, 국내시장 돈의 흐름과 다음날 리스크를 연구합니다. 동시에 프로젝트 자체의 정확성·통계·가독성·자동화는 6분 센서와 :00/:30 교대 AI가 계속 점검합니다.</p>
-
-      <div class="feature-grid">
-        <article class="feature-card">
-          <span>01</span><strong>자율 시장 탐색</strong>
-          <p>공시·정책·실적·공급망·기술·시장 반응에서 새 연구 주제를 스스로 선택합니다.</p>
-        </article>
-        <article class="feature-card">
-          <span>02</span><strong>국내 Market Tape</strong>
-          <p>1분 거래대금, 신규주, 동조 수급, 장후반 흐름을 실제 돈의 움직임 중심으로 봅니다.</p>
-        </article>
-        <article class="feature-card">
-          <span>03</span><strong>종가베팅·눌림 통계</strong>
-          <p>갭·MFE·MAE와 시장 조건을 전체 표본으로 누적해 성공 차트만 보는 편향을 줄입니다.</p>
-        </article>
-        <article class="feature-card">
-          <span>04</span><strong>20시까지 NXT</strong>
-          <p>KRX 종가 후 NXT 애프터마켓의 가격·거래대금·종가 대비 프리미엄을 추적합니다.</p>
-        </article>
-        <article class="feature-card">
-          <span>05</span><strong>Overnight Risk</strong>
-          <p>FOMC·CPI·금리·환율·미국선물 등 다음날 갭에 영향을 줄 수 있는 위험을 따로 평가합니다.</p>
-        </article>
-        <article class="feature-card">
-          <span>06</span><strong>AI 자기진화</strong>
-          <p>개선 아이디어를 찾고 테스트하며, 나쁜 변경은 기능 단위로 롤백하거나 격리합니다.</p>
-        </article>
-      </div>
-
-      <div class="how-it-works">
-        <div>
-          <p class="subhead">시장 연구 루프</p>
-          <p>시장 스캔 → 주제 선정 → 심층 조사 → 반론 검증 → 산업·종목 연결 → 보고서 → 상태 변화 감시</p>
-        </div>
-        <div>
-          <p class="subhead">프로젝트 진화 루프</p>
-          <p>6분 사실 수집 → :00 A 탐색·개발 → :30 B 반박·검증 → 수정·재검증 → 다음 A 인계</p>
-        </div>
-      </div>
-
-      <div class="guide-links">
-        <a href="https://github.com/juhwan7/stock-autoresearch/blob/main/docs/%EA%B8%B0%EB%8A%A5_%ED%95%9C%EB%88%88%EC%97%90%EB%B3%B4%EA%B8%B0.md" target="_blank" rel="noreferrer">기능 한눈에보기 ↗</a>
-        <a href="https://github.com/juhwan7/stock-autoresearch/blob/main/docs/%EB%AC%B8%EC%84%9C_%EC%A7%80%EB%8F%84.md" target="_blank" rel="noreferrer">문서 지도 ↗</a>
-        <a href="https://github.com/juhwan7/stock-autoresearch/blob/main/docs/%EC%8B%9C%EC%8A%A4%ED%85%9C_%EA%B5%AC%EC%A1%B0.md" target="_blank" rel="noreferrer">시스템 구조 ↗</a>
-        <a href="https://github.com/juhwan7/stock-autoresearch/blob/main/docs/%EC%82%AC%EC%9A%A9%EC%9E%90_%EB%8F%84%EC%9B%80_%ED%95%84%EC%9A%94.md" target="_blank" rel="noreferrer">내가 도와야 할 일 ↗</a>
-      </div>
-    </section>
-
-    <section class="panel text-panel">
-      <p class="kicker">AI CHANGELOG</p>
-      <h2>AI가 실제로 바꾼 것</h2>
-      <pre id="changelog"></pre>
     </section>
   </main>
 
-  <footer><span>Stock AutoResearch</span><span id="updated"></span></footer>
+  <footer><span>Stock AutoResearch</span><span id="updated">데이터 확인 중</span></footer>
   <script src="기능.js"></script>
 </body>
 </html>
