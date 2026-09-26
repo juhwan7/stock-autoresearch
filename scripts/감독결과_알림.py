@@ -119,20 +119,68 @@ def send_telegram(report: dict[str, Any]) -> bool:
         print("Telegram Secret이 없어 감독 알림은 건너뜀")
         return False
 
+    supervisor = str(report.get("supervisor") or "Recovery")
+    processed = str(report.get("processed_at") or "")
+    axes = report.get("work_axes_reviewed") or []
+    telegram_report = report.get("telegram_report") or []
+
     lines = [
-        "Stock AutoResearch 1시간 감독 결과",
-        "상태: " + str(report.get("status") or "unknown"),
-        "처리 관측: " + str(len(report.get("observation_ids") or [])) + "개",
+        f"Stock AutoResearch · Supervisor {supervisor}",
+        (processed + " · " if processed else "") + "상태 " + str(report.get("status") or "unknown"),
+        f"검토 작업축 {len(axes)}개 · 처리 관측 {len(report.get('observation_ids') or [])}개",
     ]
-    for item in (report.get("summary") or [])[:5]:
-        lines.append("- " + str(item))
+
+    if telegram_report:
+        lines.append("")
+        for item in telegram_report[:10]:
+            lines.append(str(item))
+    else:
+        lines.extend(["", "시장·프로젝트 핵심"])
+        for item in (report.get("summary") or [])[:6]:
+            lines.append("- " + str(item))
+
+    signals = report.get("project_improvement_signals") or []
+    if signals:
+        resolved = sum(
+            1 for x in signals
+            if isinstance(x, dict) and str(x.get("status") or "").lower() == "resolved"
+        )
+        pending = len(signals) - resolved
+        lines.extend(
+            [
+                "",
+                f"프로젝트 개선: {len(signals)}건 · 해결 {resolved} · 추적 {pending}",
+            ]
+        )
+
     changed = report.get("changed_paths") or []
     if changed:
-        lines.append("변경 파일: " + str(len(changed)) + "개")
+        lines.append("실제 변경: " + str(len(changed)) + "개 경로")
+
+    feedback = report.get("feedback_to_other_supervisor") or []
+    if feedback:
+        lines.extend(["", "다음 상대 Supervisor"])
+        for item in feedback[:4]:
+            lines.append("- " + str(item))
+
+    actions_needed = report.get("required_user_actions") or []
+    if actions_needed:
+        lines.extend(["", "사용자 개입 필요"])
+        for item in actions_needed[:3]:
+            if isinstance(item, dict):
+                lines.append("- " + str(item.get("action") or item.get("why") or item))
+            else:
+                lines.append("- " + str(item))
+    else:
+        lines.extend(["", "사용자 개입 필요: 없음"])
+
+    text = "\n".join(lines)
+    if len(text) > 3900:
+        text = text[:3870].rstrip() + "\n…(상세 내용은 대시보드/GitHub에서 확인)"
 
     payload = build_telegram_payload(
         chat_id=chat_id,
-        text="\n".join(lines),
+        text=text,
         feedback_url="https://github.com/juhwan7/stock-autoresearch/issues/1",
         dashboard_url="https://juhwan7.github.io/stock-autoresearch/",
     )
