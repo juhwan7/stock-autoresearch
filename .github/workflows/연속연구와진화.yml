@@ -34,7 +34,7 @@ on:
 permissions:
   contents: write
   issues: write
-  actions: read
+  actions: write
 
 concurrency:
   group: stock-autoresearch-observer
@@ -43,7 +43,7 @@ concurrency:
 jobs:
   observe:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Pin observation slot at workflow start
         env:
@@ -57,18 +57,31 @@ jobs:
           KST = timezone(timedelta(hours=9))
           requested = (os.getenv("REQUESTED_SLOT_AT") or "").strip()
           now = datetime.now(KST)
+          current_slot = now.replace(minute=(now.minute // 10) * 10, second=0, microsecond=0)
           if requested:
               parsed = datetime.fromisoformat(requested.replace("Z", "+00:00"))
               if parsed.tzinfo is None:
                   parsed = parsed.replace(tzinfo=KST)
-              basis = parsed.astimezone(KST)
-              source = "dispatch_input"
+              requested_kst = parsed.astimezone(KST)
+              requested_slot = requested_kst.replace(
+                  minute=(requested_kst.minute // 10) * 10,
+                  second=0,
+                  microsecond=0,
+              )
+              if requested_slot == current_slot:
+                  slot = requested_slot
+                  source = "dispatch_input"
+              else:
+                  # 오래 지연된 dispatch를 과거 슬롯의 실제 관측처럼 저장하지 않는다.
+                  slot = current_slot
+                  source = "dispatch_input_rebased"
           else:
-              basis = now
+              slot = current_slot
               source = "workflow_start"
-          slot = basis.replace(minute=(basis.minute // 10) * 10, second=0, microsecond=0)
+          start_delay = max(0.0, (now - slot).total_seconds())
           print(f"SENSOR_SLOT_AT={slot.isoformat()}")
           print(f"SENSOR_SLOT_SOURCE={source}")
+          print(f"SENSOR_SLOT_START_DELAY_SECONDS={start_delay:.3f}")
           PY
 
       - uses: actions/checkout@v4
@@ -234,6 +247,135 @@ jobs:
               exit 1
             fi
           fi
+
+      - name: Keep 10-minute sensor chain alive
+        if: always() && github.ref == 'refs/heads/main' && vars.SENSOR_SELF_CHAIN_DISABLED != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python - <<'PY' > /tmp/next-sensor.env
+          from datetime import datetime, timedelta, timezone
+
+          KST = timezone(timedelta(hours=9))
+          now = datetime.now(KST)
+          current_slot = now.replace(minute=(now.minute // 10) * 10, second=0, microsecond=0)
+          next_slot = current_slot + timedelta(minutes=10)
+          target = next_slot + timedelta(seconds=20)
+          wait_seconds = max(0, int((target - now).total_seconds()))
+          print(f"NEXT_SLOT={next_slot.isoformat()}")
+          print(f"WAIT_SECONDS={wait_seconds}")
+          PY
+          cat /tmp/next-sensor.env
+          source /tmp/next-sensor.env
+
+          if [ "$WAIT_SECONDS" -gt 0 ]; then
+            sleep "$WAIT_SECONDS"
+          fi
+
+          fetch_latest_slot() {
+            if ! gh api "repos/$GH_REPO/contents/data/supervisor/recent.json?ref=main" \
+              --jq '.content' 2>/dev/null | tr -d '\n' | base64 -d > /tmp/chain-recent.json 2>/dev/null; then
+              echo ""
+              return
+            fi
+            python - <<'PY'
+          import json
+          from datetime import datetime
+          from pathlib import Path
+
+          try:
+              payload = json.loads(Path("/tmp/chain-recent.json").read_text(encoding="utf-8"))
+          except Exception:
+              print("")
+              raise SystemExit(0)
+
+          slots = []
+          for item in payload.get("observations") or []:
+              if not isinstance(item, dict):
+                  continue
+              value = item.get("slot_at")
+              if not value:
+                  continue
+              try:
+                  slots.append(datetime.fromisoformat(str(value).replace("Z", "+00:00")))
+              except ValueError:
+                  continue
+          print(max(slots).isoformat() if slots else "")
+          PY
+          }
+
+          slot_is_ready() {
+            python - "$1" "$2" <<'PY'
+          import sys
+          from datetime import datetime
+
+          latest, expected = sys.argv[1:3]
+          if not latest:
+              raise SystemExit(1)
+          try:
+              latest_dt = datetime.fromisoformat(latest.replace("Z", "+00:00"))
+              expected_dt = datetime.fromisoformat(expected.replace("Z", "+00:00"))
+          except ValueError:
+              raise SystemExit(1)
+          raise SystemExit(0 if latest_dt >= expected_dt else 1)
+          PY
+          }
+
+          LATEST_SLOT="$(fetch_latest_slot)"
+          if slot_is_ready "$LATEST_SLOT" "$NEXT_SLOT"; then
+            echo "다음 슬롯 $NEXT_SLOT 이 이미 저장되어 self-chain dispatch를 생략합니다."
+            exit 0
+          fi
+
+          gh run list \
+            --workflow "연속연구와진화.yml" \
+            --repo "$GH_REPO" \
+            --limit 20 \
+            --json databaseId,status > /tmp/chain-runs.json
+
+          ACTIVE_OTHER_RUNS=$(python - "$CURRENT_RUN_ID" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          current = str(sys.argv[1])
+          try:
+              runs = json.loads(Path("/tmp/chain-runs.json").read_text(encoding="utf-8"))
+          except Exception:
+              print(0)
+              raise SystemExit(0)
+
+          count = 0
+          for item in runs:
+              if str(item.get("databaseId")) == current:
+                  continue
+              if item.get("status") in {"queued", "in_progress"}:
+                  count += 1
+          print(count)
+          PY
+          )
+
+          if [ "${ACTIVE_OTHER_RUNS:-0}" -gt 0 ]; then
+            echo "다음 슬롯을 담당할 센서가 이미 실행/대기 중이라 self-chain dispatch를 생략합니다."
+            exit 0
+          fi
+
+          LATEST_SLOT="$(fetch_latest_slot)"
+          if slot_is_ready "$LATEST_SLOT" "$NEXT_SLOT"; then
+            echo "재확인 중 다음 슬롯이 저장되어 self-chain dispatch를 생략합니다."
+            exit 0
+          fi
+
+          echo "GitHub schedule에 의존하지 않고 다음 슬롯 $NEXT_SLOT 센서를 self-chain으로 실행합니다."
+          gh workflow run "연속연구와진화.yml" \
+            --repo "$GH_REPO" \
+            --ref main \
+            -f slot_at="$NEXT_SLOT"
 
       - name: Surface validation failure
         if: env.VALIDATION_STATUS != 'ok'

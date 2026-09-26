@@ -111,24 +111,33 @@ def expected_supervisor_slots(
     ]
 
 
-def _observation_quality(item: Mapping[str, Any]) -> tuple[int, float, datetime]:
+def _observation_quality(item: Mapping[str, Any]) -> tuple[int, float, float, datetime]:
     validation = str((item.get("validation") or {}).get("status") or "")
     steps = item.get("steps") or {}
     successful_steps = sum(1 for value in steps.values() if value == "success")
     observed = _parse_datetime(item.get("observed_at")) or datetime.min.replace(tzinfo=KST)
     slot = _observation_slot(item)
-    raw_delay = item.get("slot_delay_seconds")
+
+    raw_completion_delay = item.get("slot_delay_seconds")
     try:
-        delay = float(raw_delay)
+        completion_delay = float(raw_completion_delay)
     except (TypeError, ValueError):
-        delay = (
+        completion_delay = (
             max(0.0, (observed - slot).total_seconds())
             if slot is not None
             else 999999.0
         )
+
+    raw_start_delay = item.get("slot_start_delay_seconds")
+    try:
+        start_delay = float(raw_start_delay)
+    except (TypeError, ValueError):
+        start_delay = completion_delay
+
     return (
         (100 if validation == "ok" else 0) + successful_steps,
-        -delay,
+        -start_delay,
+        -completion_delay,
         observed,
     )
 
@@ -342,6 +351,12 @@ def build_observation(
     requested_slot = _parse_datetime(env.get("SENSOR_SLOT_AT"))
     slot_at = sensor_slot_start(requested_slot or now)
     slot_source = str(env.get("SENSOR_SLOT_SOURCE") or "observation_time")
+    try:
+        slot_start_delay_seconds = float(
+            env.get("SENSOR_SLOT_START_DELAY_SECONDS") or ""
+        )
+    except (TypeError, ValueError):
+        slot_start_delay_seconds = max(0.0, (now - slot_at).total_seconds())
     observation_id = now.strftime("obs-%Y%m%dT%H%M%S%z-") + suffix
 
     health_issues = []
@@ -412,10 +427,12 @@ def build_observation(
         "slot_key": slot_at.strftime("%Y-%m-%dT%H:%M%z"),
         "sensor_interval_minutes": SENSOR_INTERVAL_MINUTES,
         "slot_source": slot_source,
+        "slot_start_delay_seconds": slot_start_delay_seconds,
         "slot_delay_seconds": max(0.0, (now - slot_at).total_seconds()),
         "source": {
             "repository": env.get("GITHUB_REPOSITORY"),
             "workflow": env.get("GITHUB_WORKFLOW"),
+            "event_name": env.get("GITHUB_EVENT_NAME"),
             "run_id": run_id or None,
             "run_attempt": run_attempt,
             "head_sha": head_sha or None,
@@ -488,7 +505,7 @@ def build_observation(
             "dropped_from_current_top50_count": public_batch.get("dropped_from_current_top50_count"),
             "tracked_outside_top50_with_samples": public_batch.get("tracked_outside_top50_with_samples"),
             "minute_samples_by_ticker": {
-                str(ticker): rows[-6:]
+                str(ticker): rows[-10:]
                 for ticker, rows in (public_batch.get("minute_samples_by_ticker") or {}).items()
                 if isinstance(rows, list)
             },

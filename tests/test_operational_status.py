@@ -99,13 +99,19 @@ def test_sensor_slot_coverage_uses_completed_six_slots(tmp_path):
                     "observation_id": "obs-1500",
                     "observed_at": "2026-09-26T15:01:00+09:00",
                     "slot_at": "2026-09-26T15:00:00+09:00",
+                    "slot_start_delay_seconds": 20,
                     "slot_delay_seconds": 60,
+                    "source": {"event_name": "workflow_dispatch"},
+                    "slot_source": "dispatch_input",
                 },
                 {
                     "observation_id": "obs-1510",
                     "observed_at": "2026-09-26T15:11:30+09:00",
                     "slot_at": "2026-09-26T15:10:00+09:00",
+                    "slot_start_delay_seconds": 30,
                     "slot_delay_seconds": 90,
+                    "source": {"event_name": "schedule"},
+                    "slot_source": "workflow_start",
                 },
                 {
                     "observation_id": "obs-1530",
@@ -136,7 +142,10 @@ def test_sensor_slot_coverage_uses_completed_six_slots(tmp_path):
     assert coverage["received_slot_count"] == 5
     assert coverage["missing_slots"] == ["2026-09-26T15:20:00+09:00"]
     assert coverage["coverage_ratio"] == 0.833
+    assert coverage["max_slot_start_delay_seconds"] == 60.0
     assert coverage["max_slot_delay_seconds"] == 90.0
+    assert coverage["trigger_event_counts"]["workflow_dispatch"] == 1
+    assert coverage["trigger_event_counts"]["schedule"] == 1
 
 
 def test_build_status_surfaces_poor_sensor_slot_coverage(tmp_path):

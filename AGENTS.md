@@ -116,7 +116,7 @@ python -m autoresearch risk-intel --mode dry-run
 
 ## 질문 기반 시장 학습
 
-10분 관측은 판단하지 않는 사실 수집 센서다. 질문 생성·가설 판단·버그 진단·프로젝트 개선 결정은 :00/:30 Supervisor만 수행한다. `data/supervisor/question_queue.json`은 두 Supervisor가 이어 쓰는 장기 연구 메모이며, 기존 열린 질문이 있으면 반드시 읽는다.
+10분 관측은 판단하지 않는 사실 수집 센서다. 질문 생성·가설 판단·버그 진단·프로젝트 개선 결정은 :00/:30 Supervisor만 수행한다. GitHub `schedule`은 지연·드롭될 수 있으므로 센서 run이 종료 전에 다음 10분 슬롯을 `workflow_dispatch`로 이어주는 self-chain을 1차 연속성 장치로 사용하고, cron·:05 heartbeat·heavy Recovery를 보조망으로 둔다. self-chain은 현재 run 자신을 제외한 실행/대기 센서와 이미 저장된 슬롯을 다시 확인해 중복 dispatch하지 않는다. `data/supervisor/question_queue.json`은 두 Supervisor가 이어 쓰는 장기 연구 메모이며, 기존 열린 질문이 있으면 반드시 읽는다.
 
 - 질문 수 자체를 성과로 보지 않는다. 반복성, 거래대금 근거, 1차 자료 존재, 반증 가능성으로 중요도를 판단한다.
 - 같은 현상의 질문은 묶되 시간 순서 정보는 보존한다.
