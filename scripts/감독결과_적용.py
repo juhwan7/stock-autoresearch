@@ -135,6 +135,67 @@ def normalize_observation_window(result: dict, warnings: list[str]) -> dict:
     return manifest
 
 
+def _supervisor_role(value: object) -> str | None:
+    text = str(value or "").strip().upper()
+    if text == "B" or text.endswith("-B") or text.startswith("B-"):
+        return "B"
+    if text == "A" or text.endswith("-A") or text.startswith("A-"):
+        return "A"
+    return None
+
+
+def validate_feedback_handoff(
+    current: dict,
+    result: dict,
+    warnings: list[str],
+) -> dict:
+    previous_role = _supervisor_role(current.get("supervisor"))
+    current_role = _supervisor_role(result.get("supervisor"))
+    previous_feedback = current.get("feedback_to_other_supervisor") or []
+    if not isinstance(previous_feedback, list):
+        previous_feedback = [previous_feedback] if previous_feedback else []
+    received = result.get("feedback_received") or []
+    outgoing = result.get("feedback_to_other_supervisor") or []
+
+    inbound_required = bool(
+        previous_role
+        and current_role
+        and previous_role != current_role
+        and previous_feedback
+    )
+    inbound_recorded = bool(received)
+    outgoing_recorded = bool(outgoing)
+
+    if inbound_required and not inbound_recorded:
+        warnings.append(
+            "직전 상대 Supervisor의 feedback_to_other_supervisor가 있으나 "
+            "feedback_received가 비어 있어 상호 피드백 연속성을 검증할 수 없음"
+        )
+        if str(result.get("status") or "") != "blocked":
+            result["status"] = "verification_pending"
+
+    if current_role and not outgoing_recorded:
+        warnings.append(
+            "다음 상대 Supervisor에 넘길 feedback_to_other_supervisor가 비어 있음"
+        )
+        if str(result.get("status") or "") != "blocked":
+            result["status"] = "verification_pending"
+
+    handoff = {
+        "source_batch_id": current.get("batch_id") if inbound_required else None,
+        "source_supervisor": previous_role if inbound_required else None,
+        "target_supervisor": current_role,
+        "inbound_required": inbound_required,
+        "inbound_recorded": inbound_recorded,
+        "outgoing_recorded": outgoing_recorded,
+        "complete": (not inbound_required or inbound_recorded) and (
+            not current_role or outgoing_recorded
+        ),
+    }
+    result["feedback_handoff"] = handoff
+    return handoff
+
+
 def update_supervisor_disagreements(result: dict) -> None:
     incoming = result.get("supervisor_disagreements") or []
     if not isinstance(incoming, list) or not incoming:
@@ -571,6 +632,7 @@ def main() -> int:
             source_path = str(src)
         result["changed_paths"] = [source_path]
         warnings.append("changed_paths 누락을 현재 Supervisor 결과 경로로 복구")
+    feedback_handoff = validate_feedback_handoff(current, result, warnings)
     window_manifest = normalize_observation_window(result, warnings)
     if warnings:
         result["validation_warnings"] = warnings
@@ -603,6 +665,10 @@ def main() -> int:
     state["processed_observation_ids_recent"] = processed_recent[-120:]
 
     role = str(window_manifest.get("supervisor") or "A")
+    state["last_feedback_handoff"] = {
+        "batch_id": result["batch_id"],
+        **feedback_handoff,
+    }
     state["last_a_window" if role == "A" else "last_b_window"] = {
         "batch_id": result["batch_id"],
         "window_start": result.get("observation_window_start"),

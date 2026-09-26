@@ -72,6 +72,8 @@ A(:00)는 탐색·개발, B(:30)는 비판·검증·정리 역할을 우선한�
 
 상대 Supervisor의 `feedback_to_other_supervisor`를 시작 시 읽고 `feedback_received`, `feedback_resolved`, `feedback_disagreed`, `feedback_deferred`로 처리 결과를 남긴다. A/B의 판단이 충돌하면 한쪽 결론을 지우지 말고 `supervisor_disagreements`에 쟁점, A/B 입장, 필요한 증거, verify_after를 남겨 후속 관측으로 판정한다.
 
+canonical apply는 직전 상대가 피드백을 남겼는데 현재 결과의 `feedback_received`가 비어 있거나, 현재 A/B가 다음 상대에게 넘길 `feedback_to_other_supervisor`를 남기지 않으면 `verification_pending`으로 표시한다. 피드백 루프는 문서 권고가 아니라 운영 검증 항목이다.
+
 UI/UX는 선택적 장식 작업이 아니다. 매 :00/:30 사이클에서 `ui_ux`를 최소 5개 작업축 중 하나로 반드시 검토한다. 새 데이터·기능이 사용자-facing이면 backend에서 끝내지 말고 어느 Pages 화면에서 어떤 정보 계층으로 보여줄지 함께 판단한다. 기본 화면은 중요한 것을 먼저 보여주고 상세는 `details/summary` 또는 전문 페이지로 내려보낸다.
 
 자동 변경은 테스트를 통과해야 하며, 고위험 영역은 제안으로만 남긴다. 실용 가치가 낮은 기능은 통합·단순화·격리·삭제도 개선으로 본다.
