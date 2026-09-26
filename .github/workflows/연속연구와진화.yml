@@ -233,17 +233,29 @@ jobs:
           else
             git commit -m "observe: record 10-minute supervisor checkpoint"
 
-            # 다른 AI/사용자 작업이 같은 시각 main을 갱신하면 생성 데이터는
-            # 줄 단위 병합보다 다음 10분 주기에 최신 입력으로 다시 만드는 편이 안전하다.
-            # 오래된 관측을 억지로 재베이스해 충돌 파일을 저장하지 않는다.
-            if ! git pull --rebase; then
-              echo "main 동시 갱신으로 핵심 관측 commit이 충돌했습니다. observation 저장 실패를 숨기지 않고 workflow를 실패 처리합니다."
-              git rebase --abort || true
-              exit 1
-            fi
+            # 다른 writer가 pull 직후 main을 한 번 더 갱신하는 좁은 race가 실제로 관측됐다.
+            # 내용 충돌이 없는 non-fast-forward만 짧게 재동기화하고, rebase 충돌은 즉시 실패시킨다.
+            PUSHED=false
+            for ATTEMPT in 1 2 3; do
+              if ! git pull --rebase; then
+                echo "main 동시 갱신으로 핵심 관측 commit이 충돌했습니다. observation 저장 실패를 숨기지 않고 workflow를 실패 처리합니다."
+                git rebase --abort || true
+                exit 1
+              fi
 
-            if ! git push; then
-              echo "push 직전 main이 다시 갱신되어 핵심 observation 저장에 실패했습니다."
+              if git push; then
+                PUSHED=true
+                break
+              fi
+
+              if [ "$ATTEMPT" -lt 3 ]; then
+                echo "push 직전 main이 다시 갱신되었습니다. 충돌 없는 경우에만 재동기화 후 재시도합니다. attempt=$ATTEMPT"
+                sleep $((ATTEMPT * 2))
+              fi
+            done
+
+            if [ "$PUSHED" != "true" ]; then
+              echo "3회 재동기화 후에도 핵심 observation 저장에 실패했습니다."
               exit 1
             fi
           fi
