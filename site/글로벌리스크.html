@@ -7,7 +7,7 @@
 </head>
 <body>
 <header class="hero">
-  <div><p class="eyebrow">GLOBAL & OVERNIGHT RISK</p><h1>글로벌 · 리스크</h1><p class="lead">미국 최근 3거래일, 다음 주요 일정, 금리·유가·환율 같은 오버나잇 변수를 한곳에서 봅니다. 실시간 매크로 값이 없으면 빈 숫자로 판단하지 않습니다.</p></div>
+  <div><p class="eyebrow">GLOBAL & OVERNIGHT RISK</p><h1>글로벌 · 리스크</h1><p class="lead">가장 큰 오버나잇 위험과 가까운 일정을 먼저 보고, 미국 3거래일·매크로 상세는 필요할 때 펼칩니다.</p></div>
   <div class="hero-side"><span class="pulse">미국 종가 + 예정 이벤트</span></div>
 </header>
 <nav class="page-tabs"><div class="wrap">
@@ -22,31 +22,42 @@
 </div></nav>
 <main>
   <div id="global-data-note"></div>
-  <section class="panel">
-    <div class="panel-head"><div><p class="kicker">US · 3 SESSIONS</p><h2>미국 최근 3거래일</h2></div><span class="badge" id="three-session-updated">확인 중</span></div>
-    <div id="quick-us-summary" class="summary-strip"></div>
-    <div id="us-session-history"></div>
-  </section>
 
-  <section class="panel">
+  <section class="panel primary-panel">
     <div class="panel-head"><div><p class="kicker">OVERNIGHT PRIORITY</p><h2>오버나잇 리스크 우선순위</h2></div><span class="risk-badge" id="risk-level">확인 중</span></div>
     <div id="risk-summary" style="margin-bottom:14px"></div>
     <div id="overnight-risk-list"></div>
   </section>
 
-  <section class="grid two">
-    <article class="panel"><div class="panel-head"><div><p class="kicker">EVENT CALENDAR</p><h2>다음 중요 일정</h2></div></div><div id="risk-events"></div></article>
-    <article class="panel"><div class="panel-head"><div><p class="kicker">NEXT CHECKS</p><h2>AI가 다음에 확인할 것</h2></div></div><div id="next-checks" class="mini-list"></div></article>
+  <section class="grid two priority-grid">
+    <article class="panel priority-panel"><div class="panel-head"><div><p class="kicker">EVENT CALENDAR</p><h2>다음 중요 일정</h2></div></div><div id="risk-events" data-limit="6"></div></article>
+    <article class="panel priority-panel"><div class="panel-head"><div><p class="kicker">NEXT CHECKS</p><h2>AI가 다음에 확인할 것</h2></div></div><div id="next-checks" class="mini-list"></div></article>
   </section>
 
-  <section class="panel">
-    <div class="panel-head"><div><p class="kicker">CROSS-ASSET MACRO</p><h2>실시간 매크로 상태</h2></div><div class="hero-side"><span class="badge" id="macro-regime">UNKNOWN</span><span class="badge" id="macro-coverage">0/0</span></div></div>
-    <div class="macro-summary">
-      <div><p class="subhead">전달 경로</p><div id="macro-paths" class="mini-list"></div></div>
-      <div><p class="subhead">충돌 신호</p><div id="macro-conflicts" class="mini-list"></div></div>
+  <details class="panel disclosure-panel" data-persist="global-us-sessions">
+    <summary>
+      <div><p class="kicker">US · 3 SESSIONS</p><h2>미국 최근 3거래일</h2><p class="disclosure-hint">최근 흐름을 비교할 때 펼쳐봅니다.</p></div>
+      <div class="summary-actions"><span class="badge" id="three-session-updated">확인 중</span><span class="disclosure-toggle">상세 보기</span></div>
+    </summary>
+    <div class="disclosure-body">
+      <div id="quick-us-summary" class="summary-strip"></div>
+      <div id="us-session-history"></div>
     </div>
-    <div id="macro-groups"></div>
-  </section>
+  </details>
+
+  <details class="panel disclosure-panel quiet-panel" data-persist="global-macro">
+    <summary>
+      <div><p class="kicker">CROSS-ASSET MACRO</p><h2>실시간 매크로 상세</h2><p class="disclosure-hint">금리·유가·환율 전달경로와 충돌 신호를 깊게 확인합니다.</p></div>
+      <div class="summary-actions"><span class="badge" id="macro-regime">UNKNOWN</span><span class="badge" id="macro-coverage">0/0</span><span class="disclosure-toggle">상세 보기</span></div>
+    </summary>
+    <div class="disclosure-body">
+      <div class="macro-summary">
+        <div><p class="subhead">전달 경로</p><div id="macro-paths" class="mini-list"></div></div>
+        <div><p class="subhead">충돌 신호</p><div id="macro-conflicts" class="mini-list"></div></div>
+      </div>
+      <div id="macro-groups"></div>
+    </div>
+  </details>
 </main>
 <footer><span>Stock AutoResearch · 글로벌 리스크</span><span id="updated">데이터 확인 중</span></footer><script src="기능.js"></script>
 </body></html>
