@@ -334,3 +334,14 @@ GitHub Pages AI 대화 화면
 8. 데이터가 없으면 없다고 표시하며 과거값·미래값으로 현재 슬롯을 정상처럼 만들지 않는다.
 
 2026-09-27 00:35 B의 센서 0/3, issue-digest 해결, macro 검증 보류 사례는 최초 bootstrap history로 보존한다. 이후 실제 센서가 다시 들어왔더라도 과거 00:35 상태를 최신 현재 상태로 덮어쓰지 않고 다음 정규 Supervisor가 새 근거로 동일 incident를 갱신한다.
+
+
+### 2026-09-27 A/B 상호 생존 복구 강화
+
+- 실제 장애: B의 분석/센서 window 자체가 실패한 것이 아니라 결과 저장 단계의 connector write 차단 뒤 ChatGPT 예약 `AutoResearch Supervisor B :30`가 비활성화되어 이후 정규 B 결과가 비었다.
+- 잘못된 대응: 단일 `create_file`/write 실패를 Supervisor 자체 중단 사유로 취급한 것.
+- 확인된 사실: A는 계속 실행되며 complete B window와 정규 B result 공백을 감지했고, `Supervisor 결과 적용 및 Telegram` single-writer workflow는 최근에도 success였다. 따라서 저장소 전체 write 장애로 보면 안 된다.
+- 검증된 fallback: direct write 반복 대신 owner가 만든 `[Supervisor Result]` Issue body에 결과 JSON을 전달하면 기존 Action single-writer가 저장·canonical·memory·Telegram을 처리한다.
+- 구조 강화: `scripts/감독결과_적용.py`가 collaboration에 A/B별 `supervisor_health`를 계산한다. complete window 대비 result 누락은 `missing_result`, result 대비 state 미적용은 `unapplied`로 분리한다. 저장소만으로 automation disabled 여부를 알 수 없으므로 원인은 live automation/Actions를 교차확인한다.
+- 불변식: recoverable write/Telegram/Pages/sensor 문제 하나만으로 A/B를 disable하지 않는다. 살아 있는 상대 Supervisor가 복구하고 기존 스케줄을 유지한다.
+- 다음 검증: 재활성화된 B가 다음 :37 실행에서 :10/:20/:30만 사용해 regular result를 만들고 single-writer 경로로 canonical/Telegram까지 완료하는지 확인한다.
