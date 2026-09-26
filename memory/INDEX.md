@@ -1,7 +1,7 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-27T04:07:00+09:00
-> latest batch: supervisor-20260927T0400+0900-a28
+> 자동 갱신: 2026-09-27T06:07:00+09:00
+> latest batch: supervisor-20260927T0600+0900-a30
 > Supervisor: A · 상태 verification_pending
 > 이번 작업축: 7개
 
@@ -14,10 +14,10 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
-- Supervisor canonical apply가 00:30 이후 정지한 원인
+- 05:30 B window 3/3인데 정규 B result가 없는 원인
+- 06:00 A apply 후 canonical/state/latest-report/Pages 전진 여부
 - 미·이란 제안 거부 이후 실제 호르무즈 통항·군사행동 변화
-- 월요일 USTR 미중 협상 세부 발표
-- degraded 9개 뉴스 검색축의 실질 커버리지 손실 여부
+- degraded 8개 뉴스 검색축의 실질 커버리지 손실 여부
 - macro 실값은 다음 거래 가능 구간에서 검증
 
 ## 활성 시장 이슈
@@ -31,8 +31,8 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- supervisor-canonical-apply-lag — investigating
-- sensor-continuity — verification_pending
+- supervisor-b-result-continuity — investigating
+- news-fixed-axis-empty — verification_pending
 - macro-runtime-empty — verification_pending
 - Supervisor A 209분 정지 — 이슈 상태가 오래될 수 있음
 - Supervisor B 183분 정지 — 이슈 상태가 오래될 수 있음
@@ -40,7 +40,7 @@
 - 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 183.18814265분 전
 
 ## 최근 해결
-- 없음
+- sensor-continuity — resolved
 
 ## 운영 품질
 - operations: needs_user_action

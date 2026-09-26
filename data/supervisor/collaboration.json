@@ -1,27 +1,140 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-27T04:07:00+09:00",
+  "updated_at": "2026-09-27T06:07:00+09:00",
   "status": "investigating",
-  "headline": "A와 B가 센서 연속성 장애를 공동 추적 중입니다. 최근 해결: 이슈 원장 갱신 지연.",
-  "active_incident_count": 3,
-  "resolved_incident_count": 1,
+  "headline": "A와 B가 거시 데이터 실값 공백를 공동 추적 중입니다. 최근 해결: 센서 연속성 장애.",
+  "active_incident_count": 4,
+  "resolved_incident_count": 2,
   "incidents": [
+    {
+      "incident_id": "macro-runtime-data",
+      "title": "거시 데이터 실값 공백",
+      "status": "verification_pending",
+      "summary": "휴장 중 실값으로 방향 판정하지 않음",
+      "owner": "A",
+      "verify_after": "다음 거래 가능 구간",
+      "evidence": [],
+      "source_kind": "project_improvement_signal",
+      "source_batch_id": "supervisor-20260927T0600+0900-a30",
+      "source_file": "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json",
+      "first_seen": "2026-09-27T00:09:11+09:00",
+      "updated_at": "2026-09-27T06:07:00+09:00",
+      "history": [
+        {
+          "at": "2026-09-27T00:09:11+09:00",
+          "by": "A",
+          "batch_id": "supervisor-20260927T0000+0900-a24",
+          "status": "verification_pending",
+          "summary": "23:40/23:50 모두 macro 실값 없음"
+        },
+        {
+          "at": "2026-09-27T00:35:21+09:00",
+          "by": "B",
+          "batch_id": "supervisor-20260927T0030+0900-b35",
+          "status": "verification_pending",
+          "summary": "새 B 관측 자체가 없어 live macro 검증 불가"
+        },
+        {
+          "at": "2026-09-27T04:07:00+09:00",
+          "by": "A",
+          "batch_id": "supervisor-20260927T0400+0900-a28",
+          "status": "verification_pending",
+          "summary": "휴장 중 실값 공백은 방향 추정 금지"
+        },
+        {
+          "at": "2026-09-27T06:07:00+09:00",
+          "by": "A",
+          "batch_id": "supervisor-20260927T0600+0900-a30",
+          "status": "verification_pending",
+          "summary": "휴장 중 실값으로 방향 판정하지 않음"
+        }
+      ]
+    },
+    {
+      "incident_id": "supervisor-b-result-continuity",
+      "history": [
+        {
+          "at": "2026-09-27T06:07:00+09:00",
+          "by": "A",
+          "batch_id": "supervisor-20260927T0600+0900-a30",
+          "status": "investigating",
+          "summary": "latest-B 05:30 3/3이나 대응 정규 B result가 main에서 확인되지 않음"
+        }
+      ],
+      "title": "latest-B 05:30 3/3이나 대응 정규 B result가 main에서 확인되지 않음",
+      "status": "investigating",
+      "summary": "latest-B 05:30 3/3이나 대응 정규 B result가 main에서 확인되지 않음",
+      "owner": "A",
+      "verify_after": "06:30 B 또는 B 실행 기록 확인",
+      "evidence": [],
+      "source_kind": "project_improvement_signal",
+      "source_batch_id": "supervisor-20260927T0600+0900-a30",
+      "source_file": "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json",
+      "updated_at": "2026-09-27T06:07:00+09:00",
+      "first_seen": "2026-09-27T06:07:00+09:00"
+    },
+    {
+      "incident_id": "news-fixed-axis-empty",
+      "history": [
+        {
+          "at": "2026-09-27T06:07:00+09:00",
+          "by": "A",
+          "batch_id": "supervisor-20260927T0600+0900-a30",
+          "status": "verification_pending",
+          "summary": "06:00 discovery failed=0/degraded=8이나 여러 고정 검색축 empty"
+        }
+      ],
+      "title": "06:00 discovery failed=0/degraded=8이나 여러 고정 검색축 empty",
+      "status": "verification_pending",
+      "summary": "06:00 discovery failed=0/degraded=8이나 여러 고정 검색축 empty",
+      "owner": "A",
+      "verify_after": "다음 discovery 및 독립 출처 대조",
+      "evidence": [],
+      "source_kind": "project_improvement_signal",
+      "source_batch_id": "supervisor-20260927T0600+0900-a30",
+      "source_file": "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json",
+      "updated_at": "2026-09-27T06:07:00+09:00",
+      "first_seen": "2026-09-27T06:07:00+09:00"
+    },
+    {
+      "incident_id": "supervisor-canonical-apply-lag",
+      "history": [
+        {
+          "at": "2026-09-27T04:07:00+09:00",
+          "by": "A",
+          "batch_id": "supervisor-20260927T0400+0900-a28",
+          "status": "investigating",
+          "summary": "latest-A 04:00 및 latest-B 03:30은 3/3인데 state/latest-report는 00:30 B에 정지"
+        }
+      ],
+      "title": "latest-A 04:00 및 latest-B 03:30은 3/3인데 state/latest-report는 00:30 B에 정지",
+      "status": "investigating",
+      "summary": "latest-A 04:00 및 latest-B 03:30은 3/3인데 state/latest-report는 00:30 B에 정지",
+      "owner": "A",
+      "verify_after": "이 A result apply 직후",
+      "evidence": [],
+      "source_kind": "project_improvement_signal",
+      "source_batch_id": "supervisor-20260927T0400+0900-a28",
+      "source_file": "data/supervisor/ai-results/supervisor-20260927T0400+0900-a28.json",
+      "updated_at": "2026-09-27T04:07:00+09:00",
+      "first_seen": "2026-09-27T04:07:00+09:00"
+    },
     {
       "incident_id": "sensor-continuity",
       "title": "센서 연속성 장애",
-      "status": "verification_pending",
-      "summary": "최근 operations 6/6 및 04:00 A 3/3",
+      "status": "resolved",
+      "summary": "A 06:00 및 B 05:30 모두 3/3",
       "owner": "A",
-      "verify_after": "04:30 B",
+      "verify_after": "연속성이 다시 깨질 때",
       "evidence": [
         "data/supervisor/windows/latest-A.json: 01:40/01:50/02:00 = 3/3 complete",
         "data/supervisor/windows/latest-B.json: 02:10/02:20/02:30 = 3/3 complete"
       ],
       "source_kind": "project_improvement_signal",
-      "source_batch_id": "supervisor-20260927T0400+0900-a28",
-      "source_file": "data/supervisor/ai-results/supervisor-20260927T0400+0900-a28.json",
+      "source_batch_id": "supervisor-20260927T0600+0900-a30",
+      "source_file": "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json",
       "first_seen": "2026-09-27T00:09:11+09:00",
-      "updated_at": "2026-09-27T04:07:00+09:00",
+      "updated_at": "2026-09-27T06:07:00+09:00",
       "history": [
         {
           "at": "2026-09-27T00:09:11+09:00",
@@ -50,68 +163,15 @@
           "batch_id": "supervisor-20260927T0400+0900-a28",
           "status": "verification_pending",
           "summary": "최근 operations 6/6 및 04:00 A 3/3"
-        }
-      ]
-    },
-    {
-      "incident_id": "macro-runtime-data",
-      "title": "거시 데이터 실값 공백",
-      "status": "verification_pending",
-      "summary": "휴장 중 실값 공백은 방향 추정 금지",
-      "owner": "A",
-      "verify_after": "다음 거래 가능 구간",
-      "evidence": [],
-      "source_kind": "project_improvement_signal",
-      "source_batch_id": "supervisor-20260927T0400+0900-a28",
-      "source_file": "data/supervisor/ai-results/supervisor-20260927T0400+0900-a28.json",
-      "first_seen": "2026-09-27T00:09:11+09:00",
-      "updated_at": "2026-09-27T04:07:00+09:00",
-      "history": [
-        {
-          "at": "2026-09-27T00:09:11+09:00",
-          "by": "A",
-          "batch_id": "supervisor-20260927T0000+0900-a24",
-          "status": "verification_pending",
-          "summary": "23:40/23:50 모두 macro 실값 없음"
         },
         {
-          "at": "2026-09-27T00:35:21+09:00",
-          "by": "B",
-          "batch_id": "supervisor-20260927T0030+0900-b35",
-          "status": "verification_pending",
-          "summary": "새 B 관측 자체가 없어 live macro 검증 불가"
-        },
-        {
-          "at": "2026-09-27T04:07:00+09:00",
+          "at": "2026-09-27T06:07:00+09:00",
           "by": "A",
-          "batch_id": "supervisor-20260927T0400+0900-a28",
-          "status": "verification_pending",
-          "summary": "휴장 중 실값 공백은 방향 추정 금지"
+          "batch_id": "supervisor-20260927T0600+0900-a30",
+          "status": "resolved",
+          "summary": "A 06:00 및 B 05:30 모두 3/3"
         }
       ]
-    },
-    {
-      "incident_id": "supervisor-canonical-apply-lag",
-      "history": [
-        {
-          "at": "2026-09-27T04:07:00+09:00",
-          "by": "A",
-          "batch_id": "supervisor-20260927T0400+0900-a28",
-          "status": "investigating",
-          "summary": "latest-A 04:00 및 latest-B 03:30은 3/3인데 state/latest-report는 00:30 B에 정지"
-        }
-      ],
-      "title": "latest-A 04:00 및 latest-B 03:30은 3/3인데 state/latest-report는 00:30 B에 정지",
-      "status": "investigating",
-      "summary": "latest-A 04:00 및 latest-B 03:30은 3/3인데 state/latest-report는 00:30 B에 정지",
-      "owner": "A",
-      "verify_after": "이 A result apply 직후",
-      "evidence": [],
-      "source_kind": "project_improvement_signal",
-      "source_batch_id": "supervisor-20260927T0400+0900-a28",
-      "source_file": "data/supervisor/ai-results/supervisor-20260927T0400+0900-a28.json",
-      "updated_at": "2026-09-27T04:07:00+09:00",
-      "first_seen": "2026-09-27T04:07:00+09:00"
     },
     {
       "incident_id": "issue-digest-apply",
@@ -154,27 +214,27 @@
     }
   ],
   "last_turn": {
-    "batch_id": "supervisor-20260927T0400+0900-a28",
-    "processed_at": "2026-09-27T04:07:00+09:00",
+    "batch_id": "supervisor-20260927T0600+0900-a30",
+    "processed_at": "2026-09-27T06:07:00+09:00",
     "supervisor": "A",
     "status": "verification_pending",
-    "summary": "04:00 A canonical window 03:40/03:50/04:00은 3/3 완전하다. 센서 연속성은 최근 6/6으로 회복됐지만 canonical Supervisor state/latest-report는 00:30 B에 정지해 있어 결과 적용 경로 지연을 별도 운영 장애로 본다.",
+    "summary": "06:00 A canonical window 05:40/05:50/06:00은 3/3 완전하다. 센서 연속성은 유지되지만 최신 B window는 05:30까지 3/3인데 대응하는 정규 B result가 main에서 확인되지 않아 A↔B 대화 연속성은 여전히 불완전하다. 04:00 A apply로 canonical lag 자체는 전진했으므로 센서 재수정보다 B 결과 생성/저장 경로를 우선 추적한다.",
     "feedback_received": [
       {
         "from_batch": "supervisor-20260927T0030+0900-b35",
-        "item": "이전 누락 슬롯을 끌어오지 말 것."
+        "item": "누락 슬롯을 과거값으로 보충하지 말 것."
       },
       {
         "from_batch": "supervisor-20260927T0030+0900-b35",
-        "item": "센서 self-chain/heartbeat 연속성을 확인할 것."
+        "item": "센서 연속성과 canonical apply를 구분해 확인할 것."
       },
       {
         "from_batch": "supervisor-20260927T0030+0900-b35",
-        "item": "issue-digest stale resolved를 처음부터 재조사하지 말 것."
+        "item": "issue-digest resolved를 반복 조사하지 말 것."
       },
       {
         "from_batch": "supervisor-20260927T0030+0900-b35",
-        "item": "macro 실값과 휴장 중 가격·수급을 추정하지 말 것."
+        "item": "macro 실값 없는 휴장 구간에서 방향을 추정하지 말 것."
       },
       {
         "from_batch": "supervisor-20260927T0030+0900-b35",
@@ -184,14 +244,14 @@
     "feedback_resolved": [
       {
         "item": "canonical window 규칙",
-        "resolution": "03:40/03:50/04:00만 사용, 3/3"
+        "resolution": "05:40/05:50/06:00만 사용해 3/3"
       },
       {
         "item": "센서 연속성",
-        "resolution": "최근 6/6 및 이번 A 3/3으로 복구 관측 지속"
+        "resolution": "A 06:00/B 05:30 모두 3/3으로 센서 자체는 정상"
       },
       {
-        "item": "issue-digest 재조사 금지",
+        "item": "issue-digest 반복 조사 금지",
         "resolution": "기존 resolved 유지"
       },
       {
@@ -202,35 +262,112 @@
     "feedback_disagreed": [],
     "feedback_deferred": [
       {
-        "item": "macro 최종판정",
-        "reason": "휴장 및 거래 가능 실값 검증 전"
+        "item": "최신 B의 신규 피드백",
+        "reason": "05:30 B window는 존재하지만 대응 정규 B result가 main에서 확인되지 않아 새 feedback_to_other_supervisor를 읽을 수 없음"
       },
       {
-        "item": "센서 복구 원인 최종 확정",
-        "reason": "복구는 관측됐으나 self-chain/heartbeat 중 실제 기여 경로는 추가 운영증거 필요"
+        "item": "macro 최종판정",
+        "reason": "휴장 및 다음 거래 가능 실값 검증 전"
       }
     ],
     "feedback_to_other_supervisor": [
-      "04:30 B는 04:10/04:20/04:30만 사용하고 이전 슬롯으로 보충하지 말 것.",
-      "센서 자체는 연속 3/3이므로 같은 센서 수정부터 반복하지 말고 canonical apply/state/latest-report/Pages 전진 여부를 우선 검증할 것.",
-      "트럼프의 이란 제안 직접 거부는 Reuters로 확인됐으므로 다시 '공식 거부 미확인'으로 되돌리지 말되 실제 통항·추가 군사행동은 별도 근거로 판정할 것.",
-      "월요일 USTR 세부 발표 전 미중 합의 세부를 확정하지 말 것.",
-      "macro는 다음 거래 가능 구간 전까지 방향 추정하지 말 것."
+      "06:30 B는 06:10/06:20/06:30만 사용하고 과거 슬롯으로 보충하지 말 것.",
+      "센서 A/B window는 연속 3/3이므로 센서 수정부터 반복하지 말고 B 정규 result 생성/저장 경로와 canonical/Pages 전진을 우선 검증할 것.",
+      "이란 제안 거부 자체는 Reuters로 확인됐지만 실제 호르무즈 통항 악화·추가 군사행동은 별도 근거로 판정할 것.",
+      "USTR 신규 공식 세부자료 확인 전 미중 합의 세부를 확정하지 말 것.",
+      "06:00 discovery degraded=8의 empty 고정축이 실질 커버리지 손실인지 확인할 것."
     ],
     "changed_paths": [
-      "data/supervisor/ai-results/supervisor-20260927T0400+0900-a28.json"
+      "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json"
     ],
     "change_kind": "result_only",
     "next_checks": [
-      "04:30 B는 04:10/04:20/04:30만 사용한다.",
-      "이 결과 apply 후 state/latest-report/AI 대화 타임라인이 실제 전진하는지 확인한다.",
-      "센서 연속성 incident는 3/3 연속 유지가 깨질 때만 재개한다.",
-      "월요일 USTR 공식 세부자료 확인.",
-      "macro는 다음 거래 가능 구간에서 실값 검증."
+      "06:30 B는 06:10/06:20/06:30만 사용한다.",
+      "05:30 B 정규 result가 왜 생성/저장되지 않았는지 Supervisor B 실행·저장 경로를 우선 확인한다.",
+      "이 A result apply 후 state/latest-report/collaboration/AI 대화 타임라인이 06:00으로 전진하는지 확인한다.",
+      "degraded 8개 고정 검색축의 empty가 주말 정상 공백인지 공급자 품질 문제인지 분해한다.",
+      "macro는 다음 거래 가능 구간에서 실값 검증한다."
     ],
-    "source_file": "data/supervisor/ai-results/supervisor-20260927T0400+0900-a28.json"
+    "source_file": "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json"
   },
   "timeline": [
+    {
+      "batch_id": "supervisor-20260927T0600+0900-a30",
+      "processed_at": "2026-09-27T06:07:00+09:00",
+      "supervisor": "A",
+      "status": "verification_pending",
+      "summary": "06:00 A canonical window 05:40/05:50/06:00은 3/3 완전하다. 센서 연속성은 유지되지만 최신 B window는 05:30까지 3/3인데 대응하는 정규 B result가 main에서 확인되지 않아 A↔B 대화 연속성은 여전히 불완전하다. 04:00 A apply로 canonical lag 자체는 전진했으므로 센서 재수정보다 B 결과 생성/저장 경로를 우선 추적한다.",
+      "feedback_received": [
+        {
+          "from_batch": "supervisor-20260927T0030+0900-b35",
+          "item": "누락 슬롯을 과거값으로 보충하지 말 것."
+        },
+        {
+          "from_batch": "supervisor-20260927T0030+0900-b35",
+          "item": "센서 연속성과 canonical apply를 구분해 확인할 것."
+        },
+        {
+          "from_batch": "supervisor-20260927T0030+0900-b35",
+          "item": "issue-digest resolved를 반복 조사하지 말 것."
+        },
+        {
+          "from_batch": "supervisor-20260927T0030+0900-b35",
+          "item": "macro 실값 없는 휴장 구간에서 방향을 추정하지 말 것."
+        },
+        {
+          "from_batch": "supervisor-20260927T0030+0900-b35",
+          "item": "UI 카드 증설을 자제할 것."
+        }
+      ],
+      "feedback_resolved": [
+        {
+          "item": "canonical window 규칙",
+          "resolution": "05:40/05:50/06:00만 사용해 3/3"
+        },
+        {
+          "item": "센서 연속성",
+          "resolution": "A 06:00/B 05:30 모두 3/3으로 센서 자체는 정상"
+        },
+        {
+          "item": "issue-digest 반복 조사 금지",
+          "resolution": "기존 resolved 유지"
+        },
+        {
+          "item": "UI 증설 자제",
+          "resolution": "no_change"
+        }
+      ],
+      "feedback_disagreed": [],
+      "feedback_deferred": [
+        {
+          "item": "최신 B의 신규 피드백",
+          "reason": "05:30 B window는 존재하지만 대응 정규 B result가 main에서 확인되지 않아 새 feedback_to_other_supervisor를 읽을 수 없음"
+        },
+        {
+          "item": "macro 최종판정",
+          "reason": "휴장 및 다음 거래 가능 실값 검증 전"
+        }
+      ],
+      "feedback_to_other_supervisor": [
+        "06:30 B는 06:10/06:20/06:30만 사용하고 과거 슬롯으로 보충하지 말 것.",
+        "센서 A/B window는 연속 3/3이므로 센서 수정부터 반복하지 말고 B 정규 result 생성/저장 경로와 canonical/Pages 전진을 우선 검증할 것.",
+        "이란 제안 거부 자체는 Reuters로 확인됐지만 실제 호르무즈 통항 악화·추가 군사행동은 별도 근거로 판정할 것.",
+        "USTR 신규 공식 세부자료 확인 전 미중 합의 세부를 확정하지 말 것.",
+        "06:00 discovery degraded=8의 empty 고정축이 실질 커버리지 손실인지 확인할 것."
+      ],
+      "changed_paths": [
+        "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json"
+      ],
+      "change_kind": "result_only",
+      "next_checks": [
+        "06:30 B는 06:10/06:20/06:30만 사용한다.",
+        "05:30 B 정규 result가 왜 생성/저장되지 않았는지 Supervisor B 실행·저장 경로를 우선 확인한다.",
+        "이 A result apply 후 state/latest-report/collaboration/AI 대화 타임라인이 06:00으로 전진하는지 확인한다.",
+        "degraded 8개 고정 검색축의 empty가 주말 정상 공백인지 공급자 품질 문제인지 분해한다.",
+        "macro는 다음 거래 가능 구간에서 실값 검증한다."
+      ],
+      "source_file": "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json"
+    },
     {
       "batch_id": "supervisor-20260927T0400+0900-a28",
       "processed_at": "2026-09-27T04:07:00+09:00",
