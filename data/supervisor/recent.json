@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-26T08:37:40.180044+09:00",
+  "updated_at": "2026-09-26T10:58:32.458864+09:00",
   "batch_size": 10,
   "observations": [
     {
@@ -7981,6 +7981,534 @@
         "updated_at": "2026-09-25T21:51:28Z",
         "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36193777119",
         "head_sha": "296b445f24e915f9b87a2fcc96fcd6953cbeb0c5"
+      },
+      "hypothesis_verification": {
+        "due": []
+      },
+      "signals": [
+        "health:CRITICAL",
+        "discovery:degraded",
+        "market:outside_domestic_monitor_window"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "observation_id": "obs-20260926T105832+0900-36210163426-1",
+      "observed_at": "2026-09-26T10:58:32.458864+09:00",
+      "source": {
+        "repository": "juhwan7/stock-autoresearch",
+        "workflow": "6분 감독 관측 큐",
+        "run_id": "36210163426",
+        "run_attempt": "1",
+        "head_sha": "82d156d24f0278e5243c4884eda1beb483dca78d",
+        "ref_name": "main"
+      },
+      "queue": {
+        "batch_size": 10,
+        "pending_before_append": 3,
+        "last_processed_observation_id": "obs-20260925T215636+0900-36137826255-1",
+        "pending_after_append": 4
+      },
+      "validation": {
+        "status": "ok",
+        "compile": "ok",
+        "pytest": "ok",
+        "diff_check": "ok"
+      },
+      "steps": {
+        "toss_fetch": "success",
+        "toss_summary": "success",
+        "health": "success",
+        "dashboard": "success",
+        "market_discovery": "success",
+        "public_batch_market": "success",
+        "market_sensor_repair": "success",
+        "risk_sensor_repair": "success",
+        "regression_refresh": "success"
+      },
+      "health": {
+        "status": "CRITICAL",
+        "generated_at": "2026-09-26T10:58:30.245136+09:00",
+        "issues": [
+          {
+            "component": "macro",
+            "code": "unavailable",
+            "severity": "CRITICAL",
+            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+          },
+          {
+            "component": "discovery",
+            "code": "google-news-degraded",
+            "severity": "CRITICAL",
+            "message": "Google News 탐색 5/7개 그룹이 비어 있거나 오류"
+          }
+        ]
+      },
+      "regression": {
+        "status": "COLLECTING",
+        "generated_at": "2026-09-26T01:58:29.626996+00:00",
+        "quarantine_count": 0,
+        "rolled_back_count": 0
+      },
+      "market_discovery": {
+        "generated_at": "2026-09-26T10:58:21.571118+09:00",
+        "item_count": 31,
+        "new_item_count": 12,
+        "topic_counts": {
+          "kr_corporate_events": 1,
+          "broad_fallback": 30
+        },
+        "trending_terms": [
+          {
+            "term": "유가",
+            "count": 10,
+            "publisher_count": 8,
+            "previous_count": 6,
+            "delta": 4,
+            "score": 32,
+            "examples": [
+              "\"유가 불안·연준 추가 인상 공포\"… 전 세계 채권 '패닉 셀링', 日 주택시장 직격탄",
+              "'고공행진' 건설공사비, 환율·유가 엇갈려도 오름세 유지될까",
+              "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감"
+            ]
+          },
+          {
+            "term": "뉴욕증시",
+            "count": 7,
+            "publisher_count": 7,
+            "previous_count": 4,
+            "delta": 3,
+            "score": 24,
+            "examples": [
+              "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+              "국제유가 2%대 하락‥뉴욕증시 상승",
+              "미·이란 협상 기대에 유가 2%↓... S&P500 0.51%↑ [뉴욕증시]"
+            ]
+          },
+          {
+            "term": "하락에",
+            "count": 7,
+            "publisher_count": 5,
+            "previous_count": 3,
+            "delta": 4,
+            "score": 23,
+            "examples": [
+              "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+              "환율 하락에 항공주 수혜…식음료는 딜레마",
+              "환율 하락에 항공주는 웃고 해운주 울고…식음료는 딜레마"
+            ]
+          },
+          {
+            "term": "협상",
+            "count": 5,
+            "publisher_count": 4,
+            "previous_count": 0,
+            "delta": 5,
+            "score": 19,
+            "examples": [
+              "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+              "미·이란 협상 기대에 유가 2%↓... S&P500 0.51%↑ [뉴욕증시]",
+              "국제유가, 미·이란 협상 기대감에 2%대 하락"
+            ]
+          },
+          {
+            "term": "환율",
+            "count": 5,
+            "publisher_count": 3,
+            "previous_count": 0,
+            "delta": 5,
+            "score": 18,
+            "examples": [
+              "'고공행진' 건설공사비, 환율·유가 엇갈려도 오름세 유지될까",
+              "환율 끌어내린 조선사 선물환…'미래 달러' 추가 매도 여력은",
+              "환율 하락에 항공주 수혜…식음료는 딜레마"
+            ]
+          },
+          {
+            "term": "호르무즈",
+            "count": 5,
+            "publisher_count": 5,
+            "previous_count": 3,
+            "delta": 2,
+            "score": 17,
+            "examples": [
+              "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+              "[뉴욕유가] 호르무즈 해법 기대감에 사흘만에 하락…WTI, 2.33%↓",
+              "[뉴욕증시] '호르무즈 낙관론'에 국제유가 하락...3대 지수 상승"
+            ]
+          },
+          {
+            "term": "마감",
+            "count": 4,
+            "publisher_count": 4,
+            "previous_count": 0,
+            "delta": 4,
+            "score": 16,
+            "examples": [
+              "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+              "[속보]나스닥 0.5% 상승 마감…국채금리 상승에도 유가 하락"
+            ]
+          },
+          {
+            "term": "기대",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 0,
+            "delta": 3,
+            "score": 12,
+            "examples": [
+              "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감"
+            ]
+          },
+          {
+            "term": "나스닥",
+            "count": 4,
+            "publisher_count": 2,
+            "previous_count": 6,
+            "delta": -2,
+            "score": 10,
+            "examples": [
+              "RegenLab, 나스닥 상장 추진…매출 2,900만 달러 돌파",
+              "[속보]나스닥 0.5% 상승 마감…국채금리 상승에도 유가 하락",
+              "[뉴욕마감]국채금리 급등에도 AI주 랠리…나스닥 0.48%↑"
+            ]
+          },
+          {
+            "term": "상한가",
+            "count": 3,
+            "publisher_count": 1,
+            "previous_count": 0,
+            "delta": 3,
+            "score": 10,
+            "examples": [
+              "\"코스피 7,000인데 내 종목은 왜\"…상한가 줄고 52주 신저가 속출",
+              "‘코스피 7000 맞나요’ 개미 울리는 쏠림장세…상한가 ‘반토막’, 신저가만 속출 [투자360]",
+              "지루한 박스권 장세…상한가·52주 신고가 종목수도 '뚝'"
+            ]
+          },
+          {
+            "term": "달러",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 9,
+            "examples": [
+              "RegenLab, 나스닥 상장 추진…매출 2,900만 달러 돌파",
+              "환율 끌어내린 조선사 선물환…'미래 달러' 추가 매도 여력은",
+              "원·달러 환율 1350원대로…항공주 강세, 해운·식품주는 셈법 복잡"
+            ]
+          },
+          {
+            "term": "국제유가",
+            "count": 3,
+            "publisher_count": 3,
+            "previous_count": 4,
+            "delta": -1,
+            "score": 9,
+            "examples": [
+              "국제유가 2%대 하락‥뉴욕증시 상승",
+              "국제유가, 미·이란 협상 기대감에 2%대 하락",
+              "[뉴욕증시] '호르무즈 낙관론'에 국제유가 하락...3대 지수 상승"
+            ]
+          },
+          {
+            "term": "국채금리",
+            "count": 3,
+            "publisher_count": 2,
+            "previous_count": 3,
+            "delta": 0,
+            "score": 8,
+            "examples": [
+              "[속보]나스닥 0.5% 상승 마감…국채금리 상승에도 유가 하락",
+              "[뉴욕마감]국채금리 급등에도 AI주 랠리…나스닥 0.48%↑",
+              "유가 꺾이자 美 국채금리 진정…증시 선물 반등"
+            ]
+          },
+          {
+            "term": "항공주",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "환율 하락에 항공주 수혜…식음료는 딜레마",
+              "원·달러 환율 1350원대로…항공주 강세, 해운·식품주는 셈법 복잡"
+            ]
+          },
+          {
+            "term": "지수",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "[뉴욕증시] '호르무즈 낙관론'에 국제유가 하락...3대 지수 상승",
+              "뉴욕증시, 유가 하락에 3대 지수 상승…다우 0.93%↑"
+            ]
+          },
+          {
+            "term": "개미",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "\"우리도 한국 주식 살래\" 해외 개미 '러브콜'...ETF도 직접 투자한다 - 머니투데이",
+              "‘코스피 7000 맞나요’ 개미 울리는 쏠림장세…상한가 ‘반토막’, 신저가만 속출 [투자360]"
+            ]
+          },
+          {
+            "term": "강세",
+            "count": 2,
+            "publisher_count": 2,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 8,
+            "examples": [
+              "[외환-마감] 엔화 강세·유가 하락에…8.50원↓",
+              "원·달러 환율 1350원대로…항공주 강세, 해운·식품주는 셈법 복잡"
+            ]
+          },
+          {
+            "term": "식음료는",
+            "count": 2,
+            "publisher_count": 1,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 7,
+            "examples": [
+              "환율 하락에 항공주 수혜…식음료는 딜레마",
+              "환율 하락에 항공주는 웃고 해운주 울고…식음료는 딜레마"
+            ]
+          },
+          {
+            "term": "딜레마",
+            "count": 2,
+            "publisher_count": 1,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 7,
+            "examples": [
+              "환율 하락에 항공주 수혜…식음료는 딜레마",
+              "환율 하락에 항공주는 웃고 해운주 울고…식음료는 딜레마"
+            ]
+          },
+          {
+            "term": "52주",
+            "count": 2,
+            "publisher_count": 1,
+            "previous_count": 0,
+            "delta": 2,
+            "score": 7,
+            "examples": [
+              "\"코스피 7,000인데 내 종목은 왜\"…상한가 줄고 52주 신저가 속출",
+              "지루한 박스권 장세…상한가·52주 신고가 종목수도 '뚝'"
+            ]
+          }
+        ],
+        "new_dart_filings": [],
+        "official_web_candidates": [],
+        "toss_market": {
+          "available": true,
+          "captured_at": "2026-09-26T09:29:11.283818+09:00",
+          "top_turnover": [],
+          "minute_burst_leaders": [],
+          "top10_share": null
+        },
+        "sector_selection": {
+          "mode": "dynamic",
+          "fixed_sector_whitelist": false,
+          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 1시간 AI가 주도 섹터를 선택"
+        },
+        "naver_indices": {
+          "KOSPI": "7,080.92",
+          "KOSDAQ": "844.48",
+          "KOSPI200": "1,126.12"
+        },
+        "source_summary": {
+          "ok_or_partial": 3,
+          "failed": 0,
+          "degraded": 5
+        },
+        "top_new_items": [
+          {
+            "topic": "broad_fallback",
+            "title": "'고공행진' 건설공사비, 환율·유가 엇갈려도 오름세 유지될까",
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9aUFRXQ0xDRmhuVFZnTW9lVVU4Q1loNXFYRmVWdnFRWVFiQU9xcl9FdERWSmhfTFROd1VYMVh4YXNMZ0V2UHBRVERaUXVKdklzSWg2WEZUcmRoeV9GR3RUb2dRTGw4a2VPYXoyOS1lbWs?oc=5",
+            "published_at": "Sat, 26 Sep 2026 01:00:15 GMT",
+            "publisher": "news.einfomax.co.kr",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "뉴욕증시, 호르무즈 협상 기대·유가 하락에 상승 마감",
+            "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9uWGFxajFZZnJ1d2t2V0VMY3J3LXREY25IMlRPUmZRMUZoVVE1LWVvY0N5U3diY2pZZVhTYWdyUDRlbHhoYi1XWGpkdHlfS3FFQU1KdkRGaDNNQXM?oc=5",
+            "published_at": "Fri, 25 Sep 2026 20:22:00 GMT",
+            "publisher": "KBS 뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "미·이란 협상 기대에 유가 2%↓... S&P500 0.51%↑ [뉴욕증시]",
+            "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1ocnF0YXdwaU8zbDNEQ3BuaVFJajNpVFhsejNERnRTYmwwRjZ5X0JaRlVzNTVrbjUzQXcxZW4yd2NYa3VIRjVYck55NmxGU2xKVGpqM3h6N0NIRTEyU3VBdkgxMVnSAWhBVV95cUxQYWt0c0ZBemJsczBjNWlhbDBnMWY1d0phZEVsTjh6X2RLaWJtQy1XLXB1TVY5RUItNHpOdFdyeGlySGtUSEtIUG9aOUhTbWsxaHpYaVpQYlU1OVktdWNFTldERVFZVDlvWA?oc=5",
+            "published_at": "Sat, 26 Sep 2026 00:59:48 GMT",
+            "publisher": "매일일보",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "\"우리도 한국 주식 살래\" 해외 개미 '러브콜'...ETF도 직접 투자한다 - 머니투데이",
+            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5vOU1UcjUyWEJGZ2kyZGk5V3k0OWRqdTBkdzh2aVBtVGdDSS1PbnJYY0xlVUtsQWItdXBjQXNaX0JULXpLZF9SSTNVUW1XNzJqOUNHX2pvY1QzellkNl9oc0U0cEFmU1h00gFuQVVfeXFMUF9HMWZnSnN4RGZaRFQzN3ZWNmxhek04WDhEQjRLX3JDcjMwdHN4UXY0OE5teHFybnBKRnZtWUdwVFM1T2tZMVdHY19aZUJCem9KMkZhcU9qLThXVkFCNEEzcm8xc2lQSnRZQlozekE?oc=5",
+            "published_at": "Sat, 26 Sep 2026 00:00:00 GMT",
+            "publisher": "머니투데이",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "[IPO챗] 글로벌테크놀로지 등 4곳, 이번주 코스닥 입성",
+            "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5CX1NyQ1Z1Yy01bVZmelo1Z3NVNWx5UHZXQkxqSkpFS2hKMWROLU9LanRzWXU0QW9sd0hOX2tKRE9yQ3k4dXpPY2NDcTBoWEpfT2c?oc=5",
+            "published_at": "Sat, 26 Sep 2026 00:00:07 GMT",
+            "publisher": "매일경제 마켓",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "추석 지나면 코스닥이 약했다…올해는 다를까",
+            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9BbEVRbFc3d1J0RkxGM1Q5cjZ0VERYenBOTFZCZVRmWVF1cVZLdFdLTWVzemdzWWNaSnhmenJCanZZVjhuWGY3ZXNLeHlSdEpUTzJOcF9tdUk5YVhiX0x0N2huZURnV2dz?oc=5",
+            "published_at": "Fri, 25 Sep 2026 21:00:00 GMT",
+            "publisher": "ebn.co.kr",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "‘코스피 7000 맞나요’ 개미 울리는 쏠림장세…상한가 ‘반토막’, 신저가만 속출 [투자360]",
+            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE53WDdXMTBub1ZuQ05XcmhIbUFmVWI5eGYyUl91UFk5Z0REbXJncVBKOEtncTQ0Rld6UHRoTTVUMUpqZ3RnUHozeGFfZ3Joc0k?oc=5",
+            "published_at": "Fri, 25 Sep 2026 23:42:55 GMT",
+            "publisher": "v.daum.net",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "환율 하락에 항공주 수혜…식음료는 딜레마",
+            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFA3cUxScWY2WnlsZUFuelJZay1VU3BLVVFWQk9EZHdndzNoRjdGWVlWZFY3LURGQldMX21ZbTRLRW96Tnk5TWlVVV9OVDlkLW8?oc=5",
+            "published_at": "Sat, 26 Sep 2026 01:18:03 GMT",
+            "publisher": "v.daum.net",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "환율 하락에 항공주는 웃고 해운주 울고…식음료는 딜레마",
+            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1uenNYa2hQdVZFd3dPWnVCZHRBak1ZZU9NUkhmcHpYcGl1SnBYS1dSWHQ0VW92cXA1Q0s4RldFZDAxVExITVJBb2Y4dlk3MFU?oc=5",
+            "published_at": "Sat, 26 Sep 2026 01:01:43 GMT",
+            "publisher": "v.daum.net",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "broad_fallback",
+            "title": "[9월 넷째 주 세계경제동향 브리핑] 코스피 7,000선 회복…한미 증시 동반 상승",
+            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFAxQVd3Q2pFa1M4WERiRV94bWlnUkdVdU5VajJ3bWtYcXluVXNzOUZfdHVmZ3VXdE9UZHgtN0c1Q0Q0bDFHay1LMFY2cEdicm8?oc=5",
+            "published_at": "Sat, 26 Sep 2026 00:50:58 GMT",
+            "publisher": "v.daum.net",
+            "discovery_source": "google_news_rss"
+          }
+        ],
+        "handoff_queries": [
+          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+          "유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "뉴욕증시 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "하락에 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "협상 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "환율 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "호르무즈 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "마감 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "기대 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+        ]
+      },
+      "public_batch_market": {
+        "generated_at": "2026-09-26T10:58:16.481793+09:00",
+        "status": "unavailable",
+        "provider": "naver_public",
+        "exact_1m_bars": false,
+        "elapsed_minutes_from_previous": 140.87600304999998,
+        "interval_leaders": [],
+        "one_minute_samples_available": false,
+        "minute_amount_exact": false,
+        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
+        "minute_sample_ticker_count": 0,
+        "current_top50_count": 0,
+        "tracked_universe_count": 0,
+        "dropped_from_current_top50_count": 0,
+        "tracked_outside_top50_with_samples": 0,
+        "minute_samples_by_ticker": {},
+        "limitations": [
+          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
+          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
+          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
+          "최근 6개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+          "6분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+        ]
+      },
+      "market": {
+        "generated_at": "2026-09-26T10:58:28.388005+09:00",
+        "source_status": "outside_domestic_monitor_window",
+        "provider": "provider_chain",
+        "fallback_used": null
+      },
+      "toss": {
+        "available": true,
+        "captured_at": "2026-09-26T09:29:11.283818+09:00",
+        "collector": {
+          "subscription_count": 0,
+          "rejected_count": 0,
+          "last_message_at": null,
+          "last_universe_refresh": "2026-09-26T09:29:11.283818+09:00"
+        }
+      },
+      "user_feedback": {
+        "pending_count": 0,
+        "latest_pending_comment_id": null
+      },
+      "git": {
+        "head_sha": "82d156d24f0278e5243c4884eda1beb483dca78d",
+        "latest_commit_changed_files": [
+          "data/discovery/latest.json",
+          "data/health/latest.json",
+          "data/health/state.json",
+          "data/macro/current.json",
+          "data/market/runtime.json",
+          "data/providers/naver_batch/history.json",
+          "data/providers/naver_batch/latest.json",
+          "data/providers/toss/fetch_runtime.json",
+          "data/providers/toss/status.json",
+          "data/regression/history/2026-09-25.jsonl",
+          "data/regression/latest.json",
+          "data/risk/calendar_live.json",
+          "data/risk/latest.json",
+          "data/risk/runtime.json",
+          "data/risk/state.json",
+          "data/supervisor/queue/2026-09-26.jsonl",
+          "data/supervisor/recent.json",
+          "\"site/data/\\354\\203\\201\\355\\203\\234.json\""
+        ]
+      },
+      "previous_workflow_run": {
+        "id": 36204452933,
+        "name": "고정 IP 토스 6분 시장 데이터",
+        "event": "schedule",
+        "status": "completed",
+        "conclusion": "skipped",
+        "created_at": "2026-09-26T00:20:00Z",
+        "updated_at": "2026-09-26T00:20:01Z",
+        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36204452933",
+        "head_sha": "82d156d24f0278e5243c4884eda1beb483dca78d"
       },
       "hypothesis_verification": {
         "due": []
