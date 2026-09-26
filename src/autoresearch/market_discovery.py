@@ -50,6 +50,45 @@ def is_low_quality_news_item(title: str, publisher: str | None = None) -> bool:
     haystack = f"{title} {publisher or ''}".lower()
     return any(term.lower() in haystack for term in LOW_QUALITY_TITLE_TERMS)
 
+
+TOPIC_RELEVANCE_TERMS: dict[str, tuple[str, ...]] = {
+    "kr_market_broad": ("코스피","코스닥","증시","주가","거래대금","공시","수주","계약","상장","상폐","시총"),
+    "kr_market_flow": ("외국인","기관","수급","순매수","순매도","거래대금","증시","코스피","코스닥"),
+    "kr_corporate_events": ("공시","수주","계약","투자","실적","상장","증자","합병","분할","생산"),
+    "kr_policy_economy": ("경제","정책","규제","세제","금융","산업","수입","수출","무역","관세","예산","지원"),
+    "kr_diplomacy_summit": ("정상회담","순방","국빈","유엔","회담","대통령","외교","협정","협력"),
+    "kr_semiconductor_ai": ("반도체","HBM","DRAM","낸드","AI","데이터센터","삼성전자","SK하이닉스","메모리"),
+    "kr_energy_power": ("전력","원전","가스","석유","배터리","전력망","에너지","발전","LNG"),
+    "kr_bio_health": ("바이오","제약","임상","허가","기술수출","CDMO","신약","의료"),
+    "kr_defense_shipbuilding": ("방산","조선","수주","항공","우주","로봇","군함","미사일"),
+    "global_market": ("증시","주가","나스닥","S&P","다우","국채","금리","달러","환율","유가","원유","WTI","브렌트","금값","금가격","채권","선물","비트코인"),
+    "global_diplomacy_summit": ("정상회담","회담","관세","무역","제재","휴전","투자","에너지","전쟁","공격","미사일","수출통제"),
+    "us_macro_rates": ("연준","Fed","금리","물가","고용","PCE","CPI","국채","인플레이션","실업"),
+    "global_energy_middle_east": ("이란","호르무즈","사우디","후티","중동","유가","원유","LNG","공격","휴전"),
+    "us_china_trade_ai": ("미중","중국","미국","트럼프","시진핑","관세","무역","AI","반도체","수출규제","수출통제","대만"),
+    "japan_boj_fx": ("일본","BOJ","엔화","환율","금리","닛케이","캐리"),
+    "europe_debt_ecb": ("유럽","ECB","프랑스","독일","국채","재정","인플레이션","금리"),
+    "global_ai_tech": ("AI","Nvidia","엔비디아","Microsoft","마이크로소프트","Meta","OpenAI","반도체","데이터센터","에이전트"),
+    "commodities_shipping_supplychain": ("구리","금값","금가격","원유","LNG","운임","해운","공급망","물류","원자재"),
+}
+GENERAL_MARKET_RELEVANCE_TERMS = (
+    "증시","주가","금리","국채","환율","달러","유가","원유","관세","무역","수출","공시","수주","계약",
+    "반도체","AI","데이터센터","전력","원전","방산","조선","바이오","제약","정상회담","제재","휴전",
+    "전쟁","공격","미사일","정전","파업","항만","공급망","인플레이션","고용","중앙은행","연준","BOJ","ECB",
+)
+DYNAMIC_QUERY_STOPWORDS = {"대통령","가능성","계획","거부","7일","재개","선거","진전","없이","찾은","관련","오늘","내일"}
+
+
+def is_market_relevant_news_item(title: str, topic: str) -> bool:
+    text = str(title or "").strip()
+    if not text:
+        return False
+    if topic.startswith("dynamic:"):
+        term = topic.split(":", 1)[1].strip()
+        return bool(term and term.lower() in text.lower())
+    terms = TOPIC_RELEVANCE_TERMS.get(topic, GENERAL_MARKET_RELEVANCE_TERMS)
+    return any(term.lower() in text.lower() for term in terms)
+
 STOPWORDS = {
     "한국", "증시", "주식", "시장", "코스피", "코스닥", "관련", "전망", "급등", "급락",
     "상승", "하락", "오늘", "내일", "뉴스", "단독", "속보", "종목", "기업", "투자",
@@ -96,7 +135,7 @@ def parse_google_news_rss(xml_text: str, topic: str, limit: int = 10) -> list[di
         source = _clean_text(item.findtext("source"))
         if source and title.endswith(" - " + source):
             title = title[: -(len(source) + 3)].strip()
-        if not title or not link or is_low_quality_news_item(title, source):
+        if not title or not link or is_low_quality_news_item(title, source) or not is_market_relevant_news_item(title, topic):
             continue
         rows.append(
             {
@@ -679,6 +718,8 @@ def collect(
         if isinstance(item, dict)
         and str(item.get("term") or "").strip()
         and int(item.get("publisher_count") or 0) >= 2
+        and str(item.get("term") or "").strip() not in DYNAMIC_QUERY_STOPWORDS
+        and not re.fullmatch(r"\d+(?:일|월|년)?", str(item.get("term") or "").strip())
     ][:8]
     for term in dynamic_terms:
         key = "google_news:dynamic:" + re.sub(r"[^0-9A-Za-z가-힣_-]", "_", term)[:40]
