@@ -348,6 +348,7 @@ def main() -> None:
         "reports": reports,
         "supervisor_latest": read_json(ROOT / "data" / "supervisor" / "latest-report.json"),
         "supervisor_recent": read_json(ROOT / "data" / "supervisor" / "recent.json"),
+        "market_issues": read_json(ROOT / "data" / "supervisor" / "market-issues.json"),
         "discovery": read_json(ROOT / "data" / "discovery" / "latest.json"),
         "quality_history": [
             {
