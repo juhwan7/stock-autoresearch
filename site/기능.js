@@ -200,10 +200,14 @@ async function load() {
 
   const popularReports = data.popular_reports || {};
   const popularUpdated = $("popular-reports-updated");
-  const snapshotAt = ((popularReports.ranking_source || {}).snapshot_at) || popularReports.updated_at;
+  const snapshotAt = popularReports.updated_at || ((popularReports.ranking_source || {}).snapshot_at);
   if (popularUpdated) popularUpdated.textContent = snapshotAt ? "기준 · " + relativeTime(snapshotAt) : "데이터 없음";
 
-  const popularItems = (popularReports.items || []).slice(0, 10);
+  const popularItems = (popularReports.items || []).slice().sort((a, b) =>
+    String(b.report_date || "").localeCompare(String(a.report_date || "")) ||
+    Number(b.views || 0) - Number(a.views || 0) ||
+    String(a.title || "").localeCompare(String(b.title || ""))
+  ).slice(0, 30);
   const popularList = $("popular-report-list");
   if (popularList) popularList.innerHTML = popularItems.length
     ? popularItems.map((x) => {
@@ -211,7 +215,7 @@ async function load() {
         const viewsText = Number.isFinite(views) ? views.toLocaleString("ko-KR") + "회" : "조회수 미확인";
         const url = x.report_url || ((popularReports.ranking_source || {}).url) || "#";
         return `<a class="popular-report-card" href="${esc(url)}" target="_blank" rel="noreferrer">
-          <div class="popular-rank">#${esc(x.rank || "")}</div>
+          <div class="popular-rank">${esc(x.display_order || (popularItems.indexOf(x) + 1))}</div>
           <div class="popular-report-main">
             <div class="popular-report-meta"><span>${esc(x.company || "")}</span><span>${esc(x.broker || "")}</span><span>${esc(x.report_date || "")}</span></div>
             <strong>${esc(x.title || "")}</strong>
@@ -581,88 +585,7 @@ async function load() {
     ).join("")
     : `<div class="health-ok">현재 확인된 운영 이상 없음</div>`;
 
-  const allReports = data.reports || [];
-  const stockSelect = $("report-stock");
-  const industrySelect = $("report-industry");
-  const searchInput = $("report-search");
-  const dateInput = $("report-date");
 
-  const stocks = [...new Set(allReports.flatMap((r) => r.stocks || []))].sort();
-  const industries = [...new Set(allReports.flatMap((r) => r.industries || []))].sort();
-  stockSelect.insertAdjacentHTML(
-    "beforeend",
-    stocks.map((x) => `<option value="${esc(x)}">${esc(x)}</option>`).join("")
-  );
-  industrySelect.insertAdjacentHTML(
-    "beforeend",
-    industries.map((x) => `<option value="${esc(x)}">${esc(x)}</option>`).join("")
-  );
-
-  function reportDay(value) {
-    if (!value) return "";
-    const parsed = new Date(value);
-    if (Number.isNaN(parsed.getTime())) return String(value).slice(0, 10);
-    return parsed.toISOString().slice(0, 10);
-  }
-
-  function renderQualityChart() {
-    const rows = (data.quality_history || []).filter((x) => x.quality != null);
-    $("quality-chart").innerHTML = rows.length
-      ? rows.map((x) => {
-          const score = Math.max(0, Math.min(100, Number(x.quality || 0)));
-          return `<div class="quality-bar-wrap" title="${esc(reportDay(x.generated_at))} · ${score.toFixed(1)}점">
-            <div class="quality-bar" style="height:${score}%"></div>
-          </div>`;
-        }).join("")
-      : `<p class="muted">아직 품질점수 이력이 충분하지 않습니다.</p>`;
-  }
-
-  function renderReports() {
-    const query = (searchInput.value || "").trim().toLowerCase();
-    const day = dateInput.value || "";
-    const stock = stockSelect.value || "";
-    const industry = industrySelect.value || "";
-
-    const filtered = allReports.filter((r) => {
-      const haystack = [
-        r.title,
-        r.preview,
-        ...(r.stocks || []),
-        ...(r.industries || []),
-      ].join(" ").toLowerCase();
-      return (!query || haystack.includes(query))
-        && (!day || reportDay(r.generated_at) === day)
-        && (!stock || (r.stocks || []).includes(stock))
-        && (!industry || (r.industries || []).includes(industry));
-    });
-
-    $("report-count").textContent = filtered.length + "개";
-    $("reports").innerHTML = filtered.length
-      ? filtered.map((r) => {
-          const meta = [
-            reportDay(r.generated_at),
-            r.quality != null ? `품질 ${Number(r.quality).toFixed(1)}` : "",
-            (r.stocks || []).slice(0, 2).join(" · "),
-            (r.industries || []).slice(0, 2).join(" · "),
-          ].filter(Boolean).join(" · ");
-          return `<a class="report report-card" href="${esc(r.github_url)}" target="_blank" rel="noreferrer">
-            <span><strong>${esc(r.title)}</strong><small>${esc(meta)}</small></span>
-            <b>읽기 ↗</b>
-          </a>`;
-        }).join("")
-      : `<div class="report"><span>조건에 맞는 리서치가 없습니다.</span></div>`;
-  }
-
-  [searchInput, dateInput, stockSelect, industrySelect].forEach((element) => {
-    element.addEventListener("input", renderReports);
-    element.addEventListener("change", renderReports);
-  });
-  $("report-clear").addEventListener("click", () => {
-    searchInput.value = "";
-    dateInput.value = "";
-    stockSelect.value = "";
-    industrySelect.value = "";
-    renderReports();
   });
   renderQualityChart();
   renderReports();
