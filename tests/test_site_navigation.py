@@ -116,8 +116,17 @@ def test_home_market_first_sections_precede_supporting_numbers():
     assert positions == sorted(positions)
 
 
-def test_issue_tracker_defaults_to_market_priority_sort():
+def test_issue_tracker_defaults_to_latest_activity_sort():
     html = (SITE / "이슈추적.html").read_text(encoding="utf-8")
     js = (SITE / "기능.js").read_text(encoding="utf-8")
-    assert '<option value="priority" selected>' in html
-    assert 'let activeSort="priority";' in js
+    assert '<option value="updated" selected>최근 변화순</option>' in html
+    assert 'let activeSort="updated";' in js
+    assert "function issueLatestActivity(issue)" in js
+    assert "function compareIssueRecency(a,b)" in js
+    assert 'add(x.status_changed_at, "status_changed_at")' in js
+    assert 'add(x.last_updated, "last_updated")' in js
+    assert 'add(x.first_detected, "first_detected")' in js
+    assert 'add(x.event_time, "event_time")' in js
+    assert 'asArray(x.history).forEach' in js
+    assert 'const activityMs=issueLatestActivityTime(x);' in js
+    assert 'if(activeSort==="updated") return compareIssueRecency(a,b);' in js
