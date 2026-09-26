@@ -45,6 +45,26 @@ async function load() {
     `<div class="metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`
   ).join("");
 
+  const issueStore = data.market_issues || {};
+  const issueRows = (issueStore.issues || []).slice().sort((a, b) => {
+    const rank = {ESCALATING: 0, NEW: 1, ACTIVE: 2, WATCHING: 3, EASING: 4, RESOLVED: 5};
+    return (rank[a.status] ?? 9) - (rank[b.status] ?? 9);
+  });
+  const issueList = $("market-issue-list");
+  if (issueList) issueList.innerHTML = issueRows.length
+    ? issueRows.map((x) => {
+        const status = String(x.status || "WATCHING").toUpperCase();
+        const label = {NEW:"신규", WATCHING:"관찰", ACTIVE:"지속", ESCALATING:"강화", EASING:"완화", RESOLVED:"해소"}[status] || status;
+        const first = x.first_detected ? ageText(x.first_detected) : "미확인";
+        const last = x.last_seen ? ageText(x.last_seen) : "미확인";
+        const resolved = x.resolved_at ? " · " + ageText(x.resolved_at) + " 해소" : "";
+        const history = (x.history || []).slice(-3).reverse().map(h =>
+          `<small>${esc(h.at ? ageText(h.at) : "")} · ${esc(h.from || "최초")} → ${esc(h.to || "")} ${esc(h.note || "")}</small>`
+        ).join("");
+        return `<div class="mini-row" data-level="${esc(status)}"><strong>[${esc(label)}] ${esc(x.title || x.issue_id)}</strong><span>처음 감지 ${esc(first)} · 최근 확인 ${esc(last)}${esc(resolved)}</span><span>${esc(x.reason || "")}</span>${history}</div>`;
+      }).join("")
+    : "<p class='muted'>다음 :00/:30 AI부터 이슈의 등장·강화·완화·해소 시점을 누적합니다.</p>";
+
   const supervisor = data.supervisor_latest || {};
   const discovery = data.discovery || {};
   const supervisorStatus = $("supervisor-status");
