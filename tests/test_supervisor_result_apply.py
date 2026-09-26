@@ -151,3 +151,61 @@ def test_main_recovers_missing_changed_paths_without_blocking_apply(tmp_path, mo
     applied = json.loads(module.REPORT.read_text(encoding="utf-8"))
     assert applied["changed_paths"] == [str(result_path)]
     assert any("changed_paths" in x for x in applied["validation_warnings"])
+
+
+def test_issue_merge_deduplicates_sources_and_records_additional_update(tmp_path):
+    module = load_module()
+    module.NEWS_ISSUES = tmp_path / "issue-digest.json"
+    module.NEWS_ISSUES.write_text(
+        json.dumps(
+            {
+                "issues": [
+                    {
+                        "issue_id": "north-korea-missile",
+                        "title": "북한 탄도미사일",
+                        "status": "ACTIVE",
+                        "summary": "최초 발사 보도",
+                        "latest_update": "합참 확인",
+                        "first_detected": "2026-09-26T10:00:00+09:00",
+                        "last_updated": "2026-09-26T10:00:00+09:00",
+                        "status_changed_at": "2026-09-26T10:00:00+09:00",
+                        "sources": [
+                            {"publisher": "연합뉴스", "title": "합참 확인", "url": "https://example.com/a"}
+                        ],
+                        "history": [],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    module.update_news_issue_digest(
+        {
+            "processed_at": "2026-09-26T12:00:00+09:00",
+            "news_issue_digest": {
+                "issues": [
+                    {
+                        "issue_id": "north-korea-missile",
+                        "title": "북한 탄도미사일",
+                        "status": "ACTIVE",
+                        "summary": "일본 방위성이 비행거리 정보를 추가 발표",
+                        "latest_update": "일본 방위성 비행거리 발표",
+                        "sources": [
+                            {"publisher": "연합뉴스", "title": "합참 확인", "url": "https://example.com/a"},
+                            {"publisher": "Reuters", "title": "Japan adds flight details", "url": "https://example.com/b"},
+                        ],
+                    }
+                ]
+            },
+        }
+    )
+
+    stored = json.loads(module.NEWS_ISSUES.read_text(encoding="utf-8"))
+    issue = next(x for x in stored["issues"] if x["issue_id"] == "north-korea-missile")
+    assert len(issue["sources"]) == 2
+    assert issue["source_count"] == 2
+    assert issue["status_changed_at"] == "2026-09-26T10:00:00+09:00"
+    assert issue["age_hours"] == 2.0
+    assert "추가 소식" in issue["history"][-1]["note"]
