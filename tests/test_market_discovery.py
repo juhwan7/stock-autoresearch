@@ -4,6 +4,7 @@ from autoresearch.market_discovery import (
     extract_naver_indices,
     extract_trending_terms,
     is_low_quality_news_item,
+    is_market_relevant_news_item,
     parse_google_news_rss,
     recent_items,
     summarize_toss_market,
@@ -136,3 +137,15 @@ def test_google_news_parser_filters_obvious_gambling_spam():
 def test_low_quality_title_filter_covers_common_gambling_spam():
     assert is_low_quality_news_item("바카라 유출 정보", "낯선매체") is True
     assert is_low_quality_news_item("미중 정상회담 무역휴전 연장", "연합뉴스") is False
+
+
+def test_topic_relevance_filters_sports_noise_but_keeps_market_news():
+    assert is_market_relevant_news_item("카누, 벌써 금2·은2…혼성 카약 은메달", "global_market") is False
+    assert is_market_relevant_news_item("미 10년물 국채금리 급등에 나스닥 부담", "global_market") is True
+    assert is_market_relevant_news_item("게임 이해를 돕는 짧은 문답", "kr_policy_economy") is False
+    assert is_market_relevant_news_item("한미 정상회담에서 전략투자 협력 논의", "kr_diplomacy_summit") is True
+
+
+def test_dynamic_topic_requires_its_own_emerging_term():
+    assert is_market_relevant_news_item("이란 휴전 협상 새 제안", "dynamic:이란") is True
+    assert is_market_relevant_news_item("미국채 금리 상승", "dynamic:이란") is False
