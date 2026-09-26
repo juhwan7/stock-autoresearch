@@ -128,6 +128,8 @@ def test_main_recovers_missing_changed_paths_without_blocking_apply(tmp_path, mo
     module.RECENT_SESSIONS = tmp_path / "recent-sessions.json"
     module.POPULAR_REPORTS = tmp_path / "popular-reports.json"
     module.NEWS_ISSUES = tmp_path / "issue-digest.json"
+    module.AI_RESULTS = tmp_path / "data/supervisor/ai-results"
+    module.AI_RESULTS.mkdir(parents=True, exist_ok=True)
     module.STATE.write_text("{}", encoding="utf-8")
 
     result_path = tmp_path / "supervisor-result.json"
@@ -507,3 +509,75 @@ def test_e2e_result_is_isolated_from_regular_canonical_state(tmp_path, monkeypat
     assert stored_test["batch_id"] == "supervisor-writer-e2e-20260926T1831+0900"
     assert stored_test["run_kind"] == "test"
     assert source["run_kind"] == "test"
+
+
+def test_reconcile_regular_windows_repairs_legacy_test_and_recovery_pointers(tmp_path):
+    module = load_module()
+    module.ROOT = tmp_path
+    module.AI_RESULTS = tmp_path / "data/supervisor/ai-results"
+    module.AI_RESULTS.mkdir(parents=True, exist_ok=True)
+
+    regular_a = {
+        "batch_id": "supervisor-20260926T2300+0900-a23",
+        "processed_at": "2026-09-26T23:05:00+09:00",
+        "supervisor": "A",
+        "run_kind": "regular",
+        "observation_ids": ["a1", "a2", "a3"],
+        "observation_slots": [
+            "2026-09-26T22:40:00+09:00",
+            "2026-09-26T22:50:00+09:00",
+            "2026-09-26T23:00:00+09:00",
+        ],
+        "observation_window_start": "2026-09-26T22:40:00+09:00",
+        "observation_window_end": "2026-09-26T23:00:00+09:00",
+        "expected_observation_count": 3,
+        "received_observation_count": 3,
+        "missing_observation_slots": [],
+        "observation_window_complete": True,
+    }
+    regular_b = {
+        "batch_id": "supervisor-20260926T2330+0900-b37",
+        "processed_at": "2026-09-26T23:37:00+09:00",
+        "supervisor": "B",
+        "run_kind": "regular",
+        "observation_ids": ["b1", "b2", "b3"],
+        "observation_slots": [
+            "2026-09-26T23:10:00+09:00",
+            "2026-09-26T23:20:00+09:00",
+            "2026-09-26T23:30:00+09:00",
+        ],
+        "observation_window_start": "2026-09-26T23:10:00+09:00",
+        "observation_window_end": "2026-09-26T23:30:00+09:00",
+        "expected_observation_count": 3,
+        "received_observation_count": 3,
+        "missing_observation_slots": [],
+        "observation_window_complete": True,
+    }
+    test_b = {
+        **regular_b,
+        "batch_id": "supervisor-writer-e2e-20260926T2350+0900",
+        "processed_at": "2026-09-26T23:50:00+09:00",
+        "run_kind": "test",
+    }
+    recovery_a = {
+        **regular_a,
+        "batch_id": "recovery-20260926T2355+0900",
+        "processed_at": "2026-09-26T23:55:00+09:00",
+        "supervisor": "Recovery-A",
+        "run_kind": "recovery",
+    }
+    for index, item in enumerate((regular_a, regular_b, test_b, recovery_a)):
+        (module.AI_RESULTS / f"{index}.json").write_text(
+            json.dumps(item, ensure_ascii=False), encoding="utf-8"
+        )
+
+    state = {
+        "last_a_window": {"batch_id": recovery_a["batch_id"]},
+        "last_b_window": {"batch_id": test_b["batch_id"]},
+    }
+    module._reconcile_regular_windows(state)
+
+    assert state["last_a_window"]["batch_id"] == regular_a["batch_id"]
+    assert state["last_b_window"]["batch_id"] == regular_b["batch_id"]
+    assert state["last_a_window"]["complete"] is True
+    assert state["last_b_window"]["complete"] is True
