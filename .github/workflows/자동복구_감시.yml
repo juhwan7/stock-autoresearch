@@ -1,0 +1,106 @@
+name: 자동복구 감시
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: stock-autoresearch-recovery
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 20
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Build recovery status
+        run: python scripts/운영상태_생성.py
+
+      - name: Check sensor freshness and self-heal
+        id: recover
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          python - <<'PY' > /tmp/recovery.env
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          def parse(value):
+              if not value:
+                  return None
+              try:
+                  return datetime.fromisoformat(str(value).replace("Z","+00:00"))
+              except ValueError:
+                  return None
+
+          path=Path("data/discovery/latest.json")
+          try:
+              data=json.loads(path.read_text(encoding="utf-8"))
+          except Exception:
+              data={}
+          dt=parse(data.get("generated_at"))
+          now=datetime.now(timezone.utc)
+          age=99999 if dt is None else max(0,(now-dt.astimezone(timezone.utc)).total_seconds()/60)
+          print(f"DISCOVERY_AGE_MINUTES={age:.1f}")
+          print("RECOVER_SENSOR=true" if age>20 else "RECOVER_SENSOR=false")
+          PY
+          cat /tmp/recovery.env >> "$GITHUB_ENV"
+          if grep -q 'RECOVER_SENSOR=true' /tmp/recovery.env; then
+            echo "Discovery가 20분 이상 stale입니다. 6분 센서를 workflow_dispatch로 재실행합니다."
+            gh workflow run "연속연구와진화.yml" --repo "$GH_REPO" || true
+          fi
+
+      - name: Rebuild dashboard after recovery status
+        run: python scripts/대시보드_생성.py
+
+      - name: Validate recovery files
+        run: |
+          python -m py_compile scripts/운영상태_생성.py scripts/대시보드_생성.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          ops=json.loads(Path("data/operations/status.json").read_text(encoding="utf-8"))
+          page=json.loads(Path("site/data/상태.json").read_text(encoding="utf-8"))
+          assert ops.get("generated_at")
+          assert isinstance(ops.get("cards"), list)
+          assert page.get("operations",{}).get("generated_at")
+          print("recovery status verified", ops.get("status"))
+          PY
+
+      - name: Commit recovery status
+        shell: bash
+        run: |
+          git config user.name "stock-autoresearch-recovery[bot]"
+          git config user.email "stock-autoresearch-recovery[bot]@users.noreply.github.com"
+          git add data/operations/status.json docs/운영_칸반.md README.md site/data/상태.json
+          if git diff --cached --quiet; then
+            echo "복구 상태 변화 없음"
+            exit 0
+          fi
+          git commit -m "recovery: refresh watchdog and user-action board"
+          if ! git pull --rebase origin main; then
+            git rebase --abort || true
+            echo "동시 변경으로 복구 상태 저장을 건너뜁니다. 다음 15분 주기에서 재생성합니다."
+            exit 0
+          fi
+          git push origin HEAD:main || echo "다음 복구 주기에서 다시 저장합니다."
