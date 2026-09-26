@@ -259,8 +259,8 @@ function renderMacro(data) {
 }
 function renderDomesticLive(data, krRows) {
   const market=data.market||{}, runtime=data.market_runtime||{}, q=market.quantitative||{}, source=market.source||{}, interp=market.interpretation||{};
-  const status=runtime.source_status||source.status||q.status||"no_live_data";
-  const labels={ok:"장중 실데이터",outside_regular_session:"장 종료 · 마지막 유효 장세",needs_credentials:"API 설정 필요",no_rows:"실시간 시세 없음",toss_snapshot_unavailable:"Toss Collector 대기",outside_domestic_monitor_window:"국내 감시시간 종료",no_live_data:"최근 3거래일 모드"};
+  const status=q.status==="historical_fallback" ? "historical_fallback" : (runtime.source_status||source.status||q.status||"no_live_data");
+  const labels={ok:"장중 실데이터",historical_fallback:"휴장 · 최근 3거래일 분석",outside_regular_session:"장 종료 · 최근 거래일 분석",needs_credentials:"API 설정 필요",no_rows:"실시간 시세 없음",toss_snapshot_unavailable:"Toss Collector 대기",outside_domestic_monitor_window:"국내 감시시간 종료",no_live_data:"최근 3거래일 모드"};
   setText("market-status", labels[status] || status);
   if (q.status === "ok") {
     const ov=source.market_overview||{}, kp=ov.KOSPI||{}, kd=ov.KOSDAQ||{};
