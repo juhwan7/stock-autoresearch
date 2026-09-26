@@ -639,6 +639,29 @@ def collect(
                 "error": type(exc).__name__,
             }
 
+
+    # 직전 센서에서 새로 부상한 키워드는 다음 6분 주기의 독립 검색축으로 자동 승격한다.
+    # 고정 키워드만 장기간 보는 문제를 막고, 생소한 기업·국가·인물도 반복 등장하면 따라간다.
+    dynamic_terms = [
+        str(item.get("term") or "").strip()
+        for item in (previous.get("trending_terms") or [])
+        if isinstance(item, dict)
+        and str(item.get("term") or "").strip()
+        and int(item.get("publisher_count") or 0) >= 2
+    ][:8]
+    for term in dynamic_terms:
+        key = "google_news:dynamic:" + re.sub(r"[^0-9A-Za-z가-힣_-]", "_", term)[:40]
+        try:
+            params = urllib.parse.urlencode(
+                {"q": term + " when:1d", "hl": "ko", "gl": "KR", "ceid": "KR:ko"}
+            )
+            xml_text = fetcher("https://news.google.com/rss/search?" + params)
+            rows = recent_items(parse_google_news_rss(xml_text, "dynamic:" + term, limit=20), now, hours=36)
+            items.extend(rows)
+            source_status[key] = {"status": "ok" if rows else "empty", "count": len(rows), "term": term}
+        except (OSError, TimeoutError, urllib.error.URLError, urllib.error.HTTPError, ValueError) as exc:
+            source_status[key] = {"status": "error", "error": type(exc).__name__, "term": term}
+
     google_ok_groups = sum(
         1
         for key, value in source_status.items()
@@ -833,6 +856,18 @@ def collect(
     public_batch_market = summarize_public_batch_market(root)
     toss_market = summarize_toss_market(root)
     handoff_queries = build_dynamic_handoff_queries(trending_terms)
+    hot_topic_candidates = [
+        {
+            **item,
+            "article_velocity": max(int(item.get("delta") or 0), 0),
+            "hot_score": (
+                int(item.get("count") or 0) * 2
+                + int(item.get("publisher_count") or 0) * 3
+                + max(int(item.get("delta") or 0), 0) * 4
+            ),
+        }
+        for item in trending_terms[:12]
+    ]
 
     ok_sources = sum(
         1
@@ -877,6 +912,8 @@ def collect(
         "new_items": new_items[:20],
         "items": deduped,
         "handoff_queries": handoff_queries,
+        "dynamic_query_terms": dynamic_terms,
+        "hot_topic_candidates": hot_topic_candidates,
         "sector_selection": {
             "mode": "dynamic",
             "fixed_sector_whitelist": False,
