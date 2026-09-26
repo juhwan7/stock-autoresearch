@@ -1,7 +1,7 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-26T17:17:00+09:00
-> latest batch: recovery-a-20260926T1717+0900
+> 자동 갱신: 2026-09-26T18:00:00+09:00
+> latest batch: supervisor-20260926T1800+0900
 > Supervisor: A · 상태 verification_pending
 > 이번 작업축: 8개
 
@@ -14,10 +14,10 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
-- us-iran-hormuz-negotiation — 호르무즈 통항과 군사상황이 유가·인플레이션 기대·미 장기금리·월요일 한국장 갭으로 직접 전달될 수 있다.
-- global-long-bond-selloff — 높은 미국 장기금리가 AI/성장주 위험선호의 지속성을 제약할 수 있어 유가와 함께 확인해야 한다.
-- us-china-summit-trade-followup — 정상회담 수사보다 월요일 USTR/백악관의 실제 관세·AI·희토류 정책 문서가 중요하다.
-- korea-import-restrictions-2026h1 — 241건·신규조사25건은 확인됐지만 휴장이라 가격·수급 반응은 다음 거래일 검증이 필요하다.
+- us-iran-hormuz-negotiation — 공식 미국 답변과 실제 호르무즈 통항이 유가·인플레이션 기대·미 장기금리·월요일 한국장 갭으로 연결
+- global-long-bond-selloff — 유가 하락이 25일 미 국채금리를 일부 안정시켰지만 장기금리 고점 부담은 지속
+- us-china-summit-trade-followup — 월요일 USTR/백악관 공식 세부문서가 한국 반도체·수출주 전달경로를 결정
+- korea-import-restrictions-2026h1 — 241건·신규조사25건은 확인됐지만 휴장으로 시장반응 미검증
 
 ## 활성 시장 이슈
 - 이란 전쟁 여파로 EU 에너지 가격 위기 경고 — NEW
@@ -30,13 +30,12 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- verification_pending
-- verification_pending
-- verification_pending
+- recovery-sensor-dispatch-order — watchdog는 stale flag만 계산→recovery 상태 commit→마지막 step에서 sensor dispatch
+- news-origin-story-independence — origin_story_count/independent_primary_source_count를 별도 계산하고 hot_score에서 독립근거 가중치를 높임
 - 뉴스 discovery 신선도 저하 — 마지막 갱신 45.88092773333334분 전
 
 ## 최근 해결
-- 없음
+- ui-progressive-disclosure — resolved
 
 ## 운영 품질
 - operations: investigating
