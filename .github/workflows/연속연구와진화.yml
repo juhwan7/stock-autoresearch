@@ -9,6 +9,7 @@ name: 6분 감독 관측 큐
 # Relative-strength KOSPI JSON source smoke run.
 # Three-session historical fallback smoke run.
 # Relative-strength live KOSPI prevChangeRate parser smoke run.
+# Multi-period relative-strength Yahoo batch smoke run.
 
 on:
   workflow_dispatch:
@@ -69,7 +70,7 @@ jobs:
       - name: Collect index-relative strength
         id: relative_strength
         continue-on-error: true
-        run: python -m autoresearch relative-strength --limit 500
+        run: python -m autoresearch relative-strength --limit 500 --force
 
       - name: Collect broad market discovery
         id: discovery
