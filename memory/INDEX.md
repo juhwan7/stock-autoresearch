@@ -33,8 +33,8 @@
 - sensor-slot-0000-plus-continuity — investigating
 - macro-runtime-empty — verification_pending
 - Supervisor A 정규 window 검증 대기 — 최근 정규 결과 2/3 슬롯 · 누락 슬롯은 과거값으로 보충하지 않음
-- 10분 센서 슬롯 일부 누락 — 4/6 슬롯 · 누락 2026-09-27T00:00:00+09:00, 2026-09-27T00:10:00+09:00
-- 뉴스 discovery 신선도 저하 — 마지막 갱신 29.906798849999998분 전
+- Supervisor B 정규 window 검증 대기 — 최근 정규 결과 0/3 슬롯 · 누락 슬롯은 과거값으로 보충하지 않음
+- 10분 센서 슬롯 커버리지 낮음 — 0/6 슬롯 · GitHub schedule/저장 경로 점검 필요
 
 ## 최근 해결
 - issue-digest-apply-stale — resolved
