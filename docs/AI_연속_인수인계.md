@@ -200,3 +200,14 @@ Supervisor의 GitHub 쓰기 요청 하나가 실패하거나 실행 전 안전�
 - 클릭 상세에는 현재 요약, 왜 중요한가, 진행 상황, 다음 확인, 전달 경로, 영향 자산, 확인된 사실, 미확인/반증 조건, 상태 변경 history, 출처 링크가 보여야 한다.
 - 같은 사건의 사전 일정→회담→공동성명→후속 실무협의는 같은 issue_id로 누적한다.
 - 홈은 상위 이슈만 요약하고, 전체 내용은 전용 `이슈 추적` 화면에서 확인한다.
+
+## 1년 이상 무인 운영 기준
+
+- 이슈 화면 기본 정렬은 최근 발생/업데이트순이다. event_time, first_detected, last_updated, status_changed_at을 분리하고 최근 24시간은 상대시간, 이후는 시작일+추적일수를 표시한다.
+- discovery는 고정 검색축만 사용하지 않고 직전 주기의 다매체 급증 키워드를 다음 6분 독립 검색축으로 확장한다. 일반 단어·숫자·시장과 무관한 기사·스팸은 센서 단계에서 줄인다.
+- 이슈는 기사 단위가 아니라 사건 단위다. 후속 기사는 같은 issue_id의 sources/latest_update/history에 `추가 소식`으로 병합한다.
+- `data/discovery/archive/`에는 6분 뉴스 커버리지·핫키워드 통계를, `data/news/archive/`에는 Supervisor 이슈 상태 변화를 일별 JSONL로 보존한다.
+- A(:00), B(:30)는 서로의 직전 실행·canonical 적용·Telegram workflow를 시작 시점에 검사하고 누락 구간을 이어받는다.
+- 별도 ChatGPT Recovery(:15)는 A/B 공백을 감시하고, GitHub `자동복구 감시` workflow는 discovery·Pages·운영상태를 15분 단위로 확인해 stale 센서를 재실행한다.
+- `data/operations/status.json`, `docs/운영_칸반.md`, README `사용자 확인 필요`를 장기 운영의 사용자-facing 상태판으로 쓴다.
+- 공개 fallback으로 충분히 운영되는 선택형 API 미연결은 사용자 필수조치로 올리지 않는다. 실제 권한·Secret·결제·계정 UI 조치가 필요할 때만 올린다.
