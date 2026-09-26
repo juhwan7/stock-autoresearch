@@ -102,24 +102,55 @@ def update_popular_reports(result: dict) -> None:
     payload = result.get("popular_reports")
     if not isinstance(payload, dict):
         return
-    items = payload.get("items")
-    if not isinstance(items, list) or not items:
+    incoming = payload.get("items")
+    if not isinstance(incoming, list) or not incoming:
         return
-    cleaned = []
-    for item in items[:20]:
+
+    store = json.loads(POPULAR_REPORTS.read_text(encoding="utf-8")) if POPULAR_REPORTS.exists() else {}
+    existing = store.get("items") if isinstance(store.get("items"), list) else []
+
+    def item_key(item: dict) -> str:
+        return "|".join([
+            str(item.get("report_date") or ""),
+            str(item.get("broker") or ""),
+            str(item.get("company") or ""),
+            str(item.get("title") or ""),
+        ])
+
+    merged: dict[str, dict] = {}
+    for item in existing + incoming:
         if not isinstance(item, dict):
             continue
-        if not item.get("title") or not item.get("broker"):
+        if not item.get("title") or not item.get("broker") or not item.get("report_date"):
             continue
-        cleaned.append(item)
-    if not cleaned:
-        return
-    payload = dict(payload)
-    payload["items"] = cleaned
-    payload["updated_at"] = str(result.get("processed_at") or payload.get("updated_at") or "")
-    POPULAR_REPORTS.parent.mkdir(parents=True, exist_ok=True)
-    POPULAR_REPORTS.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        key = item_key(item)
+        previous = merged.get(key, {})
+        candidate = dict(previous)
+        candidate.update(item)
+        if previous:
+            candidate["views"] = max(int(previous.get("views") or 0), int(item.get("views") or 0))
+        merged[key] = candidate
 
+    items = sorted(
+        merged.values(),
+        key=lambda x: (
+            str(x.get("report_date") or ""),
+            int(x.get("views") or 0),
+            str(x.get("title") or ""),
+        ),
+        reverse=True,
+    )[:30]
+    for index, item in enumerate(items, 1):
+        item["display_order"] = index
+
+    next_store = dict(store)
+    next_store.update({k: v for k, v in payload.items() if k != "items"})
+    next_store["items"] = items
+    next_store["max_items"] = 30
+    next_store["sort_mode"] = "report_date_desc_then_views_desc"
+    next_store["updated_at"] = str(result.get("processed_at") or payload.get("updated_at") or "")
+    POPULAR_REPORTS.parent.mkdir(parents=True, exist_ok=True)
+    POPULAR_REPORTS.write_text(json.dumps(next_store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 def main() -> int:
     if len(sys.argv) != 2:
