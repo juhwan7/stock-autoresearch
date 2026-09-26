@@ -558,6 +558,37 @@ def build_dynamic_handoff_queries(
     return queries
 
 
+def _append_discovery_archive(root: Path, snapshot: dict[str, Any]) -> None:
+    """6분 센서의 커버리지/핫키워드 통계를 일별 JSONL로 장기 보존한다."""
+    generated = _published_datetime(str(snapshot.get("generated_at") or ""))
+    if generated is None:
+        try:
+            generated = datetime.fromisoformat(str(snapshot.get("generated_at") or "").replace("Z", "+00:00")).astimezone(KST)
+        except (TypeError, ValueError):
+            generated = datetime.now(KST)
+    folder = root / "data" / "discovery" / "archive"
+    folder.mkdir(parents=True, exist_ok=True)
+    path = folder / (generated.strftime("%Y-%m-%d") + ".jsonl")
+    compact = {
+        "generated_at": snapshot.get("generated_at"),
+        "item_count": snapshot.get("item_count"),
+        "new_item_count": snapshot.get("new_item_count"),
+        "query_group_count": snapshot.get("query_group_count"),
+        "source_summary": snapshot.get("source_summary"),
+        "topic_counts": snapshot.get("topic_counts"),
+        "dynamic_query_terms": snapshot.get("dynamic_query_terms"),
+        "hot_topic_candidates": (snapshot.get("hot_topic_candidates") or [])[:12],
+    }
+    with path.open("a", encoding="utf-8") as fp:
+        fp.write(json.dumps(compact, ensure_ascii=False, separators=(",", ":")) + "\n")
+
+    index_path = folder / "index.json"
+    index = _read_json(index_path)
+    days = [x for x in (index.get("days") or []) if isinstance(x, dict) and x.get("date") != generated.strftime("%Y-%m-%d")]
+    days.insert(0, {"date": generated.strftime("%Y-%m-%d"), "file": str(path.relative_to(root)), "last_generated_at": snapshot.get("generated_at")})
+    _write_json(index_path, {"updated_at": snapshot.get("generated_at"), "days": days[:60]})
+
+
 def collect(
     root: Path,
     *,
@@ -931,6 +962,7 @@ def collect(
         },
     }
     _write_json(output, snapshot)
+    _append_discovery_archive(root, snapshot)
     return {
         "status": "ok" if ok_sources else "unavailable",
         "output": str(OUTPUT),
