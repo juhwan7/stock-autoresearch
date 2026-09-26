@@ -780,7 +780,9 @@ def main() -> int:
     # 과거 test/Recovery 오염이 남아 있어도 immutable 정규 결과를 기준으로
     # A/B window 포인터를 다시 계산한다. Recovery 자체가 포인터를 전진시키는 것은 아니다.
     _reconcile_regular_windows(state)
-    if not is_regular_supervisor:
+    if is_regular_supervisor:
+        state["last_a_window" if role == "A" else "last_b_window"] = _window_state_from_result(result)
+    else:
         warnings.append(f"{run_kind} 결과는 정규 A/B window 포인터를 전진시키지 않음")
         result["validation_warnings"] = warnings
         REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
