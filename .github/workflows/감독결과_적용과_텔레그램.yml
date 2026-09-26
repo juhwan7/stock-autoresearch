@@ -11,6 +11,8 @@ on:
     branches: [main]
     paths:
       - "data/supervisor/ai-results/*.json"
+  issues:
+    types: [labeled]
 
 permissions:
   contents: write
@@ -22,6 +24,7 @@ concurrency:
 
 jobs:
   apply-and-notify:
+    if: github.event_name != 'issues' || (github.event.label.name == 'supervisor-result-dispatch' && github.actor == github.repository_owner)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -40,6 +43,7 @@ jobs:
         shell: bash
         env:
           DISPATCH_RESULT: ${{ inputs.supervisor_result }}
+          ISSUE_RESULT: ${{ github.event.issue.body }}
         run: |
           RESULT="$(python - <<'PY'
           import json
@@ -49,7 +53,7 @@ jobs:
 
           root = Path("data/supervisor/ai-results")
           root.mkdir(parents=True, exist_ok=True)
-          raw = (os.environ.get("DISPATCH_RESULT") or "").strip()
+          raw = (os.environ.get("DISPATCH_RESULT") or os.environ.get("ISSUE_RESULT") or "").strip()
 
           if raw:
               try:
@@ -175,6 +179,17 @@ jobs:
           REMOTE_BATCH="$(python -c 'import json; print(json.load(open("/tmp/persisted-result.json", encoding="utf-8"))["batch_id"])')"
           test "$LOCAL_BATCH" = "$REMOTE_BATCH"
           echo "main result persistence verified: $REMOTE_BATCH"
+
+      - name: Close consumed dispatch issue
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        shell: bash
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --repo "$GH_REPO" --body "Supervisor 결과가 단일 writer 경로로 저장·적용되었습니다."
+          gh issue close "$ISSUE_NUMBER" --repo "$GH_REPO"
 
       - name: Send Telegram result
         env:
