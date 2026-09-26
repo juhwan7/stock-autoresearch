@@ -255,3 +255,13 @@ Supervisor의 GitHub 쓰기 요청 하나가 실패하거나 실행 전 안전�
 - 이슈 목록의 기본 우선순위는 단순 최신순이 아니라 상태·심각도·시장 영향 가능성·가격 반영 여부·다음 트리거를 함께 본다.
 - `AI 대화`는 실제 `data/supervisor/ai-results/*.json`의 A/B/Recovery 필드만 렌더링하며 가짜 대화 문장을 생성하지 않는다.
 - A/B Supervisor는 UI를 자기진화 대상으로 보되 기능 수를 늘리는 것보다 사용자가 시장 핵심을 더 빨리 찾는지를 우선 검증한다.
+
+
+## 2026-09-26 22:42 KST 뉴스 원장·Supervisor 연속성 진단
+
+- 확인: `data/discovery/latest.json`은 생성시각만으로 건강 여부를 판단하면 안 된다. 22:30 표본은 Google News 계열 27개가 HTTPError이고 `item_count=0`이었다. 직전 22:10 표본은 실제 기사 185건·신규 14건을 확보했다.
+- 확인: `data/news/issue-digest.json`은 센서가 직접 쓰지 않고 정규 Supervisor 결과의 `news_issue_digest`를 `scripts/감독결과_적용.py`가 병합할 때 갱신된다. 18:00 이후 정규 A 결과들이 이 필드를 생략해 16:00에서 멈췄다.
+- 수정: 건강한 discovery에 새 기사가 있는데 정규 A/B가 `news_issue_digest`를 생략하면 apply가 validation warning과 `verification_pending`을 남긴다. AGENTS에도 같은 계약을 추가했다.
+- 수정: recovery/catch-up 결과는 canonical 보고서는 갱신할 수 있어도 정규 `last_a_window`/`last_b_window`를 전진시키지 못하도록 apply를 제한했다.
+- macro: `data/macro/current.json`과 risk runtime은 빈 정상값이 아니라 `source_mode=unavailable`, 원인 `6분 sensor에 연결된 실시간 매크로 provider가 없음`을 명시한다. 과거값으로 보충하지 않는다.
+- 검증 대기: 다음 정규 A/B가 실제 `news_issue_digest`를 포함해 원장을 갱신하는지, 정규 B 성공 후에만 `last_b_window`가 이동하는지 확인한다.
