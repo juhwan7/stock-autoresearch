@@ -94,6 +94,62 @@ function asArray(value) {
   if (value == null || value === "") return [];
   return [value];
 }
+function asObject(value) {
+  return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+}
+function readableItem(value) {
+  if (value == null) return "";
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) return value.map(readableItem).filter(Boolean).join(" · ");
+  const item = asObject(value);
+  const head = item.title || item.name || item.term || item.issue_id || item.check || item.action || item.claim || item.text || "";
+  const detail = item.reason || item.why || item.summary || item.evidence || item.note || "";
+  if (head && detail && String(head) !== String(detail)) return String(head) + " — " + String(detail);
+  if (head || detail) return String(head || detail);
+  try { return JSON.stringify(item); } catch (_) { return String(item); }
+}
+function shortText(value, limit = 280) {
+  const text = readableItem(value).replace(/\s+/g, " ").trim();
+  return text.length > limit ? text.slice(0, limit).trimEnd() + "…" : text;
+}
+function researchDateValue(item) {
+  const x = asObject(item);
+  const explicit = x.published_at || x.report_datetime || x.generated_at || x.created_at || x.updated_at || x.sort_at || x.report_date || x.date || "";
+  if (explicit) {
+    const parsed = new Date(explicit).getTime();
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  const source = [x.title, x.file, x.name].filter(Boolean).join(" ");
+  const day = source.match(/20\d{2}-\d{2}-\d{2}/);
+  if (!day) return 0;
+  const tail = source.slice((day.index || 0) + day[0].length);
+  const matches = [...tail.matchAll(/(?:^|\D)([01]\d|2[0-3]):?([0-5]\d)(?!\d)/g)];
+  const time = matches.length ? matches[matches.length - 1][1] + ":" + matches[matches.length - 1][2] : "00:00";
+  const parsed = new Date(day[0] + "T" + time + ":00+09:00").getTime();
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+function researchDateLabel(item) {
+  const x = asObject(item);
+  const raw = x.published_at || x.report_datetime || x.generated_at || x.created_at || x.sort_at || x.report_date || x.date || "";
+  if (raw) return String(raw).replace("T", " ").replace(/\+09:00$|Z$/, "").slice(0, 16);
+  const source = [x.title, x.file].filter(Boolean).join(" ");
+  const day = source.match(/20\d{2}-\d{2}-\d{2}/);
+  return day ? day[0] : "작성 시각 미확인";
+}
+function researchValueMarkup(value) {
+  const values = asArray(value).map(readableItem).filter(Boolean);
+  if (!values.length) return "";
+  if (values.length === 1) return '<p>' + esc(values[0]) + '</p>';
+  return '<ul>' + values.map((item) => '<li>' + esc(item) + '</li>').join("") + '</ul>';
+}
+function researchSection(title, value) {
+  const body = researchValueMarkup(value);
+  return body ? '<section class="research-section"><h3>' + esc(title) + '</h3>' + body + '</section>' : "";
+}
+function researchTags(values) {
+  const items = asArray(values).map(readableItem).filter(Boolean);
+  return items.length ? '<div class="research-tags">' + items.map((item) => '<span>' + esc(item) + '</span>').join("") + '</div>' : "";
+}
 function sessionCard(row, market) {
   if (market === "kr") {
     return '<div class="session-card"><div class="date"><span>' + esc(row.date || "-") + '</span><span>' + esc(row.status || "") + '</span></div>' +
@@ -229,17 +285,65 @@ function issuePricingLabel(value) {
   return labels[key] || (key ? key.replaceAll("_"," ") : "반영 판단 대기");
 }
 function renderIssues(data) {
-  const digest = data.news_issue_digest || {};
-  const store = (digest.issues || []).length ? digest : (data.market_issues || {});
+  const target = $("market-issue-list");
+  if (!target) return;
+  const digest = asObject(data.news_issue_digest);
+  const digestIssues = asArray(digest.issues);
+  const fallback = asObject(data.market_issues);
+  const rows = (digestIssues.length ? digestIssues : asArray(fallback.issues)).slice();
+  const researchMode = target.dataset.mode === "research";
   const rank = {ESCALATING:0,NEW:1,ACTIVE:2,WATCHING:3,EASING:4,RESOLVED:5};
   const sev = {CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3};
-  const rows = (store.issues || []).slice().sort((a,b)=>
-    (rank[String(a.status||"WATCHING").toUpperCase()]??9)-(rank[String(b.status||"WATCHING").toUpperCase()]??9) ||
-    (sev[String(a.severity||"LOW").toUpperCase()]??9)-(sev[String(b.severity||"LOW").toUpperCase()]??9) ||
-    String(b.last_updated||b.last_seen||"").localeCompare(String(a.last_updated||a.last_seen||""))
-  );
-  const limit = $("market-issue-list")?.dataset.limit ? Number($("market-issue-list").dataset.limit) : rows.length;
-  setHTML("market-issue-list", rows.length ? rows.slice(0,limit).map((x) => {
+
+  if (researchMode) {
+    rows.sort((a,b) => researchDateValue({
+      updated_at:b.last_updated || b.latest_update || b.event_time || b.first_detected
+    }) - researchDateValue({
+      updated_at:a.last_updated || a.latest_update || a.event_time || a.first_detected
+    }));
+  } else {
+    rows.sort((a,b)=>
+      (rank[String(a.status||"WATCHING").toUpperCase()]??9)-(rank[String(b.status||"WATCHING").toUpperCase()]??9) ||
+      (sev[String(a.severity||"LOW").toUpperCase()]??9)-(sev[String(b.severity||"LOW").toUpperCase()]??9) ||
+      String(b.last_updated||b.last_seen||"").localeCompare(String(a.last_updated||a.last_seen||""))
+    );
+  }
+
+  const limit = target.dataset.limit ? Number(target.dataset.limit) : rows.length;
+  const selected = rows.slice(0, Number.isFinite(limit) ? limit : rows.length);
+  if (!selected.length) {
+    target.innerHTML = empty("누적된 시장 이슈가 아직 없습니다.");
+    return;
+  }
+
+  if (researchMode) {
+    target.innerHTML = selected.map((x) => {
+      const status = String(x.status || "WATCHING").toUpperCase();
+      const label = {NEW:"신규",WATCHING:"관찰",ACTIVE:"지속",ESCALATING:"강화",EASING:"완화",RESOLVED:"해소"}[status] || status;
+      const impact = issueImpactGroup(x.impact);
+      const sources = asArray(x.sources).map((source) => {
+        const s = asObject(source);
+        return s.url ? '<a class="button" href="' + esc(s.url) + '" target="_blank" rel="noreferrer">' + esc(s.publisher || "원문") + '</a>' : "";
+      }).filter(Boolean).join("");
+      return '<details class="research-detail" data-level="' + esc(status) + '">' +
+        '<summary><div class="research-summary-main"><div class="research-title-line"><span class="issue-status">' + esc(label) + '</span><span class="issue-impact ' + impact.toLowerCase() + '">' + esc(issueImpactLabel(x.impact)) + '</span><strong>' + esc(x.title || x.issue_id || "시장 이슈") + '</strong></div>' +
+        '<div class="research-meta"><span>' + esc(x.scope === "KOREA" ? "국내" : "글로벌") + '</span><span>' + esc(x.category || "기타") + '</span><span>' + esc(researchDateLabel({updated_at:x.last_updated || x.event_time || x.first_detected})) + '</span></div>' +
+        '<p>' + esc(shortText(x.summary || x.reason || x.latest_update || "", 260)) + '</p></div><span class="research-toggle">상세 보기</span></summary>' +
+        '<div class="research-expanded"><div class="research-section-grid">' +
+        researchSection("전체 요약", x.summary || x.latest_update) +
+        researchSection("왜 중요한가", x.why_market_matters) +
+        researchSection("현재 상황", x.latest_update || x.reason) +
+        researchSection("시장 영향·전달 경로", asArray(x.transmission_path)) +
+        researchSection("관련 업종·자산", asArray(x.affected_assets)) +
+        researchSection("확인된 사실·근거", x.confirmed_facts || x.evidence) +
+        researchSection("반론·불확실성", x.unconfirmed || x.unknowns) +
+        researchSection("앞으로 확인할 것", x.next_check) +
+        '</div>' + (sources ? '<div class="research-actions">' + sources + '</div>' : '<div class="notice">상세 출처 링크를 추가 확인 중입니다.</div>') + '</div></details>';
+    }).join("");
+    return;
+  }
+
+  target.innerHTML = selected.map((x) => {
     const status = String(x.status || "WATCHING").toUpperCase();
     const label = {NEW:"신규",WATCHING:"관찰",ACTIVE:"지속",ESCALATING:"강화",EASING:"완화",RESOLVED:"해소"}[status] || status;
     const impact = issueImpactGroup(x.impact);
@@ -248,11 +352,9 @@ function renderIssues(data) {
       '<span class="issue-impact ' + impact.toLowerCase() + '">' + esc(issueImpactLabel(x.impact)) + '</span></div>' +
       '<span>' + esc(x.reason || x.summary || "") + '</span>' +
       '<div class="issue-mini-meta"><small>' + esc(x.scope==="KOREA"?"국내":"글로벌") + ' · ' + esc(x.category||"기타") + ' · ' + esc(issuePricingLabel(x.pricing_status)) + '</small>' +
-      '<small>사건 ' + esc(x.event_time || "미확인") + ' · 첫 감지 ' + esc(x.first_detected ? relativeTime(x.first_detected) : "미확인") + ' · 최근 ' + esc((x.last_updated || x.last_seen) ? relativeTime(x.last_updated || x.last_seen) : "미확인") + '</small></div>' +
-      '</div>';
-  }).join("") : empty("누적된 시장 이슈가 아직 없습니다."));
+      '<small>사건 ' + esc(x.event_time || "미확인") + ' · 최근 ' + esc((x.last_updated || x.last_seen) ? relativeTime(x.last_updated || x.last_seen) : "미확인") + '</small></div></div>';
+  }).join("");
 }
-
 function issueHotScore(issue) {
   const statusScore = {ESCALATING:24,NEW:20,ACTIVE:14,WATCHING:8,EASING:3,RESOLVED:0}[String(issue.status||"WATCHING").toUpperCase()] || 0;
   const severityScore = {CRITICAL:18,HIGH:12,MEDIUM:6,LOW:2}[String(issue.severity||"LOW").toUpperCase()] || 0;
@@ -436,36 +538,106 @@ function renderIssueTracker(data) {
 }
 
 function renderResearch(data) {
-  const supervisor = data.supervisor_latest || {};
+  const supervisor = asObject(data.supervisor_latest);
   setText("supervisor-status", supervisor.status || "NO DATA");
-  const summary = (supervisor.summary || []).slice(0, 7);
-  setHTML("supervisor-summary", summary.length ? summary.map((x) => '<div class="mini-row"><span>' + esc(x) + '</span></div>').join("") : empty("심층 리서치 결과가 없습니다."));
-  const reportLink = $("supervisor-report-link");
-  if (reportLink) {
-    if (supervisor.research_report_path) {
-      reportLink.href = "https://github.com/juhwan7/stock-autoresearch/blob/main/" + encodeURI(supervisor.research_report_path);
-      reportLink.style.display = "inline-flex";
-    } else reportLink.style.display = "none";
-  }
-  const discovery = data.discovery || {};
-  const trends = (supervisor.dynamic_trends || discovery.trending_terms || []).slice(0, 10);
-  setHTML("dynamic-trends", trends.length ? trends.map((x) => '<div class="mini-row"><strong>' + esc(typeof x === "string" ? x : (x.title || x.name || x.term || "트렌드")) + '</strong><span>' + esc(typeof x === "string" ? "" : (x.reason || x.evidence || (x.count != null ? "언급 " + x.count + "건" : ""))) + '</span></div>').join("") : empty("동적 트렌드를 수집 중입니다."));
-  const filings = (discovery.new_dart_filings || []).slice(0,8);
-  setHTML("new-filings", filings.length ? filings.map((x) => '<a class="mini-row" href="' + esc(x.url || "#") + '" target="_blank" rel="noreferrer"><strong>' + esc(x.corp_name || "") + '</strong><span>' + esc(x.report_nm || "") + '</span></a>').join("") : empty("새 공시 없음 또는 DART 연결 대기"));
-  const popular = data.popular_reports || {};
-  const items = (popular.items || []).slice().sort((a,b) => String(b.report_date||"").localeCompare(String(a.report_date||"")) || Number(b.views||0)-Number(a.views||0)).slice(0,30);
+
+  const discovery = asObject(data.discovery);
+  const trends = asArray(supervisor.dynamic_trends).length ? asArray(supervisor.dynamic_trends) : asArray(discovery.trending_terms);
+  setHTML("dynamic-trends", trends.length ? trends.slice(0,10).map((x) =>
+    '<div class="mini-row"><strong>' + esc(typeof x === "string" ? x : (x.title || x.name || x.term || "트렌드")) + '</strong><span>' +
+    esc(typeof x === "string" ? "" : (x.reason || x.evidence || (x.count != null ? "언급 " + x.count + "건" : ""))) + '</span></div>'
+  ).join("") : empty("동적 트렌드를 수집 중입니다."));
+
+  const filings = asArray(discovery.new_dart_filings).slice().sort((a,b)=>researchDateValue(b)-researchDateValue(a)).slice(0,8);
+  setHTML("new-filings", filings.length ? filings.map((x) =>
+    '<a class="mini-row" href="' + esc(x.url || "#") + '" target="_blank" rel="noreferrer"><strong>' + esc(x.corp_name || x.company || "") + '</strong><span>' +
+    esc(x.report_nm || x.title || "") + '</span><small>' + esc(researchDateLabel(x)) + '</small></a>'
+  ).join("") : empty("새 공시 없음 또는 DART 연결 대기"));
+
+  const supervisorSummary = asArray(supervisor.summary);
+  const supervisorFocus = asArray(supervisor.market_focus);
+  const supervisorRisks = asArray(supervisor.overnight_risks);
+  const supervisorInvalidation = asArray(supervisor.invalidation_checks);
+  const supervisorChecks = asArray(supervisor.next_checks);
+  const supervisorActions = asArray(supervisor.actions);
+  const supervisorSource = supervisor.research_report_path
+    ? "https://github.com/juhwan7/stock-autoresearch/blob/main/" + encodeURI(supervisor.research_report_path)
+    : "https://github.com/juhwan7/stock-autoresearch/blob/main/data/supervisor/latest-report.json";
+  const supervisorTitle = supervisor.title || (supervisor.supervisor ? "Supervisor " + supervisor.supervisor + " 최신 시장 리서치" : "최신 AI 심층 리서치");
+  const supervisorPreview = supervisorSummary.length ? supervisorSummary.slice(0,3).map(readableItem).join(" ") : readableItem(supervisor.market_narrative);
+  setHTML("supervisor-research", Object.keys(supervisor).length ? '<details class="research-detail">' +
+    '<summary><div class="research-summary-main"><div class="research-title-line"><strong>' + esc(supervisorTitle) + '</strong></div>' +
+    '<div class="research-meta"><span>' + esc(researchDateLabel({generated_at:supervisor.processed_at})) + '</span><span>' + esc(supervisor.status || "") + '</span>' +
+    (supervisorFocus.length ? '<span>관련 이슈 ' + esc(supervisorFocus.length) + '개</span>' : '') + '</div><p>' + esc(shortText(supervisorPreview, 360)) + '</p>' +
+    researchTags(supervisorFocus.slice(0,4).map((x)=>asObject(x).issue_id || asObject(x).title || "")) +
+    '</div><span class="research-toggle">상세 보기</span></summary><div class="research-expanded"><div class="research-section-grid">' +
+    researchSection("전체 요약", supervisorSummary) +
+    researchSection("왜 중요한가", supervisor.market_narrative) +
+    researchSection("현재 상황·핵심 이슈", supervisorFocus) +
+    researchSection("시장 영향·리스크", supervisorRisks) +
+    researchSection("반론·해석을 바꿀 조건", supervisorInvalidation) +
+    researchSection("앞으로 확인할 것", supervisorChecks) +
+    researchSection("이번 리서치의 확인·조치", supervisorActions) +
+    '</div><div class="research-actions"><a class="button primary" href="' + esc(supervisorSource) + '" target="_blank" rel="noreferrer">원본 리서치·데이터 보기</a></div></div></details>' :
+    empty("심층 리서치 결과가 없습니다."));
+
+  const popular = asObject(data.popular_reports);
+  const items = asArray(popular.items).slice().sort((a,b) => {
+    const time = researchDateValue(b) - researchDateValue(a);
+    return time || Number(b.views || 0) - Number(a.views || 0);
+  }).slice(0,30);
   setText("popular-reports-updated", popular.updated_at ? "갱신 · " + relativeTime(popular.updated_at) : "데이터 없음");
-  setHTML("popular-report-list", items.length ? '<div class="report-grid">' + items.map((x,i) =>
-    '<a class="report-card" href="' + esc(x.report_url || "#") + '" target="_blank" rel="noreferrer"><div class="report-rank">' + esc(x.display_order || i+1) + '</div><div><div class="report-meta"><span>' + esc(x.company || "") + '</span><span>' + esc(x.broker || "") + '</span><span>' + esc(x.report_date || "") + '</span></div><strong>' + esc(x.title || "") + '</strong><p>' + esc(x.summary || "") + '</p><div class="report-foot"><span>' + esc(x.theme || "") + '</span><b>' + esc(Number.isFinite(Number(x.views)) ? Number(x.views).toLocaleString("ko-KR") + "회" : "") + '</b></div></div></a>'
-  ).join("") + '</div>' : empty("인기 리포트 목록을 불러오는 중입니다."));
-  const reports = (data.reports || []).slice(0,10);
+  setHTML("popular-report-list", items.length ? items.map((x,i) => {
+    const analysis = asObject(x.analysis);
+    const views = Number(x.views);
+    const targetPrice = x.target_price || analysis.target_price || "";
+    const previousTargetPrice = x.previous_target_price || analysis.previous_target_price || "";
+    const detailAvailable = Boolean(analysis.core || analysis.evidence || analysis.market_link || analysis.countercheck || targetPrice || previousTargetPrice);
+    const sourceUrl = x.report_url || analysis.source_url || "";
+    return '<details class="research-detail broker-research">' +
+      '<summary><div class="research-summary-main"><div class="research-title-line"><span class="research-rank">' + (i+1) + '</span><strong>' + esc(x.title || "증권 리포트") + '</strong></div>' +
+      '<div class="research-meta"><span>' + esc(researchDateLabel(x)) + '</span><span>' + esc(x.broker || "증권사 미확인") + '</span><span>' + esc(x.company || x.industry || "기업·산업 미확인") + '</span>' +
+      (Number.isFinite(views) ? '<span>조회 ' + esc(views.toLocaleString("ko-KR")) + '회</span>' : '') + '</div>' +
+      '<p>' + esc(shortText(x.summary || analysis.core || "", 300)) + '</p>' +
+      researchTags([x.theme, x.ticker].filter(Boolean)) + '</div><span class="research-toggle">상세 보기</span></summary>' +
+      '<div class="research-expanded"><div class="research-section-grid">' +
+      researchSection("리포트 핵심 요약", analysis.core || x.summary) +
+      researchSection("주요 주장·근거", analysis.evidence) +
+      researchSection("실적·산업 전망 / 시장 연결", analysis.market_link) +
+      (targetPrice ? researchSection("목표주가", targetPrice) : "") +
+      (previousTargetPrice ? researchSection("이전 목표주가", previousTargetPrice) : "") +
+      researchSection("투자 포인트", analysis.market_link) +
+      researchSection("주요 리스크·반론", analysis.countercheck) +
+      researchSection("언급 기업·산업", [x.company, x.theme].filter(Boolean)) +
+      researchSection("데이터 출처·발행일", [x.broker, x.report_date].filter(Boolean)) +
+      '</div>' +
+      (!detailAvailable ? '<div class="notice warn">상세 데이터 미수집 · 현재 확보된 제목·요약·발행정보만 표시합니다.</div>' : '') +
+      (sourceUrl ? '<div class="research-actions"><a class="button primary" href="' + esc(sourceUrl) + '" target="_blank" rel="noreferrer">원본 리포트 열기</a></div>' : '<div class="notice">원본 리포트 링크 미수집</div>') +
+      '</div></details>';
+  }).join("") : empty("인기 리포트 목록을 불러오는 중입니다."));
+
+  const reports = asArray(data.reports).slice().sort((a,b)=>researchDateValue(b)-researchDateValue(a)).slice(0,15);
   setHTML("recent-reports", reports.length ? reports.map((x) => {
-    const title = x.title || x.name || x.report_title || x.path || "리포트";
-    const meta = x.generated_at || x.created_at || x.date || "";
-    return '<div class="mini-row"><strong>' + esc(title) + '</strong><span>' + esc(meta) + '</span></div>';
+    const title = x.title || x.name || x.report_title || x.path || "프로젝트 리포트";
+    const tags = [...asArray(x.industries), ...asArray(x.stocks)].filter(Boolean).slice(0,8);
+    const content = typeof x.content === "string" ? x.content : "";
+    const preview = x.preview || "";
+    return '<details class="research-detail project-research"><summary><div class="research-summary-main"><div class="research-title-line"><strong>' + esc(title) + '</strong></div>' +
+      '<div class="research-meta"><span>' + esc(researchDateLabel(x)) + '</span><span>프로젝트 리서치</span></div>' +
+      '<p>' + esc(shortText(preview, 340)) + '</p>' + researchTags(tags) + '</div><span class="research-toggle">상세 보기</span></summary>' +
+      '<div class="research-expanded">' +
+      (content ? '<section class="research-section"><h3>저장된 Markdown 원문</h3><pre class="research-markdown">' + esc(content) + '</pre></section>' :
+        '<div class="notice warn">상세 데이터 미수집 · 이 항목은 현재 요약만 저장되어 있습니다.</div>' + researchSection("저장된 요약", preview)) +
+      (x.github_url ? '<div class="research-actions"><a class="button primary" href="' + esc(x.github_url) + '" target="_blank" rel="noreferrer">GitHub 원문 열기</a></div>' : '') +
+      '</div></details>';
   }).join("") : empty("저장된 최근 리포트가 없습니다."));
-  const sources = Object.entries(discovery.source_status || {});
-  setHTML("discovery-sources", sources.length ? sources.map(([name,v]) => '<div class="mini-row"><strong>' + esc(name) + '</strong><span>' + esc((v||{}).status || "unknown") + ((v||{}).count != null ? " · " + esc((v||{}).count) + "건" : "") + '</span></div>').join("") : empty("소스 상태 데이터 없음"));
+
+  const sources = Object.entries(asObject(discovery.source_status));
+  setHTML("discovery-sources", sources.length ? sources.map(([name,v]) => {
+    const state = asObject(v);
+    return '<div class="mini-row"><strong>' + esc(name) + '</strong><span>' + esc(state.status || "unknown") +
+      (state.count != null ? " · " + esc(state.count) + "건" : "") + '</span></div>';
+  }).join("") : empty("소스 상태 데이터 없음"));
 }
 function renderRisk(data) {
   const risk = data.risk || {};
