@@ -144,6 +144,7 @@ def _supervisor_role(value: object) -> str | None:
 
 def _latest_regular_result(
     *,
+    role: str | None = None,
     before_at: str | None = None,
     exclude_batch_id: str | None = None,
 ) -> dict:
@@ -153,6 +154,8 @@ def _latest_regular_result(
         item = _read_json_dict(path)
         if not is_regular_supervisor_result(item):
             continue
+        if role and _supervisor_role(item.get("supervisor")) != role:
+            continue
         batch_id = str(item.get("batch_id") or "")
         processed_at = str(item.get("processed_at") or "")
         if exclude_batch_id and batch_id == exclude_batch_id:
@@ -161,6 +164,26 @@ def _latest_regular_result(
             continue
         rows.append((processed_at, item))
     return max(rows, key=lambda row: row[0])[1] if rows else {}
+
+
+def _window_state_from_result(item: dict) -> dict:
+    return {
+        "batch_id": item.get("batch_id"),
+        "window_start": item.get("observation_window_start"),
+        "window_end": item.get("observation_window_end"),
+        "observation_ids": list(item.get("observation_ids") or []),
+        "missing_slots": list(item.get("missing_observation_slots") or []),
+        "complete": bool(item.get("observation_window_complete")),
+    }
+
+
+def _reconcile_regular_windows(state: dict) -> None:
+    """Repair A/B pointers from immutable regular results, never from test/Recovery."""
+    for role in ("A", "B"):
+        item = _latest_regular_result(role=role)
+        if not item:
+            continue
+        state["last_a_window" if role == "A" else "last_b_window"] = _window_state_from_result(item)
 
 
 def validate_feedback_handoff(
@@ -753,18 +776,10 @@ def main() -> int:
             "batch_id": result["batch_id"],
             "processed_at": result.get("processed_at"),
         }
-    # Recovery/catch-up은 canonical 보고서를 갱신할 수 있지만 정규 A/B 실행 이력을
-    # 가장해서는 안 된다. last_a_window/last_b_window는 정규 Supervisor만 소유한다.
-    if is_regular_supervisor:
-        state["last_a_window" if role == "A" else "last_b_window"] = {
-            "batch_id": result["batch_id"],
-            "window_start": result.get("observation_window_start"),
-            "window_end": result.get("observation_window_end"),
-            "observation_ids": observation_ids,
-            "missing_slots": result.get("missing_observation_slots") or [],
-            "complete": result.get("observation_window_complete"),
-        }
-    else:
+    # 과거 test/Recovery 오염이 남아 있어도 immutable 정규 결과를 기준으로
+    # A/B window 포인터를 다시 계산한다. Recovery 자체가 포인터를 전진시키는 것은 아니다.
+    _reconcile_regular_windows(state)
+    if not is_regular_supervisor:
         warnings.append(f"{run_kind} 결과는 정규 A/B window 포인터를 전진시키지 않음")
         result["validation_warnings"] = warnings
         REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
