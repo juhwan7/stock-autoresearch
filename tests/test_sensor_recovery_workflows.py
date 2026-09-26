@@ -117,8 +117,8 @@ def test_supervisor_result_writer_retries_conflicts_and_fails_closed():
 def test_supervisor_result_workflow_has_owner_only_issue_dispatch_bridge():
     workflow = read(".github/workflows/감독결과_적용과_텔레그램.yml")
     assert "issues:" in workflow
-    assert "types: [labeled]" in workflow
-    assert "supervisor-result-dispatch" in workflow
+    assert "types: [opened]" in workflow
+    assert "startsWith(github.event.issue.title, '[Supervisor Result]')" in workflow
     assert "github.actor == github.repository_owner" in workflow
     assert "ISSUE_RESULT:" in workflow
     assert "Close consumed dispatch issue" in workflow
