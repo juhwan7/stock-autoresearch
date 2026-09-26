@@ -1,19 +1,19 @@
-# EC2 Toss 6분 수집기 연결
+# EC2 Toss 10분 수집기 연결
 
-목표는 Raspberry Pi와 상시 WebSocket 없이, 고정 공인 IP가 있는 EC2가 6분마다 Toss REST API를 직접 호출하도록 만드는 것이다.
+목표는 Raspberry Pi와 상시 WebSocket 없이, 고정 공인 IP가 있는 EC2가 10분마다 Toss REST API를 직접 호출하도록 만드는 것이다.
 
 ## 최종 구조
 
 ```
 EC2 Elastic IP
 → GitHub self-hosted runner
-→ 6분마다 Toss OAuth
+→ 10분마다 Toss OAuth
 → 거래대금 현재 Top50
 → 당일 Top50 진입 종목 합집합 유지
 → 각 추적 종목 최근 1분봉 조회
 → data/providers/toss/latest.json
 → main commit
-→ 기존 6분 감독 workflow와 1시간 AI가 사용
+→ 기존 10분 감독 workflow와 30분 간격 A/B Supervisor가 사용
 ```
 
 Toss Client ID/Secret은 EC2 파일에 저장하지 않는다. GitHub Repository Secret의 `TOSS_CLIENT_ID`, `TOSS_CLIENT_SECRET`을 self-hosted runner job에만 주입한다.
@@ -94,7 +94,7 @@ Toss Secret 값은 로그나 코드에 붙이지 않는다.
 
 GitHub:
 
-`Actions → 고정 IP 토스 6분 시장 데이터 → Run workflow`
+`Actions → 고정 IP 토스 10분 시장 데이터 → Run workflow`
 
 정상일 때 주요 단계:
 
@@ -114,7 +114,7 @@ data/providers/toss/history.json
 
 ## 수집 규칙
 
-매 6분:
+매 10분:
 
 1. Toss 거래대금 현재 Top50을 조회한다.
 2. 당일 한 번이라도 Top50에 들어온 종목은 합집합에 계속 남긴다.
@@ -123,7 +123,7 @@ data/providers/toss/history.json
 5. 새로운 1분봉을 당일 시계열에 병합한다.
 6. 다음 거래일에는 추적 Universe를 초기화한다.
 
-Toss 1분봉 REST 응답은 OHLCV이므로 1분 거래대금은 기본적으로 `종가×거래량` 근사값이다. 현재 Top50 종목이 직전 관측에도 Top50이었다면 Toss ranking의 누적 `tradingAmount` 차분을 이용해 해당 6분 구간 합계를 보정한다.
+Toss 1분봉 REST 응답은 OHLCV이므로 1분 거래대금은 기본적으로 `종가×거래량` 근사값이다. 현재 Top50 종목이 직전 관측에도 Top50이었다면 Toss ranking의 누적 `tradingAmount` 차분을 이용해 해당 10분 구간 합계를 보정한다.
 
 ## 흔한 오류
 
