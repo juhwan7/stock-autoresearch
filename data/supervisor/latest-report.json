@@ -1,251 +1,275 @@
 {
-  "batch_id": "supervisor-20260927T0030+0900-b35",
-  "processed_at": "2026-09-27T00:35:21+09:00",
-  "supervisor": "B",
+  "batch_id": "supervisor-20260927T0400+0900-a28",
+  "processed_at": "2026-09-27T04:07:00+09:00",
+  "supervisor": "A",
   "notify": true,
   "status": "verification_pending",
-  "summary": "00:30 B canonical window는 00:10/00:20/00:30 세 슬롯 모두 main에 없어 0/3이다. 과거 00:00 이전 관측이나 아직 존재하지 않는 :40 관측으로 보충하지 않았다. 직전 A가 재적용한 issue-digest는 00:09:11로 실제 전진해 해당 피드백은 해결됐지만, 센서 연속성은 00:00 이후 끊긴 상태라 시장 방향·뉴스 강화/완화 판단은 새로 확정하지 않는다.",
-  "market_narrative": "한국 현물은 추석 연휴라 새 가격·수급 검증 대상이 아니다. 최신 canonical discovery는 23:50에 멈춰 있고 이번 B window 관측이 0/3이므로 미·이란/호르무즈, 수입규제 등 기존 이슈의 상태를 기사량 변화만으로 승격·완화하지 않는다. independent_story_count_estimate는 제목 유사도 추정치로만 취급하며 독립 원기사 수로 확정하지 않는다.",
+  "summary": "04:00 A canonical window 03:40/03:50/04:00은 3/3 완전하다. 센서 연속성은 최근 6/6으로 회복됐지만 canonical Supervisor state/latest-report는 00:30 B에 정지해 있어 결과 적용 경로 지연을 별도 운영 장애로 본다.",
+  "market_narrative": "휴장 중 국내 지수·수급 방향은 추정하지 않는다. 최신 discovery는 04:00까지 전진했고 이란 관련 신규 기사군이 증가했다. Reuters는 트럼프 대통령이 이란의 호르무즈 재개방·전투종료 제안을 직접 거부했다고 보도해 기존 '공식 거부 미확인' 전제는 폐기한다. 다만 실제 통항 악화나 추가 군사행동은 별도 확인이 필요하다. 미중은 월요일 USTR 세부 발표 전 구체 합의 범위를 확정하지 않는다.",
   "market_focus": [
-    "00:10/00:20/00:30 센서 연속 누락 원인과 self-chain/heartbeat 복구",
-    "미·이란 공식 답변과 호르무즈 실제 통항",
-    "한국 수입규제 241건의 다음 거래일 업종 가격·수급 반응",
-    "macro runtime 실값의 다음 거래 가능 구간 검증"
+    "Supervisor canonical apply가 00:30 이후 정지한 원인",
+    "미·이란 제안 거부 이후 실제 호르무즈 통항·군사행동 변화",
+    "월요일 USTR 미중 협상 세부 발표",
+    "degraded 9개 뉴스 검색축의 실질 커버리지 손실 여부",
+    "macro 실값은 다음 거래 가능 구간에서 검증"
   ],
   "invalidation_checks": [
-    "00:10/00:20/00:30 중 실제 canonical observation이 뒤늦게 main에 생성되면 다음 사이클에서 해당 슬롯 provenance를 재검증한다.",
-    "미국·이란 공식 합의와 실제 통항 정상화가 확인되면 기존 HIGH 위험을 낮춘다.",
-    "군사행동·통항 악화·공급차질의 1차/복수 독립근거가 확인되면 위험 강화 검토.",
-    "휴장 중 과거 지수값을 실시간 가격 변화로 해석하지 않는다."
+    "새 A 결과 적용 후 state/latest-report가 04:00으로 전진하면 canonical lag 가설을 해소한다.",
+    "미국·이란의 새 공식 합의와 실제 통항 정상화가 확인되면 지정학 위험을 완화 검토한다.",
+    "실제 군사행동·통항 악화·공급차질이 1차 또는 복수 독립근거로 확인되면 위험 강화 검토한다.",
+    "월요일 USTR 공식 세부자료가 나오기 전 discovery 기사만으로 미중 합의 세부를 확정하지 않는다."
   ],
   "overnight_risks": [
     {
-      "risk": "미·이란 협상 결렬/호르무즈 공급차질",
+      "risk": "미·이란 협상 후퇴와 호르무즈 공급차질",
       "severity": "HIGH",
-      "status": "ACTIVE_BUT_NO_NEW_WINDOW_EVIDENCE"
+      "status": "ACTIVE"
     },
     {
-      "risk": "센서 00:00 이후 연속 누락으로 새 시장 변화 미포착",
+      "risk": "Supervisor canonical apply 정지",
       "severity": "HIGH",
+      "status": "INVESTIGATING"
+    },
+    {
+      "risk": "거시 데이터 실값 공백",
+      "severity": "MEDIUM",
       "status": "VERIFICATION_PENDING"
-    },
-    {
-      "risk": "장기금리·에너지 비용",
-      "severity": "HIGH",
-      "status": "UNVERIFIED_LIVE_DATA"
     }
   ],
   "actions": [
     {
       "type": "canonical_window",
-      "status": "verification_pending",
-      "detail": "00:10/00:20/00:30만 요구했으나 0/3; 과거값/:40 보충 금지"
-    },
-    {
-      "type": "feedback_validation",
       "status": "resolved",
-      "detail": "A의 issue-digest 재적용 후 data/news/issue-digest.json updated_at가 00:09:11로 전진함"
+      "detail": "03:40/03:50/04:00 정확한 3개 슬롯 3/3; :10 이후 또는 과거 슬롯 미사용"
     },
     {
       "type": "sensor_continuity",
+      "status": "verification_pending",
+      "detail": "operations status 최근 02:30~03:20 6/6, latest A도 04:00 3/3으로 연속성 회복 유지"
+    },
+    {
+      "type": "canonical_apply_lag",
       "status": "investigating",
-      "detail": "queue에 2026-09-27 파일 자체가 없고 operations 00:20에도 00:00/00:10 누락 표시; 00:20/00:30도 결과 생성 시점 main에 없음"
+      "detail": "windows는 04:00까지 전진했지만 state/latest-report는 00:30에 정지"
+    },
+    {
+      "type": "news_research",
+      "status": "reviewed",
+      "detail": "04:00 discovery 137건, failed=0 degraded=9; independent_story_count_estimate는 원기사 수로 확정하지 않음"
     },
     {
       "type": "ui_ux",
       "status": "no_change",
-      "detail": "내부 장애 카드를 추가로 늘리지 않고 기존 센서 슬롯 coverage 카드 하나에서 연속 누락을 표현하는 편이 정보 중복이 적음"
-    },
-    {
-      "type": "code_change",
-      "status": "no_change",
-      "detail": "현재 결과만으로 self-chain 실패 원인을 특정할 수 없어 추측성 코드 수정은 보류"
+      "detail": "canonical lag를 별도 메인 카드로 증설하기보다 기존 Supervisor 상태/타임라인 freshness에 통합하는 편이 중복이 적음"
     }
   ],
   "changed_paths": [
-    "data/supervisor/ai-results/supervisor-20260927T0030+0900-b35.json"
+    "data/supervisor/ai-results/supervisor-20260927T0400+0900-a28.json"
   ],
   "next_checks": [
-    "다음 A는 00:40/00:50/01:00만 사용하고 이번 누락 슬롯을 끌어오지 말 것.",
-    "Recovery/다음 센서에서 00:00 이후 self-chain dispatch가 왜 생성되지 않았는지 workflow run과 heartbeat 경로를 확인할 것.",
-    "issue-digest 00:09 전진은 resolved로 유지하고 동일 stale 문제를 근거 없이 재조사하지 말 것.",
-    "macro 실값은 다음 거래 가능 구간까지 verification_pending 유지.",
-    "센서 복구 후 discovery generated_at와 source_summary를 다시 비교해 degraded 9가 실질 커버리지 손실인지 평가."
+    "04:30 B는 04:10/04:20/04:30만 사용한다.",
+    "이 결과 apply 후 state/latest-report/AI 대화 타임라인이 실제 전진하는지 확인한다.",
+    "센서 연속성 incident는 3/3 연속 유지가 깨질 때만 재개한다.",
+    "월요일 USTR 공식 세부자료 확인.",
+    "macro는 다음 거래 가능 구간에서 실값 검증."
   ],
   "project_improvement_signals": [
     {
-      "id": "sensor-slot-0000-plus-continuity",
+      "id": "supervisor-canonical-apply-lag",
       "status": "investigating",
-      "signal": "00:00 누락 이후 이번 B의 00:10/00:20/00:30도 canonical queue에 없음",
-      "verify_after": "다음 Recovery/10분 센서 실행"
+      "signal": "latest-A 04:00 및 latest-B 03:30은 3/3인데 state/latest-report는 00:30 B에 정지",
+      "verify_after": "이 A result apply 직후"
     },
     {
-      "id": "issue-digest-apply-stale",
-      "status": "resolved",
-      "signal": "A payload 적용 후 canonical digest updated_at가 2026-09-27T00:09:11+09:00로 전진",
-      "verify_after": "새 lifecycle 변화 발생 시"
+      "id": "sensor-continuity",
+      "status": "verification_pending",
+      "signal": "최근 operations 6/6 및 04:00 A 3/3",
+      "verify_after": "04:30 B"
     },
     {
       "id": "macro-runtime-empty",
       "status": "verification_pending",
-      "signal": "새 B 관측 자체가 없어 live macro 검증 불가",
+      "signal": "휴장 중 실값 공백은 방향 추정 금지",
       "verify_after": "다음 거래 가능 구간"
     }
   ],
   "work_axes_reviewed": [
     {
       "axis": "데이터_품질",
-      "status": "verification_pending",
-      "finding": "B canonical window 0/3",
-      "action": "대체 관측 금지",
-      "evidence": "queue 2026-09-27 파일 부재 + operations/status 00:20",
-      "verify_after": "다음 센서"
+      "status": "reviewed",
+      "finding": "04:00 A 3/3",
+      "action": "canonical 슬롯만 사용",
+      "evidence": "windows/latest-A.json",
+      "verify_after": "04:30 B"
     },
     {
-      "axis": "버그_연속성",
+      "axis": "버그",
       "status": "investigating",
-      "finding": "00:00 이후 센서 chain이 이어지지 않은 정황",
-      "action": "workflow/self-chain/heartbeat 실행기록을 Recovery 축으로 넘김",
-      "evidence": "sensor_slot_coverage + queue directory",
-      "verify_after": "다음 Recovery"
+      "finding": "canonical state/latest-report 00:30 정지",
+      "action": "apply 경로 전진 여부 검증",
+      "evidence": "state.json/latest-report.json vs latest-A/B",
+      "verify_after": "result apply 직후"
     },
     {
       "axis": "뉴스_이슈",
-      "status": "reviewed_limited",
-      "finding": "새 canonical observation이 없어 lifecycle 변화 판정 불가",
-      "action": "기존 상태 유지, 기사수 추정치로 승격 금지",
-      "evidence": "latest discovery 23:50",
-      "verify_after": "센서 복구 후"
+      "status": "reviewed",
+      "finding": "이란 관련 신규 기사 증가와 트럼프 직접 거부 Reuters 확인",
+      "action": "공식 거부 미확인 전제 폐기, 실제 통항은 별도 검증",
+      "evidence": "Reuters + discovery 04:00",
+      "verify_after": "새 공식/통항 자료"
     },
     {
-      "axis": "기존기능_실효성",
+      "axis": "공급자_fallback",
       "status": "reviewed",
-      "finding": "issue-digest apply는 실제 00:09 전진해 복구 경로 유효",
-      "action": "resolved 처리",
-      "evidence": "data/news/issue-digest.json",
-      "verify_after": "새 변화 시"
+      "finding": "discovery failed=0 degraded=9, 선택 API credentials 없음",
+      "action": "공개 fallback 유지하되 degraded 축 독립 검증",
+      "evidence": "data/discovery/latest.json",
+      "verify_after": "다음 A/B"
+    },
+    {
+      "axis": "테스트_회귀",
+      "status": "reviewed",
+      "finding": "이번 배치에서 코드 변경 없음",
+      "action": "result apply 후 canonical/Pages 회귀 확인",
+      "evidence": "changed_paths=result only",
+      "verify_after": "apply 직후"
     },
     {
       "axis": "ui_ux",
       "status": "no_change",
-      "finding": "연속 센서 누락마다 별도 카드를 만들면 중복·정보과다",
-      "action": "기존 coverage 카드에 집약 권고",
-      "evidence": "operations/status cards",
-      "verify_after": "상태판 다음 refresh"
+      "finding": "내부 lag 카드 증설은 중복 가능",
+      "action": "기존 Supervisor freshness와 timeline에 통합",
+      "evidence": "operations cards",
+      "verify_after": "Pages refresh"
     },
     {
       "axis": "구조_단순화",
       "status": "reviewed",
-      "finding": "원인 미확정 상태에서 새 복구 레이어 추가는 중복 가능성",
-      "action": "기존 self-chain/:05 heartbeat/Recovery의 실제 실패 지점부터 확인",
-      "evidence": "운영헌장 복구 원칙",
-      "verify_after": "workflow run 확인"
-    },
-    {
-      "axis": "테스트_회귀",
-      "status": "not_applicable",
-      "finding": "코드 변경 없음; 새 observation validation도 없음",
-      "action": "추측성 테스트 결과 생성 금지",
-      "evidence": "0/3 window",
-      "verify_after": "다음 코드 변경 시"
+      "finding": "센서 복구와 canonical apply 장애를 분리해야 함",
+      "action": "센서 코드를 재수정하지 않고 apply 경로만 추적",
+      "evidence": "latest windows 3/3 vs canonical stale",
+      "verify_after": "apply 검증"
     }
   ],
   "feedback_received": [
     {
-      "from_batch": "supervisor-20260927T0000+0900-a24",
-      "item": "00:30 B는 00:10/00:20/00:30만 사용하고 00:00 누락을 끌어오지 말 것."
+      "from_batch": "supervisor-20260927T0030+0900-b35",
+      "item": "이전 누락 슬롯을 끌어오지 말 것."
     },
     {
-      "from_batch": "supervisor-20260927T0000+0900-a24",
-      "item": "A apply 후 issue-digest 전진 여부 확인."
+      "from_batch": "supervisor-20260927T0030+0900-b35",
+      "item": "센서 self-chain/heartbeat 연속성을 확인할 것."
     },
     {
-      "from_batch": "supervisor-20260927T0000+0900-a24",
-      "item": "00:00 누락의 self-chain/heartbeat 복구 확인."
+      "from_batch": "supervisor-20260927T0030+0900-b35",
+      "item": "issue-digest stale resolved를 처음부터 재조사하지 말 것."
     },
     {
-      "from_batch": "supervisor-20260927T0000+0900-a24",
-      "item": "macro 실값 전 방향 추정 금지 및 UI 카드 증설 자제."
+      "from_batch": "supervisor-20260927T0030+0900-b35",
+      "item": "macro 실값과 휴장 중 가격·수급을 추정하지 말 것."
+    },
+    {
+      "from_batch": "supervisor-20260927T0030+0900-b35",
+      "item": "UI 카드 증설을 자제할 것."
     }
   ],
   "feedback_resolved": [
     {
-      "item": "issue-digest apply",
-      "resolution": "canonical digest updated_at가 00:09:11로 전진했고 operations status도 issue-digest-ok로 표시"
+      "item": "canonical window 규칙",
+      "resolution": "03:40/03:50/04:00만 사용, 3/3"
     },
     {
-      "item": "canonical window 규칙",
-      "resolution": "00:10/00:20/00:30 외 관측을 사용하지 않음"
+      "item": "센서 연속성",
+      "resolution": "최근 6/6 및 이번 A 3/3으로 복구 관측 지속"
+    },
+    {
+      "item": "issue-digest 재조사 금지",
+      "resolution": "기존 resolved 유지"
     },
     {
       "item": "UI 증설 자제",
-      "resolution": "새 카드/기능 변경 없음"
+      "resolution": "no_change"
     }
   ],
   "feedback_disagreed": [],
   "feedback_deferred": [
     {
-      "item": "00:00 및 이후 sensor self-chain 원인",
-      "reason": "이번 시점 main에 00:10/00:20/00:30 관측 자체가 없어 원인 특정에 필요한 workflow 실행증거 부족"
+      "item": "macro 최종판정",
+      "reason": "휴장 및 거래 가능 실값 검증 전"
     },
     {
-      "item": "macro 최종판정",
-      "reason": "휴장 및 새 관측 부재로 live 값 검증 불가"
+      "item": "센서 복구 원인 최종 확정",
+      "reason": "복구는 관측됐으나 self-chain/heartbeat 중 실제 기여 경로는 추가 운영증거 필요"
     }
   ],
-  "supervisor_disagreements": [
-    {
-      "disagreement_id": "disagree-20260926-2330-issue-digest",
-      "topic": "news_issue_digest canonical apply",
-      "a_position": "A 재적용으로 digest 전진 검증",
-      "b_position": "23:37에는 stale이었으나 이번 B에서 00:09:11 전진을 확인",
-      "status": "RESOLVED",
-      "evidence_needed": "data/news/issue-digest.json updated_at=2026-09-27T00:09:11+09:00",
-      "verify_after": "새 lifecycle 변화 발생 시"
-    }
-  ],
+  "supervisor_disagreements": [],
   "feedback_to_other_supervisor": [
-    "다음 A는 00:40/00:50/01:00만 사용하고 이번 00:10/00:20/00:30 누락을 과거값으로 채우지 말 것.",
-    "센서 연속성 문제는 00:00 단일 누락이 아니라 00:30까지 이어진 것으로 보이므로 workflow self-chain/:05 heartbeat/Recovery 실행기록을 우선 확인할 것.",
-    "issue-digest apply stale은 00:09:11 전진으로 해결됐으니 동일 문제를 다시 처음부터 조사하지 말 것.",
-    "macro 실값과 휴장 중 가격·수급은 추정하지 말 것.",
-    "UI는 센서 누락별 새 카드 대신 기존 coverage 카드에 연속 누락 구간과 복구상태를 집약할 것."
+    "04:30 B는 04:10/04:20/04:30만 사용하고 이전 슬롯으로 보충하지 말 것.",
+    "센서 자체는 연속 3/3이므로 같은 센서 수정부터 반복하지 말고 canonical apply/state/latest-report/Pages 전진 여부를 우선 검증할 것.",
+    "트럼프의 이란 제안 직접 거부는 Reuters로 확인됐으므로 다시 '공식 거부 미확인'으로 되돌리지 말되 실제 통항·추가 군사행동은 별도 근거로 판정할 것.",
+    "월요일 USTR 세부 발표 전 미중 합의 세부를 확정하지 말 것.",
+    "macro는 다음 거래 가능 구간 전까지 방향 추정하지 말 것."
   ],
-  "observation_ids": [],
-  "observation_slots": [],
-  "observation_window_start": "2026-09-27T00:10:00+09:00",
-  "observation_window_end": "2026-09-27T00:30:00+09:00",
+  "observation_ids": [
+    "obs-20260927T034109+0900-36263368193-1",
+    "obs-20260927T035120+0900-36263952633-1",
+    "obs-20260927T040107+0900-36264521203-1"
+  ],
+  "observation_slots": [
+    "2026-09-27T03:40:00+09:00",
+    "2026-09-27T03:50:00+09:00",
+    "2026-09-27T04:00:00+09:00"
+  ],
+  "observation_window_start": "2026-09-27T03:40:00+09:00",
+  "observation_window_end": "2026-09-27T04:00:00+09:00",
   "expected_observation_count": 3,
-  "received_observation_count": 0,
-  "missing_observation_slots": [
-    "2026-09-27T00:10:00+09:00",
-    "2026-09-27T00:20:00+09:00",
-    "2026-09-27T00:30:00+09:00"
+  "received_observation_count": 3,
+  "missing_observation_slots": [],
+  "observation_completeness_ratio": 1.0,
+  "observation_window_complete": true,
+  "observation_details": [
+    {
+      "observation_id": "obs-20260927T034109+0900-36263368193-1",
+      "slot_at": "2026-09-27T03:40:00+09:00",
+      "slot_source": "dispatch_input",
+      "slot_delay_seconds": null,
+      "delay_note": "latest-A에는 delay 원시값이 없어 이번 실행에서 임의 추정하지 않음"
+    },
+    {
+      "observation_id": "obs-20260927T035120+0900-36263952633-1",
+      "slot_at": "2026-09-27T03:50:00+09:00",
+      "slot_source": "dispatch_input",
+      "slot_delay_seconds": null,
+      "delay_note": "latest-A에는 delay 원시값이 없어 이번 실행에서 임의 추정하지 않음"
+    },
+    {
+      "observation_id": "obs-20260927T040107+0900-36264521203-1",
+      "slot_at": "2026-09-27T04:00:00+09:00",
+      "slot_source": "dispatch_input",
+      "slot_delay_seconds": null,
+      "delay_note": "latest-A에는 delay 원시값이 없어 이번 실행에서 임의 추정하지 않음"
+    }
   ],
-  "observation_completeness_ratio": 0.0,
-  "observation_details": [],
   "telegram_report": [
-    "00:30 B: canonical 00:10/00:20/00:30이 모두 없어 0/3입니다. 과거 관측이나 :40 데이터로 채우지 않았습니다.",
-    "직전 A가 재적용한 issue-digest는 00:09:11로 실제 전진해 이 문제는 해결됐습니다.",
-    "반면 센서는 00:00 이후 연속성이 끊긴 정황이 강해 self-chain/:05 heartbeat/Recovery 실행경로 확인을 다음 최우선 작업으로 넘깁니다.",
-    "새 센서 근거가 없으므로 미·이란/호르무즈 등 시장 이슈의 강화·완화를 새로 단정하지 않았고 macro 방향도 추정하지 않았습니다.",
-    "UI/코드 변경은 하지 않았습니다. 원인 미확정 상태에서 카드나 복구 레이어를 더 추가하면 중복과 유지비만 늘 수 있습니다."
+    "04:00 A: 03:40/03:50/04:00 canonical window 3/3입니다. 과거값이나 04:10 데이터는 쓰지 않았습니다.",
+    "센서 연속성은 최근 6/6과 이번 3/3으로 회복이 유지되지만 Supervisor canonical state/latest-report는 00:30에 멈춰 있어 apply 경로를 별도 장애로 분리했습니다.",
+    "시장에서는 트럼프가 이란의 호르무즈 재개방·전투종료 제안을 직접 거부했다고 Reuters가 확인했습니다. 다만 실제 통항 악화·추가 군사행동은 아직 별도 확인 대상입니다.",
+    "04:00 discovery는 137건, failed=0/degraded=9입니다. 기사 수와 독립근거 수를 구분하며 월요일 USTR 세부 발표 전 미중 합의 세부는 확정하지 않습니다.",
+    "UI는 새 카드를 늘리지 않고 기존 Supervisor freshness/타임라인에서 canonical 지연을 드러내는 방향을 유지합니다. 다음 B는 apply/state/latest-report/Pages 전진을 우선 검증합니다."
   ],
-  "observation_window_complete": false,
+  "validation_warnings": [
+    "observation 원시 파일 경로가 latest-A에 노출되지 않아 slot_delay_seconds 원시값을 재확인하지 못했고 null로 명시함",
+    "canonical state/latest-report가 00:30에 정지해 apply 후 전진 여부 검증 필요",
+    "최신 discovery에 새 뉴스가 있으나 news_issue_digest가 없어 뉴스 lifecycle 적용이 누락됨"
+  ],
   "run_kind": "regular",
   "feedback_handoff": {
-    "source_batch_id": "supervisor-20260927T0000+0900-a24",
-    "source_supervisor": "A",
-    "target_supervisor": "B",
+    "source_batch_id": "supervisor-20260927T0030+0900-b35",
+    "source_supervisor": "B",
+    "target_supervisor": "A",
     "inbound_required": true,
     "inbound_recorded": true,
     "outgoing_recorded": true,
     "complete": true
-  },
-  "validation_warnings": [
-    "정해진 10분 슬롯 3개가 모두 없어 결과를 verification_pending으로 유지",
-    "새 observation이 없어 compile/pytest/dry-run 결과를 이번 B가 새로 통과했다고 기록하지 않음",
-    "정해진 10분 슬롯 3개가 모두 준비되지 않아 결과를 verification_pending으로 유지",
-    "최신 discovery에 새 뉴스가 있으나 news_issue_digest가 없어 뉴스 lifecycle 적용이 누락됨"
-  ]
+  }
 }

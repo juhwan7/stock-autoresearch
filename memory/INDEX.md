@@ -1,8 +1,8 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-27T00:35:21+09:00
-> latest batch: supervisor-20260927T0030+0900-b35
-> Supervisor: B · 상태 verification_pending
+> 자동 갱신: 2026-09-27T04:07:00+09:00
+> latest batch: supervisor-20260927T0400+0900-a28
+> Supervisor: A · 상태 verification_pending
 > 이번 작업축: 7개
 
 ## 시작할 때 읽기
@@ -14,10 +14,11 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
-- 00:10/00:20/00:30 센서 연속 누락 원인과 self-chain/heartbeat 복구
-- 미·이란 공식 답변과 호르무즈 실제 통항
-- 한국 수입규제 241건의 다음 거래일 업종 가격·수급 반응
-- macro runtime 실값의 다음 거래 가능 구간 검증
+- Supervisor canonical apply가 00:30 이후 정지한 원인
+- 미·이란 제안 거부 이후 실제 호르무즈 통항·군사행동 변화
+- 월요일 USTR 미중 협상 세부 발표
+- degraded 9개 뉴스 검색축의 실질 커버리지 손실 여부
+- macro 실값은 다음 거래 가능 구간에서 검증
 
 ## 활성 시장 이슈
 - 이란 전쟁 여파로 EU 에너지 가격 위기 경고 — NEW
@@ -30,7 +31,8 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- sensor-slot-0000-plus-continuity — investigating
+- supervisor-canonical-apply-lag — investigating
+- sensor-continuity — verification_pending
 - macro-runtime-empty — verification_pending
 - Supervisor A 209분 정지 — 이슈 상태가 오래될 수 있음
 - Supervisor B 183분 정지 — 이슈 상태가 오래될 수 있음
@@ -38,7 +40,7 @@
 - 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 183.18814265분 전
 
 ## 최근 해결
-- issue-digest-apply-stale — resolved
+- 없음
 
 ## 운영 품질
 - operations: needs_user_action
