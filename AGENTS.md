@@ -74,6 +74,19 @@ A(:00)는 탐색·개발, B(:30)는 비판·검증·정리 역할을 우선한�
 
 canonical apply는 직전 상대가 피드백을 남겼는데 현재 결과의 `feedback_received`가 비어 있거나, 현재 A/B가 다음 상대에게 넘길 `feedback_to_other_supervisor`를 남기지 않으면 `verification_pending`으로 표시한다. 피드백 루프는 문서 권고가 아니라 운영 검증 항목이다.
 
+### A ↔ B 공유 협업 상태
+
+`data/supervisor/collaboration.json`은 두 Supervisor가 함께 사용하는 **공유 작업 상태**다. immutable 원본인 `data/supervisor/ai-results/*.json`을 대체하지 않고, 같은 운영 문제를 하나의 incident로 이어서 관리하는 canonical 협업 인덱스다.
+
+- A와 B는 새 조사 시작 전에 `collaboration.json`의 활성 incident, 최근 해결, 마지막 turn, 다음 검증을 먼저 읽는다.
+- `sensor-slot-...`, `sensor-continuity`, heartbeat/self-chain 관련 신호처럼 같은 장애의 증상은 가능한 한 하나의 `sensor-continuity` incident에 이어 붙인다.
+- 해결된 incident는 history를 보존하되 새로운 반증 증거 또는 명시된 재검증 조건이 생기기 전에는 처음부터 재조사하지 않는다.
+- `verification_pending`은 verify_after 조건이 충족될 때 재검증하고, 그 전에는 반복 수정·카드 증설을 하지 않는다.
+- 상대 Supervisor의 이견은 삭제하지 않고 같은 incident의 history/근거로 남긴다. 증거가 부족하면 공동 결론은 보류할 수 있다.
+- 운영 incident와 시장 해석을 분리한다. 센서·macro 입력이 비어 있으면 시장 이슈의 강화/완화, 가격·수급 방향을 추정하지 않는다.
+- 실제 코드/UI/workflow 변경과 단순 Supervisor 결과 JSON 저장을 구분한다. 결과 파일만 바뀐 실행을 사용자 화면에서 프로젝트 코드 변경으로 표시하지 않는다.
+- 이 파일은 `scripts/감독결과_적용.py`의 단일 writer 경로가 갱신한다. Supervisor가 별도의 유사 공유상태 파일을 만들지 않는다.
+
 UI/UX는 선택적 장식 작업이 아니다. 매 :00/:30 사이클에서 `ui_ux`를 최소 5개 작업축 중 하나로 반드시 검토한다. 새 데이터·기능이 사용자-facing이면 backend에서 끝내지 말고 어느 Pages 화면에서 어떤 정보 계층으로 보여줄지 함께 판단한다. 기본 화면은 중요한 것을 먼저 보여주고 상세는 `details/summary` 또는 전문 페이지로 내려보낸다.
 
 자동 변경은 테스트를 통과해야 하며, 고위험 영역은 제안으로만 남긴다. 실용 가치가 낮은 기능은 통합·단순화·격리·삭제도 개선으로 본다.
@@ -84,7 +97,7 @@ UI/UX는 선택적 장식 작업이 아니다. 매 :00/:30 사이클에서 `ui_u
 
 원칙은 **기록은 풍부하게, 시작 시 읽기는 작게, 필요할 때 깊게 검색한다**이다.
 
-- HOT: `memory/INDEX.md`, `memory/current/*`, `docs/AI_연속_인수인계.md`
+- HOT: `memory/INDEX.md`, `memory/current/*`, `data/supervisor/collaboration.json`, `docs/AI_연속_인수인계.md`
 - WARM: 현재 문제와 관련된 `memory/project/`, `memory/market/`, `memory/research/`, `memory/lessons/`
 - COLD: 반복 문제·과거 비교가 필요할 때만 `memory/supervisors/`, `memory/snapshots/`, `memory/archive/`
 
