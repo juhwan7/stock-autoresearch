@@ -343,5 +343,6 @@ GitHub Pages AI 대화 화면
 - 확인된 사실: A는 계속 실행되며 complete B window와 정규 B result 공백을 감지했고, `Supervisor 결과 적용 및 Telegram` single-writer workflow는 최근에도 success였다. 따라서 저장소 전체 write 장애로 보면 안 된다.
 - 검증된 fallback: direct write 반복 대신 owner가 만든 `[Supervisor Result]` Issue body에 결과 JSON을 전달하면 기존 Action single-writer가 저장·canonical·memory·Telegram을 처리한다.
 - 구조 강화: `scripts/감독결과_적용.py`가 collaboration에 A/B별 `supervisor_health`를 계산한다. complete window 대비 result 누락은 `missing_result`, result 대비 state 미적용은 `unapplied`로 분리한다. 저장소만으로 automation disabled 여부를 알 수 없으므로 원인은 live automation/Actions를 교차확인한다.
+- 반복 장애 기억: collaboration의 `failure_patterns`에 원인별 발생 횟수와 `preferred_recovery`, `disable_supervisor=false`를 저장한다. 동일 batch 재적용은 중복 카운트하지 않고, 같은 원인 재발 시 검증된 fallback을 우선한다.
 - 불변식: recoverable write/Telegram/Pages/sensor 문제 하나만으로 A/B를 disable하지 않는다. 살아 있는 상대 Supervisor가 복구하고 기존 스케줄을 유지한다.
 - 다음 검증: 재활성화된 B가 다음 :37 실행에서 :10/:20/:30만 사용해 regular result를 만들고 single-writer 경로로 canonical/Telegram까지 완료하는지 확인한다.
