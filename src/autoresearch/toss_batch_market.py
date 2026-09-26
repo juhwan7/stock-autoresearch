@@ -302,7 +302,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
         "schema_version": 1,
         "captured_at": now.isoformat(),
         "provider": "toss",
-        "source_mode": "rest_6m_batch",
+        "source_mode": "rest_10m_batch",
         "ranking_fresh_today": ranking_fresh_today,
         "minute_amount_method": "close_x_volume; current Top50 interval may be scaled to exact ranking tradingAmount delta",
         "minute_amount_exact": False,
@@ -320,7 +320,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
         "postmarket_by_ticker": postmarket,
         "fetch_errors": errors,
         "collector": {
-            "mode": "rest_6m_batch",
+            "mode": "rest_10m_batch",
             "last_universe_refresh": now.isoformat(),
             "last_message_at": now.isoformat() if (regular or premarket or postmarket) else None,
             "subscriptions": [],
@@ -367,7 +367,7 @@ def collect(root: Path, *, now: datetime | None = None, limit: int = 50) -> dict
     return {
         "status": "ok" if ranking_fresh_today else "idle_or_holiday",
         "provider": "toss",
-        "source_mode": "rest_6m_batch",
+        "source_mode": "rest_10m_batch",
         "current_top50_count": len(current_top50),
         "tracked_universe_count": len(tracked_universe),
         "regular_ticker_count": len(regular),
