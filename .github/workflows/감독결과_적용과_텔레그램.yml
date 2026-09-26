@@ -146,7 +146,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "${{ steps.result.outputs.path }}"
-          git add data/supervisor/latest-report.json data/supervisor/state.json data/supervisor/market-issues.json data/supervisor/disagreements.json data/market/recent-sessions.json data/research/popular-reports.json data/news/issue-digest.json
+          git add data/supervisor/latest-report.json data/supervisor/state.json data/supervisor/market-issues.json data/market/recent-sessions.json data/research/popular-reports.json data/news/issue-digest.json
+          if [ -f data/supervisor/disagreements.json ]; then git add data/supervisor/disagreements.json; fi
           if [ -d data/news/archive ]; then git add data/news/archive; fi
           if [ -d memory ]; then git add memory; fi
           if git diff --cached --quiet; then
