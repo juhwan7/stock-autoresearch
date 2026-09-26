@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="투자자예탁금·신용융자·CMA·주식형펀드·외국인·기관 수급을 함께 보는 시장 거대자금 대시보드">
+  <title>시장 거대자금 · Stock AutoResearch</title>
+  <link rel="stylesheet" href="스타일.css">
+  <style>
+    .money-hero-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+    .money-card{padding:16px;border:1px solid #dfe6ef;border-radius:15px;background:#fff}
+    .money-card span{display:block;color:#7a879a;font-size:11px}.money-card strong{display:block;margin-top:6px;font-size:23px;letter-spacing:-.04em}
+    .money-card small{display:block;margin-top:5px;color:#8994a5;font-size:10px;line-height:1.45}
+    .money-card .delta{margin-top:8px;font-size:12px;font-weight:850}.money-card .delta.up{color:#d43d55}.money-card .delta.down{color:#1968bc}
+    .money-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .money-row{display:grid;grid-template-columns:minmax(150px,1.2fr) 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #edf1f5}
+    .money-row:last-child{border-bottom:0}.money-row strong{font-size:13px}.money-row span{font-size:12px;text-align:right}.money-row small{display:block;margin-top:3px;color:#8994a5;font-size:10px}
+    .money-ratio{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ratio-card{padding:16px;border-radius:15px;background:#f8fafc;border:1px solid #e1e7ef}
+    .ratio-card span{font-size:11px;color:#748197}.ratio-card strong{display:block;margin-top:7px;font-size:25px}.ratio-card p{margin:7px 0 0;color:#718096;font-size:11px;line-height:1.55}
+    .extension-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.extension{padding:13px;border:1px solid #e2e8f0;border-radius:13px;background:#fbfcfe}
+    .extension strong{display:block;font-size:13px}.extension span{display:inline-block;margin:6px 0;padding:4px 7px;border-radius:999px;background:#fff7df;color:#815f00;font-size:10px;font-weight:850}
+    .extension p{margin:0;color:#78869a;font-size:11px;line-height:1.55}
+    .history-table td:first-child,.history-table th:first-child{text-align:left}
+    @media(max-width:1100px){.money-hero-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.money-grid{grid-template-columns:1fr}}
+    @media(max-width:700px){.money-hero-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.money-ratio,.extension-list{grid-template-columns:1fr}.money-row{grid-template-columns:1fr 1fr}.money-row span{text-align:left}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">MARKET LIQUIDITY MAP</p>
+      <h1>시장 거대자금 흐름</h1>
+      <p class="lead">투자자예탁금·신용융자·CMA·주식형펀드 같은 큰 자금의 방향과 외국인·기관·개인의 실제 매매 흐름을 분리해서 봅니다. 서로 성격이 다른 잔고를 억지로 합산하지 않습니다.</p>
+    </div>
+    <div class="hero-side">
+      <span class="pulse">공식 통계 + 최근 거래일 수급</span>
+      <a class="hero-button" href="https://github.com/juhwan7/stock-autoresearch" target="_blank" rel="noreferrer">GitHub</a>
+    </div>
+  </header>
+
+  <nav class="page-tabs">
+    <div class="wrap">
+      <a href="index.html">요약</a>
+      <a href="국내시장.html">국내시장</a>
+      <a class="active" href="거대자금.html">거대자금</a>
+      <a href="글로벌리스크.html">글로벌 · 리스크</a>
+      <a href="이슈추적.html">이슈 추적</a>
+      <a href="리서치.html">리서치</a>
+      <a href="시스템.html">시스템</a>
+      <a href="상대강도.html">상대강도</a>
+    </div>
+  </nav>
+
+  <main>
+    <div id="money-note"></div>
+
+    <section class="money-hero-grid" id="money-summary"></section>
+
+    <section class="panel">
+      <div class="panel-head"><div><p class="kicker">HOW TO READ</p><h2>자금 성격을 먼저 분리</h2></div><span class="badge" id="money-date">기준일 확인 중</span></div>
+      <div class="money-grid">
+        <div class="mini-row"><strong>대기·현금성 자금</strong><span>투자자예탁금과 CMA를 봅니다. 둘은 성격과 중복 가능성이 달라 단순 합산하지 않습니다.</span></div>
+        <div class="mini-row"><strong>레버리지 자금</strong><span>신용융자 잔고와 예탁금 대비 신용 비율을 봅니다. 절대액 증가와 비율 상승을 구분합니다.</span></div>
+        <div class="mini-row"><strong>간접투자 자금</strong><span>주식형펀드 순자산과 전체 펀드 순자산을 봅니다. 순자산 증가는 자금유입뿐 아니라 가격상승 영향도 포함할 수 있습니다.</span></div>
+        <div class="mini-row"><strong>실제 매수 주체</strong><span>외국인·기관·개인 최근 3거래일 순매수를 별도로 확인해 잔고 증가가 실제 주식 매수와 연결되는지 봅니다.</span></div>
+      </div>
+    </section>
+
+    <section class="money-grid">
+      <article class="panel">
+        <div class="panel-head"><div><p class="kicker">LIQUIDITY · LEVERAGE</p><h2>대기자금과 신용</h2></div></div>
+        <div id="liquidity-table"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><p class="kicker">FUND CAPITAL</p><h2>펀드 자금</h2></div></div>
+        <div id="fund-table"></div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><p class="kicker">RATIOS</p><h2>잔고 크기를 비교하는 보조 비율</h2></div></div>
+      <div class="money-ratio" id="money-ratios"></div>
+      <p class="section-note" style="margin-top:12px">비율은 시장의 위험도를 점수화하지 않습니다. 예탁금·신용·펀드의 절대 증감과 함께 읽기 위한 계산값입니다.</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><p class="kicker">ACTUAL BUYERS · 3 SESSIONS</p><h2>실제 매수 주체</h2></div><a class="hero-button" href="국내시장.html">국내시장 상세</a></div>
+      <div id="actor-summary" class="flow-cards"></div>
+      <div id="actor-history"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><p class="kicker">OBSERVATION HISTORY</p><h2>공식 통계 관측 이력</h2></div></div>
+      <div id="money-history"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><p class="kicker">NEXT DATA LAYERS</p><h2>추가 연결할 거대자금 지표</h2></div></div>
+      <div id="money-extensions" class="extension-list"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><p class="kicker">INTERPRETATION</p><h2>조합으로 읽는 방법</h2></div></div>
+      <div id="money-reading" class="grid three"></div>
+      <p class="section-note" style="margin-top:12px">위 설명은 해석 가이드입니다. 같은 자금 변화라도 지수 방향, 거래대금, 금리, 펀드 평가손익과 함께 봐야 하며 단일 지표로 매수·매도를 판단하지 않습니다.</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><p class="kicker">SOURCE & LAG</p><h2>출처와 발표 시차</h2></div></div>
+      <div id="money-source"></div>
+    </section>
+  </main>
+
+  <footer><span>Stock AutoResearch</span><span id="updated">데이터 확인 중</span></footer>
+  <script src="거대자금.js"></script>
+</body>
+</html>
