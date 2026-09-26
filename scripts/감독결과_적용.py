@@ -741,7 +741,7 @@ def update_collaboration_state(result: dict, src: Path) -> None:
     resolved_statuses = {"resolved", "discarded", "closed", "completed"}
     # active first, and newest first inside each group
     ordered = sorted(
-        ordered,
+        incidents.values(),
         key=lambda item: (
             str(item.get("status") or "").lower() in resolved_statuses,
             -_parse_result_time(item.get("updated_at") or now).timestamp() if (item.get("updated_at") or now) else 0,
