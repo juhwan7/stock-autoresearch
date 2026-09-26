@@ -333,3 +333,59 @@ def test_pending_count_recovers_from_processed_slot_when_id_was_replaced(tmp_pat
         env={"GITHUB_RUN_ID": "pending-slot", "GITHUB_RUN_ATTEMPT": "1"},
     )
     assert observation["queue"]["pending_before_append"] == 1
+
+
+
+def test_build_observation_keeps_workflow_start_slot_after_long_collection(tmp_path):
+    observation = build_observation(
+        tmp_path,
+        now=datetime(2026, 9, 26, 18, 31, 30, tzinfo=KST),
+        env={
+            "GITHUB_RUN_ID": "slot-pin",
+            "GITHUB_RUN_ATTEMPT": "1",
+            "SENSOR_SLOT_AT": "2026-09-26T18:20:00+09:00",
+            "SENSOR_SLOT_SOURCE": "workflow_start",
+        },
+    )
+    assert observation["slot_at"] == "2026-09-26T18:20:00+09:00"
+    assert observation["slot_source"] == "workflow_start"
+    assert observation["slot_delay_seconds"] == 690.0
+
+
+def test_equal_quality_duplicate_slot_prefers_lower_delay():
+    observations = [
+        {
+            "observation_id": "obs-late",
+            "observed_at": "2026-09-26T18:28:00+09:00",
+            "slot_at": "2026-09-26T18:20:00+09:00",
+            "slot_delay_seconds": 480,
+            "validation": {"status": "ok"},
+            "steps": {"market": "success"},
+        },
+        {
+            "observation_id": "obs-ontime",
+            "observed_at": "2026-09-26T18:21:00+09:00",
+            "slot_at": "2026-09-26T18:20:00+09:00",
+            "slot_delay_seconds": 60,
+            "validation": {"status": "ok"},
+            "steps": {"market": "success"},
+        },
+        {
+            "observation_id": "obs-1810",
+            "observed_at": "2026-09-26T18:11:00+09:00",
+            "slot_at": "2026-09-26T18:10:00+09:00",
+            "validation": {"status": "ok"},
+        },
+        {
+            "observation_id": "obs-1830",
+            "observed_at": "2026-09-26T18:31:00+09:00",
+            "slot_at": "2026-09-26T18:30:00+09:00",
+            "validation": {"status": "ok"},
+        },
+    ]
+    manifest = build_supervisor_window(
+        observations,
+        processed_at=datetime(2026, 9, 26, 18, 30, tzinfo=KST),
+        supervisor="B",
+    )
+    assert manifest["observation_ids"] == ["obs-1810", "obs-ontime", "obs-1830"]
