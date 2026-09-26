@@ -110,14 +110,14 @@ python -m autoresearch risk-intel --mode dry-run
 
 ## 질문 기반 시장 학습
 
-6분 관측은 판단하지 않는 사실 수집 센서다. 질문 생성·가설 판단·버그 진단·프로젝트 개선 결정은 :00/:30 Supervisor만 수행한다. `data/supervisor/question_queue.json`은 두 Supervisor가 이어 쓰는 장기 연구 메모이며, 기존 열린 질문이 있으면 반드시 읽는다.
+10분 관측은 판단하지 않는 사실 수집 센서다. 질문 생성·가설 판단·버그 진단·프로젝트 개선 결정은 :00/:30 Supervisor만 수행한다. `data/supervisor/question_queue.json`은 두 Supervisor가 이어 쓰는 장기 연구 메모이며, 기존 열린 질문이 있으면 반드시 읽는다.
 
 - 질문 수 자체를 성과로 보지 않는다. 반복성, 거래대금 근거, 1차 자료 존재, 반증 가능성으로 중요도를 판단한다.
 - 같은 현상의 질문은 묶되 시간 순서 정보는 보존한다.
 - 답을 찾으면 근거와 함께 answered/partially_answered/unresolved를 구분한다.
 - unresolved는 다음 배치로 넘기고, 답변 과정에서 생긴 후속 질문은 다시 큐에 넣는다.
 - 각 핵심 가설에는 최소 하나의 반증 질문 또는 대체 설명을 둔다.
-- 수급이 뉴스보다 먼저였는지 뒤였는지 6분 관측 시계열로 확인한다.
+- 수급이 뉴스보다 먼저였는지 뒤였는지 10분 관측 시계열로 확인한다.
 - 장 종료/다음 거래일에는 중요한 가설의 사후 결과를 확인해 어떤 질문·근거가 유용했는지 학습한다.
 - 매수·매도 추천이 아니라 시장 구조와 근거를 더 잘 이해하기 위한 질문이어야 한다.
 
@@ -128,7 +128,7 @@ python -m autoresearch risk-intel --mode dry-run
 가설에는 statement, question_ids, question_kinds, evidence_for, evidence_against, verification_checks, verify_after, expires_at을 둔다.
 
 - statement는 이후 데이터로 틀렸다고 판정할 수 있는 문장이어야 한다.
-- verify_after는 다음 6분, 장마감, 다음 거래일 등 실제 확인 가능한 시점을 사용한다.
+- verify_after는 다음 10분, 장마감, 다음 거래일 등 실제 확인 가능한 시점을 사용한다.
 - verification_checks에는 어떤 관측이면 확인/반증인지 구체적으로 적는다.
 - 사후 판정은 confirmed / partially_confirmed / falsified / indeterminate를 사용한다.
 - falsified는 실패한 연구가 아니다. 좋은 질문이 잘못된 가설을 제거했다면 질문의 usefulness는 높게 평가할 수 있다.
@@ -165,10 +165,10 @@ python -m autoresearch risk-intel --mode dry-run
 
 Toss가 연결되어 있다는 사실만으로 데이터가 완전하다고 가정하지 않는다. 거래일 장중에는 Toss 결과를 Naver 공개 배치, 사용 가능한 Kiwoom/KRX 등 독립 경로와 비교한다.
 
-매 1시간 감독은 실제 장애뿐 아니라 다음 1시간/다음 거래일에 발생할 수 있는 데이터 실패를 선제적으로 질문한다.
+매 :00/:30 감독은 실제 장애뿐 아니라 다음 30분/다음 거래일에 발생할 수 있는 데이터 실패를 선제적으로 질문한다.
 - Top50 일부 종목이 누락될 수 있는가
 - 랭킹은 있지만 1분봉이 비어 있을 수 있는가
-- 6분 실행 자체가 지연되어 구간이 비는가
+- 10분 실행 자체가 지연되어 구간이 비는가
 - Top50 이탈 종목 추적이 끊기는가
 - API rate limit/401/403/429/5xx가 발생할 때 데이터가 조용히 비는가
 - 종목코드/시장구분/NXT 지원 여부 변화로 파서가 누락하는가
@@ -226,7 +226,7 @@ Supervisor는 같은 문제를 계속 관찰하는 AI가 아니라 문제를 끝
 
 정각/30분 Supervisor는 `data/news/issue-digest.json`을 단순 핵심 3~5개 요약이 아니라 **최근 7일 시장 사건 원장**으로 유지한다.
 
-- 매 :00/:30 사이클마다 6분 센서가 모은 최신 뉴스 후보를 기본 입력으로 사용하고, 필요하면 웹·공식자료를 추가 조사한다. 후보 수집 목표는 최대 500건이며 동일 기사 재전송·제목만 바뀐 복제·광고성 글·시장과 무관한 잡음은 제거한다.
+- 매 :00/:30 사이클마다 10분 센서가 모은 최신 뉴스 후보를 기본 입력으로 사용하고, 필요하면 웹·공식자료를 추가 조사한다. 후보 수집 목표는 최대 500건이며 동일 기사 재전송·제목만 바뀐 복제·광고성 글·시장과 무관한 잡음은 제거한다.
 - 후보 500건을 앞부분 일부만 샘플링해서 끝내지 않는다. 전체 후보의 제목·출처·시각·주제 분포를 훑고, 중복 사건을 클러스터링한 뒤 각 클러스터의 대표 기사와 1차 자료를 확인한다. 후보가 500건보다 적으면 실제 수집 건수를 기록한다.
 - 매 사이클에 GLOBAL/KOREA가 모두 커버됐는지 검사한다. 글로벌은 미국·중국·일본·유럽·중동/에너지·원자재/물류를, 국내는 정책·수출·공시·산업·주요 기업을 최소 점검한다.
 - 시장 가격 변화가 큰 경우 원인 역추적을 반드시 한다. 예: 유가 급등/급락이면 중동 군사행동·호르무즈 통항·OPEC+·재고·수요전망·달러 중 무엇이 실제로 작용했는지 복수 출처로 확인하고 issue에 연결한다. 금리·환율·반도체 지수·원자재도 같은 원칙을 적용한다.
@@ -244,7 +244,7 @@ Supervisor는 같은 문제를 계속 관찰하는 AI가 아니라 문제를 끝
 - 이슈 누락 검사를 매 사이클 수행한다. 최근 7일의 주요 국가 정상회담·해외 순방·중앙은행 결정·대형 정책 발표가 digest에 하나도 없으면 실제로 없었던 것인지 검색 범위가 빠진 것인지 재검증한다.
 
 Supervisor 결과에는 가능한 경우 `news_issue_digest`를 구조화해 전달한다. 적용 스크립트가 기존 항목과 병합하며 최근 7일/최대 100개 원장을 유지한다.
-매 :00/:30 결과에는 의미 있는 변화가 하나도 없어도 `news_issue_digest`의 기존 ACTIVE/WATCHING 핵심 이슈를 다시 읽고 상태 유지 근거와 next_check를 갱신한다. Telegram에는 전체 100개를 나열하지 않고 신규·강화·완화·해소와 가장 중요한 오버나잇 위험만 요약한다. 6분 센서는 이 판단을 하지 않고 사실 후보 수집만 수행한다.
+매 :00/:30 결과에는 의미 있는 변화가 하나도 없어도 `news_issue_digest`의 기존 ACTIVE/WATCHING 핵심 이슈를 다시 읽고 상태 유지 근거와 next_check를 갱신한다. Telegram에는 전체 100개를 나열하지 않고 신규·강화·완화·해소와 가장 중요한 오버나잇 위험만 요약한다. 10분 센서는 이 판단을 하지 않고 사실 후보 수집만 수행한다.
 
 ## Supervisor 커밋 제목 규칙
 
@@ -313,9 +313,9 @@ Supervisor 결과에는 가능한 경우 `news_issue_digest`를 구조화해 전
 
 이 프로젝트는 며칠짜리 실험이 아니라 1년 이상 사람 개입 없이 계속 관측·연구할 수 있는 구조를 목표로 한다.
 
-- 6분 센서는 최신 뉴스·시장 데이터와 운영상태를 수집하고 `data/discovery/archive/YYYY-MM-DD.jsonl`에 커버리지·핫키워드 통계를 일별 보존한다.
+- 10분 센서는 최신 뉴스·시장 데이터와 운영상태를 수집하고 `data/discovery/archive/YYYY-MM-DD.jsonl`에 커버리지·핫키워드 통계를 일별 보존한다.
 - Supervisor A(:00)와 B(:30)는 시작할 때 직전 상대 Supervisor의 최근 실행, immutable 결과 파일, canonical 반영, Telegram workflow를 확인한다. 상대가 누락됐으면 해당 30분 구간을 이어받아 복구하고 blocked 하나 때문에 멈추지 않는다.
-- ChatGPT Recovery(:15)는 A/B 중 하나가 70분 이상 비거나 적용 실패가 있으면 fallback Supervisor catch-up을 시도한다. GitHub Recovery workflow는 15분마다 discovery·Pages·운영 상태를 감시하고 6분 센서 stale 시 workflow를 재실행한다.
+- ChatGPT Recovery(:15)는 A/B 중 하나가 70분 이상 비거나 적용 실패가 있으면 fallback Supervisor catch-up을 시도한다. GitHub Recovery workflow는 15분 간격의 오프셋 시각에 discovery·Pages·운영 상태를 감시하고 10분 센서 stale 시 recovery 상태 저장 뒤 workflow를 재실행한다.
 - 사람이 직접 해결해야 하는 권한·Secret·결제·계정 UI 문제만 README의 `사용자 확인 필요`에 올린다. 공개 fallback으로 정상 운영 중인 선택형 API 미연결은 필수 사용자조치로 승격하지 않는다.
 - `docs/운영_칸반.md`와 `data/operations/status.json`을 운영 상태의 기준으로 사용한다. 상태는 발견/조사 중/수정 중/검증 대기/사용자 확인 필요/완료로 보여주되, 내부 문제 상태 normal/investigating/verification_pending/resolved/blocked+verify_after와 연결한다.
 - 이슈는 event_time, first_detected, last_updated, status_changed_at을 분리한다. 24시간 안에서는 분/시간 경과를, 그 이상은 시작일과 추적 일수를 사용자 화면에 표시한다.
