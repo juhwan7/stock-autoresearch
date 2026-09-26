@@ -11,6 +11,7 @@ from .market_intel import MarketIntelEngine
 from .naver_batch_market import collect as naver_batch_market_collect
 from .pipeline import Pipeline
 from .regression import RegressionDetector
+from .relative_strength import collect as relative_strength_collect
 from .risk_engine import RiskEngine
 from .supervisor_queue import observe as supervisor_observe
 from .toss_batch_market import collect as toss_batch_market_collect
@@ -72,6 +73,14 @@ def build_parser() -> argparse.ArgumentParser:
     batch_market.add_argument("--root", default=".", help="저장소 루트")
     batch_market.add_argument("--limit", type=int, default=50, help="현재 거래대금 Top50 + 당일 Top50 진입 종목 전체를 추적")
 
+    relative_strength = sub.add_parser(
+        "relative-strength",
+        help="NASDAQ·KOSPI 기준지수 대비 종목 상대강도를 수집",
+    )
+    relative_strength.add_argument("--root", default=".", help="저장소 루트")
+    relative_strength.add_argument("--limit", type=int, default=500, help="시장별 시가총액 상위 비교 종목 수")
+    relative_strength.add_argument("--force", action="store_true", help="30분 캐시를 무시하고 즉시 다시 수집")
+
     discovery = sub.add_parser(
         "market-discovery-observe",
         help="AI 호출 없이 웹·포털 시장 단서를 수집",
@@ -120,6 +129,8 @@ def main() -> None:
         result = RegressionDetector(root).run()
     elif args.command == "naver-batch-market":
         result = naver_batch_market_collect(root, limit=args.limit)
+    elif args.command == "relative-strength":
+        result = relative_strength_collect(root, force=args.force, limit=args.limit)
     elif args.command == "market-discovery-observe":
         result = market_discovery_collect(root)
     elif args.command == "supervisor-observe":
