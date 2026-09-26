@@ -384,3 +384,69 @@ def test_supervisor_disagreement_is_preserved_for_followup(tmp_path, monkeypatch
     assert item["disagreement_id"] == "news-independence-1"
     assert item["a_position"] == "중요도 상승"
     assert item["b_position"] == "재전송 가능성 검증 필요"
+
+
+
+def test_feedback_handoff_requires_receipt_of_previous_supervisor_feedback():
+    module = load_module()
+    warnings = []
+    current = {
+        "batch_id": "supervisor-b-1830",
+        "supervisor": "B",
+        "feedback_to_other_supervisor": ["A는 센서 누락 원인을 확인할 것"],
+    }
+    result = {
+        "batch_id": "supervisor-a-1900",
+        "supervisor": "A",
+        "status": "changed",
+        "feedback_received": [],
+        "feedback_to_other_supervisor": ["B는 수정 결과를 검증할 것"],
+    }
+    handoff = module.validate_feedback_handoff(current, result, warnings)
+    assert handoff["inbound_required"] is True
+    assert handoff["inbound_recorded"] is False
+    assert handoff["outgoing_recorded"] is True
+    assert handoff["complete"] is False
+    assert result["status"] == "verification_pending"
+    assert any("feedback_received" in item for item in warnings)
+
+
+def test_feedback_handoff_is_complete_when_both_directions_are_recorded():
+    module = load_module()
+    warnings = []
+    current = {
+        "batch_id": "supervisor-a-1900",
+        "supervisor": "A",
+        "feedback_to_other_supervisor": ["B는 독립 원기사 추정을 반증할 것"],
+    }
+    result = {
+        "batch_id": "supervisor-b-1930",
+        "supervisor": "B",
+        "status": "changed",
+        "feedback_received": ["A의 독립 원기사 추정 검증 요청을 이어받음"],
+        "feedback_to_other_supervisor": ["A는 반증 결과를 다음 구현에 반영할 것"],
+    }
+    handoff = module.validate_feedback_handoff(current, result, warnings)
+    assert handoff["source_batch_id"] == "supervisor-a-1900"
+    assert handoff["source_supervisor"] == "A"
+    assert handoff["target_supervisor"] == "B"
+    assert handoff["complete"] is True
+    assert result["status"] == "changed"
+    assert warnings == []
+
+
+def test_feedback_handoff_requires_outgoing_feedback_for_regular_supervisor():
+    module = load_module()
+    warnings = []
+    result = {
+        "batch_id": "supervisor-a-2000",
+        "supervisor": "A",
+        "status": "changed",
+        "feedback_received": [],
+        "feedback_to_other_supervisor": [],
+    }
+    handoff = module.validate_feedback_handoff({}, result, warnings)
+    assert handoff["inbound_required"] is False
+    assert handoff["outgoing_recorded"] is False
+    assert handoff["complete"] is False
+    assert result["status"] == "verification_pending"
