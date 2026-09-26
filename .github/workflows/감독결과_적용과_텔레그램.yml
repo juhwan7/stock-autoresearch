@@ -131,13 +131,20 @@ jobs:
           from pathlib import Path
           result_path = Path("${{ steps.result.outputs.path }}")
           source = json.loads(result_path.read_text(encoding="utf-8"))
-          r=json.loads(Path("data/supervisor/latest-report.json").read_text())
-          s=json.loads(Path("data/supervisor/state.json").read_text())
-          assert source["batch_id"] == r["batch_id"] == s["last_batch_id"]
-          assert r["processed_at"] == s["last_processed_at"]
-          assert r["notify"] is True
+          run_kind = source.get("run_kind")
+          assert run_kind in {"regular", "test", "recovery", "unknown"}
+          if run_kind == "test":
+              test_report = json.loads(Path("data/supervisor/latest-test-report.json").read_text())
+              assert source["batch_id"] == test_report["batch_id"]
+              print("Supervisor test result isolated from canonical state")
+          else:
+              r=json.loads(Path("data/supervisor/latest-report.json").read_text())
+              s=json.loads(Path("data/supervisor/state.json").read_text())
+              assert source["batch_id"] == r["batch_id"] == s["last_batch_id"]
+              assert r["processed_at"] == s["last_processed_at"]
+              assert r["notify"] is True
+              print("Supervisor result and canonical state verified")
           assert result_path.name == f'{source["batch_id"]}.json'
-          print("Supervisor result and canonical state verified")
           PY
 
       - name: Commit result and canonical state as one writer
@@ -147,6 +154,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "${{ steps.result.outputs.path }}"
           git add data/supervisor/latest-report.json data/supervisor/state.json data/supervisor/market-issues.json data/market/recent-sessions.json data/research/popular-reports.json data/news/issue-digest.json
+          if [ -f data/supervisor/latest-test-report.json ]; then git add data/supervisor/latest-test-report.json; fi
           if [ -f data/supervisor/disagreements.json ]; then git add data/supervisor/disagreements.json; fi
           if [ -d data/news/archive ]; then git add data/news/archive; fi
           if [ -d memory ]; then git add memory; fi
@@ -197,4 +205,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SUPERVISOR_RESULT_PATH: ${{ steps.result.outputs.path }}
         run: python scripts/감독결과_알림.py

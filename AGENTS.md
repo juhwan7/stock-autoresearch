@@ -332,7 +332,7 @@ Supervisor 결과에는 가능한 경우 `news_issue_digest`를 구조화해 전
 - 10분 센서는 최신 뉴스·시장 데이터와 운영상태를 수집하고 `data/discovery/archive/YYYY-MM-DD.jsonl`에 커버리지·핫키워드 통계를 일별 보존한다.
 - Supervisor A(:00)와 B(:30)는 시작할 때 직전 상대 Supervisor의 최근 실행, immutable 결과 파일, canonical 반영, Telegram workflow를 확인한다. 상대가 누락됐으면 해당 30분 구간을 이어받아 복구하고 blocked 하나 때문에 멈추지 않는다.
 - ChatGPT Recovery(:15)는 A/B 중 하나가 70분 이상 비거나 적용 실패가 있으면 fallback Supervisor catch-up을 시도한다. GitHub Recovery workflow는 15분 간격의 오프셋 시각에 discovery·Pages·운영 상태를 감시하고 10분 센서 stale 시 recovery 상태 저장 뒤 workflow를 재실행한다.
-- 사람이 직접 해결해야 하는 권한·Secret·결제·계정 UI 문제만 README의 `사용자 확인 필요`에 올린다. 공개 fallback으로 정상 운영 중인 선택형 API 미연결은 필수 사용자조치로 승격하지 않는다.
+- 사람이 직접 해결해야 하는 권한·Secret·결제·계정 UI 문제만 시스템 페이지와 운영 Kanban의 `사용자 확인 필요`에 올린다. README에는 실시간 장애 상세를 자동 삽입하지 않는다. 공개 fallback으로 정상 운영 중인 선택형 API 미연결은 필수 사용자조치로 승격하지 않는다.
 - `docs/운영_칸반.md`와 `data/operations/status.json`을 운영 상태의 기준으로 사용한다. 상태는 발견/조사 중/수정 중/검증 대기/사용자 확인 필요/완료로 보여주되, 내부 문제 상태 normal/investigating/verification_pending/resolved/blocked+verify_after와 연결한다.
 - 이슈는 event_time, first_detected, last_updated, status_changed_at을 분리한다. 24시간 안에서는 분/시간 경과를, 그 이상은 시작일과 추적 일수를 사용자 화면에 표시한다.
 - 같은 사건의 후속 기사와 공식 발표는 같은 issue_id에 sources/history/latest_update로 병합한다. 같은 기사 재전송은 새 이슈가 아니다.
@@ -359,3 +359,18 @@ Supervisor 결과에는 가능한 경우 `news_issue_digest`를 구조화해 전
 - `issue_id`, 내부 오류 코드, change_id 같은 개발자용 식별자는 기본 화면 제목·요약으로 사용하지 않는다. 꼭 필요하면 `개발자용 원본 정보` 접힘 영역에 둔다.
 - 페이지 eyebrow/kicker와 일반 소제목은 고유명사·표준 약어(AI, KOSPI, KOSDAQ, Nasdaq, S&P 500, DART, CPI, FOMC, USTR, NXT 등)를 제외하고 한국어를 기본으로 한다.
 - 새 상세보기 렌더러를 추가할 때는 실제 Supervisor/issue/risk/operations 데이터의 중첩 객체를 테스트해 원시 JSON과 영문 enum이 다시 노출되지 않는지 회귀검증한다.
+
+
+## Supervisor 결과 종류와 정규 A/B 연속성
+
+Supervisor 결과는 시장 정규 사이클과 진단용 결과를 구분한다.
+
+- 권장 필드 `run_kind`: `regular` / `test` / `recovery`.
+- 새 정규 A/B 결과는 가능하면 `run_kind=regular`을 명시한다.
+- writer E2E, Telegram E2E, format test 등은 `run_kind=test`로 저장한다.
+- Recovery/catch-up은 `run_kind=recovery`로 저장한다.
+- 과거 파일에 `run_kind`가 없으면 역할, 정규 3슬롯 window, test action/summary 등을 함께 사용해 호환 판정한다. 파일명 하나만으로 판정하지 않는다.
+- A/B liveness, `last_a_window`/`last_b_window`, 상호 피드백 선행 결과는 **정규 regular 결과만** 사용한다.
+- test/E2E는 writer·Telegram 경로를 검증할 수 있지만 시장 canonical, 이슈 원장, A/B 피드백 연속성을 전진시키지 않는다.
+- Recovery는 별도 복구 이력으로 남기며 정규 A/B 성공으로 가장하지 않는다.
+- README에는 분 단위 stale·사용자 조치 상세를 자동 삽입하지 않는다. 실시간 상태는 GitHub Pages `시스템`, `data/operations/status.json`, `docs/운영_칸반.md`, 필요 시 Telegram이 담당한다.
