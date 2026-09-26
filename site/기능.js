@@ -531,7 +531,7 @@ function renderIssueTracker(data) {
   let activeScope="ALL";
   let activeImpact="ALL";
   let activeAge="7";
-  let activeSort="updated";
+  let activeSort="priority";
   let query="";
   const issueTime = (x, key) => {
     const raw = x[key] || "";
@@ -562,10 +562,21 @@ function renderIssueTracker(data) {
       if(activeSort==="updated") return Math.max(issueTime(b,"last_updated"),issueTime(b,"event_time"),issueTime(b,"first_detected"))-Math.max(issueTime(a,"last_updated"),issueTime(a,"event_time"),issueTime(a,"first_detected"));
       if(activeSort==="event") return issueTime(b,"event_time")-issueTime(a,"event_time");
       if(activeSort==="detected") return issueTime(b,"first_detected")-issueTime(a,"first_detected");
-      const sr=(statusRank[String(a.status||"WATCHING").toUpperCase()]??9)-(statusRank[String(b.status||"WATCHING").toUpperCase()]??9);
-      if(sr) return sr;
-      const sev=(severityRank[String(a.severity||"LOW").toUpperCase()]??9)-(severityRank[String(b.severity||"LOW").toUpperCase()]??9);
-      if(sev) return sev;
+      const pricingScore={ACTIVE_MARKET_DRIVER:24,NOT_PRICED:18,EARLY:15,PARTLY_PRICED:11,LOW_CURRENT_PRICING:8,WATCH:6,UNCERTAIN:5,FULLY_PRICED:2};
+      const priorityScore=(x)=>{
+        const status=String(x.status||"WATCHING").toUpperCase();
+        const severity=String(x.severity||"LOW").toUpperCase();
+        const pricing=String(x.pricing_status||"UNCERTAIN").toUpperCase();
+        const statusPoints={ESCALATING:30,ACTIVE:24,NEW:20,WATCHING:12,EASING:6,RESOLVED:0}[status]||0;
+        const severityPoints={CRITICAL:26,HIGH:18,MEDIUM:10,LOW:3}[severity]||0;
+        const velocity=Math.min(20,Math.max(0,Number(x.article_velocity||0)));
+        const sourceBreadth=Math.min(12,Math.max(0,Number(x.independent_story_count_estimate||x.source_count||(x.sources||[]).length||0)));
+        const assetBreadth=Math.min(8,asArray(x.affected_assets).length*2);
+        const triggerReady=x.next_check?5:0;
+        return statusPoints+severityPoints+(pricingScore[pricing]||0)+velocity+sourceBreadth+assetBreadth+triggerReady;
+      };
+      const priorityDiff=priorityScore(b)-priorityScore(a);
+      if(priorityDiff) return priorityDiff;
       return (issueTime(b,"last_updated")||0)-(issueTime(a,"last_updated")||0);
     });
     setText("issue-total-count", filtered.length + "개 / 전체 " + rows.length + "개");
@@ -739,6 +750,88 @@ function renderResearch(data) {
       (state.count != null ? " · " + esc(state.count) + "건" : "") + '</span></div>';
   }).join("") : empty("소스 상태 데이터 없음"));
 }
+
+function renderHomeResearch(data) {
+  const root = $("home-research-list");
+  if (!root) return;
+  const supervisor = asObject(data.supervisor_latest);
+  const reports = asArray(data.reports);
+  const rows = [];
+  if (Object.keys(supervisor).length) {
+    rows.push({
+      title: supervisor.supervisor ? "Supervisor " + supervisor.supervisor + " 최신 심층 리서치" : "최신 AI 심층 리서치",
+      preview: shortText(asArray(supervisor.summary).length ? supervisor.summary : supervisor.market_narrative, 240),
+      meta: supervisor.processed_at ? researchDateLabel({generated_at:supervisor.processed_at}) : "시각 미확인",
+      href: "리서치.html"
+    });
+  }
+  reports.slice(0,2).forEach((x) => rows.push({
+    title: x.title || "프로젝트 리서치",
+    preview: shortText(x.preview || x.content || "", 220),
+    meta: researchDateLabel(x),
+    href: "리서치.html"
+  }));
+  root.innerHTML = rows.length ? rows.slice(0,3).map((x) =>
+    '<a class="mini-row home-research-row" href="' + esc(x.href) + '"><strong>' + esc(x.title) + '</strong><span>' + esc(x.preview) + '</span><small>' + esc(x.meta) + '</small></a>'
+  ).join("") : empty("연결된 최신 리서치를 준비 중입니다.");
+}
+
+function renderAIDialogue(data) {
+  const root = $("ai-dialogue");
+  if (!root) return;
+  const rows = asArray(data.supervisor_timeline).slice(0,40);
+  if (!rows.length) {
+    root.innerHTML = empty("저장된 A/B Supervisor 결과가 아직 없습니다.");
+    setText("ai-dialogue-status", "데이터 없음");
+    return;
+  }
+  const latest = rows[0] || {};
+  const latestTime = latest.processed_at ? new Date(latest.processed_at).getTime() : NaN;
+  const stale = Number.isFinite(latestTime) && Date.now() - latestTime > 90 * 60 * 1000;
+  setText("ai-dialogue-status", (stale ? "STALE · " : "최근 ") + (latest.processed_at ? relativeTime(latest.processed_at) : "시각 미확인"));
+
+  root.innerHTML = rows.map((x) => {
+    const speaker = String(x.supervisor || "SYSTEM").toUpperCase();
+    const speakerClass = speaker === "A" ? "speaker-a" : speaker === "B" ? "speaker-b" : "speaker-recovery";
+    const label = speaker === "A" ? "A · 탐색/개발" : speaker === "B" ? "B · 반증/검증" : "Recovery · 연속성";
+    const summary = asArray(x.summary).map(readableItem).filter(Boolean);
+    const received = asArray(x.feedback_received).map(readableItem).filter(Boolean);
+    const resolved = asArray(x.feedback_resolved).map(readableItem).filter(Boolean);
+    const disagreed = [...asArray(x.feedback_disagreed), ...asArray(x.supervisor_disagreements)].map(readableItem).filter(Boolean);
+    const deferred = asArray(x.feedback_deferred).map(readableItem).filter(Boolean);
+    const outgoing = asArray(x.feedback_to_other_supervisor).map(readableItem).filter(Boolean);
+    const actions = asArray(x.actions).map(readableItem).filter(Boolean);
+    const changes = asArray(x.changed_paths).map(readableItem).filter(Boolean);
+    const next = asArray(x.next_checks).map(readableItem).filter(Boolean);
+    const signals = asArray(x.project_improvement_signals).map(readableItem).filter(Boolean);
+    const completenessRaw = x.observation_completeness_ratio;
+    const completeness = completenessRaw == null || completenessRaw === "" ? NaN : Number(completenessRaw);
+    const completenessText = Number.isFinite(completeness) ? Math.round(completeness * 100) + "% 관측" : "";
+    const body = summary.length ? summary.slice(0,4).join(" ") : shortText(x.market_narrative || "", 520);
+    return '<article class="ai-turn ' + speakerClass + '">' +
+      '<div class="ai-turn-marker">' + esc(speaker === "RECOVERY" ? "R" : speaker) + '</div>' +
+      '<details class="ai-message">' +
+        '<summary><div class="ai-message-head"><div><span class="ai-speaker">' + esc(label) + '</span><time>' + esc(researchDateLabel({generated_at:x.processed_at})) + '</time></div>' +
+        '<div class="ai-message-badges"><span>' + esc(x.status || "") + '</span>' + (completenessText ? '<span>' + esc(completenessText) + '</span>' : '') + '</div></div>' +
+        '<p>' + esc(shortText(body, 520)) + '</p><span class="research-toggle">대화·근거 펼치기</span></summary>' +
+        '<div class="ai-message-detail">' +
+          researchSection("현재 판단", summary.length ? summary : x.market_narrative) +
+          researchSection("받은 의견", received) +
+          researchSection("반영·해결", resolved) +
+          researchSection("반론·의견 충돌", disagreed) +
+          researchSection("보류한 판단", deferred) +
+          researchSection("이번 실행의 조치", actions) +
+          researchSection("프로젝트 개선 신호", signals) +
+          researchSection("다음 Supervisor에게 전달", outgoing) +
+          researchSection("다음 확인", next) +
+          researchSection("변경 파일", changes) +
+          (x.source_url ? '<div class="research-actions"><a class="button primary" href="' + esc(x.source_url) + '" target="_blank" rel="noreferrer">저장된 원본 JSON 보기</a></div>' : '') +
+        '</div>' +
+      '</details>' +
+    '</article>';
+  }).join("");
+}
+
 function renderRisk(data) {
   const risk = data.risk || {};
   const evaln = risk.evaluation || {};
@@ -877,6 +970,8 @@ async function load() {
   renderHotIssues(data);
   renderIssueTracker(data);
   renderResearch(data);
+  renderHomeResearch(data);
+  renderAIDialogue(data);
   renderRisk(data);
   renderMacro(data);
   renderDomesticLive(data, krRows);

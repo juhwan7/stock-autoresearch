@@ -214,6 +214,49 @@ def read_json(path: Path) -> dict:
         return {}
 
 
+def supervisor_timeline(limit: int = 80) -> list[dict]:
+    """실제 Supervisor A/B/Recovery 결과를 Pages용 대화 타임라인으로 정규화한다."""
+    folder = ROOT / "data" / "supervisor" / "ai-results"
+    if not folder.exists():
+        return []
+    repo = os.getenv("GITHUB_REPOSITORY", "juhwan7/stock-autoresearch")
+    rows: list[dict] = []
+    for path in folder.glob("*.json"):
+        data = read_json(path)
+        if not data:
+            continue
+        batch_id = str(data.get("batch_id") or path.stem)
+        supervisor = str(data.get("supervisor") or "").upper()
+        if supervisor not in {"A", "B"}:
+            if batch_id.lower().startswith("recovery"):
+                supervisor = "RECOVERY"
+            else:
+                continue
+        rows.append({
+            "batch_id": batch_id,
+            "processed_at": data.get("processed_at"),
+            "supervisor": supervisor,
+            "status": data.get("status"),
+            "summary": data.get("summary"),
+            "market_narrative": data.get("market_narrative"),
+            "actions": data.get("actions", []),
+            "feedback_received": data.get("feedback_received", []),
+            "feedback_resolved": data.get("feedback_resolved", []),
+            "feedback_disagreed": data.get("feedback_disagreed", []),
+            "feedback_deferred": data.get("feedback_deferred", []),
+            "feedback_to_other_supervisor": data.get("feedback_to_other_supervisor", []),
+            "supervisor_disagreements": data.get("supervisor_disagreements", []),
+            "project_improvement_signals": data.get("project_improvement_signals", []),
+            "changed_paths": data.get("changed_paths", []),
+            "next_checks": data.get("next_checks", []),
+            "observation_completeness_ratio": data.get("observation_completeness_ratio"),
+            "source_file": str(path.relative_to(ROOT)),
+            "source_url": f"https://github.com/{repo}/blob/main/{path.relative_to(ROOT)}",
+        })
+    rows.sort(key=lambda item: str(item.get("processed_at") or ""), reverse=True)
+    return rows[:limit]
+
+
 def toss_provider_status() -> dict:
     snapshot = read_json(ROOT / "data" / "providers" / "toss" / "latest.json")
     persisted = read_json(ROOT / "data" / "providers" / "toss" / "status.json")
@@ -470,10 +513,11 @@ def main() -> None:
     status = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "project": "Stock AutoResearch",
-        "heartbeat": "6분",
+        "heartbeat": "10분",
         "reports": reports,
         "popular_reports": read_json(ROOT / "data" / "research" / "popular-reports.json"),
         "supervisor_latest": read_json(ROOT / "data" / "supervisor" / "latest-report.json"),
+        "supervisor_timeline": supervisor_timeline(),
         "supervisor_recent": read_json(ROOT / "data" / "supervisor" / "recent.json"),
         "market_issues": read_json(ROOT / "data" / "supervisor" / "market-issues.json"),
         "discovery": read_json(ROOT / "data" / "discovery" / "latest.json"),

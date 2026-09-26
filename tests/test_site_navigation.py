@@ -8,6 +8,18 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 
+EXPECTED_PRIMARY_ORDER = [
+    "index.html",
+    "이슈추적.html",
+    "리서치.html",
+    "국내시장.html",
+    "글로벌리스크.html",
+    "상대강도.html",
+    "거대자금.html",
+    "시스템.html",
+    "AI대화.html",
+]
+
 PAGES = {
     "index.html",
     "국내시장.html",
@@ -17,6 +29,7 @@ PAGES = {
     "리서치.html",
     "시스템.html",
     "상대강도.html",
+    "AI대화.html",
 }
 
 
@@ -63,6 +76,11 @@ def test_primary_navigation_is_complete_unique_and_active():
                 f"{page_name}: 상단 메뉴의 {target} 링크가 없거나 중복됨: {nav_hrefs}"
             )
 
+        primary_order = [href for href in nav_hrefs if href in PAGES]
+        assert primary_order == EXPECTED_PRIMARY_ORDER, (
+            f"{page_name}: 시장 중요도 기준 메뉴 순서가 다름: {primary_order}"
+        )
+
         active = [href for href, classes in parser.nav_links if "active" in classes]
         assert active == [page_name], (
             f"{page_name}: 활성 메뉴가 현재 페이지와 다름: {active}"
@@ -84,3 +102,22 @@ def test_html_does_not_contain_literal_newline_escape_artifacts():
     for path in SITE.glob("*.html"):
         text = path.read_text(encoding="utf-8")
         assert "\\n" not in text, f"{path.name}: HTML에 문자 그대로 \\n이 남아 있음"
+
+
+def test_home_market_first_sections_precede_supporting_numbers():
+    html = (SITE / "index.html").read_text(encoding="utf-8")
+    headings = [
+        "지금 시장을 움직이는 핵심 이슈",
+        "앞으로 시장을 움직일 트리거",
+        "현재 주목해야 할 리서치",
+        "시장 핵심 숫자",
+    ]
+    positions = [html.index(title) for title in headings]
+    assert positions == sorted(positions)
+
+
+def test_issue_tracker_defaults_to_market_priority_sort():
+    html = (SITE / "이슈추적.html").read_text(encoding="utf-8")
+    js = (SITE / "기능.js").read_text(encoding="utf-8")
+    assert '<option value="priority" selected>' in html
+    assert 'let activeSort="priority";' in js
