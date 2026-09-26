@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -199,22 +200,54 @@ def update_news_issue_digest(result: dict) -> None:
         merged["history"] = history[-80:]
         existing[issue_id] = merged
 
+    def parse_time(value: object) -> datetime | None:
+        if not value:
+            return None
+        try:
+            parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        except ValueError:
+            return None
+        if parsed.tzinfo is None:
+            return parsed.replace(tzinfo=datetime.now().astimezone().tzinfo)
+        return parsed
+
+    now_dt = parse_time(now) or datetime.now().astimezone()
+    cutoff = now_dt - timedelta(days=7)
+
+    def keep_issue(item: dict) -> bool:
+        status = str(item.get("status") or "").upper()
+        if status != "RESOLVED":
+            return True
+        reference = (
+            parse_time(item.get("last_updated"))
+            or parse_time(item.get("resolved_at"))
+            or parse_time(item.get("event_time"))
+            or parse_time(item.get("first_detected"))
+        )
+        return bool(reference and reference >= cutoff)
+
     def issue_rank(item: dict) -> tuple:
         status_rank = {"ESCALATING": 0, "NEW": 1, "ACTIVE": 2, "WATCHING": 3, "EASING": 4, "RESOLVED": 5}
         severity_rank = {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3}
+        updated = (
+            parse_time(item.get("last_updated"))
+            or parse_time(item.get("event_time"))
+            or parse_time(item.get("first_detected"))
+        )
+        updated_score = -updated.timestamp() if updated else 0
         return (
             status_rank.get(str(item.get("status") or "").upper(), 9),
             severity_rank.get(str(item.get("severity") or "").upper(), 9),
-            str(item.get("last_updated") or ""),
+            updated_score,
         )
 
-    items = sorted(existing.values(), key=issue_rank)
-    active = [x for x in items if str(x.get("status") or "").upper() != "RESOLVED"]
-    resolved = [x for x in items if str(x.get("status") or "").upper() == "RESOLVED"]
+    items = sorted((x for x in existing.values() if keep_issue(x)), key=issue_rank)
     store.update({k: v for k, v in payload.items() if k != "issues"})
     store["updated_at"] = now
-    store["issues"] = (active + resolved)[:30]
-    store["max_issues"] = 30
+    store["issues"] = items[:100]
+    store["max_issues"] = 100
+    store["retention_days"] = 7
+    store["retention_rule"] = "active/easing issues persist; resolved issues remain visible for at least 7 days"
     NEWS_ISSUES.parent.mkdir(parents=True, exist_ok=True)
     NEWS_ISSUES.write_text(json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
