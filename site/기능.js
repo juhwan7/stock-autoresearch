@@ -160,10 +160,49 @@ function issueTemporalLabel(issue) {
   if (status === "RESOLVED") return date + " 시작 · " + relativeTime(issue.status_changed_at || issue.last_updated || startRaw) + " 해소";
   return date + " 시작 · " + days + "일째 " + (status === "ACTIVE" ? "지속" : "추적");
 }
+function parseIssueTimestamp(value) {
+  const raw = String(value || "").trim();
+  if (!raw || !/^\d{4}-\d{2}-\d{2}(?:[T\s].*)?$/.test(raw)) return 0;
+  const parsed = new Date(raw);
+  return Number.isNaN(parsed.getTime()) ? 0 : parsed.getTime();
+}
+function issueLatestActivity(issue) {
+  const x = issue && typeof issue === "object" ? issue : {};
+  const candidates = [];
+  const add = (value, source) => {
+    const ms = parseIssueTimestamp(value);
+    if (ms) candidates.push({ms, raw:String(value), source});
+  };
+  asArray(x.history).forEach((item) => {
+    if (!item || typeof item !== "object") return;
+    add(item.at, "history.at");
+    add(item.event_time, "history.event_time");
+  });
+  add(x.status_changed_at, "status_changed_at");
+  add(x.last_updated, "last_updated");
+  add(x.last_seen, "last_seen");
+  add(x.first_detected, "first_detected");
+  add(x.event_time, "event_time");
+  add(x.latest_update, "latest_update");
+  if (!candidates.length) return {ms:0, raw:"", source:""};
+  candidates.sort((a,b) => b.ms-a.ms || a.source.localeCompare(b.source));
+  return candidates[0];
+}
+function issueLatestActivityTime(issue) {
+  return issueLatestActivity(issue).ms;
+}
+function compareIssueRecency(a,b) {
+  const diff = issueLatestActivityTime(b) - issueLatestActivityTime(a);
+  if (diff) return diff;
+  return String(a.issue_id || "").localeCompare(String(b.issue_id || ""), "ko");
+}
 function issueLatestUpdateLabel(issue) {
-  const latest = issue.last_updated || issue.first_detected || issue.event_time;
-  if (!latest) return "업데이트 시각 미확인";
-  return "추가 소식 · " + relativeTime(latest);
+  const latest = issueLatestActivity(issue);
+  if (!latest.ms) return "최근 변화 시각 미확인";
+  const absolute = new Intl.DateTimeFormat("ko-KR", {
+    timeZone:"Asia/Seoul", month:"numeric", day:"numeric", hour:"numeric", minute:"2-digit"
+  }).format(new Date(latest.ms));
+  return "최근 변화 " + absolute + " · " + relativeTime(latest.raw);
 }
 function compoundPct(rows, key) {
   if (!rows.length) return null;
@@ -647,7 +686,7 @@ function renderIssueTracker(data) {
   let activeScope="ALL";
   let activeImpact="ALL";
   let activeAge="7";
-  let activeSort="priority";
+  let activeSort="updated";
   let query="";
   const issueTime = (x, key) => {
     const raw = x[key] || "";
@@ -665,8 +704,8 @@ function renderIssueTracker(data) {
       if (activeImpact!=="ALL" && impact!==activeImpact) return false;
       if (activeAge!=="ALL") {
         const days=Number(activeAge);
-        const eventMs=issueTime(x,"event_time") || issueTime(x,"last_updated") || issueTime(x,"first_detected");
-        if (eventMs && nowMs-eventMs > days*86400000) return false;
+        const activityMs=issueLatestActivityTime(x);
+        if (activityMs && nowMs-activityMs > days*86400000) return false;
       }
       if (!query) return true;
       const hay=[x.title,x.summary,x.category,x.scope,x.why_market_matters,x.pricing_status,(x.affected_assets||[]).join(" "),(x.transmission_path||[]).join(" ")].join(" ").toLowerCase();
@@ -675,7 +714,7 @@ function renderIssueTracker(data) {
     const statusRank={ESCALATING:0,NEW:1,ACTIVE:2,WATCHING:3,EASING:4,RESOLVED:5};
     const severityRank={CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3};
     filtered.sort((a,b)=>{
-      if(activeSort==="updated") return Math.max(issueTime(b,"last_updated"),issueTime(b,"event_time"),issueTime(b,"first_detected"))-Math.max(issueTime(a,"last_updated"),issueTime(a,"event_time"),issueTime(a,"first_detected"));
+      if(activeSort==="updated") return compareIssueRecency(a,b);
       if(activeSort==="event") return issueTime(b,"event_time")-issueTime(a,"event_time");
       if(activeSort==="detected") return issueTime(b,"first_detected")-issueTime(a,"first_detected");
       const pricingScore={ACTIVE_MARKET_DRIVER:24,NOT_PRICED:18,EARLY:15,PARTLY_PRICED:11,LOW_CURRENT_PRICING:8,WATCH:6,UNCERTAIN:5,FULLY_PRICED:2};
