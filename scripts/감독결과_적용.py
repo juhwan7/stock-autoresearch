@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "data/supervisor/latest-report.json"
 STATE = ROOT / "data/supervisor/state.json"
 ISSUES = ROOT / "data/supervisor/market-issues.json"
+RECENT_SESSIONS = ROOT / "data/market/recent-sessions.json"
 
 def update_issue_lifecycle(result: dict) -> None:
     """Persist explicit market issue state transitions without deleting history."""
@@ -70,6 +71,32 @@ def update_issue_lifecycle(result: dict) -> None:
     ISSUES.write_text(json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def update_market_session_history(result: dict) -> None:
+    updates = result.get("market_session_history") or {}
+    if not isinstance(updates, dict):
+        return
+    store = json.loads(RECENT_SESSIONS.read_text(encoding="utf-8")) if RECENT_SESSIONS.exists() else {}
+    changed = False
+    for market in ("korea", "us"):
+        rows = updates.get(market)
+        if not isinstance(rows, list) or not rows:
+            continue
+        merged = {
+            str(item.get("date")): item
+            for item in store.get(market, [])
+            if isinstance(item, dict) and item.get("date")
+        }
+        for item in rows:
+            if isinstance(item, dict) and item.get("date"):
+                merged[str(item["date"])] = item
+                changed = True
+        store[market] = sorted(merged.values(), key=lambda x: str(x.get("date") or ""), reverse=True)[:3]
+    if changed:
+        store["updated_at"] = str(result.get("processed_at") or "")
+        RECENT_SESSIONS.parent.mkdir(parents=True, exist_ok=True)
+        RECENT_SESSIONS.write_text(json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         raise SystemExit("usage: python scripts/supervisor_result_apply.py <result.json>")
@@ -104,6 +131,7 @@ def main() -> int:
         raise SystemExit("Supervisor result must have notify=true")
     observation_ids = result.get("observation_ids") or []
     update_issue_lifecycle(result)
+    update_market_session_history(result)
     REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     state = json.loads(STATE.read_text(encoding="utf-8"))
     state["last_batch_id"] = result["batch_id"]
