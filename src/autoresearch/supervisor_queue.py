@@ -161,6 +161,7 @@ def build_observation(
     health = _read_json(root / "data" / "health" / "latest.json")
     regression = _read_json(root / "data" / "regression" / "latest.json")
     market = _read_json(root / "data" / "market" / "runtime.json")
+    recent_sessions = _read_json(root / "data" / "market" / "recent-sessions.json")
     discovery = _read_json(root / "data" / "discovery" / "latest.json")
     public_batch = _read_json(
         root / "data" / "providers" / "naver_batch" / "latest.json"
@@ -209,7 +210,22 @@ def build_observation(
         signals.append("discovery:degraded")
 
     market_source_status = str(market.get("source_status") or "")
-    if market_source_status and market_source_status not in {"ok", "idle"}:
+    has_recent_sessions = bool(
+        isinstance(recent_sessions.get("korea"), list)
+        and recent_sessions.get("korea")
+    )
+    normal_historical_fallback = (
+        market_source_status in {
+            "outside_domestic_monitor_window",
+            "outside_regular_session",
+        }
+        and has_recent_sessions
+    )
+    if (
+        market_source_status
+        and market_source_status not in {"ok", "idle"}
+        and not normal_historical_fallback
+    ):
         signals.append("market:" + market_source_status)
 
     previous_run = _recent_workflow_run(env)
@@ -307,6 +323,14 @@ def build_observation(
             "source_status": market.get("source_status"),
             "provider": market.get("provider"),
             "fallback_used": market.get("fallback_used"),
+            "historical_fallback_available": has_recent_sessions,
+        },
+        "market_recent_sessions": {
+            "updated_at": recent_sessions.get("updated_at"),
+            "basis": recent_sessions.get("basis"),
+            "korea": (recent_sessions.get("korea") or [])[:3],
+            "us": (recent_sessions.get("us") or [])[:3],
+            "holiday_notes": recent_sessions.get("holiday_notes") or [],
         },
         "toss": {
             "available": toss.get("available"),
