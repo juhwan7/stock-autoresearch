@@ -40,6 +40,83 @@ function relativeTime(value) {
   return (minutes / 1440).toFixed(1) + "일 전";
 }
 
+function kstDateParts(value) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone:"Asia/Seoul", year:"numeric", month:"2-digit", day:"2-digit"
+  }).formatToParts(new Date(value));
+  const get = (type) => Number((parts.find((part) => part.type === type) || {}).value);
+  return {year:get("year"), month:get("month"), day:get("day")};
+}
+function durationLabel(totalMinutes, suffix) {
+  const minutes = Math.max(0, Math.round(Number(totalMinutes) || 0));
+  if (minutes < 60) return Math.max(1, minutes) + "분 " + suffix;
+  const hours = Math.floor(minutes / 60);
+  const remainMinutes = minutes % 60;
+  if (hours < 24) return hours + "시간" + (remainMinutes ? " " + remainMinutes + "분" : "") + " " + suffix;
+  const days = Math.floor(hours / 24);
+  const remainHours = hours % 24;
+  if (days >= 30) {
+    const months = Math.floor(days / 30);
+    const remainDays = days % 30;
+    return months + "개월" + (remainDays ? " " + remainDays + "일" : "") + " " + suffix;
+  }
+  return days + "일" + (remainHours ? " " + remainHours + "시간" : "") + " " + suffix;
+}
+function eventTiming(event, nowMs = Date.now()) {
+  const x = event && typeof event === "object" ? event : {};
+  const timeUnknown = x.time_unknown === true || String(x.time_status || "").toLowerCase() === "unknown" || (!x.datetime_kst && Boolean(x.date_kst));
+  const dateOnly = String(x.date_kst || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (timeUnknown && dateOnly) {
+    const targetSerial = Date.UTC(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]));
+    const now = kstDateParts(nowMs);
+    const nowSerial = Date.UTC(now.year, now.month - 1, now.day);
+    const days = Math.round((targetSerial - nowSerial) / 86400000);
+    const dateForLabel = new Date(Date.UTC(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]), 12));
+    const dateLabel = new Intl.DateTimeFormat("ko-KR", {
+      timeZone:"Asia/Seoul", month:"long", day:"numeric", weekday:"short"
+    }).format(dateForLabel) + " · 시간 미확정";
+    return {
+      valid:true, exact:false, dateLabel,
+      countdown:days > 0 ? "D-" + days + " · 시간 미확정" : days === 0 ? "D-DAY · 시간 미확정" : "종료 · 시간 미확정",
+      urgency:days < 0 ? "past" : days === 0 ? "today" : days <= 3 ? "soon" : days <= 7 ? "near" : "normal",
+      remainingHours:null
+    };
+  }
+
+  const raw = x.datetime_kst || (!timeUnknown ? x.resolved_datetime_kst : "");
+  const target = raw ? new Date(raw) : null;
+  if (!target || Number.isNaN(target.getTime())) {
+    return {valid:false, exact:false, dateLabel:"일정 시각 확인 중", countdown:"일정 시각 확인 중", urgency:"unknown", remainingHours:null};
+  }
+
+  const diffMinutes = Math.round((target.getTime() - nowMs) / 60000);
+  const absMinutes = Math.abs(diffMinutes);
+  const dateLabel = new Intl.DateTimeFormat("ko-KR", {
+    timeZone:"Asia/Seoul", month:"long", day:"numeric", weekday:"short"
+  }).format(target) + " · " + new Intl.DateTimeFormat("ko-KR", {
+    timeZone:"Asia/Seoul", hour:"numeric", minute:"2-digit", hour12:true
+  }).format(target);
+
+  if (diffMinutes < 0) {
+    return {valid:true, exact:true, dateLabel, countdown:"종료 · " + durationLabel(absMinutes, "전"), urgency:"past", remainingHours:diffMinutes / 60};
+  }
+
+  const hours = diffMinutes / 60;
+  const dDay = hours < 24 ? "D-DAY" : "D-" + Math.max(1, Math.floor(hours / 24));
+  const urgency = hours < 1 ? "imminent" : hours < 24 ? "today" : hours < 72 ? "soon" : hours < 168 ? "near" : "normal";
+  return {valid:true, exact:true, dateLabel, countdown:dDay + " · " + durationLabel(diffMinutes, "남음"), urgency, remainingHours:hours};
+}
+function eventCard(event) {
+  const x = event && typeof event === "object" ? event : {};
+  const timing = eventTiming(x);
+  const level = x.risk_level || (Number(x.severity) >= 5 ? "HIGH" : Number(x.severity) >= 4 ? "WATCH" : "");
+  return '<div class="event-row" data-urgency="' + esc(timing.urgency) + '">' +
+    '<div class="event-main"><strong>' + esc(x.title || "주요 일정") + '</strong><div class="event-date">' + esc(timing.dateLabel) + '</div>' +
+    '<div class="event-countdown">' + esc(timing.countdown) + '</div></div>' +
+    (level ? '<span class="event-level">' + esc(level) + '</span>' : '') +
+    '</div>';
+}
 function issueTemporalLabel(issue) {
   const status = String(issue.status || "WATCHING").toUpperCase();
   const statusWord = {NEW:"등장",WATCHING:"관찰",ACTIVE:"지속",ESCALATING:"강화",EASING:"완화",RESOLVED:"해소"}[status] || status;
@@ -647,8 +724,13 @@ function renderRisk(data) {
   const known = Number(macro.known_count || 0), total = Number(macro.total_count || 0);
   const rows = [];
   (risk.macro_signals || []).forEach((x)=>rows.push({level:x.risk_level||"WATCH",title:x.field||"매크로 변화",why:"임계값을 넘은 매크로 변화를 확인합니다.",value:x.value}));
-  (risk.upcoming_events || []).slice(0,5).forEach((x)=>{
-    if (Number(x.hours_to_event || 9999) <= 72) rows.push({level:x.risk_level||"WATCH",title:x.title||"주요 일정",why:"향후 72시간 안 예정된 이벤트입니다.",value:Number.isFinite(Number(x.hours_to_event))?Number(x.hours_to_event).toFixed(1)+"시간 후":""});
+  asArray(risk.upcoming_events).slice(0,5).forEach((x)=>{
+    const timing = eventTiming(x);
+    const fallbackHours = Number(x.hours_to_event);
+    const remainingHours = Number.isFinite(timing.remainingHours) ? timing.remainingHours : (Number.isFinite(fallbackHours) ? fallbackHours : null);
+    if (remainingHours !== null && remainingHours >= 0 && remainingHours <= 72) {
+      rows.push({level:x.risk_level||"WATCH",title:x.title||"주요 일정",why:"향후 72시간 안 예정된 이벤트입니다.",value:timing.countdown});
+    }
   });
   (supervisor.market_focus || []).slice(0,3).forEach((x,i)=>rows.push({level:i===0?"WATCH":"LOW",title:x.title||x.name||"AI 확인 항목",why:x.reason||x.why||"",value:""}));
   if (total && !known) rows.push({level:"UNKNOWN",title:"실시간 매크로 값 미수집",why:"빈 값을 LOW로 해석하지 않습니다. 실시간 값이 복구될 때까지 최근 종가와 AI 검증 메모를 함께 봅니다.",value:known+"/"+total});
@@ -659,7 +741,8 @@ function renderRisk(data) {
   setText("risk-level", level);
   if ($("risk-level")) $("risk-level").dataset.level = level;
   setHTML("risk-summary", '<div class="regime"><strong>' + esc(evaln.summary || "리스크 입력을 확인 중입니다.") + '</strong><p>' + esc(((evaln.single_biggest_risk || {}).title) || "확정된 단일 대형 리스크 없음") + '</p><small>' + esc(((evaln.single_biggest_risk || {}).why) || "") + '</small></div>');
-  setHTML("risk-events", (risk.upcoming_events || []).length ? '<div class="event-list">' + (risk.upcoming_events || []).slice(0,8).map((x) => '<div class="event-row"><strong>' + esc(x.title || "") + '</strong><span>' + esc(x.risk_level || "") + '</span><small>' + esc(x.datetime_kst || x.date_kst || "") + (x.hours_to_event != null ? " · " + Number(x.hours_to_event).toFixed(1) + "시간 후" : "") + '</small></div>').join("") + '</div>' : empty("예정 이벤트 없음"));
+  const upcomingEvents = asArray(risk.upcoming_events);
+  setHTML("risk-events", upcomingEvents.length ? '<div class="event-list">' + upcomingEvents.slice(0,8).map(eventCard).join("") + '</div>' : empty("예정 이벤트 없음"));
   setHTML("next-checks", (supervisor.next_checks || []).length ? (supervisor.next_checks || []).slice(0,8).map((x)=>'<div class="mini-row"><span>' + esc(typeof x === "string" ? x : (x.title || x.check || "")) + '</span></div>').join("") : empty("다음 확인 항목 없음"));
 }
 function renderMacro(data) {
