@@ -212,7 +212,10 @@ jobs:
           git config user.name "stock-autoresearch[bot]"
           git config user.email "stock-autoresearch[bot]@users.noreply.github.com"
 
-          git add data/supervisor
+          # 센서는 Supervisor 전체 디렉터리가 아니라 자기 산출물만 소유한다.
+          git add data/supervisor/recent.json
+          if [ -d data/supervisor/queue ]; then git add data/supervisor/queue; fi
+          if [ -d data/supervisor/windows ]; then git add data/supervisor/windows; fi
           if [ -d data/providers/toss ]; then git add data/providers/toss; fi
           if [ -d data/providers/naver_batch ]; then git add data/providers/naver_batch; fi
           if [ -d data/health ]; then git add data/health; fi
@@ -232,6 +235,13 @@ jobs:
             echo "이번 10분 관측에는 저장할 변화가 없습니다."
           else
             git commit -m "observe: record 10-minute supervisor checkpoint"
+
+            # pytest/dashboard/operations는 센서가 소유하지 않는 tracked 파일을 로컬에서
+            # 바꿀 수 있다. 의도한 센서 산출물은 이미 commit했으므로 rebase 전에 남은
+            # 비소유 tracked 변경을 버려 git pull --rebase가 막히지 않게 한다.
+            echo "sensor commit 뒤 남은 비소유 변경:"
+            git status --short || true
+            git reset --hard HEAD
 
             # 다른 writer가 pull 직후 main을 한 번 더 갱신하는 좁은 race가 실제로 관측됐다.
             # 내용 충돌이 없는 non-fast-forward만 짧게 재동기화하고, rebase 충돌은 즉시 실패시킨다.
