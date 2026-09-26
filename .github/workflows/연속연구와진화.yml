@@ -208,6 +208,7 @@ jobs:
         run: python -m autoresearch supervisor-observe
 
       - name: Commit observation data
+        id: persist_observation
         run: |
           git config user.name "stock-autoresearch[bot]"
           git config user.email "stock-autoresearch[bot]@users.noreply.github.com"
@@ -276,9 +277,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           CURRENT_RUN_ID: ${{ github.run_id }}
+          PERSIST_OUTCOME: ${{ steps.persist_observation.outcome }}
         shell: bash
         run: |
           set -euo pipefail
+
+          if [ "${PERSIST_OUTCOME:-unknown}" != "success" ]; then
+            echo "observation 저장 단계가 실패해 self-chain 대기를 생략합니다. heartbeat/Recovery가 현재 슬롯 복구를 담당합니다."
+            exit 0
+          fi
 
           python - <<'PY' > /tmp/next-sensor.env
           import os

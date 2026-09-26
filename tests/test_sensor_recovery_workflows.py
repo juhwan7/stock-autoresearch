@@ -138,3 +138,11 @@ def test_sensor_stages_only_sensor_owned_supervisor_files_and_cleans_before_reba
     reset_index = workflow.index("git reset --hard HEAD")
     rebase_index = workflow.index("if ! git pull --rebase; then", reset_index)
     assert reset_index < rebase_index
+
+
+def test_sensor_persist_failure_does_not_hold_concurrency_until_next_slot():
+    workflow = read(".github/workflows/연속연구와진화.yml")
+    assert "id: persist_observation" in workflow
+    assert "PERSIST_OUTCOME: ${{ steps.persist_observation.outcome }}" in workflow
+    assert 'if [ "${PERSIST_OUTCOME:-unknown}" != "success" ]; then' in workflow
+    assert "self-chain 대기를 생략합니다" in workflow
