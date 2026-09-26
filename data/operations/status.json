@@ -1,0 +1,86 @@
+{
+  "generated_at": "2026-09-26T15:37:16.987178+09:00",
+  "status": "needs_user_action",
+  "supervisors": {
+    "A": {
+      "processed_at": "2026-09-26T15:00:26+09:00",
+      "batch_id": "supervisor-20260926T1500+0900",
+      "status": "verification_pending",
+      "path": "data/supervisor/ai-results/supervisor-20260926T1500+0900.json"
+    },
+    "B": {
+      "processed_at": "2026-09-26T13:30:00+09:00",
+      "batch_id": "supervisor-20260926T1330+0900",
+      "status": "verification_pending",
+      "path": "data/supervisor/ai-results/supervisor-20260926T1330+0900.json"
+    }
+  },
+  "canonical": {
+    "last_batch_id": "supervisor-20260926T1500+0900",
+    "last_processed_at": "2026-09-26T15:00:26+09:00"
+  },
+  "news": {
+    "discovery_generated_at": "2026-09-26T15:36:59.923617+09:00",
+    "candidate_count": 227,
+    "issue_updated_at": "2026-09-26T15:00:26+09:00",
+    "issue_count": 33
+  },
+  "question_queue": {
+    "updated_at": "2026-09-25T16:31:47.462349+09:00",
+    "open_count": 24
+  },
+  "cards": [
+    {
+      "card_id": "supervisor-a-ok",
+      "title": "Supervisor A 정상",
+      "state": "완료",
+      "impact": "마지막 37분 전",
+      "last_checked": "2026-09-26T15:37:16.987178+09:00",
+      "owner": "A"
+    },
+    {
+      "card_id": "supervisor-b-stale",
+      "title": "Supervisor B 127분 지연",
+      "state": "조사 중",
+      "impact": "다음 사이클 누락 가능",
+      "last_checked": "2026-09-26T15:37:16.987178+09:00",
+      "owner": "Recovery",
+      "verify_after": "다음 30분 사이클"
+    },
+    {
+      "card_id": "discovery-ok",
+      "title": "뉴스 discovery 정상",
+      "state": "완료",
+      "impact": "0분 전 갱신",
+      "last_checked": "2026-09-26T15:37:16.987178+09:00",
+      "owner": "6분 센서"
+    },
+    {
+      "card_id": "issue-digest-ok",
+      "title": "이슈 원장 정상",
+      "state": "완료",
+      "impact": "37분 전 갱신 · 33개",
+      "last_checked": "2026-09-26T15:37:16.987178+09:00",
+      "owner": "A/B"
+    },
+    {
+      "card_id": "pages-data-ok",
+      "title": "Pages 상태 데이터 정상",
+      "state": "완료",
+      "impact": "1153355 bytes",
+      "last_checked": "2026-09-26T15:37:16.987178+09:00",
+      "owner": "Dashboard"
+    }
+  ],
+  "user_actions": [
+    {
+      "id": "optional-news-credentials",
+      "problem": "일부 보조 뉴스/공시 API 자격증명 없음",
+      "impact": "Google RSS 등 fallback은 계속 작동하지만 탐색 범위가 줄어들 수 있음",
+      "attempted": "키 없는 공개 소스와 broad fallback 유지",
+      "why_blocked": "API Secret은 사용자가 GitHub Secrets에 직접 등록해야 함",
+      "action": "필요 시 NAVER_CLIENT_ID/NAVER_CLIENT_SECRET/DART_API_KEY 등록",
+      "verify": "source_status가 needs_credentials에서 ok로 전환"
+    }
+  ]
+}
