@@ -206,6 +206,7 @@ def parse_kospi_market_payload(payload: Any) -> list[dict[str, Any]]:
             _first(
                 price_block,
                 "fluctuationsRatio",
+                "prevChangeRate",
                 "changeRate",
                 "percentageChange",
                 "changePercent",
@@ -239,6 +240,7 @@ def parse_kospi_market_payload(payload: Any) -> list[dict[str, Any]]:
                         price_block,
                         "closePrice",
                         "currentPrice",
+                        "nowPrice",
                         "lastPrice",
                         "lastSalePrice",
                         "nv",
