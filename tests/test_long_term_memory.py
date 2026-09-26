@@ -36,6 +36,7 @@ def test_memory_refresh_builds_hot_and_cold_layers(tmp_path):
         "batch_id": "supervisor-test-a",
         "processed_at": "2026-09-26T17:00:00+09:00",
         "supervisor": "A",
+        "run_kind": "regular",
         "status": "verification_pending",
         "summary": ["시장 점검", "UI 점검"],
         "market_narrative": "시장 해설",
