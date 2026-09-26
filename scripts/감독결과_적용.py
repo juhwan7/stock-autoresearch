@@ -95,18 +95,34 @@ def normalize_observation_window(result: dict, warnings: list[str]) -> dict:
             "Supervisor가 사용한 observation_ids가 정해진 3개 슬롯 window와 일치하지 않음"
         )
 
+    selected_slots = actual_slots or manifest_slots
+    selected_slot_set = set(selected_slots)
+    selected_missing = [
+        slot for slot in expected_slots
+        if slot not in selected_slot_set
+    ]
+    expected_count = int(manifest.get("expected_observation_count") or 3)
+    selected_expected_count = sum(
+        1 for slot in selected_slots
+        if slot in set(expected_slots)
+    )
+
     result["observation_ids"] = valid_ids
-    result["observation_slots"] = actual_slots or manifest_slots
+    result["observation_slots"] = selected_slots
     result["observation_window_start"] = manifest.get("window_start")
     result["observation_window_end"] = manifest.get("window_end")
-    result["expected_observation_count"] = manifest.get("expected_observation_count", 3)
+    result["expected_observation_count"] = expected_count
     result["received_observation_count"] = len(valid_ids)
-    result["missing_observation_slots"] = list(manifest.get("missing_slots") or [])
-    result["observation_completeness_ratio"] = manifest.get("completeness_ratio", 0)
+    result["missing_observation_slots"] = selected_missing
+    result["observation_completeness_ratio"] = round(
+        selected_expected_count / expected_count,
+        3,
+    ) if expected_count else 0.0
     result["observation_window_complete"] = (
         bool(manifest.get("complete"))
         and not unknown
         and ids_match_window
+        and not selected_missing
     )
 
     if not result["observation_window_complete"]:
@@ -574,9 +590,10 @@ def main() -> int:
         for x in (state.get("processed_observation_ids_recent") or [])
         if str(x).strip()
     ]
-    for item_id in observation_ids:
-        if item_id not in processed_recent:
-            processed_recent.append(item_id)
+    if result.get("observation_window_complete"):
+        for item_id in observation_ids:
+            if item_id not in processed_recent:
+                processed_recent.append(item_id)
     state["processed_observation_ids_recent"] = processed_recent[-120:]
 
     role = str(window_manifest.get("supervisor") or "A")
