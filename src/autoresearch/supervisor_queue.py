@@ -16,6 +16,8 @@ from .hypothesis_learning import due_hypotheses
 KST = timezone(timedelta(hours=9))
 BATCH_SIZE = 10
 RECENT_LIMIT = 120
+SENSOR_INTERVAL_MINUTES = 10
+SUPERVISOR_WINDOW_SIZE = 3
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -54,6 +56,143 @@ def _append_jsonl(path: Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(value, ensure_ascii=False) + "\n")
+
+
+def sensor_slot_start(value: datetime) -> datetime:
+    """Return the canonical 10-minute KST slot for an observation."""
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=KST)
+    value = value.astimezone(KST)
+    minute = (value.minute // SENSOR_INTERVAL_MINUTES) * SENSOR_INTERVAL_MINUTES
+    return value.replace(minute=minute, second=0, microsecond=0)
+
+
+def _parse_datetime(value: Any) -> datetime | None:
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=KST)
+    return parsed.astimezone(KST)
+
+
+def _observation_slot(item: Mapping[str, Any]) -> datetime | None:
+    explicit = _parse_datetime(item.get("slot_at"))
+    if explicit is not None:
+        return sensor_slot_start(explicit)
+    observed = _parse_datetime(item.get("observed_at"))
+    return sensor_slot_start(observed) if observed is not None else None
+
+
+def _supervisor_anchor(processed_at: datetime, supervisor: str) -> datetime:
+    if processed_at.tzinfo is None:
+        processed_at = processed_at.replace(tzinfo=KST)
+    processed_at = processed_at.astimezone(KST)
+    role = "B" if "B" in supervisor.upper() else "A"
+    if role == "A":
+        return processed_at.replace(minute=0, second=0, microsecond=0)
+    if processed_at.minute >= 30:
+        return processed_at.replace(minute=30, second=0, microsecond=0)
+    previous_hour = processed_at - timedelta(hours=1)
+    return previous_hour.replace(minute=30, second=0, microsecond=0)
+
+
+def expected_supervisor_slots(
+    processed_at: datetime,
+    supervisor: str,
+) -> list[datetime]:
+    anchor = _supervisor_anchor(processed_at, supervisor)
+    return [
+        anchor - timedelta(minutes=SENSOR_INTERVAL_MINUTES * offset)
+        for offset in range(SUPERVISOR_WINDOW_SIZE - 1, -1, -1)
+    ]
+
+
+def _observation_quality(item: Mapping[str, Any]) -> tuple[int, datetime]:
+    validation = str((item.get("validation") or {}).get("status") or "")
+    steps = item.get("steps") or {}
+    successful_steps = sum(1 for value in steps.values() if value == "success")
+    observed = _parse_datetime(item.get("observed_at")) or datetime.min.replace(tzinfo=KST)
+    return ((100 if validation == "ok" else 0) + successful_steps, observed)
+
+
+def build_supervisor_window(
+    observations: list[dict[str, Any]],
+    *,
+    processed_at: datetime,
+    supervisor: str,
+) -> dict[str, Any]:
+    expected = expected_supervisor_slots(processed_at, supervisor)
+    expected_keys = {slot.isoformat(): slot for slot in expected}
+    canonical: dict[str, dict[str, Any]] = {}
+
+    for item in observations:
+        if not isinstance(item, dict):
+            continue
+        slot = _observation_slot(item)
+        if slot is None:
+            continue
+        key = slot.isoformat()
+        if key not in expected_keys:
+            continue
+        current = canonical.get(key)
+        if current is None or _observation_quality(item) > _observation_quality(current):
+            canonical[key] = item
+
+    ordered = [canonical.get(slot.isoformat()) for slot in expected]
+    received = [item for item in ordered if item is not None]
+    missing = [
+        slot.isoformat()
+        for slot, item in zip(expected, ordered)
+        if item is None
+    ]
+    anchor = expected[-1]
+    return {
+        "schema_version": 1,
+        "supervisor": "B" if "B" in supervisor.upper() else "A",
+        "anchor_at": anchor.isoformat(),
+        "window_start": expected[0].isoformat(),
+        "window_end": anchor.isoformat(),
+        "expected_observation_count": SUPERVISOR_WINDOW_SIZE,
+        "received_observation_count": len(received),
+        "completeness_ratio": round(len(received) / SUPERVISOR_WINDOW_SIZE, 3),
+        "complete": len(received) == SUPERVISOR_WINDOW_SIZE,
+        "expected_slots": [slot.isoformat() for slot in expected],
+        "observation_slots": [
+            slot.isoformat()
+            for slot, item in zip(expected, ordered)
+            if item is not None
+        ],
+        "observation_ids": [
+            str(item.get("observation_id"))
+            for item in received
+            if item.get("observation_id")
+        ],
+        "missing_slots": missing,
+    }
+
+
+def _write_window_manifest(
+    root: Path,
+    observations: list[dict[str, Any]],
+    slot: datetime,
+) -> dict[str, Any] | None:
+    if slot.minute not in {0, 30}:
+        return None
+    role = "A" if slot.minute == 0 else "B"
+    manifest = build_supervisor_window(
+        observations,
+        processed_at=slot,
+        supervisor=role,
+    )
+    folder = root / "data" / "supervisor" / "windows"
+    dated = folder / slot.strftime("%Y-%m-%d")
+    _write_json(folder / f"latest-{role}.json", manifest)
+    _write_json(dated / (slot.strftime("%H%M") + f"-{role}.json"), manifest)
+    return manifest
 
 
 def _latest_changed_files(root: Path) -> list[str]:
@@ -176,6 +315,7 @@ def build_observation(
     run_attempt = str(env.get("GITHUB_RUN_ATTEMPT") or "1")
     head_sha = str(env.get("GITHUB_SHA") or "")
     suffix = (run_id + "-" + run_attempt) if run_id else (head_sha[:10] or "local")
+    slot_at = sensor_slot_start(now)
     observation_id = now.strftime("obs-%Y%m%dT%H%M%S%z-") + suffix
 
     health_issues = []
@@ -235,9 +375,13 @@ def build_observation(
     pending_before = _pending_after(recent, str(last_processed_id) if last_processed_id else None)
 
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "observation_id": observation_id,
         "observed_at": now.isoformat(),
+        "slot_at": slot_at.isoformat(),
+        "slot_key": slot_at.strftime("%Y-%m-%dT%H:%M%z"),
+        "sensor_interval_minutes": SENSOR_INTERVAL_MINUTES,
+        "slot_delay_seconds": max(0.0, (now - slot_at).total_seconds()),
         "source": {
             "repository": env.get("GITHUB_REPOSITORY"),
             "workflow": env.get("GITHUB_WORKFLOW"),
@@ -374,11 +518,34 @@ def append_observation(
             "recent_count": len(recent),
         }
 
+    new_slot = _observation_slot(observation)
+    same_slot_index = None
+    for index, item in enumerate(recent):
+        if new_slot is not None and _observation_slot(item) == new_slot:
+            same_slot_index = index
+
     stamp = datetime.fromisoformat(str(observation["observed_at"]))
     queue_path = supervisor_dir / "queue" / (stamp.astimezone(KST).strftime("%Y-%m-%d") + ".jsonl")
-    _append_jsonl(queue_path, observation)
 
-    recent.append(observation)
+    if same_slot_index is not None:
+        existing = recent[same_slot_index]
+        if _observation_quality(observation) <= _observation_quality(existing):
+            return {
+                "status": "duplicate_slot",
+                "observation_id": observation_id,
+                "slot_at": new_slot.isoformat() if new_slot else None,
+                "canonical_observation_id": existing.get("observation_id"),
+                "recent_count": len(recent),
+            }
+        observation["supersedes_observation_id"] = existing.get("observation_id")
+        recent[same_slot_index] = observation
+        _append_jsonl(queue_path, observation)
+        append_status = "replaced_slot"
+    else:
+        _append_jsonl(queue_path, observation)
+        recent.append(observation)
+        append_status = "appended"
+
     recent = recent[-RECENT_LIMIT:]
     state = _read_json(state_path)
     last_processed = state.get("last_processed_observation_id")
@@ -391,11 +558,18 @@ def append_observation(
     _write_json(
         recent_path,
         {
-            "schema_version": 1,
+            "schema_version": 2,
             "updated_at": observation["observed_at"],
             "batch_size": BATCH_SIZE,
+            "sensor_interval_minutes": SENSOR_INTERVAL_MINUTES,
             "observations": recent,
         },
+    )
+
+    window_manifest = (
+        _write_window_manifest(root, recent, new_slot)
+        if new_slot is not None
+        else None
     )
 
     if not state:
@@ -405,6 +579,10 @@ def append_observation(
                 "schema_version": 1,
                 "batch_size": BATCH_SIZE,
                 "last_processed_observation_id": None,
+                "last_processed_slot": None,
+                "processed_observation_ids_recent": [],
+                "last_a_window": None,
+                "last_b_window": None,
                 "last_processed_at": None,
                 "last_batch_id": None,
                 "last_processed_feedback_comment_id": None,
@@ -412,18 +590,20 @@ def append_observation(
         )
 
     return {
-        "status": "appended",
+        "status": append_status,
         "observation_id": observation_id,
+        "slot_at": new_slot.isoformat() if new_slot else None,
         "queue_file": str(queue_path.relative_to(root)),
         "recent_count": len(recent),
         "pending_after_append": pending_after,
+        "window_manifest": window_manifest,
     }
 
 
 def observe(root: Path, env: Mapping[str, str] | None = None) -> dict[str, Any]:
     """Record facts only.
 
-    The six-minute sensor is deliberately not a reasoning layer. It collects
+    The ten-minute sensor is deliberately not a reasoning layer. It collects
     observable market/system state and leaves questions, hypotheses, bug
     diagnosis, and project-improvement decisions to the :00/:30 Supervisor.
     """
