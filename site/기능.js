@@ -427,14 +427,15 @@ async function load() {
   const q = market.quantitative || {};
   const interp = market.interpretation || {};
   const source = market.source || {};
-  const runtimeStatus = runtime.source_status || source.status || q.status || "데이터 없음";
+  const runtimeStatus = source.status === "historical_fallback" ? "historical_fallback" : (runtime.source_status || source.status || q.status || "데이터 없음");
   const statusLabels = {
     ok: "장중 분석",
     outside_regular_session: "장 종료 · 마지막 유효 장세",
     needs_credentials: "키움 API 설정 필요",
     no_rows: "시세 데이터 없음",
     toss_snapshot_unavailable: "토스 Collector 대기",
-    outside_domestic_monitor_window: "국내시장 감시시간 종료"
+    outside_domestic_monitor_window: "국내시장 감시시간 종료",
+    historical_fallback: "휴장 · 최근 3거래일 분석"
   };
   $("market-status").textContent = statusLabels[runtimeStatus] || runtimeStatus;
 
@@ -521,6 +522,25 @@ async function load() {
         ).join("")
       );
     }
+  } else if (q.status === "historical_fallback") {
+    const overview = source.market_overview || {};
+    const kospi = overview.KOSPI || {};
+    const kosdaq = overview.KOSDAQ || {};
+    const sessions = q.historical_sessions || [];
+    const dates = sessions.map((x) => x.date).filter(Boolean);
+    $("market-summary").innerHTML =
+      `<div class="regime"><strong>${esc(interp.regime_name || "휴장 · 최근 거래일 기준")}</strong><p>${esc(interp.one_line || q.reason || "")}</p><small>실시간 장세가 없을 때 최근 실제 거래일 데이터를 자동 백필합니다.</small></div>` +
+      `<div class="market-numbers">
+        <span>KOSPI <b>${kospi.change_pct == null ? "-" : signedPct(kospi.change_pct)}</b><small>${esc(dates[0] || "최근 거래일")} 종가 ${kospi.index == null ? "-" : Number(kospi.index).toLocaleString("ko-KR")}</small></span>
+        <span>KOSDAQ <b>${kosdaq.change_pct == null ? "-" : signedPct(kosdaq.change_pct)}</b><small>${esc(dates[0] || "최근 거래일")} 종가 ${kosdaq.index == null ? "-" : Number(kosdaq.index).toLocaleString("ko-KR")}</small></span>
+        <span>분석 기준 <b>${esc(sessions.length)}거래일</b><small>${esc(dates.join(" · "))}</small></span>
+        <span>장중 분봉 <b>미보존</b><small>없는 과거 Top50/1분값은 생성하지 않음</small></span>
+      </div>`;
+    $("nxt-after").innerHTML = "<p class='muted'>휴장/장외: 마지막 실제 거래일의 지수·수급을 사용합니다. 과거 NXT 원본은 저장된 경우에만 표시합니다.</p>";
+    $("burst-leaders").innerHTML = "<p class='muted'>최근 3거래일 종가·수급은 분석 중입니다. 과거 1분 거래대금 원본은 현재 저장소에 미보존입니다.</p>";
+    $("new-listings").innerHTML = "<p class='muted'>과거 분봉 원본 미보존 · 임의 복원하지 않음</p>";
+    $("coflow-groups").innerHTML = "<p class='muted'>과거 동조 분봉 원본 미보존 · 최근 3거래일 지수/수급 컨텍스트는 유지</p>";
+    $("strategy-stats").innerHTML = "<p class='muted'>기존 누적 전략 통계는 유지되며, 휴장이라고 초기화하지 않습니다.</p>";
   } else {
     const reason = source.reason || q.reason || "국내시장 실데이터가 아직 연결되지 않았습니다.";
     $("market-summary").innerHTML = `<div class="regime"><strong>분석 대기</strong><p>${esc(reason)}</p></div>`;
