@@ -91,3 +91,24 @@ def test_self_chain_catches_up_current_slot_after_long_sensor_run():
     assert "expected_next = (" in workflow
     assert "next_slot = max(expected_next, current_slot)" in workflow
     assert "과거 슬롯을 backfill하지 않고 현재 슬롯을 즉시 이어" in workflow
+
+
+def test_supervisor_result_workflow_has_dispatch_single_writer_fallback():
+    workflow = read(".github/workflows/감독결과_적용과_텔레그램.yml")
+    assert "workflow_dispatch:" in workflow
+    assert "supervisor_result:" in workflow
+    assert "Receive or find Supervisor result" in workflow
+    assert 'payload.get("notify") is not True' in workflow
+    assert 'supervisor not in {"A", "B"}' in workflow
+    assert 'git add "${{ steps.result.outputs.path }}"' in workflow
+    assert "Commit result and canonical state as one writer" in workflow
+    assert "Verify persisted result on main" in workflow
+
+
+def test_supervisor_result_writer_retries_conflicts_and_fails_closed():
+    workflow = read(".github/workflows/감독결과_적용과_텔레그램.yml")
+    assert "for ATTEMPT in 1 2 3" in workflow
+    assert "git pull --rebase origin main" in workflow
+    assert "Supervisor result/canonical 저장에 3회 실패했습니다." in workflow
+    assert "exit 1" in workflow
+    assert "supervisor-result-apply" in workflow
