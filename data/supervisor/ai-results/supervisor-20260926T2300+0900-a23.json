@@ -1,0 +1,349 @@
+{
+  "batch_id": "supervisor-20260926T2300+0900-a23",
+  "processed_at": "2026-09-26T23:05:50+09:00",
+  "supervisor": "A",
+  "notify": true,
+  "status": "verification_pending",
+  "summary": "23:00 canonical window 3/3 정상. 직전 B의 single-writer E2E는 main→canonical→Telegram workflow까지 성공해 해당 피드백을 해소했다. 뉴스는 수입규제 군집이 22:40→22:50에 크게 증가한 뒤 23:00 유지됐고, 미·이란은 기사 감소만으로 완화하지 않았다. macro 실값 공백과 discovery 9개 degraded 그룹은 계속 검증 대상이다.",
+  "market_narrative": "한국은 추석 연휴로 현물 수급·거래대금 신규 반응을 확인할 수 없다. 미국 최근 종가는 AI 관련주 강세가 지수를 지지했지만 중동 에너지 위험과 장기금리 부담이 남은 구조다. 23:00 뉴스에서는 한국산 수입규제 241건 보도가 빠르게 확산된 뒤 유지됐고, 미·이란은 호르무즈 재개방 제안에 대한 미국의 공식 답변이 아직 확인되지 않아 ACTIVE를 유지한다. 월요일 USTR의 미중 협상 세부 공개가 다음 확인 이벤트다.",
+  "market_focus": [
+    "미·이란 공식 답변과 호르무즈 실제 통항 변화",
+    "한국산 수입규제 241건의 국가·품목별 실제 노출과 다음 한국장 업종 반응",
+    "월요일 USTR 미중 무역협상 세부 공식 발표",
+    "미국 장기금리·유가의 다음 거래 재개 시 동행 여부"
+  ],
+  "invalidation_checks": [
+    "미국 정부가 이란 제안을 공식 수용하고 실제 호르무즈 통항 정상화가 확인되면 중동 위험 평가를 낮춘다.",
+    "군사행동 재개·통항 악화·원유 공급차질이 확인되면 미·이란 위험을 ESCALATING 후보로 재평가한다.",
+    "KOTRA 수입규제 증가가 소수 품목에 집중되고 신규조사 상당수가 종료·철회되면 광범위한 한국 수출 부담 해석을 낮춘다.",
+    "월요일 USTR 공식문서가 센서의 관세·AI 관련 2차 보도와 다르면 공식문서를 우선한다."
+  ],
+  "overnight_risks": [
+    {
+      "risk": "미·이란 협상 결렬 또는 군사행동 재개",
+      "severity": "HIGH",
+      "path": "호르무즈→원유 공급→유가·인플레이션 기대→미국 장기금리→Nasdaq·한국 성장주",
+      "status": "ACTIVE"
+    },
+    {
+      "risk": "월요일 미중 무역협상 세부 공개",
+      "severity": "MEDIUM",
+      "path": "관세·AI·수출통제→글로벌 공급망→한국 반도체·수출주",
+      "status": "WATCHING"
+    }
+  ],
+  "actions": [
+    {
+      "type": "continuity",
+      "status": "resolved",
+      "detail": "직전 B single-writer 2차 E2E의 main 저장, canonical latest-report/state 반영, Telegram 적용 workflow success 확인"
+    },
+    {
+      "type": "news_validation",
+      "status": "done",
+      "detail": "22:40/22:50/23:00 discovery의 기사수·매체수·독립스토리 추정치를 분리해 비교하고 미·이란 Reuters 및 USTR 월요일 발표를 재확인"
+    },
+    {
+      "type": "issue_lifecycle",
+      "status": "update",
+      "detail": "미·이란은 기사 수 감소만으로 완화하지 않고 ACTIVE 유지. 수입규제는 22:50 급증 후 23:00 유지로 NEW 유지"
+    },
+    {
+      "type": "ui_ux",
+      "status": "no_change",
+      "detail": "주말·휴장 구간에서 내부 센서 품질지표를 메인 카드로 추가하지 않음. HIGH 위험은 메인, 긴 근거·history는 이슈 추적 상세에 유지"
+    },
+    {
+      "type": "data_quality",
+      "status": "verification_pending",
+      "detail": "macro runtime 실값 공백과 discovery 9개 degraded 그룹이 세 슬롯에서 반복되어 다음 B에 원인·실질 누락 검증 인계"
+    }
+  ],
+  "changed_paths": [
+    "data/supervisor/ai-results/supervisor-20260926T2300+0900-a23.json"
+  ],
+  "next_checks": [
+    "23:10/23:20/23:30 B window가 3/3으로 이어지는지 확인",
+    "macro runtime 실제 값 공백이 휴장·주말 정상조건인지 공급자 누락인지 구분",
+    "discovery degraded 9개 그룹의 빈 결과가 검색 무결성 문제인지 정상 무응답인지 표본 점검",
+    "미·이란 공식 미국 답변 또는 실제 호르무즈 통항 변화 확인",
+    "월요일 USTR 공식 세부문서 확인",
+    "issue-digest가 이번 canonical apply 뒤 16:00 stale에서 실제 전진하는지 확인"
+  ],
+  "project_improvement_signals": [
+    {
+      "id": "supervisor-single-writer",
+      "status": "resolved",
+      "signal": "2차 E2E에서 main 결과 저장·canonical 적용·Telegram workflow success 확인",
+      "verify_after": "다음 정규 A/B에서도 동일 경로 유지 여부"
+    },
+    {
+      "id": "macro-runtime-empty",
+      "status": "verification_pending",
+      "signal": "22:40/22:50/23:00 세 슬롯 모두 macro runtime은 생성됐으나 실제 시장값이 비어 있음",
+      "verify_after": "다음 B 및 다음 거래 가능 구간"
+    },
+    {
+      "id": "discovery-degraded-groups",
+      "status": "verification_pending",
+      "signal": "세 슬롯 모두 source_summary degraded=9. item_count는 111→158→150으로 실제 기사 입력은 존재",
+      "verify_after": "23:30 B"
+    },
+    {
+      "id": "issue-digest-stale",
+      "status": "verification_pending",
+      "signal": "canonical issue-digest가 16:00에 머물러 있으므로 이번 news_issue_digest 적용 후 전진 여부 확인",
+      "verify_after": "이번 apply workflow 완료 후"
+    }
+  ],
+  "work_axes_reviewed": [
+    {
+      "axis": "news_issues",
+      "status": "reviewed",
+      "finding": "수입규제는 15→25건으로 증가 후 25건 유지. 이란은 16→19→17건으로 감소했지만 공식 상황 변화 근거 없음",
+      "action": "수입규제 NEW, 미·이란 ACTIVE 유지",
+      "evidence": "3개 canonical discovery + Reuters/USTR 재검증",
+      "verify_after": "23:30 B"
+    },
+    {
+      "axis": "data_quality_freshness",
+      "status": "verification_pending",
+      "finding": "canonical window 3/3이나 macro 실값 공백과 discovery degraded=9 지속",
+      "action": "시장값을 추정하지 않고 공급자 상태를 다음 B에 인계",
+      "evidence": "22:40/22:50/23:00 health",
+      "verify_after": "23:30 B"
+    },
+    {
+      "axis": "bugs",
+      "status": "resolved_and_monitor",
+      "finding": "직전 B가 요청한 single-writer E2E 확인은 성공",
+      "action": "해당 피드백 resolved. 새 writer 변경은 하지 않음",
+      "evidence": "workflow 36246557250 success + canonical latest-report/state",
+      "verify_after": "다음 정규 결과"
+    },
+    {
+      "axis": "provider_fallback",
+      "status": "reviewed",
+      "finding": "국내 public batch는 휴장으로 unavailable이며 historical fallback은 존재. 이를 장애로 오판하지 않음",
+      "action": "no_change",
+      "evidence": "market source_status=outside_domestic_monitor_window",
+      "verify_after": "다음 한국 거래일"
+    },
+    {
+      "axis": "testing_regression",
+      "status": "passed",
+      "finding": "세 관측 모두 compile/pytest/diff_check ok, 센서 단계 success",
+      "action": "no_change",
+      "evidence": "canonical observations 3건",
+      "verify_after": "23:30 B"
+    },
+    {
+      "axis": "ui_ux",
+      "status": "no_change",
+      "pages": [
+        "index.html",
+        "이슈추적.html",
+        "시스템.html"
+      ],
+      "finding": "새 내부 품질지표를 메인에 추가하면 휴장 구간에서 정보밀도만 증가한다. HIGH 위험과 사용자 판단 정보는 이미 메인/이슈 추적에 분리됨",
+      "action": "현재 progressive disclosure 유지",
+      "expected_benefit": "메인 확인시간과 시각적 잡음 최소화",
+      "validation": "최근 Pages 배포와 프로젝트 검증 success, 이번 데이터 구조 변경 없음",
+      "verify_after": "이슈 50개 이상 또는 모바일 회귀 발생 시"
+    },
+    {
+      "axis": "structure_simplification",
+      "status": "no_change",
+      "finding": "single-writer E2E가 성공한 직후 writer 경로를 다시 변경할 근거 없음",
+      "action": "안정화 관측 우선",
+      "evidence": "직전 실패 후 retry success",
+      "verify_after": "다음 2개 정규 A/B"
+    }
+  ],
+  "feedback_received": [
+    {
+      "from_batch": "supervisor-writer-e2e-20260926T2251+0900",
+      "item": "다음 A는 2차 E2E의 main 저장·canonical·Telegram 성공 상태를 확인"
+    }
+  ],
+  "feedback_resolved": [
+    {
+      "item": "single-writer 2차 E2E 실운영 확인",
+      "resolution": "결과 파일이 main에 존재하고 latest-report/state가 같은 batch로 전진했으며 Supervisor 결과 적용 및 Telegram workflow 36246557250이 success"
+    }
+  ],
+  "feedback_disagreed": [],
+  "feedback_deferred": [],
+  "supervisor_disagreements": [],
+  "feedback_to_other_supervisor": [
+    "23:10/23:20/23:30을 정확히 사용해 3/3 연속성을 재검증하고 다른 슬롯으로 보충하지 말 것",
+    "이번 apply 후 issue-digest updated_at이 16:00에서 전진했는지 확인하고 전진하지 않으면 apply의 news_issue_digest 병합 경로를 실패경로로 조사할 것",
+    "macro 실값 공백이 주말 정상조건인지 provider 장애인지 반증할 것. 값이 없으면 숫자를 추정하지 말 것",
+    "discovery degraded 9개 그룹 중 실제 중요 축이 빠지는지 원시 검색결과 표본으로 확인할 것",
+    "미·이란은 기사량 감소만으로 EASING 처리하지 말고 미국 공식답변·통항·군사행동 중 실제 상태변화가 있어야 낮출 것",
+    "UI는 새 카드 추가보다 기존 메인/이슈추적 중복·과다 여부를 먼저 검토하고 삭제·통합 후보가 있으면 제안할 것"
+  ],
+  "observation_ids": [
+    "obs-20260926T224103+0900-36245945045-1",
+    "obs-20260926T225118+0900-36246492073-1",
+    "obs-20260926T230142+0900-36247025383-1"
+  ],
+  "observation_slots": [
+    "2026-09-26T22:40:00+09:00",
+    "2026-09-26T22:50:00+09:00",
+    "2026-09-26T23:00:00+09:00"
+  ],
+  "observation_window_start": "2026-09-26T22:40:00+09:00",
+  "observation_window_end": "2026-09-26T23:00:00+09:00",
+  "expected_observation_count": 3,
+  "received_observation_count": 3,
+  "missing_observation_slots": [],
+  "observation_completeness_ratio": 1,
+  "observation_details": [
+    {
+      "slot_at": "2026-09-26T22:40:00+09:00",
+      "slot_source": "dispatch_input",
+      "slot_delay_seconds": 63.663254
+    },
+    {
+      "slot_at": "2026-09-26T22:50:00+09:00",
+      "slot_source": "dispatch_input",
+      "slot_delay_seconds": 78.888337
+    },
+    {
+      "slot_at": "2026-09-26T23:00:00+09:00",
+      "slot_source": "dispatch_input",
+      "slot_delay_seconds": 102.646699
+    }
+  ],
+  "news_issue_digest": {
+    "updated_at": "2026-09-26T23:05:50+09:00",
+    "cycle": "supervisor-A-2300",
+    "scan_summary": {
+      "target_articles": 500,
+      "actual_articles": 150,
+      "note": "23:00 canonical discovery 150건과 22:40/22:50 추세를 비교하고 중요 사건은 독립 웹 원문으로 재검증. 기사 수와 독립근거 수를 구분함."
+    },
+    "issues": [
+      {
+        "issue_id": "us-iran-hormuz-negotiation",
+        "title": "미국·이란 협상과 호르무즈 해협 재개방",
+        "scope": "GLOBAL",
+        "category": "지정학·에너지",
+        "status": "ACTIVE",
+        "severity": "HIGH",
+        "impact": "MIXED",
+        "event_time": "2026-09-26",
+        "article_count": 17,
+        "publisher_count": 13,
+        "article_velocity": -2,
+        "latest_update": "23:00 센서에서 이란 관련 기사 수는 19→17로 줄었지만 상황 완화의 독립 근거는 아니다. Reuters 최신 확인상 이란은 호르무즈 재개방·전투 종식 제안에 대한 미국의 공식 답변을 기다리고 있으며 WSJ의 거부 보도와 공식 미국 답변을 구분한다.",
+        "why_market_matters": "호르무즈 통항이 원유 공급·유가·인플레이션 기대·미국 장기금리를 거쳐 글로벌 성장주와 다음 한국장 갭에 영향을 줄 수 있다.",
+        "transmission_path": [
+          "미·이란 협상",
+          "호르무즈 통항",
+          "Brent/WTI",
+          "인플레이션 기대",
+          "미국 장기금리",
+          "Nasdaq·한국 성장주"
+        ],
+        "affected_assets": [
+          "Brent",
+          "WTI",
+          "미국채",
+          "Nasdaq",
+          "KOSPI"
+        ],
+        "affected_korean_sectors": [
+          "정유",
+          "항공",
+          "화학",
+          "반도체",
+          "성장주"
+        ],
+        "pricing_status": "PARTLY_PRICED",
+        "next_check": "미국 공식 답변, 실제 호르무즈 통항, 추가 군사행동",
+        "confirmed_facts": [
+          "이란은 미국의 공식 답변을 기다리고 있다고 Reuters가 9월26일 보도했다.",
+          "이란 제안은 호르무즈 재개방과 전투 종식 경로를 포함한다."
+        ],
+        "unconfirmed": [
+          "WSJ 보도가 미국 정부의 최종 공식 답변과 동일한지 여부",
+          "실제 통항 정상화 일정"
+        ],
+        "invalidation_conditions": [
+          "공식 합의와 통항 정상화 확인 시 위험 완화",
+          "군사행동 재개·통항 악화 시 강화"
+        ],
+        "sources": [
+          {
+            "publisher": "Reuters",
+            "title": "Iran awaits US move after WSJ report says Trump rejects peace plan",
+            "url": "https://www.reuters.com/world/middle-east/iran-awaits-us-move-after-wsj-report-says-trump-rejects-peace-plan-2026-09-26/"
+          }
+        ],
+        "change_reason": "추가 소식 · 기사량 감소만으로 완화하지 않고 공식 답변 대기 상태를 유지"
+      },
+      {
+        "issue_id": "korea-import-restrictions-2026h1",
+        "title": "한국산 제품 수입규제 241건·신규조사 증가",
+        "scope": "KOREA",
+        "category": "통상·수출규제",
+        "status": "NEW",
+        "severity": "MEDIUM",
+        "impact": "NEGATIVE",
+        "event_time": "2026-09-26",
+        "article_count": 25,
+        "publisher_count": 20,
+        "article_velocity": 0,
+        "latest_update": "22:40 15건에서 22:50 25건으로 증가한 뒤 23:00에도 25건을 유지했다. 제목 유사도 기반 독립스토리 추정은 13개지만 확정 원기사 수로 취급하지 않는다.",
+        "why_market_matters": "보호무역 강화는 철강·금속·화학 등 한국 수출기업의 대응비용과 시장접근성에 부담이 될 수 있으나 신규 조사는 최종 규제 확정과 다르다.",
+        "transmission_path": [
+          "각국 무역구제 강화",
+          "반덤핑·상계관세·세이프가드 조사",
+          "수출 비용·시장접근성",
+          "한국 철강·화학"
+        ],
+        "affected_assets": [
+          "KOSPI 수출주",
+          "철강",
+          "금속",
+          "화학"
+        ],
+        "affected_korean_sectors": [
+          "철강·금속",
+          "화학",
+          "플라스틱·고무",
+          "수출주"
+        ],
+        "pricing_status": "EARLY",
+        "market_reaction": "한국 휴장으로 당일 국내 가격·수급 반응 확인 불가",
+        "next_check": "KOTRA 원문 세부 품목·국가와 다음 한국장 관련 업종 가격·외국인·기관 수급",
+        "confirmed_facts": [
+          "KOTRA 보고서 기반 보도상 6월 말 26개국의 대한국 수입규제는 241건으로 직전 반기보다 11건 증가했다."
+        ],
+        "unconfirmed": [
+          "신규 조사들의 최종 규제 전환율",
+          "개별 상장사 실적 영향"
+        ],
+        "invalidation_conditions": [
+          "신규 조사 종료·철회가 빠르게 늘거나 실제 적용범위가 제한적이면 부담 평가를 낮춤"
+        ],
+        "sources": [
+          {
+            "publisher": "SBS",
+            "title": "Import Restrictions on South Korean Products Total 241 Cases in First Half, Up 11 From Late Last Year",
+            "url": "https://news.sbs.co.kr/english/article.do?news_id=N1008770738"
+          }
+        ],
+        "change_reason": "추가 소식 · 기사 군집 급증 후 유지, 휴장이라 시장반응은 아직 미확인"
+      }
+    ]
+  },
+  "telegram_report": [
+    "23:00 A: 22:40/22:50/23:00 센서 3/3 정상입니다. 직전 B의 single-writer E2E도 main→canonical→Telegram까지 성공해 해당 장애 검증은 해소했습니다.",
+    "시장 핵심은 여전히 미·이란/호르무즈입니다. 기사 수가 조금 줄었지만 공식 미국 답변이나 통항 정상화가 확인되지 않아 완화로 내리지 않았습니다.",
+    "국내는 수입규제 241건 보도가 15→25건으로 급증한 뒤 유지됐습니다. 한국 휴장이라 실제 주가·외국인·기관 반응은 아직 확인할 수 없습니다.",
+    "프로젝트는 macro 실값 공백과 discovery 9개 degraded 검색축을 다음 B가 반증하도록 넘겼습니다. UI는 새 카드를 늘리지 않고 핵심 위험은 메인, 긴 근거는 이슈 추적 상세에 유지했습니다."
+  ]
+}
