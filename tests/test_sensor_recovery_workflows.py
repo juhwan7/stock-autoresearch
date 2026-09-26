@@ -72,3 +72,13 @@ def test_stale_dispatch_is_rebased_instead_of_backfilling_old_slot():
     assert 'source = "dispatch_input_rebased"' in workflow
     assert "requested_slot == current_slot" in workflow
     assert "SENSOR_SLOT_START_DELAY_SECONDS=" in workflow
+
+
+
+def test_sensor_push_race_retries_only_nonconflicting_updates():
+    workflow = read(".github/workflows/연속연구와진화.yml")
+    assert "for ATTEMPT in 1 2 3" in workflow
+    assert "git pull --rebase" in workflow
+    assert "3회 재동기화 후에도 핵심 observation 저장에 실패했습니다." in workflow
+    assert "git rebase --abort || true" in workflow
+    assert "sleep $((ATTEMPT * 2))" in workflow
