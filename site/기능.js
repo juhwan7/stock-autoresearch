@@ -170,16 +170,52 @@ function renderFlow(krRows) {
     }
   }
 }
+function issueImpactGroup(value) {
+  const text = String(value || "MIXED").toUpperCase();
+  if (text.startsWith("POSITIVE")) return "POSITIVE";
+  if (text.startsWith("NEGATIVE")) return "NEGATIVE";
+  return "MIXED";
+}
+function issueImpactLabel(value) {
+  const group = issueImpactGroup(value);
+  return group === "POSITIVE" ? "호재 가능" : group === "NEGATIVE" ? "악재 가능" : "혼합/양면";
+}
+function issuePricingLabel(value) {
+  const key = String(value || "").toUpperCase();
+  const labels = {
+    "NOT_PRICED":"미반영 가능",
+    "EARLY":"초기 반영",
+    "PARTLY_PRICED":"일부 반영",
+    "ACTIVE_MARKET_DRIVER":"현재 가격결정",
+    "FULLY_PRICED":"상당부분 반영",
+    "LOW_CURRENT_PRICING":"현재 반영 낮음",
+    "WATCH":"관찰",
+    "UNCERTAIN":"반영 불확실"
+  };
+  return labels[key] || (key ? key.replaceAll("_"," ") : "반영 판단 대기");
+}
 function renderIssues(data) {
   const digest = data.news_issue_digest || {};
   const store = (digest.issues || []).length ? digest : (data.market_issues || {});
   const rank = {ESCALATING:0,NEW:1,ACTIVE:2,WATCHING:3,EASING:4,RESOLVED:5};
-  const rows = (store.issues || []).slice().sort((a,b)=>(rank[a.status]??9)-(rank[b.status]??9));
+  const sev = {CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3};
+  const rows = (store.issues || []).slice().sort((a,b)=>
+    (rank[String(a.status||"WATCHING").toUpperCase()]??9)-(rank[String(b.status||"WATCHING").toUpperCase()]??9) ||
+    (sev[String(a.severity||"LOW").toUpperCase()]??9)-(sev[String(b.severity||"LOW").toUpperCase()]??9) ||
+    String(b.last_updated||b.last_seen||"").localeCompare(String(a.last_updated||a.last_seen||""))
+  );
   const limit = $("market-issue-list")?.dataset.limit ? Number($("market-issue-list").dataset.limit) : rows.length;
   setHTML("market-issue-list", rows.length ? rows.slice(0,limit).map((x) => {
     const status = String(x.status || "WATCHING").toUpperCase();
     const label = {NEW:"신규",WATCHING:"관찰",ACTIVE:"지속",ESCALATING:"강화",EASING:"완화",RESOLVED:"해소"}[status] || status;
-    return '<div class="mini-row" data-level="' + esc(status) + '"><strong>[' + esc(label) + '] ' + esc(x.title || x.issue_id || "이슈") + '</strong><span>' + esc(x.reason || x.summary || "") + '</span><small>사건 ' + esc(x.event_time || "미확인") + ' · 첫 감지 ' + esc(x.first_detected ? relativeTime(x.first_detected) : "미확인") + ' · 최근 ' + esc((x.last_updated || x.last_seen) ? relativeTime(x.last_updated || x.last_seen) : "미확인") + '</small></div>';
+    const impact = issueImpactGroup(x.impact);
+    return '<div class="mini-row issue-mini" data-level="' + esc(status) + '">' +
+      '<div class="issue-mini-head"><strong>[' + esc(label) + '] ' + esc(x.title || x.issue_id || "이슈") + '</strong>' +
+      '<span class="issue-impact ' + impact.toLowerCase() + '">' + esc(issueImpactLabel(x.impact)) + '</span></div>' +
+      '<span>' + esc(x.reason || x.summary || "") + '</span>' +
+      '<div class="issue-mini-meta"><small>' + esc(x.scope==="KOREA"?"국내":"글로벌") + ' · ' + esc(x.category||"기타") + ' · ' + esc(issuePricingLabel(x.pricing_status)) + '</small>' +
+      '<small>사건 ' + esc(x.event_time || "미확인") + ' · 첫 감지 ' + esc(x.first_detected ? relativeTime(x.first_detected) : "미확인") + ' · 최근 ' + esc((x.last_updated || x.last_seen) ? relativeTime(x.last_updated || x.last_seen) : "미확인") + '</small></div>' +
+      '</div>';
   }).join("") : empty("누적된 시장 이슈가 아직 없습니다."));
 }
 
@@ -190,6 +226,8 @@ function renderIssueTracker(data) {
   const rows = (store.issues || []).slice();
   const statusLabel = {NEW:"등장",WATCHING:"관찰",ACTIVE:"지속",ESCALATING:"강화",EASING:"완화",RESOLVED:"해소"};
   const statuses = ["ALL","NEW","ESCALATING","ACTIVE","WATCHING","EASING","RESOLVED"];
+  const scopes = ["ALL","GLOBAL","KOREA"];
+  const impacts = ["ALL","POSITIVE","NEGATIVE","MIXED"];
 
   setText("issue-updated", store.updated_at ? "갱신 · " + relativeTime(store.updated_at) : "데이터 없음");
   setText("issue-total-count", rows.length + "개");
@@ -209,19 +247,32 @@ function renderIssueTracker(data) {
   setHTML("issue-status-filters", statuses.map((s,i) =>
     '<button type="button" class="issue-filter' + (i===0?" active":"") + '" data-status="' + s + '">' + esc(s==="ALL"?"전체":statusLabel[s]) + '</button>'
   ).join(""));
+  setHTML("issue-scope-filters", scopes.map((s,i) =>
+    '<button type="button" class="issue-filter' + (i===0?" active":"") + '" data-scope="' + s + '">' + esc(s==="ALL"?"전체":s==="KOREA"?"국내":"글로벌") + '</button>'
+  ).join(""));
+  setHTML("issue-impact-filters", impacts.map((s,i) =>
+    '<button type="button" class="issue-filter' + (i===0?" active":"") + '" data-impact="' + s + '">' + esc(s==="ALL"?"전체":s==="POSITIVE"?"호재":s==="NEGATIVE"?"악재":"혼합") + '</button>'
+  ).join(""));
 
   let activeStatus="ALL";
+  let activeScope="ALL";
+  let activeImpact="ALL";
   let query="";
   const render = () => {
     const filtered = rows.filter((x) => {
       const s=String(x.status||"WATCHING").toUpperCase();
+      const scope=String(x.scope||"GLOBAL").toUpperCase();
+      const impact=issueImpactGroup(x.impact);
       if (activeStatus!=="ALL" && s!==activeStatus) return false;
+      if (activeScope!=="ALL" && scope!==activeScope) return false;
+      if (activeImpact!=="ALL" && impact!==activeImpact) return false;
       if (!query) return true;
-      const hay=[x.title,x.summary,x.category,x.scope,x.why_market_matters,(x.affected_assets||[]).join(" "),(x.transmission_path||[]).join(" ")].join(" ").toLowerCase();
+      const hay=[x.title,x.summary,x.category,x.scope,x.why_market_matters,x.pricing_status,(x.affected_assets||[]).join(" "),(x.transmission_path||[]).join(" ")].join(" ").toLowerCase();
       return hay.includes(query);
     });
     root.innerHTML = filtered.length ? filtered.map((x) => {
       const status=String(x.status||"WATCHING").toUpperCase();
+      const impact=issueImpactGroup(x.impact);
       const sources=(x.sources||[]).map((s) =>
         '<a class="issue-source" href="' + esc(s.url||"#") + '" target="_blank" rel="noreferrer"><strong>' + esc(s.publisher||"출처") + '</strong><span>' + esc(s.title||s.url||"") + '</span></a>'
       ).join("");
@@ -230,15 +281,20 @@ function renderIssueTracker(data) {
       ).join("");
       const facts=(x.confirmed_facts||x.evidence||[]);
       const unknowns=(x.unconfirmed||x.unknowns||[]);
-      return '<details class="issue-detail" data-level="' + esc(status) + '">' +
-        '<summary><div class="issue-summary-main"><div class="issue-title-line"><span class="issue-status">' + esc(statusLabel[status]||status) + '</span><strong>' + esc(x.title||x.issue_id||"이슈") + '</strong></div><p>' + esc(x.summary||x.reason||"") + '</p></div>' +
-        '<div class="issue-summary-meta"><span>' + esc(x.scope||"") + '</span><span>' + esc(x.category||"") + '</span><b>' + esc(x.severity||"") + '</b><small>사건 ' + esc(x.event_time||"미확인") + '<br>최근 ' + esc(x.last_updated?relativeTime(x.last_updated):"미확인") + '</small></div></summary>' +
+      return '<details class="issue-detail" data-level="' + esc(status) + '" data-impact="' + esc(impact) + '">' +
+        '<summary><div class="issue-summary-main"><div class="issue-title-line">' +
+          '<span class="issue-status">' + esc(statusLabel[status]||status) + '</span>' +
+          '<span class="issue-impact ' + impact.toLowerCase() + '">' + esc(issueImpactLabel(x.impact)) + '</span>' +
+          '<strong>' + esc(x.title||x.issue_id||"이슈") + '</strong></div><p>' + esc(x.summary||x.reason||"") + '</p></div>' +
+        '<div class="issue-summary-meta"><span>' + esc(x.scope==="KOREA"?"국내":"글로벌") + '</span><span>' + esc(x.category||"") + '</span><b>' + esc(x.severity||"") + '</b>' +
+        '<span>' + esc(issuePricingLabel(x.pricing_status)) + '</span><span>출처 ' + esc(x.source_count ?? (x.sources||[]).length) + '개</span>' +
+        '<small>사건 ' + esc(x.event_time||"미확인") + '<br>첫 감지 ' + esc(x.first_detected?relativeTime(x.first_detected):"미확인") + ' · 최근 ' + esc(x.last_updated?relativeTime(x.last_updated):"미확인") + '</small></div></summary>' +
         '<div class="issue-expanded">' +
           '<div class="issue-explain-grid">' +
             '<section><h3>어떤 이슈인가</h3><p>' + esc(x.summary||"") + '</p></section>' +
             '<section><h3>왜 시장에 중요한가</h3><p>' + esc(x.why_market_matters||"시장 영향 경로를 추가 확인 중입니다.") + '</p></section>' +
-            '<section><h3>현재 진행 상황</h3><p>' + esc(x.change_reason||x.next_check||"다음 :00/:30 사이클에서 새 근거를 확인합니다.") + '</p></section>' +
-            '<section><h3>다음 확인</h3><p>' + esc(x.next_check||"추가 확인 항목 없음") + '</p></section>' +
+            '<section><h3>시장 반영 판단</h3><p><strong>' + esc(issuePricingLabel(x.pricing_status)) + '</strong>' + (x.pricing_reason ? " · " + esc(x.pricing_reason) : "") + '</p></section>' +
+            '<section><h3>다음 확인</h3><p>' + esc(x.next_check||"다음 :00/:30 사이클에서 추가 확인합니다.") + '</p></section>' +
           '</div>' +
           '<div class="issue-detail-grid">' +
             '<section><h3>전달 경로</h3><div class="issue-tags">' + (x.transmission_path||[]).map((v)=>'<span>'+esc(v)+'</span>').join("") + '</div></section>' +
@@ -255,11 +311,25 @@ function renderIssueTracker(data) {
 
   const search=$("issue-search");
   if (search) search.addEventListener("input",()=>{query=search.value.trim().toLowerCase();render();});
-  const filters=$("issue-status-filters");
-  if (filters) filters.addEventListener("click",(event)=>{
+  const statusFilters=$("issue-status-filters");
+  if (statusFilters) statusFilters.addEventListener("click",(event)=>{
     const button=event.target.closest("[data-status]"); if(!button) return;
     activeStatus=button.dataset.status||"ALL";
-    filters.querySelectorAll(".issue-filter").forEach((x)=>x.classList.toggle("active",x===button));
+    statusFilters.querySelectorAll(".issue-filter").forEach((x)=>x.classList.toggle("active",x===button));
+    render();
+  });
+  const scopeFilters=$("issue-scope-filters");
+  if (scopeFilters) scopeFilters.addEventListener("click",(event)=>{
+    const button=event.target.closest("[data-scope]"); if(!button) return;
+    activeScope=button.dataset.scope||"ALL";
+    scopeFilters.querySelectorAll(".issue-filter").forEach((x)=>x.classList.toggle("active",x===button));
+    render();
+  });
+  const impactFilters=$("issue-impact-filters");
+  if (impactFilters) impactFilters.addEventListener("click",(event)=>{
+    const button=event.target.closest("[data-impact]"); if(!button) return;
+    activeImpact=button.dataset.impact||"ALL";
+    impactFilters.querySelectorAll(".issue-filter").forEach((x)=>x.classList.toggle("active",x===button));
     render();
   });
 }
