@@ -24,6 +24,20 @@ function ageText(value) {
   return (minutes / 60).toFixed(1) + "시간 전";
 }
 
+function signedPct(value) {
+  if (value == null || value === "") return "-";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "-";
+  return (n > 0 ? "+" : "") + n.toFixed(2) + "%";
+}
+
+function flowEok(value) {
+  if (value == null || value === "") return "-";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "-";
+  return (n > 0 ? "+" : "") + n.toLocaleString("ko-KR") + "억";
+}
+
 function esc(value = "") {
   return String(value).replace(/[&<>"']/g, (m) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
@@ -64,6 +78,52 @@ async function load() {
         return `<div class="mini-row" data-level="${esc(status)}"><strong>[${esc(label)}] ${esc(x.title || x.issue_id)}</strong><span>처음 감지 ${esc(first)} · 최근 확인 ${esc(last)}${esc(resolved)}</span><span>${esc(x.reason || "")}</span>${history}</div>`;
       }).join("")
     : "<p class='muted'>다음 :00/:30 AI부터 이슈의 등장·강화·완화·해소 시점을 누적합니다.</p>";
+
+  const sessionHistory = data.market_recent_sessions || {};
+  const sessionUpdated = $("three-session-updated");
+  if (sessionUpdated) sessionUpdated.textContent = sessionHistory.updated_at ? "갱신 · " + ageText(sessionHistory.updated_at) : "데이터 없음";
+
+  function indexCell(block) {
+    if (!block || block.close == null) return "<span class='muted'>-</span>";
+    const pct = Number(block.change_pct);
+    const cls = Number.isFinite(pct) ? (pct > 0 ? "session-up" : pct < 0 ? "session-down" : "session-flat") : "";
+    return `<strong>${Number(block.close).toLocaleString("ko-KR")}</strong><small class="${cls}">${esc(signedPct(block.change_pct))}</small>`;
+  }
+
+  const koreaRows = (sessionHistory.korea || []).slice(0, 3);
+  const koreaBox = $("korea-session-history");
+  if (koreaBox) koreaBox.innerHTML = koreaRows.length ? `
+    <div class="session-table-wrap"><table class="session-table">
+      <thead><tr><th>날짜</th><th>KOSPI</th><th>KOSDAQ</th><th>외국인</th><th>기관</th></tr></thead>
+      <tbody>${koreaRows.map(row => `<tr>
+        <td><strong>${esc(row.date || "-")}</strong><small>${esc(row.note || "")}</small></td>
+        <td>${indexCell(row.kospi)}</td>
+        <td>${indexCell(row.kosdaq)}</td>
+        <td><strong>${esc(flowEok((row.flows_krw_100m || {}).foreign))}</strong></td>
+        <td><strong>${esc(flowEok((row.flows_krw_100m || {}).institution))}</strong></td>
+      </tr>`).join("")}</tbody>
+    </table></div>`
+    : "<p class='muted'>한국 최근 거래일 데이터가 아직 없습니다.</p>";
+
+  const usRows = (sessionHistory.us || []).slice(0, 3);
+  const usBox = $("us-session-history");
+  if (usBox) usBox.innerHTML = usRows.length ? `
+    <div class="session-table-wrap"><table class="session-table">
+      <thead><tr><th>날짜</th><th>S&P 500</th><th>Nasdaq</th><th>Dow</th></tr></thead>
+      <tbody>${usRows.map(row => `<tr>
+        <td><strong>${esc(row.date || "-")}</strong><small>${esc(row.note || "")}</small></td>
+        <td>${indexCell(row.sp500)}</td>
+        <td>${indexCell(row.nasdaq)}</td>
+        <td>${indexCell(row.dow)}</td>
+      </tr>`).join("")}</tbody>
+    </table></div>`
+    : "<p class='muted'>미국 최근 거래일 데이터가 아직 없습니다.</p>";
+
+  const holidayRows = sessionHistory.holiday_notes || [];
+  const holidayNote = $("session-holiday-note");
+  if (holidayNote) holidayNote.textContent = holidayRows.length
+    ? holidayRows.map(x => `${x.market === "KR" ? "한국" : x.market}: ${x.from}~${x.to} ${x.reason || "휴장"}`).join(" · ")
+    : "휴장 정보 없음";
 
   const supervisor = data.supervisor_latest || {};
   const discovery = data.discovery || {};
