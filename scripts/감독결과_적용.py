@@ -738,6 +738,86 @@ def _collaboration_status(value: object) -> str:
     return raw or "investigating"
 
 
+def _is_repository_supervisor_result_path(src: Path) -> bool:
+    """True only for immutable Supervisor results inside this repository.
+
+    Unit tests and ad-hoc temporary files must not inherit live repository
+    continuity incidents merely because they exercise collaboration merging.
+    """
+    try:
+        src.resolve().relative_to(AI_RESULTS.resolve())
+        return True
+    except (OSError, ValueError):
+        return False
+
+
+def _update_failure_patterns(
+    store: dict,
+    *,
+    result: dict,
+    supervisor_health: dict[str, dict],
+) -> list[dict]:
+    """Keep recurring recoverable failure causes as reusable recovery memory."""
+    existing = store.get("failure_patterns") or []
+    by_id = {
+        str(item.get("failure_pattern")): dict(item)
+        for item in existing
+        if isinstance(item, dict) and item.get("failure_pattern")
+    }
+    batch_id = str(result.get("batch_id") or "")
+    now = str(result.get("processed_at") or "")
+
+    def record(pattern: str, recovery: str, *, detail: str = "") -> None:
+        if not pattern:
+            return
+        item = by_id.get(pattern, {
+            "failure_pattern": pattern,
+            "occurrences": 0,
+            "disable_supervisor": False,
+        })
+        if str(item.get("last_batch_id") or "") != batch_id:
+            item["occurrences"] = int(item.get("occurrences") or 0) + 1
+        item["preferred_recovery"] = recovery or item.get("preferred_recovery") or "inspect_then_safe_fallback"
+        item["disable_supervisor"] = False
+        item["last_verified"] = now
+        item["last_batch_id"] = batch_id
+        if detail:
+            item["detail"] = detail
+        by_id[pattern] = item
+
+    for role, health in supervisor_health.items():
+        if str(health.get("status") or "") == "healthy":
+            continue
+        cause = str(health.get("cause") or health.get("status") or "unknown").strip().lower()
+        record(
+            f"supervisor_{role.lower()}_{cause}",
+            str(health.get("preferred_recovery") or "inspect_window_and_recent_actions"),
+            detail=f"status={health.get('status')} expected={health.get('last_expected_anchor')}",
+        )
+
+    for raw in result.get("project_improvement_signals") or []:
+        if not isinstance(raw, dict):
+            continue
+        cause = str(raw.get("failure_cause") or raw.get("cause") or "").strip().lower()
+        if not cause:
+            continue
+        status = _collaboration_status(raw.get("status"))
+        if status == "resolved":
+            continue
+        recovery = str(
+            raw.get("preferred_recovery")
+            or raw.get("recovery")
+            or "inspect_then_safe_fallback"
+        )
+        record(cause, recovery, detail=str(raw.get("signal") or raw.get("detail") or ""))
+
+    return sorted(
+        by_id.values(),
+        key=lambda item: (int(item.get("occurrences") or 0), str(item.get("last_verified") or "")),
+        reverse=True,
+    )[:40]
+
+
 def update_collaboration_state(result: dict, src: Path) -> None:
     """Merge A/B work into one shared incident state without inventing evidence."""
     store = _read_json_dict(COLLABORATION)
@@ -820,28 +900,39 @@ def update_collaboration_state(result: dict, src: Path) -> None:
             upsert(raw, source_kind="supervisor_disagreement")
 
     supervisor_health = _supervisor_health_snapshot()
-    for role, item in supervisor_health.items():
-        if item.get("status") == "healthy":
-            continue
-        upsert(
-            {
-                "id": f"supervisor-{role.lower()}-continuity",
-                "status": "investigating" if item.get("status") in {"missing_result", "unapplied"} else item.get("status"),
-                "signal": (
-                    f"Supervisor {role} 상태={item.get('status')} · "
-                    f"expected={item.get('last_expected_anchor')} · "
-                    f"result={item.get('last_result_batch') or '없음'}"
-                ),
-                "verify_after": "상대 Supervisor의 다음 정규 사이클 또는 복구 직후",
-                "evidence": [
-                    f"latest_window_complete={item.get('latest_window_complete')}",
-                    f"canonical_applied={item.get('canonical_applied')}",
-                    f"cause={item.get('cause') or 'none'}",
-                    f"preferred_recovery={item.get('preferred_recovery')}",
-                ],
-            },
-            source_kind="supervisor_health",
-        )
+    promote_live_health = (
+        _is_repository_supervisor_result_path(src)
+        and is_regular_supervisor_result(result)
+    )
+    if promote_live_health:
+        for role, item in supervisor_health.items():
+            if item.get("status") == "healthy":
+                continue
+            upsert(
+                {
+                    "id": f"supervisor-{role.lower()}-continuity",
+                    "status": "investigating" if item.get("status") in {"missing_result", "unapplied"} else item.get("status"),
+                    "signal": (
+                        f"Supervisor {role} 상태={item.get('status')} · "
+                        f"expected={item.get('last_expected_anchor')} · "
+                        f"result={item.get('last_result_batch') or '없음'}"
+                    ),
+                    "verify_after": "상대 Supervisor의 다음 정규 사이클 또는 복구 직후",
+                    "evidence": [
+                        f"latest_window_complete={item.get('latest_window_complete')}",
+                        f"canonical_applied={item.get('canonical_applied')}",
+                        f"cause={item.get('cause') or 'none'}",
+                        f"preferred_recovery={item.get('preferred_recovery')}",
+                    ],
+                },
+                source_kind="supervisor_health",
+            )
+
+    failure_patterns = _update_failure_patterns(
+        store,
+        result=result,
+        supervisor_health=supervisor_health if promote_live_health else {},
+    )
 
     resolved_statuses = {"resolved", "discarded", "closed", "completed"}
     # active first, and newest first inside each group
@@ -924,6 +1015,13 @@ def update_collaboration_state(result: dict, src: Path) -> None:
         "last_turn": last_turn,
         "timeline": timeline[:80],
         "supervisor_health": supervisor_health,
+        "failure_patterns": failure_patterns,
+        "recovery_policy": {
+            "disable_on_single_failure": False,
+            "preferred_result_transport": "issue_action_single_writer",
+            "same_failed_method_retry": False,
+            "automation_state_source": "live ChatGPT automation state + recent Actions",
+        },
     }
     COLLABORATION.parent.mkdir(parents=True, exist_ok=True)
     COLLABORATION.write_text(
