@@ -29,6 +29,27 @@ main{padding:22px 0 28px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}
 .panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
 .panel-head p{margin:0}
+.primary-panel{border-color:#d6e1ef;box-shadow:0 14px 38px rgba(30,52,90,.075)}
+.priority-panel{border-color:#dce4ee}
+.priority-grid{align-items:start}
+.disclosure-panel>summary{list-style:none;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:0}
+.disclosure-panel>summary::-webkit-details-marker{display:none}
+.disclosure-panel>summary:focus-visible,.inline-disclosure>summary:focus-visible{outline:3px solid rgba(36,91,215,.2);outline-offset:4px;border-radius:10px}
+.disclosure-panel .disclosure-hint{margin:6px 0 0;color:#8490a1;font-size:11px;line-height:1.5}
+.disclosure-panel>.disclosure-body{padding-top:16px;margin-top:16px;border-top:1px solid #e8edf3}
+.disclosure-panel:not([open])>summary{margin-bottom:0}
+.disclosure-toggle{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:6px 9px;border:1px solid #dbe3ed;border-radius:9px;background:#fff;color:#68778b;font-size:10px;font-weight:900;white-space:nowrap}
+.disclosure-panel[open] .disclosure-toggle{background:#172033;border-color:#172033;color:#fff}
+.summary-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.inline-disclosure{margin-top:12px;border:1px solid #e1e7ef;border-radius:12px;background:#fbfcfe;overflow:hidden}
+.inline-disclosure>summary{list-style:none;cursor:pointer;padding:10px 12px;color:#607087;font-size:11px;font-weight:900}
+.inline-disclosure>summary::-webkit-details-marker{display:none}
+.inline-disclosure>summary:after{content:"+";float:right;color:#8793a5;font-size:14px;line-height:1}
+.inline-disclosure[open]>summary:after{content:"–"}
+.inline-disclosure[open]>summary{border-bottom:1px solid #e6ebf1;background:#f7f9fc}
+.disclosure-content{padding:10px 12px}
+.quiet-panel{background:#fbfcfe;box-shadow:none}
+.disclosure-grid>.panel{margin-bottom:0}
 .subhead{margin:0 0 8px;color:#7b8799;font-size:11px;font-weight:900;letter-spacing:.04em}
 .section-note{margin:0 0 14px;color:#708095;font-size:12px;line-height:1.65}
 .metrics,.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
@@ -91,6 +112,7 @@ th:first-child,td:first-child{text-align:left}td strong{display:block;font-size:
 .research-markdown{margin:0;max-height:620px;overflow:auto;white-space:pre-wrap;word-break:break-word;color:#4d5f77;font:11px/1.75 ui-monospace,SFMono-Regular,Menlo,monospace}
 .broker-research .research-summary-main>p,.project-research .research-summary-main>p{max-width:1050px}
 @media(max-width:680px){
+  .disclosure-panel>summary{gap:10px}.summary-actions{justify-content:flex-start}.disclosure-panel>summary{flex-direction:column}.disclosure-toggle{align-self:flex-start}
   .event-row{grid-template-columns:1fr}.event-level{justify-self:start}.research-detail>summary{padding:13px;gap:10px}.research-toggle{padding:6px 8px}.research-section-grid{grid-template-columns:1fr}.research-expanded{padding:12px}.research-meta{gap:5px}.research-summary-main>p{font-size:11px}}
 .provider-grid,.regression-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.provider-card,.regression-number{padding:12px;border:1px solid #e1e7ef;border-radius:12px;background:#fbfcfe}.provider-card span,.regression-number span{display:block;color:#7d8999;font-size:10px}.provider-card strong,.regression-number strong{display:block;margin-top:4px;font-size:15px}
 .health-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.health-item{display:grid;grid-template-columns:1fr minmax(220px,.8fr);gap:12px;padding:13px;border:1px solid #e2e8f0;border-radius:12px;background:#fbfcfe}.health-item[data-level="CRITICAL"]{border-color:#efb6c0;background:#fff4f6}.health-item strong{font-size:12px}.health-item p{margin:5px 0 0;color:#6f7d90;font-size:11px;line-height:1.55}.health-recovery{font-size:11px;color:#6c7b90;line-height:1.55}
