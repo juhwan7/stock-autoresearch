@@ -34,10 +34,10 @@
 - supervisor-b-result-continuity — investigating
 - news-fixed-axis-empty — verification_pending
 - macro-runtime-empty — verification_pending
-- Supervisor A 1094분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
-- Supervisor B 1426분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
-- 이슈 원장 갱신 지연 — 마지막 갱신 1451.9479535833334분 전
-- 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 1094.1312869166666분 전
+- Supervisor A 1327분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
+- Supervisor B 1659분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
+- 이슈 원장 갱신 지연 — 마지막 갱신 1684.8498143166667분 전
+- 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 1327.03314765분 전
 
 ## 최근 해결
 - sensor-continuity — resolved
