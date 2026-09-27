@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-28T04:14:01.988859+09:00",
+  "generated_at": "2026-09-28T07:20:19.351374+09:00",
   "status": "investigating",
   "supervisors": {
     "A": {
-      "processed_at": "2026-09-27T06:07:00+09:00",
-      "batch_id": "supervisor-20260927T0600+0900-a30",
+      "processed_at": "2026-09-28T07:09:13+09:00",
+      "batch_id": "supervisor-20260928T0700+0900-a50",
       "status": "verification_pending",
-      "path": "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json",
+      "path": "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json",
       "run_kind": "regular",
       "window_complete": true,
       "expected_observation_count": 3,
@@ -29,29 +29,74 @@
       ]
     }
   },
-  "supervisor_health": {},
-  "supervisor_failure_patterns": [],
+  "supervisor_health": {
+    "A": {
+      "enabled": null,
+      "last_expected_anchor": "2026-09-28T07:00:00+09:00",
+      "latest_window_complete": true,
+      "last_result_batch": "supervisor-20260928T0700+0900-a50",
+      "last_result_at": "2026-09-28T07:09:13+09:00",
+      "last_result_window_end": "2026-09-28T07:00:00+09:00",
+      "canonical_applied": true,
+      "status": "healthy",
+      "cause": null,
+      "preferred_recovery": "none",
+      "disable_supervisor": false
+    },
+    "B": {
+      "enabled": null,
+      "last_expected_anchor": "2026-09-28T06:30:00+09:00",
+      "latest_window_complete": true,
+      "last_result_batch": "supervisor-20260927T0030+0900-b35",
+      "last_result_at": "2026-09-27T00:35:21+09:00",
+      "last_result_window_end": "2026-09-27T00:30:00+09:00",
+      "canonical_applied": false,
+      "status": "missing_result",
+      "cause": "unknown",
+      "preferred_recovery": "check_automation_then_issue_action_single_writer",
+      "disable_supervisor": false
+    }
+  },
+  "supervisor_failure_patterns": [
+    {
+      "failure_pattern": "supervisor_b_unknown",
+      "occurrences": 1,
+      "disable_supervisor": false,
+      "preferred_recovery": "check_automation_then_issue_action_single_writer",
+      "last_verified": "2026-09-28T07:09:13+09:00",
+      "last_batch_id": "supervisor-20260928T0700+0900-a50",
+      "detail": "status=missing_result expected=2026-09-28T06:30:00+09:00"
+    },
+    {
+      "failure_pattern": "a/b 예약과 canonical windows는 정상 전진하지만 immutable regular results와 canonical이 장시간 정지",
+      "occurrences": 1,
+      "disable_supervisor": false,
+      "preferred_recovery": "owner [Supervisor Result] Issue body JSON → Supervisor 결과 적용 및 Telegram single-writer; immutable result 존재 시 재분석 없이 재적용",
+      "last_verified": "2026-09-28T07:09:13+09:00",
+      "last_batch_id": "supervisor-20260928T0700+0900-a50"
+    }
+  ],
   "canonical": {
-    "last_batch_id": "supervisor-20260927T0600+0900-a30",
-    "last_processed_at": "2026-09-27T06:07:00+09:00"
+    "last_batch_id": "supervisor-20260928T0700+0900-a50",
+    "last_processed_at": "2026-09-28T07:09:13+09:00"
   },
   "sensor_slot_coverage": {
-    "window_start": "2026-09-28T03:10:00+09:00",
-    "window_end": "2026-09-28T04:00:00+09:00",
+    "window_start": "2026-09-28T06:20:00+09:00",
+    "window_end": "2026-09-28T07:10:00+09:00",
     "expected_slot_count": 6,
     "received_slot_count": 6,
     "received_slots": [
-      "2026-09-28T03:10:00+09:00",
-      "2026-09-28T03:20:00+09:00",
-      "2026-09-28T03:30:00+09:00",
-      "2026-09-28T03:40:00+09:00",
-      "2026-09-28T03:50:00+09:00",
-      "2026-09-28T04:00:00+09:00"
+      "2026-09-28T06:20:00+09:00",
+      "2026-09-28T06:30:00+09:00",
+      "2026-09-28T06:40:00+09:00",
+      "2026-09-28T06:50:00+09:00",
+      "2026-09-28T07:00:00+09:00",
+      "2026-09-28T07:10:00+09:00"
     ],
     "missing_slots": [],
     "coverage_ratio": 1.0,
-    "max_slot_start_delay_seconds": 32.3,
-    "max_slot_delay_seconds": 82.5,
+    "max_slot_start_delay_seconds": 32.1,
+    "max_slot_delay_seconds": 80.5,
     "trigger_event_counts": {
       "workflow_dispatch": 6
     },
@@ -60,8 +105,8 @@
     }
   },
   "news": {
-    "discovery_generated_at": "2026-09-28T04:11:00.139156+09:00",
-    "candidate_count": 172,
+    "discovery_generated_at": "2026-09-28T07:10:43.710374+09:00",
+    "candidate_count": 181,
     "issue_updated_at": "2026-09-27T00:09:11+09:00",
     "issue_count": 34
   },
@@ -70,54 +115,52 @@
     "open_count": 24
   },
   "memory": {
-    "generated_at": "2026-09-27T06:07:00+09:00",
-    "latest_batch_id": "supervisor-20260927T0600+0900-a30",
+    "generated_at": "2026-09-28T07:09:13+09:00",
+    "latest_batch_id": "supervisor-20260928T0700+0900-a50",
     "latest_supervisor": "A",
-    "age_minutes": 1327.0
+    "age_minutes": 11.1
   },
   "cards": [
     {
-      "card_id": "supervisor-a-critical",
-      "title": "Supervisor A 1327분 정규 결과 공백",
-      "state": "수정 중",
-      "impact": "단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음",
-      "last_checked": "2026-09-28T04:14:01.988859+09:00",
-      "owner": "A/B 상호복구",
-      "verify_after": "상대 Supervisor 복구 직후 또는 다음 정규 사이클",
-      "preferred_recovery": "check_live_automation_then_issue_action_single_writer"
+      "card_id": "supervisor-a-ok",
+      "title": "Supervisor A 정상",
+      "state": "완료",
+      "impact": "마지막 정규 실행 11분 전 · 3/3 window",
+      "last_checked": "2026-09-28T07:20:19.351374+09:00",
+      "owner": "A"
     },
     {
       "card_id": "supervisor-b-critical",
-      "title": "Supervisor B 1659분 정규 결과 공백",
+      "title": "Supervisor B 1845분 정규 결과 공백",
       "state": "수정 중",
       "impact": "단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음",
-      "last_checked": "2026-09-28T04:14:01.988859+09:00",
+      "last_checked": "2026-09-28T07:20:19.351374+09:00",
       "owner": "A/B 상호복구",
       "verify_after": "상대 Supervisor 복구 직후 또는 다음 정규 사이클",
-      "preferred_recovery": "check_live_automation_then_issue_action_single_writer"
+      "preferred_recovery": "check_automation_then_issue_action_single_writer"
     },
     {
       "card_id": "sensor-slot-coverage-ok",
       "title": "10분 센서 슬롯 커버리지 정상",
       "state": "완료",
       "impact": "6/6 슬롯",
-      "last_checked": "2026-09-28T04:14:01.988859+09:00",
+      "last_checked": "2026-09-28T07:20:19.351374+09:00",
       "owner": "10분 센서"
     },
     {
       "card_id": "discovery-ok",
       "title": "뉴스 discovery 정상",
       "state": "완료",
-      "impact": "3분 전 갱신",
-      "last_checked": "2026-09-28T04:14:01.988859+09:00",
+      "impact": "10분 전 갱신",
+      "last_checked": "2026-09-28T07:20:19.351374+09:00",
       "owner": "10분 센서"
     },
     {
       "card_id": "issue-digest-stale",
       "title": "이슈 원장 갱신 지연",
       "state": "검증 대기",
-      "impact": "마지막 갱신 1684.8498143166667분 전",
-      "last_checked": "2026-09-28T04:14:01.988859+09:00",
+      "impact": "마지막 갱신 1871.1391895666668분 전",
+      "last_checked": "2026-09-28T07:20:19.351374+09:00",
       "owner": "A/B",
       "verify_after": "다음 :00/:30"
     },
@@ -125,25 +168,24 @@
       "card_id": "pages-data-ok",
       "title": "Pages 상태 데이터 정상",
       "state": "완료",
-      "impact": "4846156 bytes",
-      "last_checked": "2026-09-28T04:14:01.988859+09:00",
+      "impact": "4884380 bytes",
+      "last_checked": "2026-09-28T07:20:19.351374+09:00",
       "owner": "Dashboard"
     },
     {
-      "card_id": "long-memory-stale",
-      "title": "장기 AI 기억 갱신 지연",
-      "state": "검증 대기",
-      "impact": "마지막 기억 갱신 1327.03314765분 전",
-      "last_checked": "2026-09-28T04:14:01.988859+09:00",
-      "owner": "Memory",
-      "verify_after": "다음 :00/:30 또는 Recovery"
+      "card_id": "long-memory-ok",
+      "title": "장기 AI 기억 정상",
+      "state": "완료",
+      "impact": "11분 전 갱신 · A",
+      "last_checked": "2026-09-28T07:20:19.351374+09:00",
+      "owner": "Memory"
     },
     {
       "card_id": "optional-news-credentials",
       "title": "선택형 뉴스·공시 API 미연결",
       "state": "완료",
-      "impact": "현재 공개 fallback으로 후보 172건 확보되어 필수 조치 아님",
-      "last_checked": "2026-09-28T04:14:01.988859+09:00",
+      "impact": "현재 공개 fallback으로 후보 181건 확보되어 필수 조치 아님",
+      "last_checked": "2026-09-28T07:20:19.351374+09:00",
       "owner": "Discovery"
     }
   ],
