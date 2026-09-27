@@ -1,7 +1,7 @@
 # Stock AutoResearch Memory Index
 
-> 자동 갱신: 2026-09-27T06:07:00+09:00
-> latest batch: supervisor-20260927T0600+0900-a30
+> 자동 갱신: 2026-09-28T07:09:13+09:00
+> latest batch: supervisor-20260928T0700+0900-a50
 > Supervisor: A · 상태 verification_pending
 > 이번 작업축: 7개
 
@@ -14,11 +14,10 @@
 5. 반복 문제/과거 비교가 필요할 때만 COLD memory
 
 ## 현재 가장 중요한 시장
-- 05:30 B window 3/3인데 정규 B result가 없는 원인
-- 06:00 A apply 후 canonical/state/latest-report/Pages 전진 여부
-- 미·이란 제안 거부 이후 실제 호르무즈 통항·군사행동 변화
-- degraded 8개 뉴스 검색축의 실질 커버리지 손실 여부
-- macro 실값은 다음 거래 가능 구간에서 검증
+- A/B regular-result transport/apply 단절
+- issue-digest lifecycle 지연
+- degraded 7개 고정 뉴스축
+- 다음 거래 가능 구간 macro 실값
 
 ## 활성 시장 이슈
 - 이란 전쟁 여파로 EU 에너지 가격 위기 경고 — NEW
@@ -31,16 +30,14 @@
 - AI 강세와 고금리·에너지 부담의 줄다리기 — ACTIVE
 
 ## 현재 열린 프로젝트 문제
-- supervisor-b-result-continuity — investigating
-- news-fixed-axis-empty — verification_pending
-- macro-runtime-empty — verification_pending
+- supervisor-result-transport — investigating
 - Supervisor A 1327분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
 - Supervisor B 1659분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
 - 이슈 원장 갱신 지연 — 마지막 갱신 1684.8498143166667분 전
 - 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 1327.03314765분 전
 
 ## 최근 해결
-- sensor-continuity — resolved
+- 없음
 
 ## 운영 품질
 - operations: investigating

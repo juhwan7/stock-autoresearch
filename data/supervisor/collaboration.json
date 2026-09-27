@@ -1,11 +1,62 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-27T06:07:00+09:00",
+  "updated_at": "2026-09-28T07:09:13+09:00",
   "status": "investigating",
-  "headline": "A와 B가 거시 데이터 실값 공백를 공동 추적 중입니다. 최근 해결: 센서 연속성 장애.",
-  "active_incident_count": 4,
+  "headline": "A와 B가 supervisor-result-transport를 공동 추적 중입니다. 최근 해결: 센서 연속성 장애.",
+  "active_incident_count": 6,
   "resolved_incident_count": 2,
   "incidents": [
+    {
+      "incident_id": "supervisor-result-transport",
+      "history": [
+        {
+          "at": "2026-09-28T07:09:13+09:00",
+          "by": "A",
+          "batch_id": "supervisor-20260928T0700+0900-a50",
+          "status": "investigating",
+          "summary": ""
+        }
+      ],
+      "title": "supervisor-result-transport",
+      "status": "investigating",
+      "summary": "",
+      "owner": "A",
+      "verify_after": "이번 Issue Action 완료 후 또는 다음 B",
+      "evidence": [],
+      "source_kind": "project_improvement_signal",
+      "source_batch_id": "supervisor-20260928T0700+0900-a50",
+      "source_file": "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json",
+      "updated_at": "2026-09-28T07:09:13+09:00",
+      "first_seen": "2026-09-28T07:09:13+09:00"
+    },
+    {
+      "incident_id": "supervisor-b-continuity",
+      "history": [
+        {
+          "at": "2026-09-28T07:09:13+09:00",
+          "by": "A",
+          "batch_id": "supervisor-20260928T0700+0900-a50",
+          "status": "investigating",
+          "summary": "Supervisor B 상태=missing_result · expected=2026-09-28T06:30:00+09:00 · result=supervisor-20260927T0030+0900-b35"
+        }
+      ],
+      "title": "Supervisor B 상태=missing_result ",
+      "status": "investigating",
+      "summary": "Supervisor B 상태=missing_result · expected=2026-09-28T06:30:00+09:00 · result=supervisor-20260927T0030+0900-b35",
+      "owner": "A",
+      "verify_after": "상대 Supervisor의 다음 정규 사이클 또는 복구 직후",
+      "evidence": [
+        "latest_window_complete=True",
+        "canonical_applied=False",
+        "cause=unknown",
+        "preferred_recovery=check_automation_then_issue_action_single_writer"
+      ],
+      "source_kind": "supervisor_health",
+      "source_batch_id": "supervisor-20260928T0700+0900-a50",
+      "source_file": "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json",
+      "updated_at": "2026-09-28T07:09:13+09:00",
+      "first_seen": "2026-09-28T07:09:13+09:00"
+    },
     {
       "incident_id": "macro-runtime-data",
       "title": "거시 데이터 실값 공백",
@@ -214,83 +265,72 @@
     }
   ],
   "last_turn": {
-    "batch_id": "supervisor-20260927T0600+0900-a30",
-    "processed_at": "2026-09-27T06:07:00+09:00",
+    "batch_id": "supervisor-20260928T0700+0900-a50",
+    "processed_at": "2026-09-28T07:09:13+09:00",
     "supervisor": "A",
     "status": "verification_pending",
-    "summary": "06:00 A canonical window 05:40/05:50/06:00은 3/3 완전하다. 센서 연속성은 유지되지만 최신 B window는 05:30까지 3/3인데 대응하는 정규 B result가 main에서 확인되지 않아 A↔B 대화 연속성은 여전히 불완전하다. 04:00 A apply로 canonical lag 자체는 전진했으므로 센서 재수정보다 B 결과 생성/저장 경로를 우선 추적한다.",
-    "feedback_received": [
-      {
-        "from_batch": "supervisor-20260927T0030+0900-b35",
-        "item": "누락 슬롯을 과거값으로 보충하지 말 것."
-      },
-      {
-        "from_batch": "supervisor-20260927T0030+0900-b35",
-        "item": "센서 연속성과 canonical apply를 구분해 확인할 것."
-      },
-      {
-        "from_batch": "supervisor-20260927T0030+0900-b35",
-        "item": "issue-digest resolved를 반복 조사하지 말 것."
-      },
-      {
-        "from_batch": "supervisor-20260927T0030+0900-b35",
-        "item": "macro 실값 없는 휴장 구간에서 방향을 추정하지 말 것."
-      },
-      {
-        "from_batch": "supervisor-20260927T0030+0900-b35",
-        "item": "UI 카드 증설을 자제할 것."
-      }
-    ],
-    "feedback_resolved": [
-      {
-        "item": "canonical window 규칙",
-        "resolution": "05:40/05:50/06:00만 사용해 3/3"
-      },
-      {
-        "item": "센서 연속성",
-        "resolution": "A 06:00/B 05:30 모두 3/3으로 센서 자체는 정상"
-      },
-      {
-        "item": "issue-digest 반복 조사 금지",
-        "resolution": "기존 resolved 유지"
-      },
-      {
-        "item": "UI 증설 자제",
-        "resolution": "no_change"
-      }
-    ],
+    "summary": "07:00 A canonical window 06:40/06:50/07:00은 3/3 완전하다. B 예약은 enabled이며 06:30 B window도 3/3이지만 canonical 정규 결과는 2026-09-27 06:00 A 이후 전진하지 않았다. 센서/예약보다 regular-result transport/apply 단절을 우선 복구한다.",
+    "feedback_received": [],
+    "feedback_resolved": [],
     "feedback_disagreed": [],
     "feedback_deferred": [
       {
-        "item": "최신 B의 신규 피드백",
-        "reason": "05:30 B window는 존재하지만 대응 정규 B result가 main에서 확인되지 않아 새 feedback_to_other_supervisor를 읽을 수 없음"
-      },
-      {
-        "item": "macro 최종판정",
-        "reason": "휴장 및 다음 거래 가능 실값 검증 전"
+        "item": "최신 B feedback",
+        "reason": "06:30 B window는 3/3이나 대응 immutable regular B result가 main에서 확인되지 않음"
       }
     ],
     "feedback_to_other_supervisor": [
-      "06:30 B는 06:10/06:20/06:30만 사용하고 과거 슬롯으로 보충하지 말 것.",
-      "센서 A/B window는 연속 3/3이므로 센서 수정부터 반복하지 말고 B 정규 result 생성/저장 경로와 canonical/Pages 전진을 우선 검증할 것.",
-      "이란 제안 거부 자체는 Reuters로 확인됐지만 실제 호르무즈 통항 악화·추가 군사행동은 별도 근거로 판정할 것.",
-      "USTR 신규 공식 세부자료 확인 전 미중 합의 세부를 확정하지 말 것.",
-      "06:00 discovery degraded=8의 empty 고정축이 실질 커버리지 손실인지 확인할 것."
+      "07:30 B는 07:10/07:20/07:30만 사용하고 과거 슬롯으로 보충하지 말 것.",
+      "센서/예약은 정상으로 확인됐으므로 regular-result writer/apply E2E를 우선 검증할 것.",
+      "이번 A immutable result가 생겼다면 재분석하지 말고 canonical 재적용을 우선할 것.",
+      "issue-digest stale을 timestamp 강제 변경으로 숨기지 말 것."
     ],
     "changed_paths": [
-      "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json"
+      "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json"
     ],
     "change_kind": "result_only",
     "next_checks": [
-      "06:30 B는 06:10/06:20/06:30만 사용한다.",
-      "05:30 B 정규 result가 왜 생성/저장되지 않았는지 Supervisor B 실행·저장 경로를 우선 확인한다.",
-      "이 A result apply 후 state/latest-report/collaboration/AI 대화 타임라인이 06:00으로 전진하는지 확인한다.",
-      "degraded 8개 고정 검색축의 empty가 주말 정상 공백인지 공급자 품질 문제인지 분해한다.",
-      "macro는 다음 거래 가능 구간에서 실값 검증한다."
+      "이 Issue 처리 Action이 immutable ai-result를 만들었는지 확인",
+      "canonical/state/latest-report→memory→Telegram까지 E2E 전진 확인",
+      "다음 B는 07:10/07:20/07:30만 사용",
+      "writer 동작 중이면 중복 재시작 금지"
     ],
-    "source_file": "data/supervisor/ai-results/supervisor-20260927T0600+0900-a30.json"
+    "source_file": "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json"
   },
   "timeline": [
+    {
+      "batch_id": "supervisor-20260928T0700+0900-a50",
+      "processed_at": "2026-09-28T07:09:13+09:00",
+      "supervisor": "A",
+      "status": "verification_pending",
+      "summary": "07:00 A canonical window 06:40/06:50/07:00은 3/3 완전하다. B 예약은 enabled이며 06:30 B window도 3/3이지만 canonical 정규 결과는 2026-09-27 06:00 A 이후 전진하지 않았다. 센서/예약보다 regular-result transport/apply 단절을 우선 복구한다.",
+      "feedback_received": [],
+      "feedback_resolved": [],
+      "feedback_disagreed": [],
+      "feedback_deferred": [
+        {
+          "item": "최신 B feedback",
+          "reason": "06:30 B window는 3/3이나 대응 immutable regular B result가 main에서 확인되지 않음"
+        }
+      ],
+      "feedback_to_other_supervisor": [
+        "07:30 B는 07:10/07:20/07:30만 사용하고 과거 슬롯으로 보충하지 말 것.",
+        "센서/예약은 정상으로 확인됐으므로 regular-result writer/apply E2E를 우선 검증할 것.",
+        "이번 A immutable result가 생겼다면 재분석하지 말고 canonical 재적용을 우선할 것.",
+        "issue-digest stale을 timestamp 강제 변경으로 숨기지 말 것."
+      ],
+      "changed_paths": [
+        "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json"
+      ],
+      "change_kind": "result_only",
+      "next_checks": [
+        "이 Issue 처리 Action이 immutable ai-result를 만들었는지 확인",
+        "canonical/state/latest-report→memory→Telegram까지 E2E 전진 확인",
+        "다음 B는 07:10/07:20/07:30만 사용",
+        "writer 동작 중이면 중복 재시작 금지"
+      ],
+      "source_file": "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json"
+    },
     {
       "batch_id": "supervisor-20260927T0600+0900-a30",
       "processed_at": "2026-09-27T06:07:00+09:00",
@@ -445,5 +485,58 @@
       ],
       "source_file": "data/supervisor/ai-results/supervisor-20260927T0400+0900-a28.json"
     }
-  ]
+  ],
+  "supervisor_health": {
+    "A": {
+      "enabled": null,
+      "last_expected_anchor": "2026-09-28T07:00:00+09:00",
+      "latest_window_complete": true,
+      "last_result_batch": "supervisor-20260928T0700+0900-a50",
+      "last_result_at": "2026-09-28T07:09:13+09:00",
+      "last_result_window_end": "2026-09-28T07:00:00+09:00",
+      "canonical_applied": true,
+      "status": "healthy",
+      "cause": null,
+      "preferred_recovery": "none",
+      "disable_supervisor": false
+    },
+    "B": {
+      "enabled": null,
+      "last_expected_anchor": "2026-09-28T06:30:00+09:00",
+      "latest_window_complete": true,
+      "last_result_batch": "supervisor-20260927T0030+0900-b35",
+      "last_result_at": "2026-09-27T00:35:21+09:00",
+      "last_result_window_end": "2026-09-27T00:30:00+09:00",
+      "canonical_applied": false,
+      "status": "missing_result",
+      "cause": "unknown",
+      "preferred_recovery": "check_automation_then_issue_action_single_writer",
+      "disable_supervisor": false
+    }
+  },
+  "failure_patterns": [
+    {
+      "failure_pattern": "supervisor_b_unknown",
+      "occurrences": 1,
+      "disable_supervisor": false,
+      "preferred_recovery": "check_automation_then_issue_action_single_writer",
+      "last_verified": "2026-09-28T07:09:13+09:00",
+      "last_batch_id": "supervisor-20260928T0700+0900-a50",
+      "detail": "status=missing_result expected=2026-09-28T06:30:00+09:00"
+    },
+    {
+      "failure_pattern": "a/b 예약과 canonical windows는 정상 전진하지만 immutable regular results와 canonical이 장시간 정지",
+      "occurrences": 1,
+      "disable_supervisor": false,
+      "preferred_recovery": "owner [Supervisor Result] Issue body JSON → Supervisor 결과 적용 및 Telegram single-writer; immutable result 존재 시 재분석 없이 재적용",
+      "last_verified": "2026-09-28T07:09:13+09:00",
+      "last_batch_id": "supervisor-20260928T0700+0900-a50"
+    }
+  ],
+  "recovery_policy": {
+    "disable_on_single_failure": false,
+    "preferred_result_transport": "issue_action_single_writer",
+    "same_failed_method_retry": false,
+    "automation_state_source": "live ChatGPT automation state + recent Actions"
+  }
 }
