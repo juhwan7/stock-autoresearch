@@ -645,6 +645,45 @@ function renderHotIssues(data) {
       '</div></a>';
   }).join(""):empty("급부상 이슈 점수를 계산할 데이터가 아직 부족합니다.");
 }
+function renderLiveNews(data) {
+  const root = $("live-news-list");
+  if (!root) return;
+  const discovery = asObject(data.discovery);
+  const generatedAt = discovery.generated_at || discovery.updated_at || "";
+  const fresh = asArray(discovery.new_items);
+  const pool = fresh.length ? fresh : asArray(discovery.items);
+  const seen = new Set();
+  const rows = pool
+    .filter((item) => {
+      const key = String(item.url || item.title || "").trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return Boolean(item.title);
+    })
+    .sort((a,b) => {
+      const at = Date.parse(a.published_at || "") || 0;
+      const bt = Date.parse(b.published_at || "") || 0;
+      return bt - at;
+    })
+    .slice(0,25);
+
+  const newCount = Number(discovery.new_item_count || 0);
+  setText("live-news-updated",
+    generatedAt
+      ? "센서 " + relativeTime(generatedAt) + (newCount > 0 ? " · 신규 " + newCount + "건" : "")
+      : "센서 데이터 없음"
+  );
+
+  root.innerHTML = rows.length ? rows.map((item) => {
+    const publisher = item.publisher || item.discovery_source || "뉴스";
+    const published = item.published_at ? relativeTime(item.published_at) : "시각 미확인";
+    const topic = String(item.topic || "").replace(/^dynamic:/, "");
+    const meta = [publisher, published, topic].filter(Boolean).join(" · ");
+    return '<a class="issue-source" href="' + esc(item.url || "#") + '" target="_blank" rel="noreferrer">' +
+      '<strong>' + esc(item.title || "제목 없음") + '</strong><span>' + esc(meta) + '</span></a>';
+  }).join("") : empty("이번 센서에서 표시할 새 뉴스가 없습니다.");
+}
+
 function renderIssueTracker(data) {
   const root = $("issue-full-list");
   if (!root) return;
@@ -655,7 +694,8 @@ function renderIssueTracker(data) {
   const scopes = ["ALL","GLOBAL","KOREA"];
   const impacts = ["ALL","POSITIVE","NEGATIVE","MIXED"];
 
-  setText("issue-updated", store.updated_at ? "갱신 · " + relativeTime(store.updated_at) : "데이터 없음");
+  const sensorAt = (data.discovery || {}).generated_at || "";
+  setText("issue-updated", sensorAt ? "뉴스 센서 · " + relativeTime(sensorAt) : (store.updated_at ? "AI 이슈 원장 · " + relativeTime(store.updated_at) : "데이터 없음"));
   setText("issue-total-count", rows.length + "개");
   const scan = store.scan_summary || {};
   const discovery = data.discovery || {};
@@ -1206,6 +1246,7 @@ async function load() {
   renderFlow(krRows);
   renderIssues(data);
   renderHotIssues(data);
+  renderLiveNews(data);
   renderIssueTracker(data);
   renderResearch(data);
   renderHomeResearch(data);
