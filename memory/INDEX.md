@@ -31,10 +31,8 @@
 
 ## 현재 열린 프로젝트 문제
 - supervisor-result-transport — investigating
-- Supervisor A 1327분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
-- Supervisor B 1659분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
-- 이슈 원장 갱신 지연 — 마지막 갱신 1684.8498143166667분 전
-- 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 1327.03314765분 전
+- Supervisor B 1845분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
+- 이슈 원장 갱신 지연 — 마지막 갱신 1871.1391895666668분 전
 
 ## 최근 해결
 - 없음
