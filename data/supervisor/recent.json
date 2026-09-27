@@ -1,830 +1,9 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-09-27T13:41:18.188029+09:00",
+  "updated_at": "2026-09-27T13:51:03.507722+09:00",
   "batch_size": 3,
   "sensor_interval_minutes": 10,
   "observations": [
-    {
-      "schema_version": 1,
-      "observation_id": "obs-20260925T163033+0900-36107941964-1",
-      "observed_at": "2026-09-25T16:30:33.884959+09:00",
-      "source": {
-        "repository": "juhwan7/stock-autoresearch",
-        "workflow": "6분 감독 관측 큐",
-        "run_id": "36107941964",
-        "run_attempt": "1",
-        "head_sha": "9a72a49ba1a028562b3cd95655f20292e378f27f",
-        "ref_name": "main"
-      },
-      "queue": {
-        "batch_size": 10,
-        "pending_before_append": 2,
-        "last_processed_observation_id": "obs-20260925T114442+0900-36087484086-1",
-        "pending_after_append": 3
-      },
-      "validation": {
-        "status": "ok",
-        "compile": "ok",
-        "pytest": "ok",
-        "diff_check": "ok"
-      },
-      "steps": {
-        "toss_fetch": "success",
-        "toss_summary": "success",
-        "health": "success",
-        "dashboard": "success",
-        "market_discovery": "success",
-        "public_batch_market": "success",
-        "market_sensor_repair": "success",
-        "risk_sensor_repair": "success",
-        "regression_refresh": "success"
-      },
-      "health": {
-        "status": "CRITICAL",
-        "generated_at": "2026-09-25T16:30:31.813751+09:00",
-        "issues": [
-          {
-            "component": "public_batch",
-            "code": "stale-or-degraded",
-            "severity": "WARN",
-            "message": "6분 공개 시세 배치 상태: unavailable"
-          },
-          {
-            "component": "market",
-            "code": "toss-collector-unavailable",
-            "severity": "NOTICE",
-            "message": "NXT 시간대용 토스 Collector 스냅샷을 사용할 수 없음"
-          },
-          {
-            "component": "toss",
-            "code": "snapshot-stale",
-            "severity": "NOTICE",
-            "message": "Toss snapshot이 오래됨: 229.6분"
-          },
-          {
-            "component": "toss",
-            "code": "subscription-empty",
-            "severity": "WARN",
-            "message": "Toss WebSocket 활성 구독 정보가 비어 있음"
-          },
-          {
-            "component": "macro",
-            "code": "unavailable",
-            "severity": "CRITICAL",
-            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
-          },
-          {
-            "component": "discovery",
-            "code": "google-news-degraded",
-            "severity": "CRITICAL",
-            "message": "Google News 탐색 5/7개 그룹이 비어 있거나 오류"
-          }
-        ]
-      },
-      "regression": {
-        "status": "COLLECTING",
-        "generated_at": "2026-09-25T07:30:31.210255+00:00",
-        "quarantine_count": 0,
-        "rolled_back_count": 0
-      },
-      "market_discovery": {
-        "generated_at": "2026-09-25T16:30:23.085216+09:00",
-        "item_count": 34,
-        "new_item_count": 8,
-        "topic_counts": {
-          "kr_corporate_events": 4,
-          "broad_fallback": 30
-        },
-        "trending_terms": [
-          {
-            "term": "상폐",
-            "count": 7,
-            "publisher_count": 6,
-            "previous_count": 6,
-            "delta": 1,
-            "score": 21,
-            "examples": [
-              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-              "[속보]'시총미달 상폐' 코스닥서 속출",
-              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
-            ]
-          },
-          {
-            "term": "유가",
-            "count": 7,
-            "publisher_count": 6,
-            "previous_count": 8,
-            "delta": -1,
-            "score": 20,
-            "examples": [
-              "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
-              "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
-              "급등하는 국채 수익률과 유가, 미국 증시 선물 하락 압박"
-            ]
-          },
-          {
-            "term": "위기",
-            "count": 5,
-            "publisher_count": 5,
-            "previous_count": 5,
-            "delta": 0,
-            "score": 15,
-            "examples": [
-              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-              "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기"
-            ]
-          },
-          {
-            "term": "국제유가",
-            "count": 5,
-            "publisher_count": 5,
-            "previous_count": 5,
-            "delta": 0,
-            "score": 15,
-            "examples": [
-              "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]",
-              "美 10년물 국채금리 5.2% 돌파…국제유가 상승 등 영향",
-              "유럽 증시, 국제유가 하락에 힘입어 소폭 상승"
-            ]
-          },
-          {
-            "term": "시총미달",
-            "count": 4,
-            "publisher_count": 4,
-            "previous_count": 3,
-            "delta": 1,
-            "score": 13,
-            "examples": [
-              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-              "[속보]'시총미달 상폐' 코스닥서 속출",
-              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
-            ]
-          },
-          {
-            "term": "속출",
-            "count": 4,
-            "publisher_count": 4,
-            "previous_count": 3,
-            "delta": 1,
-            "score": 13,
-            "examples": [
-              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-              "[속보]'시총미달 상폐' 코스닥서 속출",
-              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
-            ]
-          },
-          {
-            "term": "환율",
-            "count": 3,
-            "publisher_count": 3,
-            "previous_count": 0,
-            "delta": 3,
-            "score": 12,
-            "examples": [
-              "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
-              "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
-              "ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’"
-            ]
-          },
-          {
-            "term": "동전주까지",
-            "count": 3,
-            "publisher_count": 3,
-            "previous_count": 0,
-            "delta": 3,
-            "score": 12,
-            "examples": [
-              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-              "코스닥 ‘시총 미달 상폐’ 속출…내달엔 동전주까지 위기",
-              "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기"
-            ]
-          },
-          {
-            "term": "퇴출",
-            "count": 4,
-            "publisher_count": 3,
-            "previous_count": 5,
-            "delta": -1,
-            "score": 11,
-            "examples": [
-              "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기",
-              "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기",
-              "코스닥 8개사·코스피 1개사 퇴출…‘시총미달·동전주’ 관리종목 대폭 증가"
-            ]
-          },
-          {
-            "term": "코스닥서",
-            "count": 3,
-            "publisher_count": 3,
-            "previous_count": 2,
-            "delta": 1,
-            "score": 10,
-            "examples": [
-              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-              "[속보]'시총미달 상폐' 코스닥서 속출",
-              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기"
-            ]
-          },
-          {
-            "term": "이슈",
-            "count": 3,
-            "publisher_count": 3,
-            "previous_count": 3,
-            "delta": 0,
-            "score": 9,
-            "examples": [
-              "신한투자증권, 종목 이슈·미국 공시 AI로 요약… 신규 서비스 2종 출시",
-              "신한투자증권, 종목 이슈·미국 공시 AI가 실시간 정리",
-              "글로벌 금융시장·국제유가 ‘요동’…추석 연휴 뒤 코스피 어디로? [이슈+]"
-            ]
-          },
-          {
-            "term": "무더기",
-            "count": 3,
-            "publisher_count": 3,
-            "previous_count": 3,
-            "delta": 0,
-            "score": 9,
-            "examples": [
-              "코스닥서 상폐 속출…’시총미달·동전주’ 무더기 위기",
-              "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-              "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기"
-            ]
-          },
-          {
-            "term": "뉴욕증시",
-            "count": 3,
-            "publisher_count": 3,
-            "previous_count": 6,
-            "delta": -3,
-            "score": 9,
-            "examples": [
-              "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
-              "[해외시황] 뉴욕증시, 유가·국채금리 급등에 '혼조'…다우 0.31%↓",
-              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]"
-            ]
-          },
-          {
-            "term": "내달",
-            "count": 3,
-            "publisher_count": 3,
-            "previous_count": 3,
-            "delta": 0,
-            "score": 9,
-            "examples": [
-              "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기",
-              "코스닥 ‘무더기 상폐’ 초읽기… 내달 동전주까지 줄줄이 퇴출 위기",
-              "시총 기준 강화에 코스닥 8개사 상폐 결정…내달 추가 퇴출 가능성"
-            ]
-          },
-          {
-            "term": "금리",
-            "count": 3,
-            "publisher_count": 3,
-            "previous_count": 3,
-            "delta": 0,
-            "score": 9,
-            "examples": [
-              "뉴욕증시, 유가·금리 부담 속 보합권…30년물 금리 2004년 이후 최고",
-              "[속보] 美국채 금리 급등에도 보합권…S&P·나스닥 제자리",
-              "[뉴욕채권] 약세 지속…유가·바이백 실망 속 30년물 금리 22년來 최고"
-            ]
-          },
-          {
-            "term": "국채금리",
-            "count": 3,
-            "publisher_count": 3,
-            "previous_count": 4,
-            "delta": -1,
-            "score": 9,
-            "examples": [
-              "美 10년물 국채금리 5.2% 돌파…국제유가 상승 등 영향",
-              "[해외시황] 뉴욕증시, 유가·국채금리 급등에 '혼조'…다우 0.31%↓",
-              "뉴욕증시, 국채금리 급등·유가 상승에 혼조…다우 0.31%↓[뉴욕마감]"
-            ]
-          },
-          {
-            "term": "후티",
-            "count": 3,
-            "publisher_count": 2,
-            "previous_count": 2,
-            "delta": 1,
-            "score": 9,
-            "examples": [
-              "후티 반군, 사우디 미사일 공격 소식에…국제유가 3% 넘게 급등",
-              "예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑",
-              "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소"
-            ]
-          },
-          {
-            "term": "시총",
-            "count": 3,
-            "publisher_count": 2,
-            "previous_count": 3,
-            "delta": 0,
-            "score": 8,
-            "examples": [
-              "시총·주가 미달 상폐 현실화…코스닥 8곳 퇴출·내달 추가 위기",
-              "코스닥 ‘시총 미달 상폐’ 속출…내달엔 동전주까지 위기",
-              "시총 기준 강화에 코스닥 8개사 상폐 결정…내달 추가 퇴출 가능성"
-            ]
-          },
-          {
-            "term": "호르무즈",
-            "count": 2,
-            "publisher_count": 2,
-            "previous_count": 0,
-            "delta": 2,
-            "score": 8,
-            "examples": [
-              "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
-              "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소"
-            ]
-          },
-          {
-            "term": "합의",
-            "count": 2,
-            "publisher_count": 2,
-            "previous_count": 0,
-            "delta": 2,
-            "score": 8,
-            "examples": [
-              "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
-              "[뉴욕유가] 후티 도발에 이틀째↑…호르무즈 합의 모색설에 오름폭 축소"
-            ]
-          }
-        ],
-        "new_dart_filings": [],
-        "official_web_candidates": [],
-        "toss_market": {
-          "available": true,
-          "captured_at": "2026-09-25T12:40:55.854533+09:00",
-          "top_turnover": [],
-          "minute_burst_leaders": [],
-          "top10_share": null
-        },
-        "sector_selection": {
-          "mode": "dynamic",
-          "fixed_sector_whitelist": false,
-          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 1시간 AI가 주도 섹터를 선택"
-        },
-        "naver_indices": {
-          "KOSPI": "7,080.92",
-          "KOSDAQ": "844.48",
-          "KOSPI200": "1,126.12"
-        },
-        "source_summary": {
-          "ok_or_partial": 3,
-          "failed": 0,
-          "degraded": 5
-        },
-        "top_new_items": [
-          {
-            "topic": "broad_fallback",
-            "title": "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
-            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE00eTZ3N1N2anVLWjYyT3hHVlFCRUpLeUtPTDBiejZYR0tSbHM3M0VxQTA5TURUYzBkZmdDSHdSS01YQW96enFYVnYtOTYxMHdDQWpxMHRwVjFNdGdUbkgwdNIBYEFVX3lxTE00eTZ3N1N2anVLWjYyT3hHVlFCRUpLeUtPTDBiejZYR0tSbHM3M0VxQTA5TURUYzBkZmdDSHdSS01YQW96enFYVnYtOTYxMHdDQWpxMHRwVjFNdGdUbkgwdA?oc=5",
-            "published_at": "Fri, 25 Sep 2026 01:00:01 GMT",
-            "publisher": "yna.co.kr",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "broad_fallback",
-            "title": "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
-            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBsOUZaVmF0N3pod0kzYUU4anV3UTFYR0dKUm1DNl9ZbFBUQTlzbFpjS0h5ZVlNb014RGV2dXVyWngtbGdjcXVfSUVtV3MzR2g4dkozOE1QU0tFcE9GUUNmdlpjSi0wdF9rVjJzY1Fzaw?oc=5",
-            "published_at": "Fri, 25 Sep 2026 00:47:00 GMT",
-            "publisher": "Investing.com 한국어",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "broad_fallback",
-            "title": "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
-            "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE8yOG5JdllmV0JXRGx3ekg5M2c3YjBnemkyOXlqZkhzQnJYS0pNTTJrZTl6QkxZU2J0N0RpWFFaaWk4WkV1ZXFIZ2x1UVVlYjAwc3E2VE4yMlBlQ2M?oc=5",
-            "published_at": "Fri, 25 Sep 2026 07:20:00 GMT",
-            "publisher": "KBS 뉴스",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "broad_fallback",
-            "title": "[속보]'시총미달 상폐' 코스닥서 속출",
-            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9yeG1NRlVxQWY0RW9YVUFEd3JtbmliMTY1OHFyY3dUNlVkOWNEdnljbnMyOTFhQ0tZWGNBR1pCdDdQUF9nYi01dldFSFFGc19MZHUyY1lTVWFKR2FGOGRvU0xhR1dqOFBCaHI2TQ?oc=5",
-            "published_at": "Fri, 25 Sep 2026 04:48:00 GMT",
-            "publisher": "한경매거진&북",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "broad_fallback",
-            "title": "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE93QWtKUVVNeGF5Q1Z2SHF3RUVmdllOdDI0LUkteXBWYXVLT1g3NVk5SEJlRVpDdDg4dDFRZkVmazV5aUdyWGcyUGdDSE9od2E4eFMtLVJXWFBENVV6NkNYamhFUHBOMFY5VFIw?oc=5",
-            "published_at": "Fri, 25 Sep 2026 05:36:46 GMT",
-            "publisher": "BBS불교방송",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "broad_fallback",
-            "title": "유럽 증시, 국제유가 하락에 힘입어 소폭 상승",
-            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE0tdFpHMWhXRndXVDNtUFkxNzF0dDVQTFBoNnhCVTN2Q2oxR2RrUnpSOG5wcHdQQzBTYVhfY2NfWDJ2d2ptWWZNMlpNU3pjQkp6c1F2WE5XejhLT1pWcVJhMHlnTzBWU3BNMmxmLW1WNFo?oc=5",
-            "published_at": "Fri, 25 Sep 2026 07:04:00 GMT",
-            "publisher": "Investing.com 한국어",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "broad_fallback",
-            "title": "예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑",
-            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFB0Y0Q1OE0wWnQxM2lzU0hxcW5jMEF5UWZpRnkxYWsyanlBczhxX0w0aVkxNnhEekR6eU9SV0xpaVlVVGduVzFvbjhyUTJ1VWhrQXBtb1Uyc0Y4OXVueFY3RzJaTWtSNUg3MzcweGFTaGw?oc=5",
-            "published_at": "Thu, 24 Sep 2026 17:23:52 GMT",
-            "publisher": "연합인포맥스",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "broad_fallback",
-            "title": "ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’",
-            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE15NnFSU3NlR0xxVllLa1M4VXk0dGFHZWRKVTZXSHNYV1ZGU1o1dTNINnAzMmJBT2dVZkpQUXhGR0pqNzM5Z2RpT0U5bTRMQ29XTlhxZXdJNUo3SGdMMEswMGlyVjFTbUcxMllyTQ?oc=5",
-            "published_at": "Fri, 25 Sep 2026 00:00:00 GMT",
-            "publisher": "인사이드비나",
-            "discovery_source": "google_news_rss"
-          }
-        ],
-        "handoff_queries": [
-          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
-          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
-          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
-          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
-          "상폐 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "위기 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "국제유가 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "시총미달 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "속출 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "환율 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "동전주까지 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
-        ]
-      },
-      "public_batch_market": {
-        "generated_at": "2026-09-25T16:30:18.702635+09:00",
-        "status": "unavailable",
-        "provider": "naver_public",
-        "exact_1m_bars": false,
-        "elapsed_minutes_from_previous": 228.41168275,
-        "interval_leaders": [],
-        "one_minute_samples_available": false,
-        "minute_amount_exact": false,
-        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
-        "minute_sample_ticker_count": 0,
-        "current_top50_count": 0,
-        "tracked_universe_count": 0,
-        "dropped_from_current_top50_count": 0,
-        "tracked_outside_top50_with_samples": 0,
-        "minute_samples_by_ticker": {},
-        "limitations": [
-          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
-          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
-          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
-          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
-          "최근 6개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
-          "6분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
-        ]
-      },
-      "market": {
-        "generated_at": "2026-09-25T16:30:29.957663+09:00",
-        "source_status": "toss_snapshot_unavailable",
-        "provider": "toss",
-        "fallback_used": false
-      },
-      "toss": {
-        "available": true,
-        "captured_at": "2026-09-25T12:40:55.854533+09:00",
-        "collector": {
-          "subscription_count": 0,
-          "rejected_count": 0,
-          "last_message_at": null,
-          "last_universe_refresh": "2026-09-25T12:40:55.854533+09:00"
-        }
-      },
-      "user_feedback": {
-        "pending_count": 0,
-        "latest_pending_comment_id": null
-      },
-      "git": {
-        "head_sha": "9a72a49ba1a028562b3cd95655f20292e378f27f",
-        "latest_commit_changed_files": [
-          "data/supervisor/state.json"
-        ]
-      },
-      "previous_workflow_run": {
-        "id": 36105613988,
-        "name": "GitHub Pages 즉시 배포",
-        "event": "push",
-        "status": "completed",
-        "conclusion": "success",
-        "created_at": "2026-09-25T07:01:52Z",
-        "updated_at": "2026-09-25T07:02:30Z",
-        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36105613988",
-        "head_sha": "bf2f67a5d8b4b9aa24124a00f48797886a732101"
-      },
-      "hypothesis_verification": {
-        "due": []
-      },
-      "signals": [
-        "health:CRITICAL",
-        "discovery:degraded",
-        "market:toss_snapshot_unavailable"
-      ],
-      "research_questions": [
-        {
-          "question_id": "q-e7f6d3f25e6f13b9",
-          "kind": "system",
-          "subject": "discovery",
-          "question": "discovery의 'Google News 탐색 5/7개 그룹이 비어 있거나 오류' 문제가 반복되는 구조적 원인인가 일시적 센서 공백인가? 다음 관측에서 무엇으로 구분할 수 있는가?",
-          "priority": 5,
-          "evidence": [
-            "Google News 탐색 5/7개 그룹이 비어 있거나 오류"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-f4e037d78601a83d",
-          "kind": "system",
-          "subject": "macro",
-          "question": "macro의 '매크로 runtime은 생성됐지만 실제 시장값이 비어 있음' 문제가 반복되는 구조적 원인인가 일시적 센서 공백인가? 다음 관측에서 무엇으로 구분할 수 있는가?",
-          "priority": 5,
-          "evidence": [
-            "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-5c18348e47abe493",
-          "kind": "data_quality",
-          "subject": "minute_trading_value",
-          "question": "분 단위 거래대금이 근사치인 현재 관측에서 어떤 결론까지 상대 비교로 허용하고, 어떤 절대값 판단은 보류해야 하는가?",
-          "priority": 4,
-          "evidence": [
-            "price_x_minute_volume_scaled_to_interval_total",
-            "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
-            "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 6분이 아닐 수 있음",
-            "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-1e299fc496332531",
-          "kind": "news",
-          "subject": "broad_fallback",
-          "question": "'엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
-          "priority": 3,
-          "evidence": [
-            "엔·달러 환율, 다시 160엔 근접…“트럼프, 우려 표명” 이례적 공개",
-            "KBS 뉴스"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-295722c4b258195f",
-          "kind": "emerging_topic",
-          "subject": "상폐",
-          "question": "'상폐' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
-          "priority": 3,
-          "evidence": [
-            "반복 키워드=상폐",
-            "기사=7, 매체=6"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-2e10d66f10b466c4",
-          "kind": "emerging_topic",
-          "subject": "국제유가",
-          "question": "'국제유가' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
-          "priority": 3,
-          "evidence": [
-            "반복 키워드=국제유가",
-            "기사=5, 매체=5"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-345f6ff132d1dcd3",
-          "kind": "news",
-          "subject": "broad_fallback",
-          "question": "'유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
-          "priority": 3,
-          "evidence": [
-            "유가, 급등 후 하락... 미-이란 호르무즈 해협 합의 모색 보도",
-            "Investing.com 한국어"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-38d78009531714f1",
-          "kind": "news",
-          "subject": "broad_fallback",
-          "question": "'ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
-          "priority": 3,
-          "evidence": [
-            "ADB, 베트남 경제성장률 전망치 7.2→7.8% 상향 조정…물가·환율 리스크는 ‘여전’",
-            "인사이드비나"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-5fcdce8516563327",
-          "kind": "system",
-          "subject": "toss",
-          "question": "toss의 'Toss WebSocket 활성 구독 정보가 비어 있음' 문제가 반복되는 구조적 원인인가 일시적 센서 공백인가? 다음 관측에서 무엇으로 구분할 수 있는가?",
-          "priority": 3,
-          "evidence": [
-            "Toss WebSocket 활성 구독 정보가 비어 있음"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-61dc873c3db9dae2",
-          "kind": "news",
-          "subject": "broad_fallback",
-          "question": "'[속보]'시총미달 상폐' 코스닥서 속출'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
-          "priority": 3,
-          "evidence": [
-            "[속보]'시총미달 상폐' 코스닥서 속출",
-            "한경매거진&북"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-76d37f32ecff4aa5",
-          "kind": "news",
-          "subject": "broad_fallback",
-          "question": "'유럽 증시, 국제유가 하락에 힘입어 소폭 상승'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
-          "priority": 3,
-          "evidence": [
-            "유럽 증시, 국제유가 하락에 힘입어 소폭 상승",
-            "Investing.com 한국어"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-7eb7190576b013c2",
-          "kind": "emerging_topic",
-          "subject": "시총미달",
-          "question": "'시총미달' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
-          "priority": 3,
-          "evidence": [
-            "반복 키워드=시총미달",
-            "기사=4, 매체=4"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-8b8cdcdd1973b181",
-          "kind": "system",
-          "subject": "public_batch",
-          "question": "public_batch의 '6분 공개 시세 배치 상태: unavailable' 문제가 반복되는 구조적 원인인가 일시적 센서 공백인가? 다음 관측에서 무엇으로 구분할 수 있는가?",
-          "priority": 3,
-          "evidence": [
-            "6분 공개 시세 배치 상태: unavailable"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-929372ddee953299",
-          "kind": "emerging_topic",
-          "subject": "속출",
-          "question": "'속출' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
-          "priority": 3,
-          "evidence": [
-            "반복 키워드=속출",
-            "기사=4, 매체=4"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-9476dd96b4a37d4b",
-          "kind": "news",
-          "subject": "broad_fallback",
-          "question": "''시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
-          "priority": 3,
-          "evidence": [
-            "'시총미달 상폐' 코스닥서 속출…내달부터 동전주까지 무더기 위기",
-            "BBS불교방송"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-94a4ee2784e33477",
-          "kind": "emerging_topic",
-          "subject": "위기",
-          "question": "'위기' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
-          "priority": 3,
-          "evidence": [
-            "반복 키워드=위기",
-            "기사=5, 매체=5"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-c216e48fc042b551",
-          "kind": "emerging_topic",
-          "subject": "환율",
-          "question": "'환율' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
-          "priority": 3,
-          "evidence": [
-            "반복 키워드=환율",
-            "기사=3, 매체=3"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-c89531e35b70012d",
-          "kind": "emerging_topic",
-          "subject": "동전주까지",
-          "question": "'동전주까지' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
-          "priority": 3,
-          "evidence": [
-            "반복 키워드=동전주까지",
-            "기사=3, 매체=3"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-cbd19d48198f6598",
-          "kind": "news",
-          "subject": "broad_fallback",
-          "question": "'美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
-          "priority": 3,
-          "evidence": [
-            "美 장기금리 상승의 국내 영향은?…\"환율↑·외인 자본 유출\"",
-            "yna.co.kr"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-d0175c771a79dfb6",
-          "kind": "emerging_topic",
-          "subject": "유가",
-          "question": "'유가' 언급 증가는 실제 새 정보의 확산인가 단순 기사 복제인가, 그리고 실제 거래대금 반응이 동반되는가?",
-          "priority": 3,
-          "evidence": [
-            "반복 키워드=유가",
-            "기사=7, 매체=6"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        },
-        {
-          "question_id": "q-d197112e0b472e4b",
-          "kind": "news",
-          "subject": "broad_fallback",
-          "question": "'예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑'은 새로운 사실인가, 기존 기사·발언의 재인용인가? 최초 출처와 1차 자료는 무엇인가?",
-          "priority": 3,
-          "evidence": [
-            "예멘 후티 \"사우디 자잔지역 군사시설 공격\"…유가 4%↑",
-            "연합인포맥스"
-          ],
-          "parent_question_id": null,
-          "status": "open",
-          "learned_priority_bonus": 0
-        }
-      ]
-    },
     {
       "schema_version": 1,
       "observation_id": "obs-20260925T163147+0900-36108053575-1",
@@ -82876,6 +82055,750 @@
         "updated_at": "2026-09-27T04:40:24Z",
         "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36294501049",
         "head_sha": "c4ba5eabdb1395e42580a76f147bc98427652aed"
+      },
+      "hypothesis_verification": {
+        "due": []
+      },
+      "signals": [
+        "discovery:degraded"
+      ]
+    },
+    {
+      "schema_version": 2,
+      "observation_id": "obs-20260927T135103+0900-36295467295-1",
+      "observed_at": "2026-09-27T13:51:03.507722+09:00",
+      "slot_at": "2026-09-27T13:50:00+09:00",
+      "slot_key": "2026-09-27T13:50+0900",
+      "sensor_interval_minutes": 10,
+      "slot_source": "dispatch_input",
+      "slot_start_delay_seconds": 28.914,
+      "slot_delay_seconds": 63.507722,
+      "source": {
+        "repository": "juhwan7/stock-autoresearch",
+        "workflow": "10분 감독 관측 큐",
+        "event_name": "workflow_dispatch",
+        "run_id": "36295467295",
+        "run_attempt": "1",
+        "head_sha": "be8deae124351ec335682c9b25d110de43a62739",
+        "ref_name": "main"
+      },
+      "queue": {
+        "batch_size": 3,
+        "pending_before_append": 46,
+        "last_processed_observation_id": "obs-20260927T060104+0900-36271434540-1",
+        "last_processed_slot": "2026-09-27T06:00:00+09:00",
+        "pending_after_append": 47
+      },
+      "validation": {
+        "status": "ok",
+        "compile": "ok",
+        "pytest": "ok",
+        "diff_check": "ok"
+      },
+      "steps": {
+        "toss_fetch": "success",
+        "toss_summary": "success",
+        "health": "success",
+        "dashboard": "success",
+        "market_discovery": "success",
+        "public_batch_market": "success",
+        "market_sensor_repair": "success",
+        "risk_sensor_repair": "success",
+        "regression_refresh": "success"
+      },
+      "health": {
+        "status": "NOTICE",
+        "generated_at": "2026-09-27T13:50:58.760443+09:00",
+        "issues": [
+          {
+            "component": "macro",
+            "code": "unavailable",
+            "severity": "NOTICE",
+            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+          }
+        ]
+      },
+      "regression": {
+        "status": "COLLECTING",
+        "generated_at": "2026-09-27T04:50:58.324070+00:00",
+        "quarantine_count": 0,
+        "rolled_back_count": 0
+      },
+      "market_discovery": {
+        "generated_at": "2026-09-27T13:50:42.808632+09:00",
+        "item_count": 165,
+        "new_item_count": 16,
+        "topic_counts": {
+          "kr_policy_economy": 22,
+          "kr_diplomacy_summit": 30,
+          "kr_semiconductor_ai": 3,
+          "kr_energy_power": 1,
+          "global_market": 20,
+          "global_diplomacy_summit": 26,
+          "us_macro_rates": 2,
+          "global_energy_middle_east": 1,
+          "us_china_trade_ai": 6,
+          "japan_boj_fx": 2,
+          "dynamic:AI": 20,
+          "dynamic:순방": 3,
+          "dynamic:멕시코": 6,
+          "dynamic:귀국길": 6,
+          "dynamic:마치고": 4,
+          "dynamic:수입규제": 8,
+          "dynamic:트럼프": 5
+        },
+        "trending_terms": [
+          {
+            "term": "대통령",
+            "count": 39,
+            "publisher_count": 25,
+            "independent_story_count_estimate": 26,
+            "syndication_ratio_estimate": 0.333,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 38,
+            "delta": 1,
+            "score": 104,
+            "examples": [
+              "이재명 대통령, 순방 일정 마치고 귀국길 올라",
+              "유엔서 ‘평화’ 외치고 트럼프 만났다…이재명 대통령, 순방서 무엇을 얻었나",
+              "이 대통령, 미·멕시코 순방 마치고 귀국길…대법관 재제청 등 현안 산적"
+            ]
+          },
+          {
+            "term": "순방",
+            "count": 38,
+            "publisher_count": 23,
+            "independent_story_count_estimate": 27,
+            "syndication_ratio_estimate": 0.289,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 37,
+            "delta": 1,
+            "score": 100,
+            "examples": [
+              "이재명 대통령, 순방 일정 마치고 귀국길 올라",
+              "이 대통령, 미·멕시코 순방 마치고 귀국길…대법관 재제청 등 현안 산적",
+              "이 대통령 순방 마무리...귀국 후 현안 집중"
+            ]
+          },
+          {
+            "term": "AI",
+            "count": 33,
+            "publisher_count": 26,
+            "independent_story_count_estimate": 29,
+            "syndication_ratio_estimate": 0.121,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 35,
+            "delta": -2,
+            "score": 92,
+            "examples": [
+              "\"AI 거품론에도 2800조 눈앞\"…반도체 호황 언제까지 갈까",
+              "목대균 KCGI자산운용 대표 “최근 조정은 반도체 재평가 과정…韓 제조업 AI 생태계 핵심” - 조선비즈",
+              "미중 정상회담 ‘성과’ 강조했지만…희토류·AI 곳곳 이견"
+            ]
+          },
+          {
+            "term": "멕시코",
+            "count": 23,
+            "publisher_count": 18,
+            "independent_story_count_estimate": 16,
+            "syndication_ratio_estimate": 0.304,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 23,
+            "delta": 0,
+            "score": 64,
+            "examples": [
+              "이 대통령, 미·멕시코 순방 마치고 귀국길…대법관 재제청 등 현안 산적",
+              "유엔서 다자협의 틀 제안·트럼프와 안보협상 물꼬…이 대통령, 미국·멕시코 순방 마치고 귀국길",
+              "이 대통령, 美·멕시코 순방 마치고 귀국…외교 성과 안고 국내 현안으로"
+            ]
+          },
+          {
+            "term": "마치고",
+            "count": 22,
+            "publisher_count": 17,
+            "independent_story_count_estimate": 12,
+            "syndication_ratio_estimate": 0.455,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 22,
+            "delta": 0,
+            "score": 61,
+            "examples": [
+              "이재명 대통령, 순방 일정 마치고 귀국길 올라",
+              "이 대통령, 미·멕시코 순방 마치고 귀국길…대법관 재제청 등 현안 산적",
+              "유엔서 다자협의 틀 제안·트럼프와 안보협상 물꼬…이 대통령, 미국·멕시코 순방 마치고 귀국길"
+            ]
+          },
+          {
+            "term": "수입규제",
+            "count": 22,
+            "publisher_count": 16,
+            "independent_story_count_estimate": 12,
+            "syndication_ratio_estimate": 0.455,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 22,
+            "delta": 0,
+            "score": 60,
+            "examples": [
+              "[국내경제] 美 관세만 문제가 아니다…한국산 수입규제 241건, ‘제2의 무역장벽’ 높아졌다",
+              "상반기 한국제품 수입규제 241건…지난해 하반기보다 11건↑",
+              "보호무역 확산에 한국 수출품 수입규제 241건‥반년 새 11건 늘어"
+            ]
+          },
+          {
+            "term": "트럼프",
+            "count": 21,
+            "publisher_count": 17,
+            "independent_story_count_estimate": 19,
+            "syndication_ratio_estimate": 0.095,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 21,
+            "delta": 0,
+            "score": 59,
+            "examples": [
+              "유엔서 ‘평화’ 외치고 트럼프 만났다…이재명 대통령, 순방서 무엇을 얻었나",
+              "이란 외무, 트럼프 '7일 휴전안' 거부에도 \"美 최종 입장 기다리는 중\"",
+              "트럼프, 이란 휴전안 거절…“그 합의안 못 받아”"
+            ]
+          },
+          {
+            "term": "귀국길",
+            "count": 21,
+            "publisher_count": 17,
+            "independent_story_count_estimate": 13,
+            "syndication_ratio_estimate": 0.381,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 22,
+            "delta": -1,
+            "score": 59,
+            "examples": [
+              "이재명 대통령, 순방 일정 마치고 귀국길 올라",
+              "이 대통령, 미·멕시코 순방 마치고 귀국길…대법관 재제청 등 현안 산적",
+              "李대통령, 순방 귀국길 알래스카 들러 ‘즉석 차담회’"
+            ]
+          },
+          {
+            "term": "241건",
+            "count": 19,
+            "publisher_count": 13,
+            "independent_story_count_estimate": 9,
+            "syndication_ratio_estimate": 0.526,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 19,
+            "delta": 0,
+            "score": 51,
+            "examples": [
+              "[국내경제] 美 관세만 문제가 아니다…한국산 수입규제 241건, ‘제2의 무역장벽’ 높아졌다",
+              "상반기 한국제품 수입규제 241건…지난해 하반기보다 11건↑",
+              "보호무역 확산에 한국 수출품 수입규제 241건‥반년 새 11건 늘어"
+            ]
+          },
+          {
+            "term": "귀국",
+            "count": 12,
+            "publisher_count": 10,
+            "independent_story_count_estimate": 7,
+            "syndication_ratio_estimate": 0.417,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 12,
+            "delta": 0,
+            "score": 34,
+            "examples": [
+              "이 대통령 순방 마무리...귀국 후 현안 집중",
+              "이 대통령, 美·멕시코 순방 마치고 귀국…외교 성과 안고 국내 현안으로",
+              "[일요와이드] 이 대통령 순방 마치고 귀국…추석 연휴 민심은?"
+            ]
+          },
+          {
+            "term": "7일",
+            "count": 9,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 8,
+            "syndication_ratio_estimate": 0.111,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 9,
+            "score": 33,
+            "examples": [
+              "李대통령, 5박 7일 북중미 순방 매듭…귀국길 기자들과 차담(종합)",
+              "이란 외무, 트럼프 '7일 휴전안' 거부에도 \"美 최종 입장 기다리는 중\"",
+              "트럼프 7일 휴전안 거부에도…이란 외교적 해법이 유일"
+            ]
+          },
+          {
+            "term": "성과",
+            "count": 11,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 8,
+            "syndication_ratio_estimate": 0.273,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 10,
+            "delta": 1,
+            "score": 32,
+            "examples": [
+              "이 대통령, 美·멕시코 순방 마치고 귀국…외교 성과 안고 국내 현안으로",
+              "李대통령, 美·멕시코 순방 마치고 귀국… ‘깜짝’ 한미회담·외교 성과 뒤엔 산적한 내치 과제",
+              "李대통령, 미국·멕시코 순방 끝 귀국길…한미회담 등 성과 점검"
+            ]
+          },
+          {
+            "term": "이란",
+            "count": 11,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 10,
+            "syndication_ratio_estimate": 0.091,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 11,
+            "delta": 0,
+            "score": 31,
+            "examples": [
+              "이란 외무, 트럼프 '7일 휴전안' 거부에도 \"美 최종 입장 기다리는 중\"",
+              "트럼프, 이란 휴전안 거절…“그 합의안 못 받아”",
+              "'호르무즈→트럼프 해협' 지도 올린 트럼프, 이란 휴전안 거절"
+            ]
+          },
+          {
+            "term": "늘어",
+            "count": 9,
+            "publisher_count": 4,
+            "independent_story_count_estimate": 2,
+            "syndication_ratio_estimate": 0.778,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 9,
+            "score": 31,
+            "examples": [
+              "보호무역 확산에 한국 수출품 수입규제 241건‥반년 새 11건 늘어",
+              "한국제품 수입규제 상반기 241건…작년 하반기보다 11건 늘어",
+              "보호무역 확산에 한국 수출품 수입규제 241건…반년 새 11건 늘어"
+            ]
+          },
+          {
+            "term": "트럼프와",
+            "count": 8,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 4,
+            "syndication_ratio_estimate": 0.5,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 8,
+            "score": 30,
+            "examples": [
+              "유엔서 다자협의 틀 제안·트럼프와 안보협상 물꼬…이 대통령, 미국·멕시코 순방 마치고 귀국길",
+              "이 대통령, 美·멕시코 순방 마무리…트럼프와 안보현안 논의·투자협상 진전",
+              "순방 마친 李, 뉴욕서 트럼프와 극적 정상회담…멕시코선 CEPA 제안"
+            ]
+          },
+          {
+            "term": "제품",
+            "count": 8,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 5,
+            "syndication_ratio_estimate": 0.375,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 8,
+            "score": 30,
+            "examples": [
+              "한국 제품 수입규제 상반기 241건…작년 하반기보다 11건 늘어",
+              "한국산 제품 무역장벽 높아졌다…상반기 수입규제 241건",
+              "[글로벌 통상] 한국 제품 수입규제 241건…보호무역 확산에 철강·화학업계 부담"
+            ]
+          },
+          {
+            "term": "정상회담",
+            "count": 10,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 10,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 10,
+            "delta": 0,
+            "score": 29,
+            "examples": [
+              "“한·미 정상회담, 오해 줄이는 데 도움···호르무즈·쿠팡 압력, 안보 합의 이행 지연은 계속될 듯”",
+              "‘빅딜’ 없었던 미·중 정상회담…화려한 의전 속 ‘관리된 휴전’ 선택",
+              "미중 정상회담, 무역 합의에도 핵심 현안은 '온도 차'"
+            ]
+          },
+          {
+            "term": "달러",
+            "count": 10,
+            "publisher_count": 8,
+            "independent_story_count_estimate": 10,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 11,
+            "delta": -1,
+            "score": 28,
+            "examples": [
+              "베트남 청과물 수출, 3개월 연속 10억 달러 돌파…9개월 누적 73억 달러 육박",
+              "코인베이스 CFO 알레시아 하스, A급 보통주 801만 달러 상당 매도",
+              "1380원대 찍더니 다시 아래로…추석 뒤 환율 가를 '달러·엔·네고' - 머니투데이"
+            ]
+          },
+          {
+            "term": "철강",
+            "count": 7,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 6,
+            "syndication_ratio_estimate": 0.143,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 7,
+            "score": 28,
+            "examples": [
+              "상반기 한국산 수입규제 241건…절반이 철강·금속",
+              "[글로벌 통상] 한국 제품 수입규제 241건…보호무역 확산에 철강·화학업계 부담",
+              "韓제품 수입규제 241건으로 늘었다…절반은 철강·금속"
+            ]
+          },
+          {
+            "term": "무역",
+            "count": 9,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 5,
+            "syndication_ratio_estimate": 0.444,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 9,
+            "delta": 0,
+            "score": 27,
+            "examples": [
+              "미중 정상회담, 무역 합의에도 핵심 현안은 '온도 차'",
+              "美 \"'SI 핫라인' 합의…무역·투자위 가동\" 미중 정상회담 팩트시트 - 머니투데이",
+              "시진핑, 미국 국빈 방문 마치고 귀국…트럼프와 무역·AI 등 논의"
+            ]
+          }
+        ],
+        "new_dart_filings": [],
+        "official_web_candidates": [],
+        "toss_market": {
+          "available": true,
+          "captured_at": "2026-09-27T10:31:34.806598+09:00",
+          "top_turnover": [],
+          "minute_burst_leaders": [],
+          "top10_share": null
+        },
+        "sector_selection": {
+          "mode": "dynamic",
+          "fixed_sector_whitelist": false,
+          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택"
+        },
+        "naver_indices": {
+          "KOSPI": "7,080.92",
+          "KOSDAQ": "844.48",
+          "KOSPI200": "1,126.12"
+        },
+        "source_summary": {
+          "ok_or_partial": 19,
+          "failed": 0,
+          "degraded": 8
+        },
+        "top_new_items": [
+          {
+            "topic": "kr_policy_economy",
+            "title": "“빨래에 하얀 가루가…” 세제 찌꺼기와 종이 조각 구분",
+            "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5YdWt2Zmh6bS1kSloweEZCaXhmd29uQ0F6SnpuNWwzbEU2UkJ6b3lzc0JWNlhrUWNSejRPSzNEcVc2MVgySktBbDUtNmFhQnJQVUU1dnVPS1lfLXZ0MUFxVERUai04dw?oc=5",
+            "published_at": "Sat, 26 Sep 2026 11:24:52 GMT",
+            "publisher": "비건뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "유엔서 다자협의 틀 제안·트럼프와 안보협상 물꼬…이 대통령, 미국·멕시코 순방 마치고 귀국길",
+            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE16aklUWmR0VVByVzVYZWVIZ2JSclhILWdHQ1p3N3Z4RDE2cW1WSkhmWUwwY2lFb1ZManVkbU9raUI1bmhFUE02Qkg2b3F2Qy1uZzZ3ZDFHNTdHUdIBX0FVX3lxTE1RODFNTXhCZUJGRXE5cXJsV1B1MlFkeEExVnhSZXhXcHM1VlNibmRwaFdWNWhEckJtQmZsSV9SVTByd2lfdXdoN2xETFd6VjU1QU9SYnBlbDV3c2ZJLUdZ?oc=5",
+            "published_at": "Sun, 27 Sep 2026 00:51:00 GMT",
+            "publisher": "경향신문",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "이재명 대통령, 순방 기자단과 티타임",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE45dGdUb0lUMFR0MHlyUHQwWGExQllGTy0yYjFGWUFwVkREQnUtdjZIZWtxN3lUWWFvcmNuM1ljV1NrVW1kUmpHLUpFUml3eG5KSHlEVnA2R2VlNmZJanVWVdIBYEFVX3lxTE45dGdUb0lUMFR0MHlyUHQwWGExQllGTy0yYjFGWUFwVkREQnUtdjZIZWtxN3lUWWFvcmNuM1ljV1NrVW1kUmpHLUpFUml3eG5KSHlEVnA2R2VlNmZJanVWVQ?oc=5",
+            "published_at": "Sun, 27 Sep 2026 03:26:27 GMT",
+            "publisher": "연합뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "global_market",
+            "title": "휴전 기대에도 유가 100달러대…중동 공급 정상화 내년 2분기 전망",
+            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5NQXdjTm00UTdaaVg4TmNINVVLWXJxLUxadTNRT2xGRzNENTdNVzZIbDR3aWhFdExpSHBJd29hVF81Y1JXT2hCb0x2UzRaUW5FWmhucFdYSmphUdIBWkFVX3lxTE5NQXdjTm00UTdaaVg4TmNINVVLWXJxLUxadTNRT2xGRzNENTdNVzZIbDR3aWhFdExpSHBJd29hVF81Y1JXT2hCb0x2UzRaUW5FWmhucFdYSmphUQ?oc=5",
+            "published_at": "Sat, 26 Sep 2026 22:45:00 GMT",
+            "publisher": "뉴스1",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "global_diplomacy_summit",
+            "title": "트럼프 7일 휴전안 거부에도…이란 외교적 해법이 유일",
+            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1PMUlacG0zWGZ2MFZUa21mOFk5WmxvRGZzZFRVc2pOdUtvUm91YmRkOXcwUFpWYk1GTUd3d2ZoYjNyb3VRbGpRSXFnSG0xMW9LdThfXzlJSWJaQdIBWEFVX3lxTE91bXB3dTNRVERqeVJKT2F3OEZ3ZUMyVHNBdFBVdE1hUWdSRE53bWFkSjZPT2h3SlVXMDV2QTJudDJpZnE1czQ5MlJUR2Z1MGVnOHNXbmdDWno?oc=5",
+            "published_at": "Sun, 27 Sep 2026 02:39:42 GMT",
+            "publisher": "아주경제",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "japan_boj_fx",
+            "title": "채권 수익률 상승, 일본 자금의 본국 송환을 막다",
+            "url": "https://news.google.com/rss/articles/CBMixAJBVV95cUxPMFF4cnpmUnh6ZFpJdzZuVXpEQ0VvbHREQ2FfcWcxc21EdHFLUmhuWEN2bzZnaWtKWFdhN3VHZ3ZNWDJwMFBPc09wMWlEVE1NS0lmbGR5T2s4Q0xTUDA1YzljZnFPQzJpeEk4LWlaUTNFdmxHX0JpQnBSbUQ4MUUtWEJwUjYwcFFrYWptVzVSeHNaTzI1T1l0dUtjRFJ4ZTRVX1NxWlBXR1hYNzJIWmV2c25OVnJfdmU1VkgwOU82WG50Vy1rVDFyUEFUX1cyd1ZXRjA0bzVkX3h1S25naFByTDVQckhZRzU4OGhDQnEtYW5haUlfSXVwalFYX0FpUEI3eVJsLWwxSGVWai13bWExQnRyclBJcUt1OTNDUWlhRDJaVXZSN0oySnRFV3ZLZnhfWDJkZHRLTWNXa29tSTlwTmxVNk8?oc=5",
+            "published_at": "Sat, 26 Sep 2026 06:00:00 GMT",
+            "publisher": "IDNFinancials",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:AI",
+            "title": "한드림넷, AI 전환(AX) 시대, 이제 ‘보안 스위치’는 선택이 아닌 필수",
+            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5peHRRQ3dtOFhOZHhjNWhzTGVtZGlabldUYm9ua3BDdm0zVTgzQ2FaWnhkWnM1U1I0Wi1VNjVxN1VKQUphVWJHeE1MdHBZWnZadHJHZlJhNmdfT0NSTUpXbEZyV19XQ2laNkM4?oc=5",
+            "published_at": "Sun, 27 Sep 2026 04:30:00 GMT",
+            "publisher": "보안뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:AI",
+            "title": "美 대졸 실업률 7.3%…기업들의 AI 사전 스크리닝이 원인으로 부각",
+            "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPWGZ4NGtsMWdGdEt2UEVicDh4WTJVN29BaWJEenN3Yng1b3lXT2RNS1k4a1c2ME1GZ1RBdnl5SWVrdjNmaE1mcGJBbmFWcUJXQV9wWVg3S09NczBhWHRHalJ1UjhWNlhKOWJ1NmliSFR0a1Zfb09nQTlyVHY5S1BSUndqb3RTaWJU?oc=5",
+            "published_at": "Sun, 27 Sep 2026 04:35:14 GMT",
+            "publisher": "g-enews.com",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:AI",
+            "title": "‘AI위험’ 논쟁 가열, 주요 AI기업들 ‘사내 전수조사’",
+            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5JOWRJd1RVenphZkNsMmwzOHBlS3VNV1Y2NHNCSWRQNVgyaHc0OUFYWTMzZkxsTUJaczhIRmJlc1prYnI1R3dhTEZNbXFfTWNxcm12U1ptR2Q0N2g2bnR6Q1BNX1pKWXhk?oc=5",
+            "published_at": "Sun, 27 Sep 2026 04:42:23 GMT",
+            "publisher": "애플경제",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:AI",
+            "title": "중국 관영 매체 \"미·중, AI 관리 공동 책임 있다\"",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE83Zk42N1lLMk5tRHVvc0t4UzBjV3VHM3pHdVo5alc0WE9GdzVveHRjd1Z0R01KSzR3MHo4UFRUNDkzSjhLNGNjYjRSUFYzQktJVVhLN0ppLTRHckgwaHVsZGpDOGdnQ3NOQmc?oc=5",
+            "published_at": "Sun, 27 Sep 2026 04:39:00 GMT",
+            "publisher": "Investing.com 한국어",
+            "discovery_source": "google_news_rss"
+          }
+        ],
+        "handoff_queries": [
+          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+          "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "순방 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "멕시코 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "마치고 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "수입규제 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "귀국길 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+        ]
+      },
+      "public_batch_market": {
+        "generated_at": "2026-09-27T13:50:37.606959+09:00",
+        "status": "unavailable",
+        "provider": "naver_public",
+        "exact_1m_bars": false,
+        "elapsed_minutes_from_previous": 9.983939516666668,
+        "interval_leaders": [],
+        "one_minute_samples_available": false,
+        "minute_amount_exact": false,
+        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
+        "minute_sample_ticker_count": 0,
+        "current_top50_count": 0,
+        "tracked_universe_count": 0,
+        "dropped_from_current_top50_count": 0,
+        "tracked_outside_top50_with_samples": 0,
+        "minute_samples_by_ticker": {},
+        "limitations": [
+          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
+          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
+          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
+          "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+          "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+        ]
+      },
+      "market": {
+        "generated_at": "2026-09-27T13:50:57.415409+09:00",
+        "source_status": "outside_domestic_monitor_window",
+        "provider": "provider_chain",
+        "fallback_used": null,
+        "historical_fallback_available": true
+      },
+      "market_recent_sessions": {
+        "updated_at": "2026-09-26T12:50:00+09:00",
+        "basis": "verified_close",
+        "korea": [
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "kospi": {
+              "close": 7080.92,
+              "change_pct": 0.9
+            },
+            "kosdaq": {
+              "close": 844.48,
+              "change_pct": 1.21
+            },
+            "flows_krw_100m": {
+              "foreign": -5047,
+              "institution": 3169,
+              "individual": -14396
+            },
+            "note": "추석 연휴 직전 마지막 거래일",
+            "source": "연합뉴스/Investing.com"
+          },
+          {
+            "date": "2026-09-22",
+            "status": "closed",
+            "kospi": {
+              "close": 7017.91,
+              "change_pct": 0.15
+            },
+            "kosdaq": {
+              "close": 834.38,
+              "change_pct": -0.23
+            },
+            "flows_krw_100m": {
+              "foreign": 850,
+              "institution": -1190,
+              "individual": -16089
+            },
+            "note": "장중 2%대 상승 후 상승폭 축소",
+            "source": "연합뉴스"
+          },
+          {
+            "date": "2026-09-21",
+            "status": "closed",
+            "kospi": {
+              "close": 7007.72,
+              "change_pct": 1.65
+            },
+            "kosdaq": {
+              "close": 836.27,
+              "change_pct": 1.11
+            },
+            "flows_krw_100m": {
+              "foreign": -1603,
+              "institution": 14924,
+              "individual": -29790
+            },
+            "note": "반도체 강세로 7천선 회복",
+            "source": "연합뉴스"
+          }
+        ],
+        "us": [
+          {
+            "date": "2026-09-25",
+            "status": "closed",
+            "sp500": {
+              "close": 7743.41,
+              "change_pct": 0.51
+            },
+            "nasdaq": {
+              "close": 27068.72,
+              "change_pct": 0.48
+            },
+            "dow": {
+              "close": 51828.62,
+              "change_pct": 0.93
+            },
+            "note": "AI 기술주 강세",
+            "source": "Reuters/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-24",
+            "status": "closed",
+            "sp500": {
+              "close": 7704.13,
+              "change_pct": -0.02
+            },
+            "nasdaq": {
+              "close": 26939.37,
+              "change_pct": 0.01
+            },
+            "dow": {
+              "close": 51349.98,
+              "change_pct": -0.31
+            },
+            "note": "금리·유가 부담 속 혼조",
+            "source": "FRED/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "sp500": {
+              "close": 7706.03,
+              "change_pct": -0.75
+            },
+            "nasdaq": {
+              "close": 26936.04,
+              "change_pct": -1.13
+            },
+            "dow": {
+              "close": 51511.59,
+              "change_pct": -0.68
+            },
+            "note": "장기금리 상승으로 위험자산 압박",
+            "source": "FRED/시장 종가 데이터"
+          }
+        ],
+        "holiday_notes": [
+          {
+            "market": "KR",
+            "from": "2026-09-24",
+            "to": "2026-09-27",
+            "reason": "추석 연휴"
+          }
+        ]
+      },
+      "toss": {
+        "available": true,
+        "captured_at": "2026-09-27T10:31:34.806598+09:00",
+        "collector": {
+          "subscription_count": 0,
+          "rejected_count": 0,
+          "last_message_at": null,
+          "last_universe_refresh": "2026-09-27T10:31:34.806598+09:00"
+        }
+      },
+      "user_feedback": {
+        "pending_count": 0,
+        "latest_pending_comment_id": null
+      },
+      "git": {
+        "head_sha": "be8deae124351ec335682c9b25d110de43a62739",
+        "latest_commit_changed_files": [
+          "data/discovery/archive/2026-09-27.jsonl",
+          "data/discovery/archive/index.json",
+          "data/discovery/latest.json",
+          "data/health/latest.json",
+          "data/health/state.json",
+          "data/macro/current.json",
+          "data/market/relative-strength.json",
+          "data/market/runtime.json",
+          "data/providers/naver_batch/history.json",
+          "data/providers/naver_batch/latest.json",
+          "data/providers/toss/fetch_runtime.json",
+          "data/providers/toss/status.json",
+          "data/regression/history/2026-09-27.jsonl",
+          "data/regression/latest.json",
+          "data/risk/calendar_live.json",
+          "data/risk/latest.json",
+          "data/risk/runtime.json",
+          "data/risk/state.json",
+          "data/supervisor/queue/2026-09-27.jsonl",
+          "data/supervisor/recent.json",
+          "\"site/data/\\354\\203\\201\\353\\214\\200\\352\\260\\225\\353\\217\\204.json\""
+        ]
+      },
+      "previous_workflow_run": {
+        "id": 36294984634,
+        "name": "10분 감독 관측 큐",
+        "event": "workflow_dispatch",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-09-27T04:40:22Z",
+        "updated_at": "2026-09-27T04:50:25Z",
+        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36294984634",
+        "head_sha": "dd976333c9e9dd9e264953273deb9295ed0dc9a4"
       },
       "hypothesis_verification": {
         "due": []
