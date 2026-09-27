@@ -1,327 +1,9 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-09-27T22:21:06.044906+09:00",
+  "updated_at": "2026-09-27T22:31:08.694333+09:00",
   "batch_size": 3,
   "sensor_interval_minutes": 10,
   "observations": [
-    {
-      "schema_version": 2,
-      "observation_id": "obs-20260927T023408+0900-36259260030-1",
-      "observed_at": "2026-09-27T02:34:08.966446+09:00",
-      "slot_at": "2026-09-27T02:30:00+09:00",
-      "slot_key": "2026-09-27T02:30+0900",
-      "sensor_interval_minutes": 10,
-      "slot_source": "dispatch_input",
-      "slot_start_delay_seconds": 28.349,
-      "slot_delay_seconds": 248.966446,
-      "source": {
-        "repository": "juhwan7/stock-autoresearch",
-        "workflow": "10분 감독 관측 큐",
-        "event_name": "workflow_dispatch",
-        "run_id": "36259260030",
-        "run_attempt": "1",
-        "head_sha": "ce0755b8b7242b72afb1bdab56804a49099ea7ff",
-        "ref_name": "main"
-      },
-      "queue": {
-        "batch_size": 3,
-        "pending_before_append": 11,
-        "last_processed_observation_id": "obs-20260926T233103+0900-36248732704-1",
-        "last_processed_slot": "2026-09-26T23:30:00+09:00",
-        "pending_after_append": 12
-      },
-      "validation": {
-        "status": "ok",
-        "compile": "ok",
-        "pytest": "ok",
-        "diff_check": "ok"
-      },
-      "steps": {
-        "toss_fetch": "success",
-        "toss_summary": "success",
-        "health": "success",
-        "dashboard": "success",
-        "market_discovery": "success",
-        "public_batch_market": "success",
-        "market_sensor_repair": "success",
-        "risk_sensor_repair": "success",
-        "regression_refresh": "success"
-      },
-      "health": {
-        "status": "NOTICE",
-        "generated_at": "2026-09-27T02:34:04.815979+09:00",
-        "issues": [
-          {
-            "component": "macro",
-            "code": "unavailable",
-            "severity": "NOTICE",
-            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
-          },
-          {
-            "component": "discovery",
-            "code": "google-news-degraded",
-            "severity": "NOTICE",
-            "message": "Google News 탐색 27/27개 그룹이 비어 있거나 오류"
-          }
-        ]
-      },
-      "regression": {
-        "status": "COLLECTING",
-        "generated_at": "2026-09-26T17:34:04.412092+00:00",
-        "quarantine_count": 0,
-        "rolled_back_count": 0
-      },
-      "market_discovery": {
-        "generated_at": "2026-09-27T02:30:44.238370+09:00",
-        "item_count": 0,
-        "new_item_count": 0,
-        "topic_counts": {},
-        "trending_terms": [],
-        "new_dart_filings": [],
-        "official_web_candidates": [],
-        "toss_market": {
-          "available": true,
-          "captured_at": "2026-09-26T23:25:08.111069+09:00",
-          "top_turnover": [],
-          "minute_burst_leaders": [],
-          "top10_share": null
-        },
-        "sector_selection": {
-          "mode": "dynamic",
-          "fixed_sector_whitelist": false,
-          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택"
-        },
-        "naver_indices": {
-          "KOSPI": "7,080.92",
-          "KOSDAQ": "844.48",
-          "KOSPI200": "1,126.12"
-        },
-        "source_summary": {
-          "ok_or_partial": 1,
-          "failed": 27,
-          "degraded": 0
-        },
-        "top_new_items": [],
-        "handoff_queries": [
-          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
-          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
-          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
-          "미국 증시 금리 환율 원자재 변화 한국 증시 영향"
-        ]
-      },
-      "public_batch_market": {
-        "generated_at": "2026-09-27T02:30:39.128885+09:00",
-        "status": "unavailable",
-        "provider": "naver_public",
-        "exact_1m_bars": false,
-        "elapsed_minutes_from_previous": 10.022119083333333,
-        "interval_leaders": [],
-        "one_minute_samples_available": false,
-        "minute_amount_exact": false,
-        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
-        "minute_sample_ticker_count": 0,
-        "current_top50_count": 0,
-        "tracked_universe_count": 0,
-        "dropped_from_current_top50_count": 0,
-        "tracked_outside_top50_with_samples": 0,
-        "minute_samples_by_ticker": {},
-        "limitations": [
-          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
-          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
-          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
-          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
-          "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
-          "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
-        ]
-      },
-      "market": {
-        "generated_at": "2026-09-27T02:34:03.556679+09:00",
-        "source_status": "outside_domestic_monitor_window",
-        "provider": "provider_chain",
-        "fallback_used": null,
-        "historical_fallback_available": true
-      },
-      "market_recent_sessions": {
-        "updated_at": "2026-09-26T12:50:00+09:00",
-        "basis": "verified_close",
-        "korea": [
-          {
-            "date": "2026-09-23",
-            "status": "closed",
-            "kospi": {
-              "close": 7080.92,
-              "change_pct": 0.9
-            },
-            "kosdaq": {
-              "close": 844.48,
-              "change_pct": 1.21
-            },
-            "flows_krw_100m": {
-              "foreign": -5047,
-              "institution": 3169,
-              "individual": -14396
-            },
-            "note": "추석 연휴 직전 마지막 거래일",
-            "source": "연합뉴스/Investing.com"
-          },
-          {
-            "date": "2026-09-22",
-            "status": "closed",
-            "kospi": {
-              "close": 7017.91,
-              "change_pct": 0.15
-            },
-            "kosdaq": {
-              "close": 834.38,
-              "change_pct": -0.23
-            },
-            "flows_krw_100m": {
-              "foreign": 850,
-              "institution": -1190,
-              "individual": -16089
-            },
-            "note": "장중 2%대 상승 후 상승폭 축소",
-            "source": "연합뉴스"
-          },
-          {
-            "date": "2026-09-21",
-            "status": "closed",
-            "kospi": {
-              "close": 7007.72,
-              "change_pct": 1.65
-            },
-            "kosdaq": {
-              "close": 836.27,
-              "change_pct": 1.11
-            },
-            "flows_krw_100m": {
-              "foreign": -1603,
-              "institution": 14924,
-              "individual": -29790
-            },
-            "note": "반도체 강세로 7천선 회복",
-            "source": "연합뉴스"
-          }
-        ],
-        "us": [
-          {
-            "date": "2026-09-25",
-            "status": "closed",
-            "sp500": {
-              "close": 7743.41,
-              "change_pct": 0.51
-            },
-            "nasdaq": {
-              "close": 27068.72,
-              "change_pct": 0.48
-            },
-            "dow": {
-              "close": 51828.62,
-              "change_pct": 0.93
-            },
-            "note": "AI 기술주 강세",
-            "source": "Reuters/시장 종가 데이터"
-          },
-          {
-            "date": "2026-09-24",
-            "status": "closed",
-            "sp500": {
-              "close": 7704.13,
-              "change_pct": -0.02
-            },
-            "nasdaq": {
-              "close": 26939.37,
-              "change_pct": 0.01
-            },
-            "dow": {
-              "close": 51349.98,
-              "change_pct": -0.31
-            },
-            "note": "금리·유가 부담 속 혼조",
-            "source": "FRED/시장 종가 데이터"
-          },
-          {
-            "date": "2026-09-23",
-            "status": "closed",
-            "sp500": {
-              "close": 7706.03,
-              "change_pct": -0.75
-            },
-            "nasdaq": {
-              "close": 26936.04,
-              "change_pct": -1.13
-            },
-            "dow": {
-              "close": 51511.59,
-              "change_pct": -0.68
-            },
-            "note": "장기금리 상승으로 위험자산 압박",
-            "source": "FRED/시장 종가 데이터"
-          }
-        ],
-        "holiday_notes": [
-          {
-            "market": "KR",
-            "from": "2026-09-24",
-            "to": "2026-09-27",
-            "reason": "추석 연휴"
-          }
-        ]
-      },
-      "toss": {
-        "available": true,
-        "captured_at": "2026-09-26T23:25:08.111069+09:00",
-        "collector": {
-          "subscription_count": 0,
-          "rejected_count": 0,
-          "last_message_at": null,
-          "last_universe_refresh": "2026-09-26T23:25:08.111069+09:00"
-        }
-      },
-      "user_feedback": {
-        "pending_count": 0,
-        "latest_pending_comment_id": null
-      },
-      "git": {
-        "head_sha": "ce0755b8b7242b72afb1bdab56804a49099ea7ff",
-        "latest_commit_changed_files": [
-          "data/discovery/archive/2026-09-27.jsonl",
-          "data/discovery/archive/index.json",
-          "data/discovery/latest.json",
-          "data/health/latest.json",
-          "data/health/state.json",
-          "data/macro/current.json",
-          "data/market/runtime.json",
-          "data/providers/naver_batch/history.json",
-          "data/providers/naver_batch/latest.json",
-          "data/providers/toss/fetch_runtime.json",
-          "data/providers/toss/status.json",
-          "data/regression/history/2026-09-26.jsonl",
-          "data/regression/latest.json",
-          "data/risk/calendar_live.json",
-          "data/risk/latest.json",
-          "data/risk/runtime.json",
-          "data/risk/state.json",
-          "data/supervisor/queue/2026-09-27.jsonl",
-          "data/supervisor/recent.json"
-        ]
-      },
-      "previous_workflow_run": {
-        "id": 36258672458,
-        "name": "10분 감독 관측 큐",
-        "event": "workflow_dispatch",
-        "status": "completed",
-        "conclusion": "success",
-        "created_at": "2026-09-26T17:20:22Z",
-        "updated_at": "2026-09-26T17:30:25Z",
-        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36258672458",
-        "head_sha": "ec9b4d36c59808d1f8c8aec6b67020f0bdd6676f"
-      },
-      "hypothesis_verification": {
-        "due": []
-      },
-      "signals": []
-    },
     {
       "schema_version": 2,
       "observation_id": "obs-20260927T024113+0900-36259854383-1",
@@ -86730,6 +86412,734 @@
         "updated_at": "2026-09-27T13:20:24Z",
         "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36321471445",
         "head_sha": "2ad21ef47bb7224f7c668cfb8adedaf54309c4cd"
+      },
+      "hypothesis_verification": {
+        "due": []
+      },
+      "signals": [
+        "discovery:degraded"
+      ]
+    },
+    {
+      "schema_version": 2,
+      "observation_id": "obs-20260927T223108+0900-36322624807-1",
+      "observed_at": "2026-09-27T22:31:08.694333+09:00",
+      "slot_at": "2026-09-27T22:30:00+09:00",
+      "slot_key": "2026-09-27T22:30+0900",
+      "sensor_interval_minutes": 10,
+      "slot_source": "dispatch_input",
+      "slot_start_delay_seconds": 28.308,
+      "slot_delay_seconds": 68.694333,
+      "source": {
+        "repository": "juhwan7/stock-autoresearch",
+        "workflow": "10분 감독 관측 큐",
+        "event_name": "workflow_dispatch",
+        "run_id": "36322624807",
+        "run_attempt": "1",
+        "head_sha": "9427e779a34572004f3fdbe4a20cb41e1bb7a342",
+        "ref_name": "main"
+      },
+      "queue": {
+        "batch_size": 3,
+        "pending_before_append": 98,
+        "last_processed_observation_id": "obs-20260927T060104+0900-36271434540-1",
+        "last_processed_slot": "2026-09-27T06:00:00+09:00",
+        "pending_after_append": 99
+      },
+      "validation": {
+        "status": "ok",
+        "compile": "ok",
+        "pytest": "ok",
+        "diff_check": "ok"
+      },
+      "steps": {
+        "toss_fetch": "success",
+        "toss_summary": "success",
+        "health": "success",
+        "dashboard": "success",
+        "market_discovery": "success",
+        "public_batch_market": "success",
+        "market_sensor_repair": "success",
+        "risk_sensor_repair": "success",
+        "regression_refresh": "success"
+      },
+      "health": {
+        "status": "NOTICE",
+        "generated_at": "2026-09-27T22:31:03.320619+09:00",
+        "issues": [
+          {
+            "component": "macro",
+            "code": "unavailable",
+            "severity": "NOTICE",
+            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+          }
+        ]
+      },
+      "regression": {
+        "status": "COLLECTING",
+        "generated_at": "2026-09-27T13:31:02.692317+00:00",
+        "quarantine_count": 0,
+        "rolled_back_count": 0
+      },
+      "market_discovery": {
+        "generated_at": "2026-09-27T22:30:45.585961+09:00",
+        "item_count": 179,
+        "new_item_count": 8,
+        "topic_counts": {
+          "kr_policy_economy": 23,
+          "kr_diplomacy_summit": 30,
+          "kr_semiconductor_ai": 6,
+          "kr_energy_power": 1,
+          "kr_bio_health": 1,
+          "global_market": 17,
+          "global_diplomacy_summit": 29,
+          "us_macro_rates": 3,
+          "global_energy_middle_east": 1,
+          "us_china_trade_ai": 3,
+          "japan_boj_fx": 2,
+          "dynamic:순방": 4,
+          "dynamic:AI": 20,
+          "dynamic:멕시코": 4,
+          "dynamic:트럼프": 4,
+          "dynamic:마치고": 6,
+          "dynamic:정상회담": 11,
+          "dynamic:규제": 7,
+          "dynamic:귀국길": 7
+        },
+        "trending_terms": [
+          {
+            "term": "대통령",
+            "count": 49,
+            "publisher_count": 24,
+            "independent_story_count_estimate": 28,
+            "syndication_ratio_estimate": 0.429,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 50,
+            "delta": -1,
+            "score": 122,
+            "examples": [
+              "李대통령, 5박 7일 미국·멕시코 순방 마치고 귀국",
+              "李대통령, 5박7일 유엔·멕시코 순방 마치고 귀국…靑인선·통합·부동산 과제 산적",
+              "이 대통령, 순방 귀국길 알래스카서 ’차담회’"
+            ]
+          },
+          {
+            "term": "순방",
+            "count": 47,
+            "publisher_count": 24,
+            "independent_story_count_estimate": 26,
+            "syndication_ratio_estimate": 0.447,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 48,
+            "delta": -1,
+            "score": 118,
+            "examples": [
+              "李대통령, 5박 7일 미국·멕시코 순방 마치고 귀국",
+              "李대통령, 5박7일 유엔·멕시코 순방 마치고 귀국…靑인선·통합·부동산 과제 산적",
+              "이 대통령, 순방 귀국길 알래스카서 ’차담회’"
+            ]
+          },
+          {
+            "term": "AI",
+            "count": 34,
+            "publisher_count": 23,
+            "independent_story_count_estimate": 33,
+            "syndication_ratio_estimate": 0.029,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 34,
+            "delta": 0,
+            "score": 91,
+            "examples": [
+              "AI 반도체 삼각 연대 이재용·최태원·젠슨 황, 뉴욕서 뭉친다",
+              "\"AI 거품론에도 2800조 눈앞\"…반도체 호황 언제까지 갈까",
+              "시진핑 만찬 다녀온 젠슨 황, 중국 지우고도 1400조 AI 질주 올라탔다"
+            ]
+          },
+          {
+            "term": "멕시코",
+            "count": 27,
+            "publisher_count": 17,
+            "independent_story_count_estimate": 16,
+            "syndication_ratio_estimate": 0.407,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 27,
+            "delta": 0,
+            "score": 71,
+            "examples": [
+              "李대통령, 5박 7일 미국·멕시코 순방 마치고 귀국",
+              "李대통령, 5박7일 유엔·멕시코 순방 마치고 귀국…靑인선·통합·부동산 과제 산적",
+              "이 대통령, 미국·멕시코 순방 마치고 귀국…유엔총회 기조연설·트럼프와 정상회담"
+            ]
+          },
+          {
+            "term": "트럼프",
+            "count": 22,
+            "publisher_count": 17,
+            "independent_story_count_estimate": 19,
+            "syndication_ratio_estimate": 0.136,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 22,
+            "delta": 0,
+            "score": 61,
+            "examples": [
+              "유엔서 ‘평화’ 외치고 트럼프 만났다…이재명 대통령, 순방서 무엇을 얻었나",
+              "트럼프 \"이란 휴전안 거절\"…이란 \"기다릴 것\"",
+              "이란 ‘7일 휴전안’에 콧방귀 낀 트럼프…호르무즈 해협→트럼프 해협으로 이름 바꾼 합성 사진 공개 [현장영상]"
+            ]
+          },
+          {
+            "term": "마치고",
+            "count": 21,
+            "publisher_count": 17,
+            "independent_story_count_estimate": 12,
+            "syndication_ratio_estimate": 0.429,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 21,
+            "delta": 0,
+            "score": 59,
+            "examples": [
+              "李대통령, 5박 7일 미국·멕시코 순방 마치고 귀국",
+              "李대통령, 5박7일 유엔·멕시코 순방 마치고 귀국…靑인선·통합·부동산 과제 산적",
+              "이 대통령, 미국·멕시코 순방 마치고 귀국…유엔총회 기조연설·트럼프와 정상회담"
+            ]
+          },
+          {
+            "term": "정상회담",
+            "count": 21,
+            "publisher_count": 13,
+            "independent_story_count_estimate": 21,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 21,
+            "delta": 0,
+            "score": 55,
+            "examples": [
+              "이 대통령, 미국·멕시코 순방 마치고 귀국…유엔총회 기조연설·트럼프와 정상회담",
+              "[미중 정상회담] 미 전문가들, 회담 결과는 “취약한 휴전” “영원히 미룰 수 없어”",
+              "美中 정상회담…무역·AI 등 주요 현안 온도 차 여전"
+            ]
+          },
+          {
+            "term": "규제",
+            "count": 18,
+            "publisher_count": 14,
+            "independent_story_count_estimate": 15,
+            "syndication_ratio_estimate": 0.167,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 18,
+            "delta": 0,
+            "score": 50,
+            "examples": [
+              "미 자동차 연비 규제 대폭 완화…국내 완성차 ‘득’일까 ‘독’일까",
+              "단일 레버리지·인버스 ETF 규제 후 거래대금 92%↓",
+              "삼저닉스 레버리지 열풍 꺾였나…규제 후 거래대금 92%↓"
+            ]
+          },
+          {
+            "term": "귀국길",
+            "count": 14,
+            "publisher_count": 11,
+            "independent_story_count_estimate": 6,
+            "syndication_ratio_estimate": 0.571,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 16,
+            "delta": -2,
+            "score": 39,
+            "examples": [
+              "이 대통령, 순방 귀국길 알래스카서 ’차담회’",
+              "순방 마친 李대통령 ‘무거운 귀국길’…DMZ·대법관·인사 메시지 주목",
+              "이 대통령, 미·멕시코 순방 마치고 귀국길…대법관 재제청 등 현안 산적"
+            ]
+          },
+          {
+            "term": "귀국",
+            "count": 13,
+            "publisher_count": 11,
+            "independent_story_count_estimate": 6,
+            "syndication_ratio_estimate": 0.538,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 14,
+            "delta": -1,
+            "score": 37,
+            "examples": [
+              "李대통령, 5박 7일 미국·멕시코 순방 마치고 귀국",
+              "李대통령, 5박7일 유엔·멕시코 순방 마치고 귀국…靑인선·통합·부동산 과제 산적",
+              "이 대통령 순방 마무리...귀국 후 현안 집중"
+            ]
+          },
+          {
+            "term": "이란",
+            "count": 12,
+            "publisher_count": 10,
+            "independent_story_count_estimate": 9,
+            "syndication_ratio_estimate": 0.25,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 12,
+            "delta": 0,
+            "score": 34,
+            "examples": [
+              "트럼프 \"이란 휴전안 거절\"…이란 \"기다릴 것\"",
+              "이란 ‘7일 휴전안’에 콧방귀 낀 트럼프…호르무즈 해협→트럼프 해협으로 이름 바꾼 합성 사진 공개 [현장영상]",
+              "이란 외무, 트럼프 '7일 휴전안' 거부에도 \"美 최종 입장 기다리는 중\""
+            ]
+          },
+          {
+            "term": "7일",
+            "count": 12,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 9,
+            "syndication_ratio_estimate": 0.25,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 12,
+            "delta": 0,
+            "score": 33,
+            "examples": [
+              "李대통령, 5박 7일 미국·멕시코 순방 마치고 귀국",
+              "이 대통령, 5박 7일 뉴욕·멕시코 순방 마치고 귀국",
+              "李대통령, 5박 7일 미국·멕시코 순방 마치고 귀국…유엔서 평화공존 구상"
+            ]
+          },
+          {
+            "term": "미중",
+            "count": 11,
+            "publisher_count": 10,
+            "independent_story_count_estimate": 11,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 12,
+            "delta": -1,
+            "score": 32,
+            "examples": [
+              "[미중 정상회담] 미 전문가들, 회담 결과는 “취약한 휴전” “영원히 미룰 수 없어”",
+              "미중 정상회담, 무역 합의에도 핵심 현안은 '온도 차'",
+              "트럼프·시진핑 미중 정상회담 결과 총정리: 무역 휴전은 연장, AI 문제는...? 🇺🇸🇨🇳"
+            ]
+          },
+          {
+            "term": "차담회",
+            "count": 11,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 4,
+            "syndication_ratio_estimate": 0.636,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 12,
+            "delta": -1,
+            "score": 31,
+            "examples": [
+              "이 대통령, 순방 귀국길 알래스카서 ’차담회’",
+              "이 대통령, 순방 귀국길 알래스카서 '차담회'",
+              "이재명 대통령, 순방 귀국길 알래스카 들러 즉석 차담회 진행"
+            ]
+          },
+          {
+            "term": "현안",
+            "count": 9,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 5,
+            "syndication_ratio_estimate": 0.444,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 8,
+            "delta": 1,
+            "score": 28,
+            "examples": [
+              "이 대통령 순방 마무리...귀국 후 현안 집중",
+              "李대통령, 미국·멕시코 순방 마치고 서울 도착…국내 현안 산적",
+              "李대통령, 북중미 순방 마치고 내치 복귀…인사·사법 현안 산적"
+            ]
+          },
+          {
+            "term": "도착",
+            "count": 7,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 4,
+            "syndication_ratio_estimate": 0.429,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 7,
+            "score": 27,
+            "examples": [
+              "李대통령, 미국·멕시코 순방 마치고 서울 도착…국내 현안 산적",
+              "李 대통령, 서울공항 도착…UN·멕시코 순방 마무리",
+              "[속보] 李대통령, 서울공항 도착…5박 7일 북중미 순방 마무리"
+            ]
+          },
+          {
+            "term": "휴전안",
+            "count": 7,
+            "publisher_count": 5,
+            "independent_story_count_estimate": 5,
+            "syndication_ratio_estimate": 0.286,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 7,
+            "score": 26,
+            "examples": [
+              "트럼프 \"이란 휴전안 거절\"…이란 \"기다릴 것\"",
+              "이란 ‘7일 휴전안’에 콧방귀 낀 트럼프…호르무즈 해협→트럼프 해협으로 이름 바꾼 합성 사진 공개 [현장영상]",
+              "이란 외무, 트럼프 '7일 휴전안' 거부에도 \"美 최종 입장 기다리는 중\""
+            ]
+          },
+          {
+            "term": "성과",
+            "count": 9,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 7,
+            "syndication_ratio_estimate": 0.222,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 10,
+            "delta": -1,
+            "score": 25,
+            "examples": [
+              "이 대통령 5박7일 순방 성과",
+              "李대통령 美·멕시코 순방 마무리…외교 성과 안고 '인사 시험대'",
+              "中 \"미중 정상회담 8대 성과…AI 대화·300억달러 관세 인하\" - 머니투데이"
+            ]
+          },
+          {
+            "term": "산적",
+            "count": 6,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 3,
+            "syndication_ratio_estimate": 0.5,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 6,
+            "score": 24,
+            "examples": [
+              "李대통령, 5박7일 유엔·멕시코 순방 마치고 귀국…靑인선·통합·부동산 과제 산적",
+              "李대통령, 미국·멕시코 순방 마치고 서울 도착…국내 현안 산적",
+              "李대통령, 북중미 순방 마치고 내치 복귀…인사·사법 현안 산적"
+            ]
+          },
+          {
+            "term": "5박7일",
+            "count": 6,
+            "publisher_count": 4,
+            "independent_story_count_estimate": 2,
+            "syndication_ratio_estimate": 0.667,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 6,
+            "score": 22,
+            "examples": [
+              "李대통령, 5박7일 유엔·멕시코 순방 마치고 귀국…靑인선·통합·부동산 과제 산적",
+              "이 대통령 5박7일 순방 성과",
+              "[속보]이재명 대통령, 5박7일 미·멕시코 순방 마치고 '귀국' - 머니투데이"
+            ]
+          }
+        ],
+        "new_dart_filings": [],
+        "official_web_candidates": [],
+        "toss_market": {
+          "available": true,
+          "captured_at": "2026-09-27T22:03:39.467517+09:00",
+          "top_turnover": [],
+          "minute_burst_leaders": [],
+          "top10_share": null
+        },
+        "sector_selection": {
+          "mode": "dynamic",
+          "fixed_sector_whitelist": false,
+          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택"
+        },
+        "naver_indices": {
+          "KOSPI": "7,080.92",
+          "KOSDAQ": "844.48",
+          "KOSPI200": "1,126.12"
+        },
+        "source_summary": {
+          "ok_or_partial": 20,
+          "failed": 0,
+          "degraded": 7
+        },
+        "top_new_items": [
+          {
+            "topic": "kr_policy_economy",
+            "title": "단일 레버리지·인버스 ETF 규제 후 거래대금 92%↓",
+            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1mY1BjcXlRcWpSR0d1N0lIQzBONTVtclhfc2RCY0pHaGx4UTBWcXhlUXBzVDVMR1Z2OWFPTGFaOTlsSmRVbzk3Z0ROaGRlVEE?oc=5",
+            "published_at": "Sun, 27 Sep 2026 05:07:00 GMT",
+            "publisher": "v.daum.net",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_policy_economy",
+            "title": "발행 규제만으론 부족… 스테이블코인 ‘돈길’까지 들여다본다",
+            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1CQ3RtWGtlQWpJSy02LUV5aUFjZkF2QjhEdDdramg0Y2M2UEhMeEJ1RWNQTDJka3d1WTlFR2h6TWlOLW9ZdG5pVVN4cXJGb3BackxBYw?oc=5",
+            "published_at": "Sun, 27 Sep 2026 07:44:07 GMT",
+            "publisher": "v.daum.net",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "李대통령, 미국·멕시코 순방 마치고 서울 도착…국내 현안 산적",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBWQnFpOFFvbG9ONi0td1dnZVpETE9BRWM2YTh3bUdDU2JFc1FxVFRmc3BodHdBNWt2bXlWZVktYUptTXU3LS1PSUQ5V2swZ3dfanpESHUtTTE3d08tUGNTddIBYEFVX3lxTFBWQnFpOFFvbG9ONi0td1dnZVpETE9BRWM2YTh3bUdDU2JFc1FxVFRmc3BodHdBNWt2bXlWZVktYUptTXU3LS1PSUQ5V2swZ3dfanpESHUtTTE3d08tUGNTdQ?oc=5",
+            "published_at": "Sun, 27 Sep 2026 12:00:50 GMT",
+            "publisher": "연합뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "李대통령 \"악의 가진 소수가 선량한 다수 좌지우지…실천해야\"",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9vcFZoTG5PVFdBZ3hBaU9pNGJYZzhfMHR1enJzeGR3UXNMeXc4LU5uQ3dFYllTRUpNV2IwUGVyS2Z6QUVXTnplWlZyMnJHdGo2U3QyaEltVlJCRThhQXFsTNIBYEFVX3lxTE9vcFZoTG5PVFdBZ3hBaU9pNGJYZzhfMHR1enJzeGR3UXNMeXc4LU5uQ3dFYllTRUpNV2IwUGVyS2Z6QUVXTnplWlZyMnJHdGo2U3QyaEltVlJCRThhQXFsTA?oc=5",
+            "published_at": "Sun, 27 Sep 2026 12:06:28 GMT",
+            "publisher": "연합뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "유엔서 ‘평화’ 외치고 트럼프 만났다…이재명 대통령, 순방서 무엇을 얻었나",
+            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9Zak1DTkZIV3h4eVpTb3hQNkktdnRqVTVCcnl4Z0ZZZ3pNWGRRcHdxQ2kzTUw5VDAwOGt5T2gtZ1dFZ1Q2TnFjLXZqd0hJRkptcTEzckowVVRVWXVIOWFIUTdSZlY2UU81c09vWTRCSQ?oc=5",
+            "published_at": "Sun, 27 Sep 2026 03:15:00 GMT",
+            "publisher": "incheonilbo.com",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:AI",
+            "title": "“테스 형~ 철학과가 다시 뜬다는데 왜 그래?”···AI 시대 ‘질문하는 능력’ 중시돼 인기",
+            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBfVlNwTHgybjlrYUR5Z0pUbDJETmd1RFNfWXhUMldYeHBDZUZ4eVIwSGJlSTNEX0h0bTk4bE1OdlR3WEp1cWxpbDhlcEZlOW1KVlBmWnRySVpJQdIBX0FVX3lxTE5lTXVkSUl3azF6RFVkUGdQOEY0dHhIbzl5UWt1ZUJwREVETFQ4NXZpWV9lZUdndUFscjFpeW9MR0IwYmtaZjU3OHRHNTlQendtNk9oU00tSUVncTBUNlZj?oc=5",
+            "published_at": "Sun, 27 Sep 2026 10:35:00 GMT",
+            "publisher": "경향신문",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:AI",
+            "title": "“로봇이 스스로 배운다”…스킬드 AI, ‘피지컬 셀프플레이’ 기술 개발",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE96VVFxbExYWnlrVzFxRGlPQ3EtSjhKRzZLaUhZdkxHeTZWbXZ0OU5heDNfZ1VVM0hhRWVHaF9Wc1ZjNlE0ZU5tQUlkX2F0bkxHRkhoTktwdDE5dnUxNXNCanNpRDFiNFRKNkhsMg?oc=5",
+            "published_at": "Sun, 27 Sep 2026 10:48:58 GMT",
+            "publisher": "로봇신문",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:정상회담",
+            "title": "미 전문가들 “한·미 정상회담, 양국 오해 푸는 데 도움”",
+            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5Ya0F5TmkwS2J2QmszalN6VjB3VExWYXEtOXpCbGFsYXdyeTVsYXVkQTZuTEVCaHNlanZqR05jWk5abENPLWtHdmVkTmluRHhEVTFRZnJlV05SQdIBX0FVX3lxTE5mZkxPVmp6Y3Y0cnlMc0Z4ZTZpa0d6Mk1pQktCSHp1Tk5jcGpWVHhWamN5WFg3ZXBYal9JNmpIV0Z6c1p2VVNEVkxXOU9QQS11cXI4LWhCSzJKODZYTWo4?oc=5",
+            "published_at": "Sun, 27 Sep 2026 11:57:00 GMT",
+            "publisher": "경향신문",
+            "discovery_source": "google_news_rss"
+          }
+        ],
+        "handoff_queries": [
+          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+          "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "순방 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "멕시코 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "마치고 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "정상회담 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "규제 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+        ]
+      },
+      "public_batch_market": {
+        "generated_at": "2026-09-27T22:30:40.555001+09:00",
+        "status": "unavailable",
+        "provider": "naver_public",
+        "exact_1m_bars": false,
+        "elapsed_minutes_from_previous": 10.037024283333333,
+        "interval_leaders": [],
+        "one_minute_samples_available": false,
+        "minute_amount_exact": false,
+        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
+        "minute_sample_ticker_count": 0,
+        "current_top50_count": 0,
+        "tracked_universe_count": 0,
+        "dropped_from_current_top50_count": 0,
+        "tracked_outside_top50_with_samples": 0,
+        "minute_samples_by_ticker": {},
+        "limitations": [
+          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
+          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
+          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
+          "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+          "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+        ]
+      },
+      "market": {
+        "generated_at": "2026-09-27T22:31:01.409190+09:00",
+        "source_status": "outside_domestic_monitor_window",
+        "provider": "provider_chain",
+        "fallback_used": null,
+        "historical_fallback_available": true
+      },
+      "market_recent_sessions": {
+        "updated_at": "2026-09-26T12:50:00+09:00",
+        "basis": "verified_close",
+        "korea": [
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "kospi": {
+              "close": 7080.92,
+              "change_pct": 0.9
+            },
+            "kosdaq": {
+              "close": 844.48,
+              "change_pct": 1.21
+            },
+            "flows_krw_100m": {
+              "foreign": -5047,
+              "institution": 3169,
+              "individual": -14396
+            },
+            "note": "추석 연휴 직전 마지막 거래일",
+            "source": "연합뉴스/Investing.com"
+          },
+          {
+            "date": "2026-09-22",
+            "status": "closed",
+            "kospi": {
+              "close": 7017.91,
+              "change_pct": 0.15
+            },
+            "kosdaq": {
+              "close": 834.38,
+              "change_pct": -0.23
+            },
+            "flows_krw_100m": {
+              "foreign": 850,
+              "institution": -1190,
+              "individual": -16089
+            },
+            "note": "장중 2%대 상승 후 상승폭 축소",
+            "source": "연합뉴스"
+          },
+          {
+            "date": "2026-09-21",
+            "status": "closed",
+            "kospi": {
+              "close": 7007.72,
+              "change_pct": 1.65
+            },
+            "kosdaq": {
+              "close": 836.27,
+              "change_pct": 1.11
+            },
+            "flows_krw_100m": {
+              "foreign": -1603,
+              "institution": 14924,
+              "individual": -29790
+            },
+            "note": "반도체 강세로 7천선 회복",
+            "source": "연합뉴스"
+          }
+        ],
+        "us": [
+          {
+            "date": "2026-09-25",
+            "status": "closed",
+            "sp500": {
+              "close": 7743.41,
+              "change_pct": 0.51
+            },
+            "nasdaq": {
+              "close": 27068.72,
+              "change_pct": 0.48
+            },
+            "dow": {
+              "close": 51828.62,
+              "change_pct": 0.93
+            },
+            "note": "AI 기술주 강세",
+            "source": "Reuters/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-24",
+            "status": "closed",
+            "sp500": {
+              "close": 7704.13,
+              "change_pct": -0.02
+            },
+            "nasdaq": {
+              "close": 26939.37,
+              "change_pct": 0.01
+            },
+            "dow": {
+              "close": 51349.98,
+              "change_pct": -0.31
+            },
+            "note": "금리·유가 부담 속 혼조",
+            "source": "FRED/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "sp500": {
+              "close": 7706.03,
+              "change_pct": -0.75
+            },
+            "nasdaq": {
+              "close": 26936.04,
+              "change_pct": -1.13
+            },
+            "dow": {
+              "close": 51511.59,
+              "change_pct": -0.68
+            },
+            "note": "장기금리 상승으로 위험자산 압박",
+            "source": "FRED/시장 종가 데이터"
+          }
+        ],
+        "holiday_notes": [
+          {
+            "market": "KR",
+            "from": "2026-09-24",
+            "to": "2026-09-27",
+            "reason": "추석 연휴"
+          }
+        ]
+      },
+      "toss": {
+        "available": true,
+        "captured_at": "2026-09-27T22:03:39.467517+09:00",
+        "collector": {
+          "subscription_count": 0,
+          "rejected_count": 0,
+          "last_message_at": null,
+          "last_universe_refresh": "2026-09-27T22:03:39.467517+09:00"
+        }
+      },
+      "user_feedback": {
+        "pending_count": 0,
+        "latest_pending_comment_id": null
+      },
+      "git": {
+        "head_sha": "9427e779a34572004f3fdbe4a20cb41e1bb7a342",
+        "latest_commit_changed_files": [
+          "data/discovery/archive/2026-09-27.jsonl",
+          "data/discovery/archive/index.json",
+          "data/discovery/latest.json",
+          "data/health/latest.json",
+          "data/health/state.json",
+          "data/macro/current.json",
+          "data/market/runtime.json",
+          "data/providers/naver_batch/history.json",
+          "data/providers/naver_batch/latest.json",
+          "data/providers/toss/fetch_runtime.json",
+          "data/providers/toss/status.json",
+          "data/regression/history/2026-09-27.jsonl",
+          "data/regression/latest.json",
+          "data/risk/calendar_live.json",
+          "data/risk/latest.json",
+          "data/risk/runtime.json",
+          "data/risk/state.json",
+          "data/supervisor/queue/2026-09-27.jsonl",
+          "data/supervisor/recent.json"
+        ]
+      },
+      "previous_workflow_run": {
+        "id": 36322046178,
+        "name": "10분 감독 관측 큐",
+        "event": "workflow_dispatch",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-09-27T13:20:21Z",
+        "updated_at": "2026-09-27T13:30:24Z",
+        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/36322046178",
+        "head_sha": "f1cecaf4acf890ef0979c12488574c90d8245c04"
       },
       "hypothesis_verification": {
         "due": []
