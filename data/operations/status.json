@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-28T16:02:48.018311+09:00",
+  "generated_at": "2026-09-29T00:22:06.881918+09:00",
   "status": "investigating",
   "supervisors": {
     "A": {
@@ -14,50 +14,63 @@
       "missing_observation_slots": []
     },
     "B": {
-      "processed_at": "2026-09-27T00:35:21+09:00",
-      "batch_id": "supervisor-20260927T0030+0900-b35",
+      "processed_at": "2026-09-28T18:36:17+09:00",
+      "batch_id": "supervisor-20260928T1830+0900-b1836",
       "status": "verification_pending",
-      "path": "data/supervisor/ai-results/supervisor-20260927T0030+0900-b35.json",
+      "path": "data/supervisor/ai-results/supervisor-20260928T1830+0900-b1836.json",
       "run_kind": "regular",
-      "window_complete": false,
+      "window_complete": true,
       "expected_observation_count": 3,
-      "received_observation_count": 0,
-      "missing_observation_slots": [
-        "2026-09-27T00:10:00+09:00",
-        "2026-09-27T00:20:00+09:00",
-        "2026-09-27T00:30:00+09:00"
-      ]
+      "received_observation_count": 3,
+      "missing_observation_slots": []
     }
   },
   "supervisor_health": {
     "A": {
       "enabled": null,
-      "last_expected_anchor": "2026-09-28T07:00:00+09:00",
+      "last_expected_anchor": "2026-09-28T18:00:00+09:00",
       "latest_window_complete": true,
       "last_result_batch": "supervisor-20260928T0700+0900-a50",
       "last_result_at": "2026-09-28T07:09:13+09:00",
       "last_result_window_end": "2026-09-28T07:00:00+09:00",
-      "canonical_applied": true,
-      "status": "healthy",
-      "cause": null,
-      "preferred_recovery": "none",
-      "disable_supervisor": false
-    },
-    "B": {
-      "enabled": null,
-      "last_expected_anchor": "2026-09-28T06:30:00+09:00",
-      "latest_window_complete": true,
-      "last_result_batch": "supervisor-20260927T0030+0900-b35",
-      "last_result_at": "2026-09-27T00:35:21+09:00",
-      "last_result_window_end": "2026-09-27T00:30:00+09:00",
       "canonical_applied": false,
       "status": "missing_result",
       "cause": "unknown",
       "preferred_recovery": "check_automation_then_issue_action_single_writer",
       "disable_supervisor": false
+    },
+    "B": {
+      "enabled": null,
+      "last_expected_anchor": "2026-09-28T18:30:00+09:00",
+      "latest_window_complete": true,
+      "last_result_batch": "supervisor-20260928T1830+0900-b1836",
+      "last_result_at": "2026-09-28T18:36:17+09:00",
+      "last_result_window_end": "2026-09-28T18:30:00+09:00",
+      "canonical_applied": true,
+      "status": "healthy",
+      "cause": null,
+      "preferred_recovery": "none",
+      "disable_supervisor": false
     }
   },
   "supervisor_failure_patterns": [
+    {
+      "failure_pattern": "supervisor_a_unknown",
+      "occurrences": 1,
+      "disable_supervisor": false,
+      "preferred_recovery": "check_automation_then_issue_action_single_writer",
+      "last_verified": "2026-09-28T18:36:17+09:00",
+      "last_batch_id": "supervisor-20260928T1830+0900-b1836",
+      "detail": "status=missing_result expected=2026-09-28T18:00:00+09:00"
+    },
+    {
+      "failure_pattern": "a enabled + 18:00 window 3/3 + 예약 실행 존재에도 18:00 immutable regular result 없음",
+      "occurrences": 1,
+      "disable_supervisor": false,
+      "preferred_recovery": "owner Issue single-writer가 safety block이면 direct immutable result 1회 저장 후 기존 canonical apply 경로로 재적용; 중복 writer 금지",
+      "last_verified": "2026-09-28T18:36:17+09:00",
+      "last_batch_id": "supervisor-20260928T1830+0900-b1836"
+    },
     {
       "failure_pattern": "supervisor_b_unknown",
       "occurrences": 1,
@@ -77,26 +90,26 @@
     }
   ],
   "canonical": {
-    "last_batch_id": "supervisor-20260928T0700+0900-a50",
-    "last_processed_at": "2026-09-28T07:09:13+09:00"
+    "last_batch_id": "supervisor-20260928T1830+0900-b1836",
+    "last_processed_at": "2026-09-28T18:36:17+09:00"
   },
   "sensor_slot_coverage": {
-    "window_start": "2026-09-28T15:00:00+09:00",
-    "window_end": "2026-09-28T15:50:00+09:00",
+    "window_start": "2026-09-28T23:20:00+09:00",
+    "window_end": "2026-09-29T00:10:00+09:00",
     "expected_slot_count": 6,
     "received_slot_count": 6,
     "received_slots": [
-      "2026-09-28T15:00:00+09:00",
-      "2026-09-28T15:10:00+09:00",
-      "2026-09-28T15:20:00+09:00",
-      "2026-09-28T15:30:00+09:00",
-      "2026-09-28T15:40:00+09:00",
-      "2026-09-28T15:50:00+09:00"
+      "2026-09-28T23:20:00+09:00",
+      "2026-09-28T23:30:00+09:00",
+      "2026-09-28T23:40:00+09:00",
+      "2026-09-28T23:50:00+09:00",
+      "2026-09-29T00:00:00+09:00",
+      "2026-09-29T00:10:00+09:00"
     ],
     "missing_slots": [],
     "coverage_ratio": 1.0,
-    "max_slot_start_delay_seconds": 32.8,
-    "max_slot_delay_seconds": 168.0,
+    "max_slot_start_delay_seconds": 35.9,
+    "max_slot_delay_seconds": 346.8,
     "trigger_event_counts": {
       "workflow_dispatch": 6
     },
@@ -105,48 +118,48 @@
     }
   },
   "news": {
-    "discovery_generated_at": "2026-09-28T16:01:48.680784+09:00",
-    "candidate_count": 222,
-    "issue_updated_at": "2026-09-27T00:09:11+09:00",
-    "issue_count": 34
+    "discovery_generated_at": "2026-09-29T00:21:04.011710+09:00",
+    "candidate_count": 204,
+    "issue_updated_at": "2026-09-29T00:21:04.011710+09:00",
+    "issue_count": 45
   },
   "question_queue": {
     "updated_at": "2026-09-25T16:31:47.462349+09:00",
     "open_count": 24
   },
   "memory": {
-    "generated_at": "2026-09-28T07:09:13+09:00",
-    "latest_batch_id": "supervisor-20260928T0700+0900-a50",
-    "latest_supervisor": "A",
-    "age_minutes": 533.6
+    "generated_at": "2026-09-28T18:36:17+09:00",
+    "latest_batch_id": "supervisor-20260928T1830+0900-b1836",
+    "latest_supervisor": "B",
+    "age_minutes": 345.8
   },
   "cards": [
     {
       "card_id": "supervisor-a-critical",
-      "title": "Supervisor A 534분 정규 결과 공백",
+      "title": "Supervisor A 1033분 정규 결과 공백",
       "state": "수정 중",
       "impact": "단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
-      "owner": "A/B 상호복구",
-      "verify_after": "상대 Supervisor 복구 직후 또는 다음 정규 사이클",
-      "preferred_recovery": "none"
-    },
-    {
-      "card_id": "supervisor-b-critical",
-      "title": "Supervisor B 2367분 정규 결과 공백",
-      "state": "수정 중",
-      "impact": "단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
+      "last_checked": "2026-09-29T00:22:06.881918+09:00",
       "owner": "A/B 상호복구",
       "verify_after": "상대 Supervisor 복구 직후 또는 다음 정규 사이클",
       "preferred_recovery": "check_automation_then_issue_action_single_writer"
+    },
+    {
+      "card_id": "supervisor-b-critical",
+      "title": "Supervisor B 346분 정규 결과 공백",
+      "state": "수정 중",
+      "impact": "단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음",
+      "last_checked": "2026-09-29T00:22:06.881918+09:00",
+      "owner": "A/B 상호복구",
+      "verify_after": "상대 Supervisor 복구 직후 또는 다음 정규 사이클",
+      "preferred_recovery": "none"
     },
     {
       "card_id": "sensor-slot-coverage-ok",
       "title": "10분 센서 슬롯 커버리지 정상",
       "state": "완료",
       "impact": "6/6 슬롯",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
+      "last_checked": "2026-09-29T00:22:06.881918+09:00",
       "owner": "10분 센서"
     },
     {
@@ -154,32 +167,31 @@
       "title": "뉴스 discovery 정상",
       "state": "완료",
       "impact": "1분 전 갱신",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
+      "last_checked": "2026-09-29T00:22:06.881918+09:00",
       "owner": "10분 센서"
     },
     {
-      "card_id": "issue-digest-stale",
-      "title": "이슈 원장 갱신 지연",
-      "state": "검증 대기",
-      "impact": "마지막 갱신 2393.61697185분 전",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
-      "owner": "A/B",
-      "verify_after": "다음 :00/:30"
+      "card_id": "issue-digest-ok",
+      "title": "이슈 원장 정상",
+      "state": "완료",
+      "impact": "1분 전 갱신 · 45개",
+      "last_checked": "2026-09-29T00:22:06.881918+09:00",
+      "owner": "A/B"
     },
     {
       "card_id": "pages-data-ok",
       "title": "Pages 상태 데이터 정상",
       "state": "완료",
-      "impact": "4922649 bytes",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
+      "impact": "5303747 bytes",
+      "last_checked": "2026-09-29T00:22:06.881918+09:00",
       "owner": "Dashboard"
     },
     {
       "card_id": "long-memory-stale",
       "title": "장기 AI 기억 갱신 지연",
       "state": "검증 대기",
-      "impact": "마지막 기억 갱신 533.5836385166666분 전",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
+      "impact": "마지막 기억 갱신 345.83136529999996분 전",
+      "last_checked": "2026-09-29T00:22:06.881918+09:00",
       "owner": "Memory",
       "verify_after": "다음 :00/:30 또는 Recovery"
     },
@@ -187,27 +199,9 @@
       "card_id": "optional-news-credentials",
       "title": "선택형 뉴스·공시 API 미연결",
       "state": "완료",
-      "impact": "현재 공개 fallback으로 후보 222건 확보되어 필수 조치 아님",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
+      "impact": "현재 공개 fallback으로 후보 204건 확보되어 필수 조치 아님",
+      "last_checked": "2026-09-29T00:22:06.881918+09:00",
       "owner": "Discovery"
-    },
-    {
-      "card_id": "health-market-toss-collector-unavailable",
-      "title": "market · NXT 시간대용 토스 Collector 스냅샷을 사용할 수 없음",
-      "state": "조사 중",
-      "impact": "고정 IP Toss Collector의 실행 상태·허용 IP·스냅샷 신선도를 확인",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
-      "owner": "Recovery",
-      "verify_after": "다음 Health 실행"
-    },
-    {
-      "card_id": "health-macro-unavailable",
-      "title": "macro · 매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
-      "state": "수정 중",
-      "impact": "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
-      "last_checked": "2026-09-28T16:02:48.018311+09:00",
-      "owner": "Recovery",
-      "verify_after": "다음 Health 실행"
     }
   ],
   "user_actions": []
