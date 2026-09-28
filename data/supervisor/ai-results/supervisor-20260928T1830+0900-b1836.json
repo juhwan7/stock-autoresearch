@@ -1,0 +1,196 @@
+{
+  "run_kind": "regular",
+  "batch_id": "supervisor-20260928T1830+0900-b1836",
+  "processed_at": "2026-09-28T18:36:17+09:00",
+  "notify": true,
+  "supervisor": "B",
+  "status": "verification_pending",
+  "observation_ids": [
+    "obs-20260928T181303+0900-36401799363-1",
+    "obs-20260928T182206+0900-36402855713-1",
+    "obs-20260928T183221+0900-36403930052-1"
+  ],
+  "observation_slots": [
+    "2026-09-28T18:10:00+09:00",
+    "2026-09-28T18:20:00+09:00",
+    "2026-09-28T18:30:00+09:00"
+  ],
+  "observation_window_start": "2026-09-28T18:10:00+09:00",
+  "observation_window_end": "2026-09-28T18:30:00+09:00",
+  "expected_observation_count": 3,
+  "received_observation_count": 3,
+  "missing_observation_slots": [],
+  "observation_completeness_ratio": 1,
+  "observation_window_complete": true,
+  "summary": "18:30 B window 3/3. Issue Fast Path는 18:32 discovery까지 issue-digest를 독립 전진시켰다. A는 enabled이고 18:00 window도 3/3이나 18:00 immutable regular result가 없어 result_write_failed로 분류한다.",
+  "market_narrative": "18:32 discovery 212건, 신규 17건. 기사 수와 제목 유사도 기반 independent_story_count_estimate를 독립 원기사 수로 확정하지 않으며 Fast Path pending evidence를 Supervisor 검증 전 상태변화 확정으로 사용하지 않는다.",
+  "market_focus": [
+    "Issue Fast Path 실운영 전진·dedup 검증",
+    "18:00 A result transport 복구",
+    "주요 글로벌/국내 뉴스의 독립근거 확인",
+    "가격·금리·유가·환율은 live 근거 없이 단일 원인 확정 금지"
+  ],
+  "invalidation_checks": [
+    "18:00 A result가 생성되면 failure cause 재분류",
+    "Fast Path가 실제 event/source 없이 timestamp만 전진하면 성공 판정 철회",
+    "pending evidence를 독립 원기사나 강화/완화 확정으로 승격하지 않음"
+  ],
+  "overnight_risks": [
+    {
+      "risk": "글로벌 지정학·에너지 변동성",
+      "severity": "HIGH",
+      "status": "PENDING_VERIFICATION"
+    },
+    {
+      "risk": "Supervisor result transport 공백",
+      "severity": "HIGH",
+      "status": "INVESTIGATING"
+    }
+  ],
+  "actions": [
+    {
+      "type": "counterpart_liveness",
+      "status": "investigating",
+      "detail": "A enabled, 최근 예약 실행 존재, latest-A 18:00 3/3이나 immutable result 없음; result_write_failed"
+    },
+    {
+      "type": "canonical_window",
+      "status": "done",
+      "detail": "18:10/18:20/18:30만 사용"
+    },
+    {
+      "type": "issue_fast_path",
+      "status": "verified",
+      "detail": "issue-digest updated_at 18:32, pending source/history 실제 추가"
+    },
+    {
+      "type": "recovery",
+      "status": "blocked",
+      "detail": "owner [Supervisor Result] Issue 제출이 connector safety check에 차단됨; 동일 요청 반복 안 함"
+    },
+    {
+      "type": "ui_ux",
+      "status": "no_change",
+      "detail": "pending/verified 구분 유지, 과잉 UI 추가 보류"
+    }
+  ],
+  "changed_paths": [
+    "data/supervisor/ai-results/supervisor-20260928T1830+0900-b1836.json"
+  ],
+  "next_checks": [
+    "canonical/state/latest-report→memory→Telegram E2E 확인",
+    "다음 A는 18:40/18:50/19:00만 사용",
+    "Fast Path 다음 discovery→digest latency/dedup 확인",
+    "A result 누락 재분류"
+  ],
+  "project_improvement_signals": [
+    {
+      "id": "supervisor-a-result-continuity",
+      "status": "investigating",
+      "failure_cause": "A enabled + 18:00 window 3/3 + 예약 실행 존재에도 18:00 immutable regular result 없음",
+      "preferred_recovery": "owner Issue single-writer가 safety block이면 direct immutable result 1회 저장 후 기존 canonical apply 경로로 재적용; 중복 writer 금지",
+      "verify_after": "다음 canonical apply 또는 A"
+    },
+    {
+      "id": "issue-fast-path-live",
+      "status": "verification_pending",
+      "failure_cause": null,
+      "preferred_recovery": "다음 discovery에서 checkpoint/dedup 및 10분 SLO 재검증",
+      "verify_after": "다음 discovery"
+    }
+  ],
+  "work_axes_reviewed": [
+    {
+      "axis": "데이터_품질_freshness",
+      "status": "passed",
+      "finding": "B 3/3, discovery/digest 18:32",
+      "action": "정규 슬롯만 사용",
+      "evidence": "latest-B/discovery/digest",
+      "verify_after": "다음 A"
+    },
+    {
+      "axis": "버그_복구",
+      "status": "investigating",
+      "finding": "A 18:00 result 누락",
+      "action": "transport 복구",
+      "evidence": "automation+latest-A+ai-results",
+      "verify_after": "다음 apply"
+    },
+    {
+      "axis": "뉴스_이슈",
+      "status": "reviewed",
+      "finding": "212건/신규17건",
+      "action": "pending/독립근거 분리",
+      "evidence": "18:32 discovery",
+      "verify_after": "다음 supervisor"
+    },
+    {
+      "axis": "이슈_생명주기",
+      "status": "verification_pending",
+      "finding": "Fast Path digest 전진",
+      "action": "다음 슬롯 지속성 검증",
+      "evidence": "issue-digest 18:32",
+      "verify_after": "다음 discovery"
+    },
+    {
+      "axis": "ui_ux",
+      "status": "no_change",
+      "finding": "pending/verified 구분 우선",
+      "action": "UI 증설 보류",
+      "evidence": "verification_status/confirmed",
+      "verify_after": "Pages"
+    },
+    {
+      "axis": "구조_단순화",
+      "status": "reviewed",
+      "finding": "Supervisor 필수 관문 제거 효과 확인",
+      "action": "A/B는 고차원 검증 집중",
+      "evidence": "Fast Path",
+      "verify_after": "다음 A/B"
+    },
+    {
+      "axis": "테스트_회귀",
+      "status": "verification_pending",
+      "finding": "18:30 sensor run 진행 중",
+      "action": "완료 후 확인",
+      "evidence": "Actions run 36403930052",
+      "verify_after": "run 완료"
+    }
+  ],
+  "feedback_received": [
+    {
+      "from_batch": "supervisor-20260928T0700+0900-a50",
+      "item": "writer/apply E2E 우선, immutable 있으면 재분석 금지, digest stale timestamp 위장 금지"
+    }
+  ],
+  "feedback_resolved": [
+    {
+      "item": "issue-digest stale",
+      "resolution": "Fast Path로 18:32까지 실제 source/history event와 함께 전진"
+    }
+  ],
+  "feedback_disagreed": [],
+  "feedback_deferred": [
+    {
+      "item": "A 18:00 복구 완료",
+      "reason": "immutable result 미확인"
+    },
+    {
+      "item": "Fast Path 장기 안정성",
+      "reason": "추가 슬롯 검증 필요"
+    }
+  ],
+  "supervisor_disagreements": [],
+  "feedback_to_other_supervisor": [
+    "19:00 A는 18:40/18:50/19:00만 사용.",
+    "Fast Path digest 전진을 반영하고 다음 latency/dedup 검증.",
+    "A 18:00 result 누락은 transport failure로 이어서 검증.",
+    "pending evidence를 상태 강화/완화 확정으로 취급하지 말 것."
+  ],
+  "telegram_report": [
+    "18:30 B: 18:10/18:20/18:30 3/3.",
+    "Fast Path가 issue-digest를 18:32까지 실제 전진.",
+    "A는 enabled·18:00 window 3/3이나 18:00 result 누락.",
+    "pending evidence와 검증된 독립근거를 구분 유지."
+  ]
+}
