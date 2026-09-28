@@ -20,7 +20,7 @@
   "expected_observation_count": 3,
   "received_observation_count": 3,
   "missing_observation_slots": [],
-  "observation_completeness_ratio": 1,
+  "observation_completeness_ratio": 1.0,
   "observation_window_complete": true,
   "summary": "18:30 B window 3/3. Issue Fast Path는 18:32 discovery까지 issue-digest를 독립 전진시켰다. A는 enabled이고 18:00 window도 3/3이나 18:00 immutable regular result가 없어 result_write_failed로 분류한다.",
   "market_narrative": "18:32 discovery 212건, 신규 17건. 기사 수와 제목 유사도 기반 independent_story_count_estimate를 독립 원기사 수로 확정하지 않으며 Fast Path pending evidence를 Supervisor 검증 전 상태변화 확정으로 사용하지 않는다.",
@@ -192,5 +192,17 @@
     "Fast Path가 issue-digest를 18:32까지 실제 전진.",
     "A는 enabled·18:00 window 3/3이나 18:00 result 누락.",
     "pending evidence와 검증된 독립근거를 구분 유지."
+  ],
+  "feedback_handoff": {
+    "source_batch_id": "supervisor-20260928T0700+0900-a50",
+    "source_supervisor": "A",
+    "target_supervisor": "B",
+    "inbound_required": true,
+    "inbound_recorded": true,
+    "outgoing_recorded": true,
+    "complete": true
+  },
+  "validation_warnings": [
+    "최신 discovery에 새 뉴스가 있으나 news_issue_digest가 없어 뉴스 lifecycle 적용이 누락됨"
   ]
 }

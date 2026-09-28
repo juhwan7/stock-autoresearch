@@ -1,155 +1,208 @@
 {
   "run_kind": "regular",
-  "batch_id": "supervisor-20260928T0700+0900-a50",
-  "processed_at": "2026-09-28T07:09:13+09:00",
+  "batch_id": "supervisor-20260928T1830+0900-b1836",
+  "processed_at": "2026-09-28T18:36:17+09:00",
   "notify": true,
-  "supervisor": "A",
+  "supervisor": "B",
   "status": "verification_pending",
   "observation_ids": [
-    "obs-20260928T064120+0900-36352580418-1",
-    "obs-20260928T065108+0900-36353178146-1",
-    "obs-20260928T070108+0900-36353740296-1"
+    "obs-20260928T181303+0900-36401799363-1",
+    "obs-20260928T182206+0900-36402855713-1",
+    "obs-20260928T183221+0900-36403930052-1"
   ],
   "observation_slots": [
-    "2026-09-28T06:40:00+09:00",
-    "2026-09-28T06:50:00+09:00",
-    "2026-09-28T07:00:00+09:00"
+    "2026-09-28T18:10:00+09:00",
+    "2026-09-28T18:20:00+09:00",
+    "2026-09-28T18:30:00+09:00"
   ],
-  "observation_window_start": "2026-09-28T06:40:00+09:00",
-  "observation_window_end": "2026-09-28T07:00:00+09:00",
+  "observation_window_start": "2026-09-28T18:10:00+09:00",
+  "observation_window_end": "2026-09-28T18:30:00+09:00",
   "expected_observation_count": 3,
   "received_observation_count": 3,
   "missing_observation_slots": [],
   "observation_completeness_ratio": 1.0,
   "observation_window_complete": true,
-  "summary": "07:00 A canonical window 06:40/06:50/07:00은 3/3 완전하다. B 예약은 enabled이며 06:30 B window도 3/3이지만 canonical 정규 결과는 2026-09-27 06:00 A 이후 전진하지 않았다. 센서/예약보다 regular-result transport/apply 단절을 우선 복구한다.",
-  "market_narrative": "07:00 discovery는 failed=0/degraded=7, 후보 입력은 계속 전진한다. 휴장 저장 지수값은 방향 판정에 사용하지 않는다. independent_story_count_estimate는 제목 유사도 추정치이므로 독립 원기사 수로 확정하지 않는다. issue-digest는 2026-09-27 00:09 이후 정지해 lifecycle 반영 지연을 별도 검증한다.",
+  "summary": "18:30 B window 3/3. Issue Fast Path는 18:32 discovery까지 issue-digest를 독립 전진시켰다. A는 enabled이고 18:00 window도 3/3이나 18:00 immutable regular result가 없어 result_write_failed로 분류한다.",
+  "market_narrative": "18:32 discovery 212건, 신규 17건. 기사 수와 제목 유사도 기반 independent_story_count_estimate를 독립 원기사 수로 확정하지 않으며 Fast Path pending evidence를 Supervisor 검증 전 상태변화 확정으로 사용하지 않는다.",
   "market_focus": [
-    "A/B regular-result transport/apply 단절",
-    "issue-digest lifecycle 지연",
-    "degraded 7개 고정 뉴스축",
-    "다음 거래 가능 구간 macro 실값"
+    "Issue Fast Path 실운영 전진·dedup 검증",
+    "18:00 A result transport 복구",
+    "주요 글로벌/국내 뉴스의 독립근거 확인",
+    "가격·금리·유가·환율은 live 근거 없이 단일 원인 확정 금지"
   ],
   "invalidation_checks": [
-    "새 immutable A/B result가 main에 생성되면 result_write_failed 가설을 갱신한다.",
-    "immutable result가 존재하지만 canonical만 stale이면 canonical_apply_failed로 재분류한다.",
-    "휴장 저장 지수로 방향을 추정하지 않는다."
+    "18:00 A result가 생성되면 failure cause 재분류",
+    "Fast Path가 실제 event/source 없이 timestamp만 전진하면 성공 판정 철회",
+    "pending evidence를 독립 원기사나 강화/완화 확정으로 승격하지 않음"
   ],
   "overnight_risks": [
     {
-      "risk": "Supervisor 정규 결과 전달/적용 공백",
+      "risk": "글로벌 지정학·에너지 변동성",
       "severity": "HIGH",
-      "status": "INVESTIGATING"
+      "status": "PENDING_VERIFICATION"
     },
     {
-      "risk": "뉴스 issue-digest stale",
-      "severity": "MEDIUM",
-      "status": "VERIFICATION_PENDING"
+      "risk": "Supervisor result transport 공백",
+      "severity": "HIGH",
+      "status": "INVESTIGATING"
     }
   ],
   "actions": [
     {
       "type": "counterpart_liveness",
-      "status": "done",
-      "detail": "B automation enabled, 최근 실행 존재, 06:30 window 3/3"
+      "status": "investigating",
+      "detail": "A enabled, 최근 예약 실행 존재, latest-A 18:00 3/3이나 immutable result 없음; result_write_failed"
     },
     {
       "type": "canonical_window",
       "status": "done",
-      "detail": "06:40/06:50/07:00 3/3; 대체 슬롯 미사용"
+      "detail": "18:10/18:20/18:30만 사용"
+    },
+    {
+      "type": "issue_fast_path",
+      "status": "verified",
+      "detail": "issue-digest updated_at 18:32, pending source/history 실제 추가"
     },
     {
       "type": "recovery",
-      "status": "attempted",
-      "detail": "검증된 owner Issue→single-writer 경로로 result 전달"
+      "status": "blocked",
+      "detail": "owner [Supervisor Result] Issue 제출이 connector safety check에 차단됨; 동일 요청 반복 안 함"
     },
     {
       "type": "ui_ux",
       "status": "no_change",
-      "detail": "중복 장애 카드 증설보다 기존 freshness/timeline 노출 유지"
+      "detail": "pending/verified 구분 유지, 과잉 UI 추가 보류"
     }
   ],
   "changed_paths": [
-    "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json"
+    "data/supervisor/ai-results/supervisor-20260928T1830+0900-b1836.json"
   ],
   "next_checks": [
-    "이 Issue 처리 Action이 immutable ai-result를 만들었는지 확인",
-    "canonical/state/latest-report→memory→Telegram까지 E2E 전진 확인",
-    "다음 B는 07:10/07:20/07:30만 사용",
-    "writer 동작 중이면 중복 재시작 금지"
+    "canonical/state/latest-report→memory→Telegram E2E 확인",
+    "다음 A는 18:40/18:50/19:00만 사용",
+    "Fast Path 다음 discovery→digest latency/dedup 확인",
+    "A result 누락 재분류"
   ],
   "project_improvement_signals": [
     {
-      "id": "supervisor-result-transport",
+      "id": "supervisor-a-result-continuity",
       "status": "investigating",
-      "failure_cause": "A/B 예약과 canonical windows는 정상 전진하지만 immutable regular results와 canonical이 장시간 정지",
-      "preferred_recovery": "owner [Supervisor Result] Issue body JSON → Supervisor 결과 적용 및 Telegram single-writer; immutable result 존재 시 재분석 없이 재적용",
-      "verify_after": "이번 Issue Action 완료 후 또는 다음 B"
+      "failure_cause": "A enabled + 18:00 window 3/3 + 예약 실행 존재에도 18:00 immutable regular result 없음",
+      "preferred_recovery": "owner Issue single-writer가 safety block이면 direct immutable result 1회 저장 후 기존 canonical apply 경로로 재적용; 중복 writer 금지",
+      "verify_after": "다음 canonical apply 또는 A"
+    },
+    {
+      "id": "issue-fast-path-live",
+      "status": "verification_pending",
+      "failure_cause": null,
+      "preferred_recovery": "다음 discovery에서 checkpoint/dedup 및 10분 SLO 재검증",
+      "verify_after": "다음 discovery"
     }
   ],
   "work_axes_reviewed": [
     {
       "axis": "데이터_품질_freshness",
-      "status": "reviewed"
+      "status": "passed",
+      "finding": "B 3/3, discovery/digest 18:32",
+      "action": "정규 슬롯만 사용",
+      "evidence": "latest-B/discovery/digest",
+      "verify_after": "다음 A"
     },
     {
       "axis": "버그_복구",
-      "status": "investigating"
+      "status": "investigating",
+      "finding": "A 18:00 result 누락",
+      "action": "transport 복구",
+      "evidence": "automation+latest-A+ai-results",
+      "verify_after": "다음 apply"
     },
     {
       "axis": "뉴스_이슈",
-      "status": "reviewed"
+      "status": "reviewed",
+      "finding": "212건/신규17건",
+      "action": "pending/독립근거 분리",
+      "evidence": "18:32 discovery",
+      "verify_after": "다음 supervisor"
     },
     {
-      "axis": "공급자_fallback",
-      "status": "verification_pending"
-    },
-    {
-      "axis": "테스트_회귀",
-      "status": "reviewed"
+      "axis": "이슈_생명주기",
+      "status": "verification_pending",
+      "finding": "Fast Path digest 전진",
+      "action": "다음 슬롯 지속성 검증",
+      "evidence": "issue-digest 18:32",
+      "verify_after": "다음 discovery"
     },
     {
       "axis": "ui_ux",
-      "status": "no_change"
+      "status": "no_change",
+      "finding": "pending/verified 구분 우선",
+      "action": "UI 증설 보류",
+      "evidence": "verification_status/confirmed",
+      "verify_after": "Pages"
     },
     {
       "axis": "구조_단순화",
-      "status": "reviewed"
+      "status": "reviewed",
+      "finding": "Supervisor 필수 관문 제거 효과 확인",
+      "action": "A/B는 고차원 검증 집중",
+      "evidence": "Fast Path",
+      "verify_after": "다음 A/B"
+    },
+    {
+      "axis": "테스트_회귀",
+      "status": "verification_pending",
+      "finding": "18:30 sensor run 진행 중",
+      "action": "완료 후 확인",
+      "evidence": "Actions run 36403930052",
+      "verify_after": "run 완료"
     }
   ],
-  "feedback_received": [],
-  "feedback_resolved": [],
+  "feedback_received": [
+    {
+      "from_batch": "supervisor-20260928T0700+0900-a50",
+      "item": "writer/apply E2E 우선, immutable 있으면 재분석 금지, digest stale timestamp 위장 금지"
+    }
+  ],
+  "feedback_resolved": [
+    {
+      "item": "issue-digest stale",
+      "resolution": "Fast Path로 18:32까지 실제 source/history event와 함께 전진"
+    }
+  ],
   "feedback_disagreed": [],
   "feedback_deferred": [
     {
-      "item": "최신 B feedback",
-      "reason": "06:30 B window는 3/3이나 대응 immutable regular B result가 main에서 확인되지 않음"
+      "item": "A 18:00 복구 완료",
+      "reason": "immutable result 미확인"
+    },
+    {
+      "item": "Fast Path 장기 안정성",
+      "reason": "추가 슬롯 검증 필요"
     }
   ],
   "supervisor_disagreements": [],
   "feedback_to_other_supervisor": [
-    "07:30 B는 07:10/07:20/07:30만 사용하고 과거 슬롯으로 보충하지 말 것.",
-    "센서/예약은 정상으로 확인됐으므로 regular-result writer/apply E2E를 우선 검증할 것.",
-    "이번 A immutable result가 생겼다면 재분석하지 말고 canonical 재적용을 우선할 것.",
-    "issue-digest stale을 timestamp 강제 변경으로 숨기지 말 것."
+    "19:00 A는 18:40/18:50/19:00만 사용.",
+    "Fast Path digest 전진을 반영하고 다음 latency/dedup 검증.",
+    "A 18:00 result 누락은 transport failure로 이어서 검증.",
+    "pending evidence를 상태 강화/완화 확정으로 취급하지 말 것."
   ],
   "telegram_report": [
-    "07:00 A: 06:40/06:50/07:00 3/3.",
-    "B 예약 및 06:30 window도 정상이나 정규 result/canonical은 stale.",
-    "owner Issue→single-writer 복구 경로를 실행.",
-    "다음 B는 writer E2E 결과를 우선 검증."
+    "18:30 B: 18:10/18:20/18:30 3/3.",
+    "Fast Path가 issue-digest를 18:32까지 실제 전진.",
+    "A는 enabled·18:00 window 3/3이나 18:00 result 누락.",
+    "pending evidence와 검증된 독립근거를 구분 유지."
   ],
   "feedback_handoff": {
-    "source_batch_id": null,
-    "source_supervisor": null,
-    "target_supervisor": "A",
-    "inbound_required": false,
-    "inbound_recorded": false,
+    "source_batch_id": "supervisor-20260928T0700+0900-a50",
+    "source_supervisor": "A",
+    "target_supervisor": "B",
+    "inbound_required": true,
+    "inbound_recorded": true,
     "outgoing_recorded": true,
     "complete": true
   },
   "validation_warnings": [
-    "changed_paths 누락을 현재 Supervisor 결과 경로로 복구",
     "최신 discovery에 새 뉴스가 있으나 news_issue_digest가 없어 뉴스 lifecycle 적용이 누락됨"
   ]
 }

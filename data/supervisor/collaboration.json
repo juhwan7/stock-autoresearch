@@ -1,11 +1,62 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-28T07:09:13+09:00",
+  "updated_at": "2026-09-28T18:36:17+09:00",
   "status": "investigating",
-  "headline": "A와 B가 supervisor-result-transport를 공동 추적 중입니다. 최근 해결: 센서 연속성 장애.",
-  "active_incident_count": 6,
+  "headline": "A와 B가 Supervisor A 상태=missing_result 를 공동 추적 중입니다. 최근 해결: 센서 연속성 장애.",
+  "active_incident_count": 8,
   "resolved_incident_count": 2,
   "incidents": [
+    {
+      "incident_id": "supervisor-a-continuity",
+      "history": [
+        {
+          "at": "2026-09-28T18:36:17+09:00",
+          "by": "B",
+          "batch_id": "supervisor-20260928T1830+0900-b1836",
+          "status": "investigating",
+          "summary": ""
+        }
+      ],
+      "title": "Supervisor A 상태=missing_result ",
+      "status": "investigating",
+      "summary": "Supervisor A 상태=missing_result · expected=2026-09-28T18:00:00+09:00 · result=supervisor-20260928T0700+0900-a50",
+      "owner": "B",
+      "verify_after": "상대 Supervisor의 다음 정규 사이클 또는 복구 직후",
+      "evidence": [
+        "latest_window_complete=True",
+        "canonical_applied=False",
+        "cause=unknown",
+        "preferred_recovery=check_automation_then_issue_action_single_writer"
+      ],
+      "source_kind": "supervisor_health",
+      "source_batch_id": "supervisor-20260928T1830+0900-b1836",
+      "source_file": "data/supervisor/ai-results/supervisor-20260928T1830+0900-b1836.json",
+      "updated_at": "2026-09-28T18:36:17+09:00",
+      "first_seen": "2026-09-28T18:36:17+09:00"
+    },
+    {
+      "incident_id": "issue-fast-path-live",
+      "history": [
+        {
+          "at": "2026-09-28T18:36:17+09:00",
+          "by": "B",
+          "batch_id": "supervisor-20260928T1830+0900-b1836",
+          "status": "verification_pending",
+          "summary": ""
+        }
+      ],
+      "title": "issue-fast-path-live",
+      "status": "verification_pending",
+      "summary": "",
+      "owner": "B",
+      "verify_after": "다음 discovery",
+      "evidence": [],
+      "source_kind": "project_improvement_signal",
+      "source_batch_id": "supervisor-20260928T1830+0900-b1836",
+      "source_file": "data/supervisor/ai-results/supervisor-20260928T1830+0900-b1836.json",
+      "updated_at": "2026-09-28T18:36:17+09:00",
+      "first_seen": "2026-09-28T18:36:17+09:00"
+    },
     {
       "incident_id": "supervisor-result-transport",
       "history": [
@@ -265,39 +316,100 @@
     }
   ],
   "last_turn": {
-    "batch_id": "supervisor-20260928T0700+0900-a50",
-    "processed_at": "2026-09-28T07:09:13+09:00",
-    "supervisor": "A",
+    "batch_id": "supervisor-20260928T1830+0900-b1836",
+    "processed_at": "2026-09-28T18:36:17+09:00",
+    "supervisor": "B",
     "status": "verification_pending",
-    "summary": "07:00 A canonical window 06:40/06:50/07:00은 3/3 완전하다. B 예약은 enabled이며 06:30 B window도 3/3이지만 canonical 정규 결과는 2026-09-27 06:00 A 이후 전진하지 않았다. 센서/예약보다 regular-result transport/apply 단절을 우선 복구한다.",
-    "feedback_received": [],
-    "feedback_resolved": [],
+    "summary": "18:30 B window 3/3. Issue Fast Path는 18:32 discovery까지 issue-digest를 독립 전진시켰다. A는 enabled이고 18:00 window도 3/3이나 18:00 immutable regular result가 없어 result_write_failed로 분류한다.",
+    "feedback_received": [
+      {
+        "from_batch": "supervisor-20260928T0700+0900-a50",
+        "item": "writer/apply E2E 우선, immutable 있으면 재분석 금지, digest stale timestamp 위장 금지"
+      }
+    ],
+    "feedback_resolved": [
+      {
+        "item": "issue-digest stale",
+        "resolution": "Fast Path로 18:32까지 실제 source/history event와 함께 전진"
+      }
+    ],
     "feedback_disagreed": [],
     "feedback_deferred": [
       {
-        "item": "최신 B feedback",
-        "reason": "06:30 B window는 3/3이나 대응 immutable regular B result가 main에서 확인되지 않음"
+        "item": "A 18:00 복구 완료",
+        "reason": "immutable result 미확인"
+      },
+      {
+        "item": "Fast Path 장기 안정성",
+        "reason": "추가 슬롯 검증 필요"
       }
     ],
     "feedback_to_other_supervisor": [
-      "07:30 B는 07:10/07:20/07:30만 사용하고 과거 슬롯으로 보충하지 말 것.",
-      "센서/예약은 정상으로 확인됐으므로 regular-result writer/apply E2E를 우선 검증할 것.",
-      "이번 A immutable result가 생겼다면 재분석하지 말고 canonical 재적용을 우선할 것.",
-      "issue-digest stale을 timestamp 강제 변경으로 숨기지 말 것."
+      "19:00 A는 18:40/18:50/19:00만 사용.",
+      "Fast Path digest 전진을 반영하고 다음 latency/dedup 검증.",
+      "A 18:00 result 누락은 transport failure로 이어서 검증.",
+      "pending evidence를 상태 강화/완화 확정으로 취급하지 말 것."
     ],
     "changed_paths": [
-      "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json"
+      "data/supervisor/ai-results/supervisor-20260928T1830+0900-b1836.json"
     ],
     "change_kind": "result_only",
     "next_checks": [
-      "이 Issue 처리 Action이 immutable ai-result를 만들었는지 확인",
-      "canonical/state/latest-report→memory→Telegram까지 E2E 전진 확인",
-      "다음 B는 07:10/07:20/07:30만 사용",
-      "writer 동작 중이면 중복 재시작 금지"
+      "canonical/state/latest-report→memory→Telegram E2E 확인",
+      "다음 A는 18:40/18:50/19:00만 사용",
+      "Fast Path 다음 discovery→digest latency/dedup 확인",
+      "A result 누락 재분류"
     ],
-    "source_file": "data/supervisor/ai-results/supervisor-20260928T0700+0900-a50.json"
+    "source_file": "data/supervisor/ai-results/supervisor-20260928T1830+0900-b1836.json"
   },
   "timeline": [
+    {
+      "batch_id": "supervisor-20260928T1830+0900-b1836",
+      "processed_at": "2026-09-28T18:36:17+09:00",
+      "supervisor": "B",
+      "status": "verification_pending",
+      "summary": "18:30 B window 3/3. Issue Fast Path는 18:32 discovery까지 issue-digest를 독립 전진시켰다. A는 enabled이고 18:00 window도 3/3이나 18:00 immutable regular result가 없어 result_write_failed로 분류한다.",
+      "feedback_received": [
+        {
+          "from_batch": "supervisor-20260928T0700+0900-a50",
+          "item": "writer/apply E2E 우선, immutable 있으면 재분석 금지, digest stale timestamp 위장 금지"
+        }
+      ],
+      "feedback_resolved": [
+        {
+          "item": "issue-digest stale",
+          "resolution": "Fast Path로 18:32까지 실제 source/history event와 함께 전진"
+        }
+      ],
+      "feedback_disagreed": [],
+      "feedback_deferred": [
+        {
+          "item": "A 18:00 복구 완료",
+          "reason": "immutable result 미확인"
+        },
+        {
+          "item": "Fast Path 장기 안정성",
+          "reason": "추가 슬롯 검증 필요"
+        }
+      ],
+      "feedback_to_other_supervisor": [
+        "19:00 A는 18:40/18:50/19:00만 사용.",
+        "Fast Path digest 전진을 반영하고 다음 latency/dedup 검증.",
+        "A 18:00 result 누락은 transport failure로 이어서 검증.",
+        "pending evidence를 상태 강화/완화 확정으로 취급하지 말 것."
+      ],
+      "changed_paths": [
+        "data/supervisor/ai-results/supervisor-20260928T1830+0900-b1836.json"
+      ],
+      "change_kind": "result_only",
+      "next_checks": [
+        "canonical/state/latest-report→memory→Telegram E2E 확인",
+        "다음 A는 18:40/18:50/19:00만 사용",
+        "Fast Path 다음 discovery→digest latency/dedup 확인",
+        "A result 누락 재분류"
+      ],
+      "source_file": "data/supervisor/ai-results/supervisor-20260928T1830+0900-b1836.json"
+    },
     {
       "batch_id": "supervisor-20260928T0700+0900-a50",
       "processed_at": "2026-09-28T07:09:13+09:00",
@@ -489,32 +601,49 @@
   "supervisor_health": {
     "A": {
       "enabled": null,
-      "last_expected_anchor": "2026-09-28T07:00:00+09:00",
+      "last_expected_anchor": "2026-09-28T18:00:00+09:00",
       "latest_window_complete": true,
       "last_result_batch": "supervisor-20260928T0700+0900-a50",
       "last_result_at": "2026-09-28T07:09:13+09:00",
       "last_result_window_end": "2026-09-28T07:00:00+09:00",
-      "canonical_applied": true,
-      "status": "healthy",
-      "cause": null,
-      "preferred_recovery": "none",
-      "disable_supervisor": false
-    },
-    "B": {
-      "enabled": null,
-      "last_expected_anchor": "2026-09-28T06:30:00+09:00",
-      "latest_window_complete": true,
-      "last_result_batch": "supervisor-20260927T0030+0900-b35",
-      "last_result_at": "2026-09-27T00:35:21+09:00",
-      "last_result_window_end": "2026-09-27T00:30:00+09:00",
       "canonical_applied": false,
       "status": "missing_result",
       "cause": "unknown",
       "preferred_recovery": "check_automation_then_issue_action_single_writer",
       "disable_supervisor": false
+    },
+    "B": {
+      "enabled": null,
+      "last_expected_anchor": "2026-09-28T18:30:00+09:00",
+      "latest_window_complete": true,
+      "last_result_batch": "supervisor-20260928T1830+0900-b1836",
+      "last_result_at": "2026-09-28T18:36:17+09:00",
+      "last_result_window_end": "2026-09-28T18:30:00+09:00",
+      "canonical_applied": true,
+      "status": "healthy",
+      "cause": null,
+      "preferred_recovery": "none",
+      "disable_supervisor": false
     }
   },
   "failure_patterns": [
+    {
+      "failure_pattern": "supervisor_a_unknown",
+      "occurrences": 1,
+      "disable_supervisor": false,
+      "preferred_recovery": "check_automation_then_issue_action_single_writer",
+      "last_verified": "2026-09-28T18:36:17+09:00",
+      "last_batch_id": "supervisor-20260928T1830+0900-b1836",
+      "detail": "status=missing_result expected=2026-09-28T18:00:00+09:00"
+    },
+    {
+      "failure_pattern": "a enabled + 18:00 window 3/3 + 예약 실행 존재에도 18:00 immutable regular result 없음",
+      "occurrences": 1,
+      "disable_supervisor": false,
+      "preferred_recovery": "owner Issue single-writer가 safety block이면 direct immutable result 1회 저장 후 기존 canonical apply 경로로 재적용; 중복 writer 금지",
+      "last_verified": "2026-09-28T18:36:17+09:00",
+      "last_batch_id": "supervisor-20260928T1830+0900-b1836"
+    },
     {
       "failure_pattern": "supervisor_b_unknown",
       "occurrences": 1,
