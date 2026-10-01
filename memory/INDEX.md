@@ -21,21 +21,20 @@
 
 ## 활성 시장 이슈
 - 고려아연 "핵심광물 공급망 재편되는 때…MBK·영풍도 동참했으면" | — WATCHING
+- "피규어 AI, 인간 행동 데이터로 휴머노이드 ‘제로샷’ 성능 높여" — WATCHING
 - 남아공-짐바브웨, 산업단지용 5억 달러 댐 논의 중 — WATCHING
 - 美 전문가들 "미중 정상회담, 무역·AI 합의에도 전략적 갈등 여전" — WATCHING
-- 트럼프, 이르면 30일 알래스카 LNG 사업에 韓 540억달러 투입 발표할 듯 — WATCHING
+- 이 대통령 지지율 37.9%로 2주째 반등‥"순방외교·인적 쇄신 영향" — WATCHING
 - 美클래러티법 지연에도 규제 속도…"韓도 미래 금융 대비해야" — WATCHING
 - 삼전닉스 190조 ‘슈퍼이익’…메모리 천장에 선다 — WATCHING
-- "피규어 AI, 인간 행동 데이터로 휴머노이드 ‘제로샷’ 성능 높여" — WATCHING
-- 국채 금리 상승 속 PCE 물가·고용지표 주목…마이크론 실적 발표[이번주 美 증시는] - 머니투데이 — WATCHING
+- [특징주] 한미반도체, 78억원 장비 수주 공시에 장중 3%대 상승 — WATCHING
 
 ## 현재 열린 프로젝트 문제
 - supervisor-a-result-continuity — investigating
 - issue-fast-path-live — verification_pending
-- Supervisor A 4430분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
-- Supervisor B 3743분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
-- 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 3742.6232821833332분 전
-- market · NXT 시간대용 토스 Collector 스냅샷을 사용할 수 없음 — 고정 IP Toss Collector의 실행 상태·허용 IP·스냅샷 신선도를 확인
+- Supervisor A 4771분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
+- Supervisor B 4084분 정규 결과 공백 — 단일 stale 결과만으로 사용자 조치를 요구하거나 Supervisor를 끄지 않음
+- 장기 AI 기억 갱신 지연 — 마지막 기억 갱신 4084.278147333333분 전
 - macro · 매크로 runtime은 생성됐지만 실제 시장값이 비어 있음 — provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정
 
 ## 최근 해결
