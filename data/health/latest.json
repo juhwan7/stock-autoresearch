@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-05T10:31:01.427772+09:00",
+  "generated_at": "2026-10-05T10:41:59.969123+09:00",
   "status": "CRITICAL",
-  "issue_count": 7,
+  "issue_count": 6,
   "issues": [
     {
       "component": "public_batch",
@@ -9,7 +9,7 @@
       "severity": "CRITICAL",
       "message": "6분 공개 시세 배치 상태: unavailable",
       "recovery": "네이버 공개 랭킹/폴링 fallback을 재시도하고 반복되면 1시간 AI가 parser를 수정",
-      "consecutive": "16"
+      "consecutive": "17"
     },
     {
       "component": "market",
@@ -17,15 +17,15 @@
       "severity": "CRITICAL",
       "message": "국내시장 데이터 인증정보가 준비되지 않음",
       "recovery": "HELP_NEEDED의 시장 데이터 Secret/Collector 항목 확인",
-      "consecutive": "10"
+      "consecutive": "11"
     },
     {
       "component": "toss",
       "code": "snapshot-stale",
       "severity": "CRITICAL",
-      "message": "Toss snapshot이 오래됨: 5699.8분",
+      "message": "Toss snapshot이 오래됨: 5710.8분",
       "recovery": "Collector 프로세스와 snapshot 전달 workflow의 갱신 상태 확인",
-      "consecutive": "16"
+      "consecutive": "17"
     },
     {
       "component": "toss",
@@ -33,15 +33,15 @@
       "severity": "CRITICAL",
       "message": "Toss WebSocket 활성 구독 정보가 비어 있음",
       "recovery": "거래대금 랭킹 조회와 trade:kr 구독 선언 상태 확인",
-      "consecutive": "16"
+      "consecutive": "17"
     },
     {
       "component": "toss",
       "code": "trade-stale",
       "severity": "CRITICAL",
-      "message": "Toss 최근 체결 수신이 5699.8분 전",
+      "message": "Toss 최근 체결 수신이 5710.8분 전",
       "recovery": "WebSocket 연결·PING·재연결 로그와 장 운영 여부를 확인",
-      "consecutive": "10"
+      "consecutive": "11"
     },
     {
       "component": "macro",
@@ -49,24 +49,15 @@
       "severity": "CRITICAL",
       "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음",
       "recovery": "provider 연결을 재시도하고 지속되면 1시간 AI 감독이 소스 경로를 수정",
-      "consecutive": "1237"
-    },
-    {
-      "component": "discovery",
-      "code": "google-news-degraded",
-      "severity": "WARN",
-      "message": "Google News 탐색 9/18개 그룹이 비어 있거나 오류",
-      "recovery": "broad fallback이 성공하면 보조 경보로 유지. fallback까지 실패하면 검색식/소스를 수정",
-      "consecutive": "2"
+      "consecutive": "1238"
     }
   ],
   "consecutive": {
-    "discovery:google-news-degraded": 2,
-    "toss:trade-stale": 10,
-    "market:credentials": 10,
-    "toss:snapshot-stale": 16,
-    "toss:subscription-empty": 16,
-    "macro:unavailable": 1237,
-    "public_batch:stale-or-degraded": 16
+    "toss:trade-stale": 11,
+    "toss:snapshot-stale": 17,
+    "market:credentials": 11,
+    "toss:subscription-empty": 17,
+    "macro:unavailable": 1238,
+    "public_batch:stale-or-degraded": 17
   }
 }
