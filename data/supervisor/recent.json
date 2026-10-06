@@ -1,1089 +1,9 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-06T10:02:16.111838+09:00",
+  "updated_at": "2026-10-06T10:12:08.697195+09:00",
   "batch_size": 3,
   "sensor_interval_minutes": 10,
   "observations": [
-    {
-      "schema_version": 2,
-      "observation_id": "obs-20261005T114114+0900-37256313198-1",
-      "observed_at": "2026-10-05T11:41:14.066652+09:00",
-      "slot_at": "2026-10-05T11:40:00+09:00",
-      "slot_key": "2026-10-05T11:40+0900",
-      "sensor_interval_minutes": 10,
-      "slot_source": "dispatch_input",
-      "slot_start_delay_seconds": 30.298,
-      "slot_delay_seconds": 74.066652,
-      "source": {
-        "repository": "juhwan7/stock-autoresearch",
-        "workflow": "10분 감독 관측 큐",
-        "event_name": "workflow_dispatch",
-        "run_id": "37256313198",
-        "run_attempt": "1",
-        "head_sha": "38509f7f39b67feeb529a8595961d6170f1cdc33",
-        "ref_name": "main"
-      },
-      "queue": {
-        "batch_size": 3,
-        "pending_before_append": 120,
-        "last_processed_observation_id": "obs-20260928T183221+0900-36403930052-1",
-        "last_processed_slot": "2026-09-28T18:30:00+09:00",
-        "pending_after_append": 120
-      },
-      "validation": {
-        "status": "ok",
-        "compile": "ok",
-        "pytest": "ok",
-        "diff_check": "ok"
-      },
-      "steps": {
-        "toss_fetch": "success",
-        "toss_summary": "success",
-        "health": "success",
-        "dashboard": "success",
-        "market_discovery": "success",
-        "public_batch_market": "success",
-        "market_sensor_repair": "success",
-        "risk_sensor_repair": "success",
-        "regression_refresh": "success"
-      },
-      "health": {
-        "status": "CRITICAL",
-        "generated_at": "2026-10-05T11:41:07.563878+09:00",
-        "issues": [
-          {
-            "component": "public_batch",
-            "code": "stale-or-degraded",
-            "severity": "CRITICAL",
-            "message": "6분 공개 시세 배치 상태: unavailable"
-          },
-          {
-            "component": "market",
-            "code": "credentials",
-            "severity": "CRITICAL",
-            "message": "국내시장 데이터 인증정보가 준비되지 않음"
-          },
-          {
-            "component": "toss",
-            "code": "snapshot-stale",
-            "severity": "CRITICAL",
-            "message": "Toss snapshot이 오래됨: 5769.9분"
-          },
-          {
-            "component": "toss",
-            "code": "subscription-empty",
-            "severity": "CRITICAL",
-            "message": "Toss WebSocket 활성 구독 정보가 비어 있음"
-          },
-          {
-            "component": "toss",
-            "code": "trade-stale",
-            "severity": "CRITICAL",
-            "message": "Toss 최근 체결 수신이 5769.9분 전"
-          },
-          {
-            "component": "macro",
-            "code": "unavailable",
-            "severity": "CRITICAL",
-            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
-          }
-        ]
-      },
-      "regression": {
-        "status": "COLLECTING",
-        "generated_at": "2026-10-05T02:41:06.984613+00:00",
-        "quarantine_count": 0,
-        "rolled_back_count": 0
-      },
-      "market_discovery": {
-        "generated_at": "2026-10-05T11:40:51.022915+09:00",
-        "item_count": 155,
-        "new_item_count": 15,
-        "topic_counts": {
-          "kr_market_broad": 2,
-          "kr_policy_economy": 19,
-          "kr_diplomacy_summit": 12,
-          "kr_semiconductor_ai": 5,
-          "kr_defense_shipbuilding": 2,
-          "global_market": 21,
-          "global_diplomacy_summit": 30,
-          "global_energy_middle_east": 1,
-          "europe_debt_ecb": 1,
-          "dynamic:트럼프": 3,
-          "dynamic:관세": 11,
-          "dynamic:공장": 3,
-          "dynamic:AI": 19,
-          "dynamic:지으면": 9,
-          "dynamic:원유": 7,
-          "dynamic:압박": 5,
-          "dynamic:규제": 5
-        },
-        "trending_terms": [
-          {
-            "term": "트럼프",
-            "count": 45,
-            "publisher_count": 28,
-            "independent_story_count_estimate": 31,
-            "syndication_ratio_estimate": 0.311,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 43,
-            "delta": 2,
-            "score": 120,
-            "examples": [
-              "트럼프 “김정은과 잘지내, ‘핵미사일 112개’… 관세 통해 대미 투자 유치”",
-              "“부정선거” 주워담은 트럼프…관세 위협·현금살포 던지며 “사전투표 하라”",
-              "“美에 공장 안 지으면 300% 관세”… 유세전 트럼프, 투자압박 높여"
-            ]
-          },
-          {
-            "term": "관세",
-            "count": 38,
-            "publisher_count": 25,
-            "independent_story_count_estimate": 25,
-            "syndication_ratio_estimate": 0.342,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 37,
-            "delta": 1,
-            "score": 102,
-            "examples": [
-              "트럼프 “김정은과 잘지내, ‘핵미사일 112개’… 관세 통해 대미 투자 유치”",
-              "“부정선거” 주워담은 트럼프…관세 위협·현금살포 던지며 “사전투표 하라”",
-              "“美에 공장 안 지으면 300% 관세”… 유세전 트럼프, 투자압박 높여"
-            ]
-          },
-          {
-            "term": "공장",
-            "count": 26,
-            "publisher_count": 19,
-            "independent_story_count_estimate": 14,
-            "syndication_ratio_estimate": 0.462,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 25,
-            "delta": 1,
-            "score": 72,
-            "examples": [
-              "“전기 넘치는데 송전선 막혀 공장 못 돌려”… ‘분산에너지 규제’에 칼 빼든 강원도",
-              "“美에 공장 안 지으면 300% 관세”… 유세전 트럼프, 투자압박 높여",
-              "\"美에 공장 안 지으면 관세 300%\" 트럼프 격전지 갈때면 동맹들 떤다"
-            ]
-          },
-          {
-            "term": "AI",
-            "count": 24,
-            "publisher_count": 18,
-            "independent_story_count_estimate": 23,
-            "syndication_ratio_estimate": 0.042,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 22,
-            "delta": 2,
-            "score": 68,
-            "examples": [
-              "45개 주에서 1,561건 — 미국 AI 규제 파편화가 한국 기업 현장을 바꾼다",
-              "미국 AI 규제 파편화의 실제 비용: 45개 주 1,561건 법안이 기업 전략을 바꾼다",
-              "영업 통로 늘렸다가 해커에 빈틈 내줬다… AI 보안은 규제에 발목"
-            ]
-          },
-          {
-            "term": "지으면",
-            "count": 21,
-            "publisher_count": 16,
-            "independent_story_count_estimate": 9,
-            "syndication_ratio_estimate": 0.571,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 21,
-            "delta": 0,
-            "score": 58,
-            "examples": [
-              "“美에 공장 안 지으면 300% 관세”… 유세전 트럼프, 투자압박 높여",
-              "\"美에 공장 안 지으면 관세 300%\" 트럼프 격전지 갈때면 동맹들 떤다",
-              "트럼프 \"공장 안 지으면 관세 300%…결국 미국 온다\""
-            ]
-          },
-          {
-            "term": "원유",
-            "count": 19,
-            "publisher_count": 16,
-            "independent_story_count_estimate": 18,
-            "syndication_ratio_estimate": 0.053,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 18,
-            "delta": 1,
-            "score": 55,
-            "examples": [
-              "올해 사우디산 원유 도입 비중 30% 하회…2021년 이후 처음",
-              "호르무즈 봉쇄 후 3번째 한국 선박 수에즈운하로 원유 운송",
-              "사우디산 원유 30%선 붕괴…미주산은 역대 최고"
-            ]
-          },
-          {
-            "term": "규제",
-            "count": 13,
-            "publisher_count": 11,
-            "independent_story_count_estimate": 13,
-            "syndication_ratio_estimate": 0.0,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 12,
-            "delta": 1,
-            "score": 38,
-            "examples": [
-              "현대차그룹 자율주행, 듀얼 트랙 전략.. 테슬라와 중국 기업들의 협공 하에서 규제 개혁도 과제②",
-              "45개 주에서 1,561건 — 미국 AI 규제 파편화가 한국 기업 현장을 바꾼다",
-              "[단독] 규제 사각 ‘무니코틴 담배’ 두 배 급증…정부는 “단속 권한 없다”"
-            ]
-          },
-          {
-            "term": "압박",
-            "count": 12,
-            "publisher_count": 10,
-            "independent_story_count_estimate": 11,
-            "syndication_ratio_estimate": 0.083,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 13,
-            "delta": -1,
-            "score": 34,
-            "examples": [
-              "韓 투자 압박 이어가는 트럼프…\"더 많이 청구하면 돼\" |",
-              "미국에서도 “알래스카 LNG 고비용” 트럼프 ‘합의 안 하면 관세 2배’ 압박",
-              "트럼프 “韓, 알래스카 투자 안하면 2배 청구” 또 압박"
-            ]
-          },
-          {
-            "term": "대통령",
-            "count": 10,
-            "publisher_count": 8,
-            "independent_story_count_estimate": 9,
-            "syndication_ratio_estimate": 0.1,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 9,
-            "delta": 1,
-            "score": 29,
-            "examples": [
-              "이 대통령 \"국내 유가 안정, 공급가·물량 통제와 정유사 협조 덕분\"",
-              "'전작권' 집중하는 李대통령…'의지'와 '현실' 사이",
-              "이재명 대통령 \"南北 적대·대결 악순환 끊어야\"…항구적 평화체제 강조 |"
-            ]
-          },
-          {
-            "term": "중동",
-            "count": 8,
-            "publisher_count": 8,
-            "independent_story_count_estimate": 6,
-            "syndication_ratio_estimate": 0.25,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 8,
-            "delta": 0,
-            "score": 24,
-            "examples": [
-              "중동 원유수출 회복세 ’찬물’…이란 호르무즈 공격 재개",
-              "중동 원유수출 회복세에 '찬물'…이란 호르무즈 공격 다시 증가",
-              "사우디 원유 의존도 30%선 붕괴…중동 리스크가 바꾼 한국 원유 지도"
-            ]
-          },
-          {
-            "term": "호르무즈",
-            "count": 8,
-            "publisher_count": 7,
-            "independent_story_count_estimate": 7,
-            "syndication_ratio_estimate": 0.125,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 8,
-            "delta": 0,
-            "score": 23,
-            "examples": [
-              "중동 원유수출 회복세 ’찬물’…이란 호르무즈 공격 재개",
-              "호르무즈 봉쇄 후 3번째 한국 선박 수에즈운하로 원유 운송",
-              "중동 원유수출 회복세에 '찬물'…이란 호르무즈 공격 다시 증가"
-            ]
-          },
-          {
-            "term": "비중",
-            "count": 6,
-            "publisher_count": 5,
-            "independent_story_count_estimate": 6,
-            "syndication_ratio_estimate": 0.0,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 0,
-            "delta": 6,
-            "score": 23,
-            "examples": [
-              "세제개편안 후 서울 아파트 15억원 이하 거래 비중 80% 육박",
-              "올해 사우디산 원유 도입 비중 30% 하회…2021년 이후 처음",
-              "올해 사우디産 원유 도입 비중, 5년 만에 30% 밑으로 - 조선비즈"
-            ]
-          },
-          {
-            "term": "최대",
-            "count": 7,
-            "publisher_count": 7,
-            "independent_story_count_estimate": 1,
-            "syndication_ratio_estimate": 0.857,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 8,
-            "delta": -1,
-            "score": 21,
-            "examples": [
-              "트럼프 “美에 공장 안 지으면 최대 300% 관세” 위협",
-              "트럼프 \"美에 공장 안 지으면 관세 최대 300%\"…한국도 재차 압박",
-              "트럼프 “美에 공장 안 지으면 최대 300% 관세”…또 투자 압박"
-            ]
-          },
-          {
-            "term": "알래스카",
-            "count": 7,
-            "publisher_count": 7,
-            "independent_story_count_estimate": 5,
-            "syndication_ratio_estimate": 0.286,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 7,
-            "delta": 0,
-            "score": 21,
-            "examples": [
-              "알래스카 투자 압박하는 트럼프, 관세 인상하나",
-              "3조원 첫 송금에도…트럼프 '알래스카 LNG' 압박에 301조 관세 촉각",
-              "미국에서도 “알래스카 LNG 고비용” 트럼프 ‘합의 안 하면 관세 2배’ 압박"
-            ]
-          },
-          {
-            "term": "반도체",
-            "count": 5,
-            "publisher_count": 5,
-            "independent_story_count_estimate": 5,
-            "syndication_ratio_estimate": 0.0,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 0,
-            "delta": 5,
-            "score": 20,
-            "examples": [
-              "코스닥 지난달 최악 수익률은 제약…금리·반도체 쏠림에 직격탄",
-              "엔비디아 AI 반도체 '담보대출' 전략 성공할까, 삼성전자 SK하이닉스 실적에도 변수",
-              "HBM만이 아니었다…반도체 수출 603억달러가 보여준 수급의 변화"
-            ]
-          },
-          {
-            "term": "LNG",
-            "count": 5,
-            "publisher_count": 5,
-            "independent_story_count_estimate": 4,
-            "syndication_ratio_estimate": 0.2,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 0,
-            "delta": 5,
-            "score": 20,
-            "examples": [
-              "3조원 첫 송금에도…트럼프 '알래스카 LNG' 압박에 301조 관세 촉각",
-              "미국에서도 “알래스카 LNG 고비용” 트럼프 ‘합의 안 하면 관세 2배’ 압박",
-              "트럼프 알래스카 LNG 투자 압박, 한미 안보협의 새 변수 되나"
-            ]
-          },
-          {
-            "term": "이재명",
-            "count": 6,
-            "publisher_count": 6,
-            "independent_story_count_estimate": 6,
-            "syndication_ratio_estimate": 0.0,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 6,
-            "delta": 0,
-            "score": 18,
-            "examples": [
-              "이재명 대통령의 왕성한 SNS 활동..우려 목소리가 많은 이유",
-              "[커버in] 북미 공급망부터 유럽 첨단산업까지 글로벌 산업협력 넓히는 이재명 정부 정상외교",
-              "이재명 대통령 \"南北 적대·대결 악순환 끊어야\"…항구적 평화체제 강조 |"
-            ]
-          },
-          {
-            "term": "다시",
-            "count": 6,
-            "publisher_count": 6,
-            "independent_story_count_estimate": 5,
-            "syndication_ratio_estimate": 0.167,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 6,
-            "delta": 0,
-            "score": 18,
-            "examples": [
-              "다시 상승세 탄 비트코인…10만 달러 탈환 가를 ‘두 변수’",
-              "중동 원유수출 회복세에 '찬물'…이란 호르무즈 공격 다시 증가",
-              "다시 열지 않는 정유공장…유럽, 원유 급등이 반복되는 이유"
-            ]
-          },
-          {
-            "term": "이란",
-            "count": 6,
-            "publisher_count": 5,
-            "independent_story_count_estimate": 4,
-            "syndication_ratio_estimate": 0.333,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 6,
-            "delta": 0,
-            "score": 17,
-            "examples": [
-              "중동 원유수출 회복세 ’찬물’…이란 호르무즈 공격 재개",
-              "중동 원유수출 회복세에 '찬물'…이란 호르무즈 공격 다시 증가",
-              "중동 원유 흐름 회복했지만…이란 ‘초토화 대응’ 위험"
-            ]
-          },
-          {
-            "term": "올트먼",
-            "count": 4,
-            "publisher_count": 4,
-            "independent_story_count_estimate": 3,
-            "syndication_ratio_estimate": 0.25,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 0,
-            "delta": 4,
-            "score": 16,
-            "examples": [
-              "올트먼 \"AI 혜택 위해 위험감수해야\"…앤트로픽 규제론과 차별화",
-              "샘 올트먼 \"AI 혜택 얻으려면 일부 위험 감수해야…'과도한 규제' 반대",
-              "“나쁜 일 일부 감수해야”…올트먼, AI 규제 선 그었다"
-            ]
-          }
-        ],
-        "new_dart_filings": [],
-        "official_web_candidates": [],
-        "toss_market": {
-          "available": true,
-          "captured_at": "2026-10-01T11:31:12.905216+09:00",
-          "top_turnover": [
-            {
-              "rank": 1,
-              "ticker": "000660",
-              "name": "SK하이닉스",
-              "trading_value": 312073755000,
-              "day_return_pct": 1.21,
-              "last_price": 1797500
-            },
-            {
-              "rank": 2,
-              "ticker": "102110",
-              "name": "TIGER 200",
-              "trading_value": 271868148983,
-              "day_return_pct": 0.19,
-              "last_price": 110115
-            },
-            {
-              "rank": 3,
-              "ticker": "005930",
-              "name": "삼성전자",
-              "trading_value": 218295848750,
-              "day_return_pct": 0.55,
-              "last_price": 270000
-            },
-            {
-              "rank": 4,
-              "ticker": "009150",
-              "name": "삼성전기",
-              "trading_value": 170171042500,
-              "day_return_pct": 1.38,
-              "last_price": 1534000
-            },
-            {
-              "rank": 5,
-              "ticker": "069500",
-              "name": "KODEX 200",
-              "trading_value": 151562733581,
-              "day_return_pct": 0.26,
-              "last_price": 109835
-            },
-            {
-              "rank": 6,
-              "ticker": "122630",
-              "name": "KODEX 레버리지",
-              "trading_value": 94418643530,
-              "day_return_pct": 0.43,
-              "last_price": 109950
-            },
-            {
-              "rank": 7,
-              "ticker": "379810",
-              "name": "KODEX 미국나스닥100",
-              "trading_value": 56777439384,
-              "day_return_pct": 1.34,
-              "last_price": 27545
-            },
-            {
-              "rank": 8,
-              "ticker": "148020",
-              "name": "RISE 200",
-              "trading_value": 53319558545,
-              "day_return_pct": 0.23,
-              "last_price": 110705
-            },
-            {
-              "rank": 9,
-              "ticker": "379800",
-              "name": "KODEX 미국S&P500",
-              "trading_value": 52729897638,
-              "day_return_pct": 0.46,
-              "last_price": 23580
-            },
-            {
-              "rank": 10,
-              "ticker": "0035S0",
-              "name": "빅웨이브로보틱스",
-              "trading_value": 45275702625,
-              "day_return_pct": -4.11,
-              "last_price": 37250
-            },
-            {
-              "rank": 11,
-              "ticker": "252670",
-              "name": "KODEX 200선물인버스2X",
-              "trading_value": 44068855991,
-              "day_return_pct": 0.0,
-              "last_price": 72
-            },
-            {
-              "rank": 12,
-              "ticker": "402340",
-              "name": "SK스퀘어",
-              "trading_value": 37997230500,
-              "day_return_pct": -1.05,
-              "last_price": 1127000
-            },
-            {
-              "rank": 13,
-              "ticker": "233740",
-              "name": "KODEX 코스닥150레버리지",
-              "trading_value": 37562592244,
-              "day_return_pct": 6.64,
-              "last_price": 7780
-            },
-            {
-              "rank": 14,
-              "ticker": "005935",
-              "name": "삼성전자우",
-              "trading_value": 37557430450,
-              "day_return_pct": 2.25,
-              "last_price": 199600
-            },
-            {
-              "rank": 15,
-              "ticker": "114800",
-              "name": "KODEX 인버스",
-              "trading_value": 36887250774,
-              "day_return_pct": -0.1,
-              "last_price": 997
-            },
-            {
-              "rank": 16,
-              "ticker": "229200",
-              "name": "KODEX 코스닥150",
-              "trading_value": 36494286407,
-              "day_return_pct": 3.45,
-              "last_price": 14955
-            },
-            {
-              "rank": 17,
-              "ticker": "468670",
-              "name": "브릴스",
-              "trading_value": 33194143675,
-              "day_return_pct": 99.23,
-              "last_price": 38850
-            },
-            {
-              "rank": 18,
-              "ticker": "080220",
-              "name": "제주반도체",
-              "trading_value": 29159704300,
-              "day_return_pct": 7.15,
-              "last_price": 83900
-            },
-            {
-              "rank": 19,
-              "ticker": "360750",
-              "name": "TIGER 미국S&P500",
-              "trading_value": 28449007140,
-              "day_return_pct": 0.44,
-              "last_price": 25940
-            },
-            {
-              "rank": 20,
-              "ticker": "133690",
-              "name": "TIGER 미국나스닥100",
-              "trading_value": 28113659826,
-              "day_return_pct": 1.33,
-              "last_price": 184240
-            }
-          ],
-          "minute_burst_leaders": [
-            {
-              "ticker": "034020",
-              "name": "두산에너빌리티",
-              "latest_minute_amount": 1341311300.0,
-              "median_recent_amount": 181278400.0,
-              "burst_ratio": 7.399178832116788
-            },
-            {
-              "ticker": "015760",
-              "name": "한국전력",
-              "latest_minute_amount": 68183450.0,
-              "median_recent_amount": 17278750.0,
-              "burst_ratio": 3.946086956521739
-            },
-            {
-              "ticker": "084010",
-              "name": "대한제강",
-              "latest_minute_amount": 65994390.0,
-              "median_recent_amount": 19896840.0,
-              "burst_ratio": 3.3168276972624797
-            },
-            {
-              "ticker": "083650",
-              "name": "비에이치아이",
-              "latest_minute_amount": 192578500.0,
-              "median_recent_amount": 67200000.0,
-              "burst_ratio": 2.865751488095238
-            },
-            {
-              "ticker": "052690",
-              "name": "한전기술",
-              "latest_minute_amount": 168721800.0,
-              "median_recent_amount": 60210300.0,
-              "burst_ratio": 2.80220826004853
-            },
-            {
-              "ticker": "047920",
-              "name": "HLB제약",
-              "latest_minute_amount": 23359250.0,
-              "median_recent_amount": 9117720.0,
-              "burst_ratio": 2.561961762370417
-            },
-            {
-              "ticker": "108490",
-              "name": "로보티즈",
-              "latest_minute_amount": 238752000.0,
-              "median_recent_amount": 93562000.0,
-              "burst_ratio": 2.551805220067976
-            },
-            {
-              "ticker": "338220",
-              "name": "뷰노",
-              "latest_minute_amount": 6634100.0,
-              "median_recent_amount": 2973880.0,
-              "burst_ratio": 2.230789406432001
-            },
-            {
-              "ticker": "011070",
-              "name": "LG이노텍",
-              "latest_minute_amount": 792695000.0,
-              "median_recent_amount": 387651000.0,
-              "burst_ratio": 2.044867677369593
-            },
-            {
-              "ticker": "455850",
-              "name": "SOL AI반도체소부장",
-              "latest_minute_amount": 468557420.0,
-              "median_recent_amount": 248018400.0,
-              "burst_ratio": 1.8892042687155468
-            },
-            {
-              "ticker": "042660",
-              "name": "한화오션",
-              "latest_minute_amount": 100983300.0,
-              "median_recent_amount": 56382200.0,
-              "burst_ratio": 1.7910493027941443
-            },
-            {
-              "ticker": "114190",
-              "name": "강원에너지",
-              "latest_minute_amount": 3090080.0,
-              "median_recent_amount": 1818600.0,
-              "burst_ratio": 1.699153194765204
-            },
-            {
-              "ticker": "000720",
-              "name": "현대건설",
-              "latest_minute_amount": 140269800.0,
-              "median_recent_amount": 90597700.0,
-              "burst_ratio": 1.5482710929747665
-            },
-            {
-              "ticker": "002710",
-              "name": "TCC스틸",
-              "latest_minute_amount": 54407220.0,
-              "median_recent_amount": 37084060.0,
-              "burst_ratio": 1.4671322395660022
-            },
-            {
-              "ticker": "000250",
-              "name": "삼천당제약",
-              "latest_minute_amount": 382592000.0,
-              "median_recent_amount": 333762200.0,
-              "burst_ratio": 1.1463011689160725
-            },
-            {
-              "ticker": "402340",
-              "name": "SK스퀘어",
-              "latest_minute_amount": 1772088000.0,
-              "median_recent_amount": 1553256000.0,
-              "burst_ratio": 1.1408859840232388
-            },
-            {
-              "ticker": "272210",
-              "name": "한화시스템",
-              "latest_minute_amount": 174191500.0,
-              "median_recent_amount": 155430000.0,
-              "burst_ratio": 1.1207070707070708
-            },
-            {
-              "ticker": "000150",
-              "name": "두산",
-              "latest_minute_amount": 166800000.0,
-              "median_recent_amount": 154068000.0,
-              "burst_ratio": 1.082638834800218
-            },
-            {
-              "ticker": "007810",
-              "name": "코리아써키트",
-              "latest_minute_amount": 254233200.0,
-              "median_recent_amount": 239552000.0,
-              "burst_ratio": 1.0612860673256745
-            },
-            {
-              "ticker": "039030",
-              "name": "이오테크닉스",
-              "latest_minute_amount": 124300000.0,
-              "median_recent_amount": 118592000.0,
-              "burst_ratio": 1.0481314085267135
-            }
-          ],
-          "top10_share": null
-        },
-        "sector_selection": {
-          "mode": "dynamic",
-          "fixed_sector_whitelist": false,
-          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택"
-        },
-        "naver_indices": {
-          "KOSPI": "7,003.74",
-          "KOSDAQ": "893.29",
-          "KOSPI200": "1,109.05"
-        },
-        "source_summary": {
-          "ok_or_partial": 18,
-          "failed": 0,
-          "degraded": 9
-        },
-        "top_new_items": [
-          {
-            "topic": "kr_diplomacy_summit",
-            "title": "이 대통령 \"국내 유가 안정, 공급가·물량 통제와 정유사 협조 덕분\"",
-            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9aRzVJNkVOWUVkbXJ6ZzRrM3FEU1c4cTVfLWhBX21yTkdHTXJsbWFFd3ZGRXJUNy1yRGRrMVdkQUVHWHIxeDRSSWhISFVpeVU?oc=5",
-            "published_at": "Mon, 05 Oct 2026 00:25:01 GMT",
-            "publisher": "v.daum.net",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "kr_semiconductor_ai",
-            "title": "마이크론이 먼저 확인한 메모리 호황…삼성·SK하이닉스는 '비용 변수'",
-            "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE0yY1hOZUp3SUIyZ09tX0xVa1RHbEoxaDNibU1Wb2F4WkJQczRCN1VFakdGUjRzRDc3ajM0Z2ZBb21HQUhoeU92T2thVQ?oc=5",
-            "published_at": "Sun, 04 Oct 2026 11:40:07 GMT",
-            "publisher": "아이뉴스24",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "global_market",
-            "title": "사우디, 11월 아시아 공급용 원유가 대폭 인하",
-            "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE0zYXE0bjFSY3Z5V3FIN1lVdF9Ra1M5TVRDRFlqVEJ2LXFJVXY1MHJxUDhHT2swNnZwN1ZWalBqUXlNUXJWX0dYekhBbWpKdzdSVG1tREVOQWRieUXSAWBBVV95cUxQMUV2QXprZTB3STVMb2dqRlpyLW1JQVE4dTFSamFwQlVtUnZqNlpNN1pSSzYwYWlpZ2MwRlNyaXpPMXcwTHlkUmZ3ck9RY2pQMzJoNzJPMms2b3RuNk1FeTU?oc=5",
-            "published_at": "Mon, 05 Oct 2026 02:25:49 GMT",
-            "publisher": "연합뉴스",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "global_market",
-            "title": "구글 제미나이 AI요금 개편…월10달러 내도 '프로' 모델 못쓴다",
-            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1GOG1wb3lCVnprQm94djlIeEpzM0JwZmFFMjhnMDBLbXdvUXdQTWZTd2pPd2JMeGtfUEQtcHBuTC02TENPTkU5WTlSXzBHRG9IQmgybGY2dWx0Y0U2OEJVX9IBYEFVX3lxTE1GOG1wb3lCVnprQm94djlIeEpzM0JwZmFFMjhnMDBLbXdvUXdQTWZTd2pPd2JMeGtfUEQtcHBuTC02TENPTkU5WTlSXzBHRG9IQmgybGY2dWx0Y0U2OEJVXw?oc=5",
-            "published_at": "Sun, 04 Oct 2026 17:27:55 GMT",
-            "publisher": "연합뉴스",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "global_diplomacy_summit",
-            "title": "트럼프, 중간선거 격전지서 관세 성과 강조…\"외국기업 결국 美에 공장\"",
-            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9PYkk5Vl94TGNmTTY1SkRGVXhTYkR6c0N5ajZHcnc2bVJsQXNONThibG5jeDFDQUY4ZDVDelUwRDhVdEZYSmloV283N1VoQjFLWTIwb08zNmVIVW44aU1LWFRXZEloYzVCejBVWXhoNTA?oc=5",
-            "published_at": "Sun, 04 Oct 2026 04:28:05 GMT",
-            "publisher": "신아일보",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "dynamic:공장",
-            "title": "[단독] \"가뭄 대비용 물인데\"…반도체 공장에 쓰겠다는 정부",
-            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9ybTZJU2NFMFdkTEY4VEpZd01ST1AzUUFYRVZuOUFfU0NETVo3Y3B5aEx2VU1RVWFOT0RFUGQ0Y0xYM0U0VzZBbkhxdUZuLWgyV1YybnZqOWptQQ?oc=5",
-            "published_at": "Mon, 05 Oct 2026 01:03:16 GMT",
-            "publisher": "한국경제",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "dynamic:AI",
-            "title": "“은행이 이렇게 쉽게 뚫린다고?”…금융사 7곳 덮친 ‘AI 해커’",
-            "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE40STh6Sk5QVXhUR1dtbzdxS1ZwdlNiVENYbGNNQU02dkgwY2NQRmpyaFlzcGVxN3E5cy1rV3hMYXJpQ095QmsyanUzMUI1X1BJaGhwc2RKNnJrVjlMVE1pRHoyZXVINmNsbDJCZFN30gFuQVVfeXFMTjRJOHpKTlBVeFRHV21vN3FLVnB2U2JUQ1hsY01BTTZ2SDBjY1BGanJoWXNwZXE3cTlzLWtXeExhcmlDT3lCazJqdTMxQjVfUEloaHBzZEo2cmtWOUxUTWlEejJldUg2Y2xsMkJkU3c?oc=5",
-            "published_at": "Mon, 05 Oct 2026 01:07:49 GMT",
-            "publisher": "주간조선",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "dynamic:AI",
-            "title": "올트먼 \"AI 혜택 위해 위험감수해야\"…앤트로픽 규제론과 차별화",
-            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBqbmZ5NE9WdUdMUUlsT01ONTBOS1ZER01lMVdfT1p6VnJHYWtSRlBsN2tRM1ItczZ5TGlINnJSU0RJYlEwQXB2aU82R3VULWpxUDRzYlR5LWpxZW0wRVhCbNIBYEFVX3lxTFBqbmZ5NE9WdUdMUUlsT01ONTBOS1ZER01lMVdfT1p6VnJHYWtSRlBsN2tRM1ItczZ5TGlINnJSU0RJYlEwQXB2aU82R3VULWpxUDRzYlR5LWpxZW0wRVhCbA?oc=5",
-            "published_at": "Mon, 05 Oct 2026 00:55:43 GMT",
-            "publisher": "연합뉴스",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "dynamic:AI",
-            "title": "AI, 인간 전문가를 '도구'로 활용…\"지시 없이 과학자 1500명에 메일\"",
-            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5Jd0d2dW80ZFZVNm5VZmNPSGJYcDRiRFMzVWJCT0EzLW56WVFYa1VZTDZ2a0Jka2JCNi12UHA0b2FsaGFGWnZhandySzBPV2tiMHpXUQ?oc=5",
-            "published_at": "Mon, 05 Oct 2026 02:36:00 GMT",
-            "publisher": "DongA Science",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "dynamic:AI",
-            "title": "'AI→ SI' 머스크, 트럼프 주장 따라 회사 이름 변경 추진",
-            "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE85SDFZUUVBeEViOG53SjJ1X1VMTmREd1VQZXN1VHZQaVpvN3liMzNKMmZMWE5abks0LTZxZWs2TFMyTUlNaFV6SEhXQXRvdndCeFlZaUJTaDRJNWtQX3p6SDMzR3R1SDd6ZDJPS2Q2NDVGZk1j0gF0QVVfeXFMTVEycGVfZmJRbTJHNEd6NTItUnVIcUprVVZCM0kwcGZhRWdQMl8xaHp4SThKeFp3Y2VfZFFMa3pZSF8yTHhvQlBaOVgzMXJScGlveVF3d0V0ZDRrcU9BSTdLNjAyQl9BOUFzd2E4NVdTS2NoLVk?oc=5",
-            "published_at": "Mon, 05 Oct 2026 02:21:40 GMT",
-            "publisher": "MBC 뉴스",
-            "discovery_source": "google_news_rss"
-          }
-        ],
-        "handoff_queries": [
-          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
-          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
-          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
-          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
-          "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "관세 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "공장 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "지으면 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "원유 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "규제 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "압박 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
-        ]
-      },
-      "public_batch_market": {
-        "generated_at": "2026-10-05T11:40:45.181567+09:00",
-        "status": "unavailable",
-        "provider": "naver_public",
-        "exact_1m_bars": false,
-        "elapsed_minutes_from_previous": 10.033139883333332,
-        "interval_leaders": [],
-        "one_minute_samples_available": false,
-        "minute_amount_exact": false,
-        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
-        "minute_sample_ticker_count": 0,
-        "current_top50_count": 0,
-        "tracked_universe_count": 0,
-        "dropped_from_current_top50_count": 0,
-        "tracked_outside_top50_with_samples": 0,
-        "minute_samples_by_ticker": {},
-        "limitations": [
-          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
-          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
-          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
-          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
-          "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
-          "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
-        ]
-      },
-      "market": {
-        "generated_at": "2026-10-05T11:41:05.796500+09:00",
-        "source_status": "needs_credentials",
-        "provider": "none",
-        "fallback_used": false,
-        "historical_fallback_available": true
-      },
-      "market_recent_sessions": {
-        "updated_at": "2026-09-26T12:50:00+09:00",
-        "basis": "verified_close",
-        "korea": [
-          {
-            "date": "2026-09-23",
-            "status": "closed",
-            "kospi": {
-              "close": 7080.92,
-              "change_pct": 0.9
-            },
-            "kosdaq": {
-              "close": 844.48,
-              "change_pct": 1.21
-            },
-            "flows_krw_100m": {
-              "foreign": -5047,
-              "institution": 3169,
-              "individual": -14396
-            },
-            "note": "추석 연휴 직전 마지막 거래일",
-            "source": "연합뉴스/Investing.com"
-          },
-          {
-            "date": "2026-09-22",
-            "status": "closed",
-            "kospi": {
-              "close": 7017.91,
-              "change_pct": 0.15
-            },
-            "kosdaq": {
-              "close": 834.38,
-              "change_pct": -0.23
-            },
-            "flows_krw_100m": {
-              "foreign": 850,
-              "institution": -1190,
-              "individual": -16089
-            },
-            "note": "장중 2%대 상승 후 상승폭 축소",
-            "source": "연합뉴스"
-          },
-          {
-            "date": "2026-09-21",
-            "status": "closed",
-            "kospi": {
-              "close": 7007.72,
-              "change_pct": 1.65
-            },
-            "kosdaq": {
-              "close": 836.27,
-              "change_pct": 1.11
-            },
-            "flows_krw_100m": {
-              "foreign": -1603,
-              "institution": 14924,
-              "individual": -29790
-            },
-            "note": "반도체 강세로 7천선 회복",
-            "source": "연합뉴스"
-          }
-        ],
-        "us": [
-          {
-            "date": "2026-09-25",
-            "status": "closed",
-            "sp500": {
-              "close": 7743.41,
-              "change_pct": 0.51
-            },
-            "nasdaq": {
-              "close": 27068.72,
-              "change_pct": 0.48
-            },
-            "dow": {
-              "close": 51828.62,
-              "change_pct": 0.93
-            },
-            "note": "AI 기술주 강세",
-            "source": "Reuters/시장 종가 데이터"
-          },
-          {
-            "date": "2026-09-24",
-            "status": "closed",
-            "sp500": {
-              "close": 7704.13,
-              "change_pct": -0.02
-            },
-            "nasdaq": {
-              "close": 26939.37,
-              "change_pct": 0.01
-            },
-            "dow": {
-              "close": 51349.98,
-              "change_pct": -0.31
-            },
-            "note": "금리·유가 부담 속 혼조",
-            "source": "FRED/시장 종가 데이터"
-          },
-          {
-            "date": "2026-09-23",
-            "status": "closed",
-            "sp500": {
-              "close": 7706.03,
-              "change_pct": -0.75
-            },
-            "nasdaq": {
-              "close": 26936.04,
-              "change_pct": -1.13
-            },
-            "dow": {
-              "close": 51511.59,
-              "change_pct": -0.68
-            },
-            "note": "장기금리 상승으로 위험자산 압박",
-            "source": "FRED/시장 종가 데이터"
-          }
-        ],
-        "holiday_notes": [
-          {
-            "market": "KR",
-            "from": "2026-09-24",
-            "to": "2026-09-27",
-            "reason": "추석 연휴"
-          }
-        ]
-      },
-      "toss": {
-        "available": true,
-        "captured_at": "2026-10-01T11:31:12.905216+09:00",
-        "collector": {
-          "subscription_count": 0,
-          "rejected_count": 0,
-          "last_message_at": "2026-10-01T11:31:12.905216+09:00",
-          "last_universe_refresh": "2026-10-01T11:31:12.905216+09:00"
-        }
-      },
-      "user_feedback": {
-        "pending_count": 0,
-        "latest_pending_comment_id": null
-      },
-      "git": {
-        "head_sha": "38509f7f39b67feeb529a8595961d6170f1cdc33",
-        "latest_commit_changed_files": [
-          "data/discovery/archive/2026-10-05.jsonl",
-          "data/discovery/archive/index.json",
-          "data/discovery/latest.json",
-          "data/health/latest.json",
-          "data/health/state.json",
-          "data/macro/current.json",
-          "data/market/runtime.json",
-          "data/news/fast-path-state.json",
-          "data/news/issue-digest.json",
-          "data/providers/naver_batch/history.json",
-          "data/providers/naver_batch/latest.json",
-          "data/providers/toss/fetch_runtime.json",
-          "data/providers/toss/status.json",
-          "data/regression/history/2026-10-05.jsonl",
-          "data/regression/latest.json",
-          "data/risk/calendar_live.json",
-          "data/risk/latest.json",
-          "data/risk/runtime.json",
-          "data/risk/state.json",
-          "data/supervisor/queue/2026-10-05.jsonl",
-          "data/supervisor/recent.json",
-          "data/supervisor/windows/2026-10-05/1130-B.json",
-          "data/supervisor/windows/latest-B.json"
-        ]
-      },
-      "previous_workflow_run": {
-        "id": 37255665123,
-        "name": "10분 감독 관측 큐",
-        "event": "workflow_dispatch",
-        "status": "completed",
-        "conclusion": "success",
-        "created_at": "2026-10-05T02:30:22Z",
-        "updated_at": "2026-10-05T02:40:27Z",
-        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/37255665123",
-        "head_sha": "05b69136e17ce347204892728b8df6e9742e259d"
-      },
-      "hypothesis_verification": {
-        "due": []
-      },
-      "signals": [
-        "health:CRITICAL",
-        "discovery:degraded",
-        "market:needs_credentials"
-      ]
-    },
     {
       "schema_version": 2,
       "observation_id": "obs-20261005T115129+0900-37256959699-1",
@@ -126181,6 +125101,1059 @@
         "created_at": "2026-10-06T00:59:15Z",
         "updated_at": "2026-10-06T00:59:24Z",
         "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/37396844041",
+        "head_sha": "c908d624bb9f87d5e3b655963f81acdb43171127"
+      },
+      "hypothesis_verification": {
+        "due": []
+      },
+      "signals": [
+        "health:CRITICAL",
+        "discovery:degraded",
+        "market:needs_credentials"
+      ]
+    },
+    {
+      "schema_version": 2,
+      "observation_id": "obs-20261006T101208+0900-37397804382-1",
+      "observed_at": "2026-10-06T10:12:08.697195+09:00",
+      "slot_at": "2026-10-06T10:10:00+09:00",
+      "slot_key": "2026-10-06T10:10+0900",
+      "sensor_interval_minutes": 10,
+      "slot_source": "dispatch_input",
+      "slot_start_delay_seconds": 30.454,
+      "slot_delay_seconds": 128.697195,
+      "source": {
+        "repository": "juhwan7/stock-autoresearch",
+        "workflow": "10분 감독 관측 큐",
+        "event_name": "workflow_dispatch",
+        "run_id": "37397804382",
+        "run_attempt": "1",
+        "head_sha": "dae5b9ef3a08949c186ebd6d0046ee7c5d4dd435",
+        "ref_name": "main"
+      },
+      "queue": {
+        "batch_size": 3,
+        "pending_before_append": 120,
+        "last_processed_observation_id": "obs-20260928T183221+0900-36403930052-1",
+        "last_processed_slot": "2026-09-28T18:30:00+09:00",
+        "pending_after_append": 120
+      },
+      "validation": {
+        "status": "ok",
+        "compile": "ok",
+        "pytest": "ok",
+        "diff_check": "ok"
+      },
+      "steps": {
+        "toss_fetch": "success",
+        "toss_summary": "success",
+        "health": "success",
+        "dashboard": "success",
+        "market_discovery": "success",
+        "public_batch_market": "success",
+        "market_sensor_repair": "success",
+        "risk_sensor_repair": "success",
+        "regression_refresh": "success"
+      },
+      "health": {
+        "status": "CRITICAL",
+        "generated_at": "2026-10-06T10:12:03.577039+09:00",
+        "issues": [
+          {
+            "component": "macro",
+            "code": "unavailable",
+            "severity": "CRITICAL",
+            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+          }
+        ]
+      },
+      "regression": {
+        "status": "COLLECTING",
+        "generated_at": "2026-10-06T01:12:03.176734+00:00",
+        "quarantine_count": 0,
+        "rolled_back_count": 0
+      },
+      "market_discovery": {
+        "generated_at": "2026-10-06T10:11:48.029112+09:00",
+        "item_count": 172,
+        "new_item_count": 12,
+        "topic_counts": {
+          "kr_market_broad": 2,
+          "kr_policy_economy": 20,
+          "kr_diplomacy_summit": 5,
+          "kr_semiconductor_ai": 5,
+          "kr_energy_power": 1,
+          "kr_bio_health": 1,
+          "global_market": 30,
+          "global_diplomacy_summit": 25,
+          "us_macro_rates": 2,
+          "global_energy_middle_east": 4,
+          "europe_debt_ecb": 5,
+          "dynamic:나스닥": 5,
+          "dynamic:사상": 8,
+          "dynamic:AI": 20,
+          "dynamic:트럼프": 4,
+          "dynamic:최고치": 3,
+          "dynamic:관세": 11,
+          "dynamic:중동": 14,
+          "dynamic:국채금리": 7
+        },
+        "trending_terms": [
+          {
+            "term": "나스닥",
+            "count": 29,
+            "publisher_count": 22,
+            "independent_story_count_estimate": 21,
+            "syndication_ratio_estimate": 0.276,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 30,
+            "delta": -1,
+            "score": 80,
+            "examples": [
+              "美국채금리 상승에도 뉴욕증시 상승…나스닥 사상 최고치(종합)",
+              "美국채금리 최고치에도 기술주 강세…나스닥 사상 최고",
+              "뉴욕증시, 국채금리 상승에도 일제히 강세...나스닥 최고치"
+            ]
+          },
+          {
+            "term": "트럼프",
+            "count": 27,
+            "publisher_count": 18,
+            "independent_story_count_estimate": 26,
+            "syndication_ratio_estimate": 0.037,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 27,
+            "delta": 0,
+            "score": 72,
+            "examples": [
+              "알래스카 LNG 투자 압박하는 트럼프…\"안 하면 관세 두 배\"",
+              "밴스 “알래스카 LNG, 韓과 세부 협의 남아”⋯트럼프 ‘투자 확정’과 온도차",
+              "유가·물가에 흔들리는 美민심… 트럼프 '대미투자'로 중간선거 표심 잡기 - 머니투데이"
+            ]
+          },
+          {
+            "term": "AI",
+            "count": 25,
+            "publisher_count": 20,
+            "independent_story_count_estimate": 24,
+            "syndication_ratio_estimate": 0.04,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 25,
+            "delta": 0,
+            "score": 70,
+            "examples": [
+              "[AI 리포트] 한국 AGI의 골든타임···'AI 속도조절론'이 규제 장벽 되기 전에",
+              "[새만금대토론회]\"피지컬 AI 신산업, 규제·초기수요·인재가 관건\" |",
+              "리사 수 AMD 회장, 7개월 만에 방한…한국서 ‘AI 동맹’ 본격 확대 예고"
+            ]
+          },
+          {
+            "term": "사상",
+            "count": 24,
+            "publisher_count": 21,
+            "independent_story_count_estimate": 17,
+            "syndication_ratio_estimate": 0.292,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 27,
+            "delta": -3,
+            "score": 69,
+            "examples": [
+              "美국채금리 상승에도 뉴욕증시 상승…나스닥 사상 최고치(종합)",
+              "美국채금리 최고치에도 기술주 강세…나스닥 사상 최고",
+              "美국채금리 상승에도 뉴욕증시 상승‥나스닥 사상 최고치"
+            ]
+          },
+          {
+            "term": "최고치",
+            "count": 22,
+            "publisher_count": 17,
+            "independent_story_count_estimate": 15,
+            "syndication_ratio_estimate": 0.318,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 24,
+            "delta": -2,
+            "score": 61,
+            "examples": [
+              "美국채금리 상승에도 뉴욕증시 상승…나스닥 사상 최고치(종합)",
+              "뉴욕증시, 국채금리 상승에도 일제히 강세...나스닥 최고치",
+              "‘AI 실적 기대감’에 나스닥 최고치…엔비디아, 시총 6조 달러 눈앞"
+            ]
+          },
+          {
+            "term": "관세",
+            "count": 22,
+            "publisher_count": 16,
+            "independent_story_count_estimate": 20,
+            "syndication_ratio_estimate": 0.091,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 23,
+            "delta": -1,
+            "score": 60,
+            "examples": [
+              "알래스카 LNG 투자 압박하는 트럼프…\"안 하면 관세 두 배\"",
+              "'트럼프 관세'에 공화당 텃밭 흔들… 메인·아이오와 '초접전' [격전지로 본 美 중간선거 (4)]",
+              "트럼프 약속에 '삼전닉스' 비명, 또 다시 꺼내 든 반도체 관세"
+            ]
+          },
+          {
+            "term": "중동",
+            "count": 19,
+            "publisher_count": 15,
+            "independent_story_count_estimate": 17,
+            "syndication_ratio_estimate": 0.105,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 19,
+            "delta": 0,
+            "score": 53,
+            "examples": [
+              "\"중동 원유수출 증가·G7 비축유 방출 약속\" 국제유가 1.8%↓",
+              "[뉴욕유가] 중동 원유수출, 전쟁 전 수준 회복…WTI 1.8% 하락 |",
+              "국제유가, 중동 원유수출 증가·G7 비축유 방출 약속에 1.8%↓"
+            ]
+          },
+          {
+            "term": "국채금리",
+            "count": 18,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 10,
+            "syndication_ratio_estimate": 0.444,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 19,
+            "delta": -1,
+            "score": 45,
+            "examples": [
+              "美국채금리 상승에도 뉴욕증시 상승…나스닥 사상 최고치(종합)",
+              "美국채금리 최고치에도 기술주 강세…나스닥 사상 최고",
+              "뉴욕증시, 국채금리 상승에도 일제히 강세...나스닥 최고치"
+            ]
+          },
+          {
+            "term": "뉴욕증시",
+            "count": 15,
+            "publisher_count": 11,
+            "independent_story_count_estimate": 7,
+            "syndication_ratio_estimate": 0.533,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 14,
+            "delta": 1,
+            "score": 42,
+            "examples": [
+              "美국채금리 상승에도 뉴욕증시 상승…나스닥 사상 최고치(종합)",
+              "뉴욕증시, 국채금리 상승에도 일제히 강세...나스닥 최고치",
+              "美국채금리 상승에도 뉴욕증시 상승‥나스닥 사상 최고치"
+            ]
+          },
+          {
+            "term": "규제",
+            "count": 10,
+            "publisher_count": 10,
+            "independent_story_count_estimate": 10,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 9,
+            "delta": 1,
+            "score": 31,
+            "examples": [
+              "내국인 주담대 옥죄는데…외국인 '해외자금' 주택매입 규제 한계",
+              "외국인 해외자금으로 국내 주택 매입 … 대출 규제 사각지대 논란",
+              "[ESG특집] 글로벌 공급망 규제 강화, 한국 기업의 '보이지 않는 리스크' 관리 해법은?"
+            ]
+          },
+          {
+            "term": "수출",
+            "count": 10,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 10,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 10,
+            "delta": 0,
+            "score": 29,
+            "examples": [
+              "이란, 호르무즈 공격 재개 … 중동 원유 수출 회복세에 '찬물'",
+              "중동 원유 수출 늘고 G7 비축유 푼다⋯국제유가 하락",
+              "국제유가, 중동 원유 수출 회복에 하락세…WTI 89달러선"
+            ]
+          },
+          {
+            "term": "알래스카",
+            "count": 7,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 7,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 7,
+            "score": 28,
+            "examples": [
+              "알래스카 LNG 투자 압박하는 트럼프…\"안 하면 관세 두 배\"",
+              "밴스 “알래스카 LNG, 韓과 세부 협의 남아”⋯트럼프 ‘투자 확정’과 온도차",
+              "3조원 첫 송금에도…트럼프 '알래스카 LNG' 압박에 301조 관세 촉각 > 시애틀 뉴스/핫이슈"
+            ]
+          },
+          {
+            "term": "G7",
+            "count": 7,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 5,
+            "syndication_ratio_estimate": 0.286,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 7,
+            "score": 28,
+            "examples": [
+              "\"중동 원유수출 증가·G7 비축유 방출 약속\" 국제유가 1.8%↓",
+              "국제유가, 중동 원유수출 증가·G7 비축유 방출 약속에 1.8%↓",
+              "중동 원유 수출 늘고 G7 비축유 푼다⋯국제유가 하락"
+            ]
+          },
+          {
+            "term": "국제유가",
+            "count": 9,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 7,
+            "syndication_ratio_estimate": 0.222,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 9,
+            "delta": 0,
+            "score": 27,
+            "examples": [
+              "\"중동 원유수출 증가·G7 비축유 방출 약속\" 국제유가 1.8%↓",
+              "국제유가, 중동 원유수출 증가·G7 비축유 방출 약속에 1.8%↓",
+              "국제유가 하락…중동 원유수출 회복에 WTI 90달러 아래로"
+            ]
+          },
+          {
+            "term": "상승에도",
+            "count": 7,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 2,
+            "syndication_ratio_estimate": 0.714,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 7,
+            "score": 27,
+            "examples": [
+              "美국채금리 상승에도 뉴욕증시 상승…나스닥 사상 최고치(종합)",
+              "뉴욕증시, 국채금리 상승에도 일제히 강세...나스닥 최고치",
+              "美국채금리 상승에도 뉴욕증시 상승‥나스닥 사상 최고치"
+            ]
+          },
+          {
+            "term": "원유수출",
+            "count": 6,
+            "publisher_count": 5,
+            "independent_story_count_estimate": 4,
+            "syndication_ratio_estimate": 0.333,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 6,
+            "score": 23,
+            "examples": [
+              "\"중동 원유수출 증가·G7 비축유 방출 약속\" 국제유가 1.8%↓",
+              "[뉴욕유가] 중동 원유수출, 전쟁 전 수준 회복…WTI 1.8% 하락 |",
+              "국제유가, 중동 원유수출 증가·G7 비축유 방출 약속에 1.8%↓"
+            ]
+          },
+          {
+            "term": "마감",
+            "count": 6,
+            "publisher_count": 4,
+            "independent_story_count_estimate": 3,
+            "syndication_ratio_estimate": 0.5,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 6,
+            "score": 22,
+            "examples": [
+              "[글로벌증시] 뉴욕증시 상승 마감…나스닥 사상 최고치 경신",
+              "뉴욕증시, 美국채금리 상승에도 상승 마감...나스닥 사상 최고치 달성",
+              "[뉴욕증시 마감] 美 국채금리 22년래 최고치도…엔비디아 강세에 나스닥 사상 최고치"
+            ]
+          },
+          {
+            "term": "최고",
+            "count": 7,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 6,
+            "syndication_ratio_estimate": 0.143,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 7,
+            "delta": 0,
+            "score": 21,
+            "examples": [
+              "美국채금리 최고치에도 기술주 강세…나스닥 사상 최고",
+              "美 국채금리 22년래 최고치에도 나스닥 ’사상 최고’…AI가 금리 공포 눌렀다 By EBN",
+              "‘AI주’ 강세에 나스닥 사상 최고···엔비디아 이틀 연속 사상 최고치 경신"
+            ]
+          },
+          {
+            "term": "엔비디아",
+            "count": 7,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 7,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 8,
+            "delta": -1,
+            "score": 21,
+            "examples": [
+              "‘AI 실적 기대감’에 나스닥 최고치…엔비디아, 시총 6조 달러 눈앞",
+              "‘AI주’ 강세에 나스닥 사상 최고···엔비디아 이틀 연속 사상 최고치 경신",
+              "엔비디아 주가 이틀연속 사상 최고치…시가총액 6조달러 돌파 가시권"
+            ]
+          },
+          {
+            "term": "비축유",
+            "count": 7,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 5,
+            "syndication_ratio_estimate": 0.286,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 7,
+            "delta": 0,
+            "score": 21,
+            "examples": [
+              "\"중동 원유수출 증가·G7 비축유 방출 약속\" 국제유가 1.8%↓",
+              "국제유가, 중동 원유수출 증가·G7 비축유 방출 약속에 1.8%↓",
+              "중동 원유 수출 늘고 G7 비축유 푼다⋯국제유가 하락"
+            ]
+          }
+        ],
+        "new_dart_filings": [],
+        "official_web_candidates": [],
+        "toss_market": {
+          "available": true,
+          "captured_at": "2026-10-01T11:31:12.905216+09:00",
+          "top_turnover": [
+            {
+              "rank": 1,
+              "ticker": "000660",
+              "name": "SK하이닉스",
+              "trading_value": 312073755000,
+              "day_return_pct": 1.21,
+              "last_price": 1797500
+            },
+            {
+              "rank": 2,
+              "ticker": "102110",
+              "name": "TIGER 200",
+              "trading_value": 271868148983,
+              "day_return_pct": 0.19,
+              "last_price": 110115
+            },
+            {
+              "rank": 3,
+              "ticker": "005930",
+              "name": "삼성전자",
+              "trading_value": 218295848750,
+              "day_return_pct": 0.55,
+              "last_price": 270000
+            },
+            {
+              "rank": 4,
+              "ticker": "009150",
+              "name": "삼성전기",
+              "trading_value": 170171042500,
+              "day_return_pct": 1.38,
+              "last_price": 1534000
+            },
+            {
+              "rank": 5,
+              "ticker": "069500",
+              "name": "KODEX 200",
+              "trading_value": 151562733581,
+              "day_return_pct": 0.26,
+              "last_price": 109835
+            },
+            {
+              "rank": 6,
+              "ticker": "122630",
+              "name": "KODEX 레버리지",
+              "trading_value": 94418643530,
+              "day_return_pct": 0.43,
+              "last_price": 109950
+            },
+            {
+              "rank": 7,
+              "ticker": "379810",
+              "name": "KODEX 미국나스닥100",
+              "trading_value": 56777439384,
+              "day_return_pct": 1.34,
+              "last_price": 27545
+            },
+            {
+              "rank": 8,
+              "ticker": "148020",
+              "name": "RISE 200",
+              "trading_value": 53319558545,
+              "day_return_pct": 0.23,
+              "last_price": 110705
+            },
+            {
+              "rank": 9,
+              "ticker": "379800",
+              "name": "KODEX 미국S&P500",
+              "trading_value": 52729897638,
+              "day_return_pct": 0.46,
+              "last_price": 23580
+            },
+            {
+              "rank": 10,
+              "ticker": "0035S0",
+              "name": "빅웨이브로보틱스",
+              "trading_value": 45275702625,
+              "day_return_pct": -4.11,
+              "last_price": 37250
+            },
+            {
+              "rank": 11,
+              "ticker": "252670",
+              "name": "KODEX 200선물인버스2X",
+              "trading_value": 44068855991,
+              "day_return_pct": 0.0,
+              "last_price": 72
+            },
+            {
+              "rank": 12,
+              "ticker": "402340",
+              "name": "SK스퀘어",
+              "trading_value": 37997230500,
+              "day_return_pct": -1.05,
+              "last_price": 1127000
+            },
+            {
+              "rank": 13,
+              "ticker": "233740",
+              "name": "KODEX 코스닥150레버리지",
+              "trading_value": 37562592244,
+              "day_return_pct": 6.64,
+              "last_price": 7780
+            },
+            {
+              "rank": 14,
+              "ticker": "005935",
+              "name": "삼성전자우",
+              "trading_value": 37557430450,
+              "day_return_pct": 2.25,
+              "last_price": 199600
+            },
+            {
+              "rank": 15,
+              "ticker": "114800",
+              "name": "KODEX 인버스",
+              "trading_value": 36887250774,
+              "day_return_pct": -0.1,
+              "last_price": 997
+            },
+            {
+              "rank": 16,
+              "ticker": "229200",
+              "name": "KODEX 코스닥150",
+              "trading_value": 36494286407,
+              "day_return_pct": 3.45,
+              "last_price": 14955
+            },
+            {
+              "rank": 17,
+              "ticker": "468670",
+              "name": "브릴스",
+              "trading_value": 33194143675,
+              "day_return_pct": 99.23,
+              "last_price": 38850
+            },
+            {
+              "rank": 18,
+              "ticker": "080220",
+              "name": "제주반도체",
+              "trading_value": 29159704300,
+              "day_return_pct": 7.15,
+              "last_price": 83900
+            },
+            {
+              "rank": 19,
+              "ticker": "360750",
+              "name": "TIGER 미국S&P500",
+              "trading_value": 28449007140,
+              "day_return_pct": 0.44,
+              "last_price": 25940
+            },
+            {
+              "rank": 20,
+              "ticker": "133690",
+              "name": "TIGER 미국나스닥100",
+              "trading_value": 28113659826,
+              "day_return_pct": 1.33,
+              "last_price": 184240
+            }
+          ],
+          "minute_burst_leaders": [
+            {
+              "ticker": "034020",
+              "name": "두산에너빌리티",
+              "latest_minute_amount": 1341311300.0,
+              "median_recent_amount": 181278400.0,
+              "burst_ratio": 7.399178832116788
+            },
+            {
+              "ticker": "015760",
+              "name": "한국전력",
+              "latest_minute_amount": 68183450.0,
+              "median_recent_amount": 17278750.0,
+              "burst_ratio": 3.946086956521739
+            },
+            {
+              "ticker": "084010",
+              "name": "대한제강",
+              "latest_minute_amount": 65994390.0,
+              "median_recent_amount": 19896840.0,
+              "burst_ratio": 3.3168276972624797
+            },
+            {
+              "ticker": "083650",
+              "name": "비에이치아이",
+              "latest_minute_amount": 192578500.0,
+              "median_recent_amount": 67200000.0,
+              "burst_ratio": 2.865751488095238
+            },
+            {
+              "ticker": "052690",
+              "name": "한전기술",
+              "latest_minute_amount": 168721800.0,
+              "median_recent_amount": 60210300.0,
+              "burst_ratio": 2.80220826004853
+            },
+            {
+              "ticker": "047920",
+              "name": "HLB제약",
+              "latest_minute_amount": 23359250.0,
+              "median_recent_amount": 9117720.0,
+              "burst_ratio": 2.561961762370417
+            },
+            {
+              "ticker": "108490",
+              "name": "로보티즈",
+              "latest_minute_amount": 238752000.0,
+              "median_recent_amount": 93562000.0,
+              "burst_ratio": 2.551805220067976
+            },
+            {
+              "ticker": "338220",
+              "name": "뷰노",
+              "latest_minute_amount": 6634100.0,
+              "median_recent_amount": 2973880.0,
+              "burst_ratio": 2.230789406432001
+            },
+            {
+              "ticker": "011070",
+              "name": "LG이노텍",
+              "latest_minute_amount": 792695000.0,
+              "median_recent_amount": 387651000.0,
+              "burst_ratio": 2.044867677369593
+            },
+            {
+              "ticker": "455850",
+              "name": "SOL AI반도체소부장",
+              "latest_minute_amount": 468557420.0,
+              "median_recent_amount": 248018400.0,
+              "burst_ratio": 1.8892042687155468
+            },
+            {
+              "ticker": "042660",
+              "name": "한화오션",
+              "latest_minute_amount": 100983300.0,
+              "median_recent_amount": 56382200.0,
+              "burst_ratio": 1.7910493027941443
+            },
+            {
+              "ticker": "114190",
+              "name": "강원에너지",
+              "latest_minute_amount": 3090080.0,
+              "median_recent_amount": 1818600.0,
+              "burst_ratio": 1.699153194765204
+            },
+            {
+              "ticker": "000720",
+              "name": "현대건설",
+              "latest_minute_amount": 140269800.0,
+              "median_recent_amount": 90597700.0,
+              "burst_ratio": 1.5482710929747665
+            },
+            {
+              "ticker": "002710",
+              "name": "TCC스틸",
+              "latest_minute_amount": 54407220.0,
+              "median_recent_amount": 37084060.0,
+              "burst_ratio": 1.4671322395660022
+            },
+            {
+              "ticker": "000250",
+              "name": "삼천당제약",
+              "latest_minute_amount": 382592000.0,
+              "median_recent_amount": 333762200.0,
+              "burst_ratio": 1.1463011689160725
+            },
+            {
+              "ticker": "402340",
+              "name": "SK스퀘어",
+              "latest_minute_amount": 1772088000.0,
+              "median_recent_amount": 1553256000.0,
+              "burst_ratio": 1.1408859840232388
+            },
+            {
+              "ticker": "272210",
+              "name": "한화시스템",
+              "latest_minute_amount": 174191500.0,
+              "median_recent_amount": 155430000.0,
+              "burst_ratio": 1.1207070707070708
+            },
+            {
+              "ticker": "000150",
+              "name": "두산",
+              "latest_minute_amount": 166800000.0,
+              "median_recent_amount": 154068000.0,
+              "burst_ratio": 1.082638834800218
+            },
+            {
+              "ticker": "007810",
+              "name": "코리아써키트",
+              "latest_minute_amount": 254233200.0,
+              "median_recent_amount": 239552000.0,
+              "burst_ratio": 1.0612860673256745
+            },
+            {
+              "ticker": "039030",
+              "name": "이오테크닉스",
+              "latest_minute_amount": 124300000.0,
+              "median_recent_amount": 118592000.0,
+              "burst_ratio": 1.0481314085267135
+            }
+          ],
+          "top10_share": null
+        },
+        "sector_selection": {
+          "mode": "dynamic",
+          "fixed_sector_whitelist": false,
+          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택"
+        },
+        "naver_indices": {
+          "KOSPI": "7,004.64",
+          "KOSDAQ": "912.49",
+          "KOSPI200": "1,108.34"
+        },
+        "source_summary": {
+          "ok_or_partial": 20,
+          "failed": 0,
+          "degraded": 7
+        },
+        "top_new_items": [
+          {
+            "topic": "kr_policy_economy",
+            "title": "\"세제개편 후 코레일 종부세 410억원·LH 129억원↑\"",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1HREQzMmtTcUU2NTFMYWEyeWQxQURRdjhWajMyeDRaTDRaYlNuM0FXUzZ0Vy1EdENVdkpTSGN2Qk5OcnZqOG1SLS14UEJWYzlydFpmTHMtSEJCZ2VxTUo4cg?oc=5",
+            "published_at": "Mon, 05 Oct 2026 23:05:03 GMT",
+            "publisher": "연합뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_policy_economy",
+            "title": "다주택자 잡고 '기업형 임대' 혜택…\"월세 오를라\" 美선 규제[부동산AtoZ]",
+            "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5sNU5sUTREU285dXY2TmlWMFhCWTQzYTZFZjJTZFlVczYtbjlIbFRHMEFwNnNJSTY1LVRGUzVYNk43RjRuQzdhR2NfOXZkcGpEMmx3?oc=5",
+            "published_at": "Mon, 05 Oct 2026 02:00:00 GMT",
+            "publisher": "네이트",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "global_market",
+            "title": "뉴욕증시, 국채금리 상승에도 일제히 강세...나스닥 최고치",
+            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1FZHVwcm81NERMX3NGNEZfRjRwR0RoNkFWSjhMeG50S2YySnRucHhnVHo1UXhBRnZyM0tMdTFVOVE4YS1VbTZ5LXJ2XzJ1SGs?oc=5",
+            "published_at": "Mon, 05 Oct 2026 23:54:00 GMT",
+            "publisher": "v.daum.net",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "global_market",
+            "title": "'KoAct 미국나스닥성장기업액티브', 나스닥 ETF 중 한달 수익률 1위",
+            "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9kcDJXbHNUSVJfekpkaXRqemt0UUVkMDJqVThuSEJ6UlJmNkpnSjhkS2lKSXNCQ1JleWdFZ1RZVnhVLXY3c1RvRG1EQXpVazVuS0VmTzVERXJSVDg4TkRpaFlR?oc=5",
+            "published_at": "Tue, 06 Oct 2026 00:07:00 GMT",
+            "publisher": "아시아경제",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "global_diplomacy_summit",
+            "title": "\"알래스카에 540억불 내라\" 트럼프 청구서⋯韓 '15% 관세' 방어막 흔들",
+            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5ieXRNUTg5WHpzeFFaQWxTLTFyazJNS1FjeWhybkRzeTAxNWpTLURrdFBXQjI1VGc2NGZGeDdobUpqc3dfNXFkVzJRZDY1Z1M0NXFqbw?oc=5",
+            "published_at": "Mon, 05 Oct 2026 04:54:00 GMT",
+            "publisher": "이투데이",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "global_energy_middle_east",
+            "title": "유가, Saudi Aramco 가격 인하와 중동 공급 우려로 하락",
+            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5KYTg3TFNScUNLSmNBS3ZVYThYTnRWcWRsaDZfZ0JsUkVSLUVDUXpBdnNvUVpiOVljRUJ4alN0cTdSbmJHRUZ4WFFuUy1FQ0phLXNySlBSUkxyZE01QUdfbEVxX1J0ektocEtqNkZUUQ?oc=5",
+            "published_at": "Tue, 06 Oct 2026 00:09:00 GMT",
+            "publisher": "kr.investing.com",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "europe_debt_ecb",
+            "title": "[뉴욕마켓워치] 고성장으로 고금리를 녹여버릴 기세…주식·달러↑채권↓ |",
+            "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE12WkRqemFQUzRvSzhjTTBSZjlQckFqMnRmLW12YWVnZW1PdTJvWkhvTmpxVkYxRmE4LW5YU1FCczdSR1Q4SkNmOTdwS1pWdEhiVEZnRWN4a0ZTX19vSzg3N2phbnlhS3Zob3doQktNVzdMT3M2?oc=5",
+            "published_at": "Mon, 05 Oct 2026 23:26:42 GMT",
+            "publisher": "연합인포맥스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:사상",
+            "title": "엔비디아 또 사상 최고…‘시총 6조달러’ 눈앞",
+            "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE45UmlTWloybmhGU3k3NWpaMzFMRVN6enJ4LVhIN3Q2QUhWT1VFN1hGTS1PZzZ3MkNWRV9PZm9lYXZ6MzJHbzc0NXlpMF9ES1Bid0tRNWljTjhwSmlQVVd5SkxzT2xMTXdGSTJxVHRVVDN5aWM1S0HSAWZBVV95cUxNam9uTnd6c3V1WEJfdFE0anh0ZVpmZGN6UDgxbndpbXhQYlBZaVVzT2JndDVYM05iMzFic1VaS0MzZTNaZ0JGTDdUZjVwN3JKUk4yVk5SX1JXZnprcXhYNHB2Y0MwQXc?oc=5",
+            "published_at": "Mon, 05 Oct 2026 23:55:49 GMT",
+            "publisher": "동아일보",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:AI",
+            "title": "씨엔티테크, 기보벤처캠프 19기 'AI 통합교육' 성료…AI·AGI 시대 스타트업 성장 전략 제시",
+            "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1kRkhLMXpoQ0p3OGlEUkc2SURHaVpiSkVtalFNa2pOdEgta1pMRlJMT2dFMWN1NUo5VWJ3cDhTTV9McC1GSXBjT2FQeDlnZw?oc=5",
+            "published_at": "Tue, 06 Oct 2026 00:22:25 GMT",
+            "publisher": "전자신문",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "dynamic:AI",
+            "title": "배경훈 \"독파모는 계속된다…국가 안보 위해 프런티어 AI 확보\" - 머니투데이",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBhTG1OVFRLN0d1dzRCbmZtdFpOM2lySGhtU3BWMlBWeG5DNEM5dmMwX19TVkc4Sl84NENoQnJaaUdvMzVzWHhEZC05ak9kRU9TOVZJUEVwWml6ZmVVT2VMOUN6U25VckdiTngya9IBbEFVX3lxTFBhTG1OVFRLN0d1dzRCbmZtdFpOM2lySGhtU3BWMlBWeG5DNEM5dmMwX19TVkc4Sl84NENoQnJaaUdvMzVzWHhEZC05ak9kRU9TOVZJUEVwWml6ZmVVT2VMOUN6U25VckdiTngyaw?oc=5",
+            "published_at": "Mon, 05 Oct 2026 23:26:21 GMT",
+            "publisher": "머니투데이",
+            "discovery_source": "google_news_rss"
+          }
+        ],
+        "handoff_queries": [
+          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+          "나스닥 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "사상 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "최고치 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "관세 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "중동 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "국채금리 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+        ]
+      },
+      "public_batch_market": {
+        "generated_at": "2026-10-06T10:10:45.160225+09:00",
+        "status": "warming_or_gap",
+        "provider": "naver_public",
+        "exact_1m_bars": false,
+        "elapsed_minutes_from_previous": 9.944259283333334,
+        "interval_leaders": [],
+        "one_minute_samples_available": false,
+        "minute_amount_exact": false,
+        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
+        "minute_sample_ticker_count": 0,
+        "current_top50_count": 50,
+        "tracked_universe_count": 86,
+        "dropped_from_current_top50_count": 36,
+        "tracked_outside_top50_with_samples": 0,
+        "minute_samples_by_ticker": {},
+        "limitations": [
+          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
+          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
+          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
+          "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+          "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+        ]
+      },
+      "market": {
+        "generated_at": "2026-10-06T10:12:02.350581+09:00",
+        "source_status": "needs_credentials",
+        "provider": "none",
+        "fallback_used": false,
+        "historical_fallback_available": true
+      },
+      "market_recent_sessions": {
+        "updated_at": "2026-09-26T12:50:00+09:00",
+        "basis": "verified_close",
+        "korea": [
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "kospi": {
+              "close": 7080.92,
+              "change_pct": 0.9
+            },
+            "kosdaq": {
+              "close": 844.48,
+              "change_pct": 1.21
+            },
+            "flows_krw_100m": {
+              "foreign": -5047,
+              "institution": 3169,
+              "individual": -14396
+            },
+            "note": "추석 연휴 직전 마지막 거래일",
+            "source": "연합뉴스/Investing.com"
+          },
+          {
+            "date": "2026-09-22",
+            "status": "closed",
+            "kospi": {
+              "close": 7017.91,
+              "change_pct": 0.15
+            },
+            "kosdaq": {
+              "close": 834.38,
+              "change_pct": -0.23
+            },
+            "flows_krw_100m": {
+              "foreign": 850,
+              "institution": -1190,
+              "individual": -16089
+            },
+            "note": "장중 2%대 상승 후 상승폭 축소",
+            "source": "연합뉴스"
+          },
+          {
+            "date": "2026-09-21",
+            "status": "closed",
+            "kospi": {
+              "close": 7007.72,
+              "change_pct": 1.65
+            },
+            "kosdaq": {
+              "close": 836.27,
+              "change_pct": 1.11
+            },
+            "flows_krw_100m": {
+              "foreign": -1603,
+              "institution": 14924,
+              "individual": -29790
+            },
+            "note": "반도체 강세로 7천선 회복",
+            "source": "연합뉴스"
+          }
+        ],
+        "us": [
+          {
+            "date": "2026-09-25",
+            "status": "closed",
+            "sp500": {
+              "close": 7743.41,
+              "change_pct": 0.51
+            },
+            "nasdaq": {
+              "close": 27068.72,
+              "change_pct": 0.48
+            },
+            "dow": {
+              "close": 51828.62,
+              "change_pct": 0.93
+            },
+            "note": "AI 기술주 강세",
+            "source": "Reuters/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-24",
+            "status": "closed",
+            "sp500": {
+              "close": 7704.13,
+              "change_pct": -0.02
+            },
+            "nasdaq": {
+              "close": 26939.37,
+              "change_pct": 0.01
+            },
+            "dow": {
+              "close": 51349.98,
+              "change_pct": -0.31
+            },
+            "note": "금리·유가 부담 속 혼조",
+            "source": "FRED/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "sp500": {
+              "close": 7706.03,
+              "change_pct": -0.75
+            },
+            "nasdaq": {
+              "close": 26936.04,
+              "change_pct": -1.13
+            },
+            "dow": {
+              "close": 51511.59,
+              "change_pct": -0.68
+            },
+            "note": "장기금리 상승으로 위험자산 압박",
+            "source": "FRED/시장 종가 데이터"
+          }
+        ],
+        "holiday_notes": [
+          {
+            "market": "KR",
+            "from": "2026-09-24",
+            "to": "2026-09-27",
+            "reason": "추석 연휴"
+          }
+        ]
+      },
+      "toss": {
+        "available": true,
+        "captured_at": "2026-10-01T11:31:12.905216+09:00",
+        "collector": {
+          "subscription_count": 0,
+          "rejected_count": 0,
+          "last_message_at": "2026-10-01T11:31:12.905216+09:00",
+          "last_universe_refresh": "2026-10-01T11:31:12.905216+09:00"
+        }
+      },
+      "user_feedback": {
+        "pending_count": 0,
+        "latest_pending_comment_id": null
+      },
+      "git": {
+        "head_sha": "dae5b9ef3a08949c186ebd6d0046ee7c5d4dd435",
+        "latest_commit_changed_files": [
+          "data/discovery/archive/2026-10-06.jsonl",
+          "data/discovery/archive/index.json",
+          "data/discovery/latest.json",
+          "data/health/latest.json",
+          "data/health/state.json",
+          "data/macro/current.json",
+          "data/market/runtime.json",
+          "data/news/fast-path-state.json",
+          "data/news/issue-digest.json",
+          "data/providers/naver_batch/history.json",
+          "data/providers/naver_batch/latest.json",
+          "data/providers/naver_batch/sessions/2026-10-06.json",
+          "data/providers/toss/fetch_runtime.json",
+          "data/providers/toss/status.json",
+          "data/regression/history/2026-10-06.jsonl",
+          "data/regression/latest.json",
+          "data/risk/calendar_live.json",
+          "data/risk/latest.json",
+          "data/risk/runtime.json",
+          "data/risk/state.json",
+          "data/supervisor/queue/2026-10-06.jsonl",
+          "data/supervisor/recent.json",
+          "data/supervisor/windows/2026-10-06/1000-A.json",
+          "data/supervisor/windows/latest-A.json"
+        ]
+      },
+      "previous_workflow_run": {
+        "id": 37396945783,
+        "name": "10분 감독 관측 큐",
+        "event": "workflow_dispatch",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T01:00:22Z",
+        "updated_at": "2026-10-06T01:10:27Z",
+        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/37396945783",
         "head_sha": "c908d624bb9f87d5e3b655963f81acdb43171127"
       },
       "hypothesis_verification": {
