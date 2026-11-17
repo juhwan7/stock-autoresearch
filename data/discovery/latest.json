@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-18T07:11:12.441925+09:00",
+  "generated_at": "2026-11-18T07:21:13.255678+09:00",
   "purpose": "10분 비AI 시장·뉴스 단서 센서. :00/:30 A/B Supervisor의 탐색 힌트이며 사실 확정 엔진이 아님.",
   "source_status": {
     "google_news:kr_market_broad": {
@@ -59,8 +59,9 @@
       "auto_repair": null
     },
     "google_news:us_macro_rates": {
-      "status": "error",
-      "error": "HTTPError"
+      "status": "empty",
+      "count": 0,
+      "auto_repair": "retry_without_when_filter"
     },
     "google_news:global_energy_middle_east": {
       "status": "empty",
@@ -69,7 +70,7 @@
     },
     "google_news:us_china_trade_ai": {
       "status": "ok",
-      "count": 4,
+      "count": 5,
       "auto_repair": null
     },
     "google_news:japan_boj_fx": {
@@ -92,6 +93,11 @@
       "count": 0,
       "auto_repair": "retry_without_when_filter"
     },
+    "google_news:dynamic:트럼프": {
+      "status": "ok",
+      "count": 10,
+      "term": "트럼프"
+    },
     "google_news:dynamic:원전": {
       "status": "ok",
       "count": 20,
@@ -107,25 +113,20 @@
       "count": 15,
       "term": "체코"
     },
-    "google_news:dynamic:트럼프": {
-      "status": "ok",
-      "count": 9,
-      "term": "트럼프"
-    },
     "google_news:dynamic:알래스카": {
       "status": "ok",
       "count": 18,
       "term": "알래스카"
     },
-    "google_news:dynamic:규제기관": {
-      "status": "ok",
-      "count": 17,
-      "term": "규제기관"
-    },
     "google_news:dynamic:품질관리": {
       "status": "ok",
       "count": 12,
       "term": "품질관리"
+    },
+    "google_news:dynamic:규제기관": {
+      "status": "ok",
+      "count": 17,
+      "term": "규제기관"
     },
     "google_news:dynamic:승인": {
       "status": "ok",
@@ -154,8 +155,8 @@
   },
   "source_summary": {
     "ok_or_partial": 18,
-    "failed": 1,
-    "degraded": 8
+    "failed": 0,
+    "degraded": 9
   },
   "naver_indices": {
     "KOSPI": "4,968.48",
@@ -170,32 +171,64 @@
     "kr_bio_health": 2,
     "global_market": 29,
     "global_diplomacy_summit": 29,
-    "us_china_trade_ai": 4,
+    "us_china_trade_ai": 5,
     "japan_boj_fx": 2,
-    "dynamic:원전": 18,
+    "dynamic:트럼프": 6,
+    "dynamic:원전": 19,
     "dynamic:AI": 19,
     "dynamic:체코": 9,
-    "dynamic:트럼프": 5,
-    "dynamic:알래스카": 4,
-    "dynamic:규제기관": 6,
-    "dynamic:품질관리": 4,
+    "dynamic:알래스카": 2,
+    "dynamic:품질관리": 6,
+    "dynamic:규제기관": 4,
     "dynamic:승인": 2
   },
   "trending_terms": [
     {
+      "term": "원전",
+      "count": 38,
+      "publisher_count": 30,
+      "independent_story_count_estimate": 24,
+      "syndication_ratio_estimate": 0.368,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 38,
+      "delta": 0,
+      "score": 106,
+      "examples": [
+        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
+        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
+        "체코가 한국 원전 품질관리 현장을 직접 본다…계약 후 규제기관 첫 참관"
+      ]
+    },
+    {
       "term": "트럼프",
       "count": 38,
-      "publisher_count": 26,
-      "independent_story_count_estimate": 23,
-      "syndication_ratio_estimate": 0.395,
+      "publisher_count": 27,
+      "independent_story_count_estimate": 24,
+      "syndication_ratio_estimate": 0.368,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 22,
-      "delta": 16,
-      "score": 118,
+      "previous_count": 38,
+      "delta": 0,
+      "score": 103,
       "examples": [
         "이 대통령, 트럼프 대통령과 필리핀 만찬장서 조우",
         "한일정상회담·트럼프 조우·수능 점검까지…李 대통령 마닐라 일정 마치고 중국 선전 도착",
         "트럼프家 스테이블코인도 레임덕?…한 달째 1달러 하회"
+      ]
+    },
+    {
+      "term": "AI",
+      "count": 35,
+      "publisher_count": 28,
+      "independent_story_count_estimate": 35,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 36,
+      "delta": -1,
+      "score": 98,
+      "examples": [
+        "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
+        "한국선급, 선박 사이버보안·AI 안전관리 대응 강화…국제 해사규제 변화 점검",
+        "[개장시황]美 AI 칩 규제·엔비디아 여파에 코스피 5010선 후퇴…옵토닉스·나노팀 급등"
       ]
     },
     {
@@ -205,45 +238,13 @@
       "independent_story_count_estimate": 26,
       "syndication_ratio_estimate": 0.161,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 31,
-      "score": 113,
+      "previous_count": 31,
+      "delta": 0,
+      "score": 82,
       "examples": [
         "이 대통령, 동아시아 정상회의 첫 참석…한반도 평화에 관심·협력 당부",
         "대통령 해외 순방 나간 새 조작기소 특검법 국무회의 통과",
         "이 대통령, 필리핀 일정 마치고 중국 선전으로 출발…APEC 정상회의 참석"
-      ]
-    },
-    {
-      "term": "원전",
-      "count": 38,
-      "publisher_count": 31,
-      "independent_story_count_estimate": 24,
-      "syndication_ratio_estimate": 0.368,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 33,
-      "delta": 5,
-      "score": 112,
-      "examples": [
-        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
-        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
-        "체코가 한국 원전 품질관리 현장을 직접 본다…계약 후 규제기관 첫 참관"
-      ]
-    },
-    {
-      "term": "AI",
-      "count": 36,
-      "publisher_count": 30,
-      "independent_story_count_estimate": 36,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 29,
-      "delta": 7,
-      "score": 109,
-      "examples": [
-        "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
-        "한국선급, 선박 사이버보안·AI 안전관리 대응 강화…국제 해사규제 변화 점검",
-        "[개장시황]美 AI 칩 규제·엔비디아 여파에 코스피 5010선 후퇴…옵토닉스·나노팀 급등"
       ]
     },
     {
@@ -253,9 +254,9 @@
       "independent_story_count_estimate": 14,
       "syndication_ratio_estimate": 0.462,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 22,
-      "delta": 4,
-      "score": 81,
+      "previous_count": 26,
+      "delta": 0,
+      "score": 77,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
@@ -263,35 +264,35 @@
       ]
     },
     {
-      "term": "알래스카",
-      "count": 23,
-      "publisher_count": 20,
-      "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.609,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 18,
-      "delta": 5,
-      "score": 71,
-      "examples": [
-        "트럼프 \"한국 투자로 알래스카 LNG 승인\" 주장",
-        "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
-        "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\""
-      ]
-    },
-    {
       "term": "품질관리",
-      "count": 21,
-      "publisher_count": 20,
-      "independent_story_count_estimate": 13,
-      "syndication_ratio_estimate": 0.381,
+      "count": 22,
+      "publisher_count": 21,
+      "independent_story_count_estimate": 14,
+      "syndication_ratio_estimate": 0.364,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 6,
-      "score": 68,
+      "previous_count": 21,
+      "delta": 1,
+      "score": 66,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
         "체코가 한국 원전 품질관리 현장을 직접 본다…계약 후 규제기관 첫 참관"
+      ]
+    },
+    {
+      "term": "알래스카",
+      "count": 22,
+      "publisher_count": 20,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.591,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 23,
+      "delta": -1,
+      "score": 64,
+      "examples": [
+        "트럼프 \"한국 투자로 알래스카 LNG 승인\" 주장",
+        "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
+        "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\""
       ]
     },
     {
@@ -301,9 +302,9 @@
       "independent_story_count_estimate": 8,
       "syndication_ratio_estimate": 0.619,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 18,
-      "delta": 3,
-      "score": 65,
+      "previous_count": 21,
+      "delta": 0,
+      "score": 62,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
@@ -312,18 +313,18 @@
     },
     {
       "term": "승인",
-      "count": 20,
+      "count": 19,
       "publisher_count": 17,
       "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.55,
+      "syndication_ratio_estimate": 0.526,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": 6,
-      "score": 63,
+      "previous_count": 20,
+      "delta": -1,
+      "score": 55,
       "examples": [
         "트럼프 \"한국 투자로 알래스카 LNG 승인\" 주장",
         "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\"",
-        "트럼프 “한국 투자 덕에 알래스카 LNG 파이프라인 사업 승인”"
+        "이 대통령·트럼프, 40초간 대화…트럼프 \"한국 투자 덕에 알래스카 LNG 사업 승인\""
       ]
     },
     {
@@ -333,9 +334,9 @@
       "independent_story_count_estimate": 9,
       "syndication_ratio_estimate": 0.471,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": 3,
-      "score": 52,
+      "previous_count": 17,
+      "delta": 0,
+      "score": 49,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
@@ -343,19 +344,67 @@
       ]
     },
     {
+      "term": "덕에",
+      "count": 16,
+      "publisher_count": 16,
+      "independent_story_count_estimate": 5,
+      "syndication_ratio_estimate": 0.688,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 16,
+      "delta": 0,
+      "score": 48,
+      "examples": [
+        "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
+        "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\"",
+        "이 대통령·트럼프, 40초간 대화…트럼프 \"한국 투자 덕에 알래스카 LNG 사업 승인\""
+      ]
+    },
+    {
       "term": "LNG",
-      "count": 17,
+      "count": 16,
       "publisher_count": 15,
       "independent_story_count_estimate": 7,
-      "syndication_ratio_estimate": 0.588,
+      "syndication_ratio_estimate": 0.562,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": 3,
-      "score": 52,
+      "previous_count": 17,
+      "delta": -1,
+      "score": 47,
       "examples": [
         "트럼프 \"한국 투자로 알래스카 LNG 승인\" 주장",
         "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
         "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\""
+      ]
+    },
+    {
+      "term": "점검",
+      "count": 16,
+      "publisher_count": 14,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.5,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 15,
+      "delta": 1,
+      "score": 47,
+      "examples": [
+        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
+        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
+        "한국선급, 선박 사이버보안·AI 안전관리 대응 강화…국제 해사규제 변화 점검"
+      ]
+    },
+    {
+      "term": "달러",
+      "count": 12,
+      "publisher_count": 10,
+      "independent_story_count_estimate": 12,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 12,
+      "score": 46,
+      "examples": [
+        "[뉴욕환시] 달러 6일만에↓…美 소비 호조에도 국채금리 따라 반락",
+        "[채권/외환] 美 국채금리 하락·달러 약세…엔비디아 실적 앞두고 안전자산 선호",
+        "배포 후에도 배우는 기업용 AI 노에리, 1.1억 달러 투자유치"
       ]
     },
     {
@@ -365,41 +414,25 @@
       "independent_story_count_estimate": 12,
       "syndication_ratio_estimate": 0.077,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 13,
-      "score": 52,
+      "previous_count": 13,
+      "delta": 0,
+      "score": 39,
       "examples": [
         "한-일 정상회담",
         "이 대통령, 다카이치와 정상회담…미중러 앞두고 ’한일협력’ 강조",
-        "李대통령, 다카이치 총리와 정상회담…\"한일 국민 선호도 사상 최고수준\""
-      ]
-    },
-    {
-      "term": "덕에",
-      "count": 16,
-      "publisher_count": 15,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.688,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 4,
-      "score": 51,
-      "examples": [
-        "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
-        "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\"",
-        "트럼프 “한국 투자 덕에 알래스카 LNG 파이프라인 사업 승인”"
+        "올해 3번째 한일 정상회담‥\"전략적 소통 중요\""
       ]
     },
     {
       "term": "사업",
-      "count": 15,
-      "publisher_count": 14,
+      "count": 13,
+      "publisher_count": 13,
       "independent_story_count_estimate": 6,
-      "syndication_ratio_estimate": 0.6,
+      "syndication_ratio_estimate": 0.538,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 11,
-      "delta": 4,
-      "score": 48,
+      "previous_count": 15,
+      "delta": -2,
+      "score": 39,
       "examples": [
         "체코 규제기관, 韓 원전 품질관리 첫 현장 확인…두코바니 사업 ‘신뢰 쌓기’",
         "체코 원전 규제기관, 한국 원전 품질관리 현장 첫 점검…두코바니 사업 신뢰 강화",
@@ -407,51 +440,19 @@
       ]
     },
     {
-      "term": "점검",
-      "count": 15,
-      "publisher_count": 13,
-      "independent_story_count_estimate": 7,
-      "syndication_ratio_estimate": 0.533,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 3,
-      "score": 46,
-      "examples": [
-        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
-        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
-        "한국선급, 선박 사이버보안·AI 안전관리 대응 강화…국제 해사규제 변화 점검"
-      ]
-    },
-    {
-      "term": "강화",
-      "count": 11,
-      "publisher_count": 11,
-      "independent_story_count_estimate": 11,
-      "syndication_ratio_estimate": 0.0,
+      "term": "참관",
+      "count": 9,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 4,
+      "syndication_ratio_estimate": 0.556,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 0,
-      "delta": 11,
-      "score": 44,
-      "examples": [
-        "한국선급, 선박 사이버보안·AI 안전관리 대응 강화…국제 해사규제 변화 점검",
-        "한수원, 체코 원전사업 품질관리 협력 강화… 규제기관 첫 참관 통해 신뢰 확보",
-        "[조상권의 경제 이야기] 미국 데이터센터 건설 규제 강화, 한국은 새로운 기회 될까?"
-      ]
-    },
-    {
-      "term": "APEC",
-      "count": 10,
-      "publisher_count": 6,
-      "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.1,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 10,
+      "delta": 9,
       "score": 36,
       "examples": [
-        "이 대통령, 필리핀 일정 마치고 중국 선전으로 출발…APEC 정상회의 참석",
-        "李대통령, APEC 열리는 中선전 도착…한반도 메시지 주목",
-        "이재명 대통령, 아세안·APEC 순방 차 출국 - 사진 | 멀티미디어"
+        "체코가 한국 원전 품질관리 현장을 직접 본다…계약 후 규제기관 첫 참관",
+        "한수원, 체코 원전사업 품질관리 협력 강화… 규제기관 첫 참관 통해 신뢰 확보",
+        "체코 원전 규제기관, 국내 품질보증감사 첫 참관"
       ]
     },
     {
@@ -461,13 +462,29 @@
       "independent_story_count_estimate": 6,
       "syndication_ratio_estimate": 0.5,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 11,
-      "delta": 1,
-      "score": 35,
+      "previous_count": 12,
+      "delta": 0,
+      "score": 34,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
         "[에너지포커스] 체코 원자력 규제기관, 한수원·두산에너빌리티 '두코바니 원전 품질관리' 현장 첫 점검"
+      ]
+    },
+    {
+      "term": "강화",
+      "count": 11,
+      "publisher_count": 11,
+      "independent_story_count_estimate": 11,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 11,
+      "delta": 0,
+      "score": 33,
+      "examples": [
+        "한국선급, 선박 사이버보안·AI 안전관리 대응 강화…국제 해사규제 변화 점검",
+        "한수원, 체코 원전사업 품질관리 협력 강화… 규제기관 첫 참관 통해 신뢰 확보",
+        "[조상권의 경제 이야기] 미국 데이터센터 건설 규제 강화, 한국은 새로운 기회 될까?"
       ]
     },
     {
@@ -477,29 +494,13 @@
       "independent_story_count_estimate": 4,
       "syndication_ratio_estimate": 0.636,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 8,
-      "delta": 3,
-      "score": 35,
+      "previous_count": 11,
+      "delta": 0,
+      "score": 32,
       "examples": [
         "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
         "트럼프 \"韓 역사적 투자 덕에 알래스카 LNG파이프라인 사업승인\"",
         "트럼프 대통령 “한국 역사적 투자 덕에 알래스카 LNG 사업 승인”"
-      ]
-    },
-    {
-      "term": "엔비디아",
-      "count": 8,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 8,
-      "score": 32,
-      "examples": [
-        "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
-        "[개장시황]美 AI 칩 규제·엔비디아 여파에 코스피 5010선 후퇴…옵토닉스·나노팀 급등",
-        "[ 글로벌 AI·반도체]美, 엔비디아 칩 우회수출 의혹 2년째 수사…젠슨 황 사임 파장, AI 반도체 공급망으로 확대"
       ]
     }
   ],
@@ -508,12 +509,12 @@
   "official_web_candidates": [],
   "public_batch_market": {
     "available": false,
-    "generated_at": "2026-11-18T07:11:07.565767+09:00",
+    "generated_at": "2026-11-18T07:21:09.115236+09:00",
     "status": "unavailable",
     "provider": "naver_public",
     "exact_1m_bars": false,
     "amount_method": "cumulative_trading_value_delta",
-    "elapsed_minutes_from_previous": 9.997655283333334,
+    "elapsed_minutes_from_previous": 10.025824483333334,
     "interval_leaders": [],
     "one_minute_samples_available": false,
     "minute_amount_exact": false,
@@ -842,169 +843,113 @@
     ],
     "top10_share": null
   },
-  "item_count": 206,
+  "item_count": 207,
   "news_scan_target": 500,
   "query_group_count": 18,
-  "new_item_count": 84,
+  "new_item_count": 13,
   "new_items": [
     {
-      "topic": "kr_policy_economy",
-      "title": "[데스크 칼럼] 관광대국 날개 꺾는 호텔 규제",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB3TkczTkx2YkhjcmhXY2RhS1otRzA0NWZGejlzeVVYSmV2T25BejFDZHZBM2t5SVNNdGtkdXJYdlFwdkZfOWpJcmFjZXBwY0JKTUNLZ1pfLXpYQQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 08:45:12 GMT",
-      "publisher": "한국경제",
+      "topic": "global_market",
+      "title": "[채권/외환] 美 국채금리 하락·달러 약세…엔비디아 실적 앞두고 안전자산 선호",
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE55aEd5aFJYNnNjcG02QldfNE90Wm0yUHEwRFIwQ1FsUGEyUEhBOTA0MzZjQ1A5alRxU3ZHNnY3OHJMdWpXUkphYm5rUTdEVXQzWURVUDZZN2tGQ2VH?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:18:00 GMT",
+      "publisher": "뉴스핌",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "규제과학 '센터' 떼고 '원'으로…국가R&D부터 싱크탱크까지",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9EZFN5SHlkVkpRRlRXdi0wY3AwOXZETE9xX09PNTdabk1oWTVXNXJCYmxXRmt5X0JCRnlQYXZ0bTBNWTN3eXcyclE2d2hkbC1ueHBzSW4ySlRXUmtkemI2dmdqcUxEcTVRSnY4?oc=5",
-      "published_at": "Tue, 17 Nov 2026 07:21:53 GMT",
-      "publisher": "히트뉴스",
+      "topic": "global_market",
+      "title": "[광화문]수출 1조 달러 그 너머 - 머니투데이",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE43V1FSS1NFd3V5emhpUlVCVDVyVkFGT3I3RVVqNVlCSE5mcWx4MVI4TXM1OEpGVk5sYnh5M3RGbFBtUDg5SWZQLTBKT1pFeDhNQktOeHlwZzFIT29vYjBrcXhXcm9rZmc3eXpz0gFwQVVfeXFMTXpmMVRJZkd6WERGdVdwWUtZSWlLa0lkTmF5YVZSU0NRUGlPejdzaWcyOS1sQzgtOVV5YjdrckRTTkh5SkFzdnNIYmZzMC1ST1RzV2ZfcUxDSDYzM2d5ZVRXOFUyTDFFdTVPbVVQQ0dHdQ?oc=5",
+      "published_at": "Tue, 17 Nov 2026 20:30:00 GMT",
+      "publisher": "머니투데이",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "한국규제과학센터→식의약규제과학원으로 새출발…정책지원 확대",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1rMTJXMzhuUUdIVm02cU5rSDR0N3FPSnMyQUJ2aXE2cG9IZ3dIV2ZmMUh1RjJTcHNqQmxxNzh5ZWp1NlhCS05VUkJPdDJlMnpUTnlvMXBKejFhVWx0by1xbA?oc=5",
-      "published_at": "Tue, 17 Nov 2026 08:52:01 GMT",
-      "publisher": "뉴스1",
+      "topic": "global_market",
+      "title": "[굿모닝 美 증시] 엔비디아 매출 ‘1158억 달러’…뉴욕증시 3대 지수는 하락",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1lNjNjQ3FVenlOdTJTU2RVQXF6LXhEekoyYlhianFlQ0FTclFESkYxZ2JqbzJITm1NdVZSUVBOTnROb2FFOXhna1hzSGR4Y1pYSmRLbHRDS21YYm5US2lRWjJ2a2pTc3FzSEEzaV9n?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:00:34 GMT",
+      "publisher": "아시아투데이",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "식의약규제과학원, 이름만 바꾼 게 아니다…'규제혁신' 시동",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9YaHVkb3pfVXR0VnBYbDZGMnc2WHlyb0N2UFF4SUtrSU9NODZmMUdhMG15aU82LUNMZmMxUEZvdUhKVVpUMkhjWEdiR2hweHYxSVZHZmhhQkFmcEJNZ2F4eVEwRWlNS0VYOVlGTA?oc=5",
-      "published_at": "Tue, 17 Nov 2026 07:05:41 GMT",
-      "publisher": "약사공론",
+      "topic": "global_market",
+      "title": "AI 수익성 우려에 나스닥 나흘째 하락… 필반지수는 반등",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE16ZGpHekhWdmJSVUFGUEloRmxvYlB4bXRpWG1TSUlhT1h2UGIxYkpmcEh6TGtYRWJGZjNGcFdETzI5b1lxemotMFNDX1NaUHZnVk5GYTEwb1hhLWdUNmtwMFlJUU96Skg0b0huZ3g4bHfSAXRBVV95cUxNRmVQMWFTclNlTFZyc0tTaWlSazBBWEdFcUlTdnIxYVRxREp5ZkdBQmFoSGZlZEJLeXZ6Z2taRHB3ZjNwZmh2emREUE83b1NxeFVqcE1UZWFKbkl4LUVmdFFxVm1zckE2Q2loYmR0YXN0WmdWUw?oc=5",
+      "published_at": "Tue, 17 Nov 2026 21:58:56 GMT",
+      "publisher": "IT조선",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "식의약규제과학원, 기관명 변경 현판식 개최…새로운 도약 선언",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE00Qk92cWxhZ3pPOXI0eUMyRHFnOG1WVXFFN2UxaXItQjJNeUVMaGNuUFlYMFJXbjRqd2FWWi1UenVXNk51TDY4UFp4YUkta3I2WkFPeFQ3RkVndXQtYzRFZThjY1NiblhfMmdJ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 08:47:55 GMT",
-      "publisher": "한국의약통신",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "규제과학센터, ‘식의약규제과학원’으로 새 출발…현판식 개최",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE83WW95RGtJWVBZWHVfd2JFb2xnLXJ3YU9SMGt4bHpZMmdhZWZxbzhtbV9TY0Y1MmQwc1JHYWNPbXhLLWc3VG9IQ0huNm54N3hqQ1gtbmx4bkVBcGxGSXNuRkFZRHIxX2MwQTJWag?oc=5",
-      "published_at": "Tue, 17 Nov 2026 12:43:44 GMT",
-      "publisher": "메드월드뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "규제과학센터 새 출발…\"이젠 식의약규제과학원\"",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE54NjhmZFptbzVFZzdWSDNyQXdJYVZVenJ1OVRVXzN5RlFSMVN2UTBtelB4M3h0aGItRHVaVlMtLVlMWTloZFRIcVFmd3dpZ05CNkppbTk3dU9SZ2NCSzI5c9IBeEFVX3lxTFB5amRNRzJrZEk5ajZaaEZSWTJ5Zm8tWGp2aDIxb0p1QU1zY0o5QXFPWnlxQ0l1VlVZR0NpemMyNnZ6a19UVE91RjVwUE1qLVcxYVgwVnlUSHNXeTFQcHE1VFlYeE9oMDRkdWRBMDl1a01Ddzg2UWJYVg?oc=5",
-      "published_at": "Tue, 17 Nov 2026 09:41:32 GMT",
+      "topic": "global_market",
+      "title": "금리·달러 강세에 짓눌린 金, 고점 대비 34% '뚝'…반등은 언제?",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE8yOExyZVhrMGUzLVBES3poMVlzajA2R3pxZnpmU1ROck9wV0R2MXlNYnAxX1JoNmFDXzF3VjhDd1BnMkFjUDBIemlTWGxlLWNyZHdrZ3ZPX0dXZ3hnR1RMZw?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:00:00 GMT",
       "publisher": "뉴시스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "리츠협회 \"지방 미분양 세제특례 확대해야\"",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE0tbUlnOVRxcFhMY2k2SFBnUWlOc1ZzOFNRanN3WENjUjNmclBHVjZ3SU9LUEFFcFBLcDJjdE9Canh0WEphaW9VT2lTTVZMMF95MktKOWYwU0RUMFFUeTF3MjRNY1BFY3QwcDY3M2xWR0U?oc=5",
-      "published_at": "Tue, 17 Nov 2026 12:11:53 GMT",
-      "publisher": "코리아리포트",
+      "topic": "global_diplomacy_summit",
+      "title": "트럼프 \"한국 투자 덕에 알래스카 LNG 승인\"…이 대통령과 40초간 대화",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFA1Y2lKdjRvOGhnWFdCbG5NZ2ptVTEtamMxd3U1WjFWWjNnclhZdVV6ZENoVkh5LTQ0UUxURUcyTDZ3cHRwanE1NVcyRklCR0ZjTDZudkUxbGxFcERiZlNPbg?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:18:57 GMT",
+      "publisher": "뉴스토마토",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "‘식의약규제과학원’ 새 출발…글로벌 규제과학 선도기관 목표",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE03dlVMcTVaNFdxNThORnktWEpmdG9PX1JvSzc3MlNFakhRbGRUMEExSndZQ1hNbnV4WlFLQ05vRVd2T0s0VlRvTWhMQzFnZFJKU0ZxcTRn?oc=5",
-      "published_at": "Tue, 17 Nov 2026 08:18:00 GMT",
-      "publisher": "현대건강신문",
+      "topic": "us_china_trade_ai",
+      "title": "‘APEC’ 오늘 선전서 개막…미중러 첫 3자회담·북미 접촉 주목",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5uUEw2MmMxZnAzU3FuYW43RDE0VjhDMkFqSFhCNU9rcWcxTW81Z014d1ZJZVlMbzFhUlNaYldJOWp5YTV3amlhQ2ZQcTZNbHdRaWZpVUlzblE3SDNzSEZmdElKcXZ2Zw?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:13:54 GMT",
+      "publisher": "싱글리스트",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "앞에선 녹색AI 약속, 뒤에선 규제 완화? 두 얼굴의 한국",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1WMm9pYVBqQzRibXR3V1VISmNXcWI5VzhDTERkd1k5TzBQMXJBeWJ4T05LZjJxWkpGbmdic05UTE5rLXUyLTI5Wlg2MzgtVFJWSVNIWmJHUmFOcl80U1BMZVRiRmpYZjVJWlhJOTJB0gFyQVVfeXFMTzM2aDlPWDBBdTAwYjYwRXM0UHpCbHctUVZ5ZE5lTVRYUTJaTE9xd3NFbGJiVEFyUzNUZUVLbHRLbnUxNVJ3aUUwQ19IRVJfUFNHRWo5dmlIZDRwUF8wRlA3ZGg5NzNZREJFVTJKV3E3ZlN3?oc=5",
-      "published_at": "Tue, 17 Nov 2026 08:26:35 GMT",
-      "publisher": "뉴스펭귄",
+      "topic": "dynamic:트럼프",
+      "title": "트럼프, 아시아 순방 시작…\"김정은도 중국 오고 싶을 것\"",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFB3dHVER2tTZWo1RnFMejczWGxMdXN2LUltOV9rN0dGWDluQU1VY1U0azE4QnExa2dKNklBSEZkV0NjSGh6MWtjS1pTRTlXUWFUUnpvZW91TGNmSzFVVE5ZNERLUmlNZEZ5ZDR3?oc=5",
+      "published_at": "Tue, 17 Nov 2026 21:55:52 GMT",
+      "publisher": "SPN 서울평양뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "한국선급, 선박 사이버보안·AI 안전관리 대응 강화…국제 해사규제 변화 점검",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1GT3RFWko5ZTNDNjlGcjJvaTJfRVJ2UnJnenpFTVlWcmdLTndSeUVtVmVLVHNGQVdtTFYydFhWWFFXQUxKd0FCOHVieUs5UXUzOUpPSF9JbUdyQjBmS3lyMmgxOXA0Wjc5VWIw?oc=5",
-      "published_at": "Tue, 17 Nov 2026 00:56:00 GMT",
-      "publisher": "해사신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "체코 규제당국 방한, 두코바니 원전 설계현장 첫 점검",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFB6UVAzTWZnbGpwN2dVbTAzUTg3dFRLWmNJT3ZQUjNzdXo2cFktSDZmNGx0aVdjUV85QmEzUUVNNWYybE5UdEhfdzVCcjZXcl83M3lsejNyMjNHc3lwdExEWE1NX1NOLVN6UktPadIBcEFVX3lxTFBQMWpETWJWczhEczdtcU9LelZ3STh4MkF5eVZ6UnBUSUs4cDUzYUdGTkEwdlFFc1lPNnhZRDcxYlM3WWpjSy1VemtBWlhkS0h4TjlDZ29IWlR1TnFVTkZ6eThMTlZKRDd1anJ3STk5Zkc?oc=5",
-      "published_at": "Tue, 17 Nov 2026 01:53:12 GMT",
+      "topic": "dynamic:원전",
+      "title": "“수소환원제철에 원전 대부분 쓸 판…해법은 원자로 열”",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5qaDN1WndXckJxTU53VjNmN3R6OGNVUzFZSnJublRyS1UtcGJqRndPTjcwMFF3cm5YZDBuTlFxNnl1MF9HWWI5RVRDUk82MEN3cmp5Nm5JNzV5TmR6WFRRUVl0QVhsOG1LLXhhcFpuSmfSAXBBVV95cUxOamgzdVp3V3JCcU1Od1YzZjd0ejhjVVMxWUpybm5UcktVLXBiakZ3T043MDBRd3JuWGQwbk5RcTZ5dTBfR1liOUVUQ1JPNjBDd3JqeTZuSTc1eU5kelhUUVFZdEFYbDhtSy14YXBabkpn?oc=5",
+      "published_at": "Tue, 17 Nov 2026 07:20:59 GMT",
       "publisher": "전기신문",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "[조상권의 경제 이야기] 미국 데이터센터 건설 규제 강화, 한국은 새로운 기회 될까?",
-      "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE81ZlpnRldTaU9XSjhtN3JQNzhoNmw5cHRQQkUxNnZZYVdFdXo2OFhIUGkwUmN1bWRMZ3ZLcXpBSXFITkxua3hZaHFn?oc=5",
-      "published_at": "Tue, 17 Nov 2026 16:20:04 GMT",
-      "publisher": "뉴스N연합",
+      "topic": "dynamic:원전",
+      "title": "새울원전 환경감시위원회 ‘주민과 함께하는 워크숍’",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1DN1Z0NHptd2JSMDhUUGRtMEUtaFBSOHVGendYY0dreEVqYmhyN25NbVlqOU5ucmx6SmRyYjJKV3Q2S0tMOEp3dVd4emJQVUZFbzBZX0duRmN0R3BtazlkdEk0V2wxdXdlWGFWQg?oc=5",
+      "published_at": "Tue, 17 Nov 2026 15:00:02 GMT",
+      "publisher": "경상일보",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "리츠협회 \"미분양 빌라·오피스텔도 CR리츠 세제 혜택 줘야\"",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBvbkR2aldQU1JuNkdxbWF5aXdESkVWWHluM01DcTk0LXlGaEljd0tGbWl0UUtJcjlOTXBmMkFIeGR3TTc2RF9kcXZwWFdleVVNTWNSSW0wU0JpQQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 07:03:42 GMT",
-      "publisher": "한국경제",
+      "topic": "dynamic:원전",
+      "title": "미국 원전 확대, 인허가·투자 신뢰가 성패 가른다",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE4wQ3M3WVhWQTlseFd0elNUaXFESlpoMkVsNGFybUVGa1BKT3VMRGx1WnJEdTBkZ0tsb3ZOSVk4ZFNZM3JjTnY1UG5vZ0dDVXIxNk5iaG5RcGpWVGpTNXc4bW40MmY?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:12:29 GMT",
+      "publisher": "에너지안전신문",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "더 강해진 美 대중 규제…한국 반도체엔 '이상無'",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9oc3RabWg1aHZSY2pnLUV2d1gtSm1kZXBOODZjakh6dnhLZHVvUkcwLU9hTHltV3diOHhqSjJsNVdLaV9PcGhpNnI4SmJkcmhsclhvZFRUU1p5QlprQk9JLXJxY091eHpITW1rRHNn?oc=5",
-      "published_at": "Tue, 17 Nov 2026 03:33:43 GMT",
-      "publisher": "중소기업신문",
+      "topic": "dynamic:AI",
+      "title": "“모돈 분만도 AI로 예측”… 스마트축산 AI 기술력 겨루다",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9PeGgtVU9KNFNGVDFiUERKd09XdElpaE14RXlLUTJ1R3ZHWTkwSy0xWEp4RmJmVnpvY3AwZlJqQnRnTk5rN2dNZjdNd3FKVzlzdFFsbXR5eXI5djBmYXRYNTE4Y3BZd0FM0gFsQVVfeXFMUEVhRUhoQVlxaXFwVTU2NGR1cVNMZ0NJaDQ2RVlUUkZodmJtR3RWNWhkZEhZNjBxU2hTSFFPU0YyajR1YjZmcFpoZElsSkZTd2lvQWh3LUlDWk05SkFYbDBkVWs2VWpuSTlndGZB?oc=5",
+      "published_at": "Tue, 17 Nov 2026 21:24:00 GMT",
+      "publisher": "한돈뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "한국리츠협회 “CR리츠 세제지원, 연립·오피스텔까지 확대해야”",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE11LTFGZ1Q3WnhaNWxpVllET1YzRkk4TzRTNmNpbEZzUEVCSVBFSEVHcjEwc0liM2hydWdtTlpzLTZ4blgxVFNKa3RhOTJ2QQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 07:42:04 GMT",
-      "publisher": "www.dt.co.kr",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "[개장시황]美 AI 칩 규제·엔비디아 여파에 코스피 5010선 후퇴…옵토닉스·나노팀 급등",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB2aU9uaXNySnpJMVVwUXM2YmJXcFNkR1NYTWMzTzFiQTRFMGp3VVFXTGVhNmMzYXBJOF9nckdGUEVPXzhkN0NMalBaa1ZfUVZLSk1pcHJBUXNpQQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 01:34:53 GMT",
-      "publisher": "한국경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "체코 두코바니 원전, 한국 공급망 품질 검증 본격화… 현지 규제기관 첫 참관",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5tbllpd3BDakc4ZHdqVlZOYmlsSHQyaWl4UWphVWFJNXZQeDc5MGNTTU1mWlpfQTdoWmE4ZW9tX2NRZnZsVnRja3pQeTR2c01xX1huVG5hUWt4QmFpRUowWV9zSnFlYTJaU0lXYzlMbUY?oc=5",
-      "published_at": "Tue, 17 Nov 2026 05:40:03 GMT",
-      "publisher": "Korea IT Times",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "체코 원전 규제기관, 한국 원전 품질관리 현장 첫 점검…두코바니 사업 신뢰 강화",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1hVGdsNGhiTDFibHJpTjFicVd0dG1GaFdFMjFFY2JHdS1NdzRVWV9BV1JvZlBSNGtWNWJpZ1k0bDBTWHVLTXo2WU5GT3QyTGktTGJoS2pGdUgwSE9scWtqWGgyT2I5R1NfYWhlOHJ3?oc=5",
-      "published_at": "Tue, 17 Nov 2026 09:49:11 GMT",
-      "publisher": "코리아포스트 한글판",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "체코 원자력 규제기관, 한국 찾아와 품질관리 첫 현장점검",
-      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBJV3Y0dTBpdk1RR2tXYkJSMmFKUEV1bXB2LXZyTG9SSS11NUlRclh1RjVGTWF3OW5tQVdVYVZ5Y0oweVlrTG1SdGJqSnRjZWc4MkFkQ1R0THpESTda?oc=5",
-      "published_at": "Tue, 17 Nov 2026 01:48:00 GMT",
-      "publisher": "뉴스핌",
+      "topic": "dynamic:규제기관",
+      "title": "한수원, 체코 두코바니 원전 품질관리 역량 점검…현지 규제기관 첫 참관",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1rRl9SaGMtSDRkMGtNV0ctdlhyODNUcUZ1UFJvODJlanY4ZEg3Q1dwaWZETXcteTZLWl9SSDlzcjZqdGlqai1SWDl2MS14OTc4TjBTdXdRdjFybU1RbUE?oc=5",
+      "published_at": "Tue, 17 Nov 2026 08:23:00 GMT",
+      "publisher": "뉴스투데이",
       "discovery_source": "google_news_rss"
     }
   ],
@@ -1307,6 +1252,14 @@
     },
     {
       "topic": "kr_diplomacy_summit",
+      "title": "올해 3번째 한일 정상회담‥\"전략적 소통 중요\"",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFA4STNUTTBGNDJFbWRyZ0VBa3M2b0hZY2tvUUNJblhJclNUMDQ4OVk3YVRQM2d1MVJBUDItSV9yTnBGWERhcGF1dlhiTzY4SVlpcW1XcWxJODBDdmdta3Z0em9fMVhQUXpWTDBPakVVRUtCY3MzU2l6c9IBeEFVX3lxTE1KWXV1TFdGeDZRTlo4ejBhWUVscjAybmhKWU9tc3N2Z2VCRmZJb1FlMEp5TXJwQkhpdnFUclBuR2p5ajFlLW1IdXBONTY5MmstakYtQk56Tm9fZW5BelptSDR4ZGJaeWUyY25kUThSTlRNVkVqOHcwSQ?oc=5",
+      "published_at": "Tue, 17 Nov 2026 15:40:00 GMT",
+      "publisher": "MBC 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
       "title": "李대통령, 다카이치 총리와 정상회담…\"한일 국민 선호도 사상 최고수준\"",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE92OG1DOGIxZkQtTWtoVmx0NXdyYkhETmNqbnhnN09LRUZTR1B1eEY5Z0tDQ3VoMjNMY3VjTXo3X2lEYlhPbFhFendTQ2ZVbzNZcG5Cb3Q5ZlhHUHppam01SWZCaGQ3czhkR1c3NGxSbjk?oc=5",
       "published_at": "Tue, 17 Nov 2026 13:20:19 GMT",
@@ -1327,14 +1280,6 @@
       "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE4tdG5IM2c4d2V1clpCdmpfelpOT3dmbkpId0FRX3h5QXhzZ3VtSHJWWDJSREdXQzVfV2UzQk5yWXdyLXhRb0hzZF9adDZ4NlpfZF9vOTZGaGpQcVo1ZFY4c0xjdHU0eHBfNDBudUF3NlZ4Sk92dk9LQw?oc=5",
       "published_at": "Tue, 17 Nov 2026 09:55:29 GMT",
       "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "올해 3번째 한일 정상회담‥\"전략적 소통 중요\"",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFA4STNUTTBGNDJFbWRyZ0VBa3M2b0hZY2tvUUNJblhJclNUMDQ4OVk3YVRQM2d1MVJBUDItSV9yTnBGWERhcGF1dlhiTzY4SVlpcW1XcWxJODBDdmdta3Z0em9fMVhQUXpWTDBPakVVRUtCY3MzU2l6c9IBeEFVX3lxTE1KWXV1TFdGeDZRTlo4ejBhWUVscjAybmhKWU9tc3N2Z2VCRmZJb1FlMEp5TXJwQkhpdnFUclBuR2p5ajFlLW1IdXBONTY5MmstakYtQk56Tm9fZW5BelptSDR4ZGJaeWUyY25kUThSTlRNVkVqOHcwSQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 15:40:00 GMT",
-      "publisher": "MBC 뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1387,14 +1332,6 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "미·중·러 정상회담에 이 대통령-다카이치, '전략적 소통' 강조",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBSZ3RKQlQ4N1doUGd5MkkwTjZIRmRoc25CTmkzdk5jSkdaYWxuXy1vTUpzVmFiTzVhNWJyWGRjd0F0dThZZlcxbFYwY25YbTcwOFNTT0NpQ3dzSUZ5bWJ0N18zek53VUYtWFA2Z0l3OUtaWGpldzdZ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 14:24:00 GMT",
-      "publisher": "OhmyNews",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "李대통령, 다카이치 총리와 정상회담...\"한일 국민 호감도 사상 최고 수준\"",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBSSmtwREFlejc2dWdwV0w4Q2JvSC1MV3VLMFhmT3Jqc0lJSXVFV1JmQWV6S1M1SG9ncXQwQUFZZkd3N0dHZ3o5V1RBLXdMT0I3WmtLTm1Ec1FqeHV1eFIxRg?oc=5",
       "published_at": "Tue, 17 Nov 2026 10:25:06 GMT",
@@ -1407,6 +1344,14 @@
       "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5QVHFSRmlnMWR6N2x0RGRFVDVucEVtbWpabnpSb0J0U3B6OUFYWWdpaDlmUUpla1pEZnNTUXpJQWpIcnlmdDIxTUNIX0dPWkZKVmU0OA?oc=5",
       "published_at": "Tue, 17 Nov 2026 08:48:00 GMT",
       "publisher": "JTBC",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "미·중·러 정상회담에 이 대통령-다카이치, '전략적 소통' 강조",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBSZ3RKQlQ4N1doUGd5MkkwTjZIRmRoc25CTmkzdk5jSkdaYWxuXy1vTUpzVmFiTzVhNWJyWGRjd0F0dThZZlcxbFYwY25YbTcwOFNTT0NpQ3dzSUZ5bWJ0N18zek53VUYtWFA2Z0l3OUtaWGpldzdZ?oc=5",
+      "published_at": "Tue, 17 Nov 2026 14:24:00 GMT",
+      "publisher": "OhmyNews",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1435,18 +1380,18 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "한일정상회담·트럼프 조우·수능 점검까지…李 대통령 마닐라 일정 마치고 중국 선전 도착",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBwRGQzU3ZhS0RROU4tdEpURFNBS0xDUWRsY3lXNEF2WjNoUkYxMGJWaG9KWGhsNGJZZVlSU1pZUkRXM1QwdGpkVGdfaDVVSXAydnFMY2FUSHl4UQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 19:14:00 GMT",
-      "publisher": "경북매일",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "李대통령, 다카이치 총리와 필리핀서 회동…내년 1월 日서 또 정상회담",
       "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9WVEUwekVwMTdmYXZvYjlITFlDRzYzOUhzVjEtU1BtYnZCeGlKa0xVYlVManY1U09DdTNhUk1kZV9jeDlDVDQyZFZnTlNCZw?oc=5",
       "published_at": "Tue, 17 Nov 2026 11:58:22 GMT",
       "publisher": "전자신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "한일정상회담·트럼프 조우·수능 점검까지…李 대통령 마닐라 일정 마치고 중국 선전 도착",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBwRGQzU3ZhS0RROU4tdEpURFNBS0xDUWRsY3lXNEF2WjNoUkYxMGJWaG9KWGhsNGJZZVlSU1pZUkRXM1QwdGpkVGdfaDVVSXAydnFMY2FUSHl4UQ?oc=5",
+      "published_at": "Tue, 17 Nov 2026 19:14:00 GMT",
+      "publisher": "경북매일",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1659,6 +1604,14 @@
     },
     {
       "topic": "global_market",
+      "title": "[채권/외환] 美 국채금리 하락·달러 약세…엔비디아 실적 앞두고 안전자산 선호",
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE55aEd5aFJYNnNjcG02QldfNE90Wm0yUHEwRFIwQ1FsUGEyUEhBOTA0MzZjQ1A5alRxU3ZHNnY3OHJMdWpXUkphYm5rUTdEVXQzWURVUDZZN2tGQ2VH?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:18:00 GMT",
+      "publisher": "뉴스핌",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
       "title": "배포 후에도 배우는 기업용 AI 노에리, 1.1억 달러 투자유치",
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9SVmRWc05sQTk1SzRfSTRkZmxQY3BwRnk0MXZ4Q2lJeDFtQWo5eFRjLXhULWxPV2w5V3dCM2xsWHZYRVN4NmJIUjNaRXE5UG8?oc=5",
       "published_at": "Tue, 17 Nov 2026 21:16:24 GMT",
@@ -1731,14 +1684,6 @@
     },
     {
       "topic": "global_market",
-      "title": "세레나 윌리엄스, 이름 뺀 VC ‘스타파이어벤처스’…2억 달러 조성 추진",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE00dmktQXhNQl9DSUlSUDJmZWdGZzc5bXZjMndZLUpZeEduS3lULTQwVEh6T2JCN0dGcVBGa0JDOXU2UXZ2ZFlmVXI1b1NJUzg?oc=5",
-      "published_at": "Tue, 17 Nov 2026 21:16:44 GMT",
-      "publisher": "와우테일",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
       "title": "달러-원, 뉴욕장서 1,330원 후반대 거래",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE54QUtQdElKTW4xVGkxaFV4QURoWlU4Mk9hSU93bFJnM0ZvRW9oNU9OZ0ppcFZTdTcydnoxYWlDVE8wUlNIWWMzckotNWYxT2x6VnJmYm8zM1N1Z3JLU21IYWNjWEkyRzdlQnlOeXB5Z0c?oc=5",
       "published_at": "Tue, 17 Nov 2026 14:56:49 GMT",
@@ -1747,10 +1692,50 @@
     },
     {
       "topic": "global_market",
+      "title": "세레나 윌리엄스, 이름 뺀 VC ‘스타파이어벤처스’…2억 달러 조성 추진",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE00dmktQXhNQl9DSUlSUDJmZWdGZzc5bXZjMndZLUpZeEduS3lULTQwVEh6T2JCN0dGcVBGa0JDOXU2UXZ2ZFlmVXI1b1NJUzg?oc=5",
+      "published_at": "Tue, 17 Nov 2026 21:16:44 GMT",
+      "publisher": "와우테일",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "[광화문]수출 1조 달러 그 너머 - 머니투데이",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE43V1FSS1NFd3V5emhpUlVCVDVyVkFGT3I3RVVqNVlCSE5mcWx4MVI4TXM1OEpGVk5sYnh5M3RGbFBtUDg5SWZQLTBKT1pFeDhNQktOeHlwZzFIT29vYjBrcXhXcm9rZmc3eXpz0gFwQVVfeXFMTXpmMVRJZkd6WERGdVdwWUtZSWlLa0lkTmF5YVZSU0NRUGlPejdzaWcyOS1sQzgtOVV5YjdrckRTTkh5SkFzdnNIYmZzMC1ST1RzV2ZfcUxDSDYzM2d5ZVRXOFUyTDFFdTVPbVVQQ0dHdQ?oc=5",
+      "published_at": "Tue, 17 Nov 2026 20:30:00 GMT",
+      "publisher": "머니투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "[굿모닝 美 증시] 엔비디아 매출 ‘1158억 달러’…뉴욕증시 3대 지수는 하락",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1lNjNjQ3FVenlOdTJTU2RVQXF6LXhEekoyYlhianFlQ0FTclFESkYxZ2JqbzJITm1NdVZSUVBOTnROb2FFOXhna1hzSGR4Y1pYSmRLbHRDS21YYm5US2lRWjJ2a2pTc3FzSEEzaV9n?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:00:34 GMT",
+      "publisher": "아시아투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
       "title": "[금/유가] 유조선 피격에 유가 소폭 반등…금값은 1년래 최저 부근",
       "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE0wT1pROHVKcG1MMFdWNXBrQ1RocEU1RmdzOXp6NDd1Q2FqZHJJSlRXVnoycG5fRlRQRmN4aS1DcjVENGlpUW5UMlIzWU5xWlNnVWs3dU91aFJNZWVi?oc=5",
       "published_at": "Tue, 17 Nov 2026 20:35:00 GMT",
       "publisher": "뉴스핌",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "[뉴욕증시] 반도체·기술주 투매로 3대 지수 급락…나스닥 장중 2.1% 폭락",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQUWJBaXhtTkRnd1dfRkQ5OXNMWnl6eVZ2OS00NGVFdHBrMXRnekZ4TGRULVJmeGxhYkEwRWtFWGhOV2JfRmZYUW5YSTE2QXl5cndpamVvRW51SVI1WmxXRGxBTVNfQ1A1VWJkZFd5c2J5SXFVbElJOXJ6d2VWX0xyRU5LamNkRl9p?oc=5",
+      "published_at": "Tue, 17 Nov 2026 21:26:09 GMT",
+      "publisher": "글로벌이코노믹",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "AI 수익성 우려에 나스닥 나흘째 하락… 필반지수는 반등",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE16ZGpHekhWdmJSVUFGUEloRmxvYlB4bXRpWG1TSUlhT1h2UGIxYkpmcEh6TGtYRWJGZjNGcFdETzI5b1lxemotMFNDX1NaUHZnVk5GYTEwb1hhLWdUNmtwMFlJUU96Skg0b0huZ3g4bHfSAXRBVV95cUxNRmVQMWFTclNlTFZyc0tTaWlSazBBWEdFcUlTdnIxYVRxREp5ZkdBQmFoSGZlZEJLeXZ6Z2taRHB3ZjNwZmh2emREUE83b1NxeFVqcE1UZWFKbkl4LUVmdFFxVm1zckE2Q2loYmR0YXN0WmdWUw?oc=5",
+      "published_at": "Tue, 17 Nov 2026 21:58:56 GMT",
+      "publisher": "IT조선",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1771,14 +1756,6 @@
     },
     {
       "topic": "global_market",
-      "title": "[뉴욕증시] 반도체·기술주 투매로 3대 지수 급락…나스닥 장중 2.1% 폭락",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQUWJBaXhtTkRnd1dfRkQ5OXNMWnl6eVZ2OS00NGVFdHBrMXRnekZ4TGRULVJmeGxhYkEwRWtFWGhOV2JfRmZYUW5YSTE2QXl5cndpamVvRW51SVI1WmxXRGxBTVNfQ1A1VWJkZFd5c2J5SXFVbElJOXJ6d2VWX0xyRU5LamNkRl9p?oc=5",
-      "published_at": "Tue, 17 Nov 2026 21:26:09 GMT",
-      "publisher": "글로벌이코노믹",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
       "title": "[속보]뉴욕증시 일제히 하락 마감…S&P500 1.03% ↓",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1ubmw4OHVSbUFVV09sM1JJeVNKdk5CaFVpZlRDSW9NX3ZNeEJla2szaXMzTU1OeS12Q0lpZk5UVzgtMGh6LVl4amhfQUhidk5TZjdIUm1HYlFXa2hfNjJSMQ?oc=5",
       "published_at": "Tue, 17 Nov 2026 21:13:31 GMT",
@@ -1787,10 +1764,10 @@
     },
     {
       "topic": "global_market",
-      "title": "[광화문]수출 1조 달러 그 너머 - 머니투데이",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1PN0tnRFdJdmM4ems1bXh4SEM1RXBxV3pOWGNldjhlN3BTLXg3RzRjM09rbVF5czlwWlFXM21KUFZOd2pkb0VFS0h1azlVRmRkOXNBRUFEdnlPLWFuX2NobTlGaDNKNFpLTUxXb1lqQ0t6MkxCRVFJNNIBfkFVX3lxTFB2RnRoVDdSX3NFb2ZRUTJ5WGcyTUMxYndnOFBCWmRPWTl0N2ExcUF0RUx0ZENtelktc2NreGJyZFhULTcwZHpWUm1UcmFJbFFpbmdqTmNYNFNwV01yY2FYbENUNU0yREVyRjBnZUdDOGJsSDJqZXNuOW9iSElWdw?oc=5",
-      "published_at": "Tue, 17 Nov 2026 20:30:00 GMT",
-      "publisher": "머니투데이",
+      "title": "금리·달러 강세에 짓눌린 金, 고점 대비 34% '뚝'…반등은 언제?",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE8yOExyZVhrMGUzLVBES3poMVlzajA2R3pxZnpmU1ROck9wV0R2MXlNYnAxX1JoNmFDXzF3VjhDd1BnMkFjUDBIemlTWGxlLWNyZHdrZ3ZPX0dXZ3hnR1RMZw?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:00:00 GMT",
+      "publisher": "뉴시스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1807,38 +1784,6 @@
       "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQNGVRRzRFVGk1VDdLVXE1aGR5R3pIY1JleE5XYXlwV3VHOVMwREZGSE1HMW5lWHpNRVpwenhCMkFMUEtXNjB2SlNmUDF1NWlWRTN5VzB4NEJIcy1JY29JSWRXSUhPVS1YOUZDbmtSTmhjLURFQjB3a3JFV0JLRVpwbS0yaUlDNGhVQlF1U05n?oc=5",
       "published_at": "Tue, 17 Nov 2026 15:50:00 GMT",
       "publisher": "조선일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "Applied Optoelectronics, 5억 5천만 달러 주식 공모 계획에 8% 하락",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE50d1Mwek02NC1SOS01MWZZSzRsellubC16a2dnNzR3UFBrVFZjRmFRcEpZY0NSYTlweUlLZFJJSGJXVW43aVhMRzBrVWRCdk5TdDBxQVZSeXc0cHdsSEw5MG9LMEllbXgwRFhRcEl0cjE?oc=5",
-      "published_at": "Tue, 17 Nov 2026 21:32:00 GMT",
-      "publisher": "Investing.com 한국어",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "수출 1조 달러 눈앞인데…항만 '통합 논란·인력난' 이중고",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5xeTZ3azQxYzZNbEhRV1kwMTY5SE5oS3dDWFBQZHJaVGlGQ09fRGJ6bzVXZzJHWVlKcC1FMXhiVzlyU3FRUm96LW41b2pWVmh2X296NWFRRnpWaUxKLWoxTQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 21:00:00 GMT",
-      "publisher": "뉴스토마토",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "원자재 값 상승·하락에 베팅… 금·은·구리 선물 ETN 6종 상장",
-      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPcEhsQmx2WlIzUlFhZjBCRVdUMXVpVTlGT2JRNVA2RG1HWXZ4a0RjaDZBZWo1RkdMLTJ5d0pIOGlMSEFNRzc3N3ZvY2xMR1otcVhLM0ZxWGRycVdkaFNNVkhsV2ZScGZJNFdLbS1JTDI5a1R6V0g0N1FRRDEtdnZOV1B3QnUxWTRKbEVVWFBR?oc=5",
-      "published_at": "Tue, 17 Nov 2026 15:37:00 GMT",
-      "publisher": "조선일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "앤트로픽 공모가 78달러 웃돌까⋯AI 거품론에도 흥행 기대감",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFA0MjJpR3hrWTFOc29YQnNuYVAzYlhCdE5CTlE1WWRTck9kWlJaUDJhbnRXalpkaE9xS01pV0t6VlZpenMyVnRDM3ZPVXlRcG9zanFCdzcxazJPUQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 21:50:00 GMT",
-      "publisher": "브릿지경제",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1867,14 +1812,6 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "트럼프 “한국 투자 덕에 알래스카 LNG 파이프라인 사업 승인”",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBZS25vSHVPUWkzby11YlFjaUVGUGNqTV9EWkhYak9TYjliR0Mwdk5mU2FvRjNibnpBbV9WNlRMMS1rekhmVjJvYlRHRXhwQWpxWnVVNl9qQzMwWk0?oc=5",
-      "published_at": "Tue, 17 Nov 2026 14:56:00 GMT",
-      "publisher": "KBS 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_diplomacy_summit",
       "title": "이 대통령·트럼프, 40초간 대화…트럼프 \"한국 투자 덕에 알래스카 LNG 사업 승인\"",
       "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE12NlAyU3haRW45eThxLTgxdVZhSVl5ZVE5UkhqYkZCVW1iQU4tbTdGU0hfRVFsUlhDQjJzc3pZUkpkM2tOeW5tYzdONmprSTlHcWhCRw?oc=5",
       "published_at": "Tue, 17 Nov 2026 14:26:00 GMT",
@@ -1883,10 +1820,26 @@
     },
     {
       "topic": "global_diplomacy_summit",
+      "title": "트럼프 “한국 투자 덕에 알래스카 LNG 파이프라인 사업 승인”",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBZS25vSHVPUWkzby11YlFjaUVGUGNqTV9EWkhYak9TYjliR0Mwdk5mU2FvRjNibnpBbV9WNlRMMS1rekhmVjJvYlRHRXhwQWpxWnVVNl9qQzMwWk0?oc=5",
+      "published_at": "Tue, 17 Nov 2026 14:56:00 GMT",
+      "publisher": "KBS 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
       "title": "미중 정상 겉으론 유대감…안으론 무역장벽·기술자원 요새 구축",
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBxYXJoWHQteV9pX1BNUmxJU0VJWlJmbHpFdlJyODZnVFN3R2k3UzNFZmhnRWlEUlRTZ2VFQTB0dmhGV1JmdU1VMHVJb1Z2d19iRjVzeFBIYm4yMkXSAWBBVV95cUxPUXV6c1B3ZEF4QmtjbGFTMS1QbHJYcmlOZ2NjM3huaG14NFd5RGxqbFk3MTE3RkRCdjRTcFZwLVFmX1g2Wlpwa1RPMmlfZjU1TFgxMERraWYyS3ZaR281SEw?oc=5",
       "published_at": "Tue, 17 Nov 2026 15:07:30 GMT",
       "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "트럼프 \"한국 투자 덕에 알래스카 LNG 승인\"…이 대통령과 40초간 대화",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFA1Y2lKdjRvOGhnWFdCbG5NZ2ptVTEtamMxd3U1WjFWWjNnclhZdVV6ZENoVkh5LTQ0UUxURUcyTDZ3cHRwanE1NVcyRklCR0ZjTDZudkUxbGxFcERiZlNPbg?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:18:57 GMT",
+      "publisher": "뉴스토마토",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1915,22 +1868,6 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "'트럼프 관세 압박' 캐나다, 中과 밀착…추가 관세 인하·경협 확대 합의",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB5YTROaGJ2Y0MwQzZ0aWJkNFQ4ZFVPekV6RWNCeFozOTdjRkZqaUNicF95YnI3SnZpbUp4QThCaU44WGRpZTB0Njc2bVJENlphbUIxeUZzOGdOZw?oc=5",
-      "published_at": "Tue, 17 Nov 2026 13:12:47 GMT",
-      "publisher": "파이낸셜뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_diplomacy_summit",
-      "title": "트럼프, 李대통령 면전서 “한국의 역사적 투자 덕에 알래스카 LNG 승인”…또 기정사실화",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBHVGVMMS1ILWVWSU5QMXFKcDFSMGpRdk1Ic0JGWXNWT0hlcnE1bFVYczYxQmNQbjF0VGJKTUN1TDZaSl84RmxzYXVoODFYUUVnRDhleDlWRWc1NjM2MDMtLU5YT09SOHJXU1ppejU5YmNjbUtEZ2J3?oc=5",
-      "published_at": "Tue, 17 Nov 2026 14:07:25 GMT",
-      "publisher": "서울신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_diplomacy_summit",
       "title": "[선전 APEC] 트럼프·시진핑·푸틴 3자 회담에 쏠리는 눈…무역·우크라전 두고 3국 3색 '동상이몽'",
       "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5VR3Q3czdzeEItN01iaVR0UzFLUzRBdHZJa24wX3NCTFpHR3hNV3ctdU1fY0ZJSG82MTV6ZzJZZkgzZ1FyZEVaYUxBQkV0RjJpdjFOcUVQanI1SndYczkwLTIwVDFmUlA1V2ZMSA?oc=5",
       "published_at": "Tue, 17 Nov 2026 21:38:01 GMT",
@@ -1947,10 +1884,18 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "트럼프, 이 대통령 앞 “韓 투자 덕 알래스카 LNG 사업승인” 주장",
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9fNW5KUnpXUXBYWDloZEVkRFZkTVpqem51SkhnREJQOWNwdEZ1dW9xaWJqVlJvbEx0WVFrN2JVVTRLUWJUTmpWazh4SWVrQ1JGNDFCb0hkbnhmeUNPN3RhZ1pn?oc=5",
-      "published_at": "Tue, 17 Nov 2026 15:07:00 GMT",
-      "publisher": "미주중앙일보",
+      "title": "트럼프, 李대통령 면전서 “한국의 역사적 투자 덕에 알래스카 LNG 승인”…또 기정사실화",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBHVGVMMS1ILWVWSU5QMXFKcDFSMGpRdk1Ic0JGWXNWT0hlcnE1bFVYczYxQmNQbjF0VGJKTUN1TDZaSl84RmxzYXVoODFYUUVnRDhleDlWRWc1NjM2MDMtLU5YT09SOHJXU1ppejU5YmNjbUtEZ2J3?oc=5",
+      "published_at": "Tue, 17 Nov 2026 14:07:25 GMT",
+      "publisher": "서울신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "'트럼프 관세 압박' 캐나다, 中과 밀착…추가 관세 인하·경협 확대 합의",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB5YTROaGJ2Y0MwQzZ0aWJkNFQ4ZFVPekV6RWNCeFozOTdjRkZqaUNicF95YnI3SnZpbUp4QThCaU44WGRpZTB0Njc2bVJENlphbUIxeUZzOGdOZw?oc=5",
+      "published_at": "Tue, 17 Nov 2026 13:12:47 GMT",
+      "publisher": "파이낸셜뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1975,6 +1920,14 @@
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5tWDdqRnROS0pkbkxvRnN3eW5YWGEzckUtWlVsNkljQk1vT2F6NTVwUjNIdUJibW90MHplN3R2Q2xac1JZVlBxMF9WWFBLQmxQWTVSMFdwM3JsYXphWGRjWtIBYEFVX3lxTE5tWDdqRnROS0pkbkxvRnN3eW5YWGEzckUtWlVsNkljQk1vT2F6NTVwUjNIdUJibW90MHplN3R2Q2xac1JZVlBxMF9WWFBLQmxQWTVSMFdwM3JsYXphWGRjWg?oc=5",
       "published_at": "Tue, 17 Nov 2026 12:32:48 GMT",
       "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "트럼프, 이 대통령 앞 “韓 투자 덕 알래스카 LNG 사업승인” 주장",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9fNW5KUnpXUXBYWDloZEVkRFZkTVpqem51SkhnREJQOWNwdEZ1dW9xaWJqVlJvbEx0WVFrN2JVVTRLUWJUTmpWazh4SWVrQ1JGNDFCb0hkbnhmeUNPN3RhZ1pn?oc=5",
+      "published_at": "Tue, 17 Nov 2026 15:07:00 GMT",
+      "publisher": "미주중앙일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2011,14 +1964,6 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "반갑다! 안동 이후 6개월만에 이재명-다카이치 ‘한일정상회담’",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5RMlBxVEVCV1lqcUZtd0NrSU00TG04QktocmphQTRYTXJuZ3BfX2V3aWI3V3JuNFc0TzdJcUtKMk1BVTFXNmdDazF2X1lRUldLUm0zdTlKZlg3Yk1NNFBWYlhmTE9kdVM2?oc=5",
-      "published_at": "Tue, 17 Nov 2026 13:32:16 GMT",
-      "publisher": "아세안익스프레스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_diplomacy_summit",
       "title": "[종합] 李대통령, 다카이치와 4번째 정상회담…\"한일, 에너지 안보 협력 강화\"",
       "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5Ocm5zT3B4MHIyWDBWRlVyRG9ROGJDenduX2lqZUZaT0Q4MWJhd25vR1ZKUG5nSFQyN2FWMkF3enlGVG9Yam13ZVFudmlrM05NMWRhRW5xRUljQTZt?oc=5",
       "published_at": "Tue, 17 Nov 2026 11:29:00 GMT",
@@ -2035,18 +1980,18 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "트럼프 “韓 투자덕에 알래스카 LNG 파이프라인 승인”",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5OZWZwWTlVNnkwNkJJTnJHWHZlVDJZdEZwRkNJdUVRNTYtT3huX2lJS2dCa1ZmWURnNS04N2IxSWRvTFE4N0VlSFBYMG9GVEw1eTREX21UcXJVYkdobzRpSWR3UXYzLXdneFdhaUVBWG9FSkN6LW9JedIBeEFVX3lxTE5OZWZwWTlVNnkwNkJJTnJHWHZlVDJZdEZwRkNJdUVRNTYtT3huX2lJS2dCa1ZmWURnNS04N2IxSWRvTFE4N0VlSFBYMG9GVEw1eTREX21UcXJVYkdobzRpSWR3UXYzLXdneFdhaUVBWG9FSkN6LW9JeQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 14:54:48 GMT",
-      "publisher": "뉴시스",
+      "title": "반갑다! 안동 이후 6개월만에 이재명-다카이치 ‘한일정상회담’",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5RMlBxVEVCV1lqcUZtd0NrSU00TG04QktocmphQTRYTXJuZ3BfX2V3aWI3V3JuNFc0TzdJcUtKMk1BVTFXNmdDazF2X1lRUldLUm0zdTlKZlg3Yk1NNFBWYlhmTE9kdVM2?oc=5",
+      "published_at": "Tue, 17 Nov 2026 13:32:16 GMT",
+      "publisher": "아세안익스프레스",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "한-일 정상회담, 이 대통령 \"공급망·에너지 안보 협력 파트너, 협력 강화할 것\"",
-      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE54OWhuSTdJVXlKcWgwS2thQlJCUF96bDQ5cjhVZV95TDc0Z3FaWkJtUWRsaEpRWE5XUGljWFRsWDJBeHZSQ1NHUHRUbDk3OFUzQU9yWFlNM0N5ekZaRHpV?oc=5",
-      "published_at": "Tue, 17 Nov 2026 13:42:14 GMT",
-      "publisher": "조세일보",
+      "title": "트럼프 “韓 투자덕에 알래스카 LNG 파이프라인 승인”",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5OZWZwWTlVNnkwNkJJTnJHWHZlVDJZdEZwRkNJdUVRNTYtT3huX2lJS2dCa1ZmWURnNS04N2IxSWRvTFE4N0VlSFBYMG9GVEw1eTREX21UcXJVYkdobzRpSWR3UXYzLXdneFdhaUVBWG9FSkN6LW9JedIBeEFVX3lxTE5OZWZwWTlVNnkwNkJJTnJHWHZlVDJZdEZwRkNJdUVRNTYtT3huX2lJS2dCa1ZmWURnNS04N2IxSWRvTFE4N0VlSFBYMG9GVEw1eTREX21UcXJVYkdobzRpSWR3UXYzLXdneFdhaUVBWG9FSkN6LW9JeQ?oc=5",
+      "published_at": "Tue, 17 Nov 2026 14:54:48 GMT",
+      "publisher": "뉴시스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2059,26 +2004,18 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "트럼프 \"韓 역사적 투자로 알래스카 LNG 사업 승인\"…李대통령 참석 만찬서 거듭 압박",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB4bWFMMkNDbUZDU0NKVDFTTUpYZ2FaUmZlT2NrOXVFZlZMaEgwR0tDeHI3TEM4dFp4WHA1WDdhdEFfWkxFVWtMRlZfYTZYZW1kMEltX0lQazAzUQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 16:12:58 GMT",
-      "publisher": "파이낸셜뉴스",
+      "title": "한-일 정상회담, 이 대통령 \"공급망·에너지 안보 협력 파트너, 협력 강화할 것\"",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE54OWhuSTdJVXlKcWgwS2thQlJCUF96bDQ5cjhVZV95TDc0Z3FaWkJtUWRsaEpRWE5XUGljWFRsWDJBeHZSQ1NHUHRUbDk3OFUzQU9yWFlNM0N5ekZaRHpV?oc=5",
+      "published_at": "Tue, 17 Nov 2026 13:42:14 GMT",
+      "publisher": "조세일보",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "막 오르는 선전 APEC… 시진핑, AI·자유무역 주도권 노린다",
-      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNd2x4SnJycTVybm9sQWNsaHRMWWVDQnFRLVk0TGxIa1RYSGNEMUJ2UERuSXFlNE9lU1ptQ1dDeTM4YzJmbGlKOEU4OG0teEM4MTY0cTNzRnYxRlc3dHZnVDVna0RaZ29zVndjbWRvV0oxNmR0b01TU1lmRmJrQ3RKQk1CRTFmMzB3dk9XSUN5Z3JEdGFKTDRFYVgwYWM0UdIBsgFBVV95cUxQSzl6bDAwZDBKZF9zSUxLY3g0UWJIODMySGEzc0VyQWpoR2ZXMzNDcjFESm5SQUs5dlZ6VmYzelZENWtXSXY1NG1YNkR6RDJGd0JvUTFBanN0M016VTJHUjFsNGJsaTRJSGh6Vl9ZY0swbzRFMnlKcmhta29SQVlDUXh4eUhHdWgweHFfYVRLTFh0cG5oOEZ5QzN6MEstalZnM2hoeEFtZlAxRGhSU1czM2dn?oc=5",
-      "published_at": "Tue, 17 Nov 2026 04:52:00 GMT",
-      "publisher": "Chosunbiz",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "us_china_trade_ai",
-      "title": "미·중 회담 직전 AI 반도체 규제 강화···베선트의 강경 선회, 양국 관계에 미칠 파장은",
-      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE0ta3U4Q3AwaFFNelVXZDZSNlJ5MnUyNUVXYXR5TVFCLXpQZUwtd0JpR1ZPUnNXaFhoR2llb3JXQWZMcUZiUGZQVTFOX0phZXVVN0piZjVkTWlyTk9qdnpB0gFfQVVfeXFMTS1rdThDcDBoUU16VVdkNlI2UnkydTI1RVdhdHlNUUItelBlTC13QmlHVk9Sc1doWGhHaWVvcldBZkxxRmJQZlBVMU5fSmFldVU3SmJmNWRNaXJOT2p2ekE?oc=5",
-      "published_at": "Tue, 17 Nov 2026 04:58:00 GMT",
-      "publisher": "경향신문",
+      "title": "트럼프 \"韓 역사적 투자로 알래스카 LNG 사업 승인\"…李대통령 참석 만찬서 거듭 압박",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB4bWFMMkNDbUZDU0NKVDFTTUpYZ2FaUmZlT2NrOXVFZlZMaEgwR0tDeHI3TEM4dFp4WHA1WDdhdEFfWkxFVWtMRlZfYTZYZW1kMEltX0lQazAzUQ?oc=5",
+      "published_at": "Tue, 17 Nov 2026 16:12:58 GMT",
+      "publisher": "파이낸셜뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2087,6 +2024,14 @@
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9YUzlpaU5NdjlQNHg0cWxxZW5UaFBsa25jdmdmOHZyMkdKdUMyLUJfQWk3RkRNY1NhMkV6ajhTV0NHbXhiZWduclRDZkRZLXJ2RTZDRFdUdkxna2PSAWBBVV95cUxQbnJwWHNNRFBoM25YVUliZnRPY294UlF5N0lzQkZUYk9qYTRBeW5sUF93dmtETm9ibk01eXRPX3JTajZWVldneTYzS2VzaUtlbE02dE1aSUdNNmQzZkY5b2g?oc=5",
       "published_at": "Tue, 17 Nov 2026 21:10:03 GMT",
       "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "us_china_trade_ai",
+      "title": "미·중 회담 직전 AI 반도체 규제 강화···베선트의 강경 선회, 양국 관계에 미칠 파장은",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE0ta3U4Q3AwaFFNelVXZDZSNlJ5MnUyNUVXYXR5TVFCLXpQZUwtd0JpR1ZPUnNXaFhoR2llb3JXQWZMcUZiUGZQVTFOX0phZXVVN0piZjVkTWlyTk9qdnpB0gFfQVVfeXFMTS1rdThDcDBoUU16VVdkNlI2UnkydTI1RVdhdHlNUUItelBlTC13QmlHVk9Sc1doWGhHaWVvcldBZkxxRmJQZlBVMU5fSmFldVU3SmJmNWRNaXJOT2p2ekE?oc=5",
+      "published_at": "Tue, 17 Nov 2026 04:58:00 GMT",
+      "publisher": "경향신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2106,6 +2051,14 @@
       "discovery_source": "google_news_rss"
     },
     {
+      "topic": "us_china_trade_ai",
+      "title": "‘APEC’ 오늘 선전서 개막…미중러 첫 3자회담·북미 접촉 주목",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5uUEw2MmMxZnAzU3FuYW43RDE0VjhDMkFqSFhCNU9rcWcxTW81Z014d1ZJZVlMbzFhUlNaYldJOWp5YTV3amlhQ2ZQcTZNbHdRaWZpVUlzblE3SDNzSEZmdElKcXZ2Zw?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:13:54 GMT",
+      "publisher": "싱글리스트",
+      "discovery_source": "google_news_rss"
+    },
+    {
       "topic": "japan_boj_fx",
       "title": "골드만삭스와 모건스탠리, 2027년까지 엔화 방향 전망 엇갈려",
       "url": "https://news.google.com/rss/articles/CBMi-AJBVV95cUxPMGhwdzVTLWxfRGx6aTl3RU4zMWNuTTdtYlMxckZtc1VhdjEzOWl1QXB4RlczZzRFTlVjMmlQN1ptM2JQeTRsTWVtMW5halJlVUhRQ1FwUnVLdnh5YnNDaWpCMzZ3Q29Ba2hlSjQxNUxISExsbkxEQmFBMWxsN2VudjVtVXhvajdpTjBldG5jYk1VOUZRWTFtSHUxUThIbnc1NXY0VTNXb0xtOGNNTzNMQkJqZk9xZXNKcWZvUEdYUDlHZWwyMnVVSkpDc01tZEVxR0tkT3owM0FmQTY2X0ZVeG5Qc1dYVnhhd2NsNloxYmp6WVhSSlB4VlZOSk9CR0JwdFlVdFNjVHpoTjc5SFRnSTdxZUFSakxpeC0zNzhnYVgyOEd3aW5tMVlqREpQUEt5VFAzcmdPN1QtQ0RtQVpPS1lRV19ickNmUzFlVDFDZ3FGbEs1TWtXeUs4Z2dMejlxaTRVR3pGc29OQVdmWDMzTzZ3d1BGR3lO?oc=5",
@@ -2119,6 +2072,54 @@
       "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE95MXFReV9LSEt3OGxaYXNrSmZqVXFYYUY5c2hTcmlDVVZIQlRjUUtzbWZhSHh6WlJxcFg3eDFLOXVXZDNRQ05Qdkt3VnN6M1JReUo3bmx2b2tLMldzb0JDajNiWFNURnQwb0ZwWDJwaFRrNkk?oc=5",
       "published_at": "Tue, 17 Nov 2026 01:19:12 GMT",
       "publisher": "디지털투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:트럼프",
+      "title": "트럼프, ‘이란 워싱턴 ‘더티밤’ 공격 계획’ 보도에 “현재 조사 중”",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9hY1JNQnZJWHFFWDgxMVNabVByNWx0VkhKcmtNQ1o4VjVCc1JaLW5IbVI5N2JmaDR5RC1QLVRRNDdmd2hrWlpRMXlmNERDMUtmWjlUUExzUWRRMzl2cVZMbkdsZWfSAWdBVV95cUxPWV9EUF9raWxjRG94Y0taTGhuNF9JVFFPbzBVWlEwU2hDd3BXZEU0eWlkUVRIeDFrSl9yMzhZN05kZFNRaGVnMW1HdzNtZ1g1MGZTV2pWUllJc2RyTTM5cGhRODE5c0lB?oc=5",
+      "published_at": "Tue, 17 Nov 2026 19:24:37 GMT",
+      "publisher": "VOA 한국어 홈페이지",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:트럼프",
+      "title": "트럼프, 아시아 순방 시작…\"김정은도 중국 오고 싶을 것\"",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFB3dHVER2tTZWo1RnFMejczWGxMdXN2LUltOV9rN0dGWDluQU1VY1U0azE4QnExa2dKNklBSEZkV0NjSGh6MWtjS1pTRTlXUWFUUnpvZW91TGNmSzFVVE5ZNERLUmlNZEZ5ZDR3?oc=5",
+      "published_at": "Tue, 17 Nov 2026 21:55:52 GMT",
+      "publisher": "SPN 서울평양뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:트럼프",
+      "title": "트럼프 \"韓 투자 덕에 알래스카 LNG파이프라인 사업승인\"",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBHVTF0dnJPUjltb0gtWkZCUzlFZmR0UGoxbE5vbDFXWTZfajFJY0JjdlZpQU1ETU9NYnBySXRxS0lGUDdqMXlCdTN5bjJidUtmY2M4Tm1nSUJwU3ZhNloybEp0TU9HMEJ6YVdKSmlqUHIwVDNH?oc=5",
+      "published_at": "Tue, 17 Nov 2026 20:30:12 GMT",
+      "publisher": "연합뉴스 한민족센터",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:트럼프",
+      "title": "트럼프, 아시아 순방 개시…역내 협력국 정상들과 회담",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5WNER0S2ZOUXdYSktTNlJNNEdMWHZ2dVltaDBGTV8ya0R2c0hRUFRHdUZkbWxILVpKazN1SVJjaTJPTkxMcXNMU2pTQ1ZxeE9ydmNaLVNHVmYxVUQ2dlBV0gFiQVVfeXFMUDR2Mnk2NnBVVXhYcklILVJ6UVBFUWlpVWoyZ25vV1Rkdnh6ZTdWUlhoSlk4eUJVZnQxRDJoeDFZcF96NUpWOWc4YTNobmJWb2RVazBJUXBuUVJTVVRiQnQ3cHc?oc=5",
+      "published_at": "Tue, 17 Nov 2026 17:22:38 GMT",
+      "publisher": "VOA 한국어 홈페이지",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:트럼프",
+      "title": "트럼프 오기 전에…시진핑, 엘니뇨 지원·AI로 중남미 '공략'",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE41U2YwZXRQTEtCZV9fQUFScWdBeG41X2lXLWR6ZHN5ajdlMWdNa2VpR2dkT0w0MzlvbHpzbWc3d0FKMk00WFNhcHU4Q1IxVEhZS0RQVURRcW1xa3PSAWBBVV95cUxOT1UxMEtwWHhfU2FJVHE2MlF3YmxoT0tsWkYwM1cwSl9qQm1NUUxzTU0xRHg2Y3E0cHFpbm1ma1JvOG5TRlBGZnF0SUs4RHhDeXdRRXhiek1GN1ZWWFprc1Y?oc=5",
+      "published_at": "Tue, 17 Nov 2026 18:27:24 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:트럼프",
+      "title": "트럼프·시진핑·푸틴 한자리에…미중러 정상회담 관전포인트",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE55T0I5VW40YlNSUmVCaklqZ2UtNHhYOGkwZ0lmYmY1eUJCcEc3bE5tRUxMNzhzelhDVGZCMXRaenVlRURLSEdrYUpsRENLbW9I0gFTQVVfeXFMTjlQTHZLc3BxbEtqQ3N2LTdyZUFBWFhXeTBYUzB5UWxSZ0ZERlYycU1GRllsdUdCYklJa0dEZU9OQ0NoWWtMYVVtRjFqeXYyMXJpUE0?oc=5",
+      "published_at": "Tue, 17 Nov 2026 16:07:09 GMT",
+      "publisher": "VOA 한국어 홈페이지",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2164,9 +2165,17 @@
     {
       "topic": "dynamic:원전",
       "title": "“수소환원제철에 원전 대부분 쓸 판…해법은 원자로 열”",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBrMFZhbWpEM1VLTnRNZkxfdDFOdDhrMm5BTHZQUlY5SlJXZGFCelFVNnVRaURSeTRieW9pTTJ4bDNEQV9xZUd4MU85VEp1aUVYMWFiZWlXZFJ0dHR1c3RxZGp1RTNCTnV3b0c5WNIBcEFVX3lxTE5qaDN1WndXckJxTU53VjNmN3R6OGNVUzFZSnJublRyS1UtcGJqRndPTjcwMFF3cm5YZDBuTlFxNnl1MF9HWWI5RVRDUk82MEN3cmp5Nm5JNzV5TmR6WFRRUVl0QVhsOG1LLXhhcFpuSmc?oc=5",
-      "published_at": "Tue, 17 Nov 2026 07:14:25 GMT",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5qaDN1WndXckJxTU53VjNmN3R6OGNVUzFZSnJublRyS1UtcGJqRndPTjcwMFF3cm5YZDBuTlFxNnl1MF9HWWI5RVRDUk82MEN3cmp5Nm5JNzV5TmR6WFRRUVl0QVhsOG1LLXhhcFpuSmfSAXBBVV95cUxOamgzdVp3V3JCcU1Od1YzZjd0ejhjVVMxWUpybm5UcktVLXBiakZ3T043MDBRd3JuWGQwbk5RcTZ5dTBfR1liOUVUQ1JPNjBDd3JqeTZuSTc1eU5kelhUUVFZdEFYbDhtSy14YXBabkpn?oc=5",
+      "published_at": "Tue, 17 Nov 2026 07:20:59 GMT",
       "publisher": "전기신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:원전",
+      "title": "[에너지포커스] \"세계로 향하는 K-원전, AI와 융합해 새 시대 연다\"...'2026원자력대전' 창원서 개막",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBOSHZJTW9PVXd3WmtBT21hYWZNSTQ3VjVlaTNmaFpxc09CVFdsUVJUdWtoSkFkZUZKbjVtb3c3M0wtc2FOZk9NeE9aUGNoSmtVWks3TGZRSkVleDhqcmlHUV9wMFZGYlk?oc=5",
+      "published_at": "Tue, 17 Nov 2026 09:40:02 GMT",
+      "publisher": "산경e뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2179,18 +2188,26 @@
     },
     {
       "topic": "dynamic:원전",
-      "title": "한수원, 원전 현장 ‘소신 행정’ 지원...감사원과 해법 모색",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE8xZWJmeHEwRnZlbXZ2OXkwVmVKeFlmZnBlWDBhQURrTjh4dzY4QWpuaTZyUVFmclVqVmNpbF9GbmJRYThqWUx0Mk0wdkJXWkk4dkFzNmlvR2lvdk9jS2hVLXl2ckJZNUd5aUE?oc=5",
-      "published_at": "Tue, 17 Nov 2026 13:50:43 GMT",
-      "publisher": "천지일보",
+      "title": "GS건설, 내년 영업익 57% 증가 전망…AIDC·원전 역할-KB證",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE0xc1lqTnFLX25zMmJzV1pBLW15NWp6bW9wQlEyQktBNVJzRnNRVVUyWkt4dXNNTU41cVNraFJ5a2VlSVdabjNEN3F4V0ZlVDJlV0ZCVjZRQS1pbHdNckRQNVZJV2I?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:00:00 GMT",
+      "publisher": "PRESS9",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "dynamic:원전",
-      "title": "[에너지포커스] \"세계로 향하는 K-원전, AI와 융합해 새 시대 연다\"...'2026원자력대전' 창원서 개막",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBOSHZJTW9PVXd3WmtBT21hYWZNSTQ3VjVlaTNmaFpxc09CVFdsUVJUdWtoSkFkZUZKbjVtb3c3M0wtc2FOZk9NeE9aUGNoSmtVWks3TGZRSkVleDhqcmlHUV9wMFZGYlk?oc=5",
-      "published_at": "Tue, 17 Nov 2026 09:40:02 GMT",
-      "publisher": "산경e뉴스",
+      "title": "국내외 원전기업 창원 집결...경남 SMR 국제콘퍼런스 개막",
+      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5XREdlcnh3N2FCd0hQSEQydmQtUVNWbkxyZlhuYW1iZTV6N05QRnpJYXF0X2U3c0Uwa1pwcHNQbzNBTEc2dVZ4VmpHckZlcTZWaEc1Sw?oc=5",
+      "published_at": "Tue, 17 Nov 2026 11:47:00 GMT",
+      "publisher": "부산경남대표방송 KNN 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:원전",
+      "title": "한수원, 원전 현장 ‘소신 행정’ 지원...감사원과 해법 모색",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE8xZWJmeHEwRnZlbXZ2OXkwVmVKeFlmZnBlWDBhQURrTjh4dzY4QWpuaTZyUVFmclVqVmNpbF9GbmJRYThqWUx0Mk0wdkJXWkk4dkFzNmlvR2lvdk9jS2hVLXl2ckJZNUd5aUE?oc=5",
+      "published_at": "Tue, 17 Nov 2026 13:50:43 GMT",
+      "publisher": "천지일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2211,18 +2228,10 @@
     },
     {
       "topic": "dynamic:원전",
-      "title": "GS건설, 내년 영업익 57% 증가 전망…AIDC·원전 역할-KB證",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE0xc1lqTnFLX25zMmJzV1pBLW15NWp6bW9wQlEyQktBNVJzRnNRVVUyWkt4dXNNTU41cVNraFJ5a2VlSVdabjNEN3F4V0ZlVDJlV0ZCVjZRQS1pbHdNckRQNVZJV2I?oc=5",
-      "published_at": "Tue, 17 Nov 2026 22:00:00 GMT",
-      "publisher": "PRESS9",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:원전",
-      "title": "원전 사고 ‘은폐 사각지대’ 막는다…종업원·교사·공모자까지 처벌 추진",
-      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9LMUpTalVOU2NVNml3aDA2S21jN0tCTE1meWo3SUNidmx2bGJ4VmxLYVRNb2xxVm04Q0dVQVdKR0dsNFZJOGtVTGxoMm1Tc0ZJT2dGd0VpVTVJMWVyODk5Zjc0NllTRVdaSVk0Nk0yQXZMZw?oc=5",
-      "published_at": "Tue, 17 Nov 2026 05:51:30 GMT",
-      "publisher": "에너지데일리",
+      "title": "새울원전 환경감시위원회 ‘주민과 함께하는 워크숍’",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1DN1Z0NHptd2JSMDhUUGRtMEUtaFBSOHVGendYY0dreEVqYmhyN25NbVlqOU5ucmx6SmRyYjJKV3Q2S0tMOEp3dVd4emJQVUZFbzBZX0duRmN0R3BtazlkdEk0V2wxdXdlWGFWQg?oc=5",
+      "published_at": "Tue, 17 Nov 2026 15:00:02 GMT",
+      "publisher": "경상일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2235,10 +2244,10 @@
     },
     {
       "topic": "dynamic:원전",
-      "title": "국내외 원전기업 창원 집결...경남 SMR 국제콘퍼런스 개막",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5XREdlcnh3N2FCd0hQSEQydmQtUVNWbkxyZlhuYW1iZTV6N05QRnpJYXF0X2U3c0Uwa1pwcHNQbzNBTEc2dVZ4VmpHckZlcTZWaEc1Sw?oc=5",
-      "published_at": "Tue, 17 Nov 2026 11:47:00 GMT",
-      "publisher": "부산경남대표방송 KNN 뉴스",
+      "title": "미국 원전 확대, 인허가·투자 신뢰가 성패 가른다",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE4wQ3M3WVhWQTlseFd0elNUaXFESlpoMkVsNGFybUVGa1BKT3VMRGx1WnJEdTBkZ0tsb3ZOSVk4ZFNZM3JjTnY1UG5vZ0dDVXIxNk5iaG5RcGpWVGpTNXc4bW40MmY?oc=5",
+      "published_at": "Tue, 17 Nov 2026 22:12:29 GMT",
+      "publisher": "에너지안전신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2279,6 +2288,14 @@
       "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9qVkI2Rzc0YU5VSGZicGhGdkttZ2F4bHFNbnNjeUVyRVZlcmJCT0tQMFcyU3M2LW8yS0s4U1NSVFVwQXhENk1ZOW9wbHNDWUZIWkRVVmNLcWFPX2txT2plOC04anZtb3NT?oc=5",
       "published_at": "Tue, 17 Nov 2026 20:34:00 GMT",
       "publisher": "데일리메디",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
+      "title": "“모돈 분만도 AI로 예측”… 스마트축산 AI 기술력 겨루다",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9PeGgtVU9KNFNGVDFiUERKd09XdElpaE14RXlLUTJ1R3ZHWTkwSy0xWEp4RmJmVnpvY3AwZlJqQnRnTk5rN2dNZjdNd3FKVzlzdFFsbXR5eXI5djBmYXRYNTE4Y3BZd0FM0gFsQVVfeXFMUEVhRUhoQVlxaXFwVTU2NGR1cVNMZ0NJaDQ2RVlUUkZodmJtR3RWNWhkZEhZNjBxU2hTSFFPU0YyajR1YjZmcFpoZElsSkZTd2lvQWh3LUlDWk05SkFYbDBkVWs2VWpuSTlndGZB?oc=5",
+      "published_at": "Tue, 17 Nov 2026 21:24:00 GMT",
+      "publisher": "한돈뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2335,14 +2352,6 @@
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9FT0NEVDRmTGdmOHpmTDUzMGZwZU83REdmWERPYklEdW45dTFLR1VEaWtGd0VVdWdmcjRIUS1Cak9acTVRUTNRM2JFUWlEemF2ZHNIbkxvaklVYUU?oc=5",
       "published_at": "Tue, 17 Nov 2026 21:00:04 GMT",
       "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "[11월17일] 미국 이어 중국도 'AI 과학적 발견' 경쟁…문샷, 생물학·화학 연구에 집중",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE04dk5wNFI2ZHJQSy1QcHY4c3hWNXlpV1pabGY0U1lNRDBSdV9Pcy16TUxNb3lCZVE3dGpZRFM3QkVycHpmanp2ckVVX2llR2RuUnhfSlVMVEU0UGhtajRHZGc3VGN0ZTJYNmc?oc=5",
-      "published_at": "Tue, 17 Nov 2026 22:00:00 GMT",
-      "publisher": "AI타임스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2490,46 +2499,6 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:트럼프",
-      "title": "트럼프, ‘이란 워싱턴 ‘더티밤’ 공격 계획’ 보도에 “현재 조사 중”",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9hY1JNQnZJWHFFWDgxMVNabVByNWx0VkhKcmtNQ1o4VjVCc1JaLW5IbVI5N2JmaDR5RC1QLVRRNDdmd2hrWlpRMXlmNERDMUtmWjlUUExzUWRRMzl2cVZMbkdsZWfSAWdBVV95cUxPWV9EUF9raWxjRG94Y0taTGhuNF9JVFFPbzBVWlEwU2hDd3BXZEU0eWlkUVRIeDFrSl9yMzhZN05kZFNRaGVnMW1HdzNtZ1g1MGZTV2pWUllJc2RyTTM5cGhRODE5c0lB?oc=5",
-      "published_at": "Tue, 17 Nov 2026 19:24:37 GMT",
-      "publisher": "VOA 한국어 홈페이지",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "트럼프 \"韓 투자 덕에 알래스카 LNG파이프라인 사업승인\"",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBHVTF0dnJPUjltb0gtWkZCUzlFZmR0UGoxbE5vbDFXWTZfajFJY0JjdlZpQU1ETU9NYnBySXRxS0lGUDdqMXlCdTN5bjJidUtmY2M4Tm1nSUJwU3ZhNloybEp0TU9HMEJ6YVdKSmlqUHIwVDNH?oc=5",
-      "published_at": "Tue, 17 Nov 2026 20:30:12 GMT",
-      "publisher": "연합뉴스 한민족센터",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "트럼프, 아시아 순방 개시…역내 협력국 정상들과 회담",
-      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5WNER0S2ZOUXdYSktTNlJNNEdMWHZ2dVltaDBGTV8ya0R2c0hRUFRHdUZkbWxILVpKazN1SVJjaTJPTkxMcXNMU2pTQ1ZxeE9ydmNaLVNHVmYxVUQ2dlBV0gFiQVVfeXFMUDR2Mnk2NnBVVXhYcklILVJ6UVBFUWlpVWoyZ25vV1Rkdnh6ZTdWUlhoSlk4eUJVZnQxRDJoeDFZcF96NUpWOWc4YTNobmJWb2RVazBJUXBuUVJTVVRiQnQ3cHc?oc=5",
-      "published_at": "Tue, 17 Nov 2026 17:22:38 GMT",
-      "publisher": "VOA 한국어 홈페이지",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "트럼프 오기 전에…시진핑, 엘니뇨 지원·AI로 중남미 '공략'",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE41U2YwZXRQTEtCZV9fQUFScWdBeG41X2lXLWR6ZHN5ajdlMWdNa2VpR2dkT0w0MzlvbHpzbWc3d0FKMk00WFNhcHU4Q1IxVEhZS0RQVURRcW1xa3PSAWBBVV95cUxOT1UxMEtwWHhfU2FJVHE2MlF3YmxoT0tsWkYwM1cwSl9qQm1NUUxzTU0xRHg2Y3E0cHFpbm1ma1JvOG5TRlBGZnF0SUs4RHhDeXdRRXhiek1GN1ZWWFprc1Y?oc=5",
-      "published_at": "Tue, 17 Nov 2026 18:27:24 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "트럼프·시진핑·푸틴 한자리에…미중러 정상회담 관전포인트",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE55T0I5VW40YlNSUmVCaklqZ2UtNHhYOGkwZ0lmYmY1eUJCcEc3bE5tRUxMNzhzelhDVGZCMXRaenVlRURLSEdrYUpsRENLbW9I0gFTQVVfeXFMTjlQTHZLc3BxbEtqQ3N2LTdyZUFBWFhXeTBYUzB5UWxSZ0ZERlYycU1GRllsdUdCYklJa0dEZU9OQ0NoWWtMYVVtRjFqeXYyMXJpUE0?oc=5",
-      "published_at": "Tue, 17 Nov 2026 16:07:09 GMT",
-      "publisher": "VOA 한국어 홈페이지",
-      "discovery_source": "google_news_rss"
-    },
-    {
       "topic": "dynamic:알래스카",
       "title": "트럼프, 또 \"한국 역사적 투자로 알래스카 가스관 승인\"",
       "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBpV3pLR09tLV9WME1ld1ZUa0NhWnVoRWM5TnRTSEVlUFROUUs1WFhkc3lhNlp0aDZLNkVVZWJNaHdIZXd3eU1JUU1HRVNrcFRiRTJtaE1ibUR0VlRCaVVfS28wblJtWWtuampV?oc=5",
@@ -2546,23 +2515,31 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:알래스카",
-      "title": "트럼프 \"한국 투자로 알래스카 LNG 사업 승인\"",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9iOG8yVXFENXMwZmZIeUJCdFpMUzhXU19BX1hjMS1iNWtUU3U3V3JRd0tDOXk5NjBqc09fcHdHNTBJMzFVVFBpMEdrY0w5SG41eWFRZDkwQUk4bFI3VkRDLVNYTjk?oc=5",
-      "published_at": "Tue, 17 Nov 2026 13:45:00 GMT",
-      "publisher": "라디오코리아",
+      "topic": "dynamic:품질관리",
+      "title": "식약처, AI 기반 바이오의약품 품질관리 혁신 논의",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBsZWdmNWN0czYtY3Itd1FON2JEYmhqRExEbVF3dUprR25pYXpBNFJ5M1JnRUhEY2NlejJZdVduZ183RE5la1JPdTBObGFuMmFJXzNGQy0xMjQ0WDR3MW5ZdzlJWmZUb01VQWJtMQ?oc=5",
+      "published_at": "Tue, 17 Nov 2026 05:36:25 GMT",
+      "publisher": "약사공론",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:알래스카",
-      "title": "트럼프 \"한국 투자 덕에 알래스카 LNG 사업 승인\"",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9lUzRUUFZTQVZEdTRnOXB0eUxHbXFSWE52MDd1bXU2UFgydEVjTjJnRGRXTi0yMW9qTlVjWktSN1ZwYk5ILWxDWDc4WThSMU5HYXIyUzBqVFJEalROQk9Tc2VVcGdhRGJNazRLN3VB0gFzQVVfeXFMUFFDcnN5aUs0QkxfbWJBMVcwSmxsM3RmenZHY050T2Y3YXhNZzNNU3k1THlUMWVyVFdsbnFUcDFhRlFjX3JzRV9ZVjN4ZUNvTzRxb2hzLVBHRXdORUF3alU3bm8xWWR5MlNWaThBNTA3Vl9XRQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 14:46:00 GMT",
-      "publisher": "한국일보",
+      "topic": "dynamic:품질관리",
+      "title": "한국앤컴퍼니그룹, AI 해커톤서 타이어 설계·품질관리 솔루션 발굴",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE44TTlReW81MWlKRG9yUmg5SlZZbE5TWXdvd2FKcUZRb1hBYVd2a0plZzBLeUM1Vjlod25wZVhKeTRaME9MelpTV3IzZ0RzQXRXbGtkV3lqcGprNVlRYjZEVXMtX0QxX1VQZG1oR29GeU_SAXRBVV95cUxQZnF4X290LTJ5N00yMmRlbTNnVlZrQWUyY085b0FuZWxDcUtDQkg0WktlSUZuaFNyckFYdFJGWFUtWUdYOW1yZWpyM2FIaGpjSTVUU3l5WUFxdUx2TWpfcUJlQ0c0ZG5CWGgwYkNNVXd2TnV6Rw?oc=5",
+      "published_at": "Tue, 17 Nov 2026 12:01:11 GMT",
+      "publisher": "IT조선",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:규제기관",
+      "topic": "dynamic:품질관리",
+      "title": "한전기술, 협력사와 품질 경쟁력 강화 맞손…AI 품질관리 방안 공유",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE53RGR0Tk1ZU29QWnZ1X1V6SWFkRG5JNWZOUEhmajBpUGZFZlRDeFlMcG1zeFM3RnBDWUdrWUpYWkF1WVREM3VMNUk4aUFRa3hVU1JIamhjNzV6ek5RRnFKTDJCYVBxeDhPRXZV?oc=5",
+      "published_at": "Tue, 17 Nov 2026 07:25:02 GMT",
+      "publisher": "파이낸셜신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:품질관리",
       "title": "한수원-체코 규제기관, 두코바니 원전 품질관리 첫 현장 점검",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9zNXIyWi1yVlJRUDdGRnlOeHVrUFdJUmdiQnRTYXdoLThUMHNmRlJYWGdoWUItWVdiZEFUUEVoMjJ3NGhVdlpnQkQxak1aUTJuS1NIaUQ3WjBuX2N5NE14YWJLRzRBaU5VQ0FhSmpCSnI?oc=5",
       "published_at": "Tue, 17 Nov 2026 01:53:09 GMT",
@@ -2570,7 +2547,15 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:규제기관",
+      "topic": "dynamic:품질관리",
+      "title": "식약처, AI 활용한 백신 제조·품질관리 혁신 방안 논의",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1VMDFqWlFJM3RyY296UXZpSTdXNnBpUDdWNHZ0NkhCQU8ybzB4YTN5aEpEekptSWdiNXdjT3luT1BuYzZ1Vk1lUTcyVjYwUHFZRTlZc3gwUTUtemE1Sm5GRVlBbVhIM1lLaFNldmRoa1pzakXSAXNBVV95cUxNVTAxalpRSTN0cmNvelF2aUk3VzZwaVA3VjR2dDZIQkFPMm8weGEzeWhKRHpKbUlnYjV3Y095bk9QbmM2dVZNZVE3MlY2MFBxWUU5WXN4MFE1LXphNUpuRkVZQW1YSDNZS2hTZXZkaGtac2pF?oc=5",
+      "published_at": "Tue, 17 Nov 2026 02:20:21 GMT",
+      "publisher": "청년의사",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:품질관리",
       "title": "한수원과 체코 원자력 규제기관, 두코바니 원전 품질관리 첫 현장 점검",
       "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE05TXpTSDRhQlN2V3JjWGZoWi1GRU91bFkyWTNLeTMzaXR6elY0dVhOXzVIWkYxMEkzRDNjWHAzdmlfN3FaNVNpREd6d3lzOVBlRDJ5dEp0bEI0T0l3TTZEd2JLQzBPbHpROEtFb3p5UjdEcFU?oc=5",
       "published_at": "Tue, 17 Nov 2026 07:26:34 GMT",
@@ -2603,42 +2588,10 @@
     },
     {
       "topic": "dynamic:규제기관",
-      "title": "한수원, 체코 두코바니 원전 품질보증감사 실시…현지 규제기관 첫 참관",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9DbmdfR3dMLThpUkh2LVhiR1Bzb01uMkp2eWI2RUFCYVR6cWdTcF9ZYWtpU3UwUEU0d3dMX2Vyenc3X3lRRDFiSW01UzJ6R1BxOElIcnZ0dEU?oc=5",
-      "published_at": "Tue, 17 Nov 2026 01:33:18 GMT",
-      "publisher": "더트래커",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:품질관리",
-      "title": "식약처, AI 기반 바이오의약품 품질관리 혁신 논의",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBsZWdmNWN0czYtY3Itd1FON2JEYmhqRExEbVF3dUprR25pYXpBNFJ5M1JnRUhEY2NlejJZdVduZ183RE5la1JPdTBObGFuMmFJXzNGQy0xMjQ0WDR3MW5ZdzlJWmZUb01VQWJtMQ?oc=5",
-      "published_at": "Tue, 17 Nov 2026 05:36:25 GMT",
-      "publisher": "약사공론",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:품질관리",
-      "title": "한국앤컴퍼니그룹, AI 해커톤서 타이어 설계·품질관리 솔루션 발굴",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE44TTlReW81MWlKRG9yUmg5SlZZbE5TWXdvd2FKcUZRb1hBYVd2a0plZzBLeUM1Vjlod25wZVhKeTRaME9MelpTV3IzZ0RzQXRXbGtkV3lqcGprNVlRYjZEVXMtX0QxX1VQZG1oR29GeU_SAXRBVV95cUxQZnF4X290LTJ5N00yMmRlbTNnVlZrQWUyY085b0FuZWxDcUtDQkg0WktlSUZuaFNyckFYdFJGWFUtWUdYOW1yZWpyM2FIaGpjSTVUU3l5WUFxdUx2TWpfcUJlQ0c0ZG5CWGgwYkNNVXd2TnV6Rw?oc=5",
-      "published_at": "Tue, 17 Nov 2026 12:01:11 GMT",
-      "publisher": "IT조선",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:품질관리",
-      "title": "한전기술, 협력사와 품질 경쟁력 강화 맞손…AI 품질관리 방안 공유",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE53RGR0Tk1ZU29QWnZ1X1V6SWFkRG5JNWZOUEhmajBpUGZFZlRDeFlMcG1zeFM3RnBDWUdrWUpYWkF1WVREM3VMNUk4aUFRa3hVU1JIamhjNzV6ek5RRnFKTDJCYVBxeDhPRXZV?oc=5",
-      "published_at": "Tue, 17 Nov 2026 07:25:02 GMT",
-      "publisher": "파이낸셜신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:품질관리",
-      "title": "식약처, AI 활용한 백신 제조·품질관리 혁신 방안 논의",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1VMDFqWlFJM3RyY296UXZpSTdXNnBpUDdWNHZ0NkhCQU8ybzB4YTN5aEpEekptSWdiNXdjT3luT1BuYzZ1Vk1lUTcyVjYwUHFZRTlZc3gwUTUtemE1Sm5GRVlBbVhIM1lLaFNldmRoa1pzakXSAXNBVV95cUxNVTAxalpRSTN0cmNvelF2aUk3VzZwaVA3VjR2dDZIQkFPMm8weGEzeWhKRHpKbUlnYjV3Y095bk9QbmM2dVZNZVE3MlY2MFBxWUU5WXN4MFE1LXphNUpuRkVZQW1YSDNZS2hTZXZkaGtac2pF?oc=5",
-      "published_at": "Tue, 17 Nov 2026 02:20:21 GMT",
-      "publisher": "청년의사",
+      "title": "한수원, 체코 두코바니 원전 품질관리 역량 점검…현지 규제기관 첫 참관",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1rRl9SaGMtSDRkMGtNV0ctdlhyODNUcUZ1UFJvODJlanY4ZEg3Q1dwaWZETXcteTZLWl9SSDlzcjZqdGlqai1SWDl2MS14OTc4TjBTdXdRdjFybU1RbUE?oc=5",
+      "published_at": "Tue, 17 Nov 2026 08:23:00 GMT",
+      "publisher": "뉴스투데이",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2663,79 +2616,79 @@
     "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
     "한국 증시 오늘 새 공시 수주 계약 정책 변화",
     "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
-    "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "원전 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "체코 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "알래스카 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "품질관리 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "알래스카 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "규제기관 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
   ],
   "dynamic_query_terms": [
+    "트럼프",
     "원전",
     "AI",
     "체코",
-    "트럼프",
     "알래스카",
-    "규제기관",
     "품질관리",
+    "규제기관",
     "승인"
   ],
   "hot_topic_candidates": [
     {
-      "term": "트럼프",
-      "count": 38,
-      "publisher_count": 26,
-      "independent_story_count_estimate": 23,
-      "syndication_ratio_estimate": 0.395,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 22,
-      "delta": 16,
-      "score": 118,
-      "examples": [
-        "이 대통령, 트럼프 대통령과 필리핀 만찬장서 조우",
-        "한일정상회담·트럼프 조우·수능 점검까지…李 대통령 마닐라 일정 마치고 중국 선전 도착",
-        "트럼프家 스테이블코인도 레임덕?…한 달째 1달러 하회"
-      ],
-      "article_velocity": 16,
-      "hot_score": 223
-    },
-    {
       "term": "원전",
       "count": 38,
-      "publisher_count": 31,
+      "publisher_count": 30,
       "independent_story_count_estimate": 24,
       "syndication_ratio_estimate": 0.368,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 33,
-      "delta": 5,
-      "score": 112,
+      "previous_count": 38,
+      "delta": 0,
+      "score": 106,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
         "체코가 한국 원전 품질관리 현장을 직접 본다…계약 후 규제기관 첫 참관"
       ],
-      "article_velocity": 5,
-      "hot_score": 192
+      "article_velocity": 0,
+      "hot_score": 170
+    },
+    {
+      "term": "트럼프",
+      "count": 38,
+      "publisher_count": 27,
+      "independent_story_count_estimate": 24,
+      "syndication_ratio_estimate": 0.368,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 38,
+      "delta": 0,
+      "score": 103,
+      "examples": [
+        "이 대통령, 트럼프 대통령과 필리핀 만찬장서 조우",
+        "한일정상회담·트럼프 조우·수능 점검까지…李 대통령 마닐라 일정 마치고 중국 선전 도착",
+        "트럼프家 스테이블코인도 레임덕?…한 달째 1달러 하회"
+      ],
+      "article_velocity": 0,
+      "hot_score": 164
     },
     {
       "term": "AI",
-      "count": 36,
-      "publisher_count": 30,
-      "independent_story_count_estimate": 36,
+      "count": 35,
+      "publisher_count": 28,
+      "independent_story_count_estimate": 35,
       "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 29,
-      "delta": 7,
-      "score": 109,
+      "previous_count": 36,
+      "delta": -1,
+      "score": 98,
       "examples": [
         "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
         "한국선급, 선박 사이버보안·AI 안전관리 대응 강화…국제 해사규제 변화 점검",
         "[개장시황]美 AI 칩 규제·엔비디아 여파에 코스피 5010선 후퇴…옵토닉스·나노팀 급등"
       ],
-      "article_velocity": 7,
-      "hot_score": 232
+      "article_velocity": 0,
+      "hot_score": 196
     },
     {
       "term": "체코",
@@ -2744,52 +2697,52 @@
       "independent_story_count_estimate": 14,
       "syndication_ratio_estimate": 0.462,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 22,
-      "delta": 4,
-      "score": 81,
+      "previous_count": 26,
+      "delta": 0,
+      "score": 77,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
         "체코 규제당국 방한, 두코바니 원전 설계현장 첫 점검"
       ],
-      "article_velocity": 4,
-      "hot_score": 134
-    },
-    {
-      "term": "알래스카",
-      "count": 23,
-      "publisher_count": 20,
-      "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.609,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 18,
-      "delta": 5,
-      "score": 71,
-      "examples": [
-        "트럼프 \"한국 투자로 알래스카 LNG 승인\" 주장",
-        "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
-        "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\""
-      ],
-      "article_velocity": 5,
-      "hot_score": 110
+      "article_velocity": 0,
+      "hot_score": 118
     },
     {
       "term": "품질관리",
-      "count": 21,
-      "publisher_count": 20,
-      "independent_story_count_estimate": 13,
-      "syndication_ratio_estimate": 0.381,
+      "count": 22,
+      "publisher_count": 21,
+      "independent_story_count_estimate": 14,
+      "syndication_ratio_estimate": 0.364,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 6,
-      "score": 68,
+      "previous_count": 21,
+      "delta": 1,
+      "score": 66,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
         "체코가 한국 원전 품질관리 현장을 직접 본다…계약 후 규제기관 첫 참관"
       ],
-      "article_velocity": 6,
-      "hot_score": 124
+      "article_velocity": 1,
+      "hot_score": 110
+    },
+    {
+      "term": "알래스카",
+      "count": 22,
+      "publisher_count": 20,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.591,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 23,
+      "delta": -1,
+      "score": 64,
+      "examples": [
+        "트럼프 \"한국 투자로 알래스카 LNG 승인\" 주장",
+        "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
+        "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\""
+      ],
+      "article_velocity": 0,
+      "hot_score": 89
     },
     {
       "term": "규제기관",
@@ -2798,34 +2751,34 @@
       "independent_story_count_estimate": 8,
       "syndication_ratio_estimate": 0.619,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 18,
-      "delta": 3,
-      "score": 65,
+      "previous_count": 21,
+      "delta": 0,
+      "score": 62,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
         "체코가 한국 원전 품질관리 현장을 직접 본다…계약 후 규제기관 첫 참관"
       ],
-      "article_velocity": 3,
-      "hot_score": 97
+      "article_velocity": 0,
+      "hot_score": 85
     },
     {
       "term": "승인",
-      "count": 20,
+      "count": 19,
       "publisher_count": 17,
       "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.55,
+      "syndication_ratio_estimate": 0.526,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": 6,
-      "score": 63,
+      "previous_count": 20,
+      "delta": -1,
+      "score": 55,
       "examples": [
         "트럼프 \"한국 투자로 알래스카 LNG 승인\" 주장",
         "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\"",
-        "트럼프 “한국 투자 덕에 알래스카 LNG 파이프라인 사업 승인”"
+        "이 대통령·트럼프, 40초간 대화…트럼프 \"한국 투자 덕에 알래스카 LNG 사업 승인\""
       ],
-      "article_velocity": 6,
-      "hot_score": 105
+      "article_velocity": 0,
+      "hot_score": 80
     },
     {
       "term": "두코바니",
@@ -2834,70 +2787,70 @@
       "independent_story_count_estimate": 9,
       "syndication_ratio_estimate": 0.471,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": 3,
-      "score": 52,
+      "previous_count": 17,
+      "delta": 0,
+      "score": 49,
       "examples": [
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
         "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
         "체코 규제당국 방한, 두코바니 원전 설계현장 첫 점검"
       ],
-      "article_velocity": 3,
-      "hot_score": 86
+      "article_velocity": 0,
+      "hot_score": 74
+    },
+    {
+      "term": "덕에",
+      "count": 16,
+      "publisher_count": 16,
+      "independent_story_count_estimate": 5,
+      "syndication_ratio_estimate": 0.688,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 16,
+      "delta": 0,
+      "score": 48,
+      "examples": [
+        "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
+        "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\"",
+        "이 대통령·트럼프, 40초간 대화…트럼프 \"한국 투자 덕에 알래스카 LNG 사업 승인\""
+      ],
+      "article_velocity": 0,
+      "hot_score": 63
     },
     {
       "term": "LNG",
-      "count": 17,
+      "count": 16,
       "publisher_count": 15,
       "independent_story_count_estimate": 7,
-      "syndication_ratio_estimate": 0.588,
+      "syndication_ratio_estimate": 0.562,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": 3,
-      "score": 52,
+      "previous_count": 17,
+      "delta": -1,
+      "score": 47,
       "examples": [
         "트럼프 \"한국 투자로 알래스카 LNG 승인\" 주장",
         "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
         "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\""
       ],
-      "article_velocity": 3,
-      "hot_score": 80
+      "article_velocity": 0,
+      "hot_score": 67
     },
     {
-      "term": "정상회담",
-      "count": 13,
-      "publisher_count": 13,
-      "independent_story_count_estimate": 12,
-      "syndication_ratio_estimate": 0.077,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 13,
-      "score": 52,
-      "examples": [
-        "한-일 정상회담",
-        "이 대통령, 다카이치와 정상회담…미중러 앞두고 ’한일협력’ 강조",
-        "李대통령, 다카이치 총리와 정상회담…\"한일 국민 선호도 사상 최고수준\""
-      ],
-      "article_velocity": 13,
-      "hot_score": 127
-    },
-    {
-      "term": "덕에",
+      "term": "점검",
       "count": 16,
-      "publisher_count": 15,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.688,
+      "publisher_count": 14,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.5,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 4,
-      "score": 51,
+      "previous_count": 15,
+      "delta": 1,
+      "score": 47,
       "examples": [
-        "트럼프 “한국 역사적 투자 덕에 알래스카 LNG 파이프라인 사업승인했다”",
-        "트럼프 \"김정은, 중국 오고 싶어할 것\"...\"한국 투자 덕에 알래스카 LNG 사업 승인\"",
-        "트럼프 “한국 투자 덕에 알래스카 LNG 파이프라인 사업 승인”"
+        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검…“계약 이후 최초”",
+        "체코 원전 규제기관, 한국의 두코바니 품질관리 현장 첫 점검",
+        "한국선급, 선박 사이버보안·AI 안전관리 대응 강화…국제 해사규제 변화 점검"
       ],
-      "article_velocity": 4,
-      "hot_score": 77
+      "article_velocity": 1,
+      "hot_score": 72
     }
   ],
   "sector_selection": {
