@@ -1,12 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-19T01:11:26.849520+09:00",
+  "generated_at": "2026-11-19T01:21:12.556775+09:00",
   "purpose": "10분 비AI 시장·뉴스 단서 센서. :00/:30 A/B Supervisor의 탐색 힌트이며 사실 확정 엔진이 아님.",
   "source_status": {
     "google_news:kr_market_broad": {
-      "status": "empty",
-      "count": 0,
-      "auto_repair": "retry_without_when_filter"
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:kr_market_flow": {
       "status": "empty",
@@ -44,9 +43,8 @@
       "auto_repair": null
     },
     "google_news:kr_defense_shipbuilding": {
-      "status": "empty",
-      "count": 0,
-      "auto_repair": "retry_without_when_filter"
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:global_market": {
       "status": "ok",
@@ -59,9 +57,8 @@
       "auto_repair": null
     },
     "google_news:us_macro_rates": {
-      "status": "empty",
-      "count": 0,
-      "auto_repair": "retry_without_when_filter"
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:global_energy_middle_east": {
       "status": "ok",
@@ -93,45 +90,45 @@
       "count": 0,
       "auto_repair": "retry_without_when_filter"
     },
+    "google_news:dynamic:정상회담": {
+      "status": "ok",
+      "count": 13,
+      "term": "정상회담"
+    },
     "google_news:dynamic:FTA": {
       "status": "ok",
       "count": 16,
       "term": "FTA"
-    },
-    "google_news:dynamic:타결": {
-      "status": "ok",
-      "count": 18,
-      "term": "타결"
     },
     "google_news:dynamic:시진핑": {
       "status": "ok",
       "count": 2,
       "term": "시진핑"
     },
-    "google_news:dynamic:서비스": {
+    "google_news:dynamic:타결": {
       "status": "ok",
-      "count": 14,
-      "term": "서비스"
+      "count": 18,
+      "term": "타결"
     },
     "google_news:dynamic:AI": {
       "status": "ok",
       "count": 20,
       "term": "AI"
     },
+    "google_news:dynamic:서비스": {
+      "status": "ok",
+      "count": 14,
+      "term": "서비스"
+    },
     "google_news:dynamic:한중": {
       "status": "ok",
-      "count": 10,
+      "count": 11,
       "term": "한중"
     },
-    "google_news:dynamic:정상회담": {
+    "google_news:dynamic:규제": {
       "status": "ok",
-      "count": 13,
-      "term": "정상회담"
-    },
-    "google_news:dynamic:협상": {
-      "status": "ok",
-      "count": 20,
-      "term": "협상"
+      "count": 4,
+      "term": "규제"
     },
     "naver_news_api": {
       "status": "needs_credentials"
@@ -155,8 +152,8 @@
   },
   "source_summary": {
     "ok_or_partial": 18,
-    "failed": 0,
-    "degraded": 9
+    "failed": 3,
+    "degraded": 6
   },
   "naver_indices": {
     "KOSPI": "5,067.44",
@@ -173,42 +170,57 @@
     "global_diplomacy_summit": 27,
     "global_energy_middle_east": 4,
     "us_china_trade_ai": 6,
+    "dynamic:정상회담": 9,
     "dynamic:FTA": 15,
     "dynamic:타결": 6,
-    "dynamic:시진핑": 1,
-    "dynamic:서비스": 4,
     "dynamic:AI": 19,
-    "dynamic:한중": 3,
-    "dynamic:정상회담": 7,
-    "dynamic:협상": 4
+    "dynamic:서비스": 4,
+    "dynamic:한중": 4,
+    "dynamic:규제": 4
   },
   "trending_terms": [
     {
       "term": "정상회담",
-      "count": 32,
-      "publisher_count": 22,
-      "independent_story_count_estimate": 29,
-      "syndication_ratio_estimate": 0.094,
+      "count": 34,
+      "publisher_count": 23,
+      "independent_story_count_estimate": 31,
+      "syndication_ratio_estimate": 0.088,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 17,
-      "delta": 15,
-      "score": 101,
+      "previous_count": 32,
+      "delta": 2,
+      "score": 93,
       "examples": [
         "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
-        "李대통령-시진핑, 中 선전서 세번째 정상회담⋯韓中 협력확대 논의",
-        "[속보] 이 대통령, 중국 선전서 시진핑과 정상회담 시작"
+        "[속보] 이 대통령, 중국 선전서 시진핑과 정상회담 시작",
+        "李대통령-시진핑, 中 선전서 세번째 정상회담⋯韓中 협력확대 논의"
+      ]
+    },
+    {
+      "term": "시진핑",
+      "count": 32,
+      "publisher_count": 22,
+      "independent_story_count_estimate": 30,
+      "syndication_ratio_estimate": 0.062,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 31,
+      "delta": 1,
+      "score": 87,
+      "examples": [
+        "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
+        "시진핑 만난 이 대통령…한국 없는 3자 회담 ‘북핵 의제’ 대비",
+        "이 대통령 “한반도 안정 양국 공동이익” 시진핑 “지역평화에 더 큰 기여”…중국 선전서 세번째 정상회담"
       ]
     },
     {
       "term": "FTA",
-      "count": 31,
-      "publisher_count": 26,
-      "independent_story_count_estimate": 23,
-      "syndication_ratio_estimate": 0.258,
+      "count": 30,
+      "publisher_count": 25,
+      "independent_story_count_estimate": 22,
+      "syndication_ratio_estimate": 0.267,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 28,
-      "delta": 3,
-      "score": 91,
+      "previous_count": 31,
+      "delta": -1,
+      "score": 85,
       "examples": [
         "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
         "李대통령-시진핑, 선전서 정상회담...FTA 타결 계기 협력 강화",
@@ -216,19 +228,19 @@
       ]
     },
     {
-      "term": "시진핑",
-      "count": 31,
-      "publisher_count": 22,
+      "term": "AI",
+      "count": 29,
+      "publisher_count": 23,
       "independent_story_count_estimate": 29,
-      "syndication_ratio_estimate": 0.065,
+      "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 24,
-      "delta": 7,
-      "score": 91,
+      "previous_count": 26,
+      "delta": 3,
+      "score": 84,
       "examples": [
-        "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
-        "시진핑 만난 이 대통령…한국 없는 3자 회담 ‘북핵 의제’ 대비",
-        "이 대통령 “한반도 안정 양국 공동이익” 시진핑 “지역평화에 더 큰 기여”…중국 선전서 세번째 정상회담"
+        "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
+        "미국의 해외 AI 데이터센터 규제가 한국 반도체도 위협, 미국 기업의 '중국 수요 대체'가 관건",
+        "AI 규제 대응 플랫폼 코딧, 신보 ‘퍼스트펭귄’ 선정"
       ]
     },
     {
@@ -238,9 +250,9 @@
       "independent_story_count_estimate": 21,
       "syndication_ratio_estimate": 0.276,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 27,
-      "delta": 2,
-      "score": 84,
+      "previous_count": 29,
+      "delta": 0,
+      "score": 82,
       "examples": [
         "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
         "李대통령-시진핑, 선전서 정상회담...FTA 타결 계기 협력 강화",
@@ -248,47 +260,15 @@
       ]
     },
     {
-      "term": "대통령",
-      "count": 24,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 22,
-      "syndication_ratio_estimate": 0.083,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 7,
-      "delta": 17,
-      "score": 83,
-      "examples": [
-        "이 대통령, 동아시아 정상회의 첫 참석…한반도 평화에 관심·협력 당부",
-        "이재명 대통령 내외, 선전APEC 정상회의 환영 만찬 참석",
-        "[속보] 이 대통령, 중국 선전서 시진핑과 정상회담 시작"
-      ]
-    },
-    {
-      "term": "AI",
-      "count": 26,
-      "publisher_count": 21,
-      "independent_story_count_estimate": 26,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": 7,
-      "score": 80,
-      "examples": [
-        "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
-        "AI 규제 대응 플랫폼 코딧, 신보 ‘퍼스트펭귄’ 선정",
-        "미국의 해외 AI 데이터센터 규제가 한국 반도체도 위협, 미국 기업의 '중국 수요 대체'가 관건"
-      ]
-    },
-    {
       "term": "서비스",
-      "count": 25,
-      "publisher_count": 20,
-      "independent_story_count_estimate": 17,
-      "syndication_ratio_estimate": 0.32,
+      "count": 24,
+      "publisher_count": 19,
+      "independent_story_count_estimate": 16,
+      "syndication_ratio_estimate": 0.333,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 24,
-      "delta": 1,
-      "score": 71,
+      "previous_count": 25,
+      "delta": -1,
+      "score": 67,
       "examples": [
         "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나",
         "이 대통령-시진핑 주석, 한·중 정삼회담…FTA 서비스·투자 협정 타결",
@@ -296,31 +276,47 @@
       ]
     },
     {
-      "term": "한중",
-      "count": 23,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 21,
-      "syndication_ratio_estimate": 0.087,
+      "term": "대통령",
+      "count": 24,
+      "publisher_count": 19,
+      "independent_story_count_estimate": 22,
+      "syndication_ratio_estimate": 0.083,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 17,
-      "delta": 6,
-      "score": 70,
+      "previous_count": 24,
+      "delta": 0,
+      "score": 67,
       "examples": [
-        "李대통령, 한중 회담서 \"판다처럼 양국 마음 열어주는 일 계속되길\"",
+        "이 대통령, 동아시아 정상회의 첫 참석…한반도 평화에 관심·협력 당부",
+        "이재명 대통령 내외, 선전APEC 정상회의 환영 만찬 참석",
+        "[속보] 이 대통령, 중국 선전서 시진핑과 정상회담 시작"
+      ]
+    },
+    {
+      "term": "한중",
+      "count": 22,
+      "publisher_count": 17,
+      "independent_story_count_estimate": 20,
+      "syndication_ratio_estimate": 0.091,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 23,
+      "delta": -1,
+      "score": 61,
+      "examples": [
         "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
-        "한중 34분간 정상회담…\"한반도 안정, 양국 공동이익\""
+        "한중 34분간 정상회담…\"한반도 안정, 양국 공동이익\"",
+        "李대통령, 한중 회담서 \"판다처럼 양국 마음 열어주는 일 계속되길\""
       ]
     },
     {
       "term": "규제",
-      "count": 16,
-      "publisher_count": 14,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.125,
+      "count": 18,
+      "publisher_count": 16,
+      "independent_story_count_estimate": 16,
+      "syndication_ratio_estimate": 0.111,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 16,
-      "score": 62,
+      "previous_count": 16,
+      "delta": 2,
+      "score": 54,
       "examples": [
         "한·EU 산업계 \"녹색전환 규제 상호인정 확대해야\"",
         "장동혁 \"낡은 제도가 혁신 발목 잡지 않도록…비현실적 규제 혁파\"",
@@ -330,33 +326,17 @@
     {
       "term": "협상",
       "count": 17,
-      "publisher_count": 15,
-      "independent_story_count_estimate": 13,
-      "syndication_ratio_estimate": 0.235,
+      "publisher_count": 14,
+      "independent_story_count_estimate": 12,
+      "syndication_ratio_estimate": 0.294,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 2,
-      "score": 51,
+      "previous_count": 17,
+      "delta": 0,
+      "score": 48,
       "examples": [
-        "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나",
         "선전서 잇단 회동 나선 트럼프…무역도 안보도 협상 테이블에",
+        "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나",
         "中서 트럼프 만난 멕시코 대통령 \"무역 협상 큰 진전 있어\""
-      ]
-    },
-    {
-      "term": "한반도",
-      "count": 12,
-      "publisher_count": 10,
-      "independent_story_count_estimate": 11,
-      "syndication_ratio_estimate": 0.083,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 12,
-      "score": 46,
-      "examples": [
-        "이 대통령, 동아시아 정상회의 첫 참석…한반도 평화에 관심·협력 당부",
-        "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
-        "이 대통령 “한반도 안정 양국 공동이익” 시진핑 “지역평화에 더 큰 기여”…중국 선전서 세번째 정상회담"
       ]
     },
     {
@@ -366,9 +346,9 @@
       "independent_story_count_estimate": 15,
       "syndication_ratio_estimate": 0.062,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 1,
-      "score": 45,
+      "previous_count": 16,
+      "delta": 0,
+      "score": 44,
       "examples": [
         "트럼프·카니, 中서 예정에 없던 회담…무역협정 논의",
         "푸틴, 트럼프·시진핑 회담 앞두고 \"서방 대러제재는 실패\"",
@@ -377,14 +357,14 @@
     },
     {
       "term": "달러",
-      "count": 15,
-      "publisher_count": 11,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.067,
+      "count": 16,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 15,
+      "syndication_ratio_estimate": 0.062,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 3,
-      "score": 44,
+      "previous_count": 15,
+      "delta": 1,
+      "score": 42,
       "examples": [
         "스팩 버토 애퀴지션, 원자력 기술 기업 암페라와 합병 계약… 기업가치 9억 달러",
         "'5000억 달러' 수출 눈앞 'K-반도체'…美 통상 압박 '제2의 일본' 되나",
@@ -398,9 +378,9 @@
       "independent_story_count_estimate": 9,
       "syndication_ratio_estimate": 0.25,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 7,
-      "delta": 5,
-      "score": 39,
+      "previous_count": 12,
+      "delta": 0,
+      "score": 34,
       "examples": [
         "이 대통령, 동아시아 정상회의 첫 참석…한반도 평화에 관심·협력 당부",
         "李대통령, 中 시진핑과 정상회담…호혜적 경제 협력 강조",
@@ -408,23 +388,39 @@
       ]
     },
     {
-      "term": "선전서",
-      "count": 10,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.2,
+      "term": "한반도",
+      "count": 11,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 10,
+      "syndication_ratio_estimate": 0.091,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 10,
-      "score": 38,
+      "previous_count": 12,
+      "delta": -1,
+      "score": 31,
       "examples": [
-        "李대통령-시진핑, 中 선전서 세번째 정상회담⋯韓中 협력확대 논의",
-        "[속보] 이 대통령, 중국 선전서 시진핑과 정상회담 시작",
+        "이 대통령, 동아시아 정상회의 첫 참석…한반도 평화에 관심·협력 당부",
+        "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
         "이 대통령 “한반도 안정 양국 공동이익” 시진핑 “지역평화에 더 큰 기여”…중국 선전서 세번째 정상회담"
       ]
     },
     {
-      "term": "대통령-시진핑",
+      "term": "APEC",
+      "count": 11,
+      "publisher_count": 8,
+      "independent_story_count_estimate": 11,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 10,
+      "delta": 1,
+      "score": 31,
+      "examples": [
+        "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
+        "아세안 일정 마친 이 대통령 선전으로…APEC 정상회의 참석",
+        "이 대통령, 오늘 중국 APEC 계기 시진핑 주석과 정상회담"
+      ]
+    },
+    {
+      "term": "앞두고",
       "count": 8,
       "publisher_count": 7,
       "independent_story_count_estimate": 7,
@@ -434,29 +430,45 @@
       "delta": 8,
       "score": 31,
       "examples": [
-        "李대통령-시진핑, 中 선전서 세번째 정상회담⋯韓中 협력확대 논의",
-        "李대통령-시진핑, 中 선전서 정상회담 시작…취임 후 세 번째",
-        "李대통령-시진핑, 中 선전서 세번째 정상회담…34분 대좌(종합)"
+        "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
+        "뉴욕증시, 앤트로픽 IPO 앞두고 혼조 출발…나스닥 0.58%↑",
+        "푸틴, 트럼프·시진핑 회담 앞두고 \"서방 대러제재는 실패\""
       ]
     },
     {
-      "term": "APEC",
+      "term": "선전서",
       "count": 10,
       "publisher_count": 8,
-      "independent_story_count_estimate": 10,
-      "syndication_ratio_estimate": 0.0,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.2,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 9,
-      "delta": 1,
-      "score": 29,
+      "previous_count": 10,
+      "delta": 0,
+      "score": 28,
       "examples": [
-        "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
-        "아세안 일정 마친 이 대통령 선전으로…APEC 정상회의 참석",
-        "‘중국 보호막’ 쓰고 APEC 나타난 푸틴 “서방 대러 제재는 실패”…시진핑과는 50번째 회담"
+        "[속보] 이 대통령, 중국 선전서 시진핑과 정상회담 시작",
+        "李대통령-시진핑, 中 선전서 세번째 정상회담⋯韓中 협력확대 논의",
+        "이 대통령 “한반도 안정 양국 공동이익” 시진핑 “지역평화에 더 큰 기여”…중국 선전서 세번째 정상회담"
       ]
     },
     {
       "term": "수출",
+      "count": 9,
+      "publisher_count": 8,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.111,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 7,
+      "delta": 2,
+      "score": 28,
+      "examples": [
+        "한국투자증권, 신규 수출 계약 불확실성에 현대로템 목표가 12만원 조정",
+        "'5000억 달러' 수출 눈앞 'K-반도체'…美 통상 압박 '제2의 일본' 되나",
+        "연간 수출 5000억 달러 눈앞 ‘K-반도체’…美 통상 압박 ‘제2의 일본’ 우려 고개"
+      ]
+    },
+    {
+      "term": "한한령",
       "count": 7,
       "publisher_count": 7,
       "independent_story_count_estimate": 6,
@@ -466,41 +478,25 @@
       "delta": 7,
       "score": 28,
       "examples": [
-        "한국투자증권, 신규 수출 계약 불확실성에 현대로템 목표가 12만원 조정",
-        "'5000억 달러' 수출 눈앞 'K-반도체'…美 통상 압박 '제2의 일본' 되나",
-        "연간 수출 5000억 달러 눈앞 ‘K-반도체’…美 통상 압박 ‘제2의 일본’ 우려 고개"
-      ]
-    },
-    {
-      "term": "정상",
-      "count": 9,
-      "publisher_count": 6,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.444,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 10,
-      "delta": -1,
-      "score": 24,
-      "examples": [
+        "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
         "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나",
-        "한중 정상, FTA 서비스·투자 협상 타결 계기로 경제협력 확대에 뜻 모아",
-        "韓中정상 \"FTA 서비스·투자 협상 타결 계기로 협력 확대\""
+        "한중 FTA 서비스·투자 타결… 영화·관광 ‘한한령’ 해제되나"
       ]
     },
     {
-      "term": "엔비디아",
-      "count": 8,
-      "publisher_count": 6,
-      "independent_story_count_estimate": 8,
+      "term": "자유무역",
+      "count": 7,
+      "publisher_count": 7,
+      "independent_story_count_estimate": 7,
       "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 6,
-      "delta": 2,
-      "score": 24,
+      "previous_count": 0,
+      "delta": 7,
+      "score": 28,
       "examples": [
-        "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
-        "젠슨 황 떠나도 엔비디아 '실적 질주'…삼성·SK AI 동맹 향방은",
-        "엔비디아, 매출 2배 껑충…'삼전닉스' AI 반도체 수요 재확인"
+        "시진핑 '관세인하' APEC 기업인서밋서 자유무역 강조, 美보호주의 직격",
+        "APEC 회의장 20만㎡ 봉쇄...시진핑 \"자유무역 지지\"",
+        "시진핑 \"개방은 진보, 폐쇄는 낙후\"…자유무역 강조하며 美겨냥(종합)"
       ]
     }
   ],
@@ -509,12 +505,12 @@
   "official_web_candidates": [],
   "public_batch_market": {
     "available": false,
-    "generated_at": "2026-11-19T01:11:12.896186+09:00",
+    "generated_at": "2026-11-19T01:21:07.637447+09:00",
     "status": "unavailable",
     "provider": "naver_public",
     "exact_1m_bars": false,
     "amount_method": "cumulative_trading_value_delta",
-    "elapsed_minutes_from_previous": 10.055656733333333,
+    "elapsed_minutes_from_previous": 9.91235435,
     "interval_leaders": [],
     "one_minute_samples_available": false,
     "minute_amount_exact": false,
@@ -843,169 +839,121 @@
     ],
     "top10_share": null
   },
-  "item_count": 195,
+  "item_count": 197,
   "news_scan_target": 500,
   "query_group_count": 18,
-  "new_item_count": 73,
+  "new_item_count": 14,
   "new_items": [
     {
       "topic": "kr_policy_economy",
-      "title": "한국규제과학센터, '식의약규제과학원'으로 기관명 변경 현판식 개최",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBkeXpoX1IwOTFyUEJWU0JIMmhtYXRnWE11MHN6d3lUOFZBS3pSNGs4RzgyT3Fidm9DLTE4MlMzV1ZCcUl2SHdoSWJWc05POGpKbmJqdEFPTVBCS190bkJGTDAtanNZOS1iSllnRA?oc=5",
-      "published_at": "Wed, 18 Nov 2026 02:39:58 GMT",
-      "publisher": "팜뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "한국규제과학센터, ‘식의약규제과학원’으로 명칭 변경…정책지원 기능 강화",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9iM2dNRVBoRVpSaW84U0RWUlhDS1ViVE40a1Y3OHJEYnNISXpDenRfM1hZNW1MOU9GWENGcDVrVmhDOEE2OVpDc05ESjgzdEpuMW5GMHhyN203Y0FjWUdNamhkbEdXa05oVHVnNg?oc=5",
-      "published_at": "Wed, 18 Nov 2026 00:31:25 GMT",
-      "publisher": "바이오타임즈",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "한·EU 산업계 \"녹색전환 규제 상호인정 확대해야\"",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE14RnpGQjdqaUg5N0xSajRINUs0NWRHWDRVbWc3ZVRrLVZyQ2xLUlFRLWwyVGNQSG9ORFg3MGNsdm5wYmg1YURqdXVndWwzZ1NBZVJyWV8tWEpaNmpDMG5DRW5XbjdWcDNINlVrRkV0M09EX1Rk?oc=5",
-      "published_at": "Wed, 18 Nov 2026 05:09:07 GMT",
-      "publisher": "연합뉴스 한민족센터",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "장동혁 \"낡은 제도가 혁신 발목 잡지 않도록…비현실적 규제 혁파\"",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE50TXdYZWg0clZrTUhXUWlVV0M3MW1qYnVzaEZoUnE1Y3hWQWtCTXVmWDctNU0yMXNyTlluZldqQXBwdTdCTmc0NFlCbWhsNkhIeUl2OEdWSU5HNjVFeU9EQWJGOUM?oc=5",
-      "published_at": "Wed, 18 Nov 2026 01:38:06 GMT",
-      "publisher": "매일일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "AI 규제 대응 플랫폼 코딧, 신보 ‘퍼스트펭귄’ 선정",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5lb0ZxNGItXzQ0bjFtY0ZSVHVoMldwaWo5Vy1IZmJqZnJlX2NRdzFsVmRuNlV2Vl9HcWM2TTNQNVNZbmNsbmMyemhSMFRSU1k?oc=5",
-      "published_at": "Wed, 18 Nov 2026 00:08:25 GMT",
-      "publisher": "와우테일",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "미국의 해외 AI 데이터센터 규제가 한국 반도체도 위협, 미국 기업의 '중국 수요 대체'가 관건",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9qenhuTk5SYnBSVXFBUmJ6UzN5RVFoVEw1WFR5NDlwN3RISmk0RGV2dzR1M2ljTm1SeGFVWkwwdl95Mjk3RDhsd1B4MktiUFpMZXNlcnNHV004NVdyb09EdmF4N3MyTGFPNWZHUXUzTG90ZUk?oc=5",
-      "published_at": "Wed, 18 Nov 2026 06:02:17 GMT",
-      "publisher": "비즈니스포스트",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "경총·주한유럽상공회의소 \"韓·EU 녹색전환, 규제 상호인정으로 푼다\"",
-      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPTmh2TEdOVHJtS3Y3RXJ2bU41RnZ5Z3hmMHZVTFRkZDdETFJ6RGxRcEY4QTZZUm43VUpsQmtNem5meXpnQmlSNDNsVHlJWjk2QldYUFBLMGRBb0V1RHVlNnhTTGFMQnhiSVhYcmFDOUVNQXMwWDVQSnV6TjBWRkR2VQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 08:57:00 GMT",
-      "publisher": "이데일리",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "한미, 대미투자·디지털 규제 놓고 공개 설전…미국 “이행 더디고 규제 문제”... 한국 “비자·인허가 개선 필요”",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBPd1dncy0xNndRWmptdEVUa3pGYWlyUDBlZVJVd1hRNUJqeHhlS2w3eW5Cdk84aWN6MWF6eVpDTkRpb2c1VDhyQ2VLdWtNcXlUQ3c1Z2g5ekJQcnpEc0Q3TjdYczBUdWxjRm9TLXhn?oc=5",
-      "published_at": "Wed, 18 Nov 2026 00:45:52 GMT",
-      "publisher": "아시아투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "외교 2차관 \"한미협력 가속 위해 규제 간소화·비자개선 필요\"(종합)",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE16cnZLOWhlWHZ5elhWTHZqcTFRbVFrLUMtWmRYczBBUk1TczZLclVlcEc0RVZMM1VjZXh4YTFReFNxQ3VxVTg4T2NQVFRaeHJWNEduTGVXUlNGd2_SAWBBVV95cUxQa3UzRjdxM3VocWN4Tk8xOF8yVVhBMEJzaGozODNGT3NCRzE5WUtGcFVRcDZ0T09iTzBieW1nYk5QbFBnVUtQbzlzSFRjMUNMZURrUVFkOXZKVEUxaEsyTkw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 02:14:54 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "장동혁 \"스타트업 발목 잡는 규제 혁파 최선…단계별 맞춤 지원 모색\" - 머니투데이",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFAtSDJXcWRiRFBkSlNvX20tU1JoN3JRX0tYVUlGTHRTUTVSTXN4UGtlN1pvdUo0UmRMQmcwZ0hTekdxQXFnVVRLQlRrNTVTZUxuTWJUMHRTWlY0WW9ONUY0Q3VYcjc0ektqUlRsWtIBckFVX3lxTE5IdU1nV1FYTTQ0TmN3cEx1RUY3YUU2NU10VjZBenRwMFpId3NsLUlfYmdfV3AxX2NQejZmd2RHM2ZWcmpjalctTEJKRk5ITTVzRVpaeVZlQVVzRWZ2dENXcHJfcDF0NWR1VE0wdXo4c2Z4QQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 01:05:37 GMT",
-      "publisher": "머니투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "한수원, 체코 규제기관과 두코바니 원전 품질관리 첫 점검",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5oWlBnQm5SMWktazdwOVRiejJ4NFdnbjloZ2RkNmVkYm0zSi1uTjdHeXlvYXZreEU4TUVHUXN3ME9mOVdORXpJUzZhc2VqM0E1QzBBRU9CLUE3ejMxN2dVTV9vdzlVRGJHcEc0?oc=5",
-      "published_at": "Wed, 18 Nov 2026 01:16:59 GMT",
-      "publisher": "일간투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "한국골프장경영협회, 2027년도 사업계획· 예산 승인, “재산세 인상·규제 현안 총력 대응”",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5vcG10cm9uMDhqNFZGTUJUVUNFeWhvVHRFVXJibXM5RUtyOV9hQ1ZjeEMyUEY5Q3M1dHlULUpMMHFvcUw3MGZnRjJnYXhtdmhxLThWM0Y4bGtMLXkzYjA1dm5DN0RtcGZtSW55VzRQYw?oc=5",
-      "published_at": "Tue, 17 Nov 2026 22:21:54 GMT",
-      "publisher": "레저신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "새벽배송 규제, 배송기사도 소비자도 불만 …누구를 위한 규제인가",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1ETXA2bjlYRl9sWG5vdEVJVlhYNmp5TV9GZFBFbGFXcWlmMExqbXVmc2R3OXppYTR3eWw4ekRDa09UV2pCTENaZUVDdFl3N1VGdGxV?oc=5",
-      "published_at": "Wed, 18 Nov 2026 03:06:27 GMT",
-      "publisher": "유스연합",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "대한민국 친환경패키징포럼 개최…“플라스틱 포장산업, 규제 넘어 재성장 기회로”",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5YVFhFNW8tMjRUclI4dnMwR0xOT1pndnRZeWhFdHdDbEE2VUlONW9rdkRWWGN4b05yUHdNZWQ0QzlaUEpfcnEteTV5WUtISVRnZXhNMUt5YUlCMEJZcVlZVjktckU?oc=5",
-      "published_at": "Tue, 17 Nov 2026 23:34:33 GMT",
-      "publisher": "지이코노미",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "코딧, 신보 '퍼스트펭귄' 선정…3년간 최대 20억원 보증지원",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9yWE44QjhkUVUtWXA4aDFyMU5yNDhZNHFsMnNUVkNtcmJQZFZNc0EzVHlYNTJjdElrQXVxdjJoTmhtZWNNUTNLai14bEFTTVlxX0NCd0w2amZZVGd3c2RBRC1ySy0?oc=5",
-      "published_at": "Wed, 18 Nov 2026 00:59:01 GMT",
-      "publisher": "매일일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "“새벽배송 규제, 배송기사 건강권·소비자 편익 균형 찾아야”",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE93bDg2c2oyTGxob0NLbGNMSXFTSGJKQzlUTGVSNTZ2ZldCZ0V4YUZpN3V4azR0eGVPamNMZlc1cjM0ODNMUjExdHVFUlp5QQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 05:05:01 GMT",
-      "publisher": "전자신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "【규제트래커】 아사히카세이, 귀금속 재활용에 DPP 실증…던롭 타이어 유럽, EUDR 입고 점검 도입",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5EcnlHeHlPOGk2SEVJV21LeFRFQXhjMm9EdzNNSDdnSGZHbEtXTFFpZzA2S1ZYLWFaWVhQRHJBdFh2TnF4aUdyVnNPSmF2UjZkeF9XYkJRWUdFaXZfdFNVQk1WOWl3UGtNdHc?oc=5",
-      "published_at": "Wed, 18 Nov 2026 08:08:35 GMT",
-      "publisher": "임팩트온",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "美 AI 칩 규제, 해외 클라우드까지 확대…韓 AIDC도 고객 검증 부담",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE13NXl4cVBod2dxbFRfb3pfd1dCcTlDZHowb1MtTFhKenoycGNXUlVWbGRUOHBZTXdHZHFaUEFuSmpsM0JCMkhOVmUyLTBZVmxkci1MM0Z2ekptMXpLZUMtRXBERHdoUk9o?oc=5",
-      "published_at": "Wed, 18 Nov 2026 01:10:51 GMT",
-      "publisher": "아이티데일리",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
       "title": "외교 2차관 \"한미협력 가속 위해 규제 간소화·비자개선 필요\"",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBPWXN1Q2tZNVlIclBVcUwtclBWNllXMlRNbl8yd0cyRGtaMmhXZ3dGNnhmbFI5TmVhRzdBUHJqZmY0WXVUd0g3VFJndUlhTDR2aFVGdkV4M09kRHPSAWBBVV95cUxQdkJNWTV3bDNSemVmWFRwQWFqVWRnMjg4RFc1WktaOWJLVlQ2dDNycWNZVWp4elBZTXB1Tm90SEN6bmJUOGtabTNUNEdQcHVtN1dlaGtOcERpcmptNU5MeE8?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFB2Qk1ZNXdsM1J6ZWZYVHBBYWpVZGcyODhEVzVaS1o5YktWVDZ0M3JxY1lVanh6UFlNcHVOb3RIQ3puYlQ4a1ptM1Q0R1BwdW03V2Voa05wRGlyam01Tkx4T9IBYEFVX3lxTFB2Qk1ZNXdsM1J6ZWZYVHBBYWpVZGcyODhEVzVaS1o5YktWVDZ0M3JxY1lVanh6UFlNcHVOb3RIQ3puYlQ4a1ptM1Q0R1BwdW03V2Voa05wRGlyam01Tkx4Tw?oc=5",
       "published_at": "Tue, 17 Nov 2026 20:37:57 GMT",
       "publisher": "연합뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_policy_economy",
-      "title": "수자원공사, 규제 개선 및 기자재 국산화 공동 대응 나선다",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE15dExacVE3bHp5QkdSQzc3elVpU2lvR2JXMGNZV0d0dUZ3UkItSzhXMUM3a2lLc0ZESE1rSnRfQUMxV0llNXBsMmEwb0xMWGlzTlNaNFdselZKUkZwTXJzV0RsR296MGR2am930gFuQVVfeXFMT3NUS3ZON25QRTRqT3ozcTVkbndxZ1c5WDY5ZmxDVFZvcDFjNkJpM1VMVzg0ckFzUHRuanNfOWhHTUNmOUMzM1c0b0diMEVsME5QTXhZWnNIVGVubXFocExvNFNTcnJhdUoxeXQ5eEE?oc=5",
-      "published_at": "Wed, 18 Nov 2026 04:51:01 GMT",
-      "publisher": "뉴스드림",
+      "topic": "kr_diplomacy_summit",
+      "title": "한ㆍ중 정상회담에서 시진핑 주석 발언듣는 이재명 대통령",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9WeENOeGJhYlVnejZsZmx2Y1BmX25kamdjOU1ZR2JvejhjUlhGRlBSUG5GUENXZHdQVm5aTS1IOEF5WVZDcG51U2l4MGFGMXJKb0Z6dnZSR2hKNzBkZ3NwS2tNeUNiU3ZGODZmWXpXR2g5R0VO?oc=5",
+      "published_at": "Wed, 18 Nov 2026 03:46:41 GMT",
+      "publisher": "연합뉴스 한민족센터",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "이 대통령, 오늘 중국 APEC 계기 시진핑 주석과 정상회담",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBmRF9kU1kzempBSkZ4TFJhRWU3M01PR1NHYjVQTnNodGZqZi02U0tkS1c0alJfQkU0UUFlVWpObVRkeEd1Nk8xY0RoSXJaSmNoakZaNmtlTzJoS3BLeHh0Y3JHck42TDZxc2wzTUNaVQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 00:45:00 GMT",
+      "publisher": "YTN",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "기업 지출 관리 페이호크, 2.8억 달러 시리즈C 투자유치",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE04Rlh2SWJjMURLNVN0eTdzWmh3bGpPMHk2NkdOWHpENFkzazJ2bldlTXVRM0NXUkE3WXM0LXF1N2N5QktXaDE0V2t0cmZaS2s?oc=5",
+      "published_at": "Wed, 18 Nov 2026 16:10:05 GMT",
+      "publisher": "와우테일",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "[사설] 수출 1조 달러 ‘기적’⋯ 지속성 위해 ‘걸림돌’ 넘어서야",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBxbXJOeFppOERDSkZnd00yb3g5Sm1EUmZfWnlYRTRDQmRHMVhCUkNYVGlDMjFxVEF1YWVlcEFBb1ZONGkxYTVZY3NZWVYtbnlaallobVAwclA?oc=5",
+      "published_at": "Wed, 18 Nov 2026 16:10:00 GMT",
+      "publisher": "국민일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "생체분자 설계 AI 볼츠, 1.1억 달러 시리즈A 투자유치",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBlSnpWeHQ1U2lENFdyckdaYTZKY3l2SG9KNDg3TDJkNkNVUm5FLVpwLUU5dWp3OW41ZzJoVFptOXZyeTVKNFBQOGF3cDM0anc?oc=5",
+      "published_at": "Wed, 18 Nov 2026 16:15:17 GMT",
+      "publisher": "와우테일",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "뉴욕 증시, 엔피디아 실적 호조에도 혼조 속 등락···다우 0.58%↓나스닥 0.58%↑",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1hMkl2ZlVkVUtScTV6djRWRlUxOHBxRFd1aHNDLUJxRHJhcndpNS1RVmpMbmhZdWZ0bFdEOEYycUdBajdZZHM4bDZoVVhBMTZYMlhCMHZhXzRmRFRXb1BUQdIBeEFVX3lxTE5oN3BxdWFZaWFEVzh3d2RGZzBoU1RkMnp6V0FqOFVOaVdWWC1WN1NlMHIwX2RBSHk4ejhueHBfWVNRMjRTR0Utd25lQTd2LUt4RVNaR3g1enFlTnFUYXMxdi1VT29GZkEwcDdZbnI4MVBKNnVKRnhGcw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 15:23:43 GMT",
+      "publisher": "뉴시스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "이란, 미·중·러 정상회담 전날 쿠웨이트 미군기지 타격",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE0zX3ZYdDNnWUxvb2JrakQ3dC1oMzRjcWloNVVVTFB4VVFPaFNXeXhka2RRRVpiUFl1dUVYT091bTFvdmZnUjJUT1ZYMWpjQnJJSTdueEtWWVJGaUYwc19mcDU4UVZrSUZIRWdaY1llWkR1Zmpm0gF0QVVfeXFMTVV0ZzdFZUFYWGdadms4SnUtLVhQdTI4YnI4and1Umd6bEpxaDJwNHctekxOT3lwWXZzb0RiQ09GQmVqN0FNX1pFSGx2UkFYT1N3dkhOLWltYk1GeXd5LS1ZSkdjWTY1SnprX0owS0FnT0tjQ0c?oc=5",
+      "published_at": "Wed, 18 Nov 2026 04:58:43 GMT",
+      "publisher": "MBC 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
+      "title": "AI가 무너뜨린 전문직 성역…자격증 가치 사라진다",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBvZUZXWGVsTi03T1kweDFNN0dsX0R6bjVNLVBnMUtzODB4MF91SmxGc1pBOVMzSHc5NXpCakF3dFNFaXpTMlAwUDRRcUZEYVhudWJFQkI2dGxNVlhZRTlVQmxpcXJrWTFaN3Q0VQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 12:30:03 GMT",
+      "publisher": "재외동포신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:한중",
+      "title": "한중 FTA 서비스·투자 협상 타결…K-콘텐츠·관광 특수 기대",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5KYkNONkQxVXF6eFptVGRoWDk2TEJMVE4tbmVZcW0yUi1jbEVBVGdnVWh1ZXlHVGpPdi1rbGg1eWthbFNqZk5zZHM2cHozZkN3UU5oWE11UFJZS0kzTWxySkJBZ1JnZ3RlcjViUA?oc=5",
+      "published_at": "Wed, 18 Nov 2026 14:44:58 GMT",
+      "publisher": "대한민국 정책브리핑",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:규제",
+      "title": "캐나다총리 \"글로벌 AI규제 시기 놓쳐…기업 수장들도 위험 경고\"",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5MSEh5YW9kN0hZeGdJYlkyQ3djOEMyY3E3SXpsUEpMQVV5QnJwdlBsNFJZR29GNWIyRzNZVEJ6R2RPbXh4eThlT1l0Tk5sWEdVTHMwUWpRblhLRzDSAWBBVV95cUxOa2Q0aHNtdUxMZmpZenoyYkNtVVN5UDVCN2N5RkdldDVJZUh0cW16Wm9pVWxnNkEyc2JOemlReWhZMmg3blpjZ1JkR0ZBemllT293dkhiSE92YXNiTHRhRGQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 11:24:51 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:규제",
+      "title": "말레이시아, 美 AI 칩 규제 준수 방침…117개 사업에 통보",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNQm9uODhnQ2c3YTBEVXhjX1NVZjRVV1c5WXkxdWJjY1JNNDJ5NGNrTGVTV2JRVG5sU1QwZW9yOExYYjJZbTZDbEFLZV8wdEp2TnEyNlFQQjZyc3dSel9UbmprcGhWYWlqLWdSMzJuLXRFR180RXpoclgxMklxaG4yZUItb0FibVpW?oc=5",
+      "published_at": "Wed, 18 Nov 2026 16:00:00 GMT",
+      "publisher": "글로벌이코노믹",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:규제",
+      "title": "[중국증시-마감] 美 대중국 기술규제 강화 우려 속 혼조",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9POERuRjR6LWZoc0Vpd0l3NU9FRUpobmU3Q3FkOTBITVZQVXdpSVVWWW12SVlHTlprRW9yNHVwSXQ1S0pHbG1OSVFVWDNNSDNaODVCVVlSbmxDR2p6SnZIQVlFQ0cxei1wV2EwQ0JHdjI?oc=5",
+      "published_at": "Wed, 18 Nov 2026 07:25:46 GMT",
+      "publisher": "연합인포맥스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:규제",
+      "title": "엔비디아, 중국에 AI 반도체 H200 공급 중단…美 수출 규제 강화 여파",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBGWmt3MWNEd18zVlIwWW5Lal81S2VlVEFwekVVNXBMWTFlUjdVZktyX3ZhWWdkLUhUdW51WkkydndhYlVIS1NCeHRna0hxY0VP?oc=5",
+      "published_at": "Wed, 18 Nov 2026 05:12:19 GMT",
+      "publisher": "블루밍비트",
       "discovery_source": "google_news_rss"
     }
   ],
@@ -1076,6 +1024,14 @@
     },
     {
       "topic": "kr_policy_economy",
+      "title": "미국의 해외 AI 데이터센터 규제가 한국 반도체도 위협, 미국 기업의 '중국 수요 대체'가 관건",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9qenhuTk5SYnBSVXFBUmJ6UzN5RVFoVEw1WFR5NDlwN3RISmk0RGV2dzR1M2ljTm1SeGFVWkwwdl95Mjk3RDhsd1B4MktiUFpMZXNlcnNHV004NVdyb09EdmF4N3MyTGFPNWZHUXUzTG90ZUk?oc=5",
+      "published_at": "Wed, 18 Nov 2026 06:02:17 GMT",
+      "publisher": "비즈니스포스트",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
       "title": "한·EU 산업계 \"녹색전환 규제 상호인정 확대해야\"",
       "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE14RnpGQjdqaUg5N0xSajRINUs0NWRHWDRVbWc3ZVRrLVZyQ2xLUlFRLWwyVGNQSG9ORFg3MGNsdm5wYmg1YURqdXVndWwzZ1NBZVJyWV8tWEpaNmpDMG5DRW5XbjdWcDNINlVrRkV0M09EX1Rk?oc=5",
       "published_at": "Wed, 18 Nov 2026 05:09:07 GMT",
@@ -1096,14 +1052,6 @@
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5lb0ZxNGItXzQ0bjFtY0ZSVHVoMldwaWo5Vy1IZmJqZnJlX2NRdzFsVmRuNlV2Vl9HcWM2TTNQNVNZbmNsbmMyemhSMFRSU1k?oc=5",
       "published_at": "Wed, 18 Nov 2026 00:08:25 GMT",
       "publisher": "와우테일",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "미국의 해외 AI 데이터센터 규제가 한국 반도체도 위협, 미국 기업의 '중국 수요 대체'가 관건",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9qenhuTk5SYnBSVXFBUmJ6UzN5RVFoVEw1WFR5NDlwN3RISmk0RGV2dzR1M2ljTm1SeGFVWkwwdl95Mjk3RDhsd1B4MktiUFpMZXNlcnNHV004NVdyb09EdmF4N3MyTGFPNWZHUXUzTG90ZUk?oc=5",
-      "published_at": "Wed, 18 Nov 2026 06:02:17 GMT",
-      "publisher": "비즈니스포스트",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1205,7 +1153,7 @@
     {
       "topic": "kr_policy_economy",
       "title": "외교 2차관 \"한미협력 가속 위해 규제 간소화·비자개선 필요\"",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBPWXN1Q2tZNVlIclBVcUwtclBWNllXMlRNbl8yd0cyRGtaMmhXZ3dGNnhmbFI5TmVhRzdBUHJqZmY0WXVUd0g3VFJndUlhTDR2aFVGdkV4M09kRHPSAWBBVV95cUxQdkJNWTV3bDNSemVmWFRwQWFqVWRnMjg4RFc1WktaOWJLVlQ2dDNycWNZVWp4elBZTXB1Tm90SEN6bmJUOGtabTNUNEdQcHVtN1dlaGtOcERpcmptNU5MeE8?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFB2Qk1ZNXdsM1J6ZWZYVHBBYWpVZGcyODhEVzVaS1o5YktWVDZ0M3JxY1lVanh6UFlNcHVOb3RIQ3puYlQ4a1ptM1Q0R1BwdW03V2Voa05wRGlyam01Tkx4T9IBYEFVX3lxTFB2Qk1ZNXdsM1J6ZWZYVHBBYWpVZGcyODhEVzVaS1o5YktWVDZ0M3JxY1lVanh6UFlNcHVOb3RIQ3puYlQ4a1ptM1Q0R1BwdW03V2Voa05wRGlyam01Tkx4Tw?oc=5",
       "published_at": "Tue, 17 Nov 2026 20:37:57 GMT",
       "publisher": "연합뉴스",
       "discovery_source": "google_news_rss"
@@ -1276,18 +1224,18 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "李대통령-시진핑, 中 선전서 세번째 정상회담⋯韓中 협력확대 논의",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5KQXRBRWpWV2tWQkQtd3dzcXo5TGtqVWZSMWNIeHBmSlFMNm1pTXBaMVZFNW5yNWFYckNOSEN6VW1FY0hwNHFKRXBZSnBtYWtDQ0J1RTNHbnpsYlE?oc=5",
-      "published_at": "Wed, 18 Nov 2026 07:18:19 GMT",
-      "publisher": "강원일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "[속보] 이 대통령, 중국 선전서 시진핑과 정상회담 시작",
       "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1JNldpTXRlRGpXNTBIQm1wajNVM1Jxdkh5N2Rzdm4yRk1OWDNXckVoQzV1R2cxakJrUlVGMEhGN0tmWGNsdDRFbV9oMzdtUmVhWnFQQm55SS14eXhBUjcxOEMzcmhpMXM?oc=5",
       "published_at": "Wed, 18 Nov 2026 03:28:00 GMT",
       "publisher": "연합뉴스TV",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "李대통령-시진핑, 中 선전서 세번째 정상회담⋯韓中 협력확대 논의",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5KQXRBRWpWV2tWQkQtd3dzcXo5TGtqVWZSMWNIeHBmSlFMNm1pTXBaMVZFNW5yNWFYckNOSEN6VW1FY0hwNHFKRXBZSnBtYWtDQ0J1RTNHbnpsYlE?oc=5",
+      "published_at": "Wed, 18 Nov 2026 07:18:19 GMT",
+      "publisher": "강원일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1324,22 +1272,6 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "李대통령, 한중 회담서 \"판다처럼 양국 마음 열어주는 일 계속되길\"",
-      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPbWdUcFJPandPUmhabjUwd25ibVhSQnZHTHFaSmpTdzZZVThhNU1JTXl4UkZHUEkwQmVkVUtzc3NPYlFYN3pON285MVRMQ1FhQUpZcmNHQTNOMXB2VUt3YWY3c0FrUzFxam1EYmlLYl8wcEFKUW1DMWI0dnJpamxkM3N5TUpVejlGaWFzYkZjMmQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 09:45:39 GMT",
-      "publisher": "조선일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9OSHN0b2ZVMWNpYUUzYklGVi1PSnVwcERlc1VYaXdEczNwd05kelFsRTZvQV8yZ0xGRmpmVlBCY2hSeF9wR3F1WG8zMmRvaGd1ZzdBTS1VbkJJb3NBQjZDdmZGeDRZRFg4Y1FZ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 15:06:22 GMT",
-      "publisher": "SPN 서울평양뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "이 대통령, 중국 선전서 시진핑 주석과 정상회담…34분간 진행",
       "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFAzY1RqZHdmem5mUkJfWUNwU0Mtb3RJdVYzR2hJczBuSlU1RGRia0ZGaWw2d1JvUGc0UTlpUTlTX2c4NTVTeGh6MjJFYkFoaTBrd0pXZ3ktYmUyaTNyYVk0RnpvQ0FiUQ?oc=5",
       "published_at": "Wed, 18 Nov 2026 03:10:00 GMT",
@@ -1356,6 +1288,14 @@
     },
     {
       "topic": "kr_diplomacy_summit",
+      "title": "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9OSHN0b2ZVMWNpYUUzYklGVi1PSnVwcERlc1VYaXdEczNwd05kelFsRTZvQV8yZ0xGRmpmVlBCY2hSeF9wR3F1WG8zMmRvaGd1ZzdBTS1VbkJJb3NBQjZDdmZGeDRZRFg4Y1FZ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 15:06:22 GMT",
+      "publisher": "SPN 서울평양뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
       "title": "李대통령-시진핑, 中 선전서 정상회담 시작…취임 후 세 번째",
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1DQXkzRHVWVHRtWExldUJYRVJWRnh1QnpYZjhrQm9nNWxnUjh4LU1LV0ZiZHhSRUhjRFhnNUViNHVmUnBrbHVLem5SbTFtUE9OaWIwN2szUW9IVWvSAWBBVV95cUxOck43MTZFN0RIcWJLUHVxZUlXdEJycG5QVFUxOEYwRWNLYV9ZbDhROHNHaTMxTHpSTzNBcFZPeUZMbGlQLTMyVnRTZ2tveTVyaUxjQllaTTMxb3dsNll5S1k?oc=5",
       "published_at": "Wed, 18 Nov 2026 03:12:32 GMT",
@@ -1364,10 +1304,10 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "李대통령, 中 시진핑과 정상회담…호혜적 경제 협력 강조",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5kWS1yTUM2bUJ5X2pCNExMT0gySzk4dGZwLV9FRlFxN1hNRUZrSjNBVDUwYW5sczFIZHQ3SWg0aGVoQkVCb3JnblI1RVBXZw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 05:17:07 GMT",
-      "publisher": "전자신문",
+      "title": "李대통령·시진핑, 34분 정상회담…“한반도 평화는 공동이익”",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1CalBrbVVfNEFQSVBOUlBLUll6OHlVVHRjQUlCaW9idUprclZMdnhITWUtdjhuMEJkVkNnZkRzcWE3YnpmalBmMXVIMG96RWJzQ0ZBU2ZR?oc=5",
+      "published_at": "Wed, 18 Nov 2026 03:10:14 GMT",
+      "publisher": "중앙일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1396,14 +1336,6 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "미·중·러 정상회담 하루 전…李대통령, 시진핑과 34분 회담",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE0zSXVScHdVbEhzX2MwUjB6OWdJSWFZcmk2bmNYMERwYlp0ZVo2RHdFdjhPeXhYNGdHNXZJM2tHREtwWTRjZzBKZ003ZDRVaWRhVVpNMkd6SUxqUkl1R3cwMnQ4X3NyLTFrc0HSAW5BVV95cUxNZTJudk5pV2hFclRNUFFWY2ZIQWFHXzlKXzZuQy10ZTRmeUlfQmF4ZFRXM3pkYi1DVkVoMmZTTmI1ZF9yM25XaFd5QVNCYkVEaFAyTTRJZ1QxV2dqRTVjbk1UVkQ0YmpUU3cydzE4Zw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 04:46:38 GMT",
-      "publisher": "주간조선",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "한중 34분간 정상회담…\"한반도 안정, 양국 공동이익\"",
       "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFB2WllFVE9RX1BDWjN2X3pRek1teV9oakRJLTc2VWQ3STFfcjJTeE5GUndOYWR2SmdyTG40b3hXU2hxZlY5ZDN4UnBHODhWWDEwaHI5UGdXRVZWUzZkTUhzdHA4bUhKOGc?oc=5",
       "published_at": "Wed, 18 Nov 2026 06:30:00 GMT",
@@ -1412,18 +1344,26 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "李대통령·시진핑, 34분 정상회담…“한반도 평화는 공동이익”",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1CalBrbVVfNEFQSVBOUlBLUll6OHlVVHRjQUlCaW9idUprclZMdnhITWUtdjhuMEJkVkNnZkRzcWE3YnpmalBmMXVIMG96RWJzQ0ZBU2ZR?oc=5",
-      "published_at": "Wed, 18 Nov 2026 03:10:14 GMT",
-      "publisher": "중앙일보",
+      "title": "李대통령, 한중 회담서 \"판다처럼 양국 마음 열어주는 일 계속되길\"",
+      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPbWdUcFJPandPUmhabjUwd25ibVhSQnZHTHFaSmpTdzZZVThhNU1JTXl4UkZHUEkwQmVkVUtzc3NPYlFYN3pON285MVRMQ1FhQUpZcmNHQTNOMXB2VUt3YWY3c0FrUzFxam1EYmlLYl8wcEFKUW1DMWI0dnJpamxkM3N5TUpVejlGaWFzYkZjMmQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 09:45:39 GMT",
+      "publisher": "조선일보",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "한ㆍ중 정상회담에서 시진핑 주석 발언듣는 이재명 대통령",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1sT1Z5WW94YjBRV1FXbW55ckV2N2ZuQlZmaWNFd090S0dRLTg5allTck9Ed1hWNW51dXJic1I5ZGFqWUxJTVNoYzlVTXEzT2tZNmtuLWlnRUVETklxcXhhREwwY25FMVlMN3RrTmxnV09RVGZ6?oc=5",
-      "published_at": "Wed, 18 Nov 2026 03:46:29 GMT",
-      "publisher": "연합뉴스 한민족센터",
+      "title": "李대통령, 中 시진핑과 정상회담…호혜적 경제 협력 강조",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5kWS1yTUM2bUJ5X2pCNExMT0gySzk4dGZwLV9FRlFxN1hNRUZrSjNBVDUwYW5sczFIZHQ3SWg0aGVoQkVCb3JnblI1RVBXZw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 05:17:07 GMT",
+      "publisher": "전자신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "미·중·러 정상회담 하루 전…李대통령, 시진핑과 34분 회담",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE0zSXVScHdVbEhzX2MwUjB6OWdJSWFZcmk2bmNYMERwYlp0ZVo2RHdFdjhPeXhYNGdHNXZJM2tHREtwWTRjZzBKZ003ZDRVaWRhVVpNMkd6SUxqUkl1R3cwMnQ4X3NyLTFrc0HSAW5BVV95cUxNZTJudk5pV2hFclRNUFFWY2ZIQWFHXzlKXzZuQy10ZTRmeUlfQmF4ZFRXM3pkYi1DVkVoMmZTTmI1ZF9yM25XaFd5QVNCYkVEaFAyTTRJZ1QxV2dqRTVjbk1UVkQ0YmpUU3cydzE4Zw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 04:46:38 GMT",
+      "publisher": "주간조선",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1432,6 +1372,14 @@
       "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBpTFEwOGx3UXRfS294TlFsVHl2Zk1pc1E5T2xDYUhxTW1aOHE0djdfNHE2d2VHMi1tNHo1bmJOUzFuTHFJTHFaMmNZdHJUSlNpTjZHdTRBbTd5dEdmT0ZnWUFCbFRpSHVqN3ZRTTFGTF8wbXFYTzRj0gF3QVVfeXFMTnhpNWJPMS1EOWRTSE5ISUcxZ2lDbDFiclFjZHprRlRUTmhZcFBib0FSTmFyQUwtcnJ5dXBoejZCN21ETlU4ckRkOTBNQ0F6N1RuN2NTeEdOTlFwZVhuS1ZNSnFGWjM0amhwYUdPN3FOSDZZZ0dUVW8?oc=5",
       "published_at": "Wed, 18 Nov 2026 00:37:46 GMT",
       "publisher": "MBC 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "한ㆍ중 정상회담에서 시진핑 주석 발언듣는 이재명 대통령",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9WeENOeGJhYlVnejZsZmx2Y1BmX25kamdjOU1ZR2JvejhjUlhGRlBSUG5GUENXZHdQVm5aTS1IOEF5WVZDcG51U2l4MGFGMXJKb0Z6dnZSR2hKNzBkZ3NwS2tNeUNiU3ZGODZmWXpXR2g5R0VO?oc=5",
+      "published_at": "Wed, 18 Nov 2026 03:46:41 GMT",
+      "publisher": "연합뉴스 한민족센터",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1460,18 +1408,18 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "李대통령-시진핑, 선전서 정상회담...FTA 타결 계기 협력 강화",
-      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFB2RjZqdWR6em9NRDFtOWFvR1RrOUk4Ry00Z3Q0ZzBHbEQ2UFBYajVPX2FaaFUyLWNFMS01Y29vMk1XUURxTTVfNFo1QlQtUkQwMWpQZGlsOUhwZmd1?oc=5",
-      "published_at": "Wed, 18 Nov 2026 08:20:54 GMT",
-      "publisher": "티제이비",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "이 대통령, 오늘 시진핑 주석과 정상회담…“한반도 평화 협력 등 의견 교환”",
       "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFAybDU2aGphWFp3VHlFUFcwd2N6ZlVwT2lJalhBcXItaElhQUNTeFpUYVl6ZThmZnRLb0NPcjF5VktCWHZzUlhYNGNMdmVVX0FpRWh1LTZnSWVqRlhYYXVqamU5Yl9PQQ?oc=5",
       "published_at": "Wed, 18 Nov 2026 00:32:00 GMT",
       "publisher": "KBS 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "李대통령-시진핑, 선전서 정상회담...FTA 타결 계기 협력 강화",
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFB2RjZqdWR6em9NRDFtOWFvR1RrOUk4Ry00Z3Q0ZzBHbEQ2UFBYajVPX2FaaFUyLWNFMS01Y29vMk1XUURxTTVfNFo1QlQtUkQwMWpQZGlsOUhwZmd1?oc=5",
+      "published_at": "Wed, 18 Nov 2026 08:20:54 GMT",
+      "publisher": "티제이비",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1484,10 +1432,10 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "이 대통령 \"한반도 문제 사활적 이익\"…시 주석 \"북미 대화 지지\"",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5iaUs2bHhJOEZwd0FZbVNmUF9VYmJ2enZIYzZhWXlsMWtVRjJlVWctNy0zeko4TWQtV2IzYW1aLWZuSUVNU3hBT2JkVmtpS1doTWxHT2hGZTk0dFNWVlFLXzRKQlhwSnEyUWlxcFllS3lSbFcw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 09:42:05 GMT",
-      "publisher": "연합뉴스 한민족센터",
+      "title": "이 대통령, 오늘 중국 APEC 계기 시진핑 주석과 정상회담",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBmRF9kU1kzempBSkZ4TFJhRWU3M01PR1NHYjVQTnNodGZqZi02U0tkS1c0alJfQkU0UUFlVWpObVRkeEd1Nk8xY0RoSXJaSmNoakZaNmtlTzJoS3BLeHh0Y3JHck42TDZxc2wzTUNaVQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 00:45:00 GMT",
+      "publisher": "YTN",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1596,9 +1544,9 @@
     },
     {
       "topic": "global_market",
-      "title": "엔비디아 비상장 투자 자산 655억 달러, 9개월 만에 3배",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9JcXBGT0tpX0pHNlVRNzhUaUsyZWFDejdWOE03ZzU3ODFHWTl3MTlEZWtJSFYzWUhqYVlBYnRJXzdDYmdrLWlkMzdmZDVLYWc?oc=5",
-      "published_at": "Wed, 18 Nov 2026 15:50:47 GMT",
+      "title": "기업 지출 관리 페이호크, 2.8억 달러 시리즈C 투자유치",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE04Rlh2SWJjMURLNVN0eTdzWmh3bGpPMHk2NkdOWHpENFkzazJ2bldlTXVRM0NXUkE3WXM0LXF1N2N5QktXaDE0V2t0cmZaS2s?oc=5",
+      "published_at": "Wed, 18 Nov 2026 16:10:05 GMT",
       "publisher": "와우테일",
       "discovery_source": "google_news_rss"
     },
@@ -1612,10 +1560,18 @@
     },
     {
       "topic": "global_market",
-      "title": "UBS, 2027년 말 금 5,000달러·브렌트유 80달러 전망",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9IMk5TSEc5WVdTbXc0SzRYN0ZiRDMtN0cxcE5UeFp4dUJUYmRrMjM3SDFuU3pPSll1NUFxcWhTellDb2NRMTFEb1hSUTRTYUh2ODBCTWV1MzJaekJpVjNOMWYwV1JZQThWUHZjUnlFUQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 12:21:00 GMT",
+      "title": "TSX 선물 하락…금·유가 약세 속 Nvidia 실적 주목",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1WcWp1WUNSUk5wZkp6NzEtQW9oemVKLTB4LXowRzh0alU5ejFIT0lvOVJ5bWxyNzlMTkpYYWUwOVFRVGpzWmcyaE1WWDZHR0xnMTU0M1poZUxRYWRBMXJ0YzRkY1lfV1o2UlVQZzFSdmY?oc=5",
+      "published_at": "Wed, 18 Nov 2026 13:02:00 GMT",
       "publisher": "Investing.com 한국어",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "“年 수출 1조 달러 돌파 다가왔지만⋯ 경제 혈은 막혔다”",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5qZlhmYjV1SWk3RnBNUVpxc1dsa0lIR0Y3ajlIczl3Y0phaFdaalpCOXI1VC1palVoWW5SZXdRM2M0OXBHMFJyMV9lZ3EzNDNiajktYU1fVmg?oc=5",
+      "published_at": "Wed, 18 Nov 2026 14:56:52 GMT",
+      "publisher": "국민일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1636,14 +1592,6 @@
     },
     {
       "topic": "global_market",
-      "title": "“年 수출 1조 달러 돌파 다가왔지만⋯ 경제 혈은 막혔다”",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5qZlhmYjV1SWk3RnBNUVpxc1dsa0lIR0Y3ajlIczl3Y0phaFdaalpCOXI1VC1palVoWW5SZXdRM2M0OXBHMFJyMV9lZ3EzNDNiajktYU1fVmg?oc=5",
-      "published_at": "Wed, 18 Nov 2026 14:56:52 GMT",
-      "publisher": "국민일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
       "title": "\"앤트로픽 IPO에 약 666조원몰려…공모가 80달러 넘을 수도\"",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFAtZDBsZXRrVWxHT00zckNZT2lkX0RmQy1jRjhFWG5VZ1M3TTViSDFnQkU0ZGRMMmJRYlF4UTRtTzdRRmNwZ3NnUEhuUTBGS3QwbThhbnhKLUR4enB2NFNwTVUzZjZXTDNTNUZKSXZNNnE?oc=5",
       "published_at": "Wed, 18 Nov 2026 15:33:43 GMT",
@@ -1652,26 +1600,26 @@
     },
     {
       "topic": "global_market",
-      "title": "엔비디아 3분기 매출 1,158억 달러, 두 배 성장…4분기 마진은 변수",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE81cmYxSHFDekpIQW9GSnRSbmV0cWxNc05uSTlDcjdZTEFIMWxLTDBLYjdzYmlHX3RrLWkwdnhBdDhPeVJxUlEzT1VZQnFhNjQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 15:14:36 GMT",
+      "title": "엔비디아 비상장 투자 자산 655억 달러, 9개월 만에 3배",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9JcXBGT0tpX0pHNlVRNzhUaUsyZWFDejdWOE03ZzU3ODFHWTl3MTlEZWtJSFYzWUhqYVlBYnRJXzdDYmdrLWlkMzdmZDVLYWc?oc=5",
+      "published_at": "Wed, 18 Nov 2026 15:50:47 GMT",
       "publisher": "와우테일",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "global_market",
-      "title": "TSX 선물 하락…금·유가 약세 속 Nvidia 실적 주목",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1WcWp1WUNSUk5wZkp6NzEtQW9oemVKLTB4LXowRzh0alU5ejFIT0lvOVJ5bWxyNzlMTkpYYWUwOVFRVGpzWmcyaE1WWDZHR0xnMTU0M1poZUxRYWRBMXJ0YzRkY1lfV1o2UlVQZzFSdmY?oc=5",
-      "published_at": "Wed, 18 Nov 2026 13:02:00 GMT",
+      "title": "UBS, 2027년 말 금 5,000달러·브렌트유 80달러 전망",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9IMk5TSEc5WVdTbXc0SzRYN0ZiRDMtN0cxcE5UeFp4dUJUYmRrMjM3SDFuU3pPSll1NUFxcWhTellDb2NRMTFEb1hSUTRTYUh2ODBCTWV1MzJaekJpVjNOMWYwV1JZQThWUHZjUnlFUQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 12:21:00 GMT",
       "publisher": "Investing.com 한국어",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "global_market",
-      "title": "뉴욕증시, 엔비디아 호실적 속 혼조 출발",
-      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE5pTE1mODJadWMzb0h0ak5nZEU4ajEtU1pyQjR2aVpKTDF0UkpySkdiaHphWUpwdk95aTdEX2JGLXl6eThKUXU0Z3hjdExVMllTVDItYWYtcGJqQzF1RTZVa182UEZ6QVZ6Q2FHVkh4TVFMdw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 15:05:45 GMT",
-      "publisher": "KB Think",
+      "title": "[사설] 수출 1조 달러 ‘기적’⋯ 지속성 위해 ‘걸림돌’ 넘어서야",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBxbXJOeFppOERDSkZnd00yb3g5Sm1EUmZfWnlYRTRDQmRHMVhCUkNYVGlDMjFxVEF1YWVlcEFBb1ZONGkxYTVZY3NZWVYtbnlaallobVAwclA?oc=5",
+      "published_at": "Wed, 18 Nov 2026 16:10:00 GMT",
+      "publisher": "국민일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1679,14 +1627,6 @@
       "title": "우주 컴퓨팅 라몬스페이스, 1.24억 달러 시리즈B 투자유치",
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1rNmNlNUhWVzJZdm5ZYkFJMGh4S28wUmZWbC1qUmtmZ0dncTdNRVFHWVNpTXZQVUViNnRTOU9TR29sZGhwVEwyeXJyWDFCWkE?oc=5",
       "published_at": "Wed, 18 Nov 2026 15:53:46 GMT",
-      "publisher": "와우테일",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "에이전트 기록으로 기업 전용 AI 만드는 레머넌스, 3천만 달러 투자유치",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5GZnF4NU9nRUhJMnlSOWw2S1NZUzdhY0J1UGJLai1JMnlqeTFaQVBmZ0psLVlTQXl6MzhkYWVRSFpUcjItdGlRd1NnZlk1SVE?oc=5",
-      "published_at": "Wed, 18 Nov 2026 15:07:15 GMT",
       "publisher": "와우테일",
       "discovery_source": "google_news_rss"
     },
@@ -1700,9 +1640,9 @@
     },
     {
       "topic": "global_market",
-      "title": "인간 손 닮은 범용 로봇 제네시스 AI, 5억 달러 시리즈A 투자유치",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1LaTFTWnNjaU8xbE13cGotVk1kVklFblNwM1ozN2NreUh2ZFgwMmc4WmlMUkZZR0pUa1BpNGVsaXdGb1hTbHVKaktjNzRBV0E?oc=5",
-      "published_at": "Wed, 18 Nov 2026 14:28:51 GMT",
+      "title": "생체분자 설계 AI 볼츠, 1.1억 달러 시리즈A 투자유치",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBlSnpWeHQ1U2lENFdyckdaYTZKY3l2SG9KNDg3TDJkNkNVUm5FLVpwLUU5dWp3OW41ZzJoVFptOXZyeTVKNFBQOGF3cDM0anc?oc=5",
+      "published_at": "Wed, 18 Nov 2026 16:15:17 GMT",
       "publisher": "와우테일",
       "discovery_source": "google_news_rss"
     },
@@ -1716,6 +1656,14 @@
     },
     {
       "topic": "global_market",
+      "title": "엔비디아 3분기 매출 1,158억 달러, 두 배 성장…4분기 마진은 변수",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE81cmYxSHFDekpIQW9GSnRSbmV0cWxNc05uSTlDcjdZTEFIMWxLTDBLYjdzYmlHX3RrLWkwdnhBdDhPeVJxUlEzT1VZQnFhNjQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 15:14:36 GMT",
+      "publisher": "와우테일",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
       "title": "外人 달러선물 순매도 11만계약 돌파…통화선물서 올해 최대 순매도",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9vVjU1V2oxMWhaTHRpN20tQ0UtX2lENW41NEx3Rmp1TlZSUUJYQndxYmthTzBQbGsyem96eWdQaER0SmcwbXNQdC16Q2NwSVk0eFdaaExfMmZUOEtfbVRkbmhzOWZzS2JXYTRZZ2laMW3SAXRBVV95cUxNdFVScXRjaDNuZmR1WW8xVWVuejVXVEZFeVc4aFhDSFdSUDR5blhGaUV1aHV3SFBJQ2s4VEJmd0l3OU02MlAtTk9Qc3dnVkhzZE43a0NPbWZaV0VkYktqRkgyN08yVkFuRTN4XzRZdXpDVTN0NA?oc=5",
       "published_at": "Wed, 18 Nov 2026 04:40:28 GMT",
@@ -1724,10 +1672,18 @@
     },
     {
       "topic": "global_market",
-      "title": "경북 중소기업, 해외시장 476만 달러 수출성과 추진",
-      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFA3aUI0Xy1qYy02NThIQmFWNHFXZG1yZ2xMMFRrUzhVcURzcC1GUmJrTGsxbEU3SFZxekh4QVE5UlE5d1VWS1NkWkQxRVg3djI2VGdaaEpnMzIwTS1kenJfaFR6RTdQdVhvT3VmV3JPY1BpcUw2M0llMDF30gF_QVVfeXFMTmpqMEp6NHJYS2VaV2tYSXY4eFVESnVMZThwSFoxSUtNdFY2YzFWREptR25DOWNNdE9Nb1BVQkh0c0U3UzMzRGlpc2hvcjVEY1Uta19XOTZtT3paQklqTmVzeFdId05lWExoTWJBYkx4TENrS0tTUjE1STBWOVpndw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 13:39:00 GMT",
-      "publisher": "뉴데일리 대구경북",
+      "title": "에이전트 기록으로 기업 전용 AI 만드는 레머넌스, 3천만 달러 투자유치",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5GZnF4NU9nRUhJMnlSOWw2S1NZUzdhY0J1UGJLai1JMnlqeTFaQVBmZ0psLVlTQXl6MzhkYWVRSFpUcjItdGlRd1NnZlk1SVE?oc=5",
+      "published_at": "Wed, 18 Nov 2026 15:07:15 GMT",
+      "publisher": "와우테일",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "인간 손 닮은 범용 로봇 제네시스 AI, 5억 달러 시리즈A 투자유치",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1LaTFTWnNjaU8xbE13cGotVk1kVklFblNwM1ozN2NreUh2ZFgwMmc4WmlMUkZZR0pUa1BpNGVsaXdGb1hTbHVKaktjNzRBV0E?oc=5",
+      "published_at": "Wed, 18 Nov 2026 14:28:51 GMT",
+      "publisher": "와우테일",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1740,10 +1696,10 @@
     },
     {
       "topic": "global_market",
-      "title": "골드만삭스 \"내년 말 S&P500 8700\"…기업 이익이 상승장 이끈다",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNQ1N0QkxpVXJOZmx4VFQyQWdCeEVweXI0NDVLYndvZi16V0xTcG9TVUpaSDdnMzh1YTR5ZVpVYndHMG41b3pIYVJnRGhiOUxBVllyaUVUSVNySDdlRFJpWEJsX01vRWV5bXFLc05OZFRsdXhVZGRJc2xQamZRLUhrQ0lyMVlEdUdw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 00:15:18 GMT",
-      "publisher": "조선일보",
+      "title": "경북 중소기업, 해외시장 476만 달러 수출성과 추진",
+      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFA3aUI0Xy1qYy02NThIQmFWNHFXZG1yZ2xMMFRrUzhVcURzcC1GUmJrTGsxbEU3SFZxekh4QVE5UlE5d1VWS1NkWkQxRVg3djI2VGdaaEpnMzIwTS1kenJfaFR6RTdQdVhvT3VmV3JPY1BpcUw2M0llMDF30gF_QVVfeXFMTmpqMEp6NHJYS2VaV2tYSXY4eFVESnVMZThwSFoxSUtNdFY2YzFWREptR25DOWNNdE9Nb1BVQkh0c0U3UzMzRGlpc2hvcjVEY1Uta19XOTZtT3paQklqTmVzeFdId05lWExoTWJBYkx4TENrS0tTUjE1STBWOVpndw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 13:39:00 GMT",
+      "publisher": "뉴데일리 대구경북",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1764,18 +1720,18 @@
     },
     {
       "topic": "global_market",
-      "title": "뉴욕증시, 앤트로픽 IPO 앞두고 혼조 출발…나스닥 0.58%↑",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9fYWpfRjFzNlRucVI2bENoS1hYZXJEUlpQQ0U0ZE42OE1GaWRDZjJFbHZUcDFmQ2RYX2lYaHA2cWpLVXU3TTI0cHh6QjFOZDdyS3hqd3BXZmQ2SjkzSl9YNm1YTTVHWldCcXdYZw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 15:19:31 GMT",
-      "publisher": "뉴시안",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
       "title": "마이크론, 12월 350억 달러 자사주매입 빗장 풀려…역대급",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9FZDJ0Z2FLNFhPYkNPcVA5NjYwR1pZVERma052RFpncUFUcHJCc0ZyUjBaUUh6Yy1kWG9Idm5RUncyOFpmSU5HZlV3b1k2X1E4V1c5MlFiYWY0MDdVZDVNWEZjbFNlTjBTdXducUNSMDU?oc=5",
       "published_at": "Wed, 18 Nov 2026 07:05:40 GMT",
       "publisher": "연합인포맥스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "뉴욕 증시, 엔피디아 실적 호조에도 혼조 속 등락···다우 0.58%↓나스닥 0.58%↑",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1hMkl2ZlVkVUtScTV6djRWRlUxOHBxRFd1aHNDLUJxRHJhcndpNS1RVmpMbmhZdWZ0bFdEOEYycUdBajdZZHM4bDZoVVhBMTZYMlhCMHZhXzRmRFRXb1BUQdIBeEFVX3lxTE5oN3BxdWFZaWFEVzh3d2RGZzBoU1RkMnp6V0FqOFVOaVdWWC1WN1NlMHIwX2RBSHk4ejhueHBfWVNRMjRTR0Utd25lQTd2LUt4RVNaR3g1enFlTnFUYXMxdi1VT29GZkEwcDdZbnI4MVBKNnVKRnhGcw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 15:23:43 GMT",
+      "publisher": "뉴시스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1788,18 +1744,10 @@
     },
     {
       "topic": "global_market",
-      "title": "\"달러 파킹 수요 늘어난다\"…KODEX 미국머니마켓액티브, 순자산 1조원 돌파",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5xZ3Y2ZnItN3MyOWN3TTRveEpXSFZFZlNiYlQtaENsZmVQb3JFRjQ2NndqTHJabG93V19lX2w4TkpuNFZzSElRUE1pZmZKVmVvZWY5aGdMeWJRUQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 08:11:31 GMT",
-      "publisher": "한국경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "Flex 주가, 자회사 Axiom의 46억 달러 신용 시설 확보로 상승",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1FczlFa3lPSXU1bTdyUlIzVm1aSnZlQ1JWR3VTTFk2d3BaMGJBS1pvdmdxZ3c2bk9MMER4ODdJdWZNV2QxV2J3WGJHODVVSjdVMmZFeFhaVmx6TUJvNnBRYmFVZDdyX0ZvMk5QbjgwYWc?oc=5",
-      "published_at": "Wed, 18 Nov 2026 13:43:00 GMT",
-      "publisher": "Investing.com 한국어",
+      "title": "뉴욕증시, 앤트로픽 IPO 앞두고 혼조 출발…나스닥 0.58%↑",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9fYWpfRjFzNlRucVI2bENoS1hYZXJEUlpQQ0U0ZE42OE1GaWRDZjJFbHZUcDFmQ2RYX2lYaHA2cWpLVXU3TTI0cHh6QjFOZDdyS3hqd3BXZmQ2SjkzSl9YNm1YTTVHWldCcXdYZw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 15:19:31 GMT",
+      "publisher": "뉴시안",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1844,6 +1792,14 @@
     },
     {
       "topic": "global_diplomacy_summit",
+      "title": "선전서 잇단 회동 나선 트럼프…무역도 안보도 협상 테이블에",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPM3VMUHpXSGFSVlhsNFlaUFJva1FiZ2lrc0NsbXFOblJDSzlZQ3plWjlfSDF0bnN2N2dBT1FVc1dtTF92VWwxOW9VczdUNHhjeklYOV9mU2dDTTN5Qjk1NG00RFNSMklXNVFraU1MdFlBaklUSF9tSGd5QVRHdGpFdw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 16:02:30 GMT",
+      "publisher": "이데일리",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
       "title": "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나",
       "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5zR1FvX1dCTU50S1dsTUYzODFlcVdIY3FFTjh3QmstTVJaU3NKRHB3NHdXdHpJdFhGSHpMYXlBZG9QMDFHcGVnUWRBT1BkMEU4XzVTZnFyZlZVS2VPVnRXNEJ0djhMYnZSVlc0eDJCUVJPZGtC?oc=5",
       "published_at": "Wed, 18 Nov 2026 13:19:00 GMT",
@@ -1880,14 +1836,6 @@
       "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE82VXpoWU5RQzN6RmY5akM4R0M2NUtOSF9RTTFHb0hfOUJVbklrWExWYTJ3SWRlek94WnRCbHhSWnl1MzJhQ2lGU1NobWRDMkk1OGUwcXlHOWRmR2hJRVBUQTl0Tkk1Z0ZOY0tGMA?oc=5",
       "published_at": "Wed, 18 Nov 2026 05:51:29 GMT",
       "publisher": "인사이드비나",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_diplomacy_summit",
-      "title": "선전서 잇단 회동 나선 트럼프…무역도 안보도 협상 테이블에",
-      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPM3VMUHpXSGFSVlhsNFlaUFJva1FiZ2lrc0NsbXFOblJDSzlZQ3plWjlfSDF0bnN2N2dBT1FVc1dtTF92VWwxOW9VczdUNHhjeklYOV9mU2dDTTN5Qjk1NG00RFNSMklXNVFraU1MdFlBaklUSF9tSGd5QVRHdGpFdw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 16:02:30 GMT",
-      "publisher": "이데일리",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1996,18 +1944,18 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "시진핑 “폐쇄는 필연적으로 낙후 초래”…트럼프 ‘일방주의 관세정책’ 겨냥",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE56c1BrRWlyenVaa05iTGZxMmRSMV9xMEt3d2lCTGdSTThTOG90V09SeTNCZExQM3Zrd0VpS1NvbTgxS2tWSzlrZnZMSG1qenNUcWfSAVNBVV95cUxPQjREQjdTSV9Hdm82cWVTaS1YcDRPalNCczBCdDZtb20xVkRKbks1Mlo0QWF2RHBnZVNmUU10UlRFTlFIY3FGandwdVVyb1RCbXRiNA?oc=5",
-      "published_at": "Wed, 18 Nov 2026 10:05:57 GMT",
-      "publisher": "서울경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_diplomacy_summit",
       "title": "“트럼프 보란 듯이”…시진핑, 자유무역 외치며 美 보호무역 직격 [이슈+]",
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE85ek5uTUFTQmVuX3NoUmZSZGRhTTE0Y2hPUWVHOGhTV1c0aXR1TXFtYklja2g5eUE2eUFLU0J0UHRZZWdsVXFiU2FJV3MxNFB0SnlybUxvaEp5Wlk?oc=5",
       "published_at": "Wed, 18 Nov 2026 05:27:03 GMT",
       "publisher": "에너지경제신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "시진핑 “폐쇄는 필연적으로 낙후 초래”…트럼프 ‘일방주의 관세정책’ 겨냥",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE56c1BrRWlyenVaa05iTGZxMmRSMV9xMEt3d2lCTGdSTThTOG90V09SeTNCZExQM3Zrd0VpS1NvbTgxS2tWSzlrZnZMSG1qenNUcWfSAVNBVV95cUxPQjREQjdTSV9Hdm82cWVTaS1YcDRPalNCczBCdDZtb20xVkRKbks1Mlo0QWF2RHBnZVNmUU10UlRFTlFIY3FGandwdVVyb1RCbXRiNA?oc=5",
+      "published_at": "Wed, 18 Nov 2026 10:05:57 GMT",
+      "publisher": "서울경제",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2096,6 +2044,78 @@
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE16X0NubmVSWGczRnEtaEN5WklwdnFrcGZmRkVyVHVlVDVUQ1l4NHpCWHIwV00yckJkZG1KV1pKb3d3bWRsU2tFWVhnLVpGTWRjN2JWc3dMRnlXRUw2amVFNnJaNnMzeUpVd2fSAVRBVV95cUxPRVdpMC1uX1dJUHZqZlVFc0d6VXpoWnRhS3c3dFRhM0xsamJNa3BwdTFrYzFqMXJ3SzFyS2VBZGdkOGFNbkhNS2U2NFo0Y2J4ZXg3Mnk?oc=5",
       "published_at": "Wed, 18 Nov 2026 13:54:33 GMT",
       "publisher": "세계일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "사진으로 보는 역사적 미중러 정상회담",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1FTnNrRGlDY3JnWkRSb1BkZ3I0Y1JqSlhlcDFPYXJCc1N2QzhqMEtBRkdUajBIbDNYTVpOSDJCOVFsWnNMSTJWM25XVTdCQkdK0gFTQVVfeXFMUFZYb0ZLdmYwU0tGY2tBdHZRSWJkN2JKSjNxZXNyQVdfcllCUU9yT2Jka01hVHhNdTdJN1RfbnZMRTd2ZUNfSjMzel9kbTRzeUxTamc?oc=5",
+      "published_at": "Wed, 18 Nov 2026 14:13:53 GMT",
+      "publisher": "VOA 한국어 홈페이지",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "경주에서 선전으로 🦋 ㅣ 한-중 정상회담",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBIWElxN1BoLWtkZXBLWVJsVFVSUUxQeTFMTnJnZ2RLNldURmRWdUNHZWJnQjRuVDlkUHRhOWh0c3hxWWFXTDctWktLck9QNE9JM3RGNHlB?oc=5",
+      "published_at": "Wed, 18 Nov 2026 08:21:13 GMT",
+      "publisher": "대한민국 청와대",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "[사설]미·중·러 정상회담 앞두고 한반도 평화 중요성 확인한 한·중 정상",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNMk12QjY4YTNWNmpBR2VSSGZYeXY5MmR4VzJtdGxKQ2VSRjYxUjVoOWdHV3pCSTh3ZzgySGIwQzk5UGVfUnNDOFVXbDU1bnk4bVRkM2hDYWVlQWp3MTVwY09Hc3RkTkx0eW9nVGVZQjBObjBNVWluT0M4NEc4dUIxTENRU0UxdWxxdFFwejdCWlE2dnFiZXJTSzZkLUJZdVhzazF1aC0zUVZyQdIBX0FVX3lxTE9KY2NGRHF2SUJRc0ZCWHJITWE4Y2NKYW01QWRfZGQtTWtwV0hBaXZuVVJkbDVPZEh1MTFKaGNwR2NJQ3k4d25Cc3NudXYxWi1HSVJvWml3blp4Yjh4a0pz?oc=5",
+      "published_at": "Wed, 18 Nov 2026 11:00:00 GMT",
+      "publisher": "경향신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "트럼프 중국 도착…시진핑 직접 영접, 미중러 정상회담 앞둬",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1wbm8zUVQ4RkMwQkkybThtRVotZFo5b091OGgySlZvUzJoMUFBaUU5cDRNU1l5Q20wbldlU2tKU1RZbHRZWkg0Nk9admw4MXRD0gFTQVVfeXFMUHhBRGdtUmZhd05Zak9YVWVnQktFLTlWd2lBTUgxV2xUaEhVb0tDTVRLSW1aX1dNVkpZeUpFa2plRDNjV01zNndRcTZ3VlBROGp4OUU?oc=5",
+      "published_at": "Wed, 18 Nov 2026 12:18:30 GMT",
+      "publisher": "VOA 한국어 홈페이지",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "미중러 정상, 사상 첫 3자 정상회담 앞두고 APEC 환영행사서 만나",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQVVhmcTAtNUFQUDBiZkN0clp3RklHNUoyOWxIWXFnNmNBai1HMUhLV29TZTg1dUEzc2xKR0U0RmVxT2NnS195UzNXX3o4NFNLRU5XOVNfRFVWZjVSM2kyOWRuNnE4ZmE0LUVaTlBDMy1HNklOa1hlRDh6eEl2a3pxZDRjd3dvakVXaURQNV9YM3MtWkVZTGxvNU5KNzN3UdIBsgFBVV95cUxQVXJJcVNkUWk2cjhkOUlMdXVpVlJHeTRpcXVVM3R3YXdpMGxtUW5ZenNyRHF6Rm41R2tJSk55M216dUZrbW4zZ21mSWJfWXByN1psamFrS0RzNXJTZzNfbE5yQUdLcnlEQXBwOXJDZ1VXWHJtZTVrSmlEalBGSGl6Q2lwMkpVT2VYX1RhRWxuZG0ycC11Mk5tRzRSYTVYZXZRNHJuRUpyMzR3LW9qc2lVLUhn?oc=5",
+      "published_at": "Wed, 18 Nov 2026 13:43:00 GMT",
+      "publisher": "Chosunbiz",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "이란, 미·중·러 정상회담 하루 앞두고 쿠웨이트 미군기지 공격",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1YVlZLQkFrSThqNEVtQUtWbW1vdEIwZ3AxRklHYXdKNkJDRkZkUTY0Rk1fc28zRlZ1czV6TkZ5Z3VaLWxWaWFRX1o5Slh5LUh5MDNkSi03NUFTR3NZOWc1UGpkZXpuWTA?oc=5",
+      "published_at": "Wed, 18 Nov 2026 04:56:00 GMT",
+      "publisher": "연합뉴스TV",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "이란, 미·중·러 정상회담 전날 쿠웨이트 미군기지 타격",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE0zX3ZYdDNnWUxvb2JrakQ3dC1oMzRjcWloNVVVTFB4VVFPaFNXeXhka2RRRVpiUFl1dUVYT091bTFvdmZnUjJUT1ZYMWpjQnJJSTdueEtWWVJGaUYwc19mcDU4UVZrSUZIRWdaY1llWkR1Zmpm0gF0QVVfeXFMTVV0ZzdFZUFYWGdadms4SnUtLVhQdTI4YnI4and1Umd6bEpxaDJwNHctekxOT3lwWXZzb0RiQ09GQmVqN0FNX1pFSGx2UkFYT1N3dkhOLWltYk1GeXd5LS1ZSkdjWTY1SnprX0owS0FnT0tjQ0c?oc=5",
+      "published_at": "Wed, 18 Nov 2026 04:58:43 GMT",
+      "publisher": "MBC 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "[그래픽] 한·중 정상회담 주요 내용",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFA0Sl9fc0F6eXM3emtnTGt4VTdaU0VnTzJramprYTVfME9BbHBqcFhFU0pHcFhMTU9qU2xYUW1ha0hPdU1VWVdWN0pfaDFLT1AtbFNpRXRUVDFiMWxJYTBmS9IBYEFVX3lxTFA0Sl9fc0F6eXM3emtnTGt4VTdaU0VnTzJramprYTVfME9BbHBqcFhFU0pHcFhMTU9qU2xYUW1ha0hPdU1VWVdWN0pfaDFLT1AtbFNpRXRUVDFiMWxJYTBmSw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 09:09:06 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:정상회담",
+      "title": "대만 \"미·중·러 정상회담 앞두고 美와 긴밀히 소통\"",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNWVIxN212OUp6N0NjLW5USkpGNVZFeWJseFA2VVhPenU1RTlnUkZGY29ocFFtdG90X0VCWG9QYXRJMHdhUTloN2VuakdOeEhkdEpkOUE5dW1LWE8zTGF0enVEWlZuaGozMmRiXzBIRW50T1BqQ3RIVXhGMUItbjdSeWpUTGZLVnhsQXlmQTJkSEQ3MlVJNUVxa2pYUnJEdw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 08:44:55 GMT",
+      "publisher": "조선일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2252,14 +2272,6 @@
     },
     {
       "topic": "dynamic:타결",
-      "title": "한·중 정상 \"FTA 서비스·투자 협상 타결 계기 경제협력 확대\"",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE9QUWZNeXNldkc4RjZJdkJpMzBqSmVaVDBpRV95c3pkR19NdDA2SUhpcVFMalVETGdrR1Z0azhuZDZMcTNIUjZzMkVUWmxrbGMtVWVlcm9oWUlmeFZVbUE?oc=5",
-      "published_at": "Wed, 18 Nov 2026 09:03:24 GMT",
-      "publisher": "한국방송뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:타결",
       "title": "[속보] 韓中정상 \"FTA 서비스·투자협상 타결 계기로 협력 확대\"",
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1RVV9FN05BUmJzbklGa0FQQTNrVFBxeHdtVnNVWERBUl9BMHRjZzJZSEFyZlZqeFF0cWlvM21fQXFyR0J3WUxhWFBwZ3pYakRXendDZjZpUFIyMlHSAWBBVV95cUxPYmlkZnVVQ2ZkRy03aVBwUXA5Nms0c2V1UTR2THhwdGR2bDZkamVPeFIwZ0tQN0c1VEx3QXg4Tjk0eElNdUxodTR5YzhEci12cmQyOXpRVkY4cFk0N21MOC0?oc=5",
       "published_at": "Wed, 18 Nov 2026 06:41:08 GMT",
@@ -2267,43 +2279,11 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:시진핑",
-      "title": "트럼프 중국 도착…시진핑 직접 영접, 미중러 정상회담 앞둬",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1wbm8zUVQ4RkMwQkkybThtRVotZFo5b091OGgySlZvUzJoMUFBaUU5cDRNU1l5Q20wbldlU2tKU1RZbHRZWkg0Nk9admw4MXRD0gFTQVVfeXFMUHhBRGdtUmZhd05Zak9YVWVnQktFLTlWd2lBTUgxV2xUaEhVb0tDTVRLSW1aX1dNVkpZeUpFa2plRDNjV01zNndRcTZ3VlBROGp4OUU?oc=5",
-      "published_at": "Wed, 18 Nov 2026 12:18:30 GMT",
-      "publisher": "VOA 한국어 홈페이지",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:서비스",
-      "title": "2인 팀이 AI로 만든 서비스, 유료 사용자 1,600명까지",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBmaGRpb1Ezcmp6X1JsLWIzQmlUUi16T2Njb0dLLUJsLVNJOGhVRFlKMXYzYmNGUzZxQWl3YzNTd3pVemdrcm5xNnBaczdwVWZaZ3IzeU1OY0pYQQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 13:59:44 GMT",
-      "publisher": "요즘IT",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:서비스",
-      "title": "미국·중국, AI 법률서비스 시장 확산…전통 로펌 수익모델 변화 압박",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9DRFBveFJQSWdadW81eFVlSEVLNHFxZjd6MGJkSmw2aFZkV09SYlpURHNEUTVwNUNDRll5dUJsc3JUOUVfUkd1MzhwZWltYVk5TGNuZjZlYUF6TXVUSld5REs1TEl1Zw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 15:11:19 GMT",
-      "publisher": "뉴스비전e",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:서비스",
-      "title": "[속보] 韓中정상 \"FTA 서비스·투자협상 타결 계기로 협력 확대\"",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9iaWRmdVVDZmRHLTdpUHBRcDk2azRzZXVRNHZMeHB0ZHZsNmRqZU94UjBnS1A3RzVUTHdBeDhOOTR4SU11TGh1NHljOERyLXZyZDI5elFWRjhwWTQ3bUw4LdIBYEFVX3lxTE9iaWRmdVVDZmRHLTdpUHBRcDk2azRzZXVRNHZMeHB0ZHZsNmRqZU94UjBnS1A3RzVUTHdBeDhOOTR4SU11TGh1NHljOERyLXZyZDI5elFWRjhwWTQ3bUw4LQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 06:41:08 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:서비스",
-      "title": "[데스크가 만났습니다] 홍정화 다올티에스 대표 “HW·SW·서비스 풀스택…기업 AI 도입, 선택 부담 줄여”",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE40ZEx3Q010aV9BZXJGQlZYNUFhOVVhWTRWX19XdEladUZUMG8xX3FOYWpCZElnbGJDQS03dDREZXdTVzlMdE83aGxSZzBZUQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 08:00:00 GMT",
-      "publisher": "전자신문",
+      "topic": "dynamic:타결",
+      "title": "한·중 정상 \"FTA 서비스·투자 협상 타결 계기 경제협력 확대\"",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE9QUWZNeXNldkc4RjZJdkJpMzBqSmVaVDBpRV95c3pkR19NdDA2SUhpcVFMalVETGdrR1Z0azhuZDZMcTNIUjZzMkVUWmxrbGMtVWVlcm9oWUlmeFZVbUE?oc=5",
+      "published_at": "Wed, 18 Nov 2026 09:03:24 GMT",
+      "publisher": "한국방송뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2404,18 +2384,18 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "AI가 택배 상자를 옮기는 시대, '초혁신경제'가 바꿀 우리 일상은?",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1DQy1SYlVid3BvTHhNYk80a1V2VGJITHJ6Y1JPS0NMTUNUeFM0Z2xIeXY5X3FHdEtaemNQSU1GYWxsbHMzdldGNE5KSUtuU1JBSHdxVnVlM0p5U3dmWmlMa3BENzdKTmRFZlE?oc=5",
-      "published_at": "Wed, 18 Nov 2026 12:56:15 GMT",
-      "publisher": "대한민국 정책브리핑",
+      "title": "성남시의사회, 방문진료 문턱 AI와 디지털 기술로 낮췄다",
+      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9RRmd6Q3FnbFJlX196eWY0aDYwZ2dIOFNwTC1OS2NPSm5jMVIxX0F2VUdMblAzOXdyUjB2YV80T0FqS0I2QUlxdnJyakszR21MR2paWTNxdEdENGtfLW5oODdKQnN3c2tOVHRXRFhwSEMyQQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 09:13:00 GMT",
+      "publisher": "의협신문",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "dynamic:AI",
-      "title": "수능 끝나면, 논술인데…AI로 풀어보니",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1EMjZjQmRfbmlmSnBnQmhvTl8zUy1TUWFBVnJfSUROSTMzampJbkZ3Qk93eURUYzBJNGlxTXBob0Y0d3RNc2tHNnJkRW5GTmFMNXB1RVJVWWVTWDBMU3dMSFFZM0Vvdw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 12:09:00 GMT",
-      "publisher": "KBS 뉴스",
+      "title": "AI가 택배 상자를 옮기는 시대, '초혁신경제'가 바꿀 우리 일상은?",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1DQy1SYlVid3BvTHhNYk80a1V2VGJITHJ6Y1JPS0NMTUNUeFM0Z2xIeXY5X3FHdEtaemNQSU1GYWxsbHMzdldGNE5KSUtuU1JBSHdxVnVlM0p5U3dmWmlMa3BENzdKTmRFZlE?oc=5",
+      "published_at": "Wed, 18 Nov 2026 12:56:15 GMT",
+      "publisher": "대한민국 정책브리핑",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2452,10 +2432,50 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "성남시의사회, 방문진료 문턱 AI와 디지털 기술로 낮췄다",
-      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9RRmd6Q3FnbFJlX196eWY0aDYwZ2dIOFNwTC1OS2NPSm5jMVIxX0F2VUdMblAzOXdyUjB2YV80T0FqS0I2QUlxdnJyakszR21MR2paWTNxdEdENGtfLW5oODdKQnN3c2tOVHRXRFhwSEMyQQ?oc=5",
-      "published_at": "Wed, 18 Nov 2026 09:13:00 GMT",
-      "publisher": "의협신문",
+      "title": "AI가 무너뜨린 전문직 성역…자격증 가치 사라진다",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBvZUZXWGVsTi03T1kweDFNN0dsX0R6bjVNLVBnMUtzODB4MF91SmxGc1pBOVMzSHc5NXpCakF3dFNFaXpTMlAwUDRRcUZEYVhudWJFQkI2dGxNVlhZRTlVQmxpcXJrWTFaN3Q0VQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 12:30:03 GMT",
+      "publisher": "재외동포신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:서비스",
+      "title": "2인 팀이 AI로 만든 서비스, 유료 사용자 1,600명까지",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBmaGRpb1Ezcmp6X1JsLWIzQmlUUi16T2Njb0dLLUJsLVNJOGhVRFlKMXYzYmNGUzZxQWl3YzNTd3pVemdrcm5xNnBaczdwVWZaZ3IzeU1OY0pYQQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 13:59:44 GMT",
+      "publisher": "요즘IT",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:서비스",
+      "title": "미국·중국, AI 법률서비스 시장 확산…전통 로펌 수익모델 변화 압박",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9DRFBveFJQSWdadW81eFVlSEVLNHFxZjd6MGJkSmw2aFZkV09SYlpURHNEUTVwNUNDRll5dUJsc3JUOUVfUkd1MzhwZWltYVk5TGNuZjZlYUF6TXVUSld5REs1TEl1Zw?oc=5",
+      "published_at": "Wed, 18 Nov 2026 15:11:19 GMT",
+      "publisher": "뉴스비전e",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:서비스",
+      "title": "[속보] 韓中정상 \"FTA 서비스·투자협상 타결 계기로 협력 확대\"",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9iaWRmdVVDZmRHLTdpUHBRcDk2azRzZXVRNHZMeHB0ZHZsNmRqZU94UjBnS1A3RzVUTHdBeDhOOTR4SU11TGh1NHljOERyLXZyZDI5elFWRjhwWTQ3bUw4LdIBYEFVX3lxTE9iaWRmdVVDZmRHLTdpUHBRcDk2azRzZXVRNHZMeHB0ZHZsNmRqZU94UjBnS1A3RzVUTHdBeDhOOTR4SU11TGh1NHljOERyLXZyZDI5elFWRjhwWTQ3bUw4LQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 06:41:08 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:서비스",
+      "title": "[데스크가 만났습니다] 홍정화 다올티에스 대표 “HW·SW·서비스 풀스택…기업 AI 도입, 선택 부담 줄여”",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE40ZEx3Q010aV9BZXJGQlZYNUFhOVVhWTRWX19XdEladUZUMG8xX3FOYWpCZElnbGJDQS03dDREZXdTVzlMdE83aGxSZzBZUQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 08:00:00 GMT",
+      "publisher": "전자신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:한중",
+      "title": "한중 FTA 서비스·투자 협상 타결…K-콘텐츠·관광 특수 기대",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5KYkNONkQxVXF6eFptVGRoWDk2TEJMVE4tbmVZcW0yUi1jbEVBVGdnVWh1ZXlHVGpPdi1rbGg1eWthbFNqZk5zZHM2cHozZkN3UU5oWE11UFJZS0kzTWxySkJBZ1JnZ3RlcjViUA?oc=5",
+      "published_at": "Wed, 18 Nov 2026 14:44:58 GMT",
+      "publisher": "대한민국 정책브리핑",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2483,91 +2503,35 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:정상회담",
-      "title": "사진으로 보는 역사적 미중러 정상회담",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1FTnNrRGlDY3JnWkRSb1BkZ3I0Y1JqSlhlcDFPYXJCc1N2QzhqMEtBRkdUajBIbDNYTVpOSDJCOVFsWnNMSTJWM25XVTdCQkdK0gFTQVVfeXFMUFZYb0ZLdmYwU0tGY2tBdHZRSWJkN2JKSjNxZXNyQVdfcllCUU9yT2Jka01hVHhNdTdJN1RfbnZMRTd2ZUNfSjMzel9kbTRzeUxTamc?oc=5",
-      "published_at": "Wed, 18 Nov 2026 14:13:53 GMT",
-      "publisher": "VOA 한국어 홈페이지",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:정상회담",
-      "title": "경주에서 선전으로 🦋 ㅣ 한-중 정상회담",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBIWElxN1BoLWtkZXBLWVJsVFVSUUxQeTFMTnJnZ2RLNldURmRWdUNHZWJnQjRuVDlkUHRhOWh0c3hxWWFXTDctWktLck9QNE9JM3RGNHlB?oc=5",
-      "published_at": "Wed, 18 Nov 2026 08:21:13 GMT",
-      "publisher": "대한민국 청와대",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:정상회담",
-      "title": "[사설]미·중·러 정상회담 앞두고 한반도 평화 중요성 확인한 한·중 정상",
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNMk12QjY4YTNWNmpBR2VSSGZYeXY5MmR4VzJtdGxKQ2VSRjYxUjVoOWdHV3pCSTh3ZzgySGIwQzk5UGVfUnNDOFVXbDU1bnk4bVRkM2hDYWVlQWp3MTVwY09Hc3RkTkx0eW9nVGVZQjBObjBNVWluT0M4NEc4dUIxTENRU0UxdWxxdFFwejdCWlE2dnFiZXJTSzZkLUJZdVhzazF1aC0zUVZyQdIBX0FVX3lxTE9KY2NGRHF2SUJRc0ZCWHJITWE4Y2NKYW01QWRfZGQtTWtwV0hBaXZuVVJkbDVPZEh1MTFKaGNwR2NJQ3k4d25Cc3NudXYxWi1HSVJvWml3blp4Yjh4a0pz?oc=5",
-      "published_at": "Wed, 18 Nov 2026 11:00:00 GMT",
-      "publisher": "경향신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:정상회담",
-      "title": "미중러 정상, 사상 첫 3자 정상회담 앞두고 APEC 환영행사서 만나",
-      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQVVhmcTAtNUFQUDBiZkN0clp3RklHNUoyOWxIWXFnNmNBai1HMUhLV29TZTg1dUEzc2xKR0U0RmVxT2NnS195UzNXX3o4NFNLRU5XOVNfRFVWZjVSM2kyOWRuNnE4ZmE0LUVaTlBDMy1HNklOa1hlRDh6eEl2a3pxZDRjd3dvakVXaURQNV9YM3MtWkVZTGxvNU5KNzN3UdIBsgFBVV95cUxQVXJJcVNkUWk2cjhkOUlMdXVpVlJHeTRpcXVVM3R3YXdpMGxtUW5ZenNyRHF6Rm41R2tJSk55M216dUZrbW4zZ21mSWJfWXByN1psamFrS0RzNXJTZzNfbE5yQUdLcnlEQXBwOXJDZ1VXWHJtZTVrSmlEalBGSGl6Q2lwMkpVT2VYX1RhRWxuZG0ycC11Mk5tRzRSYTVYZXZRNHJuRUpyMzR3LW9qc2lVLUhn?oc=5",
-      "published_at": "Wed, 18 Nov 2026 13:43:00 GMT",
-      "publisher": "Chosunbiz",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:정상회담",
-      "title": "이란, 미·중·러 정상회담 하루 앞두고 쿠웨이트 미군기지 공격",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1YVlZLQkFrSThqNEVtQUtWbW1vdEIwZ3AxRklHYXdKNkJDRkZkUTY0Rk1fc28zRlZ1czV6TkZ5Z3VaLWxWaWFRX1o5Slh5LUh5MDNkSi03NUFTR3NZOWc1UGpkZXpuWTA?oc=5",
-      "published_at": "Wed, 18 Nov 2026 04:56:00 GMT",
-      "publisher": "연합뉴스TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:정상회담",
-      "title": "[그래픽] 한·중 정상회담 주요 내용",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFA0Sl9fc0F6eXM3emtnTGt4VTdaU0VnTzJramprYTVfME9BbHBqcFhFU0pHcFhMTU9qU2xYUW1ha0hPdU1VWVdWN0pfaDFLT1AtbFNpRXRUVDFiMWxJYTBmS9IBYEFVX3lxTFA0Sl9fc0F6eXM3emtnTGt4VTdaU0VnTzJramprYTVfME9BbHBqcFhFU0pHcFhMTU9qU2xYUW1ha0hPdU1VWVdWN0pfaDFLT1AtbFNpRXRUVDFiMWxJYTBmSw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 09:09:06 GMT",
+      "topic": "dynamic:규제",
+      "title": "캐나다총리 \"글로벌 AI규제 시기 놓쳐…기업 수장들도 위험 경고\"",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5MSEh5YW9kN0hZeGdJYlkyQ3djOEMyY3E3SXpsUEpMQVV5QnJwdlBsNFJZR29GNWIyRzNZVEJ6R2RPbXh4eThlT1l0Tk5sWEdVTHMwUWpRblhLRzDSAWBBVV95cUxOa2Q0aHNtdUxMZmpZenoyYkNtVVN5UDVCN2N5RkdldDVJZUh0cW16Wm9pVWxnNkEyc2JOemlReWhZMmg3blpjZ1JkR0ZBemllT293dkhiSE92YXNiTHRhRGQ?oc=5",
+      "published_at": "Wed, 18 Nov 2026 11:24:51 GMT",
       "publisher": "연합뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:정상회담",
-      "title": "대만 \"미·중·러 정상회담 앞두고 美와 긴밀히 소통\"",
-      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNWVIxN212OUp6N0NjLW5USkpGNVZFeWJseFA2VVhPenU1RTlnUkZGY29ocFFtdG90X0VCWG9QYXRJMHdhUTloN2VuakdOeEhkdEpkOUE5dW1LWE8zTGF0enVEWlZuaGozMmRiXzBIRW50T1BqQ3RIVXhGMUItbjdSeWpUTGZLVnhsQXlmQTJkSEQ3MlVJNUVxa2pYUnJEdw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 08:44:55 GMT",
-      "publisher": "조선일보",
+      "topic": "dynamic:규제",
+      "title": "말레이시아, 美 AI 칩 규제 준수 방침…117개 사업에 통보",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNQm9uODhnQ2c3YTBEVXhjX1NVZjRVV1c5WXkxdWJjY1JNNDJ5NGNrTGVTV2JRVG5sU1QwZW9yOExYYjJZbTZDbEFLZV8wdEp2TnEyNlFQQjZyc3dSel9UbmprcGhWYWlqLWdSMzJuLXRFR180RXpoclgxMklxaG4yZUItb0FibVpW?oc=5",
+      "published_at": "Wed, 18 Nov 2026 16:00:00 GMT",
+      "publisher": "글로벌이코노믹",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:협상",
-      "title": "COP31 폐막 D-2…화석연료 퇴출·기후재원 협상 막판 진통",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE9xNHZSRWRBNkhsbUVnRUZrdGpOTDVkY1ZXMHFiV2NKWVhLeU8tcEE3czdJbDR3WDV5ZHdMZ1VCbWFfUTNKX2lqOUg4ZWtveFFPX2FYVS15RWhzV3U0Z3c?oc=5",
-      "published_at": "Wed, 18 Nov 2026 07:10:03 GMT",
-      "publisher": "기후에너지데이터뱅크",
+      "topic": "dynamic:규제",
+      "title": "[중국증시-마감] 美 대중국 기술규제 강화 우려 속 혼조",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9POERuRjR6LWZoc0Vpd0l3NU9FRUpobmU3Q3FkOTBITVZQVXdpSVVWWW12SVlHTlprRW9yNHVwSXQ1S0pHbG1OSVFVWDNNSDNaODVCVVlSbmxDR2p6SnZIQVlFQ0cxei1wV2EwQ0JHdjI?oc=5",
+      "published_at": "Wed, 18 Nov 2026 07:25:46 GMT",
+      "publisher": "연합인포맥스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:협상",
-      "title": "\"카드수수료 협상권 달라\"…마트협회 등 규탄 기자회견",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE80SnR3Y0JYanh5YmJTamFrdHlPc1o5WVNOOURWa3pnLUhKWHJOOURmcEhPQkp5TUh0bm9iazNsTWx4XzVUYVZ5OGNBenAzSm9pNE1saVhWN0xLT3VfaGpJTw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 06:43:29 GMT",
-      "publisher": "뉴스토마토",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:협상",
-      "title": "경제계 \"한중 FTA 서비스·투자협상 타결 환영…새로운 기회\"(종합)",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBGVjlmLW9GWFIwdjVsOWZvYkFybFNRNTU3TVB4VzJJdVpGRHBiUklyQjZ2aUpZS0JLX2hSTjA0ZC10WnVXaFN1djVsSTFDR2tGSDdJcURHNzRuYllMeklMQ9IBYEFVX3lxTFBGVjlmLW9GWFIwdjVsOWZvYkFybFNRNTU3TVB4VzJJdVpGRHBiUklyQjZ2aUpZS0JLX2hSTjA0ZC10WnVXaFN1djVsSTFDR2tGSDdJcURHNzRuYllMeklMQw?oc=5",
-      "published_at": "Wed, 18 Nov 2026 08:14:18 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:협상",
-      "title": "게임·영화·여행업 등 혜택…한중 FTA 서비스·투자 후속협상",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE40d0Q4TmQydWh1Z29mdHlBUVQzVUQtUU9lZUtfWFNiaUVVWktYbVF6ZkJsamh4UDBWTkYzNzUwY0kyd0FVYWFSUkhRX2NsdXZyalQzZTQwQjVpdlh0Tzk5LUptUlZMQ203V0NqOE1NVnI?oc=5",
-      "published_at": "Wed, 18 Nov 2026 14:30:40 GMT",
-      "publisher": "코리아리포트",
+      "topic": "dynamic:규제",
+      "title": "엔비디아, 중국에 AI 반도체 H200 공급 중단…美 수출 규제 강화 여파",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBGWmt3MWNEd18zVlIwWW5Lal81S2VlVEFwekVVNXBMWTFlUjdVZktyX3ZhWWdkLUhUdW51WkkydndhYlVIS1NCeHRna0hxY0VP?oc=5",
+      "published_at": "Wed, 18 Nov 2026 05:12:19 GMT",
+      "publisher": "블루밍비트",
       "discovery_source": "google_news_rss"
     }
   ],
@@ -2577,78 +2541,96 @@
     "한국 증시 오늘 새 공시 수주 계약 정책 변화",
     "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
     "정상회담 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "FTA 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "시진핑 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "타결 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "FTA 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "타결 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "서비스 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "한중 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
   ],
   "dynamic_query_terms": [
-    "FTA",
-    "타결",
-    "시진핑",
-    "서비스",
-    "AI",
-    "한중",
     "정상회담",
-    "협상"
+    "FTA",
+    "시진핑",
+    "타결",
+    "AI",
+    "서비스",
+    "한중",
+    "규제"
   ],
   "hot_topic_candidates": [
     {
       "term": "정상회담",
-      "count": 32,
-      "publisher_count": 22,
-      "independent_story_count_estimate": 29,
-      "syndication_ratio_estimate": 0.094,
+      "count": 34,
+      "publisher_count": 23,
+      "independent_story_count_estimate": 31,
+      "syndication_ratio_estimate": 0.088,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 17,
-      "delta": 15,
-      "score": 101,
+      "previous_count": 32,
+      "delta": 2,
+      "score": 93,
       "examples": [
         "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
-        "李대통령-시진핑, 中 선전서 세번째 정상회담⋯韓中 협력확대 논의",
-        "[속보] 이 대통령, 중국 선전서 시진핑과 정상회담 시작"
+        "[속보] 이 대통령, 중국 선전서 시진핑과 정상회담 시작",
+        "李대통령-시진핑, 中 선전서 세번째 정상회담⋯韓中 협력확대 논의"
       ],
-      "article_velocity": 15,
-      "hot_score": 223
-    },
-    {
-      "term": "FTA",
-      "count": 31,
-      "publisher_count": 26,
-      "independent_story_count_estimate": 23,
-      "syndication_ratio_estimate": 0.258,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 28,
-      "delta": 3,
-      "score": 91,
-      "examples": [
-        "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
-        "李대통령-시진핑, 선전서 정상회담...FTA 타결 계기 협력 강화",
-        "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나"
-      ],
-      "article_velocity": 3,
-      "hot_score": 164
+      "article_velocity": 2,
+      "hot_score": 181
     },
     {
       "term": "시진핑",
-      "count": 31,
+      "count": 32,
       "publisher_count": 22,
-      "independent_story_count_estimate": 29,
-      "syndication_ratio_estimate": 0.065,
+      "independent_story_count_estimate": 30,
+      "syndication_ratio_estimate": 0.062,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 24,
-      "delta": 7,
-      "score": 91,
+      "previous_count": 31,
+      "delta": 1,
+      "score": 87,
       "examples": [
         "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
         "시진핑 만난 이 대통령…한국 없는 3자 회담 ‘북핵 의제’ 대비",
         "이 대통령 “한반도 안정 양국 공동이익” 시진핑 “지역평화에 더 큰 기여”…중국 선전서 세번째 정상회담"
       ],
-      "article_velocity": 7,
-      "hot_score": 190
+      "article_velocity": 1,
+      "hot_score": 170
+    },
+    {
+      "term": "FTA",
+      "count": 30,
+      "publisher_count": 25,
+      "independent_story_count_estimate": 22,
+      "syndication_ratio_estimate": 0.267,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 31,
+      "delta": -1,
+      "score": 85,
+      "examples": [
+        "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
+        "李대통령-시진핑, 선전서 정상회담...FTA 타결 계기 협력 강화",
+        "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나"
+      ],
+      "article_velocity": 0,
+      "hot_score": 146
+    },
+    {
+      "term": "AI",
+      "count": 29,
+      "publisher_count": 23,
+      "independent_story_count_estimate": 29,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 26,
+      "delta": 3,
+      "score": 84,
+      "examples": [
+        "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
+        "미국의 해외 AI 데이터센터 규제가 한국 반도체도 위협, 미국 기업의 '중국 수요 대체'가 관건",
+        "AI 규제 대응 플랫폼 코딧, 신보 ‘퍼스트펭귄’ 선정"
+      ],
+      "article_velocity": 3,
+      "hot_score": 174
     },
     {
       "term": "타결",
@@ -2657,124 +2639,88 @@
       "independent_story_count_estimate": 21,
       "syndication_ratio_estimate": 0.276,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 27,
-      "delta": 2,
-      "score": 84,
+      "previous_count": 29,
+      "delta": 0,
+      "score": 82,
       "examples": [
         "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
         "李대통령-시진핑, 선전서 정상회담...FTA 타결 계기 협력 강화",
         "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나"
       ],
-      "article_velocity": 2,
-      "hot_score": 148
-    },
-    {
-      "term": "AI",
-      "count": 26,
-      "publisher_count": 21,
-      "independent_story_count_estimate": 26,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": 7,
-      "score": 80,
-      "examples": [
-        "[N2 모닝 경제 브리핑-11월 18일] 美 증시, 엔비디아 실적 앞두고 AI 불안 확산…3대 지수 일제히 하락",
-        "AI 규제 대응 플랫폼 코딧, 신보 ‘퍼스트펭귄’ 선정",
-        "미국의 해외 AI 데이터센터 규제가 한국 반도체도 위협, 미국 기업의 '중국 수요 대체'가 관건"
-      ],
-      "article_velocity": 7,
-      "hot_score": 174
+      "article_velocity": 0,
+      "hot_score": 140
     },
     {
       "term": "서비스",
-      "count": 25,
-      "publisher_count": 20,
-      "independent_story_count_estimate": 17,
-      "syndication_ratio_estimate": 0.32,
+      "count": 24,
+      "publisher_count": 19,
+      "independent_story_count_estimate": 16,
+      "syndication_ratio_estimate": 0.333,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 24,
-      "delta": 1,
-      "score": 71,
+      "previous_count": 25,
+      "delta": -1,
+      "score": 67,
       "examples": [
         "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나",
         "이 대통령-시진핑 주석, 한·중 정삼회담…FTA 서비스·투자 협정 타결",
         "李·시진핑, FTA 서비스·투자 협상 타결 계기 경제협력 확대"
       ],
-      "article_velocity": 1,
-      "hot_score": 120
+      "article_velocity": 0,
+      "hot_score": 110
     },
     {
       "term": "한중",
-      "count": 23,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 21,
-      "syndication_ratio_estimate": 0.087,
+      "count": 22,
+      "publisher_count": 17,
+      "independent_story_count_estimate": 20,
+      "syndication_ratio_estimate": 0.091,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 17,
-      "delta": 6,
-      "score": 70,
+      "previous_count": 23,
+      "delta": -1,
+      "score": 61,
       "examples": [
-        "李대통령, 한중 회담서 \"판다처럼 양국 마음 열어주는 일 계속되길\"",
         "FTA 추가 타결·한한령 해제 수순…李대통령 \"한중 기업, 상호 진출 노력\"(종합)",
-        "한중 34분간 정상회담…\"한반도 안정, 양국 공동이익\""
+        "한중 34분간 정상회담…\"한반도 안정, 양국 공동이익\"",
+        "李대통령, 한중 회담서 \"판다처럼 양국 마음 열어주는 일 계속되길\""
       ],
-      "article_velocity": 6,
-      "hot_score": 146
+      "article_velocity": 0,
+      "hot_score": 116
     },
     {
       "term": "규제",
-      "count": 16,
-      "publisher_count": 14,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.125,
+      "count": 18,
+      "publisher_count": 16,
+      "independent_story_count_estimate": 16,
+      "syndication_ratio_estimate": 0.111,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 16,
-      "score": 62,
+      "previous_count": 16,
+      "delta": 2,
+      "score": 54,
       "examples": [
         "한·EU 산업계 \"녹색전환 규제 상호인정 확대해야\"",
         "장동혁 \"낡은 제도가 혁신 발목 잡지 않도록…비현실적 규제 혁파\"",
         "AI 규제 대응 플랫폼 코딧, 신보 ‘퍼스트펭귄’ 선정"
       ],
-      "article_velocity": 16,
-      "hot_score": 150
+      "article_velocity": 2,
+      "hot_score": 106
     },
     {
       "term": "협상",
       "count": 17,
-      "publisher_count": 15,
-      "independent_story_count_estimate": 13,
-      "syndication_ratio_estimate": 0.235,
+      "publisher_count": 14,
+      "independent_story_count_estimate": 12,
+      "syndication_ratio_estimate": 0.294,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 2,
-      "score": 51,
+      "previous_count": 17,
+      "delta": 0,
+      "score": 48,
       "examples": [
-        "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나",
         "선전서 잇단 회동 나선 트럼프…무역도 안보도 협상 테이블에",
+        "한·중 정상 “FTA 서비스·투자 협상 타결”…한한령 빗장 풀리나",
         "中서 트럼프 만난 멕시코 대통령 \"무역 협상 큰 진전 있어\""
       ],
-      "article_velocity": 2,
-      "hot_score": 94
-    },
-    {
-      "term": "한반도",
-      "count": 12,
-      "publisher_count": 10,
-      "independent_story_count_estimate": 11,
-      "syndication_ratio_estimate": 0.083,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 12,
-      "score": 46,
-      "examples": [
-        "이 대통령, 동아시아 정상회의 첫 참석…한반도 평화에 관심·협력 당부",
-        "APEC : 이재명·시진핑, 세 번째 정상회담 종료…한반도 평화부터 판다까지",
-        "이 대통령 “한반도 안정 양국 공동이익” 시진핑 “지역평화에 더 큰 기여”…중국 선전서 세번째 정상회담"
-      ],
-      "article_velocity": 12,
-      "hot_score": 113
+      "article_velocity": 0,
+      "hot_score": 81
     },
     {
       "term": "트럼프",
@@ -2783,34 +2729,52 @@
       "independent_story_count_estimate": 15,
       "syndication_ratio_estimate": 0.062,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 1,
-      "score": 45,
+      "previous_count": 16,
+      "delta": 0,
+      "score": 44,
       "examples": [
         "트럼프·카니, 中서 예정에 없던 회담…무역협정 논의",
         "푸틴, 트럼프·시진핑 회담 앞두고 \"서방 대러제재는 실패\"",
         "정부는 아직 아니라는데…트럼프 또 “韓, LNG 대대적 투자”"
       ],
-      "article_velocity": 1,
-      "hot_score": 89
+      "article_velocity": 0,
+      "hot_score": 85
     },
     {
       "term": "달러",
-      "count": 15,
-      "publisher_count": 11,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.067,
+      "count": 16,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 15,
+      "syndication_ratio_estimate": 0.062,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 3,
-      "score": 44,
+      "previous_count": 15,
+      "delta": 1,
+      "score": 42,
       "examples": [
         "스팩 버토 애퀴지션, 원자력 기술 기업 암페라와 합병 계약… 기업가치 9억 달러",
         "'5000억 달러' 수출 눈앞 'K-반도체'…美 통상 압박 '제2의 일본' 되나",
         "연간 수출 5000억 달러 눈앞 ‘K-반도체’…美 통상 압박 ‘제2의 일본’ 우려 고개"
       ],
-      "article_velocity": 3,
-      "hot_score": 91
+      "article_velocity": 1,
+      "hot_score": 83
+    },
+    {
+      "term": "협력",
+      "count": 12,
+      "publisher_count": 10,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.25,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 12,
+      "delta": 0,
+      "score": 34,
+      "examples": [
+        "이 대통령, 동아시아 정상회의 첫 참석…한반도 평화에 관심·협력 당부",
+        "李대통령, 中 시진핑과 정상회담…호혜적 경제 협력 강조",
+        "이 대통령, 오늘 시진핑 주석과 정상회담…\"한반도 평화·안정 협력 논의\""
+      ],
+      "article_velocity": 0,
+      "hot_score": 59
     }
   ],
   "sector_selection": {
