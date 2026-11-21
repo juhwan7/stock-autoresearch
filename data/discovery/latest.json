@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-21T15:21:14.078447+09:00",
+  "generated_at": "2026-11-21T15:31:20.267573+09:00",
   "purpose": "10분 비AI 시장·뉴스 단서 센서. :00/:30 A/B Supervisor의 탐색 힌트이며 사실 확정 엔진이 아님.",
   "source_status": {
     "google_news:kr_market_broad": {
@@ -14,12 +14,13 @@
       "auto_repair": null
     },
     "google_news:kr_corporate_events": {
-      "status": "error",
-      "error": "HTTPError"
+      "status": "ok",
+      "count": 2,
+      "auto_repair": "retry_without_when_filter"
     },
     "google_news:kr_policy_economy": {
       "status": "ok",
-      "count": 19,
+      "count": 20,
       "auto_repair": null
     },
     "google_news:kr_diplomacy_summit": {
@@ -28,9 +29,8 @@
       "auto_repair": null
     },
     "google_news:kr_semiconductor_ai": {
-      "status": "ok",
-      "count": 11,
-      "auto_repair": null
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:kr_energy_power": {
       "status": "ok",
@@ -54,7 +54,7 @@
     },
     "google_news:global_diplomacy_summit": {
       "status": "ok",
-      "count": 20,
+      "count": 19,
       "auto_repair": null
     },
     "google_news:us_macro_rates": {
@@ -102,35 +102,35 @@
       "count": 10,
       "term": "트럼프"
     },
+    "google_news:dynamic:한반도": {
+      "status": "ok",
+      "count": 11,
+      "term": "한반도"
+    },
     "google_news:dynamic:울산": {
       "status": "ok",
       "count": 15,
       "term": "울산"
     },
+    "google_news:dynamic:데이터센터": {
+      "status": "ok",
+      "count": 20,
+      "term": "데이터센터"
+    },
     "google_news:dynamic:폭락": {
       "status": "ok",
-      "count": 10,
+      "count": 11,
       "term": "폭락"
-    },
-    "google_news:dynamic:나스닥": {
-      "status": "ok",
-      "count": 8,
-      "term": "나스닥"
     },
     "google_news:dynamic:방문": {
       "status": "ok",
       "count": 16,
       "term": "방문"
     },
-    "google_news:dynamic:한반도": {
-      "status": "ok",
-      "count": 12,
-      "term": "한반도"
-    },
-    "google_news:dynamic:데이터센터": {
-      "status": "ok",
-      "count": 20,
-      "term": "데이터센터"
+    "google_news:dynamic:대응": {
+      "status": "error",
+      "error": "HTTPError",
+      "term": "대응"
     },
     "naver_news_api": {
       "status": "needs_credentials"
@@ -153,8 +153,8 @@
     }
   },
   "source_summary": {
-    "ok_or_partial": 20,
-    "failed": 1,
+    "ok_or_partial": 19,
+    "failed": 2,
     "degraded": 6
   },
   "naver_indices": {
@@ -164,36 +164,51 @@
   },
   "topic_counts": {
     "kr_market_flow": 1,
-    "kr_policy_economy": 19,
+    "kr_corporate_events": 2,
+    "kr_policy_economy": 20,
     "kr_diplomacy_summit": 24,
-    "kr_semiconductor_ai": 11,
     "kr_energy_power": 2,
     "kr_bio_health": 2,
     "global_market": 27,
-    "global_diplomacy_summit": 20,
+    "global_diplomacy_summit": 19,
     "us_macro_rates": 1,
     "us_china_trade_ai": 3,
     "europe_debt_ecb": 1,
     "dynamic:AI": 20,
     "dynamic:트럼프": 9,
-    "dynamic:울산": 10,
-    "dynamic:폭락": 8,
-    "dynamic:나스닥": 2,
-    "dynamic:방문": 7,
     "dynamic:한반도": 8,
-    "dynamic:데이터센터": 7
+    "dynamic:울산": 10,
+    "dynamic:데이터센터": 10,
+    "dynamic:폭락": 8,
+    "dynamic:방문": 6
   },
   "trending_terms": [
     {
-      "term": "AI",
-      "count": 40,
-      "publisher_count": 34,
-      "independent_story_count_estimate": 36,
-      "syndication_ratio_estimate": 0.1,
+      "term": "대통령",
+      "count": 38,
+      "publisher_count": 28,
+      "independent_story_count_estimate": 31,
+      "syndication_ratio_estimate": 0.184,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 41,
-      "delta": -1,
-      "score": 114,
+      "previous_count": 37,
+      "delta": 1,
+      "score": 105,
+      "examples": [
+        "이재명 대통령, 한-캐나다 정상 회동 상세보기|2026년 정상 외교활동",
+        "APEC 마친 이 대통령…\"한반도 현안 주도적 해결\"",
+        "미중러 '한반도' 셈법 주시...이 대통령 \"국제정세 파장 철저 대비\""
+      ]
+    },
+    {
+      "term": "AI",
+      "count": 36,
+      "publisher_count": 30,
+      "independent_story_count_estimate": 32,
+      "syndication_ratio_estimate": 0.111,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 40,
+      "delta": -4,
+      "score": 102,
       "examples": [
         "'경품 규제'의 나비효과, 광고비 1.4조원에서 AI 보호 공백까지",
         "이 대통령 \"AI 환경 맞춰 국가시험 전면 개편\"",
@@ -202,50 +217,18 @@
     },
     {
       "term": "트럼프",
-      "count": 37,
-      "publisher_count": 30,
-      "independent_story_count_estimate": 29,
-      "syndication_ratio_estimate": 0.216,
+      "count": 36,
+      "publisher_count": 28,
+      "independent_story_count_estimate": 28,
+      "syndication_ratio_estimate": 0.222,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 28,
-      "delta": 9,
-      "score": 113,
+      "previous_count": 37,
+      "delta": -1,
+      "score": 100,
       "examples": [
         "트럼프 새 규제 불똥?…AI칩 빗장에 주가 7% 급락",
-        "트럼프 \"구형 AI 반도체만 중국에 판매\"…해외 데이터센터도 허가 대상",
-        "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려"
-      ]
-    },
-    {
-      "term": "대통령",
-      "count": 37,
-      "publisher_count": 27,
-      "independent_story_count_estimate": 30,
-      "syndication_ratio_estimate": 0.189,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 41,
-      "delta": -4,
-      "score": 101,
-      "examples": [
-        "이재명 대통령, 한-캐나다 정상 회동 상세보기|2026년 정상 외교활동",
-        "APEC 마친 이 대통령…\"한반도 현안 주도적 해결\"",
-        "이재명 대통령, 아세안·APEC 순방 \"한중 경제협력 확대 논의\""
-      ]
-    },
-    {
-      "term": "한반도",
-      "count": 21,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.333,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 6,
-      "score": 66,
-      "examples": [
-        "APEC 마친 이 대통령…\"한반도 현안 주도적 해결\"",
-        "미중러 '한반도' 셈법 주시...이 대통령 \"국제정세 파장 철저 대비\"",
-        "이 대통령 “한반도 운명은 우리가 주도”…미·중·러 정상회담에 자주외교 강조"
+        "트럼프 \"미·중·러 정상회담 전례 없는 역사적 만남…핵전쟁 막기로 합의\"",
+        "미중러 선언 '북핵' 끝내 배제ᆢ트럼프 독자제재 정지 권한땐 韓, 최악 핵위협 상황 도래"
       ]
     },
     {
@@ -260,40 +243,40 @@
       "score": 63,
       "examples": [
         "‘울산 메가’ 직접 챙긴 이 대통령 “지방 중심 AI 투자로 균형 발전”",
-        "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문",
-        "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]"
+        "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]",
+        "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문"
+      ]
+    },
+    {
+      "term": "한반도",
+      "count": 20,
+      "publisher_count": 17,
+      "independent_story_count_estimate": 12,
+      "syndication_ratio_estimate": 0.4,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 21,
+      "delta": -1,
+      "score": 57,
+      "examples": [
+        "APEC 마친 이 대통령…\"한반도 현안 주도적 해결\"",
+        "미중러 '한반도' 셈법 주시...이 대통령 \"국제정세 파장 철저 대비\"",
+        "이 대통령 “한반도 운명은 우리가 주도”…미·중·러 정상회담에 자주외교 강조"
       ]
     },
     {
       "term": "데이터센터",
-      "count": 20,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 15,
-      "syndication_ratio_estimate": 0.25,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 16,
-      "delta": 4,
-      "score": 62,
-      "examples": [
-        "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
-        "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?",
-        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도"
-      ]
-    },
-    {
-      "term": "폭락",
       "count": 19,
-      "publisher_count": 14,
+      "publisher_count": 17,
       "independent_story_count_estimate": 15,
       "syndication_ratio_estimate": 0.211,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": 0,
-      "score": 52,
+      "previous_count": 20,
+      "delta": -1,
+      "score": 55,
       "examples": [
-        "오늘의 키워드 | 코스피 5.21% 폭락·수능 AI 부정행위 파문…수출 1조 달러·빅뱅 컴백까지",
-        "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
-        "나스닥, 기술주 매도에 5.3% 폭락…다우·S&P500도 조정 진입"
+        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도",
+        "트럼프 “美기업, 해외 데이터센터 지으면 막대한 세금·제재”…젠슨 황 복귀도 공개 촉구",
+        "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문"
       ]
     },
     {
@@ -308,36 +291,20 @@
       "score": 48,
       "examples": [
         "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문",
-        "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
-        "李 울산 AI 데이터센터 건설 현장 방문…\"인력 부족 문제 정부에서 고민 많이 할 것\""
+        "李 울산 AI 데이터센터 건설 현장 방문…\"인력 부족 문제 정부에서 고민 많이 할 것\"",
+        "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”"
       ]
     },
     {
-      "term": "대응",
-      "count": 11,
-      "publisher_count": 11,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.545,
+      "term": "폭락",
+      "count": 17,
+      "publisher_count": 13,
+      "independent_story_count_estimate": 13,
+      "syndication_ratio_estimate": 0.235,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 11,
-      "score": 44,
-      "examples": [
-        "한국표준협회, 탄소 규제 대응 세미나 개최…온실가스 검증 전략 공유",
-        "표준협회, 고객사의 탄소 규제 대응 지원 위한 무료 세미나 개최",
-        "트럼프 “미·중·러 정상회담서 ‘한반도 위험’ 대응 논의했다”"
-      ]
-    },
-    {
-      "term": "나스닥",
-      "count": 15,
-      "publisher_count": 11,
-      "independent_story_count_estimate": 11,
-      "syndication_ratio_estimate": 0.267,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 16,
-      "delta": -1,
-      "score": 41,
+      "previous_count": 19,
+      "delta": -2,
+      "score": 47,
       "examples": [
         "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
         "나스닥, 기술주 매도에 5.3% 폭락…다우·S&P500도 조정 진입",
@@ -351,8 +318,8 @@
       "independent_story_count_estimate": 9,
       "syndication_ratio_estimate": 0.25,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": -2,
+      "previous_count": 12,
+      "delta": 0,
       "score": 36,
       "examples": [
         "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]",
@@ -361,66 +328,34 @@
       ]
     },
     {
-      "term": "정상회담서",
-      "count": 9,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 3,
-      "syndication_ratio_estimate": 0.667,
+      "term": "나스닥",
+      "count": 13,
+      "publisher_count": 10,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.308,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 9,
+      "previous_count": 15,
+      "delta": -2,
       "score": 36,
       "examples": [
-        "美 \"시진핑, 정상회담서 반도체 수출통제 거론 안 해\"…中 보복 근거 없어\"",
-        "트럼프 “미·중·러 정상회담서 ‘한반도 위험’ 대응 논의했다”",
-        "트럼프 \"미·중·러 정상회담서 한반도 위험 대응 논의\""
+        "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
+        "나스닥, 기술주 매도에 5.3% 폭락…다우·S&P500도 조정 진입",
+        "나스닥, 기술주 매도에 5.3% 폭락…비트코인·금도 와르르"
       ]
     },
     {
-      "term": "논의",
-      "count": 9,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.444,
+      "term": "대응",
+      "count": 11,
+      "publisher_count": 11,
+      "independent_story_count_estimate": 4,
+      "syndication_ratio_estimate": 0.636,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 9,
-      "score": 36,
+      "previous_count": 11,
+      "delta": 0,
+      "score": 33,
       "examples": [
-        "이재명 대통령, 아세안·APEC 순방 \"한중 경제협력 확대 논의\"",
-        "[정치 이슈] 이재명 대통령, ASEAN·APEC 참석…시진핑과 경제·안보 협력 논의",
-        "트럼프 \"미·중·러 정상회담서 한반도 위험 대응 논의\""
-      ]
-    },
-    {
-      "term": "미중러",
-      "count": 12,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.333,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 9,
-      "delta": 3,
-      "score": 35,
-      "examples": [
-        "미중러 '한반도' 셈법 주시...이 대통령 \"국제정세 파장 철저 대비\"",
-        "순방 마친 李 “미중러 상대 선제적 능동적 외교 전개했다” 자평",
-        "미중러 선언 '북핵' 끝내 배제ᆢ트럼프 독자제재 정지 권한땐 韓, 최악 핵위협 상황 도래"
-      ]
-    },
-    {
-      "term": "위험",
-      "count": 9,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 3,
-      "syndication_ratio_estimate": 0.667,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 9,
-      "score": 35,
-      "examples": [
-        "트럼프 추가 관세 위험, 전기기기서 차·부품으로···KIEP “투자 이행 기준 정해야”",
-        "트럼프 “미·중·러 정상회담서 ‘한반도 위험’ 대응 논의했다”",
+        "한국표준협회, 탄소 규제 대응 세미나 개최…온실가스 검증 전략 공유",
+        "표준협회, 고객사의 탄소 규제 대응 지원 위한 무료 세미나 개최",
         "트럼프 \"미·중·러 정상회담서 한반도 위험 대응 논의\""
       ]
     },
@@ -431,29 +366,29 @@
       "independent_story_count_estimate": 8,
       "syndication_ratio_estimate": 0.273,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": -1,
+      "previous_count": 11,
+      "delta": 0,
       "score": 32,
       "examples": [
         "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]",
         "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
-        "李대통령 \"AI데이터센터·메모리 수요 더 늘 것…속도가 생명\"(종합)"
+        "李, 울산 SK AI데이터센터 방문‥\"국가 경쟁 위해 속도전이 핵심\""
       ]
     },
     {
-      "term": "수출",
-      "count": 10,
-      "publisher_count": 10,
-      "independent_story_count_estimate": 10,
+      "term": "규제",
+      "count": 8,
+      "publisher_count": 8,
+      "independent_story_count_estimate": 8,
       "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 9,
-      "delta": 1,
-      "score": 31,
+      "previous_count": 0,
+      "delta": 8,
+      "score": 32,
       "examples": [
-        "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
-        "美, 중국에 AI반도체 88만개 수출 승인…첨단 반도체 통제 논란",
-        "오늘의 키워드 | 코스피 5.21% 폭락·수능 AI 부정행위 파문…수출 1조 달러·빅뱅 컴백까지"
+        "좋은 일도 규제가 막는다 [이런 규제, 이상하지 않나요?]",
+        "한국표준협회, 탄소 규제 대응 세미나 개최…온실가스 검증 전략 공유",
+        "캐피탈사 렌탈 규제 완화 추진..렌터카 시장 경쟁구도 바뀌나"
       ]
     },
     {
@@ -463,29 +398,77 @@
       "independent_story_count_estimate": 8,
       "syndication_ratio_estimate": 0.2,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 9,
-      "delta": 1,
-      "score": 31,
+      "previous_count": 10,
+      "delta": 0,
+      "score": 30,
       "examples": [
-        "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
         "SK, 울산서 AI 데이터센터 15GW 구상 첫발…성패 가를 변수는",
+        "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
         "李, 울산 SK AI데이터센터 방문‥\"국가 경쟁 위해 속도전이 핵심\""
       ]
     },
     {
-      "term": "달러",
-      "count": 10,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 10,
-      "syndication_ratio_estimate": 0.0,
+      "term": "미중러",
+      "count": 11,
+      "publisher_count": 7,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.273,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 9,
-      "delta": 1,
+      "previous_count": 12,
+      "delta": -1,
       "score": 29,
       "examples": [
+        "미중러 '한반도' 셈법 주시...이 대통령 \"국제정세 파장 철저 대비\"",
+        "순방 마친 李 “미중러 상대 선제적 능동적 외교 전개했다” 자평",
+        "미중러 선언 '북핵' 끝내 배제ᆢ트럼프 독자제재 정지 권한땐 韓, 최악 핵위협 상황 도래"
+      ]
+    },
+    {
+      "term": "시진핑",
+      "count": 7,
+      "publisher_count": 7,
+      "independent_story_count_estimate": 7,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 7,
+      "score": 28,
+      "examples": [
+        "이재명 대통령 시진핑 주석 한·중 정상회담 \"FTA 서비스·투자 협상 타결 계기 경제협력 확대,한반도 긴장완화 중국 건설적 역할\"",
+        "[선전 APEC 특별결산 2 | 인문자의 시진핑 APEC 외교 이야기 | 인간·문화·자연] 시진핑의 환대, 그 뒤의 국익 계산… 중국의 호의보다 필요를 읽어라",
+        "美 \"시진핑, 정상회담서 반도체 수출통제 거론 안 해\"…中 보복 근거 없어\""
+      ]
+    },
+    {
+      "term": "반도체",
+      "count": 7,
+      "publisher_count": 7,
+      "independent_story_count_estimate": 7,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 7,
+      "score": 28,
+      "examples": [
+        "美 반도체 수출규제 전면 확대…삼성, 中 AI칩 출하 중단",
         "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
-        "오늘의 키워드 | 코스피 5.21% 폭락·수능 AI 부정행위 파문…수출 1조 달러·빅뱅 컴백까지",
-        "숫자로 보는 '수출 1조 달러'…1달러 지폐로 지구 3897바퀴"
+        "앤트로픽 쏠림·대중규제 우려 … 반도체株 곤두박질"
+      ]
+    },
+    {
+      "term": "강조",
+      "count": 7,
+      "publisher_count": 7,
+      "independent_story_count_estimate": 7,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 7,
+      "score": 28,
+      "examples": [
+        "이 대통령 “한반도 운명은 우리가 주도”…미·중·러 정상회담에 자주외교 강조",
+        "유엔 제3위원회, 북한인권결의 채택…‘디지털 억압’ 첫 우려·남북대화도 강조",
+        "시진핑, 아시아태평양 정상들과 연쇄 회담…AI·디지털·에너지 협력 강조"
       ]
     },
     {
@@ -495,13 +478,29 @@
       "independent_story_count_estimate": 9,
       "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 8,
-      "delta": 1,
-      "score": 28,
+      "previous_count": 9,
+      "delta": 0,
+      "score": 27,
       "examples": [
         "최경환 \"이재명 대출 규제는미친 규제입니다\" / 최경환 前 경제부총리 [굿모닝 대한민국]",
         "이재명 대통령, 한-캐나다 정상 회동 상세보기|2026년 정상 외교활동",
         "이재명 대통령, 아세안·APEC 순방 \"한중 경제협력 확대 논의\""
+      ]
+    },
+    {
+      "term": "논의",
+      "count": 9,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 5,
+      "syndication_ratio_estimate": 0.444,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 9,
+      "delta": 0,
+      "score": 27,
+      "examples": [
+        "이재명 대통령, 아세안·APEC 순방 \"한중 경제협력 확대 논의\"",
+        "[정치 이슈] 이재명 대통령, ASEAN·APEC 참석…시진핑과 경제·안보 협력 논의",
+        "트럼프 \"미·중·러 정상회담서 한반도 위험 대응 논의\""
       ]
     }
   ],
@@ -510,12 +509,12 @@
   "official_web_candidates": [],
   "public_batch_market": {
     "available": false,
-    "generated_at": "2026-11-21T15:21:08.753412+09:00",
+    "generated_at": "2026-11-21T15:31:05.988894+09:00",
     "status": "unavailable",
     "provider": "naver_public",
     "exact_1m_bars": false,
     "amount_method": "cumulative_trading_value_delta",
-    "elapsed_minutes_from_previous": 10.02901565,
+    "elapsed_minutes_from_previous": 9.9539247,
     "interval_leaders": [],
     "one_minute_samples_available": false,
     "minute_amount_exact": false,
@@ -844,169 +843,105 @@
     ],
     "top10_share": null
   },
-  "item_count": 182,
+  "item_count": 173,
   "news_scan_target": 500,
   "query_group_count": 18,
-  "new_item_count": 32,
+  "new_item_count": 12,
   "new_items": [
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "이재명 대통령 시진핑 주석 한·중 정상회담 \"FTA 서비스·투자 협상 타결 계기 경제협력 확대,한반도 긴장완화 중국 건설적 역할\"",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9VTThaV3dpZmZtdFpIWnp1TU5kbVFHclNMa3NHSmMzWmhVMzlRaFJPMXlNaUFfdUExOUszN1c3THp1dWZGUmpIQnRJM0tUdjNuN0lWWQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 16:48:03 GMT",
-      "publisher": "국민뉴스",
+      "topic": "kr_corporate_events",
+      "title": "유일기술투자 등, 하나에어로 지분 46.27% 신규 보유",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1XZ2I1ZkE1eHJ2TVdRQWxCYUNRNXBzZERvai1ZVlQxZVZGbTB0S280UldnOGwtMGRvOWhoV3hNOFhQOHhhYVc4V1FRd05NOE1PeHNXQUdJWGRic2w4NG5WT1BSWHllNUg3cmk1R1ZfSldoRVk?oc=5",
+      "published_at": "Fri, 20 Nov 2026 04:12:11 GMT",
+      "publisher": "데이터투자",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_corporate_events",
+      "title": "영광YKMC,글로벌 메모리3社 생산라인 진입··\"표면처리 국내 독점적 지위기반\"",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9TRUhKcHpTdHFHUVowS2ZpM1RrWDdRbUZpQ1FwM2ZuamwtZW1wekhLUW9pSkhpb0RuWVpjRE1odEdZdWFYNWFBUjlLeDNZUWNmdjN1X2hmQ0dHSVVWZ1F3WFZJakdYSnJ1NERtYi12WkdMMGs?oc=5",
+      "published_at": "Thu, 19 Nov 2026 03:05:55 GMT",
+      "publisher": "데이터투자",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "입지 중심 지역산업정책의 구조적 한계와 추진체계 전환 방향",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPMHR4QkZWWE1LNW5PdUV1QWItZC04akZUWEdvYmlmU2ZxRklVV052Z0NaX1BVM1dyU0tTb1hPcmVfcDkyTmZBN2dQLWlWblJSNGF6TVUtVTJnaTNlNHpkZTVRd0ZJODZvb2lhdEFEaWdEN2NNbEJwV21SUzJHOU9vbA?oc=5",
+      "published_at": "Fri, 20 Nov 2026 07:58:43 GMT",
+      "publisher": "KDI 경제교육·정보센터",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "이 대통령 \"AI 환경 맞춰 국가시험 전면 개편\"",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBBZl9uRmxJb3VhcHVKdnhrYXhSdldITklVbTUxRzB6S1RlQmdoOVo1bnJabmRIQ3hmYjIyellRY3FiX0tGMlNFZXBvOURZdG5JR1J5REpnR0xzaW9FeXRIREQ4LWctMEIyak5tR05UZXN3Nklm?oc=5",
-      "published_at": "Fri, 20 Nov 2026 07:41:58 GMT",
-      "publisher": "연합뉴스 한민족센터",
+      "title": "트럼프 \"미·중·러 정상회담 전례 없는 역사적 만남…핵전쟁 막기로 합의\"",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFByY1EwVExWU0phT1p2cXhyTVdGVU9uODJvTXFtYUtuMElBbjJZdkJGSnJFUUdudGI2a05pcGNyZHBLamZhMTFISDJUXzVuMWI1cldMWUJB?oc=5",
+      "published_at": "Sat, 21 Nov 2026 00:13:55 GMT",
+      "publisher": "인터내셔널포커스",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "이 대통령, APEC서 ‘혁신·회복력·포용’ 3대 비전…“한반도 평화가 공동번영 조건”",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE4tNGhQOTRHVnFsNkdxR3FTNFlLMGEyRjRDMFhVZVhSbjFjTmxENWIxRUt3MGZDR3VKNVpWQ3EzMV9PaGVvSnFfN1ZTZnVwRlAteDBFcGRnTGFCNmFQbF9TeHhUUUtZdUE5UlE?oc=5",
-      "published_at": "Fri, 20 Nov 2026 07:47:26 GMT",
-      "publisher": "https://www.sisaworld.kr/",
+      "title": "이 대통령 “국가시험제도 A부터 Z까지 신속 개편”",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE45amI0ay1zWE1qSzBTZ0hCRTExbkIzUHoxTXhrQXVVV2J4OGgwNThvVG5ucjlWTVYydGp6UnJORGNXSmI2RUVwaUVHWnZiUWQ1VDE2T2VjTmRiZTFZblNjdlpScVgxMDRzYXpHMkJ3?oc=5",
+      "published_at": "Fri, 20 Nov 2026 06:42:25 GMT",
+      "publisher": "주간시사매거진",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "같은 순방, 다른 평가…與 “실용국익 외교” 野 “호갱·매국 외교”",
-      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5RSFQ3SGlCTUhhLWplaUVXYUp1NEY0WnA4VHh2RGhtMUVyYURPNUJHUEpVYnVuSGl2WW5MVGdET3BGdl9SaDI0cF9oZ1RwblhJM2tXWG5xWkl2NzNkcDROYmFLQQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 09:50:24 GMT",
-      "publisher": "쿠키뉴스",
+      "topic": "dynamic:AI",
+      "title": "AI 시대 인간의 판단·책임 논한다…'AI 인사이트 페스티벌'",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBfQzhGb2ZkOThMby14SjVRZ0RoZkluVUt2clJUQXBGVHF0VFdwaXdkTHF2Wm5IRFJ3U1hNTFB3dDlzY2VvSmpmcjdNSWJGVkRjaWwyc2l2ekFmMFdBSzdiQdIBYEFVX3lxTFBfQzhGb2ZkOThMby14SjVRZ0RoZkluVUt2clJUQXBGVHF0VFdwaXdkTHF2Wm5IRFJ3U1hNTFB3dDlzY2VvSmpmcjdNSWJGVkRjaWwyc2l2ekFmMFdBSzdiQQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:00:02 GMT",
+      "publisher": "연합뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "유엔 제3위원회, 북한인권결의 채택…‘디지털 억압’ 첫 우려·남북대화도 강조",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5oQzRqSUdIbTJIclJjbjRmalRsY3RkY3U1T2FlMGxHc1pDSDBXMC0tdmw0V3FJb2VTZHRJMWZ3NjU3SV9zNWJEQ3FjekVIcklRdzF3TDZLTFZNZ0M2OUlJZkduY0hkemJsR0E?oc=5",
-      "published_at": "Fri, 20 Nov 2026 08:02:31 GMT",
-      "publisher": "https://www.sisaworld.kr/",
+      "topic": "dynamic:AI",
+      "title": "앤트로픽 연구원 “AI 클로드, 수학 최대 난제 리만가설 증명” 주장",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9zaVdwbDhVa2xzMzhwMDZqd2hEbkVZSnd4M2c1WEZWQkhySkwwQ1YtQUFmVk5tNVYyUEFiWElHNnprM1FZLWdOY0EtN2ktUQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:05:55 GMT",
+      "publisher": "전자신문",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "[中선전 APEC] '2026 APEC정상 선전 전망' 채택 폐막… 사상 첫 미·중·러 회담서 '평화선언'·한중 FTA 후속협상 실질 타결",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBGeWlaVVdaSW5UOXl3ZmhoZTJqNHRSTjl0dlV1VXJ3ZzVmMmhvejEwYVJUeEpsbl9VNnRxOHM2YnY2LXRMU2Z4Zy1PQnZlU2M0TmVNcVRMaWx1R1JnQjRlVXBYOGhnSGdMQ05qb0dn?oc=5",
-      "published_at": "Fri, 20 Nov 2026 06:23:04 GMT",
-      "publisher": "폴리뉴스 Polinews",
+      "topic": "dynamic:AI",
+      "title": "韓 스트리밍 이용자, 시간당 7분 광고 수용…AI광고 거부감 낮아",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5pNXlaWXdKLXVqM0t5cDFvNGNSVWpMSnRUX0ZFeVFLUzNvbnVJNXg2Ul9nWXNCN1Z6enFtT1ZzWE9vS2VwN3dHcU5JamE3UQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:02:18 GMT",
+      "publisher": "전자신문",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_semiconductor_ai",
-      "title": "트럼프 \"구형 AI 반도체만 중국에 판매\"…해외 데이터센터도 허가 대상",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE84VzZQOWxoR3NodkpOV21xUFZoQWdoeDZ5WFQ2Y2FTRU5JVFBRX2dLRzc4aEdpUWVUSno4aHBwSEJoeTZnbmFGVW9DbEpvVm5GM1hQLUpLQTVVSzZsdjg0eVBJdUhua3dsOGJaa0g5TdIBc0FVX3lxTFBlbTluUGFRMjd3ZEJmcU5kLUwzSnMtZjd5V1FyRktkRjVneUYwSlJDX2UzdzZGV2xxTnFzZGxaT3lDck04dnF5aEppZUlyRThFRHlhQWh5Zmd6VnFDV3IxRjk0YXpXSUU0VkVneHRGTGhROEk?oc=5",
-      "published_at": "Sat, 21 Nov 2026 03:13:59 GMT",
-      "publisher": "뉴스웍스",
+      "topic": "dynamic:트럼프",
+      "title": "“트럼프, 내년 1월 전 러·우 종전 협상 타결 희망”",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE91Ymo0SEpnSzI4cDJrTnNEb3lmN1IwQ1FzYWppYld0SXhWWlVmY1VlNnFEeDRNTkRMbXVCOVpGNS1wTHRhRDNnRGxVVTdRM3U0UHBsbG56eDNyQdIBX0FVX3lxTE5rMXhzNFNHUUZxRzBTUHB2VFBhMk0zVjVWeWoxaFd6VkkwR1FYZ3cwY2RHMG1XSk0zZVVROUgzWkFGWHlhS0dUMlRSUlRnVFpQZ3RqRm13N1pnNFV3QVlr?oc=5",
+      "published_at": "Sat, 21 Nov 2026 06:21:00 GMT",
+      "publisher": "경향신문",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "global_market",
-      "title": "숫자로 보는 '수출 1조 달러'…1달러 지폐로 지구 3897바퀴",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1BQ3c4Z3NESEg3WkxEWU5PMGtXNVF1ZURFNTExeDRsQ0puMGpVOWtQazVneGZyeklBZm00dFY4N016eFlzQTBwX1NRVFlTSDRwWWdQcjBESkRtUzBiVEE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:57:51 GMT",
-      "publisher": "한국방송뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "비트코인, 유동성 압박에 5만6,000달러 아래로 급락",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBiUnd6VWNEMXFTYnJENlhhN1owYU91RTRyaUdHbllpTUFzSzJuV0psLW9sRlRkVjdFRnNBV0EzOWdDN2lrTnVvLW85NXJPVHBiVXRjVHZkMk5lOU9RTG1IQ09WaHZOQ0trTVhZS1J1cllNZ3c?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:46:00 GMT",
-      "publisher": "Investing.com 한국어",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "수출 1조 달러 축하...\"품질! 기술! 혁신!\"",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBOTjBwS0pDVUFNeTdtZ0FTV1V5RHFoVzVzMFVoMGkyZ25tbWFhdVVrczJVNkdIU3Fuc2xRRGwyT3V3eGFqcUJGeEEtNEdDOUpxOERXUTZjejU0LU9KNHc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:09:00 GMT",
+      "topic": "dynamic:트럼프",
+      "title": "트럼프 \"환상적인 미중러 관계가 미국 안전히 지켜...해외 데이터센터 지으면 세금 폭탄\"",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE8yaHBfU0pJeFpUajZNT1d6Y0RldWljM04zM0NyaUNyOHg2c09zNE5rdWFiUG9INGpzS0h0VDQySHByY0dST2RRSkxwOVNGUEtkVWpxQUs5WXNuLXNmcmk1MUxtb2RaVC1leEk3VnNoQ1FsNkdKd1E?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:39:00 GMT",
       "publisher": "YTN",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "europe_debt_ecb",
-      "title": "유로화, 금리 인상 선반영 속 미국 인플레이션이 주도할 한 주 맞아",
-      "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxPaHZld05ZLUVvYllNSEo1bEVoVFRRTzJQMUNvcjRhdFN1ZFBsNFVVamJzbk51N2MxaTJCY2lvcl92OGNmLVIwSzJhVlJwTDZZMlFJejhyWGtXMmZCZmNFVFkzWGZZbXpMZVN3eDZEb011bzU3RXRvVmtNUGFocnlWdmlOaFdmNnhhRjgwLW5HRkVfaVJQZndoUHlfZ0VTcTBJeWdmcU04X1RxMGhYcGtaVVg0Vjd2clJsRXhEYWRDMmF4Snlfa1g4a3RNSE5oSWZ4Y3ZQUWNOQlJKMTNN?oc=5",
-      "published_at": "Sat, 21 Nov 2026 00:42:09 GMT",
-      "publisher": "www.tmgm.com",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "AI 랠리 변곡점 왔나…월가 \"버블 터졌다\" vs \"반등 여지 충분\"",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFAyQXl5N1BIcUFSWEFGYkQ5MWhnZDRjeVFGVk4tc3ItMkdRVHhLZWpEMllIQmg1TldmZTZMdkhpV1dFQWFyNDZVV3EzWHRVdWlTbGdsdnpjSm93RVp0Vmg4YjhtUl9yMlp1dmZ3N2loN27SAXRBVV95cUxNWkFHTWpvaEs3c1hwYkZTakxGSTB1bTZ0eEplMFlXalpXa1l3alAwYWFYODhmWUFCRV9pTTQzanRkM3NhbEM0Z2otejJKUUd3RHNjN2FkQ1lRa1hobmpDeGd5Y3JYZkdfanFmNWM5OVE0NW9EQw?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:09:40 GMT",
-      "publisher": "연합인포맥스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "[르포] 대학 논술시험도 AI발 혼란…진동 울려 금속탐지기 조사도(종합)",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBPUmg5X3dKbVlrdEI0dy13SjZiSnQzVTI2aFRIT0g0TzVDTG85VE9mRkM1VVd5NXVEYlpYZ2tFejQtelpmbi1wWkRCTExLbUIzREVqZ2JZYURBNzDSAWBBVV95cUxNS1VGVlk3dGhCSU1ybEFhQTBtX3o1WUJpVUl6eEJuNVBMV3RpVnpMVFBHbU9KYTdiQ25XN3BsQjBfdDNoczYyRjItRktpVkY3akhqSTdrV3JsczdyUjQ0d1M?oc=5",
-      "published_at": "Sat, 21 Nov 2026 03:46:51 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "李대통령 \"AI데이터센터·메모리 수요 더 늘 것…속도가 생명\"(종합)",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1tbkpkQldyMmNNS0xKRkdyQlRnVXIxMkNPYXVpb0J3NWpGaGR0RjU2NlV0Nnlsem54Q1pxUlBqSXpRMXpaYW56LS0yNXU2S29fX3NRa2QtNlpVM1HSAWBBVV95cUxPQXJyTU1LaDJxbUxNVDVIS0NKV3Q5M3BXMVMzSUQ4eGNRXzZfanVWU2pWdDhJdjctWVRQdW00eFpKakdMRVlfTkl6TmRlT3cwQXdvdG1IVnRQWnFxU285eTk?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:08:58 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:울산",
-      "title": "SK, 울산서 AI 데이터센터 15GW 구상 첫발…성패 가를 변수는",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5xQXBLTEFNRkZvUDd2UndnU2d1OVI5RnhsdjZVOTFibkZZbG9SWUdfZi13RlNUVnBTOGZkdE9ZNkJXNjdITXNKZVZjMXBYYXA2ZHFEUzVzaG1XcFlaQ2NpWtIBYEFVX3lxTE5xQXBLTEFNRkZvUDd2UndnU2d1OVI5RnhsdjZVOTFibkZZbG9SWUdfZi13RlNUVnBTOGZkdE9ZNkJXNjdITXNKZVZjMXBYYXA2ZHFEUzVzaG1XcFlaQ2NpWg?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:24:43 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:울산",
-      "title": "이 대통령 \"울산 AI센터, 글로벌 투자 마중물 기대\"",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBwcEVGVjVTOGozaGl2OUNvSVBjOXhON01aTUVYRDJoSlI5dVBqaXBmWng0M3ZsX2N1d0xNczk2cFlXcTB0UzlVSkl6WTYwUlJLT213M2FyamdhNjJ5SVhuT0Z2c1hoTWs?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:13:00 GMT",
-      "publisher": "연합뉴스TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:울산",
-      "title": "'울산 AI데이터센터' 깜짝 방문…이 대통령 \"속도가 생명\"",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBmMXpRRzdUZWdnaTV5Vzl3RTVCQmROWVhHdUJMM2NSM3Y1TnQ5V1VZTGhUYWQ0STdqNlNRODBxdzlxSEhhRjRmVnRRMk5EV2dMbHJsQzk4ODIwVktEclNweA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:13:33 GMT",
-      "publisher": "뉴스토마토",
+      "topic": "dynamic:데이터센터",
+      "title": "이 대통령 \"AI 데이터센터, 지방 성장의 기회\"…울산서 균형발전 강조",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9UTnhpcHU1VUtsb0NjNUU5OWZpbmhYd2gxZEphY0s3eFE5MWFmc0xGcThDQ2Z3RXNkN29CQ2VZMld6elNTMWNXcXhZbTRvdDVfczVmZ2pHRzFSWTlwZkE2X3B4aE9NX0ppcHc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:43:28 GMT",
+      "publisher": "경북도민일보",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "dynamic:폭락",
-      "title": "\"금요일에 2조 샀는데\" … '검은 금요일' 버틴 개미, 美반도체 폭락에 '블랙 먼데이' 공포감",
-      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBUOGdna3dQR1c4dUFQMFRMM3oyeENwQnJTd0lkUktQc2JsV3puWkhGZGl2TzROTVhaaGI5TjBmVUU2WkFPY0ZGczY5bUJQRTdMSVRwSkxseW5uNDlKSGlnejNLaHZCZGl0QklyV0lEZEVaZDRHREQxRnZFTdIBgAFBVV95cUxQZW9XZTRwVjFvTFhLSDlPZnNQRzBScWdZUlZBRHRJcEdmY1BtQThyb2JzaVJxT3paXzR5bG9MR0Zza2E3dzBYbjVYNU5hcXVXQ3ktZUMxYV9wckU2YVRYWDlNT2lwYUptNmpBeWx5NFNvdmt0MHdfb3pQczhFLUhQNA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:27:00 GMT",
-      "publisher": "뉴데일리 경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:폭락",
-      "title": "엔비디아 주가 또 14% 폭락…거버넌스 리스크에 SEC 회계 조사설 덮쳐",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE4zWXdhOVhPRlhvQmRUeVVJS2JqdGZyQlZ5dXMwMHAtaUhlSVZocDVFaXhIelFiOEJXVkZONmxvcDdsaC0yRWVRVldqSHVrZWtvaS1iN3hyQ0RfSk5ldGhLZWhoM0tYUERfWVdEcQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 03:34:31 GMT",
-      "publisher": "ESG경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:나스닥",
-      "title": "나스닥, 기술주 매도에 5.3% 폭락…반도체주·앤트로픽 ‘직격탄’",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5GQmxnTWFIWTY1M1E3d0gteFhkbzVBdVZaXzJKRXBxdkdEQTV5eG1iNlgzdXBvX0U3elJnNlM2RGpLNjBaN21KZ0E5dTktTTJPangtVQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 23:19:00 GMT",
-      "publisher": "JTBC",
+      "title": "'7만전자·20만닉스' 전망한 전문가...\"AI 거품, 폭락 시작도 안 했다\" - 머니투데이",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE43MEdCTHJGMFd6XzlMai1GUC0tUE4zTVAzY3IzVGhRb1l4MV9VRlZ5SkZYdzNCYkx3VmZmYkR1RmRIR01MNC0tbmhfOGJUZnRZRkZyb0l0ZVlIdmxReUJSQ1BxLVdFbUZablBN0gFwQVVfeXFMTXA1ajZub0VoMXZfZDI0WmlCM1ZKbmZKRmtJTkhKc2NNS083bzZ3ZGV3TDJWTTB6bVJEUmVUb2xSeGF1eWNobUpLOEtOd1pkTjFrM3RNZjdmekZRZ19VUEFVVjJBckVwUTFEYjZTRmxYeA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:14:59 GMT",
+      "publisher": "머니투데이",
       "discovery_source": "google_news_rss"
     }
   ],
@@ -1017,6 +952,22 @@
       "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBWZDNSSnRuN3VZazZDTkFtVldCZVRONUt1ejlvX1dhOURMS21feFRTQzlpMVgyREpwU0h0MVZJN3lzVlJSQzFIemNrdHljcGxRMDB1Zy0wTWM3ZUI3dncyVFhKMmJldGF4YjgtMV9GYlNyV2c?oc=5",
       "published_at": "Fri, 20 Nov 2026 07:09:41 GMT",
       "publisher": "핀포인트뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_corporate_events",
+      "title": "유일기술투자 등, 하나에어로 지분 46.27% 신규 보유",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1XZ2I1ZkE1eHJ2TVdRQWxCYUNRNXBzZERvai1ZVlQxZVZGbTB0S280UldnOGwtMGRvOWhoV3hNOFhQOHhhYVc4V1FRd05NOE1PeHNXQUdJWGRic2w4NG5WT1BSWHllNUg3cmk1R1ZfSldoRVk?oc=5",
+      "published_at": "Fri, 20 Nov 2026 04:12:11 GMT",
+      "publisher": "데이터투자",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_corporate_events",
+      "title": "영광YKMC,글로벌 메모리3社 생산라인 진입··\"표면처리 국내 독점적 지위기반\"",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9TRUhKcHpTdHFHUVowS2ZpM1RrWDdRbUZpQ1FwM2ZuamwtZW1wekhLUW9pSkhpb0RuWVpjRE1odEdZdWFYNWFBUjlLeDNZUWNmdjN1X2hmQ0dHSVVWZ1F3WFZJakdYSnJ1NERtYi12WkdMMGs?oc=5",
+      "published_at": "Thu, 19 Nov 2026 03:05:55 GMT",
+      "publisher": "데이터투자",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1101,6 +1052,14 @@
     },
     {
       "topic": "kr_policy_economy",
+      "title": "입지 중심 지역산업정책의 구조적 한계와 추진체계 전환 방향",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPMHR4QkZWWE1LNW5PdUV1QWItZC04akZUWEdvYmlmU2ZxRklVV052Z0NaX1BVM1dyU0tTb1hPcmVfcDkyTmZBN2dQLWlWblJSNGF6TVUtVTJnaTNlNHpkZTVRd0ZJODZvb2lhdEFEaWdEN2NNbEJwV21SUzJHOU9vbA?oc=5",
+      "published_at": "Fri, 20 Nov 2026 07:58:43 GMT",
+      "publisher": "KDI 경제교육·정보센터",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
       "title": "고령농 은퇴 막는 농지거래 절벽…“규제 지역별 차등 필요”",
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE14VFpsaUgyNzdXVVNDMzBhQVktNmlrZExNMm5Sc0c1MGZ6eG0tQzVQUWlJbHl5SGc5M0tBSFdlYlRXamhVdEZrb0pEV2t1SXlfWnAtMGpodEttUQ?oc=5",
       "published_at": "Fri, 20 Nov 2026 23:00:00 GMT",
@@ -1181,14 +1140,6 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "순방 마친 李, 곧장 현안 해소 착수…연말 정국 격랑 속 숙제 산적",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5fa1ZDZ1pfa2ZWNU1JcjE2Mjd4bEwzd2xkUUZwa29jWkFEdU9zOXNnMEl3VWI0cGp3VF91M3NOck9Gd1JZM2licUVjUGQzOWNKSmx5VjI5ejhGU0tieW1qUkg2NDFXaW1wd3B3?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:31:31 GMT",
-      "publisher": "세계일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "APEC 마친 이 대통령…\"한반도 현안 주도적 해결\"",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE04OXRJdkdsTXJrckRReS1Kc0k0a3FGTFAwZWZHT1JmaVFFNmdTX1JhZFN2UjIwQklIUzkydVYzRFVnbnVMSFBPLUVpUmZjUVp4R1pkVUdJMTQ3bG5EcEJMb9IBYEFVX3lxTE04OXRJdkdsTXJrckRReS1Kc0k0a3FGTFAwZWZHT1JmaVFFNmdTX1JhZFN2UjIwQklIUzkydVYzRFVnbnVMSFBPLUVpUmZjUVp4R1pkVUdJMTQ3bG5EcEJMbw?oc=5",
       "published_at": "Fri, 20 Nov 2026 11:53:15 GMT",
@@ -1197,10 +1148,10 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "이재명 대통령, 아세안·APEC 순방 \"한중 경제협력 확대 논의\"",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5RY0xkS1ZwdEM3ZURWY1hYTXJrRVdWelltSkE0d2RTQlB0X0p6NU13Zko5QmJ0QjFxNk9YdGRuSmtkSm1zMnpjMFZHSVNZb09RdXdjdkI5MDJBeFVEVHgzLU1VUHdRN0Z0dHc?oc=5",
-      "published_at": "Fri, 20 Nov 2026 17:04:46 GMT",
-      "publisher": "데일리저널",
+      "title": "순방 마친 李, 곧장 현안 해소 착수…연말 정국 격랑 속 숙제 산적",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5fa1ZDZ1pfa2ZWNU1JcjE2Mjd4bEwzd2xkUUZwa29jWkFEdU9zOXNnMEl3VWI0cGp3VF91M3NOck9Gd1JZM2licUVjUGQzOWNKSmx5VjI5ejhGU0tieW1qUkg2NDFXaW1wd3B3?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:31:31 GMT",
+      "publisher": "세계일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1209,6 +1160,14 @@
       "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE45UTBOajVUR2FkeEE5X2RsR3pua1BJWXJKWWJfVk5yNnNTSGs4dWR1d2d1YjEwUks0LVFBd1phWGVYSzVaN0N2dE56bFpES3F1VjN3Tnh0WXhlblVEM0RxRTBZM0dtaE9rUWJ2R3YybU85THZUekE?oc=5",
       "published_at": "Fri, 20 Nov 2026 20:34:00 GMT",
       "publisher": "YTN",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "이재명 대통령, 아세안·APEC 순방 \"한중 경제협력 확대 논의\"",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5RY0xkS1ZwdEM3ZURWY1hYTXJrRVdWelltSkE0d2RTQlB0X0p6NU13Zko5QmJ0QjFxNk9YdGRuSmtkSm1zMnpjMFZHSVNZb09RdXdjdkI5MDJBeFVEVHgzLU1VUHdRN0Z0dHc?oc=5",
+      "published_at": "Fri, 20 Nov 2026 17:04:46 GMT",
+      "publisher": "데일리저널",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1253,18 +1212,18 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "순방 마친 李 “미중러 상대 선제적 능동적 외교 전개했다” 자평",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1iS2Uza1kwdk1UdTFsRm11QUVfUElGYW5ETm85Nzc2bWNEdnpBakc3d1pkZDRheXBaa2dsb3pmd1hRUmJMYm1Rd1RKMjRDbXlNUVpHN2d6VS1nZHJTcXREWE1tS191ZktLem1YSERUaTFMUVdiaFhF0gFmQVVfeXFMTThlLUI1NUtmbHBrbGhpRWc4RF80dGNyMDNxUVE5REFZaEgxaXMtX2RKVzl2U3FnRXZtODBJZXRhM2tBTlpxaUk0RnJtbnVZZF8tc0FXWUdmWmV5WGZWOGtYTUN4SURn?oc=5",
-      "published_at": "Fri, 20 Nov 2026 07:25:00 GMT",
-      "publisher": "동아일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "[정치 이슈] 이재명 대통령, ASEAN·APEC 참석…시진핑과 경제·안보 협력 논의",
       "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFByT0RERjlIY3pRck9NX1h4V3VUZERrdHF3a1hxWkFvakZIcWQxMU5qVXlYZlVpVFU2MEZ3SE81d2tHTnZpUGpyU0JabGJucEFEVlpDRzJyVFNtUjlsOThMR0dKaDlXcnhiaG54UjRR?oc=5",
       "published_at": "Fri, 20 Nov 2026 17:39:51 GMT",
       "publisher": "https://www.newfilenews.com/",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "순방 마친 李 “미중러 상대 선제적 능동적 외교 전개했다” 자평",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1iS2Uza1kwdk1UdTFsRm11QUVfUElGYW5ETm85Nzc2bWNEdnpBakc3d1pkZDRheXBaa2dsb3pmd1hRUmJMYm1Rd1RKMjRDbXlNUVpHN2d6VS1nZHJTcXREWE1tS191ZktLem1YSERUaTFMUVdiaFhF0gFmQVVfeXFMTThlLUI1NUtmbHBrbGhpRWc4RF80dGNyMDNxUVE5REFZaEgxaXMtX2RKVzl2U3FnRXZtODBJZXRhM2tBTlpxaUk0RnJtbnVZZF8tc0FXWUdmWmV5WGZWOGtYTUN4SURn?oc=5",
+      "published_at": "Fri, 20 Nov 2026 07:25:00 GMT",
+      "publisher": "동아일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1301,22 +1260,6 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "李대통령, 16~19일 필리핀·중국 순방…아세안·APEC 참석",
-      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE02MERtQ1Q2WFphSEpsbXJ0NE5LUTk4Wlg3Ml9QZ01JemQxMWJtLVpnM09CVFJEMDJHOXEyVDZSRXJTSTd4WHdoTGVlc2ZfV0s1VUU1QzYwZkRQQ2N3U2o2bk9mSQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 06:26:43 GMT",
-      "publisher": "쿠키뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "與, 이 대통령 순방 성과 부각…한한령 완화 기대",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBUU2V1aTBhb0RMZ0tSZUFLZjh4MTlCZVpWczdjZXFOTW1EeVdPLXEwX1oteTRwY2xlZ0ZSLVlwVndtLXhEMlhPOE9JNG5mWkZVY2JubkdnT2hWRmNjSzdIWE8zTml4bGZuWEVWMQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 06:32:57 GMT",
-      "publisher": "스페셜경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "이 대통령, 아세안에 ‘AI 동행’ 제안…문화창조산업까지 협력 확대",
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1lTUtzbnpNcjdmRmk0Zm5ia0Z4a3N3YkZQSmFxbml1N2dUc2dScGpMMWZ5QTFxRTYtbzMyenlYdU1TdE14dzRYcVpCMzA4SDJhQzVONDR3WDBOTVlVRGhwaG1wMUpvdFlvdkE?oc=5",
       "published_at": "Fri, 20 Nov 2026 08:41:11 GMT",
@@ -1329,6 +1272,22 @@
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE4tNGhQOTRHVnFsNkdxR3FTNFlLMGEyRjRDMFhVZVhSbjFjTmxENWIxRUt3MGZDR3VKNVpWQ3EzMV9PaGVvSnFfN1ZTZnVwRlAteDBFcGRnTGFCNmFQbF9TeHhUUUtZdUE5UlE?oc=5",
       "published_at": "Fri, 20 Nov 2026 07:47:26 GMT",
       "publisher": "https://www.sisaworld.kr/",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "與, 이 대통령 순방 성과 부각…한한령 완화 기대",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBUU2V1aTBhb0RMZ0tSZUFLZjh4MTlCZVpWczdjZXFOTW1EeVdPLXEwX1oteTRwY2xlZ0ZSLVlwVndtLXhEMlhPOE9JNG5mWkZVY2JubkdnT2hWRmNjSzdIWE8zTml4bGZuWEVWMQ?oc=5",
+      "published_at": "Fri, 20 Nov 2026 06:32:57 GMT",
+      "publisher": "스페셜경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "트럼프 \"미·중·러 정상회담 전례 없는 역사적 만남…핵전쟁 막기로 합의\"",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFByY1EwVExWU0phT1p2cXhyTVdGVU9uODJvTXFtYUtuMElBbjJZdkJGSnJFUUdudGI2a05pcGNyZHBLamZhMTFISDJUXzVuMWI1cldMWUJB?oc=5",
+      "published_at": "Sat, 21 Nov 2026 00:13:55 GMT",
+      "publisher": "인터내셔널포커스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1357,98 +1316,10 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "[中선전 APEC] '2026 APEC정상 선전 전망' 채택 폐막… 사상 첫 미·중·러 회담서 '평화선언'·한중 FTA 후속협상 실질 타결",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBGeWlaVVdaSW5UOXl3ZmhoZTJqNHRSTjl0dlV1VXJ3ZzVmMmhvejEwYVJUeEpsbl9VNnRxOHM2YnY2LXRMU2Z4Zy1PQnZlU2M0TmVNcVRMaWx1R1JnQjRlVXBYOGhnSGdMQ05qb0dn?oc=5",
-      "published_at": "Fri, 20 Nov 2026 06:23:04 GMT",
-      "publisher": "폴리뉴스 Polinews",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "엔비디아 첨단칩 중국 차단…한미반도체·디아이 반사이익 기대",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1wQmo2M2VVN3lZdkJnd2NiUXNfbkRIQXZ2Q2hhNTdJZnJvWE1JalpiTnB6cW5HcWYtMTBfTnpRZ3FGUlVaUlNnUDhOVW92MVQxV2REa1FaWXM4UmtzaDlYNVpKUzZEZzVqMXhQTGJsR1JSMDYzSGVV0gF3QVVfeXFMTXBCajYzZVU3eVl2Qmd3Y2JRc19uREhBdnZDaGE1N0lmcm9YTUlqWmJOcHpxbkdxZi0xMF9OelFncUZSVVpSU2dQOE5Vb3YxVDFXZERrUVpZczhSa3NoOVg1WkpTNkRnNWoxeFBMYmxHUlIwNjNIZVU?oc=5",
-      "published_at": "Fri, 20 Nov 2026 23:39:22 GMT",
-      "publisher": "핀포인트뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "삼성전자, 메모리·MX사업부장 교체…황상준·최원준 선임",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE4zbGNHd2xRVmlwYXNveng3dnd3eEdJRkhic1VZM0c0OUc0b09VUmhyN0pLUHFhXzFEaG50S3cyalc5VzhSM3NRY0w2S2kzeTVDNWfSAVNBVV95cUxQbS1xVDR3X045WnlMWUtxVDMxckhSSHRLcUhYZjZ6ZUZ5aDR2MDY1SWZDa0tIc2thYzBnQTVOdGlvZzNtaG5oZVZHOWtmcGFpWkdTYw?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:36:02 GMT",
-      "publisher": "서울경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "美, 중국에 AI반도체 88만개 수출 승인…첨단 반도체 통제 논란",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE42a1VBRmktbFNzdWx6SVpHTmtXaHdNd0pHXzBMby1qTS0xSmhEQXNCX2NSY2FiQ09IT0ptZ0dhYkw1bWFTZUtUVGR6SmpKQzlPVW5mcg?oc=5",
-      "published_at": "Fri, 20 Nov 2026 06:45:00 GMT",
-      "publisher": "DongA Science",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "미국, 중국에 AI 칩 88만 개 승인… 시장 개방과 국가안보 통제의 이중 전략",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1sMHVnX05XYzFyTm1peC1Rb2ZHV1BleUg5STBIME11c3ZDVHluQlpPTUlZcHh3OGM5V2VETjNVaFoxNXZOaklwaVBCYXloNWxwMnRmb3RJaVh1N3RqQ0owOVk5QUNuLVpvV3NZaENB0gFyQVVfeXFMT3ZsaU12dmFrTUVzNTJBVGd5YUdtYUU1V2Y0UWR1UlJ2ZDM4Z2NuRGw4UEd6U1pVR2tHSWZ4emJlSVd6QktiUXhEN3Q1dm15YjJMdnhLd05hcXBqbXZNSUd1d0pkVHZOQmZlazY1ejlaeTVn?oc=5",
-      "published_at": "Fri, 20 Nov 2026 06:34:26 GMT",
-      "publisher": "테크데일리",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "트럼프 \"구형 AI 반도체만 중국에 판매\"…해외 데이터센터도 허가 대상",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE84VzZQOWxoR3NodkpOV21xUFZoQWdoeDZ5WFQ2Y2FTRU5JVFBRX2dLRzc4aEdpUWVUSno4aHBwSEJoeTZnbmFGVW9DbEpvVm5GM1hQLUpLQTVVSzZsdjg0eVBJdUhua3dsOGJaa0g5TdIBc0FVX3lxTFBlbTluUGFRMjd3ZEJmcU5kLUwzSnMtZjd5V1FyRktkRjVneUYwSlJDX2UzdzZGV2xxTnFzZGxaT3lDck04dnF5aEppZUlyRThFRHlhQWh5Zmd6VnFDV3IxRjk0YXpXSUU0VkVneHRGTGhROEk?oc=5",
-      "published_at": "Sat, 21 Nov 2026 03:13:59 GMT",
-      "publisher": "뉴스웍스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "앤트로픽에 투자하고 HBM 팔고 클로드 심는다···K기업의 AI 삼각 포석",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFB4UmZvbmFUWVVRWUNISWFjWEwtbzVvclNENUxRYjJyWnJpS1RkaFpDa2hvYkpsNlhLaUNhN1Fvd3kzWTJXN1JuanVBUHVwOWNTUDVIYWlBdWdUblVZdml1MTZqcTBQZHN0X1E?oc=5",
-      "published_at": "Fri, 20 Nov 2026 21:10:50 GMT",
-      "publisher": "뉴스웨이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE4xeElYbGk4SmJTUFdNS1JBNVBLVjNMeENmT3lVbEdhY1lFTnF1Wlo3cWVLX1k5QnVTRmMtWTlBcDB6djVlcERFTlB2MXFGcFpraURxdEFkWkwzWVI2ajdpaGxHZFZ1c2VNNks1T2tVMA?oc=5",
-      "published_at": "Fri, 20 Nov 2026 22:55:42 GMT",
-      "publisher": "엠투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "“어제 118만원이었는데 하루 새 7만원 ‘뚝’”…SK하이닉스, 美 소송 조사까지",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1wN05yUjdHdl9nNmpRc0JVLUg2TDlLWE8ybENSV3Jjb2phMEhHTnRySE9Rc3Q4aWRlR0gwZm1rZ3NKUzMzNWl5Z3FhQmRjXzdIUWFFRjdncWNxSWNnWHlnSFo1UjNHTUctUzdGRw?oc=5",
-      "published_at": "Fri, 20 Nov 2026 11:24:02 GMT",
-      "publisher": "데일리25",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "오늘의 키워드 | 코스피 5.21% 폭락·수능 AI 부정행위 파문…수출 1조 달러·빅뱅 컴백까지",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9aNUxJUDdtRjBfMTNmUV92NldjcXU3cTdQLWxpWDkxcTJmVTZSWmxEOEMwYk0xU1Z3V0J3WnhQLTNiTEtQR3ZtUjk0aHRaSURfM2FGWE5QMXRWSWluak5XUDJhck55YzM4RDhtS0phSQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 09:55:30 GMT",
-      "publisher": "강릉뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBzclY3VE1nU3ROeHdFNEhzRHZJem0wU05TbmQ4czlYM3RnV2VCVnRfbENtR0lMN25VeEl2bEVZOHNEaWhVQ09MMVN5emZGUDkzNkRMSTFtb0tmLXZXbmlCMk43dVFaVDZQenJYdjlzRERIWWfSAXdBVV95cUxPaEpjN29XakJuSV9ET2RWLVZOczJPd1F0S3pzd3VxZElVZEpVQVNRbm84cVRVMUsyVzM1dzFjczV0UFBCNEpnbXNOSE11aEVXUjl1ZmtuVS1vUGZiTmNlcC1NNWpOeVpzVUZTWWhpRmRwal9Yb1Q0TQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 23:16:02 GMT",
-      "publisher": "핀포인트뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_semiconductor_ai",
-      "title": "무디스 \"삼성·SK하이닉스, 내년에도 AI 반도체 호황 지속\"",
-      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFB0SFZuazBEaXZyS1dFejNVaEo3WGt1NTFTSWxhMHVSOXJ3WXFMb295SVlYQUYwVjRVcVN4SUVIYjdGM0xNNDZqamdGdDZGZE84R0Q5VE1GTHBZa0RyS280MnFnZFFOZWZlZTd3eWlob2FYZw?oc=5",
-      "published_at": "Fri, 20 Nov 2026 07:17:28 GMT",
-      "publisher": "중앙이코노미뉴스",
+      "title": "이 대통령 “국가시험제도 A부터 Z까지 신속 개편”",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE45amI0ay1zWE1qSzBTZ0hCRTExbkIzUHoxTXhrQXVVV2J4OGgwNThvVG5ucjlWTVYydGp6UnJORGNXSmI2RUVwaUVHWnZiUWQ1VDE2T2VjTmRiZTFZblNjdlpScVgxMDRzYXpHMkJ3?oc=5",
+      "published_at": "Fri, 20 Nov 2026 06:42:25 GMT",
+      "publisher": "주간시사매거진",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1837,14 +1708,6 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "USTR, 관세 레버리지 효과는 인정...\"관세 비용 절반 이상 미국인이 부담\" : 국제",
-      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1XUVBnOTR4SjE2Zk5jTlVuUXpoSFFLY3p3UnUxeVVvLW4zNHVHc3p4NTB5X3V4RHNRdUNSMnF2c3hXc3VwTzZtY0FPNA?oc=5",
-      "published_at": "Fri, 20 Nov 2026 12:53:00 GMT",
-      "publisher": "재경일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_diplomacy_summit",
       "title": "멜라니아 트럼프, 우크라이나 휴전과 민간인 약 800명 대피에서 자신의 역할 설명",
       "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQTXR6X2Y4TVEyZEdMU3hWRWRVdXNoSlJRQkVtUmJNQzMxQkZYSGxfd0pKcG9kY194ZmZ3SmtuQ2hEWFdtQ1dBRWJTZ0xOVXcySWUtZU83WVg4SzVhVXcxX1dUWC1ab0NaRncxdVl5eWtFTlBvblNaVkNFOS1VTU1VeElnQ3ROUDJmYS14UFg5OFR1ckZJNV84TzFjZ0ZmUQ?oc=5",
       "published_at": "Fri, 20 Nov 2026 10:48:00 GMT",
@@ -1901,6 +1764,14 @@
     },
     {
       "topic": "dynamic:AI",
+      "title": "167년 안 풀린 수학 최대 난제 ‘리만 가설’, AI가 증명 주장",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxPaFpvdDh3TmRDbFRLTk5kU3NZamtDeDBIUzM2UWZaTDc5M0lUSElHemlxREFIQlp2eS1USXRGN01SeDRWSzlwbnM5Q0M5QUhUMDhrUUYwZW5xUmt5aV9DUllqcVQ0NnJVZjhudHhXN2NJMDhEV0VEUUJDTy1LdXQ5X0x1UQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:39:00 GMT",
+      "publisher": "조선일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
       "title": "AI 랠리 변곡점 왔나…월가 \"버블 터졌다\" vs \"반등 여지 충분\"",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFAyQXl5N1BIcUFSWEFGYkQ5MWhnZDRjeVFGVk4tc3ItMkdRVHhLZWpEMllIQmg1TldmZTZMdkhpV1dFQWFyNDZVV3EzWHRVdWlTbGdsdnpjSm93RVp0Vmg4YjhtUl9yMlp1dmZ3N2loN27SAXRBVV95cUxNWkFHTWpvaEs3c1hwYkZTakxGSTB1bTZ0eEplMFlXalpXa1l3alAwYWFYODhmWUFCRV9pTTQzanRkM3NhbEM0Z2otejJKUUd3RHNjN2FkQ1lRa1hobmpDeGd5Y3JYZkdfanFmNWM5OVE0NW9EQw?oc=5",
       "published_at": "Sat, 21 Nov 2026 06:09:40 GMT",
@@ -1909,10 +1780,10 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "167년 안 풀린 수학 최대 난제 ‘리만 가설’, AI가 증명 주장",
-      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxPaFpvdDh3TmRDbFRLTk5kU3NZamtDeDBIUzM2UWZaTDc5M0lUSElHemlxREFIQlp2eS1USXRGN01SeDRWSzlwbnM5Q0M5QUhUMDhrUUYwZW5xUmt5aV9DUllqcVQ0NnJVZjhudHhXN2NJMDhEV0VEUUJDTy1LdXQ5X0x1UQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:39:00 GMT",
-      "publisher": "조선일보",
+      "title": "AI 시대 인간의 판단·책임 논한다…'AI 인사이트 페스티벌'",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBfQzhGb2ZkOThMby14SjVRZ0RoZkluVUt2clJUQXBGVHF0VFdwaXdkTHF2Wm5IRFJ3U1hNTFB3dDlzY2VvSmpmcjdNSWJGVkRjaWwyc2l2ekFmMFdBSzdiQdIBYEFVX3lxTFBfQzhGb2ZkOThMby14SjVRZ0RoZkluVUt2clJUQXBGVHF0VFdwaXdkTHF2Wm5IRFJ3U1hNTFB3dDlzY2VvSmpmcjdNSWJGVkRjaWwyc2l2ekFmMFdBSzdiQQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:00:02 GMT",
+      "publisher": "연합뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1925,10 +1796,10 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9tS2ZCeXJGSmdBZEM5V3FBTUVaalBwcVYxTE82Zm5KTURfdGhGOTNGdHdKdHdDWU4teGY3SnA0WURmUEdsZEdVb1I1YjhlZEtmX0xHLVRVV0NDb284eWJveHdnY3VZT0huUkpRNG02VDU1a1RKendZ0gFmQVVfeXFMTmpCS2NWR1l0RWJCOXVFZmYya1NSdFRDc0dwWGs0Z2NMcTc0X0hpOElTV3g0LUt5bHd1VkJWcUt1b0traWtwMDg2N3JuMFpwQUp1RTlsVHVDV3JNejlVOXhZMTVYeVp3?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:28:00 GMT",
-      "publisher": "동아일보",
+      "title": "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE8zMU9jY0VOYnNTUTF0R3Q1NzEzMktObkdWeFdfYjFkM3pSYmlrOS1HNG8tZXRGVklpcXl3eE1VOXgwLU1JSWpTd0JERlZBS0VzeVpjTjFDWnNid9IBX0FVX3lxTFA5ZzFPS2JqWmJXODJlU1Z5V0c3T1RRQ2RLMG4zbDRCN2w4VDNWQk9XbzFJcGxSZENkZHBveGdXNG1uOWgwTjF1b3pQWmMyNU1LRDlpMVhkOTVNejc3d1JV?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:11:00 GMT",
+      "publisher": "경향신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1941,10 +1812,10 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE8zMU9jY0VOYnNTUTF0R3Q1NzEzMktObkdWeFdfYjFkM3pSYmlrOS1HNG8tZXRGVklpcXl3eE1VOXgwLU1JSWpTd0JERlZBS0VzeVpjTjFDWnNid9IBX0FVX3lxTFA5ZzFPS2JqWmJXODJlU1Z5V0c3T1RRQ2RLMG4zbDRCN2w4VDNWQk9XbzFJcGxSZENkZHBveGdXNG1uOWgwTjF1b3pQWmMyNU1LRDlpMVhkOTVNejc3d1JV?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:11:00 GMT",
-      "publisher": "경향신문",
+      "title": "트럼프·시진핑, 군사 AI에 인간 통제 합의…주요 군사작전까지 적용",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9OMG1QNnR4YWRDTHlpdkxSZTdIeVZHQ2ttRXhyTGE0bGNLX3lwdGZZRjR6azAzZVNrT05hSHZCY3RpUFR0MDJBSkRUMmR4STNRVFhpN0Q0R0JidnZjdmVtdzdzNW8xOU9LSkE?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:42:02 GMT",
+      "publisher": "AI타임스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1957,26 +1828,10 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "트럼프·시진핑, 군사 AI에 인간 통제 합의…주요 군사작전까지 적용",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9OMG1QNnR4YWRDTHlpdkxSZTdIeVZHQ2ttRXhyTGE0bGNLX3lwdGZZRjR6azAzZVNrT05hSHZCY3RpUFR0MDJBSkRUMmR4STNRVFhpN0Q0R0JidnZjdmVtdzdzNW8xOU9LSkE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:42:02 GMT",
-      "publisher": "AI타임스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "“앞치마 입고 논술 봤어요“…’AI커닝 논란’에 대학도 비상",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1VS2VRUnNOVVVvejN4cUpVMGtveFFrWmRtUU92RktkUnQ4VkI3VEZLX2hIZnFTN3R6bXdZQzNjMUV5RDRaNHgyUm9lQTBaOXpobUhzT0x4Z1oyVENqUEpNU2VWRXJtb3c?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:08:00 GMT",
-      "publisher": "연합뉴스TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "역대 최대 IPO 성공한 앤트로픽…오픈AI도 증시 입성 탄력 받나",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9teURaNGZmZDVVdU5lOHF5YXZ0Sy1DU1B2RFJUN0VubTZPWXgtY3NseHZXcTYyZldqTjhYTklfOUpyMWpRYVo3LXBBQkFjTVV0Tnc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:41:05 GMT",
-      "publisher": "매일경제",
+      "title": "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9tS2ZCeXJGSmdBZEM5V3FBTUVaalBwcVYxTE82Zm5KTURfdGhGOTNGdHdKdHdDWU4teGY3SnA0WURmUEdsZEdVb1I1YjhlZEtmX0xHLVRVV0NDb284eWJveHdnY3VZT0huUkpRNG02VDU1a1RKendZ0gFmQVVfeXFMTmpCS2NWR1l0RWJCOXVFZmYya1NSdFRDc0dwWGs0Z2NMcTc0X0hpOElTV3g0LUt5bHd1VkJWcUt1b0traWtwMDg2N3JuMFpwQUp1RTlsVHVDV3JNejlVOXhZMTVYeVp3?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:28:00 GMT",
+      "publisher": "동아일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1989,26 +1844,34 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "[르포] 대학 논술시험도 AI발 혼란…진동 울려 금속탐지기 조사도(종합)",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBPUmg5X3dKbVlrdEI0dy13SjZiSnQzVTI2aFRIT0g0TzVDTG85VE9mRkM1VVd5NXVEYlpYZ2tFejQtelpmbi1wWkRCTExLbUIzREVqZ2JZYURBNzDSAWBBVV95cUxNS1VGVlk3dGhCSU1ybEFhQTBtX3o1WUJpVUl6eEJuNVBMV3RpVnpMVFBHbU9KYTdiQ25XN3BsQjBfdDNoczYyRjItRktpVkY3akhqSTdrV3JsczdyUjQ0d1M?oc=5",
-      "published_at": "Sat, 21 Nov 2026 03:46:51 GMT",
-      "publisher": "연합뉴스",
+      "title": "역대 최대 IPO 성공한 앤트로픽…오픈AI도 증시 입성 탄력 받나",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9teURaNGZmZDVVdU5lOHF5YXZ0Sy1DU1B2RFJUN0VubTZPWXgtY3NseHZXcTYyZldqTjhYTklfOUpyMWpRYVo3LXBBQkFjTVV0Tnc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:41:05 GMT",
+      "publisher": "매일경제",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "dynamic:AI",
-      "title": "화웨이, 금융 AI 에이전트 대규모 운영체계 공개…개발·토큰·데이터 통합 관리",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5iR2lPTkpPYVBKdGxkWUd5OWVaOUtKWVBLdjJUMGRhTFlEVDdUd21MR1FlQjRYREVoRW1mTS04Mk4zbXVaQkxVUlNZVnVUX3RHSzhTMVAxbzRSNk11ejZmUDY4enpENTg?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:59:04 GMT",
+      "title": "오픈AI, AI 내부 추론 탈취 공격 성공률 54%에서 0.2%로…모델 무단 복제 방어 강화",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9HUVc3bWFNb3drSWcwaTVpNnhEZ3JYcW5JV2pZQ1R4QVd3Um40YTdWRUlzTTh3dkxHeHExYWVJWkFKdXNNTkdSYlFvU2UzM3JxV0N2bFc1UWpBSVBXYmEwa05ZOVJqdjQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:59:20 GMT",
       "publisher": "인공지능신문",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "dynamic:AI",
-      "title": "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBXVWtTdG1uT3plc1VsTDk2NnAyVU9mY2xadU01amlpdTZnOTJGLWlkdUtTWWN0MWhqTFlCSk1fX1BOS2pOY1VfaFM4OENZSjhnQU5CdVhR?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:51:29 GMT",
-      "publisher": "중앙일보",
+      "title": "앤트로픽 연구원 “AI 클로드, 수학 최대 난제 리만가설 증명” 주장",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9zaVdwbDhVa2xzMzhwMDZqd2hEbkVZSnd4M2c1WEZWQkhySkwwQ1YtQUFmVk5tNVYyUEFiWElHNnprM1FZLWdOY0EtN2ktUQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:05:55 GMT",
+      "publisher": "전자신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
+      "title": "“앞치마 입고 논술 봤어요“…’AI커닝 논란’에 대학도 비상",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1VS2VRUnNOVVVvejN4cUpVMGtveFFrWmRtUU92RktkUnQ4VkI3VEZLX2hIZnFTN3R6bXdZQzNjMUV5RDRaNHgyUm9lQTBaOXpobUhzT0x4Z1oyVENqUEpNU2VWRXJtb3c?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:08:00 GMT",
+      "publisher": "연합뉴스TV",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2029,25 +1892,9 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "AI 시대 인간의 판단·책임 논한다…'AI 인사이트 페스티벌'",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9nOGtINDJJemhnYzdIQk9EV3RTUVVUQVFKcVJ3ajh0Z0NkejMzdkFyTHBIWkZPWTFHWEp4OUZ0aVVFb3I4UnN0eDM1d2V3WUw0YWc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:00:02 GMT",
-      "publisher": "매일경제 마켓",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "오픈AI, AI 내부 추론 탈취 공격 성공률 54%에서 0.2%로…모델 무단 복제 방어 강화",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9HUVc3bWFNb3drSWcwaTVpNnhEZ3JYcW5JV2pZQ1R4QVd3Um40YTdWRUlzTTh3dkxHeHExYWVJWkFKdXNNTkdSYlFvU2UzM3JxV0N2bFc1UWpBSVBXYmEwa05ZOVJqdjQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:59:20 GMT",
-      "publisher": "인공지능신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "李대통령 \"AI데이터센터·메모리 수요 더 늘 것…속도가 생명\"(종합)",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1tbkpkQldyMmNNS0xKRkdyQlRnVXIxMkNPYXVpb0J3NWpGaGR0RjU2NlV0Nnlsem54Q1pxUlBqSXpRMXpaYW56LS0yNXU2S29fX3NRa2QtNlpVM1HSAWBBVV95cUxPQXJyTU1LaDJxbUxNVDVIS0NKV3Q5M3BXMVMzSUQ4eGNRXzZfanVWU2pWdDhJdjctWVRQdW00eFpKakdMRVlfTkl6TmRlT3cwQXdvdG1IVnRQWnFxU285eTk?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:08:58 GMT",
+      "title": "SK, 울산서 AI 데이터센터 15GW 구상 첫발…성패 가를 변수는",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5xQXBLTEFNRkZvUDd2UndnU2d1OVI5RnhsdjZVOTFibkZZbG9SWUdfZi13RlNUVnBTOGZkdE9ZNkJXNjdITXNKZVZjMXBYYXA2ZHFEUzVzaG1XcFlaQ2NpWtIBYEFVX3lxTE5xQXBLTEFNRkZvUDd2UndnU2d1OVI5RnhsdjZVOTFibkZZbG9SWUdfZi13RlNUVnBTOGZkdE9ZNkJXNjdITXNKZVZjMXBYYXA2ZHFEUzVzaG1XcFlaQ2NpWg?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:24:43 GMT",
       "publisher": "연합뉴스",
       "discovery_source": "google_news_rss"
     },
@@ -2057,6 +1904,22 @@
       "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFAtdERsVmQxUFVIQ0duWExKLU1LU3oxZ0lIZ0lQSlFXbGk4TDBsNWRDOUJsX1ZWaVdNbnBKM3FzNzNBRWRXM3VhRnR0R1psM2JKRXpET0gtc3NFeWUxZjI5S1VjY3FfcTQ?oc=5",
       "published_at": "Sat, 21 Nov 2026 02:14:00 GMT",
       "publisher": "연합뉴스TV",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
+      "title": "화웨이, 금융 AI 에이전트 대규모 운영체계 공개…개발·토큰·데이터 통합 관리",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5iR2lPTkpPYVBKdGxkWUd5OWVaOUtKWVBLdjJUMGRhTFlEVDdUd21MR1FlQjRYREVoRW1mTS04Mk4zbXVaQkxVUlNZVnVUX3RHSzhTMVAxbzRSNk11ejZmUDY4enpENTg?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:59:04 GMT",
+      "publisher": "인공지능신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
+      "title": "韓 스트리밍 이용자, 시간당 7분 광고 수용…AI광고 거부감 낮아",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5pNXlaWXdKLXVqM0t5cDFvNGNSVWpMSnRUX0ZFeVFLUzNvbnVJNXg2Ul9nWXNCN1Z6enFtT1ZzWE9vS2VwN3dHcU5JamE3UQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:02:18 GMT",
+      "publisher": "전자신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2077,6 +1940,14 @@
     },
     {
       "topic": "dynamic:트럼프",
+      "title": "“트럼프, 내년 1월 전 러·우 종전 협상 타결 희망”",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE91Ymo0SEpnSzI4cDJrTnNEb3lmN1IwQ1FzYWppYld0SXhWWlVmY1VlNnFEeDRNTkRMbXVCOVpGNS1wTHRhRDNnRGxVVTdRM3U0UHBsbG56eDNyQdIBX0FVX3lxTE5rMXhzNFNHUUZxRzBTUHB2VFBhMk0zVjVWeWoxaFd6VkkwR1FYZ3cwY2RHMG1XSk0zZVVROUgzWkFGWHlhS0dUMlRSUlRnVFpQZ3RqRm13N1pnNFV3QVlr?oc=5",
+      "published_at": "Sat, 21 Nov 2026 06:21:00 GMT",
+      "publisher": "경향신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:트럼프",
       "title": "트럼프 \"해외에 데이터센터 짓는 미국 기업에 막대한 세금 부과\"",
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5wQUVkVzdwZFZYUF9ZZ0FDUEptalZMYWV5N29INXFOeDRfdms1Wkx2eTdBYktjeGRLZ2l4RDNtLVY1cFpzQkxmTF9UOFF5dm5UVEJkTXJiMWZNNGhMenpmRXJmNGt5WFE4Z3c?oc=5",
       "published_at": "Sat, 21 Nov 2026 00:49:09 GMT",
@@ -2085,26 +1956,18 @@
     },
     {
       "topic": "dynamic:트럼프",
-      "title": "트럼프 “미·중·러 정상회담서 ‘한반도 위험’ 대응 논의했다”",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5HZHlZemtJYmU1c0gwbXJaOEM2V1VRZlpsZE9XTHZOdjVmLUtUczRFMjBxTG9NWkJFaGVkSGM3cmV0WUsxRHpBZlFWa2VsbDctMi02bzAxZmZMQdIBX0FVX3lxTFBSU01IVUM0OXVHSUEwM1BwcW1FTUNFN1NoSExuQWZvQTlsN3FLendJMzVrRUtjQmMzczZIUnFFT0kyT2MwUHFVcUU2TEhGdzlCMjZqT3c5cURWUHZralJ3?oc=5",
-      "published_at": "Fri, 20 Nov 2026 23:50:00 GMT",
-      "publisher": "경향신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
       "title": "트럼프 \"미·중·러 정상회담서 한반도 위험 대응 논의\"",
       "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOeFhiQ2pIMzZjSjJESTlMWlotOTJIVzNrNk9RcWNnd2RpT21wU1NfRjJPZFFFMlhwbXZZVXcteHZoR0pyelQ0T0ZKQU4td3NUUFJONjNPV2dDTGVUY1Z4NXJfbTZuY0FXX2RnNWRGcS1wY0RsTXVWYVJmY0JTVTJzSXRRemY?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:00:04 GMT",
+      "published_at": "Sat, 21 Nov 2026 00:54:00 GMT",
       "publisher": "조선일보",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "dynamic:트럼프",
-      "title": "트럼프 “미중러 정상회담서 한반도 위험 대응 논의했다”",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9Bc1FxdEZFMTVsaERhM2FBeG1Kamg3M0RKbDNzdHRDZFhxTkpYT2JuQWY4NTBNVWNHOEh6UG9GVmItb3p6aXpNMk50OWZfQmFhYllEZloxMHllbDVuVlZsejAzb25xd1JEdndqZHJaS0E5WG_SAWZBVV95cUxNTGJJcngwcjYxRE1ZNWdqZFJVeVQtX3BudDlsT3BaSmpBME1BTUdPWXdQYk1aeXhwUDNXOEtjSks5S29RYU4yOHdkZlRyUGhqcHJZd1F1X0FXaUlmZVd1Xzd3VGJaZ3c?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:08:00 GMT",
-      "publisher": "동아일보",
+      "title": "트럼프 “미·중·러 정상회담서 ‘한반도 위험’ 대응 논의했다”",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5HZHlZemtJYmU1c0gwbXJaOEM2V1VRZlpsZE9XTHZOdjVmLUtUczRFMjBxTG9NWkJFaGVkSGM3cmV0WUsxRHpBZlFWa2VsbDctMi02bzAxZmZMQdIBX0FVX3lxTFBSU01IVUM0OXVHSUEwM1BwcW1FTUNFN1NoSExuQWZvQTlsN3FLendJMzVrRUtjQmMzczZIUnFFT0kyT2MwUHFVcUU2TEhGdzlCMjZqT3c5cURWUHZralJ3?oc=5",
+      "published_at": "Fri, 20 Nov 2026 23:50:00 GMT",
+      "publisher": "경향신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2126,17 +1989,81 @@
     {
       "topic": "dynamic:트럼프",
       "title": "트럼프 \"환상적인 미중러 관계가 미국 안전히 지켜...해외 데이터센터 지으면 세금 폭탄\"",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBwLUdQbTM0T2FtS0pFUUc4MnFpcUt5Q1diX1M1ZnlDdWdSSndWU0gzVTc1VVl1c21OdWxfZXVRQnlUMXEyWXZKckdObUFjY0NiTWtmd3YzS2JlZ09TbkE?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE8yaHBfU0pJeFpUajZNT1d6Y0RldWljM04zM0NyaUNyOHg2c09zNE5rdWFiUG9INGpzS0h0VDQySHByY0dST2RRSkxwOVNGUEtkVWpxQUs5WXNuLXNmcmk1MUxtb2RaVC1leEk3VnNoQ1FsNkdKd1E?oc=5",
       "published_at": "Sat, 21 Nov 2026 01:39:00 GMT",
       "publisher": "YTN",
       "discovery_source": "google_news_rss"
     },
     {
+      "topic": "dynamic:한반도",
+      "title": "트럼프 “시진핑·푸틴과 한반도 문제 논의”…우크라 종전 협상도 속도",
+      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE51SGhDYlBBaVhkSUJxY2pOUnBoZGhzdGFucVRZelJSUnpvbG82RGJxaUs4eGtzcmM5OWxqbFQ1WFFoT3IxMUplWUxmOFZQY3pLVEIydXYtZFRxWHU4S0tqNTlDQQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:56:30 GMT",
+      "publisher": "에너지경제신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:한반도",
+      "title": "외교부 \"미중러 정상회담 주목…한반도 평화 기여 방향 기대\"",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1kQk9rUkg3eGNSNzhtQ3NOMWIzdUJIR3Yyekt1WkVDc01CdUJwcURaM0M1ZExJMy05cFBEMzVFdzYzS244R1diZU1mVnBZdVYzNWFrdTJIY3h0SzRPWUNQTHVZRkZDWjQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:34:00 GMT",
+      "publisher": "연합뉴스TV",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:한반도",
+      "title": "트럼프 “미중러 정상회담서 한반도 위험 대응 논의했다”",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9Bc1FxdEZFMTVsaERhM2FBeG1Kamg3M0RKbDNzdHRDZFhxTkpYT2JuQWY4NTBNVWNHOEh6UG9GVmItb3p6aXpNMk50OWZfQmFhYllEZloxMHllbDVuVlZsejAzb25xd1JEdndqZHJaS0E5WG_SAWZBVV95cUxNTGJJcngwcjYxRE1ZNWdqZFJVeVQtX3BudDlsT3BaSmpBME1BTUdPWXdQYk1aeXhwUDNXOEtjSks5S29RYU4yOHdkZlRyUGhqcHJZd1F1X0FXaUlmZVd1Xzd3VGJaZ3c?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:08:00 GMT",
+      "publisher": "동아일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:한반도",
+      "title": "미·중·러 정상회담에 오른 한반도 문제…트럼프 \"위험 대응 논의\"",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5aY2Q0UkZUclBmSW5TcTY2ODlab3ZqMVV5MDlZZDcyYmQ2ZnBTMjNEX2h1REZjQnBrYnl0V291X1ZIMTdfNnZzNm9QUEtQX0RHQldhb1JMZjJmQQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:31:34 GMT",
+      "publisher": "한국경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:한반도",
+      "title": "트럼프 “미·중·러 정상회담서 ‘한반도 위험’ 대응 논의”",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBVa0JxWHhZOWZobkhzeW84QU9GVUstMHdpTVhlSngyMTA3TExvMVRVRmEzcHp1eXRMOU5WTlA0azJ0bk00X3BJMjRfcGtyWGlYMUZoR21pQTc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:27:56 GMT",
+      "publisher": "세계일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:한반도",
+      "title": "트럼프 “ 미·중·러 정상회담서 한반도 위험 대응 논의”",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBubUhXZExYalUtdTBlT19pNHRVZ09WQ1kzUmlydndOVXhPblBNTWNmVVN5Y1F6VWdYSFFnTUVxZWlLUElaYmNhTENWQmIxcjRneU41MjBZZFNUSU0?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:23:10 GMT",
+      "publisher": "경기일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:한반도",
+      "title": "트럼프 \"미중러 정상회담서 한반도 위험 대응 논의\"",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5PaFFvWjEycEZBVE1oczlOZFdzMGtOcF9PMXQyMmNhR0c1WmRQSWxqa2VTb3JBVkRVRW1VZHlMTFpNZWlpUlJhU0N2RzBzOXpDV2FZRm9jU283RHFfelE?oc=5",
+      "published_at": "Fri, 20 Nov 2026 23:49:00 GMT",
+      "publisher": "YTN",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:한반도",
+      "title": "트럼프 “한반도 위협 대응 논의”…미중러 정상회담 성과 강조",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFA4ZDR0b1Q3QmEwUG9sN3Y3NHhKeXIzUC1tNG5Tc3RtZXBkb3N4eV81eEJlYmdJOW5OOFpHcTdkS0xLR2x2VlZnRURlaDlTV19fLTJkbVdxLVdpVnhvcUNkRVRhT2dUdmo2NVl4VzZRcHo5LUV2NmVvdtIBe0FVX3lxTE53c1dhUXJHaTBSRThNUDhjdXdvNTdWMzdqSHVVcjZ4MUFKQjV6ZERGUFpNUms1SHM1QzM2UDZRa2hMYV9KWVhUdW0wZ0pYUVlaSDAwbnpQTlE5Ynh5NFd4OUtUSVh4NVlmYm4wSFI3ZnZWZzYxeF9OS0xCSQ?oc=5",
+      "published_at": "Fri, 20 Nov 2026 19:43:22 GMT",
+      "publisher": "VOA 한국어 홈페이지",
+      "discovery_source": "google_news_rss"
+    },
+    {
       "topic": "dynamic:울산",
-      "title": "SK, 울산서 AI 데이터센터 15GW 구상 첫발…성패 가를 변수는",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5xQXBLTEFNRkZvUDd2UndnU2d1OVI5RnhsdjZVOTFibkZZbG9SWUdfZi13RlNUVnBTOGZkdE9ZNkJXNjdITXNKZVZjMXBYYXA2ZHFEUzVzaG1XcFlaQ2NpWtIBYEFVX3lxTE5xQXBLTEFNRkZvUDd2UndnU2d1OVI5RnhsdjZVOTFibkZZbG9SWUdfZi13RlNUVnBTOGZkdE9ZNkJXNjdITXNKZVZjMXBYYXA2ZHFEUzVzaG1XcFlaQ2NpWg?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:24:43 GMT",
-      "publisher": "연합뉴스",
+      "title": "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBXVWtTdG1uT3plc1VsTDk2NnAyVU9mY2xadU01amlpdTZnOTJGLWlkdUtTWWN0MWhqTFlCSk1fX1BOS2pOY1VfaFM4OENZSjhnQU5CdVhR?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:51:29 GMT",
+      "publisher": "중앙일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2145,6 +2072,14 @@
       "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE8ybUlsWl9yXzF4UlU4Tm8zbFViSkZ3R250YUQzLWJfQklZUTA1UFdaSnhZemxJTl9RcUxWQlIxOVB1T2pCdXRCV1pFVXpjakhwdHpXdEt1VVl0OUI4amthckRKcE5lM2dzS0JwZGdOa19oRUYtZ2kzRdIBeEFVX3lxTE9NSDAzQjFra1Y2YlNSOElqRUJ1czhtUFNZdnJ2TWhKN1NkOEZPWTNEYU0wU0Fwbkx0bjJIQXRyY1lBSU5lVGdadHJSNUNDaGMzdnJMbjJsWXVwdHJDZHdCNkVVMlRkTHhZVWJIa1V0LW5CN1N4S1FvYw?oc=5",
       "published_at": "Sat, 21 Nov 2026 05:04:49 GMT",
       "publisher": "MBC 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:울산",
+      "title": "'울산 AI데이터센터' 깜짝 방문…이 대통령 \"속도가 생명\"",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBmMXpRRzdUZWdnaTV5Vzl3RTVCQmROWVhHdUJMM2NSM3Y1TnQ5V1VZTGhUYWQ0STdqNlNRODBxdzlxSEhhRjRmVnRRMk5EV2dMbHJsQzk4ODIwVktEclNweA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 06:13:33 GMT",
+      "publisher": "뉴스토마토",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2173,14 +2108,6 @@
     },
     {
       "topic": "dynamic:울산",
-      "title": "李대통령, 울산 AI데이터센터 방문… “세계 경쟁은 속도가 생명”",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE15OVlydVN2eTViVTFvcTA0Ums0bGVYZHl5T0VTamsyYlZ0dTBTRzFNczJGX2pkM3UxMWYtUzBVZXVfRkp0bjZvSVhoTlgxUkQ2cGJUakh1V0YxWnF4a0lPRXhkWHkzOUkwbmc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:37:04 GMT",
-      "publisher": "천지일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:울산",
       "title": "이 대통령 \"울산 AI센터, 글로벌 투자 마중물 기대\"",
       "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBwcEVGVjVTOGozaGl2OUNvSVBjOXhON01aTUVYRDJoSlI5dVBqaXBmWng0M3ZsX2N1d0xNczk2cFlXcTB0UzlVSkl6WTYwUlJLT213M2FyamdhNjJ5SVhuT0Z2c1hoTWs?oc=5",
       "published_at": "Sat, 21 Nov 2026 06:13:00 GMT",
@@ -2197,14 +2124,6 @@
     },
     {
       "topic": "dynamic:울산",
-      "title": "'울산 AI데이터센터' 깜짝 방문…이 대통령 \"속도가 생명\"",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBmMXpRRzdUZWdnaTV5Vzl3RTVCQmROWVhHdUJMM2NSM3Y1TnQ5V1VZTGhUYWQ0STdqNlNRODBxdzlxSEhhRjRmVnRRMk5EV2dMbHJsQzk4ODIwVktEclNweA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:13:33 GMT",
-      "publisher": "뉴스토마토",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:울산",
       "title": "李대통령, 울산 AIDC 현장 점검…\"속도가 생명\"",
       "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE84c3pMbi1rdTJUalVZTXQ3UFFWTmxaUWlBZGl0aEd0OVljUEVHXzNRSlNITU9sMmNyMW5TeDVJQ1UydThtMGplY2pxTFpiZGVraWhwNW9hX01hYlg1bHE0NWZId3FxMWNpclcxNG9nUQ?oc=5",
       "published_at": "Sat, 21 Nov 2026 06:04:21 GMT",
@@ -2212,203 +2131,11 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:폭락",
-      "title": "엔비디아, SEC 회계 조사에 주가 14% 폭락…시총 4위 추락",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5iT0s1dlpmU1VqMjhsQmlzd25GRW8yME45eElDQWFDS0dpVFhGMHhIQ003dkxETFFkZnBBSC0wZHBmSTZOU3dFZjR5bmczR2FfcVN0dGpsMUQzR292UHpLSmk1MkZ3bi1GYVE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:32:11 GMT",
-      "publisher": "AI타임스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:폭락",
-      "title": "\"이미 2.8억 손실, 월요일이 무섭다\"...미 증시 폭락에 개미들 패닉 - 머니투데이",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5fTlhXYV8yY2JBWWt3by1VQ3QyTktXbUE0ODRIazdWRnRhLUNDb0dYaHlYUTNzaWc1TkJJYjF4Wm40LXJkamVCZk1ZUWdUeXFQMzNDMkRQdFBueWIxOExya1lVdkpLRlVQbTRF0gFwQVVfeXFMTW9EZDlTR0YtS2p5akxqeW9LMzlvdnc3cGpaZUlTS3Z2ZXFBdGlJYWJZSGtwbnd6YXZBWllwMlZ0d2tjeDltSE5FdDlGdUVPVEI5ZGV4aEJ0VFU1OEoxWXlTN3JPaGZyUC1sQnRNaXplSg?oc=5",
-      "published_at": "Sat, 21 Nov 2026 00:40:37 GMT",
-      "publisher": "머니투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:폭락",
-      "title": "하이퍼리퀴드서 래핑 모네로 99.8% 폭락…1350만달러 규모 대량 매도",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE93N1ZRRjNONmdJRVotTDBQdFJfRE1NZGJqWUhzZG1kWGFfQTRFZTN2Yy1uM09OMTJpRzJ6RXZNUG9hMmE4VHhoajMtZ1o3cnR4?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:01:38 GMT",
-      "publisher": "블루밍비트",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:폭락",
-      "title": "“내가 경고했잖아”…AI株 폭락에 금융시장 패닉, ‘빅쇼트’가 옳았나 [머니+]",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBUbHREa3RsTl8zZS0yWWFFWWJ6QzVXdWRsYjBwSGJraG91X0hBQklPdUZ5N1g4Q04yQXZSMWdNTGpFRGZqVWhaRnIycE14ZFZlNG82TkNZTnZ0X00?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:46:09 GMT",
-      "publisher": "에너지경제신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:폭락",
-      "title": "\"금요일에 2조 샀는데\" … '검은 금요일' 버틴 개미, 美반도체 폭락에 '블랙 먼데이' 공포감",
-      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBUOGdna3dQR1c4dUFQMFRMM3oyeENwQnJTd0lkUktQc2JsV3puWkhGZGl2TzROTVhaaGI5TjBmVUU2WkFPY0ZGczY5bUJQRTdMSVRwSkxseW5uNDlKSGlnejNLaHZCZGl0QklyV0lEZEVaZDRHREQxRnZFTdIBgAFBVV95cUxQZW9XZTRwVjFvTFhLSDlPZnNQRzBScWdZUlZBRHRJcEdmY1BtQThyb2JzaVJxT3paXzR5bG9MR0Zza2E3dzBYbjVYNU5hcXVXQ3ktZUMxYV9wckU2YVRYWDlNT2lwYUptNmpBeWx5NFNvdmt0MHdfb3pQczhFLUhQNA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:27:00 GMT",
-      "publisher": "뉴데일리 경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:폭락",
-      "title": "뉴욕증시, 나스닥 5.3% 폭락‥올해 상승분 반납",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5jYU9tQ3d4ZWw1NWoxcHpreWVQd0JFTEFtU09lTkktV29PZl9xNXpWdU80SUQwVjM3dWM1NHFJclpOVTNhSy16NFZZMmtNNjBfc0x5bjNORng3U0dQSHBIUVpLU1k2VXdHQnZTeHJrOGlrS2ZrLVotNtIBeEFVX3lxTE9IQm9FQ1FfTHRGZnR1S19QSnZsYTd3N2U4SXFaWVgybGh3LVRjZjQ1MXAzSEFVN1YtT0xQWndya1poZU9Kd1FMQzVRNjZNUG9zQm9mSHNCbWZ2UmVTd040QmwwYXpOZExCVUNuUk9oNEE3YTJpdzJGMA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:50:10 GMT",
-      "publisher": "MBC 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:폭락",
-      "title": "엔비디아 주가 또 14% 폭락…거버넌스 리스크에 SEC 회계 조사설 덮쳐",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE4zWXdhOVhPRlhvQmRUeVVJS2JqdGZyQlZ5dXMwMHAtaUhlSVZocDVFaXhIelFiOEJXVkZONmxvcDdsaC0yRWVRVldqSHVrZWtvaS1iN3hyQ0RfSk5ldGhLZWhoM0tYUERfWVdEcQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 03:34:31 GMT",
-      "publisher": "ESG경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:폭락",
-      "title": "“증시 치적 내세우더니 국민 자산 폭락”…나경원, 李 정부 직격",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1FYm9IcEltTVNPMDEyWnY0X3ZncExWMWxnWTJvWkI1WDFzVHN6WmZXVHN0NGpCVVV4M01zSFFmVktmZS0zR2VlQnZfVTROamliV0pHWGRGMlItRnc0R1M0TUswYXVVbk95LVkxbHJ0c9IBc0FVX3lxTE9HaXd6WGhvekZXejBya09QLU5GZFpmaUhUdFlkRHBzZ1VLSXBKQUdJTktuUzJSenRjT1BOMFNaUEtOc3Y0a1hZN2JULU52c1ZzU1BGQ3BiclR2Z1cteFdDSEU3UmJmWU9GUE0yenMtbktielE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 00:19:00 GMT",
-      "publisher": "대전일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:나스닥",
-      "title": "나스닥, 기술주 매도에 5.3% 폭락…반도체주·앤트로픽 ‘직격탄’",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5GQmxnTWFIWTY1M1E3d0gteFhkbzVBdVZaXzJKRXBxdkdEQTV5eG1iNlgzdXBvX0U3elJnNlM2RGpLNjBaN21KZ0E5dTktTTJPangtVQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 23:19:00 GMT",
-      "publisher": "JTBC",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:나스닥",
-      "title": "AI주 투매에 뉴욕증시 급락…나스닥 올해 상승분 다 날렸다",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9QdTlrSEtEa3RGZ0xodWdhbWZSMFdJZTFvR2tHa2wtYmwwLXBPMm9zMEEyY0lnLTZoa1VwYVlMb1FKdDJlTTRnVGliSlJWbVVEYXlYVnAwUXA4ZGFjM1Bza3BoQnZueE5KYTd5UVE4WU5OM03SAWZBVV95cUxQX3laT2psdk5heDI0ZXFvWDRwTkJ6N1BlZy1FdDE4X0xDbFV2eWF4SndKZGEtaFM1NVF3cTQtMnpXbDFjVEpmekpuNXBlQXZTVFhKeDBHdnFPeEt2d1BBWmtJcUhJNkE?oc=5",
-      "published_at": "Fri, 20 Nov 2026 23:25:00 GMT",
-      "publisher": "동아일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:방문",
-      "title": "李대통령, 울산 SK AI 데이터센터 현장 방문...\"글로벌 추가 투자 마중물 기대\"",
-      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE4wU2Y0STlPaTAwVk1adW05U20tdUxFUnd5T0FwclR4NzkwQkxjRG9XSG5aWTZ4WmtTYkQydlZYWmpLYnFjZk9COWpWQUVDbll0YWlTOXZjcGNRZjJQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:02:00 GMT",
-      "publisher": "뉴스핌",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:방문",
-      "title": "李, 울산 SK AI데이터센터 건설 현장 방문…“속도가 생명”",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5iNGU1ZC02Z1NSd2pmQXFpV1dWTXRmdjNKVklkSldLemJGZE9aVERydlNjMXVaVnppQVdrUUpjM2J4Ym1RY0FSWmtaRFJfWEJSUGU0WmdMSG9XWVN2VzJuS09PQnRjTUZITTNfUlNn?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:06:35 GMT",
-      "publisher": "아시아투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:방문",
-      "title": "李대통령, 울산 SK AI데이터센터 방문…\"인력 부족, 정부 차원서 고민\"",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE50bGlQWnJ2clBQRm10R0pMYnRDRnhHcmk2NHdUTkxrMVNEVXAyeVVGTWV6MjdhNkpTVE5UUW1sYXZxWXBEVmdEUURteE54MWFtSzlWSGdnNUhBVWdWYjNXRA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:15:45 GMT",
-      "publisher": "아시아경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:방문",
-      "title": "美 해사청 대표단, HD현대중공업 울산조선소 방문 - 머니투데이",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE0wNmkwemN4REZHYjl4NW8zakpxT2FhNlM4ci11MTVUcXBoS0t6NmF0c0V0Z3dvZnozTjdCSUFBdzN2V20yMTBQM1U1SHRyTzRzOHFnZGlZb01UalE5S3VwWTNNNkdKYmQxcER1V9IBckFVX3lxTFBTQkdiUDJPa0VRLTVNYnJSUktlbTd1RlJfV3lMNXlMZ0VhR2hmclNjSkZJMk1nUWZFSzlJcTlFNmF0QnRoUEZOUVQzYmh3Z3l4OEw1ek1FY295aFpvQ3lfdE5ETDlkek5JSWtzdXJtbEZEZw?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:55:43 GMT",
-      "publisher": "머니투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:방문",
-      "title": "이재명 대통령 울산 SK 데이터센터 현장 방문 “지방 중심 AI 투자로 균형 발전” 강조",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE4ya1QtTnpBS3lUWkZWZDEzTlA3NHJURjd6VU43a1ZvaWI5QWs1QUItTWZLT1NFUDh5MHNjdlRpQjJ6NEdrM1FNaGtfOWpWcENUcVFiT3NrdUJfWlpNYUVhSThFZFhERmNnQVppYnBnS21FR1Vr?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:19:00 GMT",
-      "publisher": "한겨레",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:방문",
-      "title": "김영훈 노동장관, AI 커닝 사태에 경비지도사 시험장 직접 방문… “감독관의 세심한 관찰 필요” 강조",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE45RlBBcWxocU1PbHBieHZKR0JmRnBJdHBCeHA0SVNFaFQxQktKaVZ3dnpQdk5LMTVtMUpwcW5Sek9lQmI2cmRhQ0JsV093cDRY?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:50:38 GMT",
-      "publisher": "문화일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:방문",
-      "title": "李대통령, 울산 AI 데이터센터 현장 방문…\"글로벌 추가 투자 마중물 기대\"",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE41NFpGWmR2a0FqcnZ2bng0TjNuMW5OcjYyYlZTcUFGNTZZS25sUEtUWWtaaTlxR2NQcGJPaEhMaDZoNERJV000UFpfbERpckx6R0hicHh1UzRvQzg?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:17:49 GMT",
-      "publisher": "뉴스1",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:한반도",
-      "title": "트럼프 “시진핑·푸틴과 한반도 문제 논의”…우크라 종전 협상도 속도",
-      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE51SGhDYlBBaVhkSUJxY2pOUnBoZGhzdGFucVRZelJSUnpvbG82RGJxaUs4eGtzcmM5OWxqbFQ1WFFoT3IxMUplWUxmOFZQY3pLVEIydXYtZFRxWHU4S0tqNTlDQQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:56:30 GMT",
-      "publisher": "에너지경제신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:한반도",
-      "title": "외교부 \"미중러 정상회담 주목…한반도 평화 기여 방향 기대\"",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1kQk9rUkg3eGNSNzhtQ3NOMWIzdUJIR3Yyekt1WkVDc01CdUJwcURaM0M1ZExJMy05cFBEMzVFdzYzS244R1diZU1mVnBZdVYzNWFrdTJIY3h0SzRPWUNQTHVZRkZDWjQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:34:00 GMT",
-      "publisher": "연합뉴스TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:한반도",
-      "title": "미·중·러 정상회담에 오른 한반도 문제…트럼프 \"위험 대응 논의\"",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5aY2Q0UkZUclBmSW5TcTY2ODlab3ZqMVV5MDlZZDcyYmQ2ZnBTMjNEX2h1REZjQnBrYnl0V291X1ZIMTdfNnZzNm9QUEtQX0RHQldhb1JMZjJmQQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:31:34 GMT",
-      "publisher": "한국경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:한반도",
-      "title": "트럼프 “미·중·러 정상회담서 ‘한반도 위험’ 대응 논의”",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBVa0JxWHhZOWZobkhzeW84QU9GVUstMHdpTVhlSngyMTA3TExvMVRVRmEzcHp1eXRMOU5WTlA0azJ0bk00X3BJMjRfcGtyWGlYMUZoR21pQTc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:27:56 GMT",
-      "publisher": "세계일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:한반도",
-      "title": "트럼프 \"미중러 정상회담서 한반도 위험 대응 논의\"",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5PaFFvWjEycEZBVE1oczlOZFdzMGtOcF9PMXQyMmNhR0c1WmRQSWxqa2VTb3JBVkRVRW1VZHlMTFpNZWlpUlJhU0N2RzBzOXpDV2FZRm9jU283RHFfelE?oc=5",
-      "published_at": "Fri, 20 Nov 2026 23:49:00 GMT",
-      "publisher": "YTN",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:한반도",
-      "title": "트럼프 “한반도 위협 대응 논의”…미중러 정상회담 성과 강조",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFA4ZDR0b1Q3QmEwUG9sN3Y3NHhKeXIzUC1tNG5Tc3RtZXBkb3N4eV81eEJlYmdJOW5OOFpHcTdkS0xLR2x2VlZnRURlaDlTV19fLTJkbVdxLVdpVnhvcUNkRVRhT2dUdmo2NVl4VzZRcHo5LUV2NmVvdtIBe0FVX3lxTE53c1dhUXJHaTBSRThNUDhjdXdvNTdWMzdqSHVVcjZ4MUFKQjV6ZERGUFpNUms1SHM1QzM2UDZRa2hMYV9KWVhUdW0wZ0pYUVlaSDAwbnpQTlE5Ynh5NFd4OUtUSVh4NVlmYm4wSFI3ZnZWZzYxeF9OS0xCSQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 19:43:22 GMT",
-      "publisher": "VOA 한국어 홈페이지",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:한반도",
-      "title": "트럼프 “미중러 정상회담서 한반도 문제 논의했다”",
-      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQcVpyNy02YjU5bXhRWl84eHAwaElEcVNxQ0ZFaE5CZndKUXBSU3QydHFQbkJrcmh5UEl3Mk1jUFRhYmpHSlhINkp6TV80dFpmSW82Z3NuM3pVQ0VOOXdWWlJNd1lwRWFRR3VfRWZ6SjdiU3ViQ04wYXJYVkJGaXRlYmhfY2dOSUlWcGhreXRB?oc=5",
-      "published_at": "Fri, 20 Nov 2026 23:35:00 GMT",
-      "publisher": "국제신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:한반도",
-      "title": "트럼프 “ 미·중·러 정상회담서 한반도 위험 대응 논의”",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBubUhXZExYalUtdTBlT19pNHRVZ09WQ1kzUmlydndOVXhPblBNTWNmVVN5Y1F6VWdYSFFnTUVxZWlLUElaYmNhTENWQmIxcjRneU41MjBZZFNUSU0?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:23:10 GMT",
-      "publisher": "경기일보",
+      "topic": "dynamic:울산",
+      "title": "李대통령, 울산 AI데이터센터 방문… “세계 경쟁은 속도가 생명”",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE15OVlydVN2eTViVTFvcTA0Ums0bGVYZHl5T0VTamsyYlZ0dTBTRzFNczJGX2pkM3UxMWYtUzBVZXVfRkp0bjZvSVhoTlgxUkQ2cGJUakh1V0YxWnF4a0lPRXhkWHkzOUkwbmc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:37:04 GMT",
+      "publisher": "천지일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2445,10 +2172,26 @@
     },
     {
       "topic": "dynamic:데이터센터",
+      "title": "李대통령, 울산 SK AI 데이터센터 현장 방문...\"글로벌 추가 투자 마중물 기대\"",
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE4wU2Y0STlPaTAwVk1adW05U20tdUxFUnd5T0FwclR4NzkwQkxjRG9XSG5aWTZ4WmtTYkQydlZYWmpLYnFjZk9COWpWQUVDbll0YWlTOXZjcGNRZjJQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:02:00 GMT",
+      "publisher": "뉴스핌",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:데이터센터",
       "title": "李 대통령, 울산 AI데이터센터 현장 찾아…“새로운 성장 모멘텀”",
       "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1JQjV1MzdZdDZERVVlRlFKM1MzVjhpaU5TeC1EZmVEdHZiYzlkZklvanJ1a21Ga0E3UE45TTRpaTlfQVRGdHNaQWcySWFiR0lZdVJsY1VweDFQcHpqZ3hIbWZMazQ?oc=5",
       "published_at": "Sat, 21 Nov 2026 04:50:04 GMT",
       "publisher": "서울경제TV",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:데이터센터",
+      "title": "이 대통령 \"AI 데이터센터, 지방 성장의 기회\"…울산서 균형발전 강조",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9UTnhpcHU1VUtsb0NjNUU5OWZpbmhYd2gxZEphY0s3eFE5MWFmc0xGcThDQ2Z3RXNkN29CQ2VZMld6elNTMWNXcXhZbTRvdDVfczVmZ2pHRzFSWTlwZkE2X3B4aE9NX0ppcHc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:43:28 GMT",
+      "publisher": "경북도민일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2466,6 +2209,126 @@
       "published_at": "Sat, 21 Nov 2026 04:37:00 GMT",
       "publisher": "연합뉴스TV",
       "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:데이터센터",
+      "title": "李대통령 \"AI데이터센터·메모리 수요 더 늘 것…속도가 생명\"(종합)",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1tbkpkQldyMmNNS0xKRkdyQlRnVXIxMkNPYXVpb0J3NWpGaGR0RjU2NlV0Nnlsem54Q1pxUlBqSXpRMXpaYW56LS0yNXU2S29fX3NRa2QtNlpVM1HSAWBBVV95cUxPQXJyTU1LaDJxbUxNVDVIS0NKV3Q5M3BXMVMzSUQ4eGNRXzZfanVWU2pWdDhJdjctWVRQdW00eFpKakdMRVlfTkl6TmRlT3cwQXdvdG1IVnRQWnFxU285eTk?oc=5",
+      "published_at": "Sat, 21 Nov 2026 06:08:58 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:폭락",
+      "title": "엔비디아, SEC 회계 조사에 주가 14% 폭락…시총 4위 추락",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5iT0s1dlpmU1VqMjhsQmlzd25GRW8yME45eElDQWFDS0dpVFhGMHhIQ003dkxETFFkZnBBSC0wZHBmSTZOU3dFZjR5bmczR2FfcVN0dGpsMUQzR292UHpLSmk1MkZ3bi1GYVE?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:32:11 GMT",
+      "publisher": "AI타임스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:폭락",
+      "title": "하이퍼리퀴드서 래핑 모네로 99.8% 폭락…1350만달러 규모 대량 매도",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE93N1ZRRjNONmdJRVotTDBQdFJfRE1NZGJqWUhzZG1kWGFfQTRFZTN2Yy1uM09OMTJpRzJ6RXZNUG9hMmE4VHhoajMtZ1o3cnR4?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:01:38 GMT",
+      "publisher": "블루밍비트",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:폭락",
+      "title": "\"이미 2.8억 손실, 월요일이 무섭다\"...미 증시 폭락에 개미들 패닉 - 머니투데이",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5fTlhXYV8yY2JBWWt3by1VQ3QyTktXbUE0ODRIazdWRnRhLUNDb0dYaHlYUTNzaWc1TkJJYjF4Wm40LXJkamVCZk1ZUWdUeXFQMzNDMkRQdFBueWIxOExya1lVdkpLRlVQbTRF0gFwQVVfeXFMTW9EZDlTR0YtS2p5akxqeW9LMzlvdnc3cGpaZUlTS3Z2ZXFBdGlJYWJZSGtwbnd6YXZBWllwMlZ0d2tjeDltSE5FdDlGdUVPVEI5ZGV4aEJ0VFU1OEoxWXlTN3JPaGZyUC1sQnRNaXplSg?oc=5",
+      "published_at": "Sat, 21 Nov 2026 00:40:37 GMT",
+      "publisher": "머니투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:폭락",
+      "title": "“내가 경고했잖아”…AI株 폭락에 금융시장 패닉, ‘빅쇼트’가 옳았나 [머니+]",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBUbHREa3RsTl8zZS0yWWFFWWJ6QzVXdWRsYjBwSGJraG91X0hBQklPdUZ5N1g4Q04yQXZSMWdNTGpFRGZqVWhaRnIycE14ZFZlNG82TkNZTnZ0X00?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:46:09 GMT",
+      "publisher": "에너지경제신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:폭락",
+      "title": "뉴욕증시, 나스닥 5.3% 폭락‥올해 상승분 반납",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5jYU9tQ3d4ZWw1NWoxcHpreWVQd0JFTEFtU09lTkktV29PZl9xNXpWdU80SUQwVjM3dWM1NHFJclpOVTNhSy16NFZZMmtNNjBfc0x5bjNORng3U0dQSHBIUVpLU1k2VXdHQnZTeHJrOGlrS2ZrLVotNtIBeEFVX3lxTE9IQm9FQ1FfTHRGZnR1S19QSnZsYTd3N2U4SXFaWVgybGh3LVRjZjQ1MXAzSEFVN1YtT0xQWndya1poZU9Kd1FMQzVRNjZNUG9zQm9mSHNCbWZ2UmVTd040QmwwYXpOZExCVUNuUk9oNEE3YTJpdzJGMA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:50:10 GMT",
+      "publisher": "MBC 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:폭락",
+      "title": "“증시 치적 내세우더니 국민 자산 폭락”…나경원, 李 정부 직격",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1FYm9IcEltTVNPMDEyWnY0X3ZncExWMWxnWTJvWkI1WDFzVHN6WmZXVHN0NGpCVVV4M01zSFFmVktmZS0zR2VlQnZfVTROamliV0pHWGRGMlItRnc0R1M0TUswYXVVbk95LVkxbHJ0c9IBc0FVX3lxTE9HaXd6WGhvekZXejBya09QLU5GZFpmaUhUdFlkRHBzZ1VLSXBKQUdJTktuUzJSenRjT1BOMFNaUEtOc3Y0a1hZN2JULU52c1ZzU1BGQ3BiclR2Z1cteFdDSEU3UmJmWU9GUE0yenMtbktielE?oc=5",
+      "published_at": "Sat, 21 Nov 2026 00:19:00 GMT",
+      "publisher": "대전일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:폭락",
+      "title": "'7만전자·20만닉스' 전망한 전문가...\"AI 거품, 폭락 시작도 안 했다\" - 머니투데이",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE43MEdCTHJGMFd6XzlMai1GUC0tUE4zTVAzY3IzVGhRb1l4MV9VRlZ5SkZYdzNCYkx3VmZmYkR1RmRIR01MNC0tbmhfOGJUZnRZRkZyb0l0ZVlIdmxReUJSQ1BxLVdFbUZablBN0gFwQVVfeXFMTXA1ajZub0VoMXZfZDI0WmlCM1ZKbmZKRmtJTkhKc2NNS083bzZ3ZGV3TDJWTTB6bVJEUmVUb2xSeGF1eWNobUpLOEtOd1pkTjFrM3RNZjdmekZRZ19VUEFVVjJBckVwUTFEYjZTRmxYeA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:14:59 GMT",
+      "publisher": "머니투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:폭락",
+      "title": "\"금요일에 2조 샀는데\" … '검은 금요일' 버틴 개미, 美반도체 폭락에 '블랙 먼데이' 공포감",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBUOGdna3dQR1c4dUFQMFRMM3oyeENwQnJTd0lkUktQc2JsV3puWkhGZGl2TzROTVhaaGI5TjBmVUU2WkFPY0ZGczY5bUJQRTdMSVRwSkxseW5uNDlKSGlnejNLaHZCZGl0QklyV0lEZEVaZDRHREQxRnZFTdIBgAFBVV95cUxQZW9XZTRwVjFvTFhLSDlPZnNQRzBScWdZUlZBRHRJcEdmY1BtQThyb2JzaVJxT3paXzR5bG9MR0Zza2E3dzBYbjVYNU5hcXVXQ3ktZUMxYV9wckU2YVRYWDlNT2lwYUptNmpBeWx5NFNvdmt0MHdfb3pQczhFLUhQNA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:27:00 GMT",
+      "publisher": "뉴데일리 경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:방문",
+      "title": "李, 울산 SK AI데이터센터 건설 현장 방문…“속도가 생명”",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5iNGU1ZC02Z1NSd2pmQXFpV1dWTXRmdjNKVklkSldLemJGZE9aVERydlNjMXVaVnppQVdrUUpjM2J4Ym1RY0FSWmtaRFJfWEJSUGU0WmdMSG9XWVN2VzJuS09PQnRjTUZITTNfUlNn?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:06:35 GMT",
+      "publisher": "아시아투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:방문",
+      "title": "李대통령, 울산 SK AI데이터센터 방문…\"인력 부족, 정부 차원서 고민\"",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE50bGlQWnJ2clBQRm10R0pMYnRDRnhHcmk2NHdUTkxrMVNEVXAyeVVGTWV6MjdhNkpTVE5UUW1sYXZxWXBEVmdEUURteE54MWFtSzlWSGdnNUhBVWdWYjNXRA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:15:45 GMT",
+      "publisher": "아시아경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:방문",
+      "title": "美 해사청 대표단, HD현대중공업 울산조선소 방문 - 머니투데이",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE0wNmkwemN4REZHYjl4NW8zakpxT2FhNlM4ci11MTVUcXBoS0t6NmF0c0V0Z3dvZnozTjdCSUFBdzN2V20yMTBQM1U1SHRyTzRzOHFnZGlZb01UalE5S3VwWTNNNkdKYmQxcER1V9IBckFVX3lxTFBTQkdiUDJPa0VRLTVNYnJSUktlbTd1RlJfV3lMNXlMZ0VhR2hmclNjSkZJMk1nUWZFSzlJcTlFNmF0QnRoUEZOUVQzYmh3Z3l4OEw1ek1FY295aFpvQ3lfdE5ETDlkek5JSWtzdXJtbEZEZw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:55:43 GMT",
+      "publisher": "머니투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:방문",
+      "title": "김영훈 노동장관, AI 커닝 사태에 경비지도사 시험장 직접 방문… “감독관의 세심한 관찰 필요” 강조",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE45RlBBcWxocU1PbHBieHZKR0JmRnBJdHBCeHA0SVNFaFQxQktKaVZ3dnpQdk5LMTVtMUpwcW5Sek9lQmI2cmRhQ0JsV093cDRY?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:50:38 GMT",
+      "publisher": "문화일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:방문",
+      "title": "이재명 대통령 울산 SK 데이터센터 현장 방문 “지방 중심 AI 투자로 균형 발전” 강조",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE4ya1QtTnpBS3lUWkZWZDEzTlA3NHJURjd6VU43a1ZvaWI5QWs1QUItTWZLT1NFUDh5MHNjdlRpQjJ6NEdrM1FNaGtfOWpWcENUcVFiT3NrdUJfWlpNYUVhSThFZFhERmNnQVppYnBnS21FR1Vr?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:19:00 GMT",
+      "publisher": "한겨레",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:방문",
+      "title": "李대통령, 울산 AI 데이터센터 현장 방문…\"글로벌 추가 투자 마중물 기대\"",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE41NFpGWmR2a0FqcnZ2bng0TjNuMW5OcjYyYlZTcUFGNTZZS25sUEtUWWtaaTlxR2NQcGJPaEhMaDZoNERJV000UFpfbERpckx6R0hicHh1UzRvQzg?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:17:49 GMT",
+      "publisher": "뉴스1",
+      "discovery_source": "google_news_rss"
     }
   ],
   "handoff_queries": [
@@ -2473,79 +2336,61 @@
     "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
     "한국 증시 오늘 새 공시 수주 계약 정책 변화",
     "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+    "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "한반도 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "울산 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "한반도 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "데이터센터 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "폭락 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "방문 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+    "방문 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "폭락 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
   ],
   "dynamic_query_terms": [
     "AI",
     "트럼프",
-    "울산",
-    "폭락",
-    "나스닥",
-    "방문",
     "한반도",
-    "데이터센터"
+    "울산",
+    "데이터센터",
+    "폭락",
+    "방문",
+    "대응"
   ],
   "hot_topic_candidates": [
     {
       "term": "AI",
-      "count": 40,
-      "publisher_count": 34,
-      "independent_story_count_estimate": 36,
-      "syndication_ratio_estimate": 0.1,
+      "count": 36,
+      "publisher_count": 30,
+      "independent_story_count_estimate": 32,
+      "syndication_ratio_estimate": 0.111,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 41,
-      "delta": -1,
-      "score": 114,
+      "previous_count": 40,
+      "delta": -4,
+      "score": 102,
       "examples": [
         "'경품 규제'의 나비효과, 광고비 1.4조원에서 AI 보호 공백까지",
         "이 대통령 \"AI 환경 맞춰 국가시험 전면 개편\"",
         "이 대통령, 아세안에 ‘AI 동행’ 제안…문화창조산업까지 협력 확대"
       ],
       "article_velocity": 0,
-      "hot_score": 216
+      "hot_score": 192
     },
     {
       "term": "트럼프",
-      "count": 37,
-      "publisher_count": 30,
-      "independent_story_count_estimate": 29,
-      "syndication_ratio_estimate": 0.216,
+      "count": 36,
+      "publisher_count": 28,
+      "independent_story_count_estimate": 28,
+      "syndication_ratio_estimate": 0.222,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 28,
-      "delta": 9,
-      "score": 113,
+      "previous_count": 37,
+      "delta": -1,
+      "score": 100,
       "examples": [
         "트럼프 새 규제 불똥?…AI칩 빗장에 주가 7% 급락",
-        "트럼프 \"구형 AI 반도체만 중국에 판매\"…해외 데이터센터도 허가 대상",
-        "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려"
+        "트럼프 \"미·중·러 정상회담 전례 없는 역사적 만남…핵전쟁 막기로 합의\"",
+        "미중러 선언 '북핵' 끝내 배제ᆢ트럼프 독자제재 정지 권한땐 韓, 최악 핵위협 상황 도래"
       ],
-      "article_velocity": 9,
-      "hot_score": 220
-    },
-    {
-      "term": "한반도",
-      "count": 21,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.333,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 6,
-      "score": 66,
-      "examples": [
-        "APEC 마친 이 대통령…\"한반도 현안 주도적 해결\"",
-        "미중러 '한반도' 셈법 주시...이 대통령 \"국제정세 파장 철저 대비\"",
-        "이 대통령 “한반도 운명은 우리가 주도”…미·중·러 정상회담에 자주외교 강조"
-      ],
-      "article_velocity": 6,
-      "hot_score": 123
+      "article_velocity": 0,
+      "hot_score": 176
     },
     {
       "term": "울산",
@@ -2559,47 +2404,47 @@
       "score": 63,
       "examples": [
         "‘울산 메가’ 직접 챙긴 이 대통령 “지방 중심 AI 투자로 균형 발전”",
-        "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문",
-        "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]"
+        "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]",
+        "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문"
       ],
       "article_velocity": 0,
       "hot_score": 105
     },
     {
-      "term": "데이터센터",
+      "term": "한반도",
       "count": 20,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 15,
-      "syndication_ratio_estimate": 0.25,
+      "publisher_count": 17,
+      "independent_story_count_estimate": 12,
+      "syndication_ratio_estimate": 0.4,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 16,
-      "delta": 4,
-      "score": 62,
+      "previous_count": 21,
+      "delta": -1,
+      "score": 57,
       "examples": [
-        "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
-        "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?",
-        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도"
+        "APEC 마친 이 대통령…\"한반도 현안 주도적 해결\"",
+        "미중러 '한반도' 셈법 주시...이 대통령 \"국제정세 파장 철저 대비\"",
+        "이 대통령 “한반도 운명은 우리가 주도”…미·중·러 정상회담에 자주외교 강조"
       ],
-      "article_velocity": 4,
-      "hot_score": 117
+      "article_velocity": 0,
+      "hot_score": 90
     },
     {
-      "term": "폭락",
+      "term": "데이터센터",
       "count": 19,
-      "publisher_count": 14,
+      "publisher_count": 17,
       "independent_story_count_estimate": 15,
       "syndication_ratio_estimate": 0.211,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": 0,
-      "score": 52,
+      "previous_count": 20,
+      "delta": -1,
+      "score": 55,
       "examples": [
-        "오늘의 키워드 | 코스피 5.21% 폭락·수능 AI 부정행위 파문…수출 1조 달러·빅뱅 컴백까지",
-        "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
-        "나스닥, 기술주 매도에 5.3% 폭락…다우·S&P500도 조정 진입"
+        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도",
+        "트럼프 “美기업, 해외 데이터센터 지으면 막대한 세금·제재”…젠슨 황 복귀도 공개 촉구",
+        "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문"
       ],
       "article_velocity": 0,
-      "hot_score": 92
+      "hot_score": 98
     },
     {
       "term": "방문",
@@ -2613,47 +2458,29 @@
       "score": 48,
       "examples": [
         "李 “AI 경쟁 속도전이 핵심”…울산 데이터센터 방문",
-        "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
-        "李 울산 AI 데이터센터 건설 현장 방문…\"인력 부족 문제 정부에서 고민 많이 할 것\""
+        "李 울산 AI 데이터센터 건설 현장 방문…\"인력 부족 문제 정부에서 고민 많이 할 것\"",
+        "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”"
       ],
       "article_velocity": 0,
       "hot_score": 78
     },
     {
-      "term": "대응",
-      "count": 11,
-      "publisher_count": 11,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.545,
+      "term": "폭락",
+      "count": 17,
+      "publisher_count": 13,
+      "independent_story_count_estimate": 13,
+      "syndication_ratio_estimate": 0.235,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 11,
-      "score": 44,
-      "examples": [
-        "한국표준협회, 탄소 규제 대응 세미나 개최…온실가스 검증 전략 공유",
-        "표준협회, 고객사의 탄소 규제 대응 지원 위한 무료 세미나 개최",
-        "트럼프 “미·중·러 정상회담서 ‘한반도 위험’ 대응 논의했다”"
-      ],
-      "article_velocity": 11,
-      "hot_score": 92
-    },
-    {
-      "term": "나스닥",
-      "count": 15,
-      "publisher_count": 11,
-      "independent_story_count_estimate": 11,
-      "syndication_ratio_estimate": 0.267,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 16,
-      "delta": -1,
-      "score": 41,
+      "previous_count": 19,
+      "delta": -2,
+      "score": 47,
       "examples": [
         "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
         "나스닥, 기술주 매도에 5.3% 폭락…다우·S&P500도 조정 진입",
         "나스닥, 기술주 매도에 5.3% 폭락…비트코인·금도 와르르"
       ],
       "article_velocity": 0,
-      "hot_score": 70
+      "hot_score": 82
     },
     {
       "term": "현장",
@@ -2662,8 +2489,8 @@
       "independent_story_count_estimate": 9,
       "syndication_ratio_estimate": 0.25,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": -2,
+      "previous_count": 12,
+      "delta": 0,
       "score": 36,
       "examples": [
         "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]",
@@ -2674,40 +2501,76 @@
       "hot_score": 63
     },
     {
-      "term": "정상회담서",
-      "count": 9,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 3,
-      "syndication_ratio_estimate": 0.667,
+      "term": "나스닥",
+      "count": 13,
+      "publisher_count": 10,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.308,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 9,
+      "previous_count": 15,
+      "delta": -2,
       "score": 36,
       "examples": [
-        "美 \"시진핑, 정상회담서 반도체 수출통제 거론 안 해\"…中 보복 근거 없어\"",
-        "트럼프 “미·중·러 정상회담서 ‘한반도 위험’ 대응 논의했다”",
-        "트럼프 \"미·중·러 정상회담서 한반도 위험 대응 논의\""
+        "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
+        "나스닥, 기술주 매도에 5.3% 폭락…다우·S&P500도 조정 진입",
+        "나스닥, 기술주 매도에 5.3% 폭락…비트코인·금도 와르르"
       ],
-      "article_velocity": 9,
-      "hot_score": 72
+      "article_velocity": 0,
+      "hot_score": 60
     },
     {
-      "term": "논의",
-      "count": 9,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.444,
+      "term": "대응",
+      "count": 11,
+      "publisher_count": 11,
+      "independent_story_count_estimate": 4,
+      "syndication_ratio_estimate": 0.636,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 9,
-      "score": 36,
+      "previous_count": 11,
+      "delta": 0,
+      "score": 33,
       "examples": [
-        "이재명 대통령, 아세안·APEC 순방 \"한중 경제협력 확대 논의\"",
-        "[정치 이슈] 이재명 대통령, ASEAN·APEC 참석…시진핑과 경제·안보 협력 논의",
+        "한국표준협회, 탄소 규제 대응 세미나 개최…온실가스 검증 전략 공유",
+        "표준협회, 고객사의 탄소 규제 대응 지원 위한 무료 세미나 개최",
         "트럼프 \"미·중·러 정상회담서 한반도 위험 대응 논의\""
       ],
-      "article_velocity": 9,
-      "hot_score": 78
+      "article_velocity": 0,
+      "hot_score": 45
+    },
+    {
+      "term": "AI데이터센터",
+      "count": 11,
+      "publisher_count": 10,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.273,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 11,
+      "delta": 0,
+      "score": 32,
+      "examples": [
+        "“AI 고속도로가 대한민국의 미래 연다”…울산 AI데이터센터 찾은 이재명 대통령 [현장 화보]",
+        "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
+        "李, 울산 SK AI데이터센터 방문‥\"국가 경쟁 위해 속도전이 핵심\""
+      ],
+      "article_velocity": 0,
+      "hot_score": 55
+    },
+    {
+      "term": "규제",
+      "count": 8,
+      "publisher_count": 8,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 8,
+      "score": 32,
+      "examples": [
+        "좋은 일도 규제가 막는다 [이런 규제, 이상하지 않나요?]",
+        "한국표준협회, 탄소 규제 대응 세미나 개최…온실가스 검증 전략 공유",
+        "캐피탈사 렌탈 규제 완화 추진..렌터카 시장 경쟁구도 바뀌나"
+      ],
+      "article_velocity": 8,
+      "hot_score": 80
     }
   ],
   "sector_selection": {
