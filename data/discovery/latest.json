@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-22T05:21:13.334455+09:00",
+  "generated_at": "2026-11-22T05:31:10.594188+09:00",
   "purpose": "10분 비AI 시장·뉴스 단서 센서. :00/:30 A/B Supervisor의 탐색 힌트이며 사실 확정 엔진이 아님.",
   "source_status": {
     "google_news:kr_market_broad": {
@@ -29,12 +29,13 @@
       "auto_repair": null
     },
     "google_news:kr_semiconductor_ai": {
-      "status": "error",
-      "error": "HTTPError"
+      "status": "ok",
+      "count": 5,
+      "auto_repair": null
     },
     "google_news:kr_energy_power": {
       "status": "ok",
-      "count": 2,
+      "count": 3,
       "auto_repair": null
     },
     "google_news:kr_bio_health": {
@@ -48,9 +49,8 @@
       "auto_repair": "retry_without_when_filter"
     },
     "google_news:global_market": {
-      "status": "ok",
-      "count": 29,
-      "auto_repair": null
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:global_diplomacy_summit": {
       "status": "ok",
@@ -68,9 +68,8 @@
       "auto_repair": "retry_without_when_filter"
     },
     "google_news:us_china_trade_ai": {
-      "status": "ok",
-      "count": 2,
-      "auto_repair": null
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:japan_boj_fx": {
       "status": "empty",
@@ -83,8 +82,9 @@
       "auto_repair": null
     },
     "google_news:global_ai_tech": {
-      "status": "error",
-      "error": "HTTPError"
+      "status": "empty",
+      "count": 0,
+      "auto_repair": "retry_without_when_filter"
     },
     "google_news:commodities_shipping_supplychain": {
       "status": "empty",
@@ -101,35 +101,35 @@
       "count": 20,
       "term": "수출"
     },
+    "google_news:dynamic:트럼프": {
+      "status": "error",
+      "error": "HTTPError",
+      "term": "트럼프"
+    },
     "google_news:dynamic:달러": {
       "status": "ok",
       "count": 19,
       "term": "달러"
     },
     "google_news:dynamic:규제": {
-      "status": "ok",
-      "count": 10,
+      "status": "error",
+      "error": "HTTPError",
       "term": "규제"
-    },
-    "google_news:dynamic:트럼프": {
-      "status": "ok",
-      "count": 7,
-      "term": "트럼프"
-    },
-    "google_news:dynamic:데이터센터": {
-      "status": "ok",
-      "count": 20,
-      "term": "데이터센터"
     },
     "google_news:dynamic:나스닥": {
       "status": "ok",
-      "count": 8,
+      "count": 7,
       "term": "나스닥"
     },
     "google_news:dynamic:1조": {
       "status": "ok",
       "count": 19,
       "term": "1조"
+    },
+    "google_news:dynamic:데이터센터": {
+      "status": "ok",
+      "count": 20,
+      "term": "데이터센터"
     },
     "naver_news_api": {
       "status": "needs_credentials"
@@ -152,9 +152,9 @@
     }
   },
   "source_summary": {
-    "ok_or_partial": 19,
-    "failed": 2,
-    "degraded": 6
+    "ok_or_partial": 16,
+    "failed": 4,
+    "degraded": 7
   },
   "naver_indices": {
     "KOSPI": "4,869.96",
@@ -165,65 +165,78 @@
     "kr_corporate_events": 1,
     "kr_policy_economy": 23,
     "kr_diplomacy_summit": 21,
-    "kr_energy_power": 2,
+    "kr_semiconductor_ai": 5,
+    "kr_energy_power": 3,
     "kr_bio_health": 1,
-    "global_market": 29,
     "global_diplomacy_summit": 11,
     "us_macro_rates": 1,
-    "us_china_trade_ai": 2,
     "europe_debt_ecb": 1,
     "dynamic:AI": 19,
-    "dynamic:수출": 14,
-    "dynamic:달러": 2,
-    "dynamic:규제": 9,
-    "dynamic:트럼프": 7,
-    "dynamic:데이터센터": 14,
-    "dynamic:나스닥": 6,
-    "dynamic:1조": 4
+    "dynamic:수출": 20,
+    "dynamic:달러": 11,
+    "dynamic:나스닥": 7,
+    "dynamic:1조": 7,
+    "dynamic:데이터센터": 17
   },
   "trending_terms": [
     {
       "term": "AI",
-      "count": 31,
-      "publisher_count": 23,
+      "count": 30,
+      "publisher_count": 22,
       "independent_story_count_estimate": 29,
-      "syndication_ratio_estimate": 0.065,
+      "syndication_ratio_estimate": 0.033,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 36,
-      "delta": -5,
-      "score": 85,
+      "previous_count": 31,
+      "delta": -1,
+      "score": 82,
       "examples": [
-        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도",
-        "11월 23~27일 한국·미국 증시 주요 일정｜미국 PCE·한국 금통위·델 AI 서버 실적까지",
-        "AI 랠리 변곡점 왔나…월가 \"버블 터졌다\" vs \"반등 여지 충분\""
+        "국내 반도체 소부장주, AI 투자심리 위축과 수출 규제 우려로 급락",
+        "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
+        "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?"
       ]
     },
     {
       "term": "수출",
-      "count": 25,
-      "publisher_count": 19,
-      "independent_story_count_estimate": 24,
-      "syndication_ratio_estimate": 0.04,
+      "count": 22,
+      "publisher_count": 17,
+      "independent_story_count_estimate": 22,
+      "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 24,
-      "delta": 1,
-      "score": 70,
+      "previous_count": 25,
+      "delta": -3,
+      "score": 61,
       "examples": [
         "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
-        "강원 미용 의료기기, 홍콩 코스모프로프서 122만 달러 수출 계약 성과",
-        "대구 100억·경북 450억 달러···수출 동반 회복 청신호"
+        "국내 반도체 소부장주, AI 투자심리 위축과 수출 규제 우려로 급락",
+        "한국 수출 사상 첫 '1조 달러' 돌파…독·미·중 이어 세계 4번째"
+      ]
+    },
+    {
+      "term": "달러",
+      "count": 21,
+      "publisher_count": 18,
+      "independent_story_count_estimate": 20,
+      "syndication_ratio_estimate": 0.048,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 22,
+      "delta": -1,
+      "score": 60,
+      "examples": [
+        "어반 원, 나스닥 상장유지 요건 미달 통지 수령…자본총계 250만 달러 기준 미충족",
+        "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
+        "멜라니아 트럼프 다큐에 7,500만 달러…아마존의 수상한 투자"
       ]
     },
     {
       "term": "트럼프",
-      "count": 21,
-      "publisher_count": 19,
-      "independent_story_count_estimate": 18,
-      "syndication_ratio_estimate": 0.143,
+      "count": 16,
+      "publisher_count": 16,
+      "independent_story_count_estimate": 14,
+      "syndication_ratio_estimate": 0.125,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 17,
-      "delta": 4,
-      "score": 65,
+      "previous_count": 21,
+      "delta": -5,
+      "score": 48,
       "examples": [
         "李, 트럼프·시진핑·푸틴 모두 만났다…미중러 회담 앞두고 외교전",
         "트럼프 \"미·중·러 정상회담 전례 없는 역사적 만남…핵전쟁 막기로 합의\"",
@@ -231,31 +244,15 @@
       ]
     },
     {
-      "term": "달러",
-      "count": 22,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 20,
-      "syndication_ratio_estimate": 0.091,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 21,
-      "delta": 1,
-      "score": 63,
-      "examples": [
-        "어반 원, 나스닥 상장유지 요건 미달 통지 수령…자본총계 250만 달러 기준 미충족",
-        "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
-        "강원 미용 의료기기, 홍콩 코스모프로프서 122만 달러 수출 계약 성과"
-      ]
-    },
-    {
       "term": "대통령",
-      "count": 16,
-      "publisher_count": 15,
+      "count": 15,
+      "publisher_count": 14,
       "independent_story_count_estimate": 13,
-      "syndication_ratio_estimate": 0.188,
+      "syndication_ratio_estimate": 0.133,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 16,
-      "delta": 0,
-      "score": 47,
+      "delta": -1,
+      "score": 44,
       "examples": [
         "이재명 대통령, 한-캐나다 정상 회동 상세보기|2026년 정상 외교활동",
         "이 대통령 “한반도 운명은 우리가 주도”…미·중·러 정상회담에 자주외교 강조",
@@ -263,83 +260,35 @@
       ]
     },
     {
-      "term": "규제",
-      "count": 15,
-      "publisher_count": 15,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.067,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 18,
-      "delta": -3,
-      "score": 45,
-      "examples": [
-        "전 USTR 부대표·미 상무부·정보기술업계, 한국 디지털 규제 잇단 경고…워싱턴 우려 확산",
-        "대만은 공매도 규제 강화하는데…한국도 증시 안정 대책 서둘러야",
-        "새벽배송 규제, 소비자에게 묻는다 '모두의 편익은?'...소비자주권시민회의 정책 토론회 개최"
-      ]
-    },
-    {
-      "term": "나스닥",
-      "count": 15,
-      "publisher_count": 12,
-      "independent_story_count_estimate": 11,
-      "syndication_ratio_estimate": 0.267,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 0,
-      "score": 42,
-      "examples": [
-        "어반 원, 나스닥 상장유지 요건 미달 통지 수령…자본총계 250만 달러 기준 미충족",
-        "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
-        "나스닥 5.3% 폭락 '검은 금요일'‥올해 상승분 모두 반납"
-      ]
-    },
-    {
-      "term": "1조",
+      "term": "데이터센터",
       "count": 14,
-      "publisher_count": 12,
+      "publisher_count": 14,
       "independent_story_count_estimate": 12,
       "syndication_ratio_estimate": 0.143,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 13,
       "delta": 1,
-      "score": 41,
+      "score": 43,
+      "examples": [
+        "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
+        "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?",
+        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도"
+      ]
+    },
+    {
+      "term": "1조",
+      "count": 13,
+      "publisher_count": 12,
+      "independent_story_count_estimate": 12,
+      "syndication_ratio_estimate": 0.077,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 14,
+      "delta": -1,
+      "score": 38,
       "examples": [
         "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
-        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-        "수출 1조 달러 달성했지만… ‘반도체 편중’ 넘어 성장 온기 퍼뜨려야"
-      ]
-    },
-    {
-      "term": "데이터센터",
-      "count": 13,
-      "publisher_count": 13,
-      "independent_story_count_estimate": 10,
-      "syndication_ratio_estimate": 0.231,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 16,
-      "delta": -3,
-      "score": 39,
-      "examples": [
-        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도",
-        "해외 데이터센터 \"세금 폭탄\"‥韓 투자도 흔들?",
-        "트럼프, “美기업 해외 데이터센터 건설 강력 제재” 공표"
-      ]
-    },
-    {
-      "term": "폭락",
-      "count": 12,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.333,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 0,
-      "score": 32,
-      "examples": [
-        "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
-        "나스닥 5.3% 폭락 '검은 금요일'‥올해 상승분 모두 반납",
-        "나스닥 5.3% 폭락, 올해 상승분 다 날렸다…월요일이 두려운 개미들"
+        "한국 수출 사상 첫 '1조 달러' 돌파…독·미·중 이어 세계 4번째",
+        "어떻게 ‘수출 1조 달러’인데 ‘주가 폭락’이 오나"
       ]
     },
     {
@@ -354,8 +303,8 @@
       "score": 30,
       "examples": [
         "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
-        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-        "“소프트뱅크 손정의, 최근 SK하이닉스 1조달러 인수안 검토”"
+        "“손정의 회장, SK하이닉스 1조달러에 인수 검토”",
+        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토"
       ]
     },
     {
@@ -370,19 +319,19 @@
       "score": 30,
       "examples": [
         "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
-        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-        "“소프트뱅크 손정의, 최근 SK하이닉스 1조달러 인수안 검토”"
+        "“손정의 회장, SK하이닉스 1조달러에 인수 검토”",
+        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토"
       ]
     },
     {
       "term": "울산",
       "count": 10,
       "publisher_count": 9,
-      "independent_story_count_estimate": 7,
-      "syndication_ratio_estimate": 0.3,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.2,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": -2,
+      "previous_count": 10,
+      "delta": 0,
       "score": 29,
       "examples": [
         "울산 AI데이터센터 간 李 \"AI 경쟁은 속도전…전문 건설인력 확보 강조\" - 머니투데이",
@@ -391,51 +340,67 @@
       ]
     },
     {
-      "term": "인수",
-      "count": 7,
-      "publisher_count": 7,
-      "independent_story_count_estimate": 4,
-      "syndication_ratio_estimate": 0.429,
+      "term": "AI데이터센터",
+      "count": 9,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 7,
+      "syndication_ratio_estimate": 0.222,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 7,
+      "previous_count": 8,
+      "delta": 1,
       "score": 28,
       "examples": [
-        "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
-        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-        "“손정의 회장, SK하이닉스 1조달러에 인수 검토”"
+        "울산 AI데이터센터 간 李 \"AI 경쟁은 속도전…전문 건설인력 확보 강조\" - 머니투데이",
+        "이 대통령, “대한민국 AI 대전환, 인공지능 고속도로가 열 것”...울산 SK AI데이터센터 건설 현장 점검",
+        "울산 SK AI데이터센터 찾은 李…“韓 AX는 AI 고속도로가 열게 될 것”"
       ]
     },
     {
-      "term": "1조달러",
-      "count": 7,
-      "publisher_count": 7,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.286,
+      "term": "규제",
+      "count": 9,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 7,
-      "score": 28,
+      "previous_count": 15,
+      "delta": -6,
+      "score": 27,
       "examples": [
-        "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
-        "“소프트뱅크 손정의, 최근 SK하이닉스 1조달러 인수안 검토”",
-        "수출 1조달러 시대…벌어들인 달러는 얼마나 서울환시로 돌아올까"
+        "전 USTR 부대표·미 상무부·정보기술업계, 한국 디지털 규제 잇단 경고…워싱턴 우려 확산",
+        "대만은 공매도 규제 강화하는데…한국도 증시 안정 대책 서둘러야",
+        "새벽배송 규제, 소비자에게 묻는다 '모두의 편익은?'...소비자주권시민회의 정책 토론회 개최"
       ]
     },
     {
-      "term": "방문",
+      "term": "앤트로픽",
       "count": 7,
       "publisher_count": 6,
-      "independent_story_count_estimate": 4,
-      "syndication_ratio_estimate": 0.429,
+      "independent_story_count_estimate": 6,
+      "syndication_ratio_estimate": 0.143,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 0,
       "delta": 7,
       "score": 27,
       "examples": [
-        "바트체첵 몽골 외교장관, 22~25일 방한… 10년 만의 공식 방문, 한몽 영사협정 서명",
-        "메가급 속도⚡️⚡️ 울산 SK AI 데이터센터 현장 방문",
-        "이 대통령, 울산 AI 데이터센터 현장 방문…“속도가 생명”"
+        "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?",
+        "\"앤트로픽 공동창업자, 트럼프 '아동 투자계좌'에 기부 예정\"",
+        "\"앤트로픽 공동창업자, 트럼프 '아동 투자 계좌'에 기부 예정\""
+      ]
+    },
+    {
+      "term": "나스닥",
+      "count": 8,
+      "publisher_count": 8,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 15,
+      "delta": -7,
+      "score": 24,
+      "examples": [
+        "어반 원, 나스닥 상장유지 요건 미달 통지 수령…자본총계 250만 달러 기준 미충족",
+        "나스닥 올해 상승분 반납…미 연준 \"금리 더 올려야\"",
+        "나스닥 '준공황', 반도체지수 10% 폭락 … 韓 증시 '중대 위기'"
       ]
     },
     {
@@ -449,29 +414,61 @@
       "delta": 0,
       "score": 24,
       "examples": [
+        "경기 하남 ‘트럼프 골프장’ 韓기업, 2000억 트럼프 차남 측 ‘로봇 병사’에 투자 검토",
         "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
-        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-        "“소프트뱅크 손정의, 최근 SK하이닉스 1조달러 인수안 검토”"
+        "“손정의 회장, SK하이닉스 1조달러에 인수 검토”"
       ]
     },
     {
-      "term": "AI데이터센터",
-      "count": 8,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 6,
-      "syndication_ratio_estimate": 0.25,
+      "term": "해외",
+      "count": 6,
+      "publisher_count": 6,
+      "independent_story_count_estimate": 5,
+      "syndication_ratio_estimate": 0.167,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 9,
-      "delta": -1,
+      "previous_count": 0,
+      "delta": 6,
       "score": 24,
       "examples": [
-        "울산 AI데이터센터 간 李 \"AI 경쟁은 속도전…전문 건설인력 확보 강조\" - 머니투데이",
-        "이 대통령, “대한민국 AI 대전환, 인공지능 고속도로가 열 것”...울산 SK AI데이터센터 건설 현장 점검",
-        "울산 SK AI데이터센터 찾은 李…“韓 AX는 AI 고속도로가 열게 될 것”"
+        "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
+        "해외 데이터센터 \"세금 폭탄\"‥韓 투자도 흔들?",
+        "트럼프, “美기업 해외 데이터센터 건설 강력 제재” 공표"
       ]
     },
     {
-      "term": "한반도",
+      "term": "속도가",
+      "count": 6,
+      "publisher_count": 6,
+      "independent_story_count_estimate": 4,
+      "syndication_ratio_estimate": 0.333,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 6,
+      "score": 24,
+      "examples": [
+        "이 대통령, 울산 AI 데이터센터 현장 방문…“속도가 생명”",
+        "이 대통령, 울산 AI 데이터센터 찾아 “경부고속도로 필적···속도가 생명”",
+        "李대통령 \"AI데이터센터·메모리 수요 더 늘 것…속도가 생명\"(종합)"
+      ]
+    },
+    {
+      "term": "생명",
+      "count": 6,
+      "publisher_count": 6,
+      "independent_story_count_estimate": 4,
+      "syndication_ratio_estimate": 0.333,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 6,
+      "score": 24,
+      "examples": [
+        "이 대통령, 울산 AI 데이터센터 현장 방문…“속도가 생명”",
+        "이 대통령, 울산 AI 데이터센터 찾아 “경부고속도로 필적···속도가 생명”",
+        "李대통령 \"AI데이터센터·메모리 수요 더 늘 것…속도가 생명\"(종합)"
+      ]
+    },
+    {
+      "term": "반도체",
       "count": 6,
       "publisher_count": 6,
       "independent_story_count_estimate": 6,
@@ -481,25 +478,25 @@
       "delta": 6,
       "score": 24,
       "examples": [
-        "이 대통령 “한반도 운명은 우리가 주도”…미·중·러 정상회담에 자주외교 강조",
-        "미중러 '한반도' 셈법 주시...이 대통령 \"국제정세 파장 철저 대비\"",
-        "이 대통령 “한반도 현안, 직접 당사자인 우리가 주도적으로 풀어가야”"
+        "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
+        "美 반도체 수출규제 전면 확대…삼성, 中 AI칩 출하 중단",
+        "국내 반도체 소부장주, AI 투자심리 위축과 수출 규제 우려로 급락"
       ]
     },
     {
-      "term": "소프트뱅크",
+      "term": "현장",
       "count": 6,
-      "publisher_count": 6,
-      "independent_story_count_estimate": 3,
-      "syndication_ratio_estimate": 0.5,
+      "publisher_count": 5,
+      "independent_story_count_estimate": 5,
+      "syndication_ratio_estimate": 0.167,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 0,
       "delta": 6,
-      "score": 24,
+      "score": 23,
       "examples": [
-        "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
-        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-        "“소프트뱅크 손정의, 최근 SK하이닉스 1조달러 인수안 검토”"
+        "이 대통령, “대한민국 AI 대전환, 인공지능 고속도로가 열 것”...울산 SK AI데이터센터 건설 현장 점검",
+        "메가급 속도⚡️⚡️ 울산 SK AI 데이터센터 현장 방문",
+        "이 대통령, 울산 AI 데이터센터 현장 방문…“속도가 생명”"
       ]
     }
   ],
@@ -508,12 +505,12 @@
   "official_web_candidates": [],
   "public_batch_market": {
     "available": false,
-    "generated_at": "2026-11-22T05:21:07.702318+09:00",
+    "generated_at": "2026-11-22T05:31:05.236574+09:00",
     "status": "unavailable",
     "provider": "naver_public",
     "exact_1m_bars": false,
     "amount_method": "cumulative_trading_value_delta",
-    "elapsed_minutes_from_previous": 9.932434800000001,
+    "elapsed_minutes_from_previous": 9.958904266666668,
     "interval_leaders": [],
     "one_minute_samples_available": false,
     "minute_amount_exact": false,
@@ -540,129 +537,121 @@
     "minute_burst_leaders": [],
     "top10_share": null
   },
-  "item_count": 167,
+  "item_count": 148,
   "news_scan_target": 500,
   "query_group_count": 18,
-  "new_item_count": 15,
+  "new_item_count": 14,
   "new_items": [
     {
       "topic": "kr_policy_economy",
-      "title": "에이스 퍼플리 세탁세제, 라벤더, 2.5L, 4개",
-      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTE1DWlNZbDdDaERaZWhFZFBvd0N1blFhLXp2TzM1WXcwMmR0cWpvQUNrRjcyaVhxeWE5MWJIanViWnI?oc=5",
-      "published_at": "Sat, 21 Nov 2026 03:59:58 GMT",
+      "title": "쉼표365 마마프랑 베이킹소다 주방세제, 석류향, 1L, 2개",
+      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTFBHZTdGU2F4bGRfNTZ5UXcxTlhzRzZaOFFmZWlhMFdjODFvMFl1X1F3dWlCVW14Vm1GcXZTaHprbGk?oc=5",
+      "published_at": "Fri, 20 Nov 2026 23:22:14 GMT",
       "publisher": "toss.im",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "kr_policy_economy",
-      "title": "\"같은 정품인데 비싼 것만 남았다\"… 갑자기 수입 엔진오일 가격 뛴 이유는?",
-      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPRkM4enczUkpQQ2dORXhXR1hxZzNweXc0NS0yLVYwdkcyQVBadFBBLXNFTnAzU2R6eC1mOGU4cG9KQ1g0S0JrdGd2TXF4TkxKb1ZnQ3pBRWFpM2U0T1Nobk51QUhmWjhrWmhhN1N6TEt0eTFSMGMwNmVwSjhJSkxOVGdiMW9jbFpHTEE?oc=5",
-      "published_at": "Fri, 20 Nov 2026 21:00:00 GMT",
-      "publisher": "조선일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "\"세제 두 배 넣은 빨래, 냄새와 얼룩의 시작이었다\"",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9qRmVOQVYyZzBCVHAzaGZaUXFNRG5wZ3FYMVdzTjFTQnFWV1ZyR1lfNDQydmljZjRQU1pQRlNmdDd1b29PU01KVnB6V2ZvQk5weFYyQ3lhQ1cwN1hGSnNJS1RoSWZST19NZEkyajhn?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:54:09 GMT",
-      "publisher": "국제뉴스",
+      "title": "국내 반도체 소부장주, AI 투자심리 위축과 수출 규제 우려로 급락",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQRFBjcFc1a0Zfc2lMNU9wN0JpUVBmejBaZVpaRDlNQTJXWm0zelgyODhmZC1uR20zZGhSMUtaYlBsc2s5RnVGRDdLWmVkTU1PODNoenpqY0JzeDliMmVDM1FXb0oxRTBkeGM1OHMzc0ItZUF1YmI1aGlVYXJ3bVZBZDBmMTNCbWlKRHpPdFJlZ2ZWWjRORmc?oc=5",
+      "published_at": "Fri, 20 Nov 2026 22:07:31 GMT",
+      "publisher": "Traders Union",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "1945년 얄타회담에서 2026년 선전 APEC까지, 한반도 문제는 어떻게 다뤄졌나",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE53LXhfNUtGemRFejN0bVNlSDVUT0NmWklySnlUeE15cHNMMTlGS3F0ZmZVdGpMcEY1SVFWbTdlMVpHOUhJczhaZ0ZMcEl4MjgtdTNTZHdpWFdCVnJ5T0U1LUVmMWsteVNKUEJidFVLMVZyX1lLSl9F0gF3QVVfeXFMTncteF81S0Z6ZEV6M3RtU2VINVRPQ2ZaSXJKeVR4TXlwc0wxOUZLcXRmZlV0akxwRjVJUVZtN2UxWkc5SElzOFpnRkxwSXgyOC11M1Nkd2lYV0JWcnlPRTUtRWYxay15U0pQQmJ0VUsxVnJfWUtKX0U?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:42:08 GMT",
-      "publisher": "한국시민기자협회 뉴스포털1",
+      "title": "미국 샌프란시스코 및 남미 3개국 순방",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9kWGhLYWE0b1FiZHVxMnRIYzY4WFZYM29aWkRmTGlDQi1sdmZUTVpsNjdiS2Q1VmtfWUFnaGZqRFNKNlNIUmNrWG9sakM4RWVwS1dSOHBWU1F4UEJWOGRYN1p0QmhlZmJrdHA0?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:35:42 GMT",
+      "publisher": "Mofa.go.kr",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "李대통령, 12월 트럼프·1월 다카이치 만난다…실용외교 보폭 확장",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBGV2RJU1lWaVF4NzlyVDBfUW43X2IyRDRyUW5lSEpvWGo4WW9CQjgxUFdVd2tzLS0wOWNEVWVmekJOanBjWUZRdE5PZWZkSjVmRzVrdWJkbi1rWUE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 20:05:00 GMT",
-      "publisher": "뉴스1",
+      "topic": "kr_semiconductor_ai",
+      "title": "엔비디아 첨단칩 중국 차단…한미반도체·디아이 반사이익 기대",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1wQmo2M2VVN3lZdkJnd2NiUXNfbkRIQXZ2Q2hhNTdJZnJvWE1JalpiTnB6cW5HcWYtMTBfTnpRZ3FGUlVaUlNnUDhOVW92MVQxV2REa1FaWXM4UmtzaDlYNVpKUzZEZzVqMXhQTGJsR1JSMDYzSGVV0gF3QVVfeXFMTXBCajYzZVU3eVl2Qmd3Y2JRc19uREhBdnZDaGE1N0lmcm9YTUlqWmJOcHpxbkdxZi0xMF9OelFncUZSVVpSU2dQOE5Vb3YxVDFXZERrUVpZczhSa3NoOVg1WkpTNkRnNWoxeFBMYmxHUlIwNjNIZVU?oc=5",
+      "published_at": "Fri, 20 Nov 2026 23:39:22 GMT",
+      "publisher": "핀포인트뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_bio_health",
-      "title": "'AR1001'은 이제 'FDA 승부'… 제약업계는 '실적 방어 고심'",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1yOTZhNktDQTBTWFZyQURrQ3loWDQya2IwYlZGY3V1WnZ4dnJHaUNKNU9XeFQ0aHhuZnJmODZ6SkhXR1pveF8zWWxGWFh5VEtJWm9fZmxPU2NwRXJfTUZwdER5RjVvak5xNHhB?oc=5",
-      "published_at": "Fri, 20 Nov 2026 21:03:00 GMT",
-      "publisher": "히트뉴스",
+      "topic": "kr_semiconductor_ai",
+      "title": "삼성전자, 메모리·MX사업부장 교체…황상준·최원준 선임",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE4zbGNHd2xRVmlwYXNveng3dnd3eEdJRkhic1VZM0c0OUc0b09VUmhyN0pLUHFhXzFEaG50S3cyalc5VzhSM3NRY0w2S2kzeTVDNWfSAVNBVV95cUxQbS1xVDR3X045WnlMWUtxVDMxckhSSHRLcUhYZjZ6ZUZ5aDR2MDY1SWZDa0tIc2thYzBnQTVOdGlvZzNtaG5oZVZHOWtmcGFpWkdTYw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:36:02 GMT",
+      "publisher": "서울경제",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "global_market",
-      "title": "미군 도움으로 호르무즈 해협서 원유 수출 늘리는 UAE",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1ERTg2Zlk3QlBRTF8tQUNWeU1KVnpGUC1kN0VmSjV0RTRQY04xNXZuV3NrQjVtLVRMendnQlNrWUtSTFhfRDEzczJKX0NmcDAzczk5SkgzY2hMQdIBWEFVX3lxTE9Lcmw0aDlqQUFKeWY5Z1dKRTVGLTlKSDMtQ3h1d1M3UExQZ3BpVjRYdmNrWWkwZmVMSkF5QTVlYkNiUk1PWTFVNGk4Szl5OWs5R09xb3c2Qnc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 20:00:00 GMT",
-      "publisher": "아주경제",
+      "topic": "kr_semiconductor_ai",
+      "title": "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE4xeElYbGk4SmJTUFdNS1JBNVBLVjNMeENmT3lVbEdhY1lFTnF1Wlo3cWVLX1k5QnVTRmMtWTlBcDB6djVlcERFTlB2MXFGcFpraURxdEFkWkwzWVI2ajdpaGxHZFZ1c2VNNks1T2tVMA?oc=5",
+      "published_at": "Fri, 20 Nov 2026 22:55:42 GMT",
+      "publisher": "엠투데이",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "us_china_trade_ai",
-      "title": "젠슨 황 낙마 후 첫 미·중 담판...'희토류 족쇄' 찬 트럼프, '中 우회 수출 감시망&apo...",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBKWF9Dek90RVAtWHotQTFoLWp5a2YtdGtPd1poOWFzMUhDa3kyTjFqb1dYNEJCNy0tTHR2WkJ2S0JockRRS2NCZHNMWTdDdkhtaUdGaHVWbkJUNlFvV0V2eHZyR2k5bU1pSUhJ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 03:29:28 GMT",
-      "publisher": "www.edaily.co.kr",
+      "topic": "kr_semiconductor_ai",
+      "title": "마이크론·브로드컴·TSMC 동반 급락…삼성전자·SK하이닉스에 쏠리는 '경계령'",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE02SW56ck5RRE1adUhGd0FReWVSV2ZUT25SZjBOUDQxd0JNNW1PZEk5Qi1RUDFuTmtGbVN3cEx4ZW5nRnUtczZWOWpBZFRodUVWZmZQQUhuY2N3RjhsMVFmZ0JHZ0VLTFcwWmQzU0VVODluN1HSAXdBVV95cUxQUURDX280SXdSalNVNVQtZ3VsS3QzQmN6Tl9SQXJQRG1lNkJWdEFxTm9ESTd2NDRiM1R3NXV2U3AtS25Xand5el9XSnpSd2RFQ2pOUFRxeGdfODVwSHpTVHNfMElmRlJKWG5XZlltS3VuWkVONFUtSQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:12:58 GMT",
+      "publisher": "핀포인트뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_semiconductor_ai",
+      "title": "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBzclY3VE1nU3ROeHdFNEhzRHZJem0wU05TbmQ4czlYM3RnV2VCVnRfbENtR0lMN25VeEl2bEVZOHNEaWhVQ09MMVN5emZGUDkzNkRMSTFtb0tmLXZXbmlCMk43dVFaVDZQenJYdjlzRERIWWfSAXdBVV95cUxPaEpjN29XakJuSV9ET2RWLVZOczJPd1F0S3pzd3VxZElVZEpVQVNRbm84cVRVMUsyVzM1dzFjczV0UFBCNEpnbXNOSE11aEVXUjl1ZmtuVS1vUGZiTmNlcC1NNWpOeVpzVUZTWWhpRmRwal9Yb1Q0TQ?oc=5",
+      "published_at": "Fri, 20 Nov 2026 23:16:02 GMT",
+      "publisher": "핀포인트뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_energy_power",
+      "title": "[칼럼] 에너지 없는 대한민국, 수입에 목숨 건 경제…한국과 일본은 왜 세계에서 가장 취약한 에너지 국가인가",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE01cUZ1d3JrVGN2aU95WjJhLUt1ZjFlVy1LOFB6V09LdXlZNmJVU3JHUzVEY0VpWGJlSV9NQ0ZFd0dqX0VOUDJ6dmE4SXBsb0VuUmc?oc=5",
+      "published_at": "Fri, 20 Nov 2026 21:31:00 GMT",
+      "publisher": "케이에스피뉴스",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "dynamic:AI",
-      "title": "건보공단 다제약물 관리사업에 AI 활용 제안",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE82YWxOTXBOUmZQQUcySGM4SnlvTEpESFVHTElDTjV6blF6MUl6Rm4yV2lCdjBqSllaTmJZekNUMU1mU1IyZ201dGFjWVR2UkJENHNCMElvbU5laDVkYXliR0xwMmJqVUdKOEE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 13:36:42 GMT",
-      "publisher": "병원신문",
+      "title": "'AI 부정행위' 논란 뒤 첫 국가자격시험서 6건 또 적발",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1HdzdpTWtMc3htdWJkajJKaS1sOE1KZ1ZwcnlMbTN6U3R4TnRIVW9tUXJuZXh2Z0ZiSzVNNHA0c3ExbTdPc2E5WU1hbmhKQWtycHlZOUhMcHhIb2luOUtiaw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 14:23:02 GMT",
+      "publisher": "KBC광주방송",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:수출",
-      "title": "수출 1조 달러 축하...\"품질! 기술! 혁신!\"",
-      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9xRnQzNGNFemh2SDgxY3JqWWJWSFYzOXNEQk0xWEtZajUycWdVRFZFNlNYdjh3Y3gwd21GX1pmYmRqN0dOUkpPQV9WUGljd2t5bF9fdjZPRm84ZUNFVi1yOEItS1J2c2RJTWlVWll2YUZpNTJHVEE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:09:00 GMT",
+      "topic": "dynamic:AI",
+      "title": "수익성 시험대 오른 AI...대장주 추락에 뉴욕증시 '패닉'",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE9MdEVmSUkzNGYwUnBPVHFIWUhzRjN6RWJfWV9wWm4wd1UybElRbVBPbVFkZC1xVWRWaFZNY2ZJay1sZmU2LWJtT3dLbG1NOFF5R0I5V0U3N3hieE9naWc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 13:34:00 GMT",
       "publisher": "YTN",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:트럼프",
-      "title": "야당 공세 직면한 트럼프, 정부 계약업체 의회 자료제출도 제한",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5jYnQ2cldDNXFkNThfcm0tdTcxZVNKR2NRcW5QTnR3QVdsUUQ1ZXBuVlcyaU96TVN5SUp4R2oxNDVVNUpYT0RYZTRsQUhJWGFDMWhFR2pwRzZSQTDSAWBBVV95cUxOMFFpZUJVU1VmMExqQk9pMG94ZnowdHo1Z1NaemwtSW9ZM3lWRE1JLUhGLXR3VS15U21LdUZhMWxOczlJWEs0Y284ZkJTdXZyY05ZeGxWOE5wVUJJSTF5RHk?oc=5",
-      "published_at": "Sat, 21 Nov 2026 20:05:46 GMT",
-      "publisher": "연합뉴스",
+      "topic": "dynamic:AI",
+      "title": "AI 스마트홈 헬스케어 글로벌 협력 컨퍼런스 개최",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9tc3lMZ285cXoxZjA3MzhabktKaG9uSjZRU1VuMGllaXkySkFZTG1TakhCc21CZWFFX1NXY0NwV2lXN2xjd25BUFpJVFg5R2VoZTR6cTF1SHBSa2kwUlh3eEx3REtQdG5wc1E?oc=5",
+      "published_at": "Sat, 21 Nov 2026 13:17:25 GMT",
+      "publisher": "병원신문",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:트럼프",
-      "title": "트럼프는 서두르지 않겠다는데‥이란 추가공격 압박 커져",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1La2syVGtmRTFsbk1rVVpVcHRtZVllQk1KQ2lMR1M4RXY2R3VSTjNxRFluNVItSnZic0pkUThubThsdmFCeDE1SGJMdTljSjFJNFlGVEVYZldNVHkzblNCQWxpQnVFbk9OT3JZNV9uOVdTaUJv0gF0QVVfeXFMUDg2QUZUR1gtd2NGYjdvRFNJZHJlcXQwbEFVZk5OUUhhUm5FRjdOREJNbnRXbHIyMGJxZGZLNFhLbmFFb2VJUEQxSEJBaFkyTTJiRU9vNUdDbmFlUEdqb0IzQXFkRkxXc2xxTVUyb1ZXTW1kTG0?oc=5",
-      "published_at": "Sat, 21 Nov 2026 08:58:53 GMT",
-      "publisher": "MBC 뉴스",
+      "topic": "dynamic:달러",
+      "title": "'구원투수'에서 '폭락 주범'으로…앤트로픽 시총 1090억 달러 증발에 월가 ‘네 탓 공방’",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1Qd08zeVZla2tVVnV3MzA5TFRhZ1RRcTAzaWN3R09uQ3o5TU1PZE1BVXZxVFM5bEFQY25SUGFLS0ZJRGxWRGRPUW5Cc0JtR2g2RTNYd0Q1dlJPQQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 10:58:33 GMT",
+      "publisher": "한국경제",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:트럼프",
-      "title": "\"트럼프, 내년 1월 전까지 우크라 종전협상 타결 원해\"",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE01bzdqZDJ2RlN5dWpsaXctMDdfQzE5OF8zR0hpRkt0TllScmxLTjJaYWZ5MEJGUVJDdzhsMS1jU2VOdVZQZmVzUklfOTdUZ2J3YXM5SW9FSzdQbG4xMXo3YWJ1QzJCMWc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:39:00 GMT",
-      "publisher": "연합뉴스TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "\"트럼프, 우크라 종전협상 내년 1월 초까지 타결 원해\"(종합)",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1uZXlzbnlJTGJOeUpZVGxJdTQ0a1p0Q21aWmNqLVZNOHNuVUdVTXctVnc3aTZndkpEdnRUZEl3UkZPdkwwV09EVUhWMnZpR3Q4OVk4aGtidjU2ZWvSAWBBVV95cUxOQmJEaXRUZXJtbHlfSGE5Q3ZVa1ZkSFNrSGtiSlVqSFROZjlaYktSejdzNUpCMTJWUUgwelZBSXMwdlpaX1JHM282bm9nSzBuZkswM3RTY2c3MHIteFJ0cEM?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:26:14 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "트럼프·베선트, 美 연준 추가 긴축에 잇단 견제",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNSjNXY1EtU2tuWWpRN3VydTMzUERnWDZPNUlKQWVwZnpRV1EtZ2FFaDJoVjhQQVMxSnpuMi0zV1ZVWU13czFtbmcxeDdXSDhoNTk5a1FqV2hrX2dhMzBkVTllMlFEaWZqbjkxLURyOVlYQ1hkWXVieF9ES0V1a1pDQTY0Z2FzM3lI?oc=5",
-      "published_at": "Sat, 21 Nov 2026 18:00:00 GMT",
-      "publisher": "글로벌이코노믹",
+      "topic": "dynamic:데이터센터",
+      "title": "“속도가 생명”…李, 울산 AI데이터센터 건설 현장 방문",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9tS2ZCeXJGSmdBZEM5V3FBTUVaalBwcVYxTE82Zm5KTURfdGhGOTNGdHdKdHdDWU4teGY3SnA0WURmUEdsZEdVb1I1YjhlZEtmX0xHLVRVV0NDb284eWJveHdnY3VZT0huUkpRNG02VDU1a1RKendZ0gFmQVVfeXFMTmpCS2NWR1l0RWJCOXVFZmYya1NSdFRDc0dwWGs0Z2NMcTc0X0hpOElTV3g0LUt5bHd1VkJWcUt1b0traWtwMDg2N3JuMFpwQUp1RTlsVHVDV3JNejlVOXhZMTVYeVp3?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:28:00 GMT",
+      "publisher": "동아일보",
       "discovery_source": "google_news_rss"
     }
   ],
@@ -757,6 +746,14 @@
     },
     {
       "topic": "kr_policy_economy",
+      "title": "쉼표365 마마프랑 베이킹소다 주방세제, 석류향, 1L, 2개",
+      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTFBHZTdGU2F4bGRfNTZ5UXcxTlhzRzZaOFFmZWlhMFdjODFvMFl1X1F3dWlCVW14Vm1GcXZTaHprbGk?oc=5",
+      "published_at": "Fri, 20 Nov 2026 23:22:14 GMT",
+      "publisher": "toss.im",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
       "title": "거래 1년 새 두 배, 10월 +2.11% — 규제 문턱 넘은 군포, 금정역 84㎡ 13.1억 (군포 집값은 올해 +12.57%, 다섯 주 연속 주 0.5%대)",
       "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9oSFpVdjB3cC1xc0RXUGxLNTNRbERRdGV6UFd1MlQxUllRWWlLaUJWamFtSFpHTFJMYnN5UHJKTVdVM0MtLXBtLXNMTzRWczBGWGpjY2xtMzhWd1NWalhrRUVma2hrRTczUXlEdE1nb3g2QmpEeGlUOEdMVkU?oc=5",
       "published_at": "Sat, 21 Nov 2026 15:39:00 GMT",
@@ -777,14 +774,6 @@
       "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBmSlpJYUEwcmJlYTM0b052VG01VUJoTTFNWjV1U0QxTk5sYm0tbGVubzBsOE9vbFNIVXF1WGNjMGdNYnNYLUlPbHN5ek4teVVjRDExVm01MFExWXA4bDZHYjJ3MzZHQVlXQUNyeXdB?oc=5",
       "published_at": "Sat, 21 Nov 2026 13:11:44 GMT",
       "publisher": "한국영농신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "\"같은 정품인데 비싼 것만 남았다\"… 갑자기 수입 엔진오일 가격 뛴 이유는?",
-      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPRkM4enczUkpQQ2dORXhXR1hxZzNweXc0NS0yLVYwdkcyQVBadFBBLXNFTnAzU2R6eC1mOGU4cG9KQ1g0S0JrdGd2TXF4TkxKb1ZnQ3pBRWFpM2U0T1Nobk51QUhmWjhrWmhhN1N6TEt0eTFSMGMwNmVwSjhJSkxOVGdiMW9jbFpHTEE?oc=5",
-      "published_at": "Fri, 20 Nov 2026 21:00:00 GMT",
-      "publisher": "조선일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -821,10 +810,10 @@
     },
     {
       "topic": "kr_policy_economy",
-      "title": "\"세제 두 배 넣은 빨래, 냄새와 얼룩의 시작이었다\"",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9qRmVOQVYyZzBCVHAzaGZaUXFNRG5wZ3FYMVdzTjFTQnFWV1ZyR1lfNDQydmljZjRQU1pQRlNmdDd1b29PU01KVnB6V2ZvQk5weFYyQ3lhQ1cwN1hGSnNJS1RoSWZST19NZEkyajhn?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:54:09 GMT",
-      "publisher": "국제뉴스",
+      "title": "국내 반도체 소부장주, AI 투자심리 위축과 수출 규제 우려로 급락",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQRFBjcFc1a0Zfc2lMNU9wN0JpUVBmejBaZVpaRDlNQTJXWm0zelgyODhmZC1uR20zZGhSMUtaYlBsc2s5RnVGRDdLWmVkTU1PODNoenpqY0JzeDliMmVDM1FXb0oxRTBkeGM1OHMzc0ItZUF1YmI1aGlVYXJ3bVZBZDBmMTNCbWlKRHpPdFJlZ2ZWWjRORmc?oc=5",
+      "published_at": "Fri, 20 Nov 2026 22:07:31 GMT",
+      "publisher": "Traders Union",
       "discovery_source": "google_news_rss"
     },
     {
@@ -837,17 +826,17 @@
     },
     {
       "topic": "kr_policy_economy",
-      "title": "공인 자체 평가 시스템이 한국 온라인 게임 산업을 어떻게 변화시키고 있는가",
-      "url": "https://news.google.com/rss/articles/CBMi1wNBVV95cUxOd20wcFowYS13NEExcmVIMUptQ2x4aWw1V2VERWsxTTcxVUV3bS00U19DbzYwcjRSTC00cm4ta2dURkRoZHU4aXN2Q1h6S21Jc245V18yb0dRT2JDVVNtVmRGaW1HWWtzSnhKVjdMSUM0SlZJLVNQaW5QWmhBXzJGeC14SlF4OUFvZ1JHeDBOc2NJMW5VeHJSSGN4U2pCOHBMZ2NrQXZ6d25neVhuSGUxdFhvUzdvT0V6RnFHMzFKZ0RVVVJEYUR0cUpaaXVaSGVjcm55WHpyVld5NVNBRUhpWTgwd1BUUkNDYXFYR2tiSEdDY19mYTNtMDZId09QWU1xdjdkcVdETWpiZEZUY1NqaklhR3VJaWV2dV9PWDJ5dkJrXzVTeFJuUDFWc2piTDc4OHdJSXEyOUJ5MVYzdHlsOGJQYVd3cUIwaFRuUW5TcjJmYTB6bzBhQ1Q1QkpKZ21veVlZeXREbVA0cE55SjBVYm0wcmpnaGREUzAydzJ1bzhmUk1nMGZqSzZpNFhrVHVQN2UzS08wZ09QLW5VeEFCcEVlVG5tTE5kMzExb3c1VE5pdDFjdFM0LTBQbFBSbXRpNGJGeDVVSW1HVUlpSU9uR3Z6S3dnZjA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 11:25:16 GMT",
+      "title": "플랫폼 기반 등급 평가 제도가 한국 온라인 게임 산업에 미치는 영향",
+      "url": "https://news.google.com/rss/articles/CBMipwNBVV95cUxQMXdsaFo5UjloY3lXeVVjdGRrSlhHRy1xNkZsNk8wN0V5TnFKWXdnRzdRaXJEREViQm9UX0RlLWg4U1liR0QtUklzX3VhUHhlRmUxTTJmM1lJZWU1V1NULXNVVHA0Tjl6QUZ0RlFfRGVfN2laMGtQb09DLU5NbTZ2MHFDR2dabUhfTWF4cHozaG5JMzR0dGF0T1BfLVA1VDJSYnVlbGl3QVFkN09GOENFOXBnbEg0dGo3NnBNeldIcFdlX1RkVTc2QkxFa1hkUnBlQkFyaEhfRndHQURseTJQN014NlVDLWFyZnp4YXRwaVllX0JDc0F6c0g3QmRZS0EwT1k3N0pKcEh6U0NGNFFNZTZzWFRtdmdacEl2dk5CS3IwQXB3VXlycndwYzQ3NXhmRFV1RXB0UUx0WmxwZUZ4eVNjdUptQTNjVlNDT0lyVDB5ZXNIYjNkVW9fX1Q2UHVjQWFuR2lxb3JLN2lWZXhWNDVhVlVURWZDX0VNZ1pPNVlaZ3JrZGM0c1dPT3ZGNWtodjZ4UHRXaFA2Y00tNWZnc1Qyd3ZrNHM?oc=5",
+      "published_at": "Sat, 21 Nov 2026 11:03:15 GMT",
       "publisher": "Outlook India",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "kr_policy_economy",
-      "title": "플랫폼 기반 등급 평가 제도가 한국 온라인 게임 산업에 미치는 영향",
-      "url": "https://news.google.com/rss/articles/CBMipwNBVV95cUxQMXdsaFo5UjloY3lXeVVjdGRrSlhHRy1xNkZsNk8wN0V5TnFKWXdnRzdRaXJEREViQm9UX0RlLWg4U1liR0QtUklzX3VhUHhlRmUxTTJmM1lJZWU1V1NULXNVVHA0Tjl6QUZ0RlFfRGVfN2laMGtQb09DLU5NbTZ2MHFDR2dabUhfTWF4cHozaG5JMzR0dGF0T1BfLVA1VDJSYnVlbGl3QVFkN09GOENFOXBnbEg0dGo3NnBNeldIcFdlX1RkVTc2QkxFa1hkUnBlQkFyaEhfRndHQURseTJQN014NlVDLWFyZnp4YXRwaVllX0JDc0F6c0g3QmRZS0EwT1k3N0pKcEh6U0NGNFFNZTZzWFRtdmdacEl2dk5CS3IwQXB3VXlycndwYzQ3NXhmRFV1RXB0UUx0WmxwZUZ4eVNjdUptQTNjVlNDT0lyVDB5ZXNIYjNkVW9fX1Q2UHVjQWFuR2lxb3JLN2lWZXhWNDVhVlVURWZDX0VNZ1pPNVlaZ3JrZGM0c1dPT3ZGNWtodjZ4UHRXaFA2Y00tNWZnc1Qyd3ZrNHM?oc=5",
-      "published_at": "Sat, 21 Nov 2026 11:03:15 GMT",
+      "title": "공인 자체 평가 시스템이 한국 온라인 게임 산업을 어떻게 변화시키고 있는가",
+      "url": "https://news.google.com/rss/articles/CBMi1wNBVV95cUxOd20wcFowYS13NEExcmVIMUptQ2x4aWw1V2VERWsxTTcxVUV3bS00U19DbzYwcjRSTC00cm4ta2dURkRoZHU4aXN2Q1h6S21Jc245V18yb0dRT2JDVVNtVmRGaW1HWWtzSnhKVjdMSUM0SlZJLVNQaW5QWmhBXzJGeC14SlF4OUFvZ1JHeDBOc2NJMW5VeHJSSGN4U2pCOHBMZ2NrQXZ6d25neVhuSGUxdFhvUzdvT0V6RnFHMzFKZ0RVVVJEYUR0cUpaaXVaSGVjcm55WHpyVld5NVNBRUhpWTgwd1BUUkNDYXFYR2tiSEdDY19mYTNtMDZId09QWU1xdjdkcVdETWpiZEZUY1NqaklhR3VJaWV2dV9PWDJ5dkJrXzVTeFJuUDFWc2piTDc4OHdJSXEyOUJ5MVYzdHlsOGJQYVd3cUIwaFRuUW5TcjJmYTB6bzBhQ1Q1QkpKZ21veVlZeXREbVA0cE55SjBVYm0wcmpnaGREUzAydzJ1bzhmUk1nMGZqSzZpNFhrVHVQN2UzS08wZ09QLW5VeEFCcEVlVG5tTE5kMzExb3c1VE5pdDFjdFM0LTBQbFBSbXRpNGJGeDVVSW1HVUlpSU9uR3Z6S3dnZjA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 11:25:16 GMT",
       "publisher": "Outlook India",
       "discovery_source": "google_news_rss"
     },
@@ -885,6 +874,14 @@
     },
     {
       "topic": "kr_diplomacy_summit",
+      "title": "미국 샌프란시스코 및 남미 3개국 순방",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9kWGhLYWE0b1FiZHVxMnRIYzY4WFZYM29aWkRmTGlDQi1sdmZUTVpsNjdiS2Q1VmtfWUFnaGZqRFNKNlNIUmNrWG9sakM4RWVwS1dSOHBWU1F4UEJWOGRYN1p0QmhlZmJrdHA0?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:35:42 GMT",
+      "publisher": "Mofa.go.kr",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
       "title": "李, 트럼프·시진핑·푸틴 모두 만났다…미중러 회담 앞두고 외교전",
       "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFBzOEtDX0VJTU15SnFaOTNpWEhqamdTdkNDZ09vQjBrbVg4REoxdkpkU0UtcU5lUzdiSndqZXlaSzhWVUtackczd3V4VU45WURsbGZ3LVRoVUJSaFFvTGpUWnV1OA?oc=5",
       "published_at": "Sat, 21 Nov 2026 17:51:59 GMT",
@@ -905,14 +902,6 @@
       "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5PUDNUbTBObmNnWWtZNVFRelpZVVVLSzJucWxveHUxOExOUm9GazlrY2pISFJ0Wkg1UEljamlLc0lCNmlpaDRTRUptNHBMTHNQWXZMUGJDZ09tbDVOR0ZhWS1kcHNrUUg0N19tZHBn?oc=5",
       "published_at": "Sat, 21 Nov 2026 03:05:00 GMT",
       "publisher": "코리아포스트 한글판",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "한-베트남 정상회담 상세보기|2026년 정상 외교활동",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE95YUZfLW9FOTMwT3JveXBBN1I0eUZlQWNYSVJjakNUTW1SdUxWWUhUNklsU0c1Q1Mxd1ZwRU1iWGtVUjYwZVJudW5aSmFlMWp1TElNWG1XU3A1YTNqLTRCZFpldnJOVlRoVDZZdVlR?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:07:51 GMT",
-      "publisher": "Mofa.go.kr",
       "discovery_source": "google_news_rss"
     },
     {
@@ -941,14 +930,6 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "1945년 얄타회담에서 2026년 선전 APEC까지, 한반도 문제는 어떻게 다뤄졌나",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE53LXhfNUtGemRFejN0bVNlSDVUT0NmWklySnlUeE15cHNMMTlGS3F0ZmZVdGpMcEY1SVFWbTdlMVpHOUhJczhaZ0ZMcEl4MjgtdTNTZHdpWFdCVnJ5T0U1LUVmMWsteVNKUEJidFVLMVZyX1lLSl9F0gF3QVVfeXFMTncteF81S0Z6ZEV6M3RtU2VINVRPQ2ZaSXJKeVR4TXlwc0wxOUZLcXRmZlV0akxwRjVJUVZtN2UxWkc5SElzOFpnRkxwSXgyOC11M1Nkd2lYV0JWcnlPRTUtRWYxay15U0pQQmJ0VUsxVnJfWUtKX0U?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:42:08 GMT",
-      "publisher": "한국시민기자협회 뉴스포털1",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "트럼프 “미·중·러 정상회담서 한반도 위험 논의”",
       "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5tbGxxQVlJMnRBVVREYkZraFY0T2FoeGJRZXlRcUtPR3JqWkk1d0k1b3pfVmRiUVlmZVprbjh5WE5HbFdwQV9MM3dna0cydzJx?oc=5",
       "published_at": "Fri, 20 Nov 2026 22:44:08 GMT",
@@ -965,9 +946,9 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "한일 정상회담 상세보기|2026년 정상 외교활동",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBWLWdpZG93a1QxU2FOS2ZUWlRUTjYwcUM4WmpyM3h4a09WMjRpRWk1aFpyTDJiMlV2VnhxUjd0S0pZZHhXYTFPS094TDlQMnIxVWxvQjlGWWMwQnJjcmRIbnF0TW9ydEM5QzZoNjBR?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:51:27 GMT",
+      "title": "한-베트남 정상회담 상세보기|2026년 정상 외교활동",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE95YUZfLW9FOTMwT3JveXBBN1I0eUZlQWNYSVJjakNUTW1SdUxWWUhUNklsU0c1Q1Mxd1ZwRU1iWGtVUjYwZVJudW5aSmFlMWp1TElNWG1XU3A1YTNqLTRCZFpldnJOVlRoVDZZdVlR?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:07:51 GMT",
       "publisher": "Mofa.go.kr",
       "discovery_source": "google_news_rss"
     },
@@ -977,6 +958,14 @@
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBGV2RJU1lWaVF4NzlyVDBfUW43X2IyRDRyUW5lSEpvWGo4WW9CQjgxUFdVd2tzLS0wOWNEVWVmekJOanBjWUZRdE5PZWZkSjVmRzVrdWJkbi1rWUE?oc=5",
       "published_at": "Sat, 21 Nov 2026 20:05:00 GMT",
       "publisher": "뉴스1",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "한일 정상회담 상세보기|2026년 정상 외교활동",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBWLWdpZG93a1QxU2FOS2ZUWlRUTjYwcUM4WmpyM3h4a09WMjRpRWk1aFpyTDJiMlV2VnhxUjd0S0pZZHhXYTFPS094TDlQMnIxVWxvQjlGWWMwQnJjcmRIbnF0TW9ydEM5QzZoNjBR?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:51:27 GMT",
+      "publisher": "Mofa.go.kr",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1028,11 +1017,59 @@
       "discovery_source": "google_news_rss"
     },
     {
+      "topic": "kr_semiconductor_ai",
+      "title": "엔비디아 첨단칩 중국 차단…한미반도체·디아이 반사이익 기대",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1wQmo2M2VVN3lZdkJnd2NiUXNfbkRIQXZ2Q2hhNTdJZnJvWE1JalpiTnB6cW5HcWYtMTBfTnpRZ3FGUlVaUlNnUDhOVW92MVQxV2REa1FaWXM4UmtzaDlYNVpKUzZEZzVqMXhQTGJsR1JSMDYzSGVV0gF3QVVfeXFMTXBCajYzZVU3eVl2Qmd3Y2JRc19uREhBdnZDaGE1N0lmcm9YTUlqWmJOcHpxbkdxZi0xMF9OelFncUZSVVpSU2dQOE5Vb3YxVDFXZERrUVpZczhSa3NoOVg1WkpTNkRnNWoxeFBMYmxHUlIwNjNIZVU?oc=5",
+      "published_at": "Fri, 20 Nov 2026 23:39:22 GMT",
+      "publisher": "핀포인트뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_semiconductor_ai",
+      "title": "삼성전자, 메모리·MX사업부장 교체…황상준·최원준 선임",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE4zbGNHd2xRVmlwYXNveng3dnd3eEdJRkhic1VZM0c0OUc0b09VUmhyN0pLUHFhXzFEaG50S3cyalc5VzhSM3NRY0w2S2kzeTVDNWfSAVNBVV95cUxQbS1xVDR3X045WnlMWUtxVDMxckhSSHRLcUhYZjZ6ZUZ5aDR2MDY1SWZDa0tIc2thYzBnQTVOdGlvZzNtaG5oZVZHOWtmcGFpWkdTYw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 01:36:02 GMT",
+      "publisher": "서울경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_semiconductor_ai",
+      "title": "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE4xeElYbGk4SmJTUFdNS1JBNVBLVjNMeENmT3lVbEdhY1lFTnF1Wlo3cWVLX1k5QnVTRmMtWTlBcDB6djVlcERFTlB2MXFGcFpraURxdEFkWkwzWVI2ajdpaGxHZFZ1c2VNNks1T2tVMA?oc=5",
+      "published_at": "Fri, 20 Nov 2026 22:55:42 GMT",
+      "publisher": "엠투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_semiconductor_ai",
+      "title": "마이크론·브로드컴·TSMC 동반 급락…삼성전자·SK하이닉스에 쏠리는 '경계령'",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE02SW56ck5RRE1adUhGd0FReWVSV2ZUT25SZjBOUDQxd0JNNW1PZEk5Qi1RUDFuTmtGbVN3cEx4ZW5nRnUtczZWOWpBZFRodUVWZmZQQUhuY2N3RjhsMVFmZ0JHZ0VLTFcwWmQzU0VVODluN1HSAXdBVV95cUxQUURDX280SXdSalNVNVQtZ3VsS3QzQmN6Tl9SQXJQRG1lNkJWdEFxTm9ESTd2NDRiM1R3NXV2U3AtS25Xand5el9XSnpSd2RFQ2pOUFRxeGdfODVwSHpTVHNfMElmRlJKWG5XZlltS3VuWkVONFUtSQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:12:58 GMT",
+      "publisher": "핀포인트뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_semiconductor_ai",
+      "title": "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBzclY3VE1nU3ROeHdFNEhzRHZJem0wU05TbmQ4czlYM3RnV2VCVnRfbENtR0lMN25VeEl2bEVZOHNEaWhVQ09MMVN5emZGUDkzNkRMSTFtb0tmLXZXbmlCMk43dVFaVDZQenJYdjlzRERIWWfSAXdBVV95cUxPaEpjN29XakJuSV9ET2RWLVZOczJPd1F0S3pzd3VxZElVZEpVQVNRbm84cVRVMUsyVzM1dzFjczV0UFBCNEpnbXNOSE11aEVXUjl1ZmtuVS1vUGZiTmNlcC1NNWpOeVpzVUZTWWhpRmRwal9Yb1Q0TQ?oc=5",
+      "published_at": "Fri, 20 Nov 2026 23:16:02 GMT",
+      "publisher": "핀포인트뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
       "topic": "kr_energy_power",
       "title": "한국, 에너지 수입의존 탈피→전기화·재생에너지 전환 가속 시급",
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9VTTFDRFFncV9qUjUyX0hZaGg0a2ttUFVYb0FvbHF2blJhOTlMdy1HVXlJeUFsVDVSVWdBU0VBNHNhYTdxVXN6Rk5DeDF1TG1kU2R0YnMyazNILTladGxUaG1tQjVYYWl0c1HSAW5BVV95cUxQV01qdnZOMk5aRXRXWmNYQ0hpb3hORXhnYl9TVnBDVnExdi1yaXpHVW5IMlEzNmVTeGNkZl8wTlQtSzUwR29ZN1pleGxCYWZlRnZvOHNKZU9FSWppdnRQWFRJTy1vQXVpUGwyV3RxUQ?oc=5",
       "published_at": "Sat, 21 Nov 2026 01:51:20 GMT",
       "publisher": "넷제로뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_energy_power",
+      "title": "[칼럼] 에너지 없는 대한민국, 수입에 목숨 건 경제…한국과 일본은 왜 세계에서 가장 취약한 에너지 국가인가",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE01cUZ1d3JrVGN2aU95WjJhLUt1ZjFlVy1LOFB6V09LdXlZNmJVU3JHUzVEY0VpWGJlSV9NQ0ZFd0dqX0VOUDJ6dmE4SXBsb0VuUmc?oc=5",
+      "published_at": "Fri, 20 Nov 2026 21:31:00 GMT",
+      "publisher": "케이에스피뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1049,238 +1086,6 @@
       "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1yOTZhNktDQTBTWFZyQURrQ3loWDQya2IwYlZGY3V1WnZ4dnJHaUNKNU9XeFQ0aHhuZnJmODZ6SkhXR1pveF8zWWxGWFh5VEtJWm9fZmxPU2NwRXJfTUZwdER5RjVvak5xNHhB?oc=5",
       "published_at": "Fri, 20 Nov 2026 21:03:00 GMT",
       "publisher": "히트뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "UBS, 연준 금리 인하 기대 회복 전 금 추가 약세 경고",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBkcGlPTm9ZNlU2dEpPLWt1R2s5Ml82c296aG5tSFJjNlBYV3JEeXdfSjl6eXNBeVZNTF8wN0hKVjVndXRKeHJod21tNGZlV1J2Nlh3WklvNEFqQlpTTjFlMUkwN0YtSXZyT1JoNzg2OA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 17:50:00 GMT",
-      "publisher": "Investing.com 한국어",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBnVVZsZm5TYkNqNjhpUHlQamVYZTdGMVZSVVEtQ2dkeEJBM3lYNVc3cGNudFFDLXJPTWhuWFBjWnhoZDFFWF9vcy14Ukp5YTZPMGl6V0NvVmJFOTA?oc=5",
-      "published_at": "Fri, 20 Nov 2026 21:23:00 GMT",
-      "publisher": "KBS 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "강원 미용 의료기기, 홍콩 코스모프로프서 122만 달러 수출 계약 성과",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE90dHlPck1LaHlWNWwwTWdIZWFHdHVBWjA5N1hfcXVNYWV4Z3pkRUNRMTZleXJES3NkcldodFByVTR6S0I0UV9zVW9ZTXpwTEpvMENHUnpFc19qOTNnMjEycU11T0pmWEFTYVE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 11:09:31 GMT",
-      "publisher": "의학신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "나스닥 5.3% 폭락 '검은 금요일'‥올해 상승분 모두 반납",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFBKNkV1Q0RiaXMxcExVQlM3Z3hnWlJaN2lRdC01VzlHeUsxcVR1VDYxa0JKaElNUGxrai0ySmpSM2VwMjJyc0tuQXc0UEMzR25uSDROOEdCX0ZIeWxfS2JTcUlDc29Id0tTVmh6MjItUGFpUUJhYVN1b9IBeEFVX3lxTE1QZzJmTXlJZllUNGFzSFZlbk41dWVqY184VGpoZ2dFVkRVMnFlYXNwVnNJajV0YzdUMldBclBnUk9rSFpnMnhTNE1QWW1ZN3JmbkFQd0VkcjZrd0R6RFlTS2Y5ZFdVSTVIT0tQdjF6STBwN0Y0WVo3NQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 11:07:51 GMT",
-      "publisher": "MBC 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "美 달러 강세 주춤…엔화 반등에 美·日 금리차 주목",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxONEVNQnpIdnRqYkplZjAyb3ZDeUVpeDBQMFB6TWlWSm1Ka3lMLUUtZm1hczJIeldVN2ZxeWNnbEJtUUVPTWlJYXlNLVZVcFRsS3lpVmY1RVR0T2ljMHZvWUhzNnpnV0Z1aUJLODhWc2lPQ0dhSEJoaXZzemZCUjNKTS14RWlqaVVI?oc=5",
-      "published_at": "Sat, 21 Nov 2026 18:00:00 GMT",
-      "publisher": "글로벌이코노믹",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "나스닥 올해 상승분 반납…미 연준 \"금리 더 올려야\"",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1MLXlpVUNrRS1ZTDR3NUFPdTMxSVF3LUxoNGJXUFg4UUhDZW1rWkEtanpaNURkRnh3cEVRNlppOXJvRFNRTGw0T0pSNjg2Q2ZCT3VhRE9uR2xKaFlkVllUTlV3eWpLRTVzMTNQY2JB?oc=5",
-      "published_at": "Sat, 21 Nov 2026 19:05:05 GMT",
-      "publisher": "더스쿠프",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "나스닥 5.3% 폭락, 올해 상승분 다 날렸다…월요일이 두려운 개미들",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBsMWE0eGVaN0ZQSXMxZWtaVTVNZlEwVEhjUnZ3LUphOGdVQVVxdTMtSUxEaU5mMllDZGlUNTJSQUFac2NHbnlkU0lhaEdrYklDTk5HZ2pDdFpVdnk5TkNMZ1JLLWJBR05aZ0HSAW5BVV95cUxOWlk5SFN0YWZVQ1pJZTNtN1pGbkVjN0VKMnFwVnZFTDQ3bDVqbzRJdUE0OTczM0lkckxHakN0WDJsb01rVEpMcXpIeGhNWkdLbWNBNk8xOW1Ec3Q3OXFxRjduSHpVcy1ueHdJdlhiQQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 14:40:17 GMT",
-      "publisher": "주간조선",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "지지선 붕괴된 엔비디아…\"100달러 밑으로 갈수도\"",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9YVXBYTjhHT0phazQydHlwc1U0a0FWWnZ4UkI1czBURmpBdFBCZ194cUJzSjRFRVpJYkFFbS1TZ0xHV1E5NWxqenJoMGthOWVwOVVsbmNqcmxidw?oc=5",
-      "published_at": "Sat, 21 Nov 2026 12:18:52 GMT",
-      "publisher": "한국경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "대구 100억·경북 450억 달러···수출 동반 회복 청신호",
-      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBkdDBfQ2xESG1rM3lQa3hwQVVDMy0tV0JNWlIwb1NUOTVXbmlsWC11TEZOVHlUZDhHTWs2XzFMbkpBMlZPOG1yUjNhZ2Y?oc=5",
-      "published_at": "Sat, 21 Nov 2026 11:30:00 GMT",
-      "publisher": "대구MBC",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "나스닥, 기술주 매도에 5.3% 폭락…다우·S&P500도 조정 진입",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1UbWQ5NUtvODJTMjZLTkl4S3Y3empSWHFVeVhxaElBYXF2ZzFNcWtDN1ZhVjhNamRGbDhidmdpYzBidy1PdGN3V1JaN3RxaXg4SElCTWhFR05FYk3SAWBBVV95cUxOXzMtMFdJR0FTOUxQRzNRS1VwdGxZUThMdUdpZ0M5dTBqazNlWlFUOW1ZNTZINXZlbGszWkR1MGtKRDRiNHdUcktnMUZ6LUFTR1g0aXJyc1d2NTFUY1drNkU?oc=5",
-      "published_at": "Fri, 20 Nov 2026 21:11:41 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBPTGFUbThaLTljRDhnaXhkZVByUExxOW1jNGlPZDVsV2FyV182WWtHOWVGdENpcHFkVkt2b0xXampPV29NWlJLWEQtSl92WW9zSENlcUdxMDVlaUxQbFRwemdwWEI?oc=5",
-      "published_at": "Sat, 21 Nov 2026 13:54:56 GMT",
-      "publisher": "매일일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "코스피와 따로 가는 달러-원…하반기 들어 역상관 약화",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5qNkpsSThuS29SR3BvcGNRQUI3NHpLU0pXcG1ZQy1jaEI2MVFqeW9XSEJTSjZYVEllRUF4WnVtaWs2RVUzYjlSR2ZzdWhhZVM0RWY0YXA1Tm8xOEVCYUpDRzNubHBfQUhMeE5xZWs1OUQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:01:45 GMT",
-      "publisher": "연합인포맥스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1OdWpWUmh6Tk1oeU9WS0J5ZDlQaHdLWEV6TTVxaDFBaDllYzJDMWlTZmhxUmwwRkRrd2lZS1lHZDJYNm5oN2RGQk1jQ0E2UENLLXgyOFV5SXJPbVZlY3RoSS04a3NUZ0V2UmxBU2JzOA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 15:42:23 GMT",
-      "publisher": "진일보 | 전남일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "140억 달러 시장으로 성장하는 마이크로드라마… 광고주, 콘텐츠 기획부터 참여하는 새로운 광고 모델로 주목",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE82elFsOEFEQThHTEhXQkhXTEtwSnowMmN0YkxfOU8yV0dTYy1iNDBtUzdCQmpPb1VLalFJR3F3c0dLT2FwOVVQaWRaTmRCN3RQVGZxVnNtWFEwUVp5OXJubHI5b2hCWmZOOFRzMA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 15:00:00 GMT",
-      "publisher": "매드타임스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "“소프트뱅크 손정의, 최근 SK하이닉스 1조달러 인수안 검토”",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9vUEFLNjBhZm9jQU5hQktKLXZ3aUZZZ0dua1UtQWE4TGlZc0hPeXRydUhqU0c5M3ZvUXpuQi1FRThPYk1Sb1d0ZUhmWGo5M2ozVnVDcDFaNVV4d9IBX0FVX3lxTE1hZkJWWlBRaTZaY3ZCLWJ5RThDM3VfNGFMN2ZrYXZzZTVRUy11OE8tUWdocTlKMGtpcnpxdjczSjN4UVNDTWE4VGRSLU9fN2ZhQm9IRmtfTFFndmVhWVA4?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:09:00 GMT",
-      "publisher": "경향신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "국제금값 3500달러 위협…전문가 60% 추가 하락 전망",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOYmIyMDFpWEFlZ0FuSTBVNzRnOG9oOXpHTVJvTWYxYno5cmxXY3lpeXZpbmo4TzAwTzUwcUxKaUNzbzloeVBycVN6QnVXcTNYdWVDXzlMdXlpWjhiTkc0aGNLdTRSbm1tTXVBbm9SaHI0YU13b3BjTmFsRXVnTEtRNUxmVnlKV1NP?oc=5",
-      "published_at": "Sat, 21 Nov 2026 18:00:00 GMT",
-      "publisher": "글로벌이코노믹",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "“손정의 회장, SK하이닉스 1조달러에 인수 검토”",
-      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPZFhxQWNnZXpGNEFfVWxnN2prWndYMmpOTmNRUDdWeTI2ZWtfM21iZU9Ra0czQmlpdlRxeVRPaWUtOENwaVFZbjItcjdoSjVscXJXXzBXT2Y3cjdKc25FTGFDcDlSRkI5Q1U3RVpGdFVVQ3NzT0d2ZHVoUHVtUnhkQ01aYUXSAZgBQVVfeXFMT0lwUzhncTQ0aWlxblEyUnpNOTFrbGVLbXhjRDhLdXpPMGZIblk2SlgwTjRrNWZBX2hqV3k0QVNGT3VCbGVreU5RLVhzSWZocDN5bk9FVFRpajVVX05xVmd4b2dTWHlnY1lLY0lSRWRIcTlUN3g0aTNCeUJQYjVQYWd1SDdVZ1NjYTVUUnBDYUhYbjg3Qkp0cW8?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:01:00 GMT",
-      "publisher": "Chosunbiz",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "[뉴욕마켓워치] 나스닥, 코로나 이후 최악의 한주…증시 패닉 속 채권↑달러↓",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1IdEtnRk94djJMSHhRNHRZZzZzSGM2QjA4UUpRVWs3S1ZWT2NJVXNuSWlZeUNfRUMzYTdWelZIUXZONUhaMndPdWxkUGgtVnI1MWFZVE16VGhDVUs0YU9QWFBURGpGbHdhN0d1U3VOckc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 00:04:58 GMT",
-      "publisher": "연합인포맥스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "수출 1조 달러 달성했지만… ‘반도체 편중’ 넘어 성장 온기 퍼뜨려야",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9UTmxsZ3Y2WnhUSTNzMzRGLUxHSjBjdVB5OUJ0MHloa3BKYkVFS19GbWpPdWxJR2dMRTNxRFJIdmpqZVRBVGQ2S0ZiR01SWll3YkxiMkJ0YVNBTkhRUjdrUFRTdUkycWFDRzlWOWVR?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:34:29 GMT",
-      "publisher": "더스쿠프",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "수출 1조달러 시대…벌어들인 달러는 얼마나 서울환시로 돌아올까",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE94WVd5Y1BOTTNPRmt1OGNMYXZqQlhYZS1NbE5WTVpGLXFYUjdCSVBramJwOVYzSlQza3lVOFFsdG9QbXVNMFdkUWY5NU5abGZMX1B3WW1lcjRGQXJNcGJlYmVjTnlVSFVlMHB5djE2T0k?oc=5",
-      "published_at": "Sat, 21 Nov 2026 00:40:01 GMT",
-      "publisher": "연합인포맥스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5hMkUxLWVTZ0pOVkFSOFYxaThxbk4yc2ZpaEN0Ni0xNklwUGpRdWdTaW9vbkZiU1FjcUFMb1JyLUk1MnFwcGl4ZEkzV0dxRWVkME1pSVlDMzg3UTAycUY5ZkJlRFFtdw?oc=5",
-      "published_at": "Fri, 20 Nov 2026 22:15:00 GMT",
-      "publisher": "KBS 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "김정관 장관 “수출 1조 달러, 끝 아닌 새로운 출발”",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBBZ192VGMyZEhhamcwWTVpcTdPckpqZFpoM2dtc3pDS1l2OUw1aEp5R3JaZkFjbWVkSXBScmVoR0steHFsU2R5YU9fUFhKZTI1YnhhYWlrUkFSSC14TEUwRjB1eG5EVV9IUFNpWlFEYk9vMUhq?oc=5",
-      "published_at": "Sat, 21 Nov 2026 07:54:14 GMT",
-      "publisher": "대한경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "[속보] 기술주 매도에 나스닥 5.3% 폭락…다우·S&P500도 조정 진입",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1qRHRFOGJ2bnAtajVseVpoR1o3ekZyelFvVzRYUDlObGhYMTEzbDRxTWNXNmx4UmdvSlpEajZSU25HTmtHS0xNM1c4d0JFLVJabG14UWxZUGtHS1HSAWBBVV95cUxOakdGeUExZHZ4NW01ajJyNUlOTjZNUC02QjhYMGYzeDZhZUNZTzdwc3BxbUttNW5YOGRFSm1BOVZvNXRhUTRqVWU0dXNQYzdGQTlNOUhqTGJjMDdYbi1aTjk?oc=5",
-      "published_at": "Fri, 20 Nov 2026 21:02:42 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "비트코인, 2년 최저점에서 9% 반등하며 6만 달러 회복…거래자들, 월요일 주식 시장 개장 주목",
-      "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPenpjenlWZnVoN1JSbldudDNBT1poeHBjempHNENWSnVmQm1MSm9iT1pLWUJueE9HaTlDZFdCang2eVJ4WVlfTm9NNXFJTFB3TEtVX28tVzVhZ3gwS1p5TUhnNFgtQURVajE5NmFlb043b1BHRlQtWnV1eHdKSU8zdEwyOUFtMVdQalhyNERQd2RaMHVybkNFM2gxR3lEOENDR01lOVZ4VjU0UXJyM1YxZVAxZ2cwTlpuYmlZR3ZaZVFlWVQzNmx5Z0x2Z1lZb1dGdlQ4?oc=5",
-      "published_at": "Sat, 21 Nov 2026 17:51:06 GMT",
-      "publisher": "CoinDesk",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "미군 도움으로 호르무즈 해협서 원유 수출 늘리는 UAE",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1ERTg2Zlk3QlBRTF8tQUNWeU1KVnpGUC1kN0VmSjV0RTRQY04xNXZuV3NrQjVtLVRMendnQlNrWUtSTFhfRDEzczJKX0NmcDAzczk5SkgzY2hMQdIBWEFVX3lxTE9Lcmw0aDlqQUFKeWY5Z1dKRTVGLTlKSDMtQ3h1d1M3UExQZ3BpVjRYdmNrWWkwZmVMSkF5QTVlYkNiUk1PWTFVNGk4Szl5OWs5R09xb3c2Qnc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 20:00:00 GMT",
-      "publisher": "아주경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "산업부·경제 6단체, 수출 1조 달러 넘어 ‘질적 성장’ 도약 다짐",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9QRTdMeWQxNlhCMmtHa3FFXzBBYlYwNXU0M1NBMVUyUGpMZXlHc1lLa3laUjJ4aUtxejkwN214aEFxWTA5dmhCRHZhZ2VIUUFLZ0R0UmQyQlFzUWUtU0Z2anR6N3JncXRxQ0c4?oc=5",
-      "published_at": "Sat, 21 Nov 2026 09:32:34 GMT",
-      "publisher": "뉴스데일리",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "“손정의 회장, SK하이닉스 1조 달러에 인수하려 했다”",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9zRnhOeV9aU1hoSm1zWmtxb2VfdnpXejJpTndfM3RpOGs1dU1uYmxqTTdxMUY5Zk5OTjZnQlFBLXVWZ2VFcWpCdUJTRGxSUVpfU2M4V29mbl90VlF2cDF1QS1JbHJJaHQzNVRlQ2g2TllISkXSAWZBVV95cUxQZ2lBMXhTQ0tsbXBRMWNvYmptc01Ia01IWWN5SnU2Z3I1YVVjbHMzdWxDLXlSdjhtcU9iXzV0NWlNeHZ2ZEMydmhhUXY3VFV2Ny13QXNBQjRodWJVVTZvM2w4WWJfd3c?oc=5",
-      "published_at": "Sat, 21 Nov 2026 07:11:00 GMT",
-      "publisher": "동아일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "손정의, SK하이닉스 인수 검토했었다…몸값만 1조달러",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE85cEZOcDNkSUxpaElEY29QYi1TZHkwNjlsZ2FZV1MzWkxIdWZyNHV2LVZHTjBweEFHQ3lQbE1BV1BwQXd3R25RQlFqSTQ4U1FtOFppUG9zbTgtSE9TWjEzSA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 09:29:33 GMT",
-      "publisher": "뉴스토마토",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "수출 1조 달러 축하...\"품질! 기술! 혁신!\"",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBOTjBwS0pDVUFNeTdtZ0FTV1V5RHFoVzVzMFVoMGkyZ25tbWFhdVVrczJVNkdIU3Fuc2xRRGwyT3V3eGFqcUJGeEEtNEdDOUpxOERXUTZjejU0LU9KNHc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:09:00 GMT",
-      "publisher": "YTN",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1380,22 +1185,6 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "us_china_trade_ai",
-      "title": "트럼프 \"中엔 구형 칩만 판매\"…美, 반도체 수출 '상한선' 지키고 우회로 차단",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFAwLXFVVUw2T2t2bUczT05XeldsNkxqS25DYW5OZG1HMG5aM0pDa2ZJaDBXcHVXRlNlbXZiQWtfTUpEUFdDVlh5Y2RRVDY1dUM1NjRwSFctMmxzZlhtdkFQRWl6ZW5zSzA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 01:31:23 GMT",
-      "publisher": "청년일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "us_china_trade_ai",
-      "title": "젠슨 황 낙마 후 첫 미·중 담판...'희토류 족쇄' 찬 트럼프, '中 우회 수출 감시망&apo...",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBKWF9Dek90RVAtWHotQTFoLWp5a2YtdGtPd1poOWFzMUhDa3kyTjFqb1dYNEJCNy0tTHR2WkJ2S0JockRRS2NCZHNMWTdDdkhtaUdGaHVWbkJUNlFvV0V2eHZyR2k5bU1pSUhJ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 03:29:28 GMT",
-      "publisher": "www.edaily.co.kr",
-      "discovery_source": "google_news_rss"
-    },
-    {
       "topic": "europe_debt_ecb",
       "title": "유로화, 금리 인상 선반영 속 미국 인플레이션이 주도할 한 주 맞아",
       "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxPaHZld05ZLUVvYllNSEo1bEVoVFRRTzJQMUNvcjRhdFN1ZFBsNFVVamJzbk51N2MxaTJCY2lvcl92OGNmLVIwSzJhVlJwTDZZMlFJejhyWGtXMmZCZmNFVFkzWGZZbXpMZVN3eDZEb011bzU3RXRvVmtNUGFocnlWdmlOaFdmNnhhRjgwLW5HRkVfaVJQZndoUHlfZ0VTcTBJeWdmcU04X1RxMGhYcGtaVVg0Vjd2clJsRXhEYWRDMmF4Snlfa1g4a3RNSE5oSWZ4Y3ZQUWNOQlJKMTNN?oc=5",
@@ -1429,14 +1218,6 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "시험의 종말? \"AI 콘택트 렌즈의 시대 온다\"",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFB4LWZCZnRvM3hLWXEwbVpfY1RiVlhXNkRsMGZUbldDODRVSWlObWludUdZRVotX3piaDJkaEJoaXVtRjBHMFpkUHFacTlhUkkyelE5ZjRzSl9NUmpvRkxoYjVKMnNFSHpRZElQRUFyVQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 14:10:00 GMT",
-      "publisher": "YTN",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
       "title": "AI 회사 앤트로픽, 수학계 최대 난제 ‘리만 가설’ 풀었나",
       "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBxX3ZOTWJudENya2JTVkFaTXpTYlk4bWhlOE90Wnh4ZXJJeklubDJ4T2tFQ2M3am1sTlMxSmZqSXJZZmVpY1l0UmNiSHoyU0MwZHdaOHR4M2VlV0c5akHSAWNBVV95cUxQLWkzYklqSFhQRmhabGVmYk9IUmQwVENaTFdDcWhlbHNIRXBJek11RFJnUVZnWklSbUJlZ2F1R0RIX3JNUUYyREIxUDJqU2Q4Wmp2Rm1XZnBmb2tQODBEVTZxMzQ?oc=5",
       "published_at": "Sat, 21 Nov 2026 06:23:03 GMT",
@@ -1445,18 +1226,26 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "아르헨도 AI 부정 의혹 몸살…작년엔 전공의 시험 재시험도",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5fcnI0T1I0TGFrYzJVbWNhZUhXZ1VYTXJDZ2x4WkQ3ME8yeGp6a0R6cHI2TUJQWTVfWjZSMWxId3l5Z0hqVmZNT0FnbzktdmFTVlYtS0ZwdkUzMWPSAWBBVV95cUxPNERWOTJBM2dzWkkyZDExWWhqTkVzTEVSOEtBVGRoM1g5bFNYcl9RQ0tidkFscndGbVRPdHBFTF9VWFlPTUZiY0dCbEI3ZXkzVWtNUE1La2llVkMycVFiN2U?oc=5",
-      "published_at": "Sat, 21 Nov 2026 18:18:23 GMT",
+      "title": "시험의 종말? \"AI 콘택트 렌즈의 시대 온다\"",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFB4LWZCZnRvM3hLWXEwbVpfY1RiVlhXNkRsMGZUbldDODRVSWlObWludUdZRVotX3piaDJkaEJoaXVtRjBHMFpkUHFacTlhUkkyelE5ZjRzSl9NUmpvRkxoYjVKMnNFSHpRZElQRUFyVQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 14:10:00 GMT",
+      "publisher": "YTN",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
+      "title": "앤트로픽 급등락에 월가 AI수익성 우려·실리콘밸리 낙관론 교차",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5VbVNNYzM2YmVUNWZ0aHlfWXJ3UEI0NmF2SmcxUjVrY0Zvc2xFLThrcDFtQ1RHVk05c3BoWU1maUVyUUhHS1ZyX29SZDN0R0JBNjJKZzlPT3hJVGfSAWBBVV95cUxOcHVKQkZ5eXh3cDgxZmhJUjFGQ3ZmX3d1SGcwQmwwcFUzbzI4Nm94SFZtSzE5VHgybUJHUDZ4VU95WjJ2ZHJXMlZTazJ1V0tqdFhLVnlHREkwTFF4WDhleWw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 19:49:10 GMT",
       "publisher": "연합뉴스",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "dynamic:AI",
-      "title": "AWS 이어 엔비디아·오픈AI까지 손잡나…SK, 신설법인 앞세워 GW급 AI 공략 By FinancialPost",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE44QkRTTTJGQmJGVHNRLWlXQ3NuRmdTWE4wUzBMbENIX0lMaU9OOWVJY0dsTS1QOWZYbjBYRDVVcXR2cUZDNGVVclQ3VFBtX1phUjJ4dS1XZTNRMm1aYVNCTmk4WlVmQVQ2ekdZN09TVHQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 11:41:00 GMT",
-      "publisher": "Investing.com 한국어",
+      "title": "'AI 부정행위' 논란 뒤 첫 국가자격시험서 6건 또 적발",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1HdzdpTWtMc3htdWJkajJKaS1sOE1KZ1ZwcnlMbTN6U3R4TnRIVW9tUXJuZXh2Z0ZiSzVNNHA0c3ExbTdPc2E5WU1hbmhKQWtycHlZOUhMcHhIb2luOUtiaw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 14:23:02 GMT",
+      "publisher": "KBC광주방송",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1473,6 +1262,14 @@
       "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9oelprMGdzaWhCajhScDNvSzFwUWlvemtSQk1jVlV6bjBiYWhMSVFXV0FwUjg2TjZOM2xkUGwyR3oxd0wzMWJscGlUbTBRNlo1OVJMamZFTktHQUVKRE9rVk5mRnY?oc=5",
       "published_at": "Sat, 21 Nov 2026 19:10:30 GMT",
       "publisher": "메디포뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
+      "title": "AI의 진정한 수혜자는 누구인가?",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9BRnNXQXA3Zjk1V3NuV0J5LWJWakhqZ1hxOER3N1dUZkJmOXpJX1lkQmIwbkF6TUVTVzd1YjNNZE53enpBbkp5SmJ2bEZEX3ZSNUhDSjVLcXdRRHVyZFJKTDJEUnNydmFiUFBiU3pya3g?oc=5",
+      "published_at": "Sat, 21 Nov 2026 18:51:00 GMT",
+      "publisher": "Investing.com 한국어",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1501,14 +1298,6 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "AI 작업 능력, 6개월 만에 16시간→40시간…\"판단력 여전히 한계\"",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE11WFdEaHp6MllnOHpZeF9PVjNsMFBiRF94NFdPTHN3ODhlUkxQQzl4ZDl6U1c2OGRuOXFtRjdtdHpTdzZUTnJ3YXJJOTRGWlJOOEpXcFdPNmVmazd3SnlUX0dCY0t6a01iMmc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 09:20:47 GMT",
-      "publisher": "AI타임스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
       "title": "젠슨 황 퇴진에 中 규제까지…AI 클라우드 업체 이중고",
       "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNVnM1bC0xSzlTV2pzMTljR2lOc2tCU1FLcDMtdWtQMlZNRmlqWFlhWFRTMWdwQlQ1UVl5ZDQ3Tzc1VWRBd194WThaWlROSUxsVjZ2d05KYWk5bzhkUEZwVy0zcHkzUUUzWjBQQmROTURhU3NfcjBlZVNQZ1ZqME5QSGhfWHJ4Z3lo?oc=5",
       "published_at": "Sat, 21 Nov 2026 17:00:00 GMT",
@@ -1517,18 +1306,10 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "앤트로픽 급등락에 월가 AI수익성 우려·실리콘밸리 낙관론 교차",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5VbVNNYzM2YmVUNWZ0aHlfWXJ3UEI0NmF2SmcxUjVrY0Zvc2xFLThrcDFtQ1RHVk05c3BoWU1maUVyUUhHS1ZyX29SZDN0R0JBNjJKZzlPT3hJVGfSAWBBVV95cUxOcHVKQkZ5eXh3cDgxZmhJUjFGQ3ZmX3d1SGcwQmwwcFUzbzI4Nm94SFZtSzE5VHgybUJHUDZ4VU95WjJ2ZHJXMlZTazJ1V0tqdFhLVnlHREkwTFF4WDhleWw?oc=5",
-      "published_at": "Sat, 21 Nov 2026 19:49:10 GMT",
+      "title": "아르헨도 AI 부정 의혹 몸살…작년엔 전공의 시험 재시험도",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5fcnI0T1I0TGFrYzJVbWNhZUhXZ1VYTXJDZ2x4WkQ3ME8yeGp6a0R6cHI2TUJQWTVfWjZSMWxId3l5Z0hqVmZNT0FnbzktdmFTVlYtS0ZwdkUzMWPSAWBBVV95cUxPNERWOTJBM2dzWkkyZDExWWhqTkVzTEVSOEtBVGRoM1g5bFNYcl9RQ0tidkFscndGbVRPdHBFTF9VWFlPTUZiY0dCbEI3ZXkzVWtNUE1La2llVkMycVFiN2U?oc=5",
+      "published_at": "Sat, 21 Nov 2026 18:18:23 GMT",
       "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "AI의 진정한 수혜자는 누구인가?",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9BRnNXQXA3Zjk1V3NuV0J5LWJWakhqZ1hxOER3N1dUZkJmOXpJX1lkQmIwbkF6TUVTVzd1YjNNZE53enpBbkp5SmJ2bEZEX3ZSNUhDSjVLcXdRRHVyZFJKTDJEUnNydmFiUFBiU3pya3g?oc=5",
-      "published_at": "Sat, 21 Nov 2026 18:51:00 GMT",
-      "publisher": "Investing.com 한국어",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1541,9 +1322,17 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "건보공단 다제약물 관리사업에 AI 활용 제안",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE82YWxOTXBOUmZQQUcySGM4SnlvTEpESFVHTElDTjV6blF6MUl6Rm4yV2lCdjBqSllaTmJZekNUMU1mU1IyZ201dGFjWVR2UkJENHNCMElvbU5laDVkYXliR0xwMmJqVUdKOEE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 13:36:42 GMT",
+      "title": "수익성 시험대 오른 AI...대장주 추락에 뉴욕증시 '패닉'",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE9MdEVmSUkzNGYwUnBPVHFIWUhzRjN6RWJfWV9wWm4wd1UybElRbVBPbVFkZC1xVWRWaFZNY2ZJay1sZmU2LWJtT3dLbG1NOFF5R0I5V0U3N3hieE9naWc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 13:34:00 GMT",
+      "publisher": "YTN",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
+      "title": "AI 스마트홈 헬스케어 글로벌 협력 컨퍼런스 개최",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9tc3lMZ285cXoxZjA3MzhabktKaG9uSjZRU1VuMGllaXkySkFZTG1TakhCc21CZWFFX1NXY0NwV2lXN2xjd25BUFpJVFg5R2VoZTR6cTF1SHBSa2kwUlh3eEx3REtQdG5wc1E?oc=5",
+      "published_at": "Sat, 21 Nov 2026 13:17:25 GMT",
       "publisher": "병원신문",
       "discovery_source": "google_news_rss"
     },
@@ -1573,18 +1362,10 @@
     },
     {
       "topic": "dynamic:수출",
-      "title": "어떻게 ‘수출 1조 달러’인데 ‘주가 폭락’이 오나",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE80SWNSa0Y3X3dJXzVlc05Bd1dLR1pzbGhsb3Vfb2x5RXZfQlVjS3RrZ2pLLUN3WnFFV3hYTFcybXNXZ1ZCSGg0WDM2RkppcHotTG9kdGU3ZTRYUkU?oc=5",
-      "published_at": "Fri, 20 Nov 2026 23:02:00 GMT",
-      "publisher": "KBS 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
-      "title": "하루 1억원씩 쓰면 4만년 걸려…사상 첫 ‘수출 1조달러’",
-      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE0wWWI0OEdJSW1vbnVTOWMxdDlDZDB4aHVqOVpZZDBFRVVLb294NjZIeDNWWGplZ0MtZGYyUnAzTmhoLUFDSmhRSU5jODZNMmNTSlhBTmF6WFEwODcxVnpGNktUbU5USzI0S0J5ZjZ0WXgtUQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 08:15:00 GMT",
-      "publisher": "한겨레",
+      "title": "대구 100억·경북 450억 달러···수출 동반 회복 청신호",
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBkdDBfQ2xESG1rM3lQa3hwQVVDMy0tV0JNWlIwb1NUOTVXbmlsWC11TEZOVHlUZDhHTWs2XzFMbkpBMlZPOG1yUjNhZ2Y?oc=5",
+      "published_at": "Sat, 21 Nov 2026 11:30:00 GMT",
+      "publisher": "대구MBC",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1597,10 +1378,66 @@
     },
     {
       "topic": "dynamic:수출",
+      "title": "하루 1억원씩 쓰면 4만년 걸려…사상 첫 ‘수출 1조달러’",
+      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE0wWWI0OEdJSW1vbnVTOWMxdDlDZDB4aHVqOVpZZDBFRVVLb294NjZIeDNWWGplZ0MtZGYyUnAzTmhoLUFDSmhRSU5jODZNMmNTSlhBTmF6WFEwODcxVnpGNktUbU5USzI0S0J5ZjZ0WXgtUQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 08:15:00 GMT",
+      "publisher": "한겨레",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
+      "title": "어떻게 ‘수출 1조 달러’인데 ‘주가 폭락’이 오나",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE80SWNSa0Y3X3dJXzVlc05Bd1dLR1pzbGhsb3Vfb2x5RXZfQlVjS3RrZ2pLLUN3WnFFV3hYTFcybXNXZ1ZCSGg0WDM2RkppcHotTG9kdGU3ZTRYUkU?oc=5",
+      "published_at": "Fri, 20 Nov 2026 23:02:00 GMT",
+      "publisher": "KBS 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
       "title": "스위스 '무기수출 완화' 국민투표…중립성 원칙 또 시험대",
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5KUjAtbEd3dFpablRoRVZCQTVGQVA4dVowMzU4OVhZX09YVFpvVjk3TmtQWjFHdnBZenFMdGdUUFlmeHlhTTlsUG1za0ZlX0FyMng1Unp6WnpMZVXSAWBBVV95cUxQYkZfYUtUNnhlRGhOeGJFb3NBR21rcS1YR2xQankweVZ0US1QcTF3OWRqT1ZXYVBwQ1E1YllWc3lGdlEtS2dQYWtJMzM0am1NS0J1RUs5ZC16aE84NjNwSUk?oc=5",
       "published_at": "Sat, 21 Nov 2026 10:06:56 GMT",
       "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
+      "title": "강원 미용 의료기기, 홍콩 코스모프로프서 122만 달러 수출 계약 성과",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE90dHlPck1LaHlWNWwwTWdIZWFHdHVBWjA5N1hfcXVNYWV4Z3pkRUNRMTZleXJES3NkcldodFByVTR6S0I0UV9zVW9ZTXpwTEpvMENHUnpFc19qOTNnMjEycU11T0pmWEFTYVE?oc=5",
+      "published_at": "Sat, 21 Nov 2026 11:09:31 GMT",
+      "publisher": "의학신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
+      "title": "수출 1조 달러 달성했지만… ‘반도체 편중’ 넘어 성장 온기 퍼뜨려야",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9UTmxsZ3Y2WnhUSTNzMzRGLUxHSjBjdVB5OUJ0MHloa3BKYkVFS19GbWpPdWxJR2dMRTNxRFJIdmpqZVRBVGQ2S0ZiR01SWll3YkxiMkJ0YVNBTkhRUjdrUFRTdUkycWFDRzlWOWVR?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:34:29 GMT",
+      "publisher": "더스쿠프",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
+      "title": "김정관 장관 “수출 1조 달러, 끝 아닌 새로운 출발”",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBBZ192VGMyZEhhamcwWTVpcTdPckpqZFpoM2dtc3pDS1l2OUw1aEp5R3JaZkFjbWVkSXBScmVoR0steHFsU2R5YU9fUFhKZTI1YnhhYWlrUkFSSC14TEUwRjB1eG5EVV9IUFNpWlFEYk9vMUhq?oc=5",
+      "published_at": "Sat, 21 Nov 2026 07:54:14 GMT",
+      "publisher": "대한경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
+      "title": "산업부·경제 6단체, 수출 1조 달러 넘어 ‘질적 성장’ 도약 다짐",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9QRTdMeWQxNlhCMmtHa3FFXzBBYlYwNXU0M1NBMVUyUGpMZXlHc1lLa3laUjJ4aUtxejkwN214aEFxWTA5dmhCRHZhZ2VIUUFLZ0R0UmQyQlFzUWUtU0Z2anR6N3JncXRxQ0c4?oc=5",
+      "published_at": "Sat, 21 Nov 2026 09:32:34 GMT",
+      "publisher": "뉴스데일리",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
+      "title": "수출 1조달러 시대…벌어들인 달러는 얼마나 서울환시로 돌아올까",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE94WVd5Y1BOTTNPRmt1OGNMYXZqQlhYZS1NbE5WTVpGLXFYUjdCSVBramJwOVYzSlQza3lVOFFsdG9QbXVNMFdkUWY5NU5abGZMX1B3WW1lcjRGQXJNcGJlYmVjTnlVSFVlMHB5djE2T0k?oc=5",
+      "published_at": "Sat, 21 Nov 2026 00:40:01 GMT",
+      "publisher": "연합인포맥스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1621,18 +1458,18 @@
     },
     {
       "topic": "dynamic:수출",
-      "title": "[성장의 온도차①] 수출 1조弗 축포 터졌는데…식당 '80만' 선 무너졌다",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE45TnhjcTl1V3kxc0djSC03WVNkVHVzbW5xZk0zeFJpMnNpelprTEd6WF9NaWNyRGdsSTg0azV6MnFjZ3JZR3EzNUtYbUlheVpSbEdZVXEyMlVtcGhKMDNtX9IBeEFVX3lxTE9VWUFQd0ZLVmtqbTNiXy1wMU9IN05BSlV0Tk44VnpINHhUekx3aHFIdXVyd0VJYkx0UkxJdE9RX2tiTWloYUp2STBWZFRuUmk4aVdzYTJxY21YbklRNllHRnZhUnp5RWVnVW1JZWctNVhXQlY2a0FYZw?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:00:00 GMT",
-      "publisher": "뉴시스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
       "title": "'새 성장축' 서비스 수출 15.5% 늘었지만…26년째 적자에 경쟁력 숙제",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFAzU01yaE42djlLdGxqNW53TFhnVzZpOTJfdklOODA5RFk3V0x2enlaMUNsb3o4UVh6dGRSSHlBQnVXTEthemVCNTN6SzBuM2NsSi1MQXhJX0ozUFlCY3VyYjRUVm9DemE4NjlJU05PQXg?oc=5",
       "published_at": "Sat, 21 Nov 2026 00:00:19 GMT",
       "publisher": "연합인포맥스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
+      "title": "[성장의 온도차①] 수출 1조弗 축포 터졌는데…식당 '80만' 선 무너졌다",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE45TnhjcTl1V3kxc0djSC03WVNkVHVzbW5xZk0zeFJpMnNpelprTEd6WF9NaWNyRGdsSTg0azV6MnFjZ3JZR3EzNUtYbUlheVpSbEdZVXEyMlVtcGhKMDNtX9IBeEFVX3lxTE9VWUFQd0ZLVmtqbTNiXy1wMU9IN05BSlV0Tk44VnpINHhUekx3aHFIdXVyd0VJYkx0UkxJdE9RX2tiTWloYUp2STBWZFRuUmk4aVdzYTJxY21YbklRNllHRnZhUnp5RWVnVW1JZWctNVhXQlY2a0FYZw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 06:00:00 GMT",
+      "publisher": "뉴시스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1661,10 +1498,42 @@
     },
     {
       "topic": "dynamic:수출",
-      "title": "수출 1조 달러 축하...\"품질! 기술! 혁신!\"",
-      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9xRnQzNGNFemh2SDgxY3JqWWJWSFYzOXNEQk0xWEtZajUycWdVRFZFNlNYdjh3Y3gwd21GX1pmYmRqN0dOUkpPQV9WUGljd2t5bF9fdjZPRm84ZUNFVi1yOEItS1J2c2RJTWlVWll2YUZpNTJHVEE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:09:00 GMT",
-      "publisher": "YTN",
+      "title": "미군 도움으로 호르무즈 해협서 원유 수출 늘리는 UAE",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1ERTg2Zlk3QlBRTF8tQUNWeU1KVnpGUC1kN0VmSjV0RTRQY04xNXZuV3NrQjVtLVRMendnQlNrWUtSTFhfRDEzczJKX0NmcDAzczk5SkgzY2hMQdIBWEFVX3lxTE9Lcmw0aDlqQUFKeWY5Z1dKRTVGLTlKSDMtQ3h1d1M3UExQZ3BpVjRYdmNrWWkwZmVMSkF5QTVlYkNiUk1PWTFVNGk4Szl5OWs5R09xb3c2Qnc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 20:00:00 GMT",
+      "publisher": "아주경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:달러",
+      "title": "美 달러 강세 주춤…엔화 반등에 美·日 금리차 주목",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxONEVNQnpIdnRqYkplZjAyb3ZDeUVpeDBQMFB6TWlWSm1Ka3lMLUUtZm1hczJIeldVN2ZxeWNnbEJtUUVPTWlJYXlNLVZVcFRsS3lpVmY1RVR0T2ljMHZvWUhzNnpnV0Z1aUJLODhWc2lPQ0dhSEJoaXZzemZCUjNKTS14RWlqaVVI?oc=5",
+      "published_at": "Sat, 21 Nov 2026 18:00:00 GMT",
+      "publisher": "글로벌이코노믹",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:달러",
+      "title": "코스피와 따로 가는 달러-원…하반기 들어 역상관 약화",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5qNkpsSThuS29SR3BvcGNRQUI3NHpLU0pXcG1ZQy1jaEI2MVFqeW9XSEJTSjZYVEllRUF4WnVtaWs2RVUzYjlSR2ZzdWhhZVM0RWY0YXA1Tm8xOEVCYUpDRzNubHBfQUhMeE5xZWs1OUQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:01:45 GMT",
+      "publisher": "연합인포맥스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:달러",
+      "title": "지지선 붕괴된 엔비디아…\"100달러 밑으로 갈수도\"",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9YVXBYTjhHT0phazQydHlwc1U0a0FWWnZ4UkI1czBURmpBdFBCZ194cUJzSjRFRVpJYkFFbS1TZ0xHV1E5NWxqenJoMGthOWVwOVVsbmNqcmxidw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 12:18:52 GMT",
+      "publisher": "한국경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:달러",
+      "title": "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBPTGFUbThaLTljRDhnaXhkZVByUExxOW1jNGlPZDVsV2FyV182WWtHOWVGdENpcHFkVkt2b0xXampPV29NWlJLWEQtSl92WW9zSENlcUdxMDVlaUxQbFRwemdwWEI?oc=5",
+      "published_at": "Sat, 21 Nov 2026 13:54:56 GMT",
+      "publisher": "매일일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1677,6 +1546,46 @@
     },
     {
       "topic": "dynamic:달러",
+      "title": "“손정의 회장, SK하이닉스 1조달러에 인수 검토”",
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPZFhxQWNnZXpGNEFfVWxnN2prWndYMmpOTmNRUDdWeTI2ZWtfM21iZU9Ra0czQmlpdlRxeVRPaWUtOENwaVFZbjItcjdoSjVscXJXXzBXT2Y3cjdKc25FTGFDcDlSRkI5Q1U3RVpGdFVVQ3NzT0d2ZHVoUHVtUnhkQ01aYUXSAZgBQVVfeXFMT0lwUzhncTQ0aWlxblEyUnpNOTFrbGVLbXhjRDhLdXpPMGZIblk2SlgwTjRrNWZBX2hqV3k0QVNGT3VCbGVreU5RLVhzSWZocDN5bk9FVFRpajVVX05xVmd4b2dTWHlnY1lLY0lSRWRIcTlUN3g0aTNCeUJQYjVQYWd1SDdVZ1NjYTVUUnBDYUhYbjg3Qkp0cW8?oc=5",
+      "published_at": "Sat, 21 Nov 2026 05:01:00 GMT",
+      "publisher": "Chosunbiz",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:달러",
+      "title": "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1OdWpWUmh6Tk1oeU9WS0J5ZDlQaHdLWEV6TTVxaDFBaDllYzJDMWlTZmhxUmwwRkRrd2lZS1lHZDJYNm5oN2RGQk1jQ0E2UENLLXgyOFV5SXJPbVZlY3RoSS04a3NUZ0V2UmxBU2JzOA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 15:42:23 GMT",
+      "publisher": "진일보 | 전남일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:달러",
+      "title": "“소프트뱅크 손정의, 최근 SK하이닉스 1조달러 인수안 검토”",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9vUEFLNjBhZm9jQU5hQktKLXZ3aUZZZ0dua1UtQWE4TGlZc0hPeXRydUhqU0c5M3ZvUXpuQi1FRThPYk1Sb1d0ZUhmWGo5M2ozVnVDcDFaNVV4d9IBX0FVX3lxTE1hZkJWWlBRaTZaY3ZCLWJ5RThDM3VfNGFMN2ZrYXZzZTVRUy11OE8tUWdocTlKMGtpcnpxdjczSjN4UVNDTWE4VGRSLU9fN2ZhQm9IRmtfTFFndmVhWVA4?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:09:00 GMT",
+      "publisher": "경향신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:달러",
+      "title": "'구원투수'에서 '폭락 주범'으로…앤트로픽 시총 1090억 달러 증발에 월가 ‘네 탓 공방’",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1Qd08zeVZla2tVVnV3MzA5TFRhZ1RRcTAzaWN3R09uQ3o5TU1PZE1BVXZxVFM5bEFQY25SUGFLS0ZJRGxWRGRPUW5Cc0JtR2g2RTNYd0Q1dlJPQQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 10:58:33 GMT",
+      "publisher": "한국경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:달러",
+      "title": "140억 달러 시장으로 성장하는 마이크로드라마… 광고주, 콘텐츠 기획부터 참여하는 새로운 광고 모델로 주목",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE82elFsOEFEQThHTEhXQkhXTEtwSnowMmN0YkxfOU8yV0dTYy1iNDBtUzdCQmpPb1VLalFJR3F3c0dLT2FwOVVQaWRaTmRCN3RQVGZxVnNtWFEwUVp5OXJubHI5b2hCWmZOOFRzMA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 15:00:00 GMT",
+      "publisher": "매드타임스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:달러",
       "title": "[뉴욕환시] 달러 소폭↓…기술주 투매에 급락 후 보합권 반등",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1Yd2ZKWS1lcTdyZnlxd0tncFZMZTlpRUNZOGhLeW51TDF4aS1Uenh1eldqOHhrMHU4dm1NUlBmOFZqUUFHai1Fb0VxZDdWRE5rN0tPTDQzeG00amxxaHZfcGZpSEU0WTVpdnJwejQtWUE?oc=5",
       "published_at": "Fri, 20 Nov 2026 23:20:56 GMT",
@@ -1684,131 +1593,115 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:규제",
-      "title": "결국은 \"돈 더 내라\"...미 데이터센터 규제의 진짜 속내",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1LT1RyVUREU1NFQkhucjBQZDBTS2FKQnNfZnc2YjB3VTJLTEs4MnJEVXdmNGpTZ0ZMRDJIT0V5RHJKN1UxMl9rZlU3cTZwY2p2cjlqNzgyblRoNG9mYXc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 18:04:00 GMT",
-      "publisher": "YTN",
+      "topic": "dynamic:나스닥",
+      "title": "나스닥 올해 상승분 반납…미 연준 \"금리 더 올려야\"",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1MLXlpVUNrRS1ZTDR3NUFPdTMxSVF3LUxoNGJXUFg4UUhDZW1rWkEtanpaNURkRnh3cEVRNlppOXJvRFNRTGw0T0pSNjg2Q2ZCT3VhRE9uR2xKaFlkVllUTlV3eWpLRTVzMTNQY2JB?oc=5",
+      "published_at": "Sat, 21 Nov 2026 19:05:05 GMT",
+      "publisher": "더스쿠프",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:규제",
-      "title": "AI 살상무기 규제 합의 미·러 반대로 불발…협상 2년 연장",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBCcVkyTGR0UmJ1c21qV0pwV2l1MkN6VUlrNXpCSmdwdTMzaTNreUl3QzdVRXN1bnUzbU90ZzZxdUJYOHRrNGVDYzJMaXRaTE9QRTN1Q0NlbGhxelZWRHRnSdIBeEFVX3lxTE1ybXVYOE5pZGFaZmF5bmRHUGRaMXFsMU5QYUlJS3V5TUlySXpkLW51Z3pfQnNtYzBIU1Nlc3R2RU0tT1ZpeUNwbUxMQWN1a0JxUEphRXZKN09lNHhYMGItZkpRUTRBTkdvYnZwTWFxX2doNjBxVnlVag?oc=5",
-      "published_at": "Sat, 21 Nov 2026 18:24:12 GMT",
-      "publisher": "뉴시스",
+      "topic": "dynamic:나스닥",
+      "title": "나스닥 '준공황', 반도체지수 10% 폭락 … 韓 증시 '중대 위기'",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1JakhwY0ItSUU4cnR1c1JyLWJZLTZILXE5em9xUXczcTBTMU92ZmVvV3JqUGxPT2ROT3h5TXlyMW0xSWlLaFRVaWJmaWJ1akpzbmJ5cGpEM0pGVW5SWkJBOXVOeml2amN1NmJiZF9NWk4zM2ZuSUgwNzVkONIBgAFBVV95cUxObDNpcldTclJNMG41WHRmZHBjbUp1QTk0VGxqMjFRbjRNc0tjT01kN3E4emhjYVNhMDEzSHhoN3ZNMzlRc0J4bm5mczRfNDhIcjV6bjNKeC1xNzY3MFJBekFOZGkyOUt6dXFaVVMwcGhxaFU3SXpjV0RtV2hKZFFkUQ?oc=5",
+      "published_at": "Fri, 20 Nov 2026 20:34:00 GMT",
+      "publisher": "뉴데일리",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:규제",
-      "title": "“전쟁터 누비는 AI 킬러 로봇, 이대로 두면 재앙”…유엔 규제 논의에 미·러 ‘글쎄’",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE13MzRCRzJmVHZQQ3oxQ0NkZGZ3S0llbVI4M2RFTVRhaEVFY2gyN1pUS1Z2WXNZYi1XU0llVnNPR1RVbGlmcnpHSmxyMXJaa1hhclHSAVNBVV95cUxNaU52LWFuY1BJdEx4VERsR0xYV0ZtMWh6N2ZoT0twN21TbG1KbGpwWlJXRXp0WGdNTW9HcUNuZF96UmN3emVNWE1pUjQ3cXBhaHhKMA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 14:59:04 GMT",
-      "publisher": "서울경제",
+      "topic": "dynamic:나스닥",
+      "title": "[뉴욕마켓워치] 나스닥, 코로나 이후 최악의 한주…증시 패닉 속 채권↑달러↓",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1IdEtnRk94djJMSHhRNHRZZzZzSGM2QjA4UUpRVWs3S1ZWT2NJVXNuSWlZeUNfRUMzYTdWelZIUXZONUhaMndPdWxkUGgtVnI1MWFZVE16VGhDVUs0YU9QWFBURGpGbHdhN0d1U3VOckc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 00:04:58 GMT",
+      "publisher": "연합인포맥스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:규제",
-      "title": "젠슨황發 美반도체 수출 규제에 삼성·TSCM도 부담",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5qeVN5ZmpQRkMtZ2FlZVlPVWtWVk0xMHlvaV96empkZzVLaXFHM1BIZ2diMlZvNDhycFBOZVd2OVEwT0hrQklyTlNDNERjSHZHYTV1V9IBVEFVX3lxTE5qeVN5ZmpQRkMtZ2FlZVlPVWtWVk0xMHlvaV96empkZzVLaXFHM1BIZ2diMlZvNDhycFBOZVd2OVEwT0hrQklyTlNDNERjSHZHYTV1Vw?oc=5",
-      "published_at": "Sat, 21 Nov 2026 13:00:00 GMT",
-      "publisher": "세계일보",
+      "topic": "dynamic:나스닥",
+      "title": "나스닥 5% 폭락…시험대 오른 국내 증시, 반등 열쇠는 [다음주 주요 변수 미리보기]",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBoUWp5MmhCai1Mb2ljdlc1U1EwSWVtREV0U3NhN2FWekpkNG5BN2R5d1JVX1pYM1IxRG15WlAtMU1Ja3BWQkItOEpDblR6M3lsVHlVbk9jRDFYQQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:00:08 GMT",
+      "publisher": "한국경제",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:규제",
-      "title": "대만, 증시 급락에 공매도 규제 강화…23일부터 가격 제한",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9hOXotTjkzSHRJYUFBVXhfTHhYMWVvQVRSdlJ0RUJNb0F3TDNYN0I0MkhFV0FGUmVyNm1OZzBtSks3TVc4SzZqX0NJZ01ENTMzLTg2ektuVXRrcFhnRVdqVA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 09:56:21 GMT",
-      "publisher": "아시아경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:규제",
-      "title": "문샷AI, 인니 엔비디아 B300 임대 계약 취소…美 원격접속 규제 여파",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE40Q1pmbFYwUTMtZFU5VHNUR25wRDZNc1FfRVRoM0M0UmloNEMxenNhOVhVQUxkajZMRlJOUlhMemJlZE1IamdxbU1oeGUxWUJXWFB4cFdPNXdBOXc5U3EyYlJPakQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 08:39:33 GMT",
-      "publisher": "위런치",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:규제",
-      "title": "대만, 증시 폭락에 공매도 규제 강화…23일부터 전일 종가 밑 매도 금지",
-      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNNkJPLV9pZHNZTEJmNmx5ZjlzSVBHWS1ieUxDeU1kNDhxQ0JSNXVTXzBDVDdCUGF6amFkRWZIQ1ZnbkxPZ3hUQ2pJaFpHVUZKYmRDNDlKRENMTnFXMGdZTkd1SnJHRmRCS2F2QlN2bkJCWDJQN2J3VTJObzFnQU55NnY1MUZaQQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 08:56:30 GMT",
-      "publisher": "글로벌이코노믹",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:규제",
-      "title": "대만, 증시 폭락에 공매도 규제 강화…23일부터 '직전 종가 미만' 금지",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9lTVhqT0IyTlUzUldqYlhvYXJVMk1KU3ZVcUhXWTdNZDRyZmkxbEFsVkZVckswalZIQU14cTI2UEd6allWUnJVQXU0dTBBS3YtbGhYUw?oc=5",
-      "published_at": "Sat, 21 Nov 2026 09:53:00 GMT",
-      "publisher": "이투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:규제",
-      "title": "[시세] 하이퍼리퀴드(HYPE) 규제 경고에 밀려났다…60달러 되찾을까",
-      "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE5XWWVOTVNmS2pGeHRVbW5GdWZYdE9GUUNyT2hKbEZCTlM0Z09OMTk3emhoVkFkU2MtcldzYVdfc1RTdk1ydTVTWld3?oc=5",
-      "published_at": "Sat, 21 Nov 2026 13:03:27 GMT",
-      "publisher": "코인리더스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "야당 공세 직면한 트럼프, 정부 계약업체 의회 자료제출도 제한",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5jYnQ2cldDNXFkNThfcm0tdTcxZVNKR2NRcW5QTnR3QVdsUUQ1ZXBuVlcyaU96TVN5SUp4R2oxNDVVNUpYT0RYZTRsQUhJWGFDMWhFR2pwRzZSQTDSAWBBVV95cUxOMFFpZUJVU1VmMExqQk9pMG94ZnowdHo1Z1NaemwtSW9ZM3lWRE1JLUhGLXR3VS15U21LdUZhMWxOczlJWEs0Y284ZkJTdXZyY05ZeGxWOE5wVUJJSTF5RHk?oc=5",
-      "published_at": "Sat, 21 Nov 2026 20:05:46 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "\"해외 데이터센터에 중과세\"…트럼프 몽니에 한국도 긴장",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9ScjBXTzc0c0dlTXJBZ0hUMF9oam1zcVJtTTF3QkRFN0ZkWS1mcGlQVzR1LVZpbzVNU09VTmJqRFFEWDQ5WG5aSXdpQ3d5aU5tNUVPSA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 10:33:00 GMT",
-      "publisher": "JTBC",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "트럼프는 서두르지 않겠다는데‥이란 추가공격 압박 커져",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1La2syVGtmRTFsbk1rVVpVcHRtZVllQk1KQ2lMR1M4RXY2R3VSTjNxRFluNVItSnZic0pkUThubThsdmFCeDE1SGJMdTljSjFJNFlGVEVYZldNVHkzblNCQWxpQnVFbk9OT3JZNV9uOVdTaUJv0gF0QVVfeXFMUDg2QUZUR1gtd2NGYjdvRFNJZHJlcXQwbEFVZk5OUUhhUm5FRjdOREJNbnRXbHIyMGJxZGZLNFhLbmFFb2VJUEQxSEJBaFkyTTJiRU9vNUdDbmFlUEdqb0IzQXFkRkxXc2xxTVUyb1ZXTW1kTG0?oc=5",
-      "published_at": "Sat, 21 Nov 2026 08:58:53 GMT",
+      "topic": "dynamic:나스닥",
+      "title": "뉴욕증시, 나스닥 5.3% 폭락‥올해 상승분 반납",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5jYU9tQ3d4ZWw1NWoxcHpreWVQd0JFTEFtU09lTkktV29PZl9xNXpWdU80SUQwVjM3dWM1NHFJclpOVTNhSy16NFZZMmtNNjBfc0x5bjNORng3U0dQSHBIUVpLU1k2VXdHQnZTeHJrOGlrS2ZrLVotNg?oc=5",
+      "published_at": "Sat, 21 Nov 2026 02:50:10 GMT",
       "publisher": "MBC 뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:트럼프",
-      "title": "[속보]트럼프 \"美 기업, 해외 데이터센터 건설 금지\"",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBfSGI3eW9RYUFrRDk0bW1YV0RnLU9ZcjFkOG12OFZHbDJQRHpONUNMU0dKOUFXdEpVRGtiQl9QVGUtV3BJcF92aFE3eTZRQnl1NmpqRm55Zl9oQQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 18:24:50 GMT",
-      "publisher": "파이낸셜뉴스",
+      "topic": "dynamic:나스닥",
+      "title": "미국도 '검은 금요일'…'AI 거품' 우려에 나스닥 5.3% 폭락",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5xd2NJc1BXZFBkb2wtdVAtbHRDNlpCU3RadHRVYnFYeDVIcW56dy1xa0E0aXhUdDRNRjE5MG1vTnRMYlE2dDFUOWlzbHFoWmxsNnJSTVFJbWdrTEs1X0ZsU19RVklIMS1RaFHSAWZBVV95cUxQSC1YQWFNczNLLTRONWV2Z1NpSlBfTHJVWklrd2dxWTFLbG8wTUpxWXUwMzFkR3QzdEFVX05uS05wOVhfQUtGYk1xdHA0ZWFhNTNiSy12eTNvRkduSjA3NXhhUzlvckE?oc=5",
+      "published_at": "Sat, 21 Nov 2026 11:09:09 GMT",
+      "publisher": "SBS 뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:트럼프",
-      "title": "\"트럼프, 내년 1월 전까지 우크라 종전협상 타결 원해\"",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE01bzdqZDJ2RlN5dWpsaXctMDdfQzE5OF8zR0hpRkt0TllScmxLTjJaYWZ5MEJGUVJDdzhsMS1jU2VOdVZQZmVzUklfOTdUZ2J3YXM5SW9FSzdQbG4xMXo3YWJ1QzJCMWc?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:39:00 GMT",
-      "publisher": "연합뉴스TV",
+      "topic": "dynamic:나스닥",
+      "title": "美 증시 급락…AI주 투매에 나스닥 1,261포인트 하락, 올해 상승분 반납",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5hNjB1SWpnRVZSMHJxVHM4d3FtY0RfcXByUzdxaHdfNlJkTER5QkszVDRiMktXQllOZVh3eWtkM3dIUjZiWWR4ejhKamdKS2tDWEFzRGJNdElmMTFSMkVOZy1SUWhic1FOcmV6MQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 13:29:00 GMT",
+      "publisher": "파이낸스투데이",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:트럼프",
-      "title": "\"트럼프, 우크라 종전협상 내년 1월 초까지 타결 원해\"(종합)",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1uZXlzbnlJTGJOeUpZVGxJdTQ0a1p0Q21aWmNqLVZNOHNuVUdVTXctVnc3aTZndkpEdnRUZEl3UkZPdkwwV09EVUhWMnZpR3Q4OVk4aGtidjU2ZWvSAWBBVV95cUxOQmJEaXRUZXJtbHlfSGE5Q3ZVa1ZkSFNrSGtiSlVqSFROZjlaYktSejdzNUpCMTJWUUgwelZBSXMwdlpaX1JHM282bm9nSzBuZkswM3RTY2c3MHIteFJ0cEM?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:26:14 GMT",
-      "publisher": "연합뉴스",
+      "topic": "dynamic:1조",
+      "title": "“손정의 회장, SK하이닉스 1조 달러에 인수하려 했다”",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9zRnhOeV9aU1hoSm1zWmtxb2VfdnpXejJpTndfM3RpOGs1dU1uYmxqTTdxMUY5Zk5OTjZnQlFBLXVWZ2VFcWpCdUJTRGxSUVpfU2M4V29mbl90VlF2cDF1QS1JbHJJaHQzNVRlQ2g2TllISkXSAWZBVV95cUxQZ2lBMXhTQ0tsbXBRMWNvYmptc01Ia01IWWN5SnU2Z3I1YVVjbHMzdWxDLXlSdjhtcU9iXzV0NWlNeHZ2ZEMydmhhUXY3VFV2Ny13QXNBQjRodWJVVTZvM2w4WWJfd3c?oc=5",
+      "published_at": "Sat, 21 Nov 2026 07:11:00 GMT",
+      "publisher": "동아일보",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:트럼프",
-      "title": "트럼프·베선트, 美 연준 추가 긴축에 잇단 견제",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNSjNXY1EtU2tuWWpRN3VydTMzUERnWDZPNUlKQWVwZnpRV1EtZ2FFaDJoVjhQQVMxSnpuMi0zV1ZVWU13czFtbmcxeDdXSDhoNTk5a1FqV2hrX2dhMzBkVTllMlFEaWZqbjkxLURyOVlYQ1hkWXVieF9ES0V1a1pDQTY0Z2FzM3lI?oc=5",
-      "published_at": "Sat, 21 Nov 2026 18:00:00 GMT",
-      "publisher": "글로벌이코노믹",
+      "topic": "dynamic:1조",
+      "title": "손정의, SK하이닉스 인수 검토했었다…몸값만 1조달러",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE85cEZOcDNkSUxpaElEY29QYi1TZHkwNjlsZ2FZV1MzWkxIdWZyNHV2LVZHTjBweEFHQ3lQbE1BV1BwQXd3R25RQlFqSTQ4U1FtOFppUG9zbTgtSE9TWjEzSA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 09:29:33 GMT",
+      "publisher": "뉴스토마토",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:1조",
+      "title": "손정의, SK하이닉스 1조달러 인수 검토…자금·정부 승인 ‘걸림돌’",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFB5VEhNU0w0RS1mUWtiekJOYW54XzExdWh5R2dxdC04aGtwVnJ2ekpjNV8xS00wQTBWSmJ0Tkw3RVV4ZS1sUzB1RnhxLUlWQ09jOXY3amUtRHdPZlZlUjhVVQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 14:58:31 GMT",
+      "publisher": "시사1",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:1조",
+      "title": "\"소프트뱅크 손정의, 한때 SK하이닉스 1조 달러 인수안 검토\"",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBMWDIxX1hKbGlaR0FFUjNUVHJjcUJNTVVrSjFGZVUyU0tHYWxMQVY0MXZwR2VhNFNNNGVEbVRJQkswdU5SOVVicnlYWmxxY0x5SFM1NllGOXlXVmtxVFZQbA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 06:05:01 GMT",
+      "publisher": "KBC광주방송",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:1조",
+      "title": "손정의, SK하이닉스 1조달러 인수 검토…소프트뱅크 “추진 계획 없다”",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9ZMVFxWFMzUzF2X1dTTGNLdFlFdnYxNHhRejlqNGFWbW1RRk5MMnViS0FlWnZJNTJIdmVIaVpnbjRha3dUcEJvTmFtWFg1ZmNHOWgzY19XaFdaRkk?oc=5",
+      "published_at": "Sat, 21 Nov 2026 09:40:38 GMT",
+      "publisher": "에너지경제신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:1조",
+      "title": "수출 1조 달러 축하...\"품질! 기술! 혁신!\"",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBOTjBwS0pDVUFNeTdtZ0FTV1V5RHFoVzVzMFVoMGkyZ25tbWFhdVVrczJVNkdIU3Fuc2xRRGwyT3V3eGFqcUJGeEEtNEdDOUpxOERXUTZjejU0LU9KNHc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 06:09:00 GMT",
+      "publisher": "YTN",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:1조",
+      "title": "“소프트뱅크 손정의, 1조 달러에 SK하이닉스 인수 시도 했었다”",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5hZUs2aEVYQkhzM2ZlMk13NWtoNXBXZEJaNmduUG5BQTdxbVpPMy02MUZCSFhILVdvd2tLWE0ya2tiQlNzcjlBeTU2dks5VDQ2WGZ6dEFGb0U?oc=5",
+      "published_at": "Sat, 21 Nov 2026 06:33:39 GMT",
+      "publisher": "국민일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1821,10 +1714,26 @@
     },
     {
       "topic": "dynamic:데이터센터",
+      "title": "결국은 \"돈 더 내라\"...미 데이터센터 규제의 진짜 속내",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1LT1RyVUREU1NFQkhucjBQZDBTS2FKQnNfZnc2YjB3VTJLTEs4MnJEVXdmNGpTZ0ZMRDJIT0V5RHJKN1UxMl9rZlU3cTZwY2p2cjlqNzgyblRoNG9mYXc?oc=5",
+      "published_at": "Sat, 21 Nov 2026 18:04:00 GMT",
+      "publisher": "YTN",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:데이터센터",
       "title": "이 대통령, 울산 AI 데이터센터 현장 방문…“속도가 생명”",
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE91ZFdEMnFUWGNsMC1ESmVlV3N3czJRTWEzcTlTb2Z5eEdlUXNTTDc3VV9JLWptOUJ0WldqRzRrRXp2SDBEbTFyQllCQVBNTTdWODUtYzZfTTZsZVU?oc=5",
       "published_at": "Sat, 21 Nov 2026 12:18:00 GMT",
       "publisher": "KBS 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:데이터센터",
+      "title": "[속보]트럼프 \"美 기업, 해외 데이터센터 건설 금지\"",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBfSGI3eW9RYUFrRDk0bW1YV0RnLU9ZcjFkOG12OFZHbDJQRHpONUNMU0dKOUFXdEpVRGtiQl9QVGUtV3BJcF92aFE3eTZRQnl1NmpqRm55Zl9oQQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 18:24:50 GMT",
+      "publisher": "파이낸셜뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1869,18 +1778,34 @@
     },
     {
       "topic": "dynamic:데이터센터",
-      "title": "李대통령, 울산 AI데이터센터 점검 뒤 전통시장 방문…\"속도가 생명\"",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBwLWFmQTNrUVRrNlpJNkFOZjV6c3d5VjVLMTRkQ2tBemtBaEo4YkRyWGk1c2lVODZJRS1Qb0JKNU1DSzlqWUFic29iWXU0SDV2WkJUQlBob0drX2xsbFF0MzdoM1dWQmpXbVBXNGNVNNIBc0FVX3lxTFBqUDRXRzQ0bktGV2dLMlpPcFpnQ3Zyc2EyN1hHZlVXcmYwOG1kMTNud1dxbXlYYnFBdE1NcDVWa2xIVWVrN0QtQVc5Z2RrcGg0ZGM5YUhpcDNqUFh2QWdBX2REQ2lPWnJpWGVTR3JYT0Rsbm8?oc=5",
-      "published_at": "Sat, 21 Nov 2026 12:39:50 GMT",
-      "publisher": "뉴스웍스",
+      "title": "\"해외 데이터센터에 중과세\"…트럼프 몽니에 한국도 긴장",
+      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9ScjBXTzc0c0dlTXJBZ0hUMF9oam1zcVJtTTF3QkRFN0ZkWS1mcGlQVzR1LVZpbzVNU09VTmJqRFFEWDQ5WG5aSXdpQ3d5aU5tNUVPSA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 10:33:00 GMT",
+      "publisher": "JTBC",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "dynamic:데이터센터",
-      "title": "이재명 대통령, 울산 AI 데이터센터 현장 방문…“지방 성장 기회·균형발전 이끌 핵심 사업”",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBHSEUtM1BHZFdUUGtEUlJSbnl0TG03cUo5ZlRvWHZLSEdoWEJUM1N4Rk5uLTcxdkFnbDFaUzhfeE9kTk1ONGNWWENWa2lGbHB4UHRieXFxTXBkZE0?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:30:28 GMT",
-      "publisher": "강원일보",
+      "title": "“속도가 생명”…李, 울산 AI데이터센터 건설 현장 방문",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9tS2ZCeXJGSmdBZEM5V3FBTUVaalBwcVYxTE82Zm5KTURfdGhGOTNGdHdKdHdDWU4teGY3SnA0WURmUEdsZEdVb1I1YjhlZEtmX0xHLVRVV0NDb284eWJveHdnY3VZT0huUkpRNG02VDU1a1RKendZ0gFmQVVfeXFMTmpCS2NWR1l0RWJCOXVFZmYya1NSdFRDc0dwWGs0Z2NMcTc0X0hpOElTV3g0LUt5bHd1VkJWcUt1b0traWtwMDg2N3JuMFpwQUp1RTlsVHVDV3JNejlVOXhZMTVYeVp3?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:28:00 GMT",
+      "publisher": "동아일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:데이터센터",
+      "title": "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBXVWtTdG1uT3plc1VsTDk2NnAyVU9mY2xadU01amlpdTZnOTJGLWlkdUtTWWN0MWhqTFlCSk1fX1BOS2pOY1VfaFM4OENZSjhnQU5CdVhR?oc=5",
+      "published_at": "Sat, 21 Nov 2026 04:51:29 GMT",
+      "publisher": "중앙일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:데이터센터",
+      "title": "李대통령, 울산 AI데이터센터 점검 뒤 전통시장 방문…\"속도가 생명\"",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBwLWFmQTNrUVRrNlpJNkFOZjV6c3d5VjVLMTRkQ2tBemtBaEo4YkRyWGk1c2lVODZJRS1Qb0JKNU1DSzlqWUFic29iWXU0SDV2WkJUQlBob0drX2xsbFF0MzdoM1dWQmpXbVBXNGNVNNIBc0FVX3lxTFBqUDRXRzQ0bktGV2dLMlpPcFpnQ3Zyc2EyN1hHZlVXcmYwOG1kMTNud1dxbXlYYnFBdE1NcDVWa2xIVWVrN0QtQVc5Z2RrcGg0ZGM5YUhpcDNqUFh2QWdBX2REQ2lPWnJpWGVTR3JYT0Rsbm8?oc=5",
+      "published_at": "Sat, 21 Nov 2026 12:39:50 GMT",
+      "publisher": "뉴스웍스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1914,94 +1839,6 @@
       "published_at": "Sat, 21 Nov 2026 05:24:43 GMT",
       "publisher": "연합뉴스",
       "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:데이터센터",
-      "title": "李대통령, 울산 SK AI데이터센터 방문…“국제 경쟁서 속도가 생명”",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBXVWtTdG1uT3plc1VsTDk2NnAyVU9mY2xadU01amlpdTZnOTJGLWlkdUtTWWN0MWhqTFlCSk1fX1BOS2pOY1VfaFM4OENZSjhnQU5CdVhR?oc=5",
-      "published_at": "Sat, 21 Nov 2026 04:51:29 GMT",
-      "publisher": "중앙일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:나스닥",
-      "title": "나스닥 '준공황', 반도체지수 10% 폭락 … 韓 증시 '중대 위기'",
-      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1JakhwY0ItSUU4cnR1c1JyLWJZLTZILXE5em9xUXczcTBTMU92ZmVvV3JqUGxPT2ROT3h5TXlyMW0xSWlLaFRVaWJmaWJ1akpzbmJ5cGpEM0pGVW5SWkJBOXVOeml2amN1NmJiZF9NWk4zM2ZuSUgwNzVkONIBgAFBVV95cUxObDNpcldTclJNMG41WHRmZHBjbUp1QTk0VGxqMjFRbjRNc0tjT01kN3E4emhjYVNhMDEzSHhoN3ZNMzlRc0J4bm5mczRfNDhIcjV6bjNKeC1xNzY3MFJBekFOZGkyOUt6dXFaVVMwcGhxaFU3SXpjV0RtV2hKZFFkUQ?oc=5",
-      "published_at": "Fri, 20 Nov 2026 20:34:00 GMT",
-      "publisher": "뉴데일리",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:나스닥",
-      "title": "나스닥 5% 폭락…시험대 오른 국내 증시, 반등 열쇠는 [다음주 주요 변수 미리보기]",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBoUWp5MmhCai1Mb2ljdlc1U1EwSWVtREV0U3NhN2FWekpkNG5BN2R5d1JVX1pYM1IxRG15WlAtMU1Ja3BWQkItOEpDblR6M3lsVHlVbk9jRDFYQQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:00:08 GMT",
-      "publisher": "한국경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:나스닥",
-      "title": "美 증시 급락…AI주 투매에 나스닥 1,261포인트 하락, 올해 상승분 반납",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5hNjB1SWpnRVZSMHJxVHM4d3FtY0RfcXByUzdxaHdfNlJkTER5QkszVDRiMktXQllOZVh3eWtkM3dIUjZiWWR4ejhKamdKS2tDWEFzRGJNdElmMTFSMkVOZy1SUWhic1FOcmV6MQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 13:29:00 GMT",
-      "publisher": "파이낸스투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:나스닥",
-      "title": "뉴욕증시, 나스닥 5.3% 폭락‥올해 상승분 반납",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5jYU9tQ3d4ZWw1NWoxcHpreWVQd0JFTEFtU09lTkktV29PZl9xNXpWdU80SUQwVjM3dWM1NHFJclpOVTNhSy16NFZZMmtNNjBfc0x5bjNORng3U0dQSHBIUVpLU1k2VXdHQnZTeHJrOGlrS2ZrLVotNg?oc=5",
-      "published_at": "Sat, 21 Nov 2026 02:50:10 GMT",
-      "publisher": "MBC 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:나스닥",
-      "title": "미국도 '검은 금요일'…'AI 거품' 우려에 나스닥 5.3% 폭락",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5xd2NJc1BXZFBkb2wtdVAtbHRDNlpCU3RadHRVYnFYeDVIcW56dy1xa0E0aXhUdDRNRjE5MG1vTnRMYlE2dDFUOWlzbHFoWmxsNnJSTVFJbWdrTEs1X0ZsU19RVklIMS1RaFHSAWZBVV95cUxQSC1YQWFNczNLLTRONWV2Z1NpSlBfTHJVWklrd2dxWTFLbG8wTUpxWXUwMzFkR3QzdEFVX05uS05wOVhfQUtGYk1xdHA0ZWFhNTNiSy12eTNvRkduSjA3NXhhUzlvckE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 11:09:09 GMT",
-      "publisher": "SBS 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:나스닥",
-      "title": "나스닥 5.3% 폭락… ‘AI 거품’ 공포에 다우·S&P500도 조정 진입",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBBQXcyVk5Lckc0OUdKTHlvalc5UjhNQ1J5TEFuUHdOOUttTkJ6WkJkYjI3S3dsR2o0TU1LZVMxcFJjVjdCWlBpNzNqMU5OaVkxR3Y0OFBFWjfSAVRBVV95cUxQQWU0VTVyTTROQk9WREpUeTZaenpUSzVjVDd1dUFxcmRIWi1lNDl1LUJYM3JWMXF2bzFNNUluR2JlV2U3VVhHUVVfcV9XekZKUDZCLU4?oc=5",
-      "published_at": "Sat, 21 Nov 2026 05:08:49 GMT",
-      "publisher": "세계일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:1조",
-      "title": "손정의, SK하이닉스 1조달러 인수 검토…자금·정부 승인 ‘걸림돌’",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFB5VEhNU0w0RS1mUWtiekJOYW54XzExdWh5R2dxdC04aGtwVnJ2ekpjNV8xS00wQTBWSmJ0Tkw3RVV4ZS1sUzB1RnhxLUlWQ09jOXY3amUtRHdPZlZlUjhVVQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 14:58:31 GMT",
-      "publisher": "시사1",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:1조",
-      "title": "\"소프트뱅크 손정의, 한때 SK하이닉스 1조 달러 인수안 검토\"",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBMWDIxX1hKbGlaR0FFUjNUVHJjcUJNTVVrSjFGZVUyU0tHYWxMQVY0MXZwR2VhNFNNNGVEbVRJQkswdU5SOVVicnlYWmxxY0x5SFM1NllGOXlXVmtxVFZQbA?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:05:01 GMT",
-      "publisher": "KBC광주방송",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:1조",
-      "title": "손정의, SK하이닉스 1조달러 인수 검토…소프트뱅크 “추진 계획 없다”",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9ZMVFxWFMzUzF2X1dTTGNLdFlFdnYxNHhRejlqNGFWbW1RRk5MMnViS0FlWnZJNTJIdmVIaVpnbjRha3dUcEJvTmFtWFg1ZmNHOWgzY19XaFdaRkk?oc=5",
-      "published_at": "Sat, 21 Nov 2026 09:40:38 GMT",
-      "publisher": "에너지경제신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:1조",
-      "title": "“소프트뱅크 손정의, 1조 달러에 SK하이닉스 인수 시도 했었다”",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5hZUs2aEVYQkhzM2ZlMk13NWtoNXBXZEJaNmduUG5BQTdxbVpPMy02MUZCSFhILVdvd2tLWE0ya2tiQlNzcjlBeTU2dks5VDQ2WGZ6dEFGb0U?oc=5",
-      "published_at": "Sat, 21 Nov 2026 06:33:39 GMT",
-      "publisher": "국민일보",
-      "discovery_source": "google_news_rss"
     }
   ],
   "handoff_queries": [
@@ -2011,185 +1848,131 @@
     "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
     "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "수출 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "달러 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "규제 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "나스닥 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "1조 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+    "데이터센터 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "1조 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "손정의 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
   ],
   "dynamic_query_terms": [
     "AI",
     "수출",
+    "트럼프",
     "달러",
     "규제",
-    "트럼프",
-    "데이터센터",
     "나스닥",
-    "1조"
+    "1조",
+    "데이터센터"
   ],
   "hot_topic_candidates": [
     {
       "term": "AI",
-      "count": 31,
-      "publisher_count": 23,
+      "count": 30,
+      "publisher_count": 22,
       "independent_story_count_estimate": 29,
-      "syndication_ratio_estimate": 0.065,
+      "syndication_ratio_estimate": 0.033,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 36,
-      "delta": -5,
-      "score": 85,
+      "previous_count": 31,
+      "delta": -1,
+      "score": 82,
       "examples": [
-        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도",
-        "11월 23~27일 한국·미국 증시 주요 일정｜미국 PCE·한국 금통위·델 AI 서버 실적까지",
-        "AI 랠리 변곡점 왔나…월가 \"버블 터졌다\" vs \"반등 여지 충분\""
+        "국내 반도체 소부장주, AI 투자심리 위축과 수출 규제 우려로 급락",
+        "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
+        "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?"
       ],
       "article_velocity": 0,
-      "hot_score": 164
+      "hot_score": 161
     },
     {
       "term": "수출",
-      "count": 25,
-      "publisher_count": 19,
-      "independent_story_count_estimate": 24,
-      "syndication_ratio_estimate": 0.04,
+      "count": 22,
+      "publisher_count": 17,
+      "independent_story_count_estimate": 22,
+      "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 24,
-      "delta": 1,
-      "score": 70,
+      "previous_count": 25,
+      "delta": -3,
+      "score": 61,
       "examples": [
         "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
-        "강원 미용 의료기기, 홍콩 코스모프로프서 122만 달러 수출 계약 성과",
-        "대구 100억·경북 450억 달러···수출 동반 회복 청신호"
+        "국내 반도체 소부장주, AI 투자심리 위축과 수출 규제 우려로 급락",
+        "한국 수출 사상 첫 '1조 달러' 돌파…독·미·중 이어 세계 4번째"
       ],
-      "article_velocity": 1,
-      "hot_score": 139
+      "article_velocity": 0,
+      "hot_score": 122
+    },
+    {
+      "term": "달러",
+      "count": 21,
+      "publisher_count": 18,
+      "independent_story_count_estimate": 20,
+      "syndication_ratio_estimate": 0.048,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 22,
+      "delta": -1,
+      "score": 60,
+      "examples": [
+        "어반 원, 나스닥 상장유지 요건 미달 통지 수령…자본총계 250만 달러 기준 미충족",
+        "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
+        "멜라니아 트럼프 다큐에 7,500만 달러…아마존의 수상한 투자"
+      ],
+      "article_velocity": 0,
+      "hot_score": 117
     },
     {
       "term": "트럼프",
-      "count": 21,
-      "publisher_count": 19,
-      "independent_story_count_estimate": 18,
-      "syndication_ratio_estimate": 0.143,
+      "count": 16,
+      "publisher_count": 16,
+      "independent_story_count_estimate": 14,
+      "syndication_ratio_estimate": 0.125,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 17,
-      "delta": 4,
-      "score": 65,
+      "previous_count": 21,
+      "delta": -5,
+      "score": 48,
       "examples": [
         "李, 트럼프·시진핑·푸틴 모두 만났다…미중러 회담 앞두고 외교전",
         "트럼프 \"미·중·러 정상회담 전례 없는 역사적 만남…핵전쟁 막기로 합의\"",
         "트럼프 “미·중·러 정상회담서 한반도 위험 논의”"
       ],
-      "article_velocity": 4,
-      "hot_score": 129
-    },
-    {
-      "term": "달러",
-      "count": 22,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 20,
-      "syndication_ratio_estimate": 0.091,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 21,
-      "delta": 1,
-      "score": 63,
-      "examples": [
-        "어반 원, 나스닥 상장유지 요건 미달 통지 수령…자본총계 250만 달러 기준 미충족",
-        "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
-        "강원 미용 의료기기, 홍콩 코스모프로프서 122만 달러 수출 계약 성과"
-      ],
-      "article_velocity": 1,
-      "hot_score": 122
-    },
-    {
-      "term": "규제",
-      "count": 15,
-      "publisher_count": 15,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.067,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 18,
-      "delta": -3,
-      "score": 45,
-      "examples": [
-        "전 USTR 부대표·미 상무부·정보기술업계, 한국 디지털 규제 잇단 경고…워싱턴 우려 확산",
-        "대만은 공매도 규제 강화하는데…한국도 증시 안정 대책 서둘러야",
-        "새벽배송 규제, 소비자에게 묻는다 '모두의 편익은?'...소비자주권시민회의 정책 토론회 개최"
-      ],
       "article_velocity": 0,
-      "hot_score": 87
+      "hot_score": 90
     },
     {
-      "term": "나스닥",
-      "count": 15,
-      "publisher_count": 12,
-      "independent_story_count_estimate": 11,
-      "syndication_ratio_estimate": 0.267,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 15,
-      "delta": 0,
-      "score": 42,
-      "examples": [
-        "어반 원, 나스닥 상장유지 요건 미달 통지 수령…자본총계 250만 달러 기준 미충족",
-        "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
-        "나스닥 5.3% 폭락 '검은 금요일'‥올해 상승분 모두 반납"
-      ],
-      "article_velocity": 0,
-      "hot_score": 72
-    },
-    {
-      "term": "1조",
+      "term": "데이터센터",
       "count": 14,
-      "publisher_count": 12,
+      "publisher_count": 14,
       "independent_story_count_estimate": 12,
       "syndication_ratio_estimate": 0.143,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 13,
       "delta": 1,
-      "score": 41,
+      "score": 43,
       "examples": [
-        "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
-        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-        "수출 1조 달러 달성했지만… ‘반도체 편중’ 넘어 성장 온기 퍼뜨려야"
+        "트럼프, 美기업 해외 AI 데이터센터 건설 금지 추진⋯삼전닉스 공급망 타격 우려",
+        "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?",
+        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도"
       ],
       "article_velocity": 1,
-      "hot_score": 78
+      "hot_score": 82
     },
     {
-      "term": "데이터센터",
+      "term": "1조",
       "count": 13,
-      "publisher_count": 13,
-      "independent_story_count_estimate": 10,
-      "syndication_ratio_estimate": 0.231,
+      "publisher_count": 12,
+      "independent_story_count_estimate": 12,
+      "syndication_ratio_estimate": 0.077,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 16,
-      "delta": -3,
-      "score": 39,
+      "previous_count": 14,
+      "delta": -1,
+      "score": 38,
       "examples": [
-        "AI 데이터센터 전력 병목, 초고온 암반 지열이 흔드는 에너지 조달 판도",
-        "해외 데이터센터 \"세금 폭탄\"‥韓 투자도 흔들?",
-        "트럼프, “美기업 해외 데이터센터 건설 강력 제재” 공표"
+        "수출 1조 달러 달성에도 ‘반도체 저주’ 우려?…경계론 앞서 규제부터 풀어야",
+        "한국 수출 사상 첫 '1조 달러' 돌파…독·미·중 이어 세계 4번째",
+        "어떻게 ‘수출 1조 달러’인데 ‘주가 폭락’이 오나"
       ],
       "article_velocity": 0,
-      "hot_score": 69
-    },
-    {
-      "term": "폭락",
-      "count": 12,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.333,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 0,
-      "score": 32,
-      "examples": [
-        "나스닥, 기술주 매도에 5.3% 폭락…“S&P500도 6년 사이 최장 하락”",
-        "나스닥 5.3% 폭락 '검은 금요일'‥올해 상승분 모두 반납",
-        "나스닥 5.3% 폭락, 올해 상승분 다 날렸다…월요일이 두려운 개미들"
-      ],
-      "article_velocity": 0,
-      "hot_score": 52
+      "hot_score": 73
     },
     {
       "term": "손정의",
@@ -2203,8 +1986,8 @@
       "score": 30,
       "examples": [
         "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
-        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-        "“소프트뱅크 손정의, 최근 SK하이닉스 1조달러 인수안 검토”"
+        "“손정의 회장, SK하이닉스 1조달러에 인수 검토”",
+        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토"
       ],
       "article_velocity": 0,
       "hot_score": 48
@@ -2221,8 +2004,8 @@
       "score": 30,
       "examples": [
         "\"손정의 소프트뱅크 회장, SK하이닉스 1조달러 인수 검토\"",
-        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토",
-        "“소프트뱅크 손정의, 최근 SK하이닉스 1조달러 인수안 검토”"
+        "“손정의 회장, SK하이닉스 1조달러에 인수 검토”",
+        "손정의 소프트뱅크 회장, 한때 SK하이닉스 1조 달러 인수 검토"
       ],
       "article_velocity": 0,
       "hot_score": 48
@@ -2231,11 +2014,11 @@
       "term": "울산",
       "count": 10,
       "publisher_count": 9,
-      "independent_story_count_estimate": 7,
-      "syndication_ratio_estimate": 0.3,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.2,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": -2,
+      "previous_count": 10,
+      "delta": 0,
       "score": 29,
       "examples": [
         "울산 AI데이터센터 간 李 \"AI 경쟁은 속도전…전문 건설인력 확보 강조\" - 머니투데이",
@@ -2243,7 +2026,61 @@
         "메가급 속도⚡️⚡️ 울산 SK AI 데이터센터 현장 방문"
       ],
       "article_velocity": 0,
-      "hot_score": 49
+      "hot_score": 52
+    },
+    {
+      "term": "AI데이터센터",
+      "count": 9,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 7,
+      "syndication_ratio_estimate": 0.222,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 8,
+      "delta": 1,
+      "score": 28,
+      "examples": [
+        "울산 AI데이터센터 간 李 \"AI 경쟁은 속도전…전문 건설인력 확보 강조\" - 머니투데이",
+        "이 대통령, “대한민국 AI 대전환, 인공지능 고속도로가 열 것”...울산 SK AI데이터센터 건설 현장 점검",
+        "울산 SK AI데이터센터 찾은 李…“韓 AX는 AI 고속도로가 열게 될 것”"
+      ],
+      "article_velocity": 1,
+      "hot_score": 52
+    },
+    {
+      "term": "규제",
+      "count": 9,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 15,
+      "delta": -6,
+      "score": 27,
+      "examples": [
+        "전 USTR 부대표·미 상무부·정보기술업계, 한국 디지털 규제 잇단 경고…워싱턴 우려 확산",
+        "대만은 공매도 규제 강화하는데…한국도 증시 안정 대책 서둘러야",
+        "새벽배송 규제, 소비자에게 묻는다 '모두의 편익은?'...소비자주권시민회의 정책 토론회 개최"
+      ],
+      "article_velocity": 0,
+      "hot_score": 54
+    },
+    {
+      "term": "앤트로픽",
+      "count": 7,
+      "publisher_count": 6,
+      "independent_story_count_estimate": 6,
+      "syndication_ratio_estimate": 0.143,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 7,
+      "score": 27,
+      "examples": [
+        "AI 황금기 끝났나…앤트로픽 급락에 데이터센터 전력주 어디로?",
+        "\"앤트로픽 공동창업자, 트럼프 '아동 투자계좌'에 기부 예정\"",
+        "\"앤트로픽 공동창업자, 트럼프 '아동 투자 계좌'에 기부 예정\""
+      ],
+      "article_velocity": 7,
+      "hot_score": 65
     }
   ],
   "sector_selection": {
