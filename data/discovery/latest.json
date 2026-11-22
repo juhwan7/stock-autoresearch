@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-23T02:21:26.886299+09:00",
+  "generated_at": "2026-11-23T02:31:11.794119+09:00",
   "purpose": "10분 비AI 시장·뉴스 단서 센서. :00/:30 A/B Supervisor의 탐색 힌트이며 사실 확정 엔진이 아님.",
   "source_status": {
     "google_news:kr_market_broad": {
@@ -14,19 +14,17 @@
       "auto_repair": "retry_without_when_filter"
     },
     "google_news:kr_corporate_events": {
-      "status": "empty",
-      "count": 0,
-      "auto_repair": "retry_without_when_filter"
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:kr_policy_economy": {
       "status": "ok",
-      "count": 23,
+      "count": 26,
       "auto_repair": null
     },
     "google_news:kr_diplomacy_summit": {
-      "status": "ok",
-      "count": 30,
-      "auto_repair": null
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:kr_semiconductor_ai": {
       "status": "ok",
@@ -39,12 +37,14 @@
       "auto_repair": null
     },
     "google_news:kr_bio_health": {
-      "status": "error",
-      "error": "HTTPError"
+      "status": "empty",
+      "count": 0,
+      "auto_repair": "retry_without_when_filter"
     },
     "google_news:kr_defense_shipbuilding": {
-      "status": "error",
-      "error": "HTTPError"
+      "status": "empty",
+      "count": 0,
+      "auto_repair": "retry_without_when_filter"
     },
     "google_news:global_market": {
       "status": "ok",
@@ -52,13 +52,13 @@
       "auto_repair": null
     },
     "google_news:global_diplomacy_summit": {
-      "status": "error",
-      "error": "HTTPError"
+      "status": "ok",
+      "count": 15,
+      "auto_repair": null
     },
     "google_news:us_macro_rates": {
-      "status": "ok",
-      "count": 1,
-      "auto_repair": null
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:global_energy_middle_east": {
       "status": "empty",
@@ -112,12 +112,12 @@
     },
     "google_news:dynamic:돼지만": {
       "status": "ok",
-      "count": 18,
+      "count": 20,
       "term": "돼지만"
     },
     "google_news:dynamic:수출": {
-      "status": "ok",
-      "count": 20,
+      "status": "error",
+      "error": "HTTPError",
       "term": "수출"
     },
     "google_news:dynamic:달러": {
@@ -125,10 +125,10 @@
       "count": 19,
       "term": "달러"
     },
-    "google_news:dynamic:트럼프": {
-      "status": "ok",
-      "count": 1,
-      "term": "트럼프"
+    "google_news:dynamic:규제": {
+      "status": "error",
+      "error": "HTTPError",
+      "term": "규제"
     },
     "naver_news_api": {
       "status": "needs_credentials"
@@ -151,9 +151,9 @@
     }
   },
   "source_summary": {
-    "ok_or_partial": 16,
-    "failed": 3,
-    "degraded": 8
+    "ok_or_partial": 13,
+    "failed": 5,
+    "degraded": 9
   },
   "naver_indices": {
     "KOSPI": "4,869.96",
@@ -161,65 +161,109 @@
     "KOSPI200": "755.34"
   },
   "topic_counts": {
-    "kr_policy_economy": 23,
-    "kr_diplomacy_summit": 30,
+    "kr_policy_economy": 26,
     "kr_semiconductor_ai": 7,
     "kr_energy_power": 1,
     "global_market": 23,
-    "us_macro_rates": 1,
-    "us_china_trade_ai": 1,
-    "dynamic:순방": 3,
+    "global_diplomacy_summit": 15,
+    "dynamic:순방": 20,
     "dynamic:AI": 20,
-    "dynamic:돼지": 1,
-    "dynamic:비판에": 7,
-    "dynamic:돼지만": 8,
-    "dynamic:수출": 11,
-    "dynamic:달러": 3,
-    "dynamic:트럼프": 1
+    "dynamic:돼지": 3,
+    "dynamic:비판에": 10,
+    "dynamic:돼지만": 11,
+    "dynamic:달러": 3
   },
   "trending_terms": [
     {
       "term": "대통령",
-      "count": 37,
-      "publisher_count": 33,
-      "independent_story_count_estimate": 28,
-      "syndication_ratio_estimate": 0.243,
+      "count": 33,
+      "publisher_count": 29,
+      "independent_story_count_estimate": 24,
+      "syndication_ratio_estimate": 0.273,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 42,
-      "delta": -5,
-      "score": 107,
+      "previous_count": 37,
+      "delta": -4,
+      "score": 95,
       "examples": [
+        "이재명 대통령 시진핑 주석 한·중 정상회담 \"FTA 서비스·투자 협상 타결 계기 경제협력 확대,한반도 긴장완화 중국 건설적 역할\"",
         "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "이 대통령, 野 ’잦은 순방’ 비판에 “빠질 수 없는 대통령 주요 업무“"
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”"
       ]
     },
     {
       "term": "순방",
-      "count": 33,
-      "publisher_count": 29,
-      "independent_story_count_estimate": 26,
-      "syndication_ratio_estimate": 0.212,
+      "count": 31,
+      "publisher_count": 26,
+      "independent_story_count_estimate": 25,
+      "syndication_ratio_estimate": 0.194,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 36,
-      "delta": -3,
-      "score": 95,
+      "previous_count": 33,
+      "delta": -2,
+      "score": 88,
       "examples": [
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "이 대통령, 野 ’잦은 순방’ 비판에 “빠질 수 없는 대통령 주요 업무“",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
+        "[월드 투데이] 아시아 순방 마친 트럼프…미·중 무역, 대만 문제, 기술 갈등은 여전",
+        "李 \"공정성 타협 불가\"…순방 비판엔 \"치아 흔들리고 코피\"",
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\""
+      ]
+    },
+    {
+      "term": "돼지",
+      "count": 24,
+      "publisher_count": 20,
+      "independent_story_count_estimate": 17,
+      "syndication_ratio_estimate": 0.292,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 21,
+      "delta": 3,
+      "score": 71,
+      "examples": [
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”",
+        "李 \"임기 초 순방은 국정과제\"…또 등장한 '돼지 눈엔 돼지'",
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\""
+      ]
+    },
+    {
+      "term": "비판에",
+      "count": 23,
+      "publisher_count": 20,
+      "independent_story_count_estimate": 18,
+      "syndication_ratio_estimate": 0.217,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 20,
+      "delta": 3,
+      "score": 69,
+      "examples": [
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\"",
+        "李, 순방 비판에 \"대통령 주요 업무\"…권력 활용 중요성도 강조",
+        "이 대통령, 순방 비판에 \"돼지 눈에는 돼지만‥코피 터지는 힘든 일\""
+      ]
+    },
+    {
+      "term": "돼지만",
+      "count": 22,
+      "publisher_count": 18,
+      "independent_story_count_estimate": 16,
+      "syndication_ratio_estimate": 0.273,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 19,
+      "delta": 3,
+      "score": 65,
+      "examples": [
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”",
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\"",
+        "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”"
       ]
     },
     {
       "term": "AI",
-      "count": 24,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 24,
+      "count": 22,
+      "publisher_count": 16,
+      "independent_story_count_estimate": 22,
       "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 29,
-      "delta": -5,
-      "score": 66,
+      "previous_count": 24,
+      "delta": -2,
+      "score": 60,
       "examples": [
         "AI 규제비용의 시대",
         "AI 칩 지각변동·EU 규제 쇼크···연말 공급망 ‘초비상’",
@@ -227,63 +271,63 @@
       ]
     },
     {
-      "term": "돼지",
-      "count": 21,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 14,
+      "term": "트럼프",
+      "count": 10,
+      "publisher_count": 10,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.1,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 10,
+      "score": 40,
+      "examples": [
+        "트럼프 \"해외 데이터센터 과세\" GPU 통제 강화되면 국내 산업 여파는",
+        "트럼프 제재에 ICC 직원 급여도 막히나…일, 내년 분담금 조기 납부 검토",
+        "EU, 빅테크 디지털세 제안…트럼프 “관세 100% 부과할 것”"
+      ]
+    },
+    {
+      "term": "눈에는",
+      "count": 12,
+      "publisher_count": 11,
+      "independent_story_count_estimate": 8,
       "syndication_ratio_estimate": 0.333,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 24,
-      "delta": -3,
-      "score": 60,
+      "previous_count": 10,
+      "delta": 2,
+      "score": 37,
       "examples": [
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\"",
+        "이 대통령, 잦은 해외순방 논란 정면 반박…\"돼지 눈에는 돼지만 보여\"",
+        "이 대통령, 순방 비판에 \"돼지 눈에는 돼지만‥코피 터지는 힘든 일\""
       ]
     },
     {
-      "term": "비판에",
-      "count": 20,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 15,
-      "syndication_ratio_estimate": 0.25,
+      "term": "규제",
+      "count": 12,
+      "publisher_count": 11,
+      "independent_story_count_estimate": 12,
+      "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 23,
-      "delta": -3,
-      "score": 58,
+      "previous_count": 13,
+      "delta": -1,
+      "score": 35,
       "examples": [
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "이 대통령, 野 ’잦은 순방’ 비판에 “빠질 수 없는 대통령 주요 업무“",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
-      ]
-    },
-    {
-      "term": "돼지만",
-      "count": 19,
-      "publisher_count": 16,
-      "independent_story_count_estimate": 13,
-      "syndication_ratio_estimate": 0.316,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 22,
-      "delta": -3,
-      "score": 54,
-      "examples": [
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
+        "[전화성의 기술창업 Targeting] 〈417〉 [AC협회장 주간록127] 규제 지키는 산업에서 스스로 신뢰 만드는 산업으로",
+        "정부, 증안펀드 가동 준비 착수..공매도 규제 없어",
+        "정부, 증시 급락 우려에 증안펀드 가동 준비…자사주 매입 규제 완화"
       ]
     },
     {
       "term": "수출",
-      "count": 20,
-      "publisher_count": 14,
-      "independent_story_count_estimate": 18,
-      "syndication_ratio_estimate": 0.1,
+      "count": 12,
+      "publisher_count": 10,
+      "independent_story_count_estimate": 11,
+      "syndication_ratio_estimate": 0.083,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 20,
-      "delta": 0,
-      "score": 54,
+      "delta": -8,
+      "score": 34,
       "examples": [
         "[아주경제 와이드 사설] 수출 1조 달러의 대한민국, 축배 다음을 준비하라",
         "[노트북을 열며] 수출 1조 달러, 숫자 너머의 사람들",
@@ -292,14 +336,14 @@
     },
     {
       "term": "달러",
-      "count": 14,
-      "publisher_count": 12,
-      "independent_story_count_estimate": 12,
-      "syndication_ratio_estimate": 0.143,
+      "count": 11,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 10,
+      "syndication_ratio_estimate": 0.091,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 2,
-      "score": 42,
+      "previous_count": 14,
+      "delta": -3,
+      "score": 31,
       "examples": [
         "[노트북을 열며] 수출 1조 달러, 숫자 너머의 사람들",
         "반도체만 있는 게 아니다…‘수출 1조 달러’ 숨은 주역들",
@@ -307,163 +351,67 @@
       ]
     },
     {
-      "term": "규제",
-      "count": 13,
-      "publisher_count": 12,
-      "independent_story_count_estimate": 13,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 1,
-      "score": 39,
-      "examples": [
-        "[전화성의 기술창업 Targeting] 〈417〉 [AC협회장 주간록127] 규제 지키는 산업에서 스스로 신뢰 만드는 산업으로",
-        "'대만처럼 공매도 막아달라' 정부 대책에 개미들 불만…금지 청원 5만명 넘기면 추가 규제 이끌까",
-        "청소년 SNS 규제, 가입 문턱 넘어 추천·광고까지 바꾼다"
-      ]
-    },
-    {
-      "term": "외교",
-      "count": 9,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.111,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 9,
-      "score": 36,
-      "examples": [
-        "이재명 대통령, 시험 부정행위 대책 지시…순방 외교 비판에도 입장 밝혀",
-        "이재명 대통령 해외순방…민주당 \"외교 성과로 평가해야\"",
-        "野 '대통령 해외 순방 잦아'…靑 \"해외 정상들 숨가쁜 순방 외교 보라\" |"
-      ]
-    },
-    {
-      "term": "보라",
-      "count": 9,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 6,
-      "syndication_ratio_estimate": 0.333,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 9,
-      "score": 36,
-      "examples": [
-        "청와대, ‘대통령 잦은 순방’ 지적한 야당에 “눈 들어 해외 정상 보라”",
-        "청와대, 잦은 순방 비판에 “해외 정상들의 숨 가쁜 외교를 보라”",
-        "野 ’대통령 순방’ 비판에 靑 “눈 들어 해외 정상 순방외교 보라“"
-      ]
-    },
-    {
-      "term": "해외",
-      "count": 11,
-      "publisher_count": 11,
-      "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.182,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": -3,
-      "score": 33,
-      "examples": [
-        "李 “돼지 눈엔 돼지만…해외 순방, 치아 흔들리고 코피 터지는 일”",
-        "李대통령 “해외 순방은 임기 초 꼭 필요한 국정과제”…야권 비판 정면 반박",
-        "청와대, ‘대통령 잦은 순방’ 지적한 야당에 “눈 들어 해외 정상 보라”"
-      ]
-    },
-    {
-      "term": "1조",
-      "count": 11,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.182,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 10,
-      "delta": 1,
-      "score": 32,
-      "examples": [
-        "[아주경제 와이드 사설] 수출 1조 달러의 대한민국, 축배 다음을 준비하라",
-        "[노트북을 열며] 수출 1조 달러, 숫자 너머의 사람들",
-        "반도체만 있는 게 아니다…‘수출 1조 달러’ 숨은 주역들"
-      ]
-    },
-    {
-      "term": "흔들리고",
-      "count": 8,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.375,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 8,
-      "score": 32,
-      "examples": [
-        "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
-        "이 대통령 “치아 흔들리고 코피 터져도…임기 초 순방은 국정과제”",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
-      ]
-    },
-    {
-      "term": "치아",
-      "count": 8,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.375,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 8,
-      "score": 32,
-      "examples": [
-        "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
-        "이 대통령 “치아 흔들리고 코피 터져도…임기 초 순방은 국정과제”",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
-      ]
-    },
-    {
-      "term": "잦은",
-      "count": 10,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.1,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 10,
-      "delta": 0,
-      "score": 29,
-      "examples": [
-        "이 대통령, 野 ’잦은 순방’ 비판에 “빠질 수 없는 대통령 주요 업무“",
-        "이 대통령, 잦은 해외순방 논란 정면 반박…\"돼지 눈에는 돼지만 보여\"",
-        "청와대, ‘대통령 잦은 순방’ 지적한 야당에 “눈 들어 해외 정상 보라”"
-      ]
-    },
-    {
-      "term": "눈에는",
+      "term": "코피",
       "count": 10,
       "publisher_count": 9,
       "independent_story_count_estimate": 6,
       "syndication_ratio_estimate": 0.4,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 13,
-      "delta": -3,
-      "score": 29,
+      "previous_count": 9,
+      "delta": 1,
+      "score": 30,
       "examples": [
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”",
-        "이 대통령, 순방 비판에 \"돼지 눈에는 돼지만‥코피 터지는 힘든 일\""
+        "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
+        "李 \"공정성 타협 불가\"…순방 비판엔 \"치아 흔들리고 코피\"",
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”"
       ]
     },
     {
-      "term": "코피",
+      "term": "해외",
       "count": 9,
       "publisher_count": 9,
-      "independent_story_count_estimate": 5,
-      "syndication_ratio_estimate": 0.444,
+      "independent_story_count_estimate": 7,
+      "syndication_ratio_estimate": 0.222,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 11,
+      "delta": -2,
+      "score": 27,
+      "examples": [
+        "트럼프 \"해외 데이터센터 과세\" GPU 통제 강화되면 국내 산업 여파는",
+        "李 “돼지 눈엔 돼지만…해외 순방, 치아 흔들리고 코피 터지는 일”",
+        "청와대, ‘대통령 잦은 순방’ 지적한 야당에 “눈 들어 해외 정상 보라”"
+      ]
+    },
+    {
+      "term": "반박",
+      "count": 9,
+      "publisher_count": 8,
+      "independent_story_count_estimate": 8,
+      "syndication_ratio_estimate": 0.111,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 8,
+      "delta": 1,
+      "score": 27,
+      "examples": [
+        "또 \"돼지 눈엔 돼지만\"…이 대통령, '해외순방 비판' 반박",
+        "이 대통령, 잦은 해외순방 논란 정면 반박…\"돼지 눈에는 돼지만 보여\"",
+        "이 대통령 \"치아 흔들리고 코피 터져\"... '순방 잦다' 비판에 \"돼지 눈에 돼지만\" 반박"
+      ]
+    },
+    {
+      "term": "잦은",
+      "count": 9,
+      "publisher_count": 8,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 10,
       "delta": -1,
-      "score": 27,
+      "score": 26,
       "examples": [
-        "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
-        "이 대통령 “치아 흔들리고 코피 터져도…임기 초 순방은 국정과제”",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
+        "이 대통령, 잦은 해외순방 논란 정면 반박…\"돼지 눈에는 돼지만 보여\"",
+        "청와대, ‘대통령 잦은 순방’ 지적한 야당에 “눈 들어 해외 정상 보라”",
+        "청와대, 잦은 순방 비판에 “해외 정상들의 숨 가쁜 외교를 보라”"
       ]
     },
     {
@@ -477,25 +425,73 @@
       "delta": 0,
       "score": 25,
       "examples": [
-        "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”",
-        "또 \"돼지 눈엔 돼지만\"…이 대통령, '해외순방 비판' 반박",
-        "李 “돼지 눈엔 돼지만…해외 순방, 치아 흔들리고 코피 터지는 일”"
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”",
+        "李 \"임기 초 순방은 국정과제\"…또 등장한 '돼지 눈엔 돼지'",
+        "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”"
       ]
     },
     {
-      "term": "반박",
-      "count": 8,
-      "publisher_count": 8,
+      "term": "1조",
+      "count": 9,
+      "publisher_count": 7,
       "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.0,
+      "syndication_ratio_estimate": 0.111,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 10,
+      "previous_count": 11,
       "delta": -2,
+      "score": 25,
+      "examples": [
+        "[아주경제 와이드 사설] 수출 1조 달러의 대한민국, 축배 다음을 준비하라",
+        "[노트북을 열며] 수출 1조 달러, 숫자 너머의 사람들",
+        "반도체만 있는 게 아니다…‘수출 1조 달러’ 숨은 주역들"
+      ]
+    },
+    {
+      "term": "업무",
+      "count": 6,
+      "publisher_count": 6,
+      "independent_story_count_estimate": 5,
+      "syndication_ratio_estimate": 0.167,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 6,
       "score": 24,
       "examples": [
-        "이 대통령, 잦은 해외순방 논란 정면 반박…\"돼지 눈에는 돼지만 보여\"",
-        "또 \"돼지 눈엔 돼지만\"…이 대통령, '해외순방 비판' 반박",
-        "李대통령 “해외 순방은 임기 초 꼭 필요한 국정과제”…야권 비판 정면 반박"
+        "李, 순방 비판에 \"대통령 주요 업무\"…권력 활용 중요성도 강조",
+        "이 대통령, 野 ’잦은 순방’ 비판에 “빠질 수 없는 대통령 주요 업무“",
+        "李 대통령 \"순방외교는 대통령 주요 업무\"...'잦은 외유' 비판에 반박"
+      ]
+    },
+    {
+      "term": "국정과제",
+      "count": 6,
+      "publisher_count": 6,
+      "independent_story_count_estimate": 3,
+      "syndication_ratio_estimate": 0.5,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 6,
+      "score": 24,
+      "examples": [
+        "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”",
+        "이 대통령 “치아 흔들리고 코피 터져도…임기 초 순방은 국정과제”"
+      ]
+    },
+    {
+      "term": "흔들리고",
+      "count": 8,
+      "publisher_count": 7,
+      "independent_story_count_estimate": 4,
+      "syndication_ratio_estimate": 0.5,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 8,
+      "delta": 0,
+      "score": 23,
+      "examples": [
+        "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
+        "李 \"공정성 타협 불가\"…순방 비판엔 \"치아 흔들리고 코피\"",
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”"
       ]
     }
   ],
@@ -504,12 +500,12 @@
   "official_web_candidates": [],
   "public_batch_market": {
     "available": false,
-    "generated_at": "2026-11-23T02:21:07.823177+09:00",
+    "generated_at": "2026-11-23T02:31:05.392499+09:00",
     "status": "unavailable",
     "provider": "naver_public",
     "exact_1m_bars": false,
     "amount_method": "cumulative_trading_value_delta",
-    "elapsed_minutes_from_previous": 10.0427828,
+    "elapsed_minutes_from_previous": 9.959488700000001,
     "interval_leaders": [],
     "one_minute_samples_available": false,
     "minute_amount_exact": false,
@@ -536,137 +532,169 @@
     "minute_burst_leaders": [],
     "top10_share": null
   },
-  "item_count": 140,
+  "item_count": 139,
   "news_scan_target": 500,
   "query_group_count": 18,
-  "new_item_count": 16,
+  "new_item_count": 29,
   "new_items": [
     {
       "topic": "kr_policy_economy",
-      "title": "EU AI법 개정, 고위험 규제 시한 연장과 콘텐츠 금지 조항 조기 발효 동시 적용",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9JSmpraHZ4RHdWX2JCZE4xeGpEQmEyV1JrS1BFbUtlRVpGSVFsaGh2LWRSVThNR1dJOWd2SThma2Y4aDdMMU9aMFJOZWFzRmg5QzAw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 17:15:22 GMT",
+      "title": "맘스럽 라임 주방세제, 4L, 2개",
+      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTE02Qk5vWG1XcGhxVU50WlVBTlVrV3JqWmJScXJqYXk1Sk1BbnFLSHE4S19KZjdFUmlRSVducjU1SGw?oc=5",
+      "published_at": "Sun, 22 Nov 2026 00:37:57 GMT",
+      "publisher": "toss.im",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "“재해보험으로 겨울철 자연재난 대비”… 보험료 최대100% 지원",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5ZR1A3a1NYUDlmU1AzcDBVTFF3S0dXMzlaNmFYVjMxQWpoamVXZUsxcGJKZDJHeW9KUk0yaGVpVGVaTDBvT3VHLVZKY3dzdmp5QXJ6MlI4bGRlaTg1QUlkS1FzU05YRHdoa2sw0gFvQVVfeXFMT3RUWndJV0U0dkREMnBweUZKcTVGYlZOZWFNWWpOODloV0lLVEYxSGtTOE5tSF9OWFUwSVMzWXhpVTEwMlVwY0pXUlk0SS1wYkVmY3RBSW9lRWtnbHJITDVrWkxRT2NDNktkaklRTGhR?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:53:32 GMT",
+      "publisher": "한국보험신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "유럽 AI법 개정 핵심 — 고위험 규제는 늦추고, 딥페이크·아동 착취물 금지는 앞당겼다",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE8wb0U1a2JkMkNYR0F5dml0ZncyQU0ybVp6YktmcnlYNTd2UTZhel95ZkVnU0l6d3FlZFpZU1dqU1lXYVAtdHVDaEgxVVF0c0pyMkhN?oc=5",
+      "published_at": "Sun, 22 Nov 2026 17:19:10 GMT",
       "publisher": "유스연합",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "kr_policy_economy",
-      "title": "디지털자산기본법 정부안 이번 주 윤곽..거래소 지분·스테이블코인 규제 주목",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE44d2xsWktpTGNjb050OWh5cmFvTWhtUXUzUW5zQTBhcjNfTlJFbk5IWGxtLUljenRfN2xZNjBtd1BmRjdEeF9nLTlxcHpzN081X0E?oc=5",
-      "published_at": "Sun, 22 Nov 2026 07:42:19 GMT",
-      "publisher": "한국정경신문",
+      "title": "트럼프 \"해외 데이터센터 과세\" GPU 통제 강화되면 국내 산업 여파는",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE56RXA2OWJvTkRheDd5LUlXeFpzNmFxYVdWLTNaYVRmdEsyTDdkbGRrUm9ZdkxYOTBTNUpzR3ZTUVBldTJ4a25KZ1VfQ1N0aEFOX05Xc21wYUV4MWFsbjQwdGJrUTN4TEE4blBIZWlR0gFzQVVfeXFMTk5wRUtyS3RfSzgtMzBrWlozMW0zZUtBRzR2SUZ4RWtlckNQQlcyTl85TGNwU3FveWRQUWJvWndIVXdCVDh3QU1ZbU0xZVU4OWQzbFBfLTZBWHBwd256SGdfa3d3WlE5TW0xUERPaVJEN0JfMA?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:43:00 GMT",
+      "publisher": "한국일보",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "李 대통령 \"돼지 눈에는 돼지만…순방 외교는 빠질 수 없는 업무\"",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1NVU9LcDdfMWxkUU5qZFhiMzRBQWNscm9Pczd1Z0o0enJ1ZmtLajVYMWtJTC1GVEhSa3NDc2FFV0oyTFd1TTVEWWZiRkFSNFZXQ1BSN09Vd0PSAVNBVV95cUxNSnRrZHBnMlp6emplQUNhYl9kVXNYNnFRUFU3clRCcVFBUjdvU3hfQUJORnJfX2s0SmNKeUtOZWJxVlBybk42MG5YbHpaeHVGcU9YRQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 05:10:31 GMT",
-      "publisher": "더팩트",
+      "topic": "kr_policy_economy",
+      "title": "피죤 퓨어 뽀드득 주방세제, 레몬향 3L 1개 + 솔잎향 3L 1개, 2개",
+      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTE11TnY3MlN1aXlhUFdKT0FzQkZLNTdpOERyMl92M3Q3OTN2VnZWNnN3TXZKSUhLVEdWMDBZQWppaEo?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:57:48 GMT",
+      "publisher": "toss.im",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "野 '대통령 해외 순방 잦아'…靑 \"해외 정상들 숨가쁜 순방 외교 보라\" |",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1PUUpYTWZaa0hPWEVwYVd3azQyZS1NZnJZdHpONWNqenVUdUxESkphZGNoUWlzWHlLYjBEc2xMcEg3UnMwSGRMYldRbVJsQTE1a0RBTWtxRHNzRDBhaS1oQ3ZWSDliUVpxLXRtckMyM0V4azA?oc=5",
-      "published_at": "Sun, 22 Nov 2026 01:16:38 GMT",
-      "publisher": "대전일보",
+      "topic": "kr_policy_economy",
+      "title": "AI 칩 지각변동·EU 규제 쇼크···연말 공급망 ‘초비상’",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9yckRWTGxGRkw3cjkwM050MnZ3YXJIUGtodTlYOHVqdFFsdERmc1hXd1Ffa2RyRGtFMUtfUmM2VWVtWldydmZ6eVRhWV9TeWgybnR4Q2hQd1NuaFRudFFUck02ZDhJM1A5aGZxdDhqTkFUX3RLYzlN0gF3QVVfeXFMT3JyRFZMbEZGTDdyOTAzTnQydndhckhQa2h1OVg4dWp0UWx0RGZzWFd3UV9rZHJEa0UxS19SYzZVZW1aV3J2Znp5VGFZX1N5aDJudHhDaFB3U25oVG50UVRyTTZkOEkzUDloZnF0OGpOQVRfdEtjOU0?oc=5",
+      "published_at": "Sat, 21 Nov 2026 23:21:29 GMT",
+      "publisher": "뉴스프리존",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "\"中 기술주, 시총 2300조원 증발\"…당국, 신용거래 규제 완화",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5tTmVUY2dYWW9MR3hEUDdRN2FWMEVod2lFQU9pcXo5TEZsTTItdmJxQ1A2M2VlRnRMcHozbklST0JmaS1LOENyOGJEOURYdjZsbG5YaTZ6QVV5S2ZraXZySUFBM2JXa3BYTmdFdFZUejI5TzTSAXNBVV95cUxObU5lVGNnWFlvTEd4RFA3UTdhVjBFaHdpRUFPaXF6OUxGbE0yLXZicUNQNjNlZUZ0THB6M25JUk9CZmktSzhDcjhiRDlEWHY2bGxuWGk2ekFVeUtma2l2cklBQTNiV2twWE5nRXRWVHoyOU80?oc=5",
+      "published_at": "Sun, 22 Nov 2026 14:38:00 GMT",
+      "publisher": "한국일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "한은 금리 인상, 한국 경제 어디까지 버틸 수 있나…‘빚투’ 연체 급증에 드러난 K자형 균열",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBkM2RuRVFrd3hlamtZRHlGOV9zT1JsRWxfb1Rfa3FBSWcteVFlMWhRSWhsNVlKRVI4RjdjcWJtZTlTUXlSMHFDV0pMTUhyTlAxdDFRa3VleEpXajB5UHdvUmlVUW1kMm0xNHc?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:45:47 GMT",
+      "publisher": "https://www.moneystorm.kr/",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_semiconductor_ai",
+      "title": "삼성, SK하이닉스, 마이크론, 메모리 가격 전쟁 직면? 중국의 DRAM 및 NAND 확장이 글로벌 HBM 시장에 영향을 미칠까?",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNdEZCRl9qNTdPdHVyakFRM3VseF9EaFozQ3FIYmtwUmVkWVdVZGliX2poSTE3Y0d1THIxdUdDUF9iWDhxTXlFRXlha1FvemJYWEdTTUtJTDVMajRMUTFzckNHY1VMRjBEalFadWJMRmN0bjc4WEsxYl91RXEydFg4Ujl6OHkxaHJSLVVlSV9UN2J4VE51WE9XdEVKUVdpNGN1Y2lGMmtvZ2k0NTl1a1M2WGpBWktKeWdsb0E?oc=5",
+      "published_at": "Sat, 21 Nov 2026 22:49:13 GMT",
+      "publisher": "TradingKey",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "global_market",
-      "title": "비트코인, 크라켄에서 한때 1만7000달러까지 하락…거래소는 거래 유지",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1mdkZ1dk5FWmVSa2F5TnJaLXF4NFlKUU02MG1yTjltbktERVRsV2RGN01MR282MF9qS3FEc2dHbi1qWmFFVXdYZnMtV3RqeTRyd2o5UHRfUzA2ZUVVejdNQkZxdzBzRURQb3dHVG03VQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 09:33:06 GMT",
-      "publisher": "TradingView",
+      "title": "시애틀센터에 '유럽 크리스마스 마을'…크리스마스 마켓 개막, 입장료 6.99달러부터",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1jc2ZURzM0T3oyMnNUNXhQQlZwSWhwU2lfOFRPZ3UzeEhwRWlGQnJUcmFQa0dzLWIwRWtSY1ZuZEJBSXVpRktOcjB0VHJnU21ycmlMcTNVZmFFZUZvb09oTGdqQ3lBUXVtSmR2NFU2Z9IBc0FVX3lxTE1UZW9aVi1oMGNOU0ZoTU04UjNjejZYdGJReGZvZ0FwMTRmOTRjQWlEMmhxbHVjSVBPdkdrUGVqenpwVHZJMTFveHJMOGNnajROTVZLVk9hN285LWE3czJNOGxJQ3lZV3FLc0tBd190QklXWlU?oc=5",
+      "published_at": "Sun, 22 Nov 2026 16:24:49 GMT",
+      "publisher": "시애틀코리안데일리",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "global_market",
-      "title": "’수출 1조 달러’ 한국 세계 4위 전망…반도체 빼면 8위",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9zYnpJRzFYajAzbmxuQURVYksxTzltbkt4Z2VEMEF4dE5Qd1VyMjhNb0dmM2FqZzBIdkh3dnJQQkhQYXNXV0hGYzNWYUVHWENNVmx3Q0xlZGVRNHcwR3ZmYk9KUFpIdGM?oc=5",
-      "published_at": "Sun, 22 Nov 2026 01:39:00 GMT",
-      "publisher": "연합뉴스TV",
+      "topic": "global_diplomacy_summit",
+      "title": "트럼프 제재에 ICC 직원 급여도 막히나…일, 내년 분담금 조기 납부 검토",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOLWJoRVJzTUJTYWlPNUFyT1ZrcDZMZmREcmoteGl5VHQ5d0tLaVROcTBDeS1sMUdRZHVyMGZDMjl5WnpybnlBM3YwYlprY3MyeHVGcG9lSVFkb3JNOFVyNWZFZDhObDVTNzhCc0JvMVJfbnVDajJWNnlUZVJLSHF6NFN3?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:06:00 GMT",
+      "publisher": "한겨레",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:AI",
-      "title": "AI 커닝까지 해서 자격증 따면 뭐하나, AI가 일자리 뺏는데…",
-      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNUVdNNW9sYk1SNnNMd0lPLTN2Ni1fV1JHRkxQcE4wSjJLN2ZDeUt0cWp4ODFfMEVlZGswR1FiNzhyLTZUWlhQWktxU0RmVG5JT0VhdnJLV3Bpbk96N1UzUGxzMEJQSHVsWE9PdTMxSERRQmpPcTZ5RzVKc3UwWmJSTTd1YnRhajZTRENCaTlXU18?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:46:00 GMT",
+      "topic": "global_diplomacy_summit",
+      "title": "EU, 빅테크 디지털세 제안…트럼프 “관세 100% 부과할 것”",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5SaGd5QXVoUlMtc2JlTi1sSmlSYTVzVXhsQ1lXb21fZVFnWFF6YVhoS3Zoa1hDMmFrUkhSeklvd21OM1lNN1g3TFB1SHJQcVljUHfSAVNBVV95cUxQejZQVlBtNXl5ek04M2ZOMFFBTlhPMVZmQ3JGczhtZ016dEpMcFI5NHpwWUlYb3FGUWp4eERsSldYdkV3bkFVd1g2NUNyLXFuODlrUQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:54:52 GMT",
+      "publisher": "서울경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "\"'엔비디아 사태', 휴전 두달 남은 美中 무역전쟁 재점화할수도\"",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9RQTFKY0xhMGlpLW03RDVhRHR1WUhwLUtqeW5GZnhKX1M3YUNwVWJCanlnMDk0S0FDZGJLMmkwV0xHWXZJczI0QkZSOUwwZlYzVkFRSEo1RVJnSVXSAWBBVV95cUxOWTVTNVJqajBKSWN1anFsOWN6cVUzc3o5bFN0VEIwS2dJUXczXzJQeE0zcjBnTlI5UTR0YUxoYXVJbmNmNklRRVB6SzFkdHBtdmpHUWFhcXpENDQ2b0p1blM?oc=5",
+      "published_at": "Sun, 22 Nov 2026 15:36:35 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "美·캐나다 갈등, 무역 넘어 국방으로… 헤그세스, 군사협력 제한 지시",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOS05aVWRlbXpnS1FyRTJWbF9NcXVaeExWOXRrTEIyVGUtREFIV0pvc0gySF9SUE9EZTdGRGhONFhvNXVhbW44Mk1wN1JHbHpiVWk4a25BZXJ2RjR0YVI2MVpacnoteVhKVFB0bHNqM3A3Tkl4LU8yZWV1Q0ZRQm9oMUtoQWhLM1NReTZ0Ylh0QW0zM2pENEt0OV9oeVEzUQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 00:20:48 GMT",
       "publisher": "조선일보",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:AI",
-      "title": "메신저·쇼핑몰… AI비서 접근 차단 잇달아",
-      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNcDBKWk03T0t5YzF1TnZCRWNqN2xEbEh6cUZzbEo4VXRmbF9PbXhaVkZpTFlUUWhnN0N3aGpEaS1ZQnlBWGp0bW9pOXY0YjJDNGsyR3NjNkVfMkhFckFnVHFyUnZIc0llZzlfa0VTWjdZYWN0Q2VQWUltMl9nRkhLU0x5Yw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:34:00 GMT",
-      "publisher": "조선일보",
+      "topic": "global_diplomacy_summit",
+      "title": "APEC 선전 정상회의 폐막…21개 경제체, 무역·AI·공급망 협력에 합의",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFA0NTRkZVVDVGozRzQwV1dob01McE0tWEVTTmdZTWt6cVF6NnFMWjlRSm02VmJZbERwb0k0Q0M5V2hkWVB0Y0piQUc1UXBjZ0tCUTRNVDdR?oc=5",
+      "published_at": "Sun, 22 Nov 2026 05:13:30 GMT",
+      "publisher": "인터내셔널포커스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:AI",
-      "title": "재난 대피 드론, AI 요람… 일상 파고든 K혁신",
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVS04TlV0VEVCMmxKVXpYWkhONXNhVm1ocDhyV2pVS2RuRG53S25OemNaUmppbnI1b2xXWHpOZmJDeURXc3lLSTFLNFVBREgxLWE5QTdmc1E0X1V0Wk5JR0c0TFhFbDkxNF81LVVPZ1N2cWZDcUNuN1JBdFpCd1BwR2puUUtyRUZDU3UzdWxRWQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:33:00 GMT",
-      "publisher": "조선일보",
+      "topic": "global_diplomacy_summit",
+      "title": "美로 빨려들던 구리, 이제 中으로 '역류'…트럼프 관세 물 건너가나",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNcDhwSXRHTW5rRjY0SXN4VWkyeTBuWlZVbFB2QkY4c0ZDTVFXME5jZ2FzdVhCQlFPVzJYMUNEOU9mRndTb3VqZVBZZ3hlN2FzdGxrbXZmT0NTdmNGVF9ZS3Y2V1dqU1VEeGktX3BIMFlnYnd3YklLVkVENTJXZVFQdw?oc=5",
+      "published_at": "Sun, 22 Nov 2026 02:37:21 GMT",
+      "publisher": "이데일리",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:돼지만",
-      "title": "李대통령, 순방 비판에 \"돼지 눈에는 돼지만…꼭 해야 할 국정과제\"",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5waUlUUDlQQkhIMFlyanV5TEZ1N2tWV2JkY094bDdJbEc4bWxxelRkREpIZWdSWnVLbFBXZ2NwYVc4eFZsNF8zeHdVczB0RUZFcU9JMkp2QW9fUQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 03:03:11 GMT",
-      "publisher": "파이낸셜뉴스",
+      "topic": "global_diplomacy_summit",
+      "title": "캐나다 | 트럼프 중간선거 참패…캐나다 무역협상 숨통 트이나",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1HcS1jQTdLcVl0SmZsUmczMXIyX2pyakdOalM1RnU1ck9wY2JkakNKQkZ4a2d0cC0wT3hTdTNVMTBtb2lNeVBMOVItV00tUmJlSlYzc1FRV3h3QWhLcWctdUdsQlFHbHQ4Q1BvTHdwN0ZQUGhrSzQ4?oc=5",
+      "published_at": "Sun, 22 Nov 2026 03:37:00 GMT",
+      "publisher": "밴쿠버 중앙일보",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:수출",
-      "title": "[특별기고=최호열] 대한민국, 독일·미국·중국 이어 세계 4번째 수출 1조 달러 달성",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9pVFkxOEM0NG1ZZFY3eGhsbWxhMVotUlNCaXFlYl8yUzhlcGdBb2tEUF9KNVVpQnExU05RRjVIWmNualQtaDZjUS1tdmxGVlE?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:01:01 GMT",
-      "publisher": "포천신문",
+      "topic": "global_diplomacy_summit",
+      "title": "EU, 빅테크 디지털세 공식 제안…트럼프, 관세 100％ 맞대응",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1RLXJRVVhTR1k0T1pkWnhGblJqRGtYSnVqMWZaU2JLMUVMUUVGT0JIS2NiUkxnVm9Ec1REZlVfMm9RWVJaQ2Q2bUphekpLeWt1NW1J0gFYQVVfeXFMTWFjTkxSLVV0Uno2d1dNbHNadVZ0WlFTVTcybFo5b3NXOHZhQjhlU2RvX2VwRTJScVBnekpBbkxJblJIN09ld2tnY2JHbWIyalFidVVWUVo5aw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 23:15:00 GMT",
+      "publisher": "SBS Biz",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:수출",
-      "title": "K라면 수출 20억 달러 육박⋯ ‘원조’ 일본 공략도 속도",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBHOHZ1bjBfSVllYWJqUTlBekh2NWM1azQ1NHVyd1B4eG4yZk44TExHNGxLem11dzJTV1NIa21aR01EUjJJVHJEUTZJaFUxekM4bHpiVC00NzA?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:28:00 GMT",
-      "publisher": "국민일보",
+      "topic": "global_diplomacy_summit",
+      "title": "트럼프 차남이 투자한 로봇기업, 임금 체불 파문…한국 사업 파트너, 1억 5,000만 달러로 구원 나서나",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBpc3VLZzg3YWtWdFg3clpmR0d1eGMzcHcwUHY4ZThsNDk3OVdxV0dyek1WTW1kTlpUN0RWRDBMMk9wdERidXA2dFhfbEhkbWh2REFtTnR2Ul9acEtma0ZmSlBDaVNjU3JCaTJ2R0dGV1ZwMy1EMG9GQkJ6ZzlOWk0?oc=5",
+      "published_at": "Sun, 22 Nov 2026 09:56:11 GMT",
+      "publisher": "PANews",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:달러",
-      "title": "중동 VLCC 운임 급락 속 Latsco 선박 37만3000달러/일 계약 추진...운임 바닥 가능성",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE4yRWNMcjZpcjVlR2FiQUt2RmJqR1lNY3lPenIzc0RySzdWVU9qQkFtRFpYVFNWZEFSenFKbzhpeGZkN3VqUjRjakN4elhPR0FzZ3FQa2hxQ3prREdwVTR6Q0VuWEh5dUN5M2h5bmpJaV82R1U?oc=5",
-      "published_at": "Sun, 22 Nov 2026 16:33:27 GMT",
-      "publisher": "쉬핑뉴스넷",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:달러",
-      "title": "비트코인, 크라켄에서 한때 1만7000달러까지 하락…거래소는 거래 유지",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5OTjNabmR6WmhIZ2RBOXM2anloSGV0V0tCbDVRd2IxcmhvQkpPMGhkalREbW9QUHZVZ2JtTkVPY2hhdnRfdnI2OTdSV0h0R1NyM0hpX3REeXV6NE5ZQ2wzNHZFQXRNX2lBbjM2Mm9uZw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 09:33:06 GMT",
-      "publisher": "TradingView",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:달러",
-      "title": "골드만삭스·JP모간 “내년 유가 78달러 간다…체크 신호는 4개”｜Global Money Club",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE92NkVzcXBDQUI4R1hLMDVGbG1YUmVZcElkN2tpVDBXZ3V2dFUyOFBIYVNwRmlxOXRuTDNpTXFIZjI2Y0M1NjlMZ3ZoNjBJWmthekJZUjNqR2xQbDA?oc=5",
-      "published_at": "Sun, 22 Nov 2026 13:14:48 GMT",
-      "publisher": "중앙일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "‘트럼프 편지’ 내던진 북 외교관들…‘정상회담 무산’ 막전막후",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9RQmdRSldFemRjeXJDNnBlZXBZMWo1RnZRWEZMS0x5NjdXczBDWWVqWVdKMXFjcUQxV0xYaGtYMGFSbEgxb0NpaUpTdVRPN0M2UXBDSw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 10:56:00 GMT",
-      "publisher": "JTBC",
+      "topic": "global_diplomacy_summit",
+      "title": "트럼프 대통령은 러시아와 우크라이나 간의 대규모 휴전 협정 가능성을 시사했다.",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPNWZlYWc1akdVMGM3dmh5c1g1UnJSM0ZIdnBpdTVKZFRlVXdrenFRS1pFaTZYd3VaVnZvaHdFMFlVNTVsdW0ySUVQaXY2el92aHppTmJCMnloa1JzXzNQdmh1bEp1SV93M2N5RkJRdC1aRklVMlNSNnRuRk5meE9kOGhvNkZGY2gxMVdUTDNMQ1JCMlExUm4wMTBqS1o1QQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 13:15:54 GMT",
+      "publisher": "Vietnam.vn",
       "discovery_source": "google_news_rss"
     }
   ],
@@ -689,98 +717,10 @@
     },
     {
       "topic": "kr_policy_economy",
-      "title": "자사주 매입 제한 완화…외인 이탈 우려에 공매도 규제는 빠져",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFA2azRjVjd5VFpjSklfdy1ZbjhDVFl2R1JoeDdQdG9kNDRLelYtSWNkcUVCSHFmN2c1YlFfdnpIZ3hnQVJ4SW5ZTE83Mlh5TTR2cGfSAVNBVV95cUxOdVRlSkp6aGw2MXluMllJM3pidFdLc1N5OWN2T1RNaEpFRnh1ZjJuLVpVWkFYSHVKTzlNal85MFNMZzU1OC1rWGdkOEJpeElOa1Rjdw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 11:35:22 GMT",
-      "publisher": "서울경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "'대만처럼 공매도 막아달라' 정부 대책에 개미들 불만…금지 청원 5만명 넘기면 추가 규제 이끌까",
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFB6RmNIYmwxOTE0cWNIWklmQUZMc0NROWRrRmFadWhtT3NaRlgybVpTajF4MzY2QzdmMDZaYU45NDJkV0o5bmlDWWxQTDNqc2lmM0s2MGdfc0RuQ3gtWDc2S3h3?oc=5",
-      "published_at": "Sun, 22 Nov 2026 10:05:15 GMT",
-      "publisher": "매일신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "시치미 쓱 세탁세제, 약알칼리성, 고농축, 2.5L, 4개",
-      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTE5lekRzQ1hRTmhwTmtiWlhxZmdpeXdfalhhUXVJSlNZWENXU1U1QzR4RGhpSHFrNnRKUC1vcUtfQy0?oc=5",
-      "published_at": "Sat, 21 Nov 2026 19:09:15 GMT",
+      "title": "맘스럽 라임 주방세제, 4L, 2개",
+      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTE02Qk5vWG1XcGhxVU50WlVBTlVrV3JqWmJScXJqYXk1Sk1BbnFLSHE4S19KZjdFUmlRSVducjU1SGw?oc=5",
+      "published_at": "Sun, 22 Nov 2026 00:37:57 GMT",
       "publisher": "toss.im",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "청소년 SNS 규제, 가입 문턱 넘어 추천·광고까지 바꾼다",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1Rb040UWxnbHBOcnNvTUJoSndDS0RxeU1NdjY1MDBET0pFdExNVHdLZ1Y2ei1oZzNHRWdDMVFtX3hWV09YYnFVY1dlTWYwSjlzSlZCNmZfVlIyT2Z5MjRyVHFVMTlBRFhEQW43OTQxQQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 10:09:58 GMT",
-      "publisher": "K-EnterTech Hub",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "전 USTR 부대표·미 상무부·정보기술업계, 한국 디지털 규제 잇단 경고…워싱턴 우려 확산",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9uZm1TNEt6ZUlEUE1MYUZMcmgyR3VCODVLUWhWR2ZpRVVQYVZBRzl0N3ZBZWtFa2djakpaM1NJcmgyZnU1VDFKbkVaY0tlOHdhWDRMWnV2VjlTc1RoRlp2UVNQajM5OXNsZ21faFZB?oc=5",
-      "published_at": "Sat, 21 Nov 2026 19:42:06 GMT",
-      "publisher": "아시아투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "제천 새싹 종묘 농약사, 봉양읍 취약계층에 세탁세제 150만 원 상당 기부",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9zMHJSbUFwaHJKUkRhQVpVZ2RCV2ZuRDBBanN1OGtwZ2x1a3haWGVoRXN2YzRFQWtwaEhBMFN3aHk1RC05NkU3c2RWLWJpQ1lFRGdtT1dKanA5VXJHdnBRUUpFMDhiSGtTQm03MQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 07:38:52 GMT",
-      "publisher": "충청도민일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "당국은 유명 브랜드의 세탁 세제와 샤워젤을 위조하는 시설을 적발했습니다.",
-      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPcVRUNzhIVVh2VUZEa3dHVFl0NTA0dkRLUllJa3gyRWVuZUYyLUdSVlBuU1JPUkt6WFZhY1k1aU1teTNGNHlvY0JLVGpxVWlJVGtOYmJLUzJoOTBxdXVWbmZhOEtYRXNVX19IS0QwQi1FQ1FIeGZKR3ZlOHlTaEwwZkdOYzY0N1FYSXh0WV9uaXU5bXRl?oc=5",
-      "published_at": "Sun, 22 Nov 2026 11:11:31 GMT",
-      "publisher": "Vietnam.vn",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "[규제 추적] 담배 세금 성적표 '가격 변화' 0점…11년 묶인 담뱃값에 8500원 인상론",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBWWlFGQ0ZER0dpMU5uTVkwd0o4X09Ed3ItN0UzY3c0d0RTLU82QUlNRGIwdFZvSzFSX1loZnVWTU5UdU5acG1oZmZxMWE3NG94WG9kRVh1dkpodVJVeHZubXNiRjkwQ0s3Tnozam5n?oc=5",
-      "published_at": "Sun, 22 Nov 2026 05:59:30 GMT",
-      "publisher": "이포커스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "유럽 가전 기업, 수입 제품 규제 추가 요구…“역내 생산 비중 감소”",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFA0LTlfOGtOT1gxVGZ2ZGJvYjBZZUR0UXFFXzFlY2JfX2ZsMURuN2x1NEQwd21XT2FicDBITnhRMnlNMC12R1ZjOVNVaGNJQQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 21:00:00 GMT",
-      "publisher": "전자신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "‘깐부’ 없는 韓반도체, 美 대중 규제 올라타야 [윤경환 특파원의 브레이킹 뉴욕]",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9nS2wzRFFIMFFtLXl1VExwXzZHRnRJdWFocGVSdkQtQkV5MDNZUmM5ZkxoZU9Dc3Jqc1NQR2laYjVlMTVBRTR0cEc5bHZCUTRiNUHSAVNBVV95cUxNdHlPRkxUTU5tLXE4Z1hRUkpxVUxtdC1FLVZTczU4UVhDdktFSVVISDNkSDlmd3p2V24yNDQxQzNCOTBKV0ZQZUNZNzI1NXlLVzZSMA?oc=5",
-      "published_at": "Sun, 22 Nov 2026 07:24:55 GMT",
-      "publisher": "서울경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "주방 세제 펌프 멀티 거치대, 그린, 1개",
-      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTE5QVDF6Yy1sbXdiWEdxOU1peDczWEtfUThQQktHZ1JiQVIyczQyWEI3dEt4dm05a3p1LVJEeU1ncjE?oc=5",
-      "published_at": "Sat, 21 Nov 2026 17:22:10 GMT",
-      "publisher": "toss.im",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "동아시아를 비롯한 전 세계에서 산업 정책이 '부활'하고 있다.",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOSGZBTnF1V1g4ZWxlUFhJaEJKTnY4dEsxYTlQbzhsZ1NPTG9GZXRBdERsdlFtVThNSU1GWmxGb19ZelJwMkZfUXhkTm1WMGt4VnJFdWZrT2NTRE9TMEhIWmY3RXNCbW1NdUhITGJtRXg5RW1kZE1XWXNlYzZrVFo1dkp3LTh1YlVNSHRvcC11ZmNjRVFBTGplXw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 01:29:35 GMT",
-      "publisher": "Vietnam.vn",
       "discovery_source": "google_news_rss"
     },
     {
@@ -801,6 +741,102 @@
     },
     {
       "topic": "kr_policy_economy",
+      "title": "“재해보험으로 겨울철 자연재난 대비”… 보험료 최대100% 지원",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5ZR1A3a1NYUDlmU1AzcDBVTFF3S0dXMzlaNmFYVjMxQWpoamVXZUsxcGJKZDJHeW9KUk0yaGVpVGVaTDBvT3VHLVZKY3dzdmp5QXJ6MlI4bGRlaTg1QUlkS1FzU05YRHdoa2sw0gFvQVVfeXFMT3RUWndJV0U0dkREMnBweUZKcTVGYlZOZWFNWWpOODloV0lLVEYxSGtTOE5tSF9OWFUwSVMzWXhpVTEwMlVwY0pXUlk0SS1wYkVmY3RBSW9lRWtnbHJITDVrWkxRT2NDNktkaklRTGhR?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:53:32 GMT",
+      "publisher": "한국보험신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "자사주 매입 제한 완화…외인 이탈 우려에 공매도 규제는 빠져",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFA2azRjVjd5VFpjSklfdy1ZbjhDVFl2R1JoeDdQdG9kNDRLelYtSWNkcUVCSHFmN2c1YlFfdnpIZ3hnQVJ4SW5ZTE83Mlh5TTR2cGfSAVNBVV95cUxOdVRlSkp6aGw2MXluMllJM3pidFdLc1N5OWN2T1RNaEpFRnh1ZjJuLVpVWkFYSHVKTzlNal85MFNMZzU1OC1rWGdkOEJpeElOa1Rjdw?oc=5",
+      "published_at": "Sun, 22 Nov 2026 11:35:22 GMT",
+      "publisher": "서울경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "'대만처럼 공매도 막아달라' 정부 대책에 개미들 불만…금지 청원 5만명 넘기면 추가 규제 이끌까",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFB6RmNIYmwxOTE0cWNIWklmQUZMc0NROWRrRmFadWhtT3NaRlgybVpTajF4MzY2QzdmMDZaYU45NDJkV0o5bmlDWWxQTDNqc2lmM0s2MGdfc0RuQ3gtWDc2S3h3?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:05:15 GMT",
+      "publisher": "매일신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "유럽 AI법 개정 핵심 — 고위험 규제는 늦추고, 딥페이크·아동 착취물 금지는 앞당겼다",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE8wb0U1a2JkMkNYR0F5dml0ZncyQU0ybVp6YktmcnlYNTd2UTZhel95ZkVnU0l6d3FlZFpZU1dqU1lXYVAtdHVDaEgxVVF0c0pyMkhN?oc=5",
+      "published_at": "Sun, 22 Nov 2026 17:19:10 GMT",
+      "publisher": "유스연합",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "트럼프 \"해외 데이터센터 과세\" GPU 통제 강화되면 국내 산업 여파는",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE56RXA2OWJvTkRheDd5LUlXeFpzNmFxYVdWLTNaYVRmdEsyTDdkbGRrUm9ZdkxYOTBTNUpzR3ZTUVBldTJ4a25KZ1VfQ1N0aEFOX05Xc21wYUV4MWFsbjQwdGJrUTN4TEE4blBIZWlR0gFzQVVfeXFMTk5wRUtyS3RfSzgtMzBrWlozMW0zZUtBRzR2SUZ4RWtlckNQQlcyTl85TGNwU3FveWRQUWJvWndIVXdCVDh3QU1ZbU0xZVU4OWQzbFBfLTZBWHBwd256SGdfa3d3WlE5TW0xUERPaVJEN0JfMA?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:43:00 GMT",
+      "publisher": "한국일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "청소년 SNS 규제, 가입 문턱 넘어 추천·광고까지 바꾼다",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1Rb040UWxnbHBOcnNvTUJoSndDS0RxeU1NdjY1MDBET0pFdExNVHdLZ1Y2ei1oZzNHRWdDMVFtX3hWV09YYnFVY1dlTWYwSjlzSlZCNmZfVlIyT2Z5MjRyVHFVMTlBRFhEQW43OTQxQQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:09:58 GMT",
+      "publisher": "K-EnterTech Hub",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "전 USTR 부대표·미 상무부·정보기술업계, 한국 디지털 규제 잇단 경고…워싱턴 우려 확산",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9uZm1TNEt6ZUlEUE1MYUZMcmgyR3VCODVLUWhWR2ZpRVVQYVZBRzl0N3ZBZWtFa2djakpaM1NJcmgyZnU1VDFKbkVaY0tlOHdhWDRMWnV2VjlTc1RoRlp2UVNQajM5OXNsZ21faFZB?oc=5",
+      "published_at": "Sat, 21 Nov 2026 19:42:06 GMT",
+      "publisher": "아시아투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "시치미 쓱 세탁세제, 약알칼리성, 고농축, 2.5L, 4개",
+      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTE5lekRzQ1hRTmhwTmtiWlhxZmdpeXdfalhhUXVJSlNZWENXU1U1QzR4RGhpSHFrNnRKUC1vcUtfQy0?oc=5",
+      "published_at": "Sat, 21 Nov 2026 19:09:15 GMT",
+      "publisher": "toss.im",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "‘깐부’ 없는 韓반도체, 美 대중 규제 올라타야 [윤경환 특파원의 브레이킹 뉴욕]",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9nS2wzRFFIMFFtLXl1VExwXzZHRnRJdWFocGVSdkQtQkV5MDNZUmM5ZkxoZU9Dc3Jqc1NQR2laYjVlMTVBRTR0cEc5bHZCUTRiNUHSAVNBVV95cUxNdHlPRkxUTU5tLXE4Z1hRUkpxVUxtdC1FLVZTczU4UVhDdktFSVVISDNkSDlmd3p2V24yNDQxQzNCOTBKV0ZQZUNZNzI1NXlLVzZSMA?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:24:55 GMT",
+      "publisher": "서울경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "유럽 가전 기업, 수입 제품 규제 추가 요구…“역내 생산 비중 감소”",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFA0LTlfOGtOT1gxVGZ2ZGJvYjBZZUR0UXFFXzFlY2JfX2ZsMURuN2x1NEQwd21XT2FicDBITnhRMnlNMC12R1ZjOVNVaGNJQQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 21:00:00 GMT",
+      "publisher": "전자신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "피죤 퓨어 뽀드득 주방세제, 레몬향 3L 1개 + 솔잎향 3L 1개, 2개",
+      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTE11TnY3MlN1aXlhUFdKT0FzQkZLNTdpOERyMl92M3Q3OTN2VnZWNnN3TXZKSUhLVEdWMDBZQWppaEo?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:57:48 GMT",
+      "publisher": "toss.im",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "제천 새싹 종묘 농약사, 봉양읍 취약계층에 세탁세제 150만 원 상당 기부",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9zMHJSbUFwaHJKUkRhQVpVZ2RCV2ZuRDBBanN1OGtwZ2x1a3haWGVoRXN2YzRFQWtwaEhBMFN3aHk1RC05NkU3c2RWLWJpQ1lFRGdtT1dKanA5VXJHdnBRUUpFMDhiSGtTQm03MQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:38:52 GMT",
+      "publisher": "충청도민일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
       "title": "[아주경제 와이드 사설] 수출 1조 달러의 대한민국, 축배 다음을 준비하라",
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBrOWJWb1BPbzVtcVlTWDZGM2Y0Nmt4b0NyZWtjYUxuREVMX1ctREVrQnM3RGdPOUNJbGZtRXpxNHFCVl9wQUdGTWZITm1RX2l4SjdXUWJ2Z1pjdw?oc=5",
       "published_at": "Sun, 22 Nov 2026 04:36:02 GMT",
@@ -809,34 +845,10 @@
     },
     {
       "topic": "kr_policy_economy",
-      "title": "EU AI법 개정, 고위험 규제 시한 연장과 콘텐츠 금지 조항 조기 발효 동시 적용",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9JSmpraHZ4RHdWX2JCZE4xeGpEQmEyV1JrS1BFbUtlRVpGSVFsaGh2LWRSVThNR1dJOWd2SThma2Y4aDdMMU9aMFJOZWFzRmg5QzAw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 17:15:22 GMT",
-      "publisher": "유스연합",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "디지털자산기본법 정부안 이번 주 윤곽..거래소 지분·스테이블코인 규제 주목",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE44d2xsWktpTGNjb050OWh5cmFvTWhtUXUzUW5zQTBhcjNfTlJFbk5IWGxtLUljenRfN2xZNjBtd1BmRjdEeF9nLTlxcHpzN081X0E?oc=5",
-      "published_at": "Sun, 22 Nov 2026 07:42:19 GMT",
-      "publisher": "한국정경신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "한국주택금융공사 강원서부지사, 춘천 위탁가정에 온누리상품권 100만원 후원",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE03YnRqRWN6MmRqSDRBbVFYOHY2SF9mYV9GN1k2b2VwNmx5YTllX3BaSUZjbGJuMTdUYzZNa0RDcHA1dU43ZWZBN19lV1NneTVhZWtSS3AwSWNTc3kzdE1iemVjYnVuLTBOQmZWZGsyb0E?oc=5",
-      "published_at": "Sat, 21 Nov 2026 23:15:25 GMT",
-      "publisher": "신아일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_policy_economy",
-      "title": "AI 칩 지각변동·EU 규제 쇼크···연말 공급망 ‘초비상’",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9pYVU1ZE5hSVVZVk5jTTZ4WHhMS3FIOGhEV3ZXS0Vvc0pldVg1RFZVeWRUdXJjRzRNMVZHbXhtM3FpWDdrSlhiT3NfQXVleW42UkE4d09WVlVIRHNBeHB3SGZBZWkySmx4YmN3eTQ4VUZ4SXPSAXdBVV95cUxPcnJEVkxsRkZMN3I5MDNOdDJ2d2FySFBraHU5WDh1anRRbHREZnNYV3dRX2tkckRrRTFLX1JjNlVlbVpXcnZmenlUYVlfU3loMm50eENoUHdTbmhUbnRRVHJNNmQ4STNQOWhmcXQ4ak5BVF90S2M5TQ?oc=5",
-      "published_at": "Sat, 21 Nov 2026 23:18:06 GMT",
-      "publisher": "뉴스프리존",
+      "title": "당국은 유명 브랜드의 세탁 세제와 샤워젤을 위조하는 시설을 적발했습니다.",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPcVRUNzhIVVh2VUZEa3dHVFl0NTA0dkRLUllJa3gyRWVuZUYyLUdSVlBuU1JPUkt6WFZhY1k1aU1teTNGNHlvY0JLVGpxVWlJVGtOYmJLUzJoOTBxdXVWbmZhOEtYRXNVX19IS0QwQi1FQ1FIeGZKR3ZlOHlTaEwwZkdOYzY0N1FYSXh0WV9uaXU5bXRl?oc=5",
+      "published_at": "Sun, 22 Nov 2026 11:11:31 GMT",
+      "publisher": "Vietnam.vn",
       "discovery_source": "google_news_rss"
     },
     {
@@ -849,250 +861,50 @@
     },
     {
       "topic": "kr_policy_economy",
-      "title": "정부, 증안펀드 가동 채비…자사주 매입 규제도 3개월 완화",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9SRzhJcWpDcFk4eXVvbWt6TTFkekY2cm9NcVBReUlZcU1mT09feDVsSEQwLTl4SWhIU3ZOamp4WmtaN3d0OW9PbTgxaWV1ZWJ2S29maHpSdDVsbFhKWG1RVXJBbkxYVkhGSkM5QW1n?oc=5",
-      "published_at": "Sun, 22 Nov 2026 11:11:20 GMT",
-      "publisher": "뉴스인사이드",
+      "title": "동아시아를 비롯한 전 세계에서 산업 정책이 '부활'하고 있다.",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOSGZBTnF1V1g4ZWxlUFhJaEJKTnY4dEsxYTlQbzhsZ1NPTG9GZXRBdERsdlFtVThNSU1GWmxGb19ZelJwMkZfUXhkTm1WMGt4VnJFdWZrT2NTRE9TMEhIWmY3RXNCbW1NdUhITGJtRXg5RW1kZE1XWXNlYzZrVFo1dkp3LTh1YlVNSHRvcC11ZmNjRVFBTGplXw?oc=5",
+      "published_at": "Sun, 22 Nov 2026 01:29:35 GMT",
+      "publisher": "Vietnam.vn",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5MdHVzUlY3SExKNFhEaWRqTUt3RDJ2cXEtWTdwdlEwRFA1V0MyTW02SHpfTElEbzV0YWVyaXN1d0NRVVd6dm9TWk5XSDhJQ3VJc1cxcFdfNzloS25fVUpnektvR0Y2ODdmRW1z?oc=5",
-      "published_at": "Sun, 22 Nov 2026 13:13:00 GMT",
-      "publisher": "한겨레",
+      "topic": "kr_policy_economy",
+      "title": "한국주택금융공사 강원서부지사, 춘천 위탁가정에 온누리상품권 100만원 후원",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE03YnRqRWN6MmRqSDRBbVFYOHY2SF9mYV9GN1k2b2VwNmx5YTllX3BaSUZjbGJuMTdUYzZNa0RDcHA1dU43ZWZBN19lV1NneTVhZWtSS3AwSWNTc3kzdE1iemVjYnVuLTBOQmZWZGsyb0E?oc=5",
+      "published_at": "Sat, 21 Nov 2026 23:15:25 GMT",
+      "publisher": "신아일보",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5vY3J0ZlJkejYyVExINW1kRkhDdzIyUHNBcnRGSGVRdzc1TktpMlR2LUNjVDNONVdQd1BGLXpNZjBlVzIzbHFUUXh1M2J0ejFxWGZwM3l0ZEhFYnpoUUpLbUk1dGNrYmw2Qmpla3Fn?oc=5",
-      "published_at": "Sun, 22 Nov 2026 07:23:57 GMT",
-      "publisher": "주간조선",
+      "topic": "kr_policy_economy",
+      "title": "[규제 추적] 담배 세금 성적표 '가격 변화' 0점…11년 묶인 담뱃값에 8500원 인상론",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBWWlFGQ0ZER0dpMU5uTVkwd0o4X09Ed3ItN0UzY3c0d0RTLU82QUlNRGIwdFZvSzFSX1loZnVWTU5UdU5acG1oZmZxMWE3NG94WG9kRVh1dkpodVJVeHZubXNiRjkwQ0s3Tnozam5n?oc=5",
+      "published_at": "Sun, 22 Nov 2026 05:59:30 GMT",
+      "publisher": "이포커스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "이 대통령, 野 ’잦은 순방’ 비판에 “빠질 수 없는 대통령 주요 업무“",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9sSEt6d0dCdmg4VE52Y1QwbVJMSmxmcjR3djhMVWlJZXI4VVBqbktnQ2NTdzlTN2pBcDc3ZHB1ZDVRWk8xRDBBV3QxYUwyX21PTXg1Z3p4VnNLc0phWFRmTmpVaUM2NHc?oc=5",
-      "published_at": "Sun, 22 Nov 2026 03:31:00 GMT",
-      "publisher": "연합뉴스TV",
+      "topic": "kr_policy_economy",
+      "title": "AI 칩 지각변동·EU 규제 쇼크···연말 공급망 ‘초비상’",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9yckRWTGxGRkw3cjkwM050MnZ3YXJIUGtodTlYOHVqdFFsdERmc1hXd1Ffa2RyRGtFMUtfUmM2VWVtWldydmZ6eVRhWV9TeWgybnR4Q2hQd1NuaFRudFFUck02ZDhJM1A5aGZxdDhqTkFUX3RLYzlN0gF3QVVfeXFMT3JyRFZMbEZGTDdyOTAzTnQydndhckhQa2h1OVg4dWp0UWx0RGZzWFd3UV9rZHJEa0UxS19SYzZVZW1aV3J2Znp5VGFZX1N5aDJudHhDaFB3U25oVG50UVRyTTZkOEkzUDloZnF0OGpOQVRfdEtjOU0?oc=5",
+      "published_at": "Sat, 21 Nov 2026 23:21:29 GMT",
+      "publisher": "뉴스프리존",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "이 대통령 “치아 흔들리고 코피 터져도…임기 초 순방은 국정과제”",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1yU1RFa3lmUi1FbkkwZk9uc2dwQ21UdUZxX0E4b29JTWp3amEtTV9hSEc5a2hmZ0FkaUtBY1dPcF90UHZUVVVwRUdMUkxfd0JrX3dVamN3WFQ1X0U?oc=5",
-      "published_at": "Sun, 22 Nov 2026 05:04:00 GMT",
-      "publisher": "KBS 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5jX19BTHhqekxtVGFmM0wwdms4d0lrM2xyQzcyckFHdXJENWlMaTJXbXVkNi1XOUUyRTA0RzI0ZUhtd1VWa3hLR041TUxBQkRaQ0Z6SkJR?oc=5",
-      "published_at": "Sun, 22 Nov 2026 03:37:12 GMT",
-      "publisher": "중앙일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5wdFkxc1dxenVZZlRZdzM3NG9DTjZfRHgzYTJaYU1jSURtaXBwN2RFUVczT2IzZTlidG9aMnVIaEtydW5tNmhlb0hUZDAtZ0lzblBHYUdkYklfTUt1WEE?oc=5",
-      "published_at": "Sun, 22 Nov 2026 14:53:00 GMT",
-      "publisher": "주간경향",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "이 대통령, 순방 비판에 \"돼지 눈에는 돼지만‥코피 터지는 힘든 일\"",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE4yWEFtN1djUlpPYjZ4UkVnSVpsYVRSRnlvTWNOblhYdHloNmpQX28wQS0tSFVEWlFOTERxbzN2UUdZaVRyVUlGYlpIdWlUTzMxNHZfNVNkbV9jSG9QS3NLUlFKS2dXSHUtX3ZTaFRHNHdfQzBnRlI1NNIBeEFVX3lxTE9oell1X3FBX3lDWG1SclZaWDF6YjJJN2Z6MjNoeWZnbHFESkt5Q2ZYc0FmeTViWVlIXzJYMWwwNHp2MDFnOEhydUY5cVVLVzJLdDh6cy1lRWM5bGFPX0l4OWZvcG1oR2ZRY0kwY2FaRHF5YzNEMEJORg?oc=5",
-      "published_at": "Sun, 22 Nov 2026 04:10:01 GMT",
-      "publisher": "MBC 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "이 대통령, 잦은 해외순방 논란 정면 반박…\"돼지 눈에는 돼지만 보여\"",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9mS0lGbXVEbGZaNW9scHk2b2ZocXZnTXhYN2ZaZmR4VkVzQlFSbDJWM2VQN0thckg2WEN1ZVRIUWpSbm9EeWY4QXhyMklPbTQ5Q05sZjhQWGhtT2NlZVk5NzgwSDVGbWZzZlE?oc=5",
-      "published_at": "Sun, 22 Nov 2026 08:30:47 GMT",
-      "publisher": "경북도민일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李, 순방 비판에 \"대통령 주요 업무\"…권력 활용 중요성도 강조",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5BSHpkYU1la05sRDZzbXp3OWNWSF9MblJVODBudXJ3MGFJQ3N1WVRCYWdqWWlLVlNPZzBIeUR4YlVyMjhrYU00U1BUQXRqZFB4NHlWTEhaRVRPSGRMcEQ1ejJ5anc?oc=5",
-      "published_at": "Sun, 22 Nov 2026 05:51:29 GMT",
-      "publisher": "매일일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李대통령 “치아 흔들리고 코피까지 터지는 일이지만…”",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9ISVc5Z015NHJURFU3Ql9FNmhvb3Z3T0lmTmI5ejVGYUFxOG1MSWNxMl9zWi1xZVNsRE5sZ1ZxNjBfTFBKWUpqOXNtTEdWQkN0VzJZNDhaNDhyd1dpQThrYlZPQWgzYTVhUnlCNlRUY0k?oc=5",
-      "published_at": "Sun, 22 Nov 2026 10:24:30 GMT",
-      "publisher": "미디어오늘",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "또 \"돼지 눈엔 돼지만\"…이 대통령, '해외순방 비판' 반박",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9wM1A2RUZnQVlGZ1lNMHlLVDIteDZFdWZRRFBzVW5GM3hoalB5akpnNTg5MmNzaUxQU3Rid01oWVFWQ1VrODRiR3BmY1c1RmhFVkFNYnJaLUpYZ29NNmNFTA?oc=5",
-      "published_at": "Sun, 22 Nov 2026 07:12:26 GMT",
-      "publisher": "뉴스토마토",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李 “돼지 눈엔 돼지만…해외 순방, 치아 흔들리고 코피 터지는 일”",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE5XcFZPcFpkNzFNTm9WMzJLcVlreW5WOVV2RHpaQ3o4UldjOVFhcXNWTXVKVW9sMEZ1VnZDcXJtNnNxZlRFZDE2ZTJ0ZnhTUGJLdGJqd0hYbzRaelVsX21SU1N5VXFqWGpmNmtfNzZxZWZSQWc5Wmw40gFmQVVfeXFMTmNaY1Y5ZjFWRWFGSmdULURCU2x1cGpPZXFCaHl5ZjFEQXFSLWNNUEpfSzFVV0xwbktWZWJrazZ4Y2xrNy1KTVVNc3VvMEw5bG1FOGJ1dmJaWE82dFBsZWthRDNkNVln?oc=5",
-      "published_at": "Sun, 22 Nov 2026 03:38:00 GMT",
-      "publisher": "동아일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李대통령 “해외 순방은 임기 초 꼭 필요한 국정과제”…야권 비판 정면 반박",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1pZmU4cXM2UVk5ZXRralVfaG1qeXlicEpua2xoVGNrbE9hQk9lT2llem9oa3l2U3d6cVFuRUZkc01iWlBMb0xkSGJtWDAwSG9NbFBpQi1oWWQ1STA?oc=5",
-      "published_at": "Sun, 22 Nov 2026 04:22:06 GMT",
-      "publisher": "경기일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "이 대통령 \"치아 흔들리고 코피 터져\"... '순방 잦다' 비판에 \"돼지 눈에 돼지만\" 반박",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFB3S2ZxSm9DRU9aV0RUamV2a1RDdW1GSTBUSi1VR1Jubmc1SXMtejRNa0o1OW1hRDdNSV9WN3RIWHNfWHFXSnZyQjJqWjJCMmZvT1FtU2F1aUd2aW11Sk1ENVNaZ0xjTjl4WDAtX2930gFzQVVfeXFMTjUwLXh1Ujc4ZFNpZDRGcWw3UEhPdWtfZ2xQc0JyOTgxNm01SVJrTW9YTFZtVUdmSHRUSEFjaTBWdEZyUmJRWElBVnpBSGxmS1dmX2hsOUtYRm1JWjNxakltUG9OUlhtOFRFZFJPWDR4S2Z2dw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 08:09:00 GMT",
+      "topic": "kr_policy_economy",
+      "title": "\"中 기술주, 시총 2300조원 증발\"…당국, 신용거래 규제 완화",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5tTmVUY2dYWW9MR3hEUDdRN2FWMEVod2lFQU9pcXo5TEZsTTItdmJxQ1A2M2VlRnRMcHozbklST0JmaS1LOENyOGJEOURYdjZsbG5YaTZ6QVV5S2ZraXZySUFBM2JXa3BYTmdFdFZUejI5TzTSAXNBVV95cUxObU5lVGNnWFlvTEd4RFA3UTdhVjBFaHdpRUFPaXF6OUxGbE0yLXZicUNQNjNlZUZ0THB6M25JUk9CZmktSzhDcjhiRDlEWHY2bGxuWGk2ekFVeUtma2l2cklBQTNiV2twWE5nRXRWVHoyOU80?oc=5",
+      "published_at": "Sun, 22 Nov 2026 14:38:00 GMT",
       "publisher": "한국일보",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "청와대, ‘대통령 잦은 순방’ 지적한 야당에 “눈 들어 해외 정상 보라”",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1hcHhPRFNKaDFtRVQ3S3BNWGVIZWxiSC02LUNaY0tSai0yU21XbUFQejE3UHYxeVZJbk4yM1p0RkpRRkdBbkNBOTBaMXpQZUs0SkRkSlpkb2F1S2s?oc=5",
-      "published_at": "Sun, 22 Nov 2026 01:14:00 GMT",
-      "publisher": "KBS 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1ZMEFMZ2pJVUNNc3dsT1hmWDNVVDBGcUdTYllkYVBCV2RfVUVxeXVLc0NGd0ZpQWJFbmNxWU5vZ09ZakNsQjVGSzFULTlkOW5FNGU3Y1lGR2hRUdIBX0FVX3lxTE9KdGo2NnRZcHlka3M3aEI1cHh0bGdoQTdFV0l6QU1Dd0JIV2NlcW5WUHpWX2FJRzVodTltM0thYjU5Z1NSX05nNG54M0tWc0stR3JSS2FpR0ktakh1SFJj?oc=5",
-      "published_at": "Sun, 22 Nov 2026 06:25:00 GMT",
-      "publisher": "경향신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李 \"공정성 타협 불가\"…순방 비판엔 \"치아 흔들리고 코피\"",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5URVVDZmh3dTdNSnJxTGRhTzNadHZwSWhUZzVaSTlQeHBra2IxeDA2Q2FLMnYzT252YkpVTFM1TG9HY2xoZmRCc2JnS3h6QVRmZW1FLXVLLXhSd2ZBQlc3X0hrOVNQMTg?oc=5",
-      "published_at": "Sun, 22 Nov 2026 10:03:00 GMT",
-      "publisher": "연합뉴스TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "청와대, 잦은 순방 비판에 “해외 정상들의 숨 가쁜 외교를 보라”",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9GdU8temtndVJlSkgtb21LSW1xbHpzU2FpbDZ4MFk4dVF1RFpRNFl3RVpLRUc5TlU4MS16VDdJX2I5aFc1YkV4Z3N0Vmo5LVFqa01pYzNrN1R3Q3g0UVc3TFp6Wmpxa0RMRW5SM1psYzlxdUZH?oc=5",
-      "published_at": "Sun, 22 Nov 2026 05:49:00 GMT",
-      "publisher": "한겨레",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "野 ’대통령 순방’ 비판에 靑 “눈 들어 해외 정상 순방외교 보라“",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFA2ZkdCMnh0UTZid2JXVUQyeGgwY3FMTXNhSk5fWkZYVHNNRy12RWpxV0l2aklTTE5DaWxPRkxJQ0xVN3VjeFNHZm5RTWVZbTVtaWpGM0ZmMTA3TjJNYmdybkkycVUyemc?oc=5",
-      "published_at": "Sun, 22 Nov 2026 00:49:00 GMT",
-      "publisher": "연합뉴스TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "순방 마친 이 대통령 ‘울산행’… ‘메가 프로젝트’ 현장 점검, 전통시장 민생 행보",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5JSTZpUHNQM25ZTTZ1YU9JZjRNLUtkS2txZUltaWRVdkpISlVDM0RvYUtwZUctVFF3djJmVUNmSDJWWHJXUFAtZlZoQ05CMWdmT3hTdlRiX3hobmxMT0R1aHNyeTBrd3FwYU94NGJqTGV3bnZw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 08:21:01 GMT",
-      "publisher": "부산일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "이재명 대통령, 시험 부정행위 대책 지시…순방 외교 비판에도 입장 밝혀",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFAxNVFwRUVwdXhSLXRWR3gyV2hlRnlFUUZZay1TWDRybkpfX2ZEZlhxcklUSGQ3WUJXZTg2ckF1X2hHbGFuNjdfVlJyWXNvcEpfY2VpZWI3elAyVjczQ3c0Ui05S002TUV0WGpV?oc=5",
-      "published_at": "Sun, 22 Nov 2026 04:26:18 GMT",
-      "publisher": "일간투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李 대통령 \"순방외교는 대통령 주요 업무\"...'잦은 외유' 비판에 반박",
-      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBVdjg3eURuTW8tN0VUTlBkRlpOckNiVjI3cm1qbHRzYzVsRU9Id3U3elBrRW9ZcUxZMmEwdjNuOEtwYkdaOFkzV3Z0S1BOMWNGMlN3NkJ1X2J5LVho?oc=5",
-      "published_at": "Sun, 22 Nov 2026 03:42:00 GMT",
-      "publisher": "뉴스핌",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "이재명 대통령 해외순방…민주당 \"외교 성과로 평가해야\"",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFB1c251UzBiRUd1Qjk5bi0tUVRKM1VsaWJSWU5nb0tEYlR2MVJjeFRBQ2tlMDN5X0ZST2xuczNqcGJ0bGFrd1NBQ1dRaDZoUGJzTllnaTJzQW5IX1R2VFVfYnlzNGhDYXZn?oc=5",
-      "published_at": "Sun, 22 Nov 2026 12:55:00 GMT",
-      "publisher": "CBC뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李 잦은 순방 지적에... 靑 \"눈 들어 숨가쁜 해외정상들 보라\"",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQWmhQUTJnVUJZRlI5VGE1eTZiTmlSRy0xc2w4Uk1BZW1yTFdRbGVETGxUQ0JkYXhfZG1na3lIRVVVZV9iVktudl9LaldqSkxsQTJtcGtzakwtdHBXbkp0ckZhSlQyU2hrVjN4UVIwSDF5dmtnQjJ6TzR4Z2JZdHpIRU1GWVJhcGV6?oc=5",
-      "published_at": "Sun, 22 Nov 2026 02:21:47 GMT",
-      "publisher": "조선일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李 \"임기 초 순방은 국정과제\"…또 등장한 '돼지 눈엔 돼지'",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBlbnBoaDRxNW5KSTdOS2ljZkpDb2REZXF6eTJTVTQ2TEZ0UlRuMy1tbnlQNjk5dmZkQmZtQkhBRktDWTB2aGlMaVZXaGhyMWNIS1Y2R19TZUxRQQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 10:31:01 GMT",
-      "publisher": "한국경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "`순방 잦다` 비판에 `코피까지 터지는 힘든 일`… 靑·李대통령 반발",
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9QcExRUnRFdFlCY3NPQ0c3d09KejlvVk9aSDI2bVF6ZFA4alBhQ0F6bm5QcmpvTGVMdHVyZ29URy1SM0toQlZKWkgwelY0Z2tvWDV1NExpVlVTazZFb1dVaHh3?oc=5",
-      "published_at": "Sun, 22 Nov 2026 03:31:47 GMT",
-      "publisher": "매일신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "靑 “대통령 해외 순방 많다? 어느 나라든 정상외교 증가”",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5DYktSSUxIWlhOWVk0R3ZlZ29lbVVVMWZmcnlLVGJDUFVYLTR0V0JkWDV3R0pXcnR4TElsanEtN09ZN1Zmd1NWT2RxRTlmT2RHVGxHSFlHZFA1ZTdtams1U08xQ0NNYXY0bWtFX1BBdUU?oc=5",
-      "published_at": "Sun, 22 Nov 2026 01:08:20 GMT",
-      "publisher": "미디어오늘",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李 대통령 \"돼지 눈에는 돼지만…순방 외교는 빠질 수 없는 업무\"",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1NVU9LcDdfMWxkUU5qZFhiMzRBQWNscm9Pczd1Z0o0enJ1ZmtLajVYMWtJTC1GVEhSa3NDc2FFV0oyTFd1TTVEWWZiRkFSNFZXQ1BSN09Vd0PSAVNBVV95cUxNSnRrZHBnMlp6emplQUNhYl9kVXNYNnFRUFU3clRCcVFBUjdvU3hfQUJORnJfX2s0SmNKeUtOZWJxVlBybk42MG5YbHpaeHVGcU9YRQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 05:10:31 GMT",
-      "publisher": "더팩트",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "野 잦은 순방 지적에…靑 “눈 들어 숨가쁜 해외정상들 보라”",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5CWHNtZlpyVGEtSXBFQ3ZLekVPb2lIczJYZXpuOHl4ZTM0R3ZyRVp1SWZyM21RY21mdXJpSlF3UHE4VE1KSHZXMncwdWhvaUVjQVFNVjh3?oc=5",
-      "published_at": "Sun, 22 Nov 2026 01:14:17 GMT",
-      "publisher": "중앙일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "野 '대통령 해외 순방 잦아'…靑 \"해외 정상들 숨가쁜 순방 외교 보라\" |",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1PUUpYTWZaa0hPWEVwYVd3azQyZS1NZnJZdHpONWNqenVUdUxESkphZGNoUWlzWHlLYjBEc2xMcEg3UnMwSGRMYldRbVJsQTE1a0RBTWtxRHNzRDBhaS1oQ3ZWSDliUVpxLXRtckMyM0V4azA?oc=5",
-      "published_at": "Sun, 22 Nov 2026 01:16:38 GMT",
-      "publisher": "대전일보",
+      "topic": "kr_policy_economy",
+      "title": "한은 금리 인상, 한국 경제 어디까지 버틸 수 있나…‘빚투’ 연체 급증에 드러난 K자형 균열",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBkM2RuRVFrd3hlamtZRHlGOV9zT1JsRWxfb1Rfa3FBSWcteVFlMWhRSWhsNVlKRVI4RjdjcWJtZTlTUXlSMHFDV0pMTUhyTlAxdDFRa3VleEpXajB5UHdvUmlVUW1kMm0xNHc?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:45:47 GMT",
+      "publisher": "https://www.moneystorm.kr/",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1113,10 +925,10 @@
     },
     {
       "topic": "kr_semiconductor_ai",
-      "title": "HBM 투자 기대 꺾였나…원익IPS·HPSP 등 전공정주도 '된서리'",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE12MFFQejlNeUloLThPUjRFNUVXcTNGUEdCdGowTkFFeXMxcURrb2JtQlJFRjl2TXNpUU1NbjVHbzdHcElxQnRwMXFUazhUalJQWFJ3dEZSbDViZnZ3cnVjekFJTmRfY1k0V2p5dmNUb0xtbDlDNjVF0gF3QVVfeXFMTXYwUVB6OU15SWgtOE9SNEU1RVdxM0ZQR0J0ajBOQUV5czFxRGtvYm1CUkVGOXZNc2lRTU1uNUdvN0dwSXFCdHAxcVRrOFRqUlBYUnd0RlJsNWJmdndydWN6QUlOZF9jWTRXanl2Y1RvTG1sOUM2NUU?oc=5",
-      "published_at": "Sun, 22 Nov 2026 01:01:40 GMT",
-      "publisher": "핀포인트뉴스",
+      "title": "삼성, SK하이닉스, 마이크론, 메모리 가격 전쟁 직면? 중국의 DRAM 및 NAND 확장이 글로벌 HBM 시장에 영향을 미칠까?",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNdEZCRl9qNTdPdHVyakFRM3VseF9EaFozQ3FIYmtwUmVkWVdVZGliX2poSTE3Y0d1THIxdUdDUF9iWDhxTXlFRXlha1FvemJYWEdTTUtJTDVMajRMUTFzckNHY1VMRjBEalFadWJMRmN0bjc4WEsxYl91RXEydFg4Ujl6OHkxaHJSLVVlSV9UN2J4VE51WE9XdEVKUVdpNGN1Y2lGMmtvZ2k0NTl1a1M2WGpBWktKeWdsb0E?oc=5",
+      "published_at": "Sat, 21 Nov 2026 22:49:13 GMT",
+      "publisher": "TradingKey",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1137,18 +949,18 @@
     },
     {
       "topic": "kr_semiconductor_ai",
-      "title": "무디스, 삼성전자·SK하이닉스 내년에도 웃는다? 반도체 실적 전망과 주가 영향 확인하세요 > 뉴스",
-      "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTFBnSWMxS2VpcXR5SHB0ODlHSG1iRWh0T25QaEVjTVlFUGk0TThrdlFqYjBmZ3Zhc0Z1SkdhWTRVRmFmd3Zmakwyd3JSbzFTbWNUMFZ3LXVLZ3o5S2Y2MHZVN0FwdEl0aVlyZ2VraGNxdDhnU1FHUzdYYWVxVWI?oc=5",
-      "published_at": "Sun, 22 Nov 2026 16:09:00 GMT",
-      "publisher": "진해신문",
+      "title": "HBM 투자 기대 꺾였나…원익IPS·HPSP 등 전공정주도 '된서리'",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE12MFFQejlNeUloLThPUjRFNUVXcTNGUEdCdGowTkFFeXMxcURrb2JtQlJFRjl2TXNpUU1NbjVHbzdHcElxQnRwMXFUazhUalJQWFJ3dEZSbDViZnZ3cnVjekFJTmRfY1k0V2p5dmNUb0xtbDlDNjVF0gF3QVVfeXFMTXYwUVB6OU15SWgtOE9SNEU1RVdxM0ZQR0J0ajBOQUV5czFxRGtvYm1CUkVGOXZNc2lRTU1uNUdvN0dwSXFCdHAxcVRrOFRqUlBYUnd0RlJsNWJmdndydWN6QUlOZF9jWTRXanl2Y1RvTG1sOUM2NUU?oc=5",
+      "published_at": "Sun, 22 Nov 2026 01:01:40 GMT",
+      "publisher": "핀포인트뉴스",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "kr_semiconductor_ai",
-      "title": "올해 상승분 모두 날린 나스닥…월요일 국내 증시 반도체·AI주 '연쇄 충격' 오나",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFB5ODBIXzBlR1lMSXBUb0Vtb2YwR2E5VGsycUtIbjBRMWlnbWJfZzV3WW9hdHBxYnZ0V3NVcW1NSzREX3d3QTZMS3cxYjRoQ2lsZ25QMWlZT2x0OTlfNmZVYjhwWkpGOGd0bjVZTlBwanViLXfSAXdBVV95cUxQQ1ljTnZIOGt3Q1EwR1BWbV9lN2xhSFlIVHNXUl9FVklMc2E4SFRVMzFhZkFubTZNTXFONGZNYUo5blhwUWN0ZGd4U1ZzQjI2UTFzSkJkeE5oWm8xcHc0ellyQlFoZmt1cEJwRGdQaWN2MWc3dmFsRQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 07:17:07 GMT",
-      "publisher": "핀포인트뉴스",
+      "title": "무디스, 삼성전자·SK하이닉스 내년에도 웃는다? 반도체 실적 전망과 주가 영향 확인하세요 > 뉴스",
+      "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTFBnSWMxS2VpcXR5SHB0ODlHSG1iRWh0T25QaEVjTVlFUGk0TThrdlFqYjBmZ3Zhc0Z1SkdhWTRVRmFmd3Zmakwyd3JSbzFTbWNUMFZ3LXVLZ3o5S2Y2MHZVN0FwdEl0aVlyZ2VraGNxdDhnU1FHUzdYYWVxVWI?oc=5",
+      "published_at": "Sun, 22 Nov 2026 16:09:00 GMT",
+      "publisher": "진해신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1233,18 +1045,18 @@
     },
     {
       "topic": "global_market",
-      "title": "비트코인, 크라켄에서 한때 1만7000달러까지 하락…거래소는 거래 유지",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1mdkZ1dk5FWmVSa2F5TnJaLXF4NFlKUU02MG1yTjltbktERVRsV2RGN01MR282MF9qS3FEc2dHbi1qWmFFVXdYZnMtV3RqeTRyd2o5UHRfUzA2ZUVVejdNQkZxdzBzRURQb3dHVG03VQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 09:33:06 GMT",
-      "publisher": "TradingView",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
       "title": "나스닥 폭락에 또 검은 월요일?…\"증시 공포 이미 금융위기 수준\"",
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5OTXFkelpaTUs0b0lBeTgxNlZQejRyMl9WNGgtUHdlZ0VpV2c3N0NaT29yTnZQUlUydHF3ZHBtUFpYek5QT3pBY2h6c3NRU0hCVFBhOFlNZERzTmVSU1R6bm92RlREV0tsMVE?oc=5",
       "published_at": "Sun, 22 Nov 2026 03:07:02 GMT",
       "publisher": "비즈워치",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "제주 수출 10억 달러 시대 눈앞…반도체가 끌어올렸다",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE02TmNHaDltakVDRXd4UTVxZmtBZjdUdlF1dmZERWxGb2V4YldpTko1V1BadXAxd3hIeWRnMy1CX0tXNS1SbWNIRlBuN3NSOFRzRWlBckdVY2t3cmM1c09iUVFpM2cyLXp0V3FUUg?oc=5",
+      "published_at": "Sun, 22 Nov 2026 04:35:00 GMT",
+      "publisher": "제주일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1273,14 +1085,6 @@
     },
     {
       "topic": "global_market",
-      "title": "제주 수출 10억 달러 시대 눈앞…반도체가 끌어올렸다",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE02TmNHaDltakVDRXd4UTVxZmtBZjdUdlF1dmZERWxGb2V4YldpTko1V1BadXAxd3hIeWRnMy1CX0tXNS1SbWNIRlBuN3NSOFRzRWlBckdVY2t3cmM1c09iUVFpM2cyLXp0V3FUUg?oc=5",
-      "published_at": "Sun, 22 Nov 2026 04:35:00 GMT",
-      "publisher": "제주일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
       "title": "1달러 깨진 XRP…솔라나·트론 ‘추월 후보’로",
       "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE9RREE2eDF1U2djWlNraGtzeVlLUGFyb2xhRDFneUdoanVxRXA2OFpVSXBvdDFpTC13LWw0NURYSHFUZ1lZRUVXUEJn?oc=5",
       "published_at": "Sun, 22 Nov 2026 12:52:22 GMT",
@@ -1301,14 +1105,6 @@
       "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9zYnpJRzFYajAzbmxuQURVYksxTzltbkt4Z2VEMEF4dE5Qd1VyMjhNb0dmM2FqZzBIdkh3dnJQQkhQYXNXV0hGYzNWYUVHWENNVmx3Q0xlZGVRNHcwR3ZmYk9KUFpIdGM?oc=5",
       "published_at": "Sun, 22 Nov 2026 01:39:00 GMT",
       "publisher": "연합뉴스TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "InvestingPro 고평가 경고 이후 Solaris Res 주가 51% 하락 By Investing.com",
-      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE44M3lVZzFMZVBFM1Z6aTUtbXNGUHZSM0hqdWlwTUJLbnBCNnFZWFhaaWIxMnlpTFBjaWZNbEFGV1NKMWMwZmRrcTVZUFlTaEVuSmp2RFh1bHpiZndYWlpSZ2FFQ0xJSDQzUjExeGFfZmtqNEZuN1E?oc=5",
-      "published_at": "Sun, 22 Nov 2026 11:03:00 GMT",
-      "publisher": "Investing.com 한국어",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1344,19 +1140,259 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "us_macro_rates",
-      "title": "[중국증시 주간 포인트] 美 금리향방 가를 경제지표, 中 공업기업 이익, 미중 후속 AI 대화, 18개 액티브 ETF 동시 상장, 차이나 하이테크 페어, 화웨이 신제품 등",
-      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBrYnBHMm9BRVlMbnpoa1lFeEtSQ2h1VTlHT2xKQ0pNZmxCMEVIQXdiNXFLNzl5OHFnLXc1RHlWVXlJUGNaUkwxMnBZR25uVjFhY0EyY0lPQzAxVWNySTlzQkVXNlgzdlZFT3NxODhyT2hSME1ObHdFRS1rRQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 14:55:00 GMT",
-      "publisher": "네이버 프리미엄콘텐츠",
+      "topic": "global_market",
+      "title": "시애틀센터에 '유럽 크리스마스 마을'…크리스마스 마켓 개막, 입장료 6.99달러부터",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1jc2ZURzM0T3oyMnNUNXhQQlZwSWhwU2lfOFRPZ3UzeEhwRWlGQnJUcmFQa0dzLWIwRWtSY1ZuZEJBSXVpRktOcjB0VHJnU21ycmlMcTNVZmFFZUZvb09oTGdqQ3lBUXVtSmR2NFU2Z9IBc0FVX3lxTE1UZW9aVi1oMGNOU0ZoTU04UjNjejZYdGJReGZvZ0FwMTRmOTRjQWlEMmhxbHVjSVBPdkdrUGVqenpwVHZJMTFveHJMOGNnajROTVZLVk9hN285LWE3czJNOGxJQ3lZV3FLc0tBd190QklXWlU?oc=5",
+      "published_at": "Sun, 22 Nov 2026 16:24:49 GMT",
+      "publisher": "시애틀코리안데일리",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "us_china_trade_ai",
+      "topic": "global_market",
+      "title": "[사설] 커지는 AI 거품 우려, 불안한 수출 1조 달러",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBVSC12ckpwMklmbDVDc1lWV3A1c0NyLUxFTWlleGJ0MjA1R2F5ODdUOF9XSkg2UGo2c3hiVXpxZVhnbFNxMi1nTTEtUU1YNDQ1QnRIejRjX0FmN1E0bFhEUlp3RFUzVlRXdXpNc0Rn0gFzQVVfeXFMTkcxRFV5R2lQT3FZS3FRendNTDdLNmIxMkR5aWxUZHY1dVNBRU9sbXg5ekJnUXE4VGZCZ1QwY00zMHBhdVFaRkprc0Q1NzR5YzJmblNKbWM3U0RnbGhrUzNkV1hYWldZMF9Wc2Ffc09HMmRyMA?oc=5",
+      "published_at": "Sun, 22 Nov 2026 15:10:00 GMT",
+      "publisher": "한국일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "트럼프 제재에 ICC 직원 급여도 막히나…일, 내년 분담금 조기 납부 검토",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOLWJoRVJzTUJTYWlPNUFyT1ZrcDZMZmREcmoteGl5VHQ5d0tLaVROcTBDeS1sMUdRZHVyMGZDMjl5WnpybnlBM3YwYlprY3MyeHVGcG9lSVFkb3JNOFVyNWZFZDhObDVTNzhCc0JvMVJfbnVDajJWNnlUZVJLSHF6NFN3?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:06:00 GMT",
+      "publisher": "한겨레",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "EU, 빅테크 디지털세 제안…트럼프 “관세 100% 부과할 것”",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5SaGd5QXVoUlMtc2JlTi1sSmlSYTVzVXhsQ1lXb21fZVFnWFF6YVhoS3Zoa1hDMmFrUkhSeklvd21OM1lNN1g3TFB1SHJQcVljUHfSAVNBVV95cUxQejZQVlBtNXl5ek04M2ZOMFFBTlhPMVZmQ3JGczhtZ016dEpMcFI5NHpwWUlYb3FGUWp4eERsSldYdkV3bkFVd1g2NUNyLXFuODlrUQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:54:52 GMT",
+      "publisher": "서울경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "\"'엔비디아 사태', 휴전 두달 남은 美中 무역전쟁 재점화할수도\"",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9RQTFKY0xhMGlpLW03RDVhRHR1WUhwLUtqeW5GZnhKX1M3YUNwVWJCanlnMDk0S0FDZGJLMmkwV0xHWXZJczI0QkZSOUwwZlYzVkFRSEo1RVJnSVXSAWBBVV95cUxOWTVTNVJqajBKSWN1anFsOWN6cVUzc3o5bFN0VEIwS2dJUXczXzJQeE0zcjBnTlI5UTR0YUxoYXVJbmNmNklRRVB6SzFkdHBtdmpHUWFhcXpENDQ2b0p1blM?oc=5",
+      "published_at": "Sun, 22 Nov 2026 15:36:35 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "美·캐나다 갈등, 무역 넘어 국방으로… 헤그세스, 군사협력 제한 지시",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOS05aVWRlbXpnS1FyRTJWbF9NcXVaeExWOXRrTEIyVGUtREFIV0pvc0gySF9SUE9EZTdGRGhONFhvNXVhbW44Mk1wN1JHbHpiVWk4a25BZXJ2RjR0YVI2MVpacnoteVhKVFB0bHNqM3A3Tkl4LU8yZWV1Q0ZRQm9oMUtoQWhLM1NReTZ0Ylh0QW0zM2pENEt0OV9oeVEzUQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 00:20:48 GMT",
+      "publisher": "조선일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "APEC 선전 정상회의 폐막…21개 경제체, 무역·AI·공급망 협력에 합의",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFA0NTRkZVVDVGozRzQwV1dob01McE0tWEVTTmdZTWt6cVF6NnFMWjlRSm02VmJZbERwb0k0Q0M5V2hkWVB0Y0piQUc1UXBjZ0tCUTRNVDdR?oc=5",
+      "published_at": "Sun, 22 Nov 2026 05:13:30 GMT",
+      "publisher": "인터내셔널포커스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "美로 빨려들던 구리, 이제 中으로 '역류'…트럼프 관세 물 건너가나",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNcDhwSXRHTW5rRjY0SXN4VWkyeTBuWlZVbFB2QkY4c0ZDTVFXME5jZ2FzdVhCQlFPVzJYMUNEOU9mRndTb3VqZVBZZ3hlN2FzdGxrbXZmT0NTdmNGVF9ZS3Y2V1dqU1VEeGktX3BIMFlnYnd3YklLVkVENTJXZVFQdw?oc=5",
+      "published_at": "Sun, 22 Nov 2026 02:37:21 GMT",
+      "publisher": "이데일리",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "캐나다 | 트럼프 중간선거 참패…캐나다 무역협상 숨통 트이나",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1HcS1jQTdLcVl0SmZsUmczMXIyX2pyakdOalM1RnU1ck9wY2JkakNKQkZ4a2d0cC0wT3hTdTNVMTBtb2lNeVBMOVItV00tUmJlSlYzc1FRV3h3QWhLcWctdUdsQlFHbHQ4Q1BvTHdwN0ZQUGhrSzQ4?oc=5",
+      "published_at": "Sun, 22 Nov 2026 03:37:00 GMT",
+      "publisher": "밴쿠버 중앙일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "EU, 빅테크 디지털세 공식 제안…트럼프, 관세 100％ 맞대응",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1RLXJRVVhTR1k0T1pkWnhGblJqRGtYSnVqMWZaU2JLMUVMUUVGT0JIS2NiUkxnVm9Ec1REZlVfMm9RWVJaQ2Q2bUphekpLeWt1NW1J0gFYQVVfeXFMTWFjTkxSLVV0Uno2d1dNbHNadVZ0WlFTVTcybFo5b3NXOHZhQjhlU2RvX2VwRTJScVBnekpBbkxJblJIN09ld2tnY2JHbWIyalFidVVWUVo5aw?oc=5",
+      "published_at": "Sat, 21 Nov 2026 23:15:00 GMT",
+      "publisher": "SBS Biz",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "트럼프 차남이 투자한 로봇기업, 임금 체불 파문…한국 사업 파트너, 1억 5,000만 달러로 구원 나서나",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBpc3VLZzg3YWtWdFg3clpmR0d1eGMzcHcwUHY4ZThsNDk3OVdxV0dyek1WTW1kTlpUN0RWRDBMMk9wdERidXA2dFhfbEhkbWh2REFtTnR2Ul9acEtma0ZmSlBDaVNjU3JCaTJ2R0dGV1ZwMy1EMG9GQkJ6ZzlOWk0?oc=5",
+      "published_at": "Sun, 22 Nov 2026 09:56:11 GMT",
+      "publisher": "PANews",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "트럼프 대통령은 러시아와 우크라이나 간의 대규모 휴전 협정 가능성을 시사했다.",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPNWZlYWc1akdVMGM3dmh5c1g1UnJSM0ZIdnBpdTVKZFRlVXdrenFRS1pFaTZYd3VaVnZvaHdFMFlVNTVsdW0ySUVQaXY2el92aHppTmJCMnloa1JzXzNQdmh1bEp1SV93M2N5RkJRdC1aRklVMlNSNnRuRk5meE9kOGhvNkZGY2gxMVdUTDNMQ1JCMlExUm4wMTBqS1o1QQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 13:15:54 GMT",
+      "publisher": "Vietnam.vn",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
       "title": "[월드 투데이] 아시아 순방 마친 트럼프…미·중 무역, 대만 문제, 기술 갈등은 여전",
       "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFAxU19nYjFLZ0M2UGR1Rk53LTlZZjQ5MEhBUm9GS1FYY0ZvbXhhczg2a1ZRYk5nU0Y5aGN6ajk2OTFmZmlSZVRIbXltNE9NTHg3cDh2aFBGYVpwX3ZGRWstRkhuSndGY1ZMdGUtRmZpUQ?oc=5",
       "published_at": "Sat, 21 Nov 2026 20:59:11 GMT",
       "publisher": "위키리크스한국",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "EUㆍ인니, 10년간 협상 끝에 무역협정 체결⋯상품 90% 이상 관세 철폐",
+      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5TcVNUejIyR0htNWxidGlUNWlyQ011SHpab090aG5ZZzVfaERiOHVUdWQ1NUxwY1QtZno1Vm14Y1V0ODlNS3Y1SnFiMk1LQk1ScU8xXw?oc=5",
+      "published_at": "Sun, 22 Nov 2026 06:12:00 GMT",
+      "publisher": "이투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "이재명 대통령 시진핑 주석 한·중 정상회담 \"FTA 서비스·투자 협상 타결 계기 경제협력 확대,한반도 긴장완화 중국 건설적 역할\"",
+      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9VTThaV3dpZmZtdFpIWnp1TU5kbVFHclNMa3NHSmMzWmhVMzlRaFJPMXlNaUFfdUExOUszN1c3THp1dWZGUmpIQnRJM0tUdjNuN0lWWQ?oc=5",
+      "published_at": "Sat, 21 Nov 2026 22:02:45 GMT",
+      "publisher": "국민뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "유럽연합, 빅테크 디지털세 공식 제안…미국과 무역 충돌 예고",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1iamRGcFk5WEh0S19OTEJ5cjlWamZES1VwSnd0QXhobGVWVGFCaElGTklRMS1MQkRySUhHbFZDSEtlS1N6WjB2WDdtU2FJaG1mTmZxcUQ3aDAtSW5YS2Vka2NRLUs3bGJQRjJjdXNyRDJTNTA?oc=5",
+      "published_at": "Sat, 21 Nov 2026 19:44:31 GMT",
+      "publisher": "스페셜타임스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_diplomacy_summit",
+      "title": "EU, 빅테크 온라인 매출 3% 과세 추진…트럼프 \"관세 100%\"",
+      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1rc1dJZmE4WTJKZWpXdlU0Sjg0YkVCY013SjN6YzVpZGhHSW9mYW9RN2lvdHA4X3ZacUJoWDRiMkdGbTNud3hTb3JMVFo5YzgxMWVZd0w1OERoeDFJd09qTWJ6YlY2NXpUUXRteFY1QmR3QQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 02:26:36 GMT",
+      "publisher": "중앙이코노미뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5MdHVzUlY3SExKNFhEaWRqTUt3RDJ2cXEtWTdwdlEwRFA1V0MyTW02SHpfTElEbzV0YWVyaXN1d0NRVVd6dm9TWk5XSDhJQ3VJc1cxcFdfNzloS25fVUpnektvR0Y2ODdmRW1z?oc=5",
+      "published_at": "Sun, 22 Nov 2026 13:13:00 GMT",
+      "publisher": "한겨레",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "李 \"공정성 타협 불가\"…순방 비판엔 \"치아 흔들리고 코피\"",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5URVVDZmh3dTdNSnJxTGRhTzNadHZwSWhUZzVaSTlQeHBra2IxeDA2Q2FLMnYzT252YkpVTFM1TG9HY2xoZmRCc2JnS3h6QVRmZW1FLXVLLXhSd2ZBQlc3X0hrOVNQMTg?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:03:00 GMT",
+      "publisher": "연합뉴스TV",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1ZMEFMZ2pJVUNNc3dsT1hmWDNVVDBGcUdTYllkYVBCV2RfVUVxeXVLc0NGd0ZpQWJFbmNxWU5vZ09ZakNsQjVGSzFULTlkOW5FNGU3Y1lGR2hRUdIBX0FVX3lxTE9KdGo2NnRZcHlka3M3aEI1cHh0bGdoQTdFV0l6QU1Dd0JIV2NlcW5WUHpWX2FJRzVodTltM0thYjU5Z1NSX05nNG54M0tWc0stR3JSS2FpR0ktakh1SFJj?oc=5",
+      "published_at": "Sun, 22 Nov 2026 06:25:00 GMT",
+      "publisher": "경향신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "이 대통령 “치아 흔들리고 코피 터져도…임기 초 순방은 국정과제”",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1yU1RFa3lmUi1FbkkwZk9uc2dwQ21UdUZxX0E4b29JTWp3amEtTV9hSEc5a2hmZ0FkaUtBY1dPcF90UHZUVVVwRUdMUkxfd0JrX3dVamN3WFQ1X0U?oc=5",
+      "published_at": "Sun, 22 Nov 2026 05:04:00 GMT",
+      "publisher": "KBS 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "李 \"임기 초 순방은 국정과제\"…또 등장한 '돼지 눈엔 돼지'",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBlbnBoaDRxNW5KSTdOS2ljZkpDb2REZXF6eTJTVTQ2TEZ0UlRuMy1tbnlQNjk5dmZkQmZtQkhBRktDWTB2aGlMaVZXaGhyMWNIS1Y2R19TZUxRQQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 10:31:01 GMT",
+      "publisher": "한국경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\"",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5zWVFGdmFVRTFuRTV5TEFUN1JpcE5LS1gzWnVZMWljRTR5blNmRjVwTnI4S0JBYk9tZXkwYVhreVg5ekc3U0JhcTRSajBSNlBWVVhmemctTnhaNFlUTEszNWdyNDFFUkN6SEE?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:20:18 GMT",
+      "publisher": "주간조선",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5jX19BTHhqekxtVGFmM0wwdms4d0lrM2xyQzcyckFHdXJENWlMaTJXbXVkNi1XOUUyRTA0RzI0ZUhtd1VWa3hLR041TUxBQkRaQ0Z6SkJR?oc=5",
+      "published_at": "Sun, 22 Nov 2026 03:37:12 GMT",
+      "publisher": "중앙일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "李, 순방 비판에 \"대통령 주요 업무\"…권력 활용 중요성도 강조",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5BSHpkYU1la05sRDZzbXp3OWNWSF9MblJVODBudXJ3MGFJQ3N1WVRCYWdqWWlLVlNPZzBIeUR4YlVyMjhrYU00U1BUQXRqZFB4NHlWTEhaRVRPSGRMcEQ1ejJ5anc?oc=5",
+      "published_at": "Sun, 22 Nov 2026 05:51:29 GMT",
+      "publisher": "매일일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "또 \"돼지 눈엔 돼지만\"…이 대통령, '해외순방 비판' 반박",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9wM1A2RUZnQVlGZ1lNMHlLVDIteDZFdWZRRFBzVW5GM3hoalB5akpnNTg5MmNzaUxQU3Rid01oWVFWQ1VrODRiR3BmY1c1RmhFVkFNYnJaLUpYZ29NNmNFTA?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:12:26 GMT",
+      "publisher": "뉴스토마토",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "이 대통령, 잦은 해외순방 논란 정면 반박…\"돼지 눈에는 돼지만 보여\"",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9mS0lGbXVEbGZaNW9scHk2b2ZocXZnTXhYN2ZaZmR4VkVzQlFSbDJWM2VQN0thckg2WEN1ZVRIUWpSbm9EeWY4QXhyMklPbTQ5Q05sZjhQWGhtT2NlZVk5NzgwSDVGbWZzZlE?oc=5",
+      "published_at": "Sun, 22 Nov 2026 08:30:47 GMT",
+      "publisher": "경북도민일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "李 “돼지 눈엔 돼지만…해외 순방, 치아 흔들리고 코피 터지는 일”",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE5XcFZPcFpkNzFNTm9WMzJLcVlreW5WOVV2RHpaQ3o4UldjOVFhcXNWTXVKVW9sMEZ1VnZDcXJtNnNxZlRFZDE2ZTJ0ZnhTUGJLdGJqd0hYbzRaelVsX21SU1N5VXFqWGpmNmtfNzZxZWZSQWc5Wmw40gFmQVVfeXFMTmNaY1Y5ZjFWRWFGSmdULURCU2x1cGpPZXFCaHl5ZjFEQXFSLWNNUEpfSzFVV0xwbktWZWJrazZ4Y2xrNy1KTVVNc3VvMEw5bG1FOGJ1dmJaWE82dFBsZWthRDNkNVln?oc=5",
+      "published_at": "Sun, 22 Nov 2026 03:38:00 GMT",
+      "publisher": "동아일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "이 대통령, 순방 비판에 \"돼지 눈에는 돼지만‥코피 터지는 힘든 일\"",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE4yWEFtN1djUlpPYjZ4UkVnSVpsYVRSRnlvTWNOblhYdHloNmpQX28wQS0tSFVEWlFOTERxbzN2UUdZaVRyVUlGYlpIdWlUTzMxNHZfNVNkbV9jSG9QS3NLUlFKS2dXSHUtX3ZTaFRHNHdfQzBnRlI1NNIBeEFVX3lxTE9oell1X3FBX3lDWG1SclZaWDF6YjJJN2Z6MjNoeWZnbHFESkt5Q2ZYc0FmeTViWVlIXzJYMWwwNHp2MDFnOEhydUY5cVVLVzJLdDh6cy1lRWM5bGFPX0l4OWZvcG1oR2ZRY0kwY2FaRHF5YzNEMEJORg?oc=5",
+      "published_at": "Sun, 22 Nov 2026 04:10:01 GMT",
+      "publisher": "MBC 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5wdFkxc1dxenVZZlRZdzM3NG9DTjZfRHgzYTJaYU1jSURtaXBwN2RFUVczT2IzZTlidG9aMnVIaEtydW5tNmhlb0hUZDAtZ0lzblBHYUdkYklfTUt1WEE?oc=5",
+      "published_at": "Sun, 22 Nov 2026 14:53:00 GMT",
+      "publisher": "주간경향",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "청와대, ‘대통령 잦은 순방’ 지적한 야당에 “눈 들어 해외 정상 보라”",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1hcHhPRFNKaDFtRVQ3S3BNWGVIZWxiSC02LUNaY0tSai0yU21XbUFQejE3UHYxeVZJbk4yM1p0RkpRRkdBbkNBOTBaMXpQZUs0SkRkSlpkb2F1S2s?oc=5",
+      "published_at": "Sun, 22 Nov 2026 01:14:00 GMT",
+      "publisher": "KBS 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "청와대, 잦은 순방 비판에 “해외 정상들의 숨 가쁜 외교를 보라”",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9GdU8temtndVJlSkgtb21LSW1xbHpzU2FpbDZ4MFk4dVF1RFpRNFl3RVpLRUc5TlU4MS16VDdJX2I5aFc1YkV4Z3N0Vmo5LVFqa01pYzNrN1R3Q3g0UVc3TFp6Wmpxa0RMRW5SM1psYzlxdUZH?oc=5",
+      "published_at": "Sun, 22 Nov 2026 05:49:00 GMT",
+      "publisher": "한겨레",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1369,9 +1405,25 @@
     },
     {
       "topic": "dynamic:순방",
+      "title": "이 대통령, 野 ’잦은 순방’ 비판에 “빠질 수 없는 대통령 주요 업무“",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9sSEt6d0dCdmg4VE52Y1QwbVJMSmxmcjR3djhMVWlJZXI4VVBqbktnQ2NTdzlTN2pBcDc3ZHB1ZDVRWk8xRDBBV3QxYUwyX21PTXg1Z3p4VnNLc0phWFRmTmpVaUM2NHc?oc=5",
+      "published_at": "Sun, 22 Nov 2026 03:31:00 GMT",
+      "publisher": "연합뉴스TV",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
       "title": "[팔면봉] 李, 잦은 해외 순방 지적에 \"코피 터지는 힘든 일\", 靑은 \"대통령 부부 매력 외교\". 외",
       "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNMUE1TXh0S1RrSHcyRDM5SUdpdnVfZ2RLME9GajFFUHFWMkhIckY2U3YwUjRqZmZVSzNIMTJ1RXhVLW1WS1diay1Za3o2b0lkYU5DYkFpNHNsZkc2RElnOFUwNFlUelQ2NlZ1a2RvTTBldm1qYWx5eEpwTVMyajYtVEcyb0M2ekZJUFE?oc=5",
       "published_at": "Sun, 22 Nov 2026 15:15:00 GMT",
+      "publisher": "조선일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:순방",
+      "title": "李 잦은 순방 지적에... 靑 \"눈 들어 숨가쁜 해외정상들 보라\"",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQWmhQUTJnVUJZRlI5VGE1eTZiTmlSRy0xc2w4Uk1BZW1yTFdRbGVETGxUQ0JkYXhfZG1na3lIRVVVZV9iVktudl9LaldqSkxsQTJtcGtzakwtdHBXbkp0ckZhSlQyU2hrVjN4UVIwSDF5dmtnQjJ6TzR4Z2JZdHpIRU1GWVJhcGV6?oc=5",
+      "published_at": "Sun, 22 Nov 2026 02:21:47 GMT",
       "publisher": "조선일보",
       "discovery_source": "google_news_rss"
     },
@@ -1417,6 +1469,14 @@
     },
     {
       "topic": "dynamic:AI",
+      "title": "지멘스·애지봇, AI 에이전트 활용한 휴머노이드 로봇 그리퍼 설계 기술 공개",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBzekExd1pzdUdFWjVIREJkOEt0cXJXQllvQVgxczVER1B5WWJEN2xlMzVsdExoOEU2QzYwYzJIR3pkQUZPQTlzZTNzVzVuVV9ucndDVFVEeUlqUDJ0d09RS0plcUtzc04yOTJleA?oc=5",
+      "published_at": "Sun, 22 Nov 2026 16:03:24 GMT",
+      "publisher": "로봇신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
       "title": "앞치마로 AI 막는 국가시험",
       "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPeEk0Rmc1Tno3VFNXOHk1ZzlJSUt4SEVTMno3TGltQWZtX0ozYkx0d3pyeXFyVW92blgtVzVPWTdndWtuX1pfS0x2eTZ5OWlxU3FpQWN6clk1eFdlUzhNWS00ZC0tbTlMUTU3TXJ6SGJmRG5XWHFMVnB3Z2ZqOXRrSEpR?oc=5",
       "published_at": "Sun, 22 Nov 2026 15:56:00 GMT",
@@ -1429,14 +1489,6 @@
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1pUmtDc3Q2Yk4wdnNLQXA1dFdhQXhWVGJoR1VuZTJhZGd4WW9RRDlseUQ5S093U3c5U1p0SXYtc3NVNnNaSUd2aDBHSUpIM2Q1NEl4S2FKTzdvZTg?oc=5",
       "published_at": "Sun, 22 Nov 2026 15:02:00 GMT",
       "publisher": "강원일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
-      "title": "존디어, 농업 AI 기업 '오차드 로보틱스' 인수…작물 단위 정밀농업 강화",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBaSWJ5S3otUFJlbjd2T2NRSXNhYWlLMlRkZUlheXJXUHgzcGxZa3NocXVzWlgyM1VpZEUyS2hlMHRBOTdMNGhHZUV0eVpSOEQ1TkhxN25OQlNJNEtWY3FGdmVHZFBtLW5HUTFKeg?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:52:15 GMT",
-      "publisher": "로봇신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1497,6 +1549,14 @@
     },
     {
       "topic": "dynamic:AI",
+      "title": "존디어, 농업 AI 기업 '오차드 로보틱스' 인수…작물 단위 정밀농업 강화",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBaSWJ5S3otUFJlbjd2T2NRSXNhYWlLMlRkZUlheXJXUHgzcGxZa3NocXVzWlgyM1VpZEUyS2hlMHRBOTdMNGhHZUV0eVpSOEQ1TkhxN25OQlNJNEtWY3FGdmVHZFBtLW5HUTFKeg?oc=5",
+      "published_at": "Sun, 22 Nov 2026 15:52:15 GMT",
+      "publisher": "로봇신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
       "title": "최태원 “AI 네이티브 시대엔 지혜 중심 교육을”",
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE0xeVNVUDdkeFZfbVgySGRwWFhYalJaVkV4c3kxUVF2YlR1eENqUTAyZkRVZUQ1am53Q3hvWVR5SXVoc1h6ZHdPMWxhSDM4bnhneHlYRnd0SG5kZ9IBX0FVX3lxTE1zUTBtTTRrS2tocFplMmhRT3NRNm42dkVSSFhKSGUtS2lCQUtOSTVPeGtPZFZGNU1LQWRMWkRfdHVybWRsakpvd0Y1eDc3eUlySkl1T0lpb0I4V1FFbW9F?oc=5",
       "published_at": "Sun, 22 Nov 2026 11:30:00 GMT",
@@ -1536,11 +1596,11 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:AI",
-      "title": "재난 대피 드론, AI 요람… 일상 파고든 K혁신",
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVS04TlV0VEVCMmxKVXpYWkhONXNhVm1ocDhyV2pVS2RuRG53S25OemNaUmppbnI1b2xXWHpOZmJDeURXc3lLSTFLNFVBREgxLWE5QTdmc1E0X1V0Wk5JR0c0TFhFbDkxNF81LVVPZ1N2cWZDcUNuN1JBdFpCd1BwR2puUUtyRUZDU3UzdWxRWQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:33:00 GMT",
-      "publisher": "조선일보",
+      "topic": "dynamic:돼지",
+      "title": "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5vY3J0ZlJkejYyVExINW1kRkhDdzIyUHNBcnRGSGVRdzc1TktpMlR2LUNjVDNONVdQd1BGLXpNZjBlVzIzbHFUUXh1M2J0ejFxWGZwM3l0ZEhFYnpoUUpLbUk1dGNrYmw2Qmpla3Fn?oc=5",
+      "published_at": "Sun, 22 Nov 2026 07:23:57 GMT",
+      "publisher": "주간조선",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1552,11 +1612,11 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:비판에",
-      "title": "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\"",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5zWVFGdmFVRTFuRTV5TEFUN1JpcE5LS1gzWnVZMWljRTR5blNmRjVwTnI4S0JBYk9tZXkwYVhreVg5ekc3U0JhcTRSajBSNlBWVVhmemctTnhaNFlUTEszNWdyNDFFUkN6SEE?oc=5",
-      "published_at": "Sun, 22 Nov 2026 07:20:18 GMT",
-      "publisher": "주간조선",
+      "topic": "dynamic:돼지",
+      "title": "이 대통령 \"치아 흔들리고 코피 터져\"... '순방 잦다' 비판에 \"돼지 눈에 돼지만\" 반박",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE41MC14dVI3OGRTaWQ0RnFsN1BIT3VrX2dsUHNCcjk4MTZtNUlSa01vWExWbVVHZkh0VEhBY2kwVnRGclJiUVhJQVZ6QUhsZktXZl9obDlLWEZtSVozcWpJbVBvTlJYbThURWRST1g0eEtmdnfSAXNBVV95cUxONTAteHVSNzhkU2lkNEZxbDdQSE91a19nbFBzQnI5ODE2bTVJUmtNb1hMVm1VR2ZIdFRIQWNpMFZ0RnJSYlFYSUFWekFIbGZLV2ZfaGw5S1hGbUlaM3FqSW1Qb05SWG04VEVkUk9YNHhLZnZ3?oc=5",
+      "published_at": "Sun, 22 Nov 2026 08:09:00 GMT",
+      "publisher": "한국일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1569,10 +1629,34 @@
     },
     {
       "topic": "dynamic:비판에",
+      "title": "이 대통령 \"치아 흔들리고 코피 터져\"... '순방 잦다' 비판에 \"돼지 눈에 돼지만\" 반박",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFB3S2ZxSm9DRU9aV0RUamV2a1RDdW1GSTBUSi1VR1Jubmc1SXMtejRNa0o1OW1hRDdNSV9WN3RIWHNfWHFXSnZyQjJqWjJCMmZvT1FtU2F1aUd2aW11Sk1ENVNaZ0xjTjl4WDAtX2930gFzQVVfeXFMTjUwLXh1Ujc4ZFNpZDRGcWw3UEhPdWtfZ2xQc0JyOTgxNm01SVJrTW9YTFZtVUdmSHRUSEFjaTBWdEZyUmJRWElBVnpBSGxmS1dmX2hsOUtYRm1JWjNxakltUG9OUlhtOFRFZFJPWDR4S2Z2dw?oc=5",
+      "published_at": "Sun, 22 Nov 2026 08:09:00 GMT",
+      "publisher": "한국일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:비판에",
       "title": "‘AI 늑장 대응’ 비판에 최교진 교육부 장관 사의... 이 대통령, 사의 즉각 수락",
       "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1KaG1MUDlzUVNGdmNPa1dfMTFxeWd1OGdEczdhbVBxOS1MSHR0Z292c0tCdEZlNGVfSjJKTVZpbmMxMUtmVWlLSUpBb1Rhbzhta0lPR1h4Tm5GODYzbzJyMmJFVlBLdUwwY1VzVzloRG01cm_SAXNBVV95cUxNSmhtTFA5c1FTRnZjT2tXXzExcXlndThnRHM3YW1QcTktTEh0dGdvdnNLQnRGZTRlX0oySk1WaW5jMTFLZlVpS0lKQW9UYW84bWtJT0dYeE5uRjg2M28ycjJiRVZQS3VMMGNVc1c5aERtNXJv?oc=5",
       "published_at": "Sun, 22 Nov 2026 04:47:16 GMT",
       "publisher": "여성신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:비판에",
+      "title": "`순방 잦다` 비판에 `코피까지 터지는 힘든 일`… 靑·李대통령 반발",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9QcExRUnRFdFlCY3NPQ0c3d09KejlvVk9aSDI2bVF6ZFA4alBhQ0F6bm5QcmpvTGVMdHVyZ29URy1SM0toQlZKWkgwelY0Z2tvWDV1NExpVlVTazZFb1dVaHh3?oc=5",
+      "published_at": "Sun, 22 Nov 2026 03:31:47 GMT",
+      "publisher": "매일신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:비판에",
+      "title": "李 대통령 \"순방외교는 대통령 주요 업무\"...'잦은 외유' 비판에 반박",
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBVdjg3eURuTW8tN0VUTlBkRlpOckNiVjI3cm1qbHRzYzVsRU9Id3U3elBrRW9ZcUxZMmEwdjNuOEtwYkdaOFkzV3Z0S1BOMWNGMlN3NkJ1X2J5LVho?oc=5",
+      "published_at": "Sun, 22 Nov 2026 03:42:00 GMT",
+      "publisher": "뉴스핌",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1585,10 +1669,10 @@
     },
     {
       "topic": "dynamic:비판에",
-      "title": "‘순방 잦다’ 야당 비판에…청와대 \"해외 정상들의 숨가쁜 외교 보라\"",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9vVlgyMW1JUUUyVmVZWVcwWVFhVjAxNUx1ck5jbWI4bmNYVEZReUg2S3VwMlNQakZlcVVaWnp3b0xRTVNCcFpibmkweGZ2c2Z5SS10Wg?oc=5",
-      "published_at": "Sun, 22 Nov 2026 01:50:13 GMT",
-      "publisher": "JTBC",
+      "title": "野 ’대통령 순방’ 비판에 靑 “눈 들어 해외 정상 순방외교 보라“",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFA2ZkdCMnh0UTZid2JXVUQyeGgwY3FMTXNhSk5fWkZYVHNNRy12RWpxV0l2aklTTE5DaWxPRkxJQ0xVN3VjeFNHZm5RTWVZbTVtaWpGM0ZmMTA3TjJNYmdybkkycVUyemc?oc=5",
+      "published_at": "Sun, 22 Nov 2026 00:49:00 GMT",
+      "publisher": "연합뉴스TV",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1608,11 +1692,27 @@
       "discovery_source": "google_news_rss"
     },
     {
+      "topic": "dynamic:비판에",
+      "title": "‘순방 잦다’ 야당 비판에…청와대 \"해외 정상들의 숨가쁜 외교 보라\"",
+      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9vVlgyMW1JUUUyVmVZWVcwWVFhVjAxNUx1ck5jbWI4bmNYVEZReUg2S3VwMlNQakZlcVVaWnp3b0xRTVNCcFpibmkweGZ2c2Z5SS10Wg?oc=5",
+      "published_at": "Sun, 22 Nov 2026 01:50:13 GMT",
+      "publisher": "JTBC",
+      "discovery_source": "google_news_rss"
+    },
+    {
       "topic": "dynamic:돼지만",
       "title": "李대통령 \"돼지 눈에는 돼지만…순방은 빠질 수 없는 업무\"",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9Nam5YV0g0U01iZ2w3cXZDVG5FSE5lcF9UbGJ5d0EzWmYxenRXN1MwTng0ZmRwTHN0MnVIM3FnV3B2NEFfUUFMM0E3OXE5NzZLMS1VS2pVU3V5STRaN2M5dA?oc=5",
       "published_at": "Sun, 22 Nov 2026 04:07:39 GMT",
       "publisher": "아시아경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:돼지만",
+      "title": "李 대통령 \"돼지 눈에는 돼지만…순방 외교는 빠질 수 없는 업무\"",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1NVU9LcDdfMWxkUU5qZFhiMzRBQWNscm9Pczd1Z0o0enJ1ZmtLajVYMWtJTC1GVEhSa3NDc2FFV0oyTFd1TTVEWWZiRkFSNFZXQ1BSN09Vd0PSAVNBVV95cUxNSnRrZHBnMlp6emplQUNhYl9kVXNYNnFRUFU3clRCcVFBUjdvU3hfQUJORnJfX2s0SmNKeUtOZWJxVlBybk42MG5YbHpaeHVGcU9YRQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 05:10:31 GMT",
+      "publisher": "더팩트",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1629,14 +1729,6 @@
       "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBucW9BRm1mY2xOSVJiMXRhRkxvcHFqcThjTzRqZjVNQTFndURQOEc0Ullfek1leWY1Y1F6X3hoQ0cyMTVDem4yRkhmZGExVEk3a1hzcUowOFVrZ3BJSTQ4ZzM3YWdsSjBQcFNYMHd3?oc=5",
       "published_at": "Sun, 22 Nov 2026 07:51:46 GMT",
       "publisher": "폴리뉴스 Polinews",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:돼지만",
-      "title": "李대통령, 순방 비판에 \"돼지 눈에는 돼지만…꼭 해야 할 국정과제\"",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5waUlUUDlQQkhIMFlyanV5TEZ1N2tWV2JkY094bDdJbEc4bWxxelRkREpIZWdSWnVLbFBXZ2NwYVc4eFZsNF8zeHdVczB0RUZFcU9JMkp2QW9fUQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 03:03:11 GMT",
-      "publisher": "파이낸셜뉴스",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1672,91 +1764,27 @@
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:수출",
-      "title": "[미리보는 소프트웨이브 2026] 〈1〉AI 혁신부터 투자·수출까지…SW 산업 비즈니스 장 연다",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBXS2NsLS1rNDFOWGlwLURPVGxQR3JjWXEyQ1JYWjE2UWstcG1jX3huRFczZEJDY0xsN09sa0dzTGJlYko4dTJlOGVQU0k1QQ?oc=5",
-      "published_at": "Sun, 22 Nov 2026 17:10:06 GMT",
-      "publisher": "전자신문",
+      "topic": "dynamic:돼지만",
+      "title": "李 “부처 눈에는 부처만, 돼지 눈에는 돼지만”…순방 비판에 반박",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9yT3VtZWh0NmpENVMxYUwzLXlWbG9fNW92a2F1Zi0zSjRTT0lWZHpfMExjekFJaTRZYzFQcWE2WXhZeS12UDJNaVRJXzgxZVZYQ2F4eFEzV3NuSk9YN1RsQjNySW1yZXV0UWYyMUR3?oc=5",
+      "published_at": "Sun, 22 Nov 2026 03:12:59 GMT",
+      "publisher": "아시아투데이",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:수출",
-      "title": "수출 ‘1조 달러’ 한국…반도체 빼면 세계 8위",
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9fa1Exc3FJOE5TMF9Da1BQTmJsbWRJN01VcTllaXNxY2tJcHUxQV8wVFBiYXBwNEZJbC1SYUhZU1hsVjJiUlcxWlRGTENsMkFHVHpVTHNUdElvMkUtMVB6OXNn?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:02:00 GMT",
-      "publisher": "미주중앙일보",
+      "topic": "dynamic:돼지만",
+      "title": "李대통령, 순방 비판에 \"돼지 눈에는 돼지만…꼭 해야 할 국정과제\"",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFAweE8taTc2bmt3Q1lLbmRIVVRlemZJS0YxRFFsSC04cFBYUnNNUkpfV2luRUVUNExQVlB2ZTJiTjBoNjFZNkYxYW9KWHhUWFJYbVluSjB0ckZneERiSlNKdWZGbHZmQQ?oc=5",
+      "published_at": "Sun, 22 Nov 2026 03:03:00 GMT",
+      "publisher": "부산파이낸셜뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:수출",
-      "title": "중국산 테슬라·BYD 밀려드는데 수출은 ‘뚝’…대중 자동차 적자 6조원",
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE8yTExhSFFLVXIyR2ZkY2FSSkxWcHpnOGo4OU5tSnhDZjAzaGtSMm1uajBncHhucnJYMENLbG5EWGNfT1p5cHFOT1NtSV9jLWNiYm1qUHdfSm5yTnI2Q3pOc053?oc=5",
-      "published_at": "Sun, 22 Nov 2026 13:14:00 GMT",
-      "publisher": "한겨레",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
-      "title": "[특별기고=최호열] 대한민국, 독일·미국·중국 이어 세계 4번째 수출 1조 달러 달성",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9pVFkxOEM0NG1ZZFY3eGhsbWxhMVotUlNCaXFlYl8yUzhlcGdBb2tEUF9KNVVpQnExU05RRjVIWmNualQtaDZjUS1tdmxGVlE?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:01:01 GMT",
-      "publisher": "포천신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
-      "title": "[사설] 커지는 AI 거품 우려, 불안한 수출 1조 달러",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBVSC12ckpwMklmbDVDc1lWV3A1c0NyLUxFTWlleGJ0MjA1R2F5ODdUOF9XSkg2UGo2c3hiVXpxZVhnbFNxMi1nTTEtUU1YNDQ1QnRIejRjX0FmN1E0bFhEUlp3RFUzVlRXdXpNc0Rn0gFzQVVfeXFMTkcxRFV5R2lQT3FZS3FRendNTDdLNmIxMkR5aWxUZHY1dVNBRU9sbXg5ekJnUXE4VGZCZ1QwY00zMHBhdVFaRkprc0Q1NzR5YzJmblNKbWM3U0RnbGhrUzNkV1hYWldZMF9Wc2Ffc09HMmRyMA?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:10:00 GMT",
-      "publisher": "한국일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
-      "title": "수출 늘면 코스피도 올랐는데…'10년 공식' 흔들린 까닭",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB0YjV3QVVaTEQwbUE1aGNCeHExeDU4M0s0UklmTnJFZEVjWTZoS1VQRnlIUWY2bUZzOFZjLXNjTEdzMFh1NXJyVkUwcXk1V3cydVJ5QTFZN3l3dw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 09:07:22 GMT",
-      "publisher": "한국경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
-      "title": "수출 신기록에도 웃지 못하는 인천",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1BTjJ0S1hkdV95d3l1Y3BzNi1jenZMeEdUZ1JkVTRIa2l2bTNnV29faVpVYUhVeEM5bUFzMEcxZUZTeW44N1pNMUVyY05TUDcwTi1YZ3A1V2tRS2FBY2hJRk5UTmxPbnBzZFFIWUNVcjU?oc=5",
-      "published_at": "Sun, 22 Nov 2026 08:30:00 GMT",
-      "publisher": "인천일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
-      "title": "[프리즘] 수출 현장서 골목상권까지…커지는 ‘동반성장’",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5YYXZGU2FBX3NmSldTamNGODlNaF9DeFpQMTQ0ODhTUmVhQ0FFX25naERFOUdNOG14V3FXTnJULWxwZEF0WENEWW9LQmNOcUtPZXlMQ2p3?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:02:00 GMT",
-      "publisher": "중앙일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
-      "title": "중·미 넘어 유럽까지…K-라면 연간 수출 20억달러 육박",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBLMHVJTXBOMGR1QkR3Tm1zSmI5dmZGVmtOVG9Bci1zdEZkYUtnV2RtdjF5QThFVjh4U3ZDc1dmUW1ZSWVUVmZDejdvMk01UVpNMWhSN29JTGRNYzBaLS00S25GWnZqX3c?oc=5",
-      "published_at": "Sun, 22 Nov 2026 05:16:00 GMT",
-      "publisher": "연합뉴스TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
-      "title": "K라면 수출 20억 달러 육박⋯ ‘원조’ 일본 공략도 속도",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBHOHZ1bjBfSVllYWJqUTlBekh2NWM1azQ1NHVyd1B4eG4yZk44TExHNGxLem11dzJTV1NIa21aR01EUjJJVHJEUTZJaFUxekM4bHpiVC00NzA?oc=5",
-      "published_at": "Sun, 22 Nov 2026 15:28:00 GMT",
-      "publisher": "국민일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
-      "title": "AI 전력망 호황에 대형 변압기 수출 31% 증가…소형은 39% 급감",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5ZRFRMeDZpUXk0bUlSNnZuTS1QTHIwVTd4bV92Z25WdzY0NGROTVVUNHR1ZUJmcHJUUVVOV0xCSlpMWk94cFcyYmctUDdjY3hOZ3JWWnpiSW9ydw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 09:10:15 GMT",
-      "publisher": "한국경제",
+      "topic": "dynamic:돼지만",
+      "title": "李대통령, 순방 비판에 \"돼지 눈에는 돼지만\"…권력 오남용도 경고",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOcTg0ZXpZT0lzVENHOUpDYU1VQUhvd1ZYM2NDUldzMDQydDNqbWFadERZQ1dnR1RfXzZJVXhXWUFxOHliSThYM1AxZUhYRVpUTlVfTTE5TGRMV0dxeXNtSU1UYzBMQ3dCS1RNVDB2TExpcUtsRW9uQi1ZRnlqTm5sSA?oc=5",
+      "published_at": "Sun, 22 Nov 2026 04:26:57 GMT",
+      "publisher": "이데일리",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1770,7 +1798,7 @@
     {
       "topic": "dynamic:달러",
       "title": "비트코인, 크라켄에서 한때 1만7000달러까지 하락…거래소는 거래 유지",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5OTjNabmR6WmhIZ2RBOXM2anloSGV0V0tCbDVRd2IxcmhvQkpPMGhkalREbW9QUHZVZ2JtTkVPY2hhdnRfdnI2OTdSV0h0R1NyM0hpX3REeXV6NE5ZQ2wzNHZFQXRNX2lBbjM2Mm9uZw?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1mdkZ1dk5FWmVSa2F5TnJaLXF4NFlKUU02MG1yTjltbktERVRsV2RGN01MR282MF9qS3FEc2dHbi1qWmFFVXdYZnMtV3RqeTRyd2o5UHRfUzA2ZUVVejdNQkZxdzBzRURQb3dHVG03VQ?oc=5",
       "published_at": "Sun, 22 Nov 2026 09:33:06 GMT",
       "publisher": "TradingView",
       "discovery_source": "google_news_rss"
@@ -1782,14 +1810,6 @@
       "published_at": "Sun, 22 Nov 2026 13:14:48 GMT",
       "publisher": "중앙일보",
       "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:트럼프",
-      "title": "‘트럼프 편지’ 내던진 북 외교관들…‘정상회담 무산’ 막전막후",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9RQmdRSldFemRjeXJDNnBlZXBZMWo1RnZRWEZMS0x5NjdXczBDWWVqWVdKMXFjcUQxV0xYaGtYMGFSbEgxb0NpaUpTdVRPN0M2UXBDSw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 10:56:00 GMT",
-      "publisher": "JTBC",
-      "discovery_source": "google_news_rss"
     }
   ],
   "handoff_queries": [
@@ -1799,12 +1819,12 @@
     "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
     "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "순방 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "돼지 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "비판에 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "돼지만 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "수출 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "달러 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+    "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "눈에는 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
   ],
   "dynamic_query_terms": [
     "순방",
@@ -1814,224 +1834,224 @@
     "돼지만",
     "수출",
     "달러",
-    "트럼프"
+    "규제"
   ],
   "hot_topic_candidates": [
     {
       "term": "순방",
-      "count": 33,
-      "publisher_count": 29,
-      "independent_story_count_estimate": 26,
-      "syndication_ratio_estimate": 0.212,
+      "count": 31,
+      "publisher_count": 26,
+      "independent_story_count_estimate": 25,
+      "syndication_ratio_estimate": 0.194,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 36,
-      "delta": -3,
-      "score": 95,
+      "previous_count": 33,
+      "delta": -2,
+      "score": 88,
       "examples": [
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "이 대통령, 野 ’잦은 순방’ 비판에 “빠질 수 없는 대통령 주요 업무“",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
+        "[월드 투데이] 아시아 순방 마친 트럼프…미·중 무역, 대만 문제, 기술 갈등은 여전",
+        "李 \"공정성 타협 불가\"…순방 비판엔 \"치아 흔들리고 코피\"",
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\""
       ],
       "article_velocity": 0,
-      "hot_score": 169
+      "hot_score": 158
+    },
+    {
+      "term": "돼지",
+      "count": 24,
+      "publisher_count": 20,
+      "independent_story_count_estimate": 17,
+      "syndication_ratio_estimate": 0.292,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 21,
+      "delta": 3,
+      "score": 71,
+      "examples": [
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”",
+        "李 \"임기 초 순방은 국정과제\"…또 등장한 '돼지 눈엔 돼지'",
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\""
+      ],
+      "article_velocity": 3,
+      "hot_score": 127
+    },
+    {
+      "term": "비판에",
+      "count": 23,
+      "publisher_count": 20,
+      "independent_story_count_estimate": 18,
+      "syndication_ratio_estimate": 0.217,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 20,
+      "delta": 3,
+      "score": 69,
+      "examples": [
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\"",
+        "李, 순방 비판에 \"대통령 주요 업무\"…권력 활용 중요성도 강조",
+        "이 대통령, 순방 비판에 \"돼지 눈에는 돼지만‥코피 터지는 힘든 일\""
+      ],
+      "article_velocity": 3,
+      "hot_score": 129
+    },
+    {
+      "term": "돼지만",
+      "count": 22,
+      "publisher_count": 18,
+      "independent_story_count_estimate": 16,
+      "syndication_ratio_estimate": 0.273,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 19,
+      "delta": 3,
+      "score": 65,
+      "examples": [
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”",
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\"",
+        "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”"
+      ],
+      "article_velocity": 3,
+      "hot_score": 118
     },
     {
       "term": "AI",
-      "count": 24,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 24,
+      "count": 22,
+      "publisher_count": 16,
+      "independent_story_count_estimate": 22,
       "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 29,
-      "delta": -5,
-      "score": 66,
+      "previous_count": 24,
+      "delta": -2,
+      "score": 60,
       "examples": [
         "AI 규제비용의 시대",
         "AI 칩 지각변동·EU 규제 쇼크···연말 공급망 ‘초비상’",
         "[오늘의글로벌PICK!] 중국 기술주 시총 2,300조원 증발…글로벌 AI 투자, 성장 기대에서 수익성 검증으로 이동"
       ],
       "article_velocity": 0,
-      "hot_score": 132
+      "hot_score": 120
     },
     {
-      "term": "돼지",
-      "count": 21,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 14,
+      "term": "트럼프",
+      "count": 10,
+      "publisher_count": 10,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.1,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 10,
+      "score": 40,
+      "examples": [
+        "트럼프 \"해외 데이터센터 과세\" GPU 통제 강화되면 국내 산업 여파는",
+        "트럼프 제재에 ICC 직원 급여도 막히나…일, 내년 분담금 조기 납부 검토",
+        "EU, 빅테크 디지털세 제안…트럼프 “관세 100% 부과할 것”"
+      ],
+      "article_velocity": 10,
+      "hot_score": 97
+    },
+    {
+      "term": "눈에는",
+      "count": 12,
+      "publisher_count": 11,
+      "independent_story_count_estimate": 8,
       "syndication_ratio_estimate": 0.333,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 24,
-      "delta": -3,
-      "score": 60,
+      "previous_count": 10,
+      "delta": 2,
+      "score": 37,
       "examples": [
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
+        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\"",
+        "이 대통령, 잦은 해외순방 논란 정면 반박…\"돼지 눈에는 돼지만 보여\"",
+        "이 대통령, 순방 비판에 \"돼지 눈에는 돼지만‥코피 터지는 힘든 일\""
       ],
-      "article_velocity": 0,
-      "hot_score": 99
+      "article_velocity": 2,
+      "hot_score": 66
     },
     {
-      "term": "비판에",
-      "count": 20,
-      "publisher_count": 18,
-      "independent_story_count_estimate": 15,
-      "syndication_ratio_estimate": 0.25,
+      "term": "규제",
+      "count": 12,
+      "publisher_count": 11,
+      "independent_story_count_estimate": 12,
+      "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 23,
-      "delta": -3,
-      "score": 58,
+      "previous_count": 13,
+      "delta": -1,
+      "score": 35,
       "examples": [
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "이 대통령, 野 ’잦은 순방’ 비판에 “빠질 수 없는 대통령 주요 업무“",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
+        "[전화성의 기술창업 Targeting] 〈417〉 [AC협회장 주간록127] 규제 지키는 산업에서 스스로 신뢰 만드는 산업으로",
+        "정부, 증안펀드 가동 준비 착수..공매도 규제 없어",
+        "정부, 증시 급락 우려에 증안펀드 가동 준비…자사주 매입 규제 완화"
       ],
       "article_velocity": 0,
-      "hot_score": 101
-    },
-    {
-      "term": "돼지만",
-      "count": 19,
-      "publisher_count": 16,
-      "independent_story_count_estimate": 13,
-      "syndication_ratio_estimate": 0.316,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 22,
-      "delta": -3,
-      "score": 54,
-      "examples": [
-        "李대통령 \"돼지 눈에는 돼지만\"…순방 비판에 \"놀러 가는 걸로 보이나\" |",
-        "李대통령 “돼지 눈엔 돼지만…해외순방을 음주가무로 생각”",
-        "‘순방 외유’ 비판에, 이 대통령 “돼지 눈에는 돼지만···치아 흔들리고 코피 터져”"
-      ],
-      "article_velocity": 0,
-      "hot_score": 90
+      "hot_score": 70
     },
     {
       "term": "수출",
-      "count": 20,
-      "publisher_count": 14,
-      "independent_story_count_estimate": 18,
-      "syndication_ratio_estimate": 0.1,
+      "count": 12,
+      "publisher_count": 10,
+      "independent_story_count_estimate": 11,
+      "syndication_ratio_estimate": 0.083,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 20,
-      "delta": 0,
-      "score": 54,
+      "delta": -8,
+      "score": 34,
       "examples": [
         "[아주경제 와이드 사설] 수출 1조 달러의 대한민국, 축배 다음을 준비하라",
         "[노트북을 열며] 수출 1조 달러, 숫자 너머의 사람들",
         "반도체만 있는 게 아니다…‘수출 1조 달러’ 숨은 주역들"
       ],
       "article_velocity": 0,
-      "hot_score": 102
+      "hot_score": 65
     },
     {
       "term": "달러",
-      "count": 14,
-      "publisher_count": 12,
-      "independent_story_count_estimate": 12,
-      "syndication_ratio_estimate": 0.143,
+      "count": 11,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 10,
+      "syndication_ratio_estimate": 0.091,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 2,
-      "score": 42,
+      "previous_count": 14,
+      "delta": -3,
+      "score": 31,
       "examples": [
         "[노트북을 열며] 수출 1조 달러, 숫자 너머의 사람들",
         "반도체만 있는 게 아니다…‘수출 1조 달러’ 숨은 주역들",
         "강원 의료기기, 독일서 726만 달러 수출계약"
       ],
-      "article_velocity": 2,
-      "hot_score": 82
+      "article_velocity": 0,
+      "hot_score": 59
     },
     {
-      "term": "규제",
-      "count": 13,
-      "publisher_count": 12,
-      "independent_story_count_estimate": 13,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 12,
-      "delta": 1,
-      "score": 39,
-      "examples": [
-        "[전화성의 기술창업 Targeting] 〈417〉 [AC협회장 주간록127] 규제 지키는 산업에서 스스로 신뢰 만드는 산업으로",
-        "'대만처럼 공매도 막아달라' 정부 대책에 개미들 불만…금지 청원 5만명 넘기면 추가 규제 이끌까",
-        "청소년 SNS 규제, 가입 문턱 넘어 추천·광고까지 바꾼다"
-      ],
-      "article_velocity": 1,
-      "hot_score": 80
-    },
-    {
-      "term": "외교",
-      "count": 9,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.111,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 9,
-      "score": 36,
-      "examples": [
-        "이재명 대통령, 시험 부정행위 대책 지시…순방 외교 비판에도 입장 밝혀",
-        "이재명 대통령 해외순방…민주당 \"외교 성과로 평가해야\"",
-        "野 '대통령 해외 순방 잦아'…靑 \"해외 정상들 숨가쁜 순방 외교 보라\" |"
-      ],
-      "article_velocity": 9,
-      "hot_score": 87
-    },
-    {
-      "term": "보라",
-      "count": 9,
+      "term": "코피",
+      "count": 10,
       "publisher_count": 9,
       "independent_story_count_estimate": 6,
-      "syndication_ratio_estimate": 0.333,
+      "syndication_ratio_estimate": 0.4,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 9,
-      "score": 36,
+      "previous_count": 9,
+      "delta": 1,
+      "score": 30,
       "examples": [
-        "청와대, ‘대통령 잦은 순방’ 지적한 야당에 “눈 들어 해외 정상 보라”",
-        "청와대, 잦은 순방 비판에 “해외 정상들의 숨 가쁜 외교를 보라”",
-        "野 ’대통령 순방’ 비판에 靑 “눈 들어 해외 정상 순방외교 보라“"
+        "이 대통령 “치아 흔들리고 코피 터지지만…임기 초 순방은 국정과제”",
+        "李 \"공정성 타협 불가\"…순방 비판엔 \"치아 흔들리고 코피\"",
+        "이 대통령 “치아 흔들리고 코피 터지지만 임기 초 순방은 국정과제…돼지 눈엔 돼지만 보여”"
       ],
-      "article_velocity": 9,
-      "hot_score": 81
+      "article_velocity": 1,
+      "hot_score": 50
     },
     {
       "term": "해외",
-      "count": 11,
-      "publisher_count": 11,
-      "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.182,
+      "count": 9,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 7,
+      "syndication_ratio_estimate": 0.222,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 14,
-      "delta": -3,
-      "score": 33,
+      "previous_count": 11,
+      "delta": -2,
+      "score": 27,
       "examples": [
+        "트럼프 \"해외 데이터센터 과세\" GPU 통제 강화되면 국내 산업 여파는",
         "李 “돼지 눈엔 돼지만…해외 순방, 치아 흔들리고 코피 터지는 일”",
-        "李대통령 “해외 순방은 임기 초 꼭 필요한 국정과제”…야권 비판 정면 반박",
         "청와대, ‘대통령 잦은 순방’ 지적한 야당에 “눈 들어 해외 정상 보라”"
       ],
       "article_velocity": 0,
-      "hot_score": 60
-    },
-    {
-      "term": "1조",
-      "count": 11,
-      "publisher_count": 9,
-      "independent_story_count_estimate": 9,
-      "syndication_ratio_estimate": 0.182,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 10,
-      "delta": 1,
-      "score": 32,
-      "examples": [
-        "[아주경제 와이드 사설] 수출 1조 달러의 대한민국, 축배 다음을 준비하라",
-        "[노트북을 열며] 수출 1조 달러, 숫자 너머의 사람들",
-        "반도체만 있는 게 아니다…‘수출 1조 달러’ 숨은 주역들"
-      ],
-      "article_velocity": 1,
-      "hot_score": 60
+      "hot_score": 48
     }
   ],
   "sector_selection": {
