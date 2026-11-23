@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-24T04:21:14.795879+09:00",
+  "generated_at": "2026-11-24T04:31:32.112699+09:00",
   "purpose": "10분 비AI 시장·뉴스 단서 센서. :00/:30 A/B Supervisor의 탐색 힌트이며 사실 확정 엔진이 아님.",
   "source_status": {
     "google_news:kr_market_broad": {
@@ -15,12 +15,13 @@
     },
     "google_news:kr_corporate_events": {
       "status": "ok",
-      "count": 4,
+      "count": 5,
       "auto_repair": null
     },
     "google_news:kr_policy_economy": {
-      "status": "error",
-      "error": "HTTPError"
+      "status": "ok",
+      "count": 22,
+      "auto_repair": null
     },
     "google_news:kr_diplomacy_summit": {
       "status": "ok",
@@ -43,9 +44,8 @@
       "auto_repair": "retry_without_when_filter"
     },
     "google_news:kr_defense_shipbuilding": {
-      "status": "empty",
-      "count": 0,
-      "auto_repair": "retry_without_when_filter"
+      "status": "error",
+      "error": "HTTPError"
     },
     "google_news:global_market": {
       "status": "ok",
@@ -54,7 +54,7 @@
     },
     "google_news:global_diplomacy_summit": {
       "status": "ok",
-      "count": 26,
+      "count": 25,
       "auto_repair": null
     },
     "google_news:us_macro_rates": {
@@ -91,15 +91,15 @@
       "count": 0,
       "auto_repair": "retry_without_when_filter"
     },
-    "google_news:dynamic:AI": {
-      "status": "ok",
-      "count": 20,
-      "term": "AI"
-    },
     "google_news:dynamic:반도체": {
       "status": "ok",
       "count": 20,
       "term": "반도체"
+    },
+    "google_news:dynamic:AI": {
+      "status": "ok",
+      "count": 20,
+      "term": "AI"
     },
     "google_news:dynamic:트럼프": {
       "status": "ok",
@@ -108,17 +108,12 @@
     },
     "google_news:dynamic:관세": {
       "status": "ok",
-      "count": 20,
+      "count": 19,
       "term": "관세"
-    },
-    "google_news:dynamic:조사": {
-      "status": "ok",
-      "count": 7,
-      "term": "조사"
     },
     "google_news:dynamic:젠슨": {
       "status": "ok",
-      "count": 3,
+      "count": 5,
       "term": "젠슨"
     },
     "google_news:dynamic:수출": {
@@ -128,8 +123,13 @@
     },
     "google_news:dynamic:엔비디아": {
       "status": "ok",
-      "count": 4,
+      "count": 6,
       "term": "엔비디아"
+    },
+    "google_news:dynamic:조사": {
+      "status": "ok",
+      "count": 6,
+      "term": "조사"
     },
     "naver_news_api": {
       "status": "needs_credentials"
@@ -152,9 +152,9 @@
     }
   },
   "source_summary": {
-    "ok_or_partial": 18,
+    "ok_or_partial": 19,
     "failed": 2,
-    "degraded": 7
+    "degraded": 6
   },
   "naver_indices": {
     "KOSPI": "4,708.54",
@@ -163,34 +163,51 @@
   },
   "topic_counts": {
     "kr_market_flow": 1,
-    "kr_corporate_events": 4,
+    "kr_corporate_events": 5,
+    "kr_policy_economy": 22,
     "kr_diplomacy_summit": 23,
     "kr_semiconductor_ai": 19,
     "kr_energy_power": 1,
     "global_market": 27,
-    "global_diplomacy_summit": 26,
+    "global_diplomacy_summit": 24,
     "us_china_trade_ai": 3,
     "japan_boj_fx": 2,
-    "dynamic:AI": 18,
     "dynamic:반도체": 20,
+    "dynamic:AI": 18,
     "dynamic:트럼프": 2,
-    "dynamic:관세": 14,
-    "dynamic:조사": 5,
-    "dynamic:젠슨": 3,
-    "dynamic:수출": 15,
-    "dynamic:엔비디아": 1
+    "dynamic:관세": 13,
+    "dynamic:젠슨": 5,
+    "dynamic:수출": 16,
+    "dynamic:엔비디아": 2,
+    "dynamic:조사": 2
   },
   "trending_terms": [
     {
+      "term": "AI",
+      "count": 33,
+      "publisher_count": 24,
+      "independent_story_count_estimate": 33,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 31,
+      "delta": 2,
+      "score": 92,
+      "examples": [
+        "연방 자율과 주 감사 체계의 분기—미국 AI 규제가 한국 기업 비용 구조를 바꾼다",
+        "일본, AI 규제보다 시장 설계를 먼저 택하다",
+        "이재명 대통령 필립핀서 대학수능 비상 점검화상 회의 주재!...AI 부정행위 엄단 촉구!"
+      ]
+    },
+    {
       "term": "반도체",
       "count": 30,
-      "publisher_count": 23,
+      "publisher_count": 24,
       "independent_story_count_estimate": 29,
       "syndication_ratio_estimate": 0.033,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 31,
-      "delta": -1,
-      "score": 83,
+      "previous_count": 30,
+      "delta": 0,
+      "score": 84,
       "examples": [
         "트럼프發 AI 규제에 흔들리는 반도체 호황…국내 메모리 업체 영향은",
         "삼성·SK 주식 어쩌나…美 반도체 쇼크에 동반 급락",
@@ -198,35 +215,67 @@
       ]
     },
     {
-      "term": "AI",
-      "count": 31,
-      "publisher_count": 21,
-      "independent_story_count_estimate": 31,
-      "syndication_ratio_estimate": 0.0,
+      "term": "트럼프",
+      "count": 20,
+      "publisher_count": 18,
+      "independent_story_count_estimate": 18,
+      "syndication_ratio_estimate": 0.1,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 33,
-      "delta": -2,
-      "score": 83,
+      "previous_count": 19,
+      "delta": 1,
+      "score": 59,
       "examples": [
-        "이재명 대통령 필립핀서 대학수능 비상 점검화상 회의 주재!...AI 부정행위 엄단 촉구!",
-        "트럼프發 AI 규제에 흔들리는 반도체 호황…국내 메모리 업체 영향은",
-        "엔비디아 이어 AMD까지 AI 투심 급랭…삼전닉스 '위기이자 기회'"
+        "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+        "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
       ]
     },
     {
-      "term": "트럼프",
-      "count": 19,
-      "publisher_count": 18,
+      "term": "젠슨",
+      "count": 21,
+      "publisher_count": 15,
       "independent_story_count_estimate": 19,
-      "syndication_ratio_estimate": 0.0,
+      "syndication_ratio_estimate": 0.095,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 21,
-      "delta": -2,
+      "previous_count": 19,
+      "delta": 2,
+      "score": 59,
+      "examples": [
+        "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
+        "엔비디아, 젠슨 황 전격 복귀에 주가 33% 폭등…AMD·마이크론 등 AI주 동반 강세",
+        "[뉴욕 금가격] 젠슨 황 복귀에 저가 매수 분출…4%대 급등"
+      ]
+    },
+    {
+      "term": "엔비디아",
+      "count": 21,
+      "publisher_count": 14,
+      "independent_story_count_estimate": 19,
+      "syndication_ratio_estimate": 0.095,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 19,
+      "delta": 2,
+      "score": 58,
+      "examples": [
+        "엔비디아 이어 AMD까지 AI 투심 급랭…삼전닉스 '위기이자 기회'",
+        "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
+        "엔비디아 역대급 실적에 삼성전자·SK하이닉스 성장 기회…2027년 고부가 메모리 시장 선점 총력"
+      ]
+    },
+    {
+      "term": "조사",
+      "count": 19,
+      "publisher_count": 15,
+      "independent_story_count_estimate": 14,
+      "syndication_ratio_estimate": 0.263,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 16,
+      "delta": 3,
       "score": 56,
       "examples": [
-        "트럼프發 AI 규제에 흔들리는 반도체 호황…국내 메모리 업체 영향은",
-        "트럼프, 자국 기업의 해외 데이터센터 건설에 과세 경고…국내 영향은",
-        "美 민주당, 한국·일본 대미 투자 합의 조사 예고…트럼프 관세도 정조준"
+        "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+        "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
       ]
     },
     {
@@ -240,37 +289,21 @@
       "delta": 0,
       "score": 55,
       "examples": [
-        "“한국엔 관세 15% 안 넘긴다더니”…美, 디지털 정책 겨냥 301조 조사",
-        "‘하원 238석 압승’ 민주, 트럼프 ‘한국 관세·대미 투자’ 조사한다",
-        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
-      ]
-    },
-    {
-      "term": "젠슨",
-      "count": 19,
-      "publisher_count": 14,
-      "independent_story_count_estimate": 18,
-      "syndication_ratio_estimate": 0.053,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": 0,
-      "score": 52,
-      "examples": [
-        "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
-        "엔비디아, 젠슨 황 전격 복귀에 주가 33% 폭등…AMD·마이크론 등 AI주 동반 강세",
-        "[뉴욕 금가격] 젠슨 황 복귀에 저가 매수 분출…4%대 급등"
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수",
+        "미국, 한국 디지털 규제 조사 검토…관세 상한 흔들리나 : 국제",
+        "‘하원 238석 압승’ 민주, 트럼프 ‘한국 관세·대미 투자’ 조사한다"
       ]
     },
     {
       "term": "수출",
-      "count": 19,
+      "count": 20,
       "publisher_count": 14,
-      "independent_story_count_estimate": 19,
+      "independent_story_count_estimate": 20,
       "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 20,
-      "delta": -1,
-      "score": 52,
+      "previous_count": 19,
+      "delta": 1,
+      "score": 55,
       "examples": [
         "李 대통령 지지율 37.3%…순방·수출 호조에2주 연속 상승",
         "李대통령 지지율 37.3%…순방·수출 호조에 0.9%p 상승[리얼미터]",
@@ -278,19 +311,19 @@
       ]
     },
     {
-      "term": "엔비디아",
-      "count": 19,
-      "publisher_count": 12,
-      "independent_story_count_estimate": 18,
-      "syndication_ratio_estimate": 0.053,
+      "term": "달러",
+      "count": 17,
+      "publisher_count": 14,
+      "independent_story_count_estimate": 17,
+      "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": 0,
-      "score": 50,
+      "previous_count": 16,
+      "delta": 1,
+      "score": 49,
       "examples": [
-        "엔비디아 이어 AMD까지 AI 투심 급랭…삼전닉스 '위기이자 기회'",
-        "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
-        "엔비디아 역대급 실적에 삼성전자·SK하이닉스 성장 기회…2027년 고부가 메모리 시장 선점 총력"
+        "틈새 제품에서 수출 1조 달러 주역으로…HBM 13년의 역사",
+        "‘앤스로픽 쇼크’… 1000억 달러 신주 발행하자 나스닥 폭락",
+        "고객 서비스 AI 시에라, 17.5억 달러 투자유치…가치 300억 달러"
       ]
     },
     {
@@ -310,62 +343,30 @@
       ]
     },
     {
-      "term": "조사",
-      "count": 16,
-      "publisher_count": 14,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.125,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": -3,
-      "score": 46,
-      "examples": [
-        "美 민주당, 한국·일본 대미 투자 합의 조사 예고…트럼프 관세도 정조준",
-        "美민주, 한국 등 대미 투자합의 조사 착수 … 트럼프 관세정책 정조준",
-        "“한국엔 관세 15% 안 넘긴다더니”…美, 디지털 정책 겨냥 301조 조사"
-      ]
-    },
-    {
-      "term": "달러",
-      "count": 16,
-      "publisher_count": 13,
-      "independent_story_count_estimate": 16,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 16,
-      "delta": 0,
-      "score": 45,
-      "examples": [
-        "틈새 제품에서 수출 1조 달러 주역으로…HBM 13년의 역사",
-        "‘앤스로픽 쇼크’… 1000억 달러 신주 발행하자 나스닥 폭락",
-        "고객 서비스 AI 시에라, 17.5억 달러 투자유치…가치 300억 달러"
-      ]
-    },
-    {
-      "term": "이재명",
-      "count": 8,
-      "publisher_count": 7,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.0,
+      "term": "규제",
+      "count": 9,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 6,
+      "syndication_ratio_estimate": 0.333,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 0,
-      "delta": 8,
-      "score": 31,
+      "delta": 9,
+      "score": 36,
       "examples": [
-        "이재명 대통령, 제29차 아세안+3 정상회의 참석··· \"아세안+3 새로운 30년, 한국도 책임 다할 것\" : 네이버 블로그",
-        "이재명 대통령 시진핑 주석 한·중 정상회담 \"FTA 서비스·투자 협상 타결 계기 경제협력 확대,한반도 긴장완화 중국 건설적 역할\"",
-        "정상들 만나고 돌아왔지만...이재명 순방 '빈손 외교' 논란 [이슈톺]"
+        "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+        "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
       ]
     },
     {
       "term": "복귀",
-      "count": 8,
-      "publisher_count": 6,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.0,
+      "count": 10,
+      "publisher_count": 8,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.1,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 8,
+      "previous_count": 8,
+      "delta": 2,
       "score": 30,
       "examples": [
         "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
@@ -390,19 +391,67 @@
       ]
     },
     {
-      "term": "나스닥",
-      "count": 9,
-      "publisher_count": 8,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.111,
+      "term": "디지털",
+      "count": 7,
+      "publisher_count": 7,
+      "independent_story_count_estimate": 4,
+      "syndication_ratio_estimate": 0.429,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 9,
-      "delta": 0,
+      "previous_count": 0,
+      "delta": 7,
+      "score": 28,
+      "examples": [
+        "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+        "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
+      ]
+    },
+    {
+      "term": "검토",
+      "count": 7,
+      "publisher_count": 7,
+      "independent_story_count_estimate": 3,
+      "syndication_ratio_estimate": 0.571,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 7,
+      "score": 28,
+      "examples": [
+        "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+        "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
+      ]
+    },
+    {
+      "term": "301조",
+      "count": 7,
+      "publisher_count": 7,
+      "independent_story_count_estimate": 4,
+      "syndication_ratio_estimate": 0.429,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 7,
+      "score": 28,
+      "examples": [
+        "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수",
+        "\"미, 한국·EU·호주 디지털 규제 겨냥 301조 조사 검토\"···강제노동·과잉생산 이어 세 번째 조사"
+      ]
+    },
+    {
+      "term": "정책",
+      "count": 7,
+      "publisher_count": 5,
+      "independent_story_count_estimate": 6,
+      "syndication_ratio_estimate": 0.143,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 0,
+      "delta": 7,
       "score": 26,
       "examples": [
-        "SK텔레콤 주가 6%대 하락, 앤트로픽 나스닥 상장 후 급락 여파",
-        "‘앤스로픽 쇼크’… 1000억 달러 신주 발행하자 나스닥 폭락",
-        "나스닥, 젠슨 황 복귀에 7% 넘게 급등 출발…엔비디아 33%↑"
+        "하나금융연구소·한국금융연구센터, '포용금융 정책 방향' 라운드테이블 개최",
+        "하나금융연구소, 한국금융연구센터와 '포용금융 정책' 방향 논의",
+        "하나금융연구소, 한국금융연구센터와 포용금융 정책 방향 논의"
       ]
     },
     {
@@ -438,7 +487,7 @@
       ]
     },
     {
-      "term": "민주당",
+      "term": "개최",
       "count": 6,
       "publisher_count": 6,
       "independent_story_count_estimate": 6,
@@ -448,57 +497,9 @@
       "delta": 6,
       "score": 24,
       "examples": [
-        "이재명 대통령 37.3%, 민주당 35.6%, 국민의힘 42.5%",
-        "美 민주당, 한국·일본 대미 투자 합의 조사 예고…트럼프 관세도 정조준",
-        "한국 '대미투자' 조사 들어가나…민주당, 판 뒤집는 예고 [지금이뉴스]"
-      ]
-    },
-    {
-      "term": "복귀에",
-      "count": 8,
-      "publisher_count": 7,
-      "independent_story_count_estimate": 7,
-      "syndication_ratio_estimate": 0.125,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 9,
-      "delta": -1,
-      "score": 23,
-      "examples": [
-        "엔비디아, 젠슨 황 전격 복귀에 주가 33% 폭등…AMD·마이크론 등 AI주 동반 강세",
-        "[뉴욕 금가격] 젠슨 황 복귀에 저가 매수 분출…4%대 급등",
-        "나스닥, 젠슨 황 복귀에 7% 넘게 급등 출발…엔비디아 33%↑"
-      ]
-    },
-    {
-      "term": "1조",
-      "count": 6,
-      "publisher_count": 5,
-      "independent_story_count_estimate": 6,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 6,
-      "score": 23,
-      "examples": [
-        "틈새 제품에서 수출 1조 달러 주역으로…HBM 13년의 역사",
-        "내년에도 수출 1조 달러 전망…반도체가 절반, 산업도 ‘K자 양극화’ 우려",
-        "수출 1조 달러 달성, 함께 이룬 성장, 함께 누릴 결실 - 전체 | 카드/한컷 | 멀티미디어"
-      ]
-    },
-    {
-      "term": "CEO",
-      "count": 6,
-      "publisher_count": 4,
-      "independent_story_count_estimate": 6,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 6,
-      "score": 22,
-      "examples": [
-        "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
-        "월가, 엔비디아 목표가 최대 270달러…황 복귀 효과 [젠슨 황 CEO 복귀]",
-        "[속보] 젠슨황 CEO 복귀 … 엔비디아 30% 급등, 美 반도체·기술주 '환호'"
+        "\"실무 경험 공유\"…의약품 규제업무 교류회 개최",
+        "하나금융연구소·한국금융연구센터, '포용금융 정책 방향' 라운드테이블 개최",
+        "하나은행, 한국금융연구센터와 ‘포용금융 정책 방향과 민간 금융 역할’ 라운드테이블 개최"
       ]
     }
   ],
@@ -507,12 +508,12 @@
   "official_web_candidates": [],
   "public_batch_market": {
     "available": false,
-    "generated_at": "2026-11-24T04:21:09.190178+09:00",
+    "generated_at": "2026-11-24T04:31:27.921461+09:00",
     "status": "unavailable",
     "provider": "naver_public",
     "exact_1m_bars": false,
     "amount_method": "cumulative_trading_value_delta",
-    "elapsed_minutes_from_previous": 9.9411696,
+    "elapsed_minutes_from_previous": 10.31218805,
     "interval_leaders": [],
     "one_minute_samples_available": false,
     "minute_amount_exact": false,
@@ -539,73 +540,169 @@
     "minute_burst_leaders": [],
     "top10_share": null
   },
-  "item_count": 184,
+  "item_count": 205,
   "news_scan_target": 500,
   "query_group_count": 18,
-  "new_item_count": 8,
+  "new_item_count": 29,
   "new_items": [
     {
-      "topic": "kr_diplomacy_summit",
-      "title": "외교부, 한-몽골 외교장관회담",
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE53ZXlMOGYyVk1hWWNpY3RZYUlvYW80RC1nRHEwVzRBUzBPX3JXSWUxWVBXLVBJWllUYm9oVGV6S285MFBuelBiZ2lkNGhURDAtdVVINEZ5YmZ6alJrV2h3UWZ3?oc=5",
-      "published_at": "Mon, 23 Nov 2026 11:10:54 GMT",
-      "publisher": "누리일보",
+      "topic": "kr_corporate_events",
+      "title": "인터내셔널 페이퍼, 디에스 스미스 분할 승인…12월 22일 런던 증시 상장폐지 추진",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9OejdnM3Q2Slg0TmJyUnlFMmVra2tCRnhOR1NqZXFKcE5ONEZxUXpHLWhaRWRZLTZhLXEtMDVXcWlTcTZXWGZ3ekRqMGowMEFxLXBRWEVmRXBNVmlPZk9WZE16eENBVEZWRko3aHNpU0JSRGM?oc=5",
+      "published_at": "Mon, 23 Nov 2026 12:27:23 GMT",
+      "publisher": "데이터투자",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "global_market",
-      "title": "엠보, 1.1억 달러 시드 투자유치…월드 모델로 로봇 두뇌 만든다",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1qQWk0ZHdGM0R0S2FobDh3LUxBelh6blMtR3cxRnVleVdPeGtpWGI3R2pQNExtQm9naHNzZ2ZHREZiOVV1THdrUHBWQ2c1eDQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 18:38:52 GMT",
-      "publisher": "와우테일",
+      "topic": "kr_policy_economy",
+      "title": "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1zV3BqMXdZM1ZSNm5GVE91UEJDa2dmT3JKa3hmNUQyckc3QS14YS1rYVlVWVg0cWZOUHpURlpldjdfLVJ5bjd6TGtVWng3c2tYSGREU0RxUDlCTVluUmNTeNIBYEFVX3lxTE1zV3BqMXdZM1ZSNm5GVE91UEJDa2dmT3JKa3hmNUQyckc3QS14YS1rYVlVWVg0cWZOUHpURlpldjdfLVJ5bjd6TGtVWng3c2tYSGREU0RxUDlCTVluUmNTeA?oc=5",
+      "published_at": "Mon, 23 Nov 2026 14:40:11 GMT",
+      "publisher": "연합뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:반도체",
-      "title": "대만 경제부, 100대 연구개발 혁신기술상 9개 수상…반도체 AI 시뮬레이션 4~5시간서 10초 미만으로",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE82cGw4SmhEcU9PUktZZWQ3TmJBUjRhZVhQYm1hOG1Ra2N4TUZyNzUxZWlnWGR4R19zaUpSZVNyMXdoWFh6MGowRE40UlRvcmJqZlBEczUwcjd1aEIxWGFyZm9YVEdaZmc?oc=5",
-      "published_at": "Mon, 23 Nov 2026 09:01:00 GMT",
-      "publisher": "인공지능신문",
+      "topic": "kr_policy_economy",
+      "title": "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBxdDVhSFFQcjU5UkozcFN1ZDRETXZUUlhOd2xHMXJ4OTBrM3JRNmxIeHVCY1ByS3UySE11RzlsQUpnS2xvY2hBNnRFU2EzcGZXZ1F0VExKMjNGZ0ZYdFEydg?oc=5",
+      "published_at": "Mon, 23 Nov 2026 16:30:25 GMT",
+      "publisher": "아시아경제",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:반도체",
-      "title": "[사설] 반도체 인력, 안 나갈 매력 줘야",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE8wRVh2WFRYMWIwdi1acEdhakVQcFpBLWY4MFE5SEhoSllBUnB4NTdPcHZQVUlHUU9BTGdVMXJyNHdoQzk4THRudUJRbWMzZw?oc=5",
-      "published_at": "Mon, 23 Nov 2026 08:00:00 GMT",
-      "publisher": "전자신문",
+      "topic": "kr_policy_economy",
+      "title": "중복상장 규제 후폭풍…1.5조 국제소송 당한 카카오",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE03b2IwZDV5SlRmLVRZMTVTUnA1MHJpY19CemhFVmFvcVFFZUxOYklvbmVRVmhmcnU3ZktVUWJkY0pqYnFEZkc5NFlkNmFlZGRvUXMxVkJtMzE1UQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 08:48:03 GMT",
+      "publisher": "한국경제",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:관세",
-      "title": "[이슈] K-에스컬레이터 살리려면…\"관세·최저가 낙찰부터 손봐야\"",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5Bc1dBcmZzS3VuaUh1V015dlFDVUd3MDdPUnM0dEJWdzhkOUs2MEJRRkhsRWRfZVJhUDhpYVluSGwxLWtmanhQTHZtNDZFWWlXUWZGRno4bTFvYmloSy05NlpYa2REcFVy?oc=5",
-      "published_at": "Mon, 23 Nov 2026 08:30:49 GMT",
-      "publisher": "팍스경제TV",
+      "topic": "kr_policy_economy",
+      "title": "\"미, 한국·EU·호주 디지털 규제 겨냥 301조 조사 검토\"···강제노동·과잉생산 이어 세 번째 조사",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBwbnA3Z25NcV8ydmxHbVZubm1WT3p5Yk11VE5ncTJ4MFZ6N3ZOTWF5LTM2a090eFhxWWRrY1lwakg4cy0xLTVheE9IYzVyQmxScVpady1OeFFEZw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 09:38:59 GMT",
+      "publisher": "파이낸셜뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:조사",
-      "title": "이헌욱 부동산원장, 공시가격 조사 현장 방문… 정확성·객관성 당부",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNMkptSFZLUlg4TkJsQnNYU00tUWtMNDR6WlJjcENzNzVEN0JLVTZZak1oY1d2RWRibjdDNkVsX1VTMTdVMm5xQWxJWGhsVkxXTWs3cE5jT0FzNFJDUXFETlpwaVIzYzVnNVpNVHFaVFVkWFVTWnV3LXpuY2J4MHZMY2xWWnlnQUdoTlBLbHFtNDVxZW0yOGt6Y9IBrAFBVV95cUxQN0t5c2Nwc1RXcHdhV2dnVEJVZU5yNF8wTFNKYkxiT2QwaXNMS0FhaTdZRGQzbnJOYnFoZHRvT0pDdjVjc3pieVhqVHIyRWNPakhUUEdwcTRlb2h0NDhPMUN3OXZvMWNjai01bTh2S284anJBX09ScHZzUGhaS2xVWUJmanBTTFNqQVZCUUtpOW9PSlFZQ1JDWk9kSHMwSE00bEE5ejNSZFRjQ09m?oc=5",
-      "published_at": "Mon, 23 Nov 2026 07:27:00 GMT",
-      "publisher": "Chosunbiz",
+      "topic": "kr_policy_economy",
+      "title": "바이오의약품협회, 주요 10개국 규제·인허가 제도 보고서 발간",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5jOHBBXzM2c3czVTJxMzBZMDhpOGdTbm5RRmxLRDgxbmE4LXBmZmlIU2MtVlRuZVI1VE45LVdkSU1hU3Nrcm43OFFTck5WSGVpcnpBN1NWMzU4Nm1WSGhOWGktRnFBb2V1TmFR?oc=5",
+      "published_at": "Mon, 23 Nov 2026 01:21:38 GMT",
+      "publisher": "히트뉴스",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:수출",
-      "title": "한국 수출 11월 1~20일 774억 달러로 역대 최대, 연간 1조 달러도 첫 돌파 📦📈",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1PTnBYZzFGOGI5d3JKU05ZTTVVY2RWMndHYTBSb2tGNERDQVlhRDB3dkctamFTWFFCVDdmREJhVVFUTmcyN0FiYjl1VU5WUE4yaENF?oc=5",
-      "published_at": "Mon, 23 Nov 2026 09:50:59 GMT",
-      "publisher": "뉴닉",
+      "topic": "kr_policy_economy",
+      "title": "이억원 \"신종피싱 거래정지 확대…가상자산 자금세탁 규제 강화\"",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBxanhlV0MtSHNZUlJBc2pTT1pIdEVrZFVNVTNvWDhNV3RHY1ZuZ2cxV3ZONTFwNGo4S2pUOE1MTmZkRGtQSGduMTB1TG5VSjFrWXkxNUhpckJ0akI3NmlSVmpYZ2tkMmc?oc=5",
+      "published_at": "Mon, 23 Nov 2026 05:23:20 GMT",
+      "publisher": "민주신문",
       "discovery_source": "google_news_rss"
     },
     {
-      "topic": "dynamic:엔비디아",
-      "title": "엔비디아 주가, 젠슨 황 사임 전으로…복귀 소식에 35% 급반등 - 머니투데이",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9NTEEyS1ZncHVabVRlY0lDZ2J2d0NZazA1Z3NyWHR3czZwWG4ySTRxSDFaQWZ2V2NmbTBxZmN1RjhWZm5JaDJyQ2tfNWZLbFhyQ3VMR1ZPOHRBbEgwNU1vVjVYbXdnbUNL0gFuQVVfeXFMTVZiWDRFblFjaHpOcUx2NnVheVc4anR0LVpFTC04UkY1WVVjeTQ0akgxM3FHQ0tWU0JWQ3FlUVFaSUlfeHp3S0M5Q0VwbVFic0RIallMVktOMDJjbFFxZjNQWGhONkx3SVBqUEZHMkE?oc=5",
-      "published_at": "Mon, 23 Nov 2026 15:54:31 GMT",
-      "publisher": "머니투데이",
+      "topic": "kr_policy_economy",
+      "title": "\"실무 경험 공유\"…의약품 규제업무 교류회 개최",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1lUEdrTVRZQ2pzTUI0bXc3OV9xN2NyQVoyalR3NmxYQ1NodWFFbmNfSnYyVDRJcFhINXMzMW1ieWNNRHJfTzhBVEtRcHMxNm9tLUNxZFFySzR4cFRJM1EtWtIBeEFVX3lxTFBCNVhqVktpOGFJN3ZRZDl0S3FCdmZiZ0pNUFFrNEwwcng3UUZzanJyNUJfV0ZqTHQwb1BaUlREY2ZGVFJ2Yk9KdGZ0akRGT204ZGhXWmRlVVJ0VUVnc3VLeGg3ekZVcmRYNHpqV0FTZWtrVFBvaWRnNQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 02:24:19 GMT",
+      "publisher": "뉴시스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "증시급락에 다시 고개 든 '공매도 금지론'…대만은 규제강화, 한국은 신중",
+      "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5oLXk1VjNWOTYxQnQ1NDV4RmF0VThvNlRyUFNodmJVWGJhNzRxM3Z2R1F4WkFTdGlwb0NDU0lLcm5TUm1qZU9QRkF0WFNFNzJxVkpvbFM5cTlfbFB4UVpMNDhzVGp1bk1xbm5FcnVkMGNxRFRXSV81RUpfS0c?oc=5",
+      "published_at": "Mon, 23 Nov 2026 01:53:53 GMT",
+      "publisher": "한국금융신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "미국, 한국 디지털 규제 조사 검토…관세 상한 흔들리나 : 국제",
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBPR1NZNHdYNHQyWjJWVzQ3Q0s0NGNmaFAxZElOenJhYVY3QnBSUi16aUc4eHpsM19UN2p1aTJfemRsZFM4ZnNJN1NDcw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 14:51:10 GMT",
+      "publisher": "재경일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "美 유타주 방폐물 규제 완화, 한국 원전 정책의 골든타임",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBUZXdYWXB2a0lnRF9uZWZtV1FHalBqZk5XSmxzYmdLY0s0WEpkN3U0R1ZkamQ1TDF1bS1GQk5FUmJudFNxc2JsUTJqaGRMZzVoZWEzQUdRNHVXU0dGQUFMM2FCbW4?oc=5",
+      "published_at": "Sun, 22 Nov 2026 22:13:20 GMT",
+      "publisher": "에너지안전신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "하나금융연구소·한국금융연구센터, '포용금융 정책 방향' 라운드테이블 개최",
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFA3WU9rU1dnOVg5SHFSOE4wS2VpYTFNX1BBcmItWjJCcGpFV0xZNGtuUXVDYVRWcjlXS1hqWExmelJDS1k1enY4M3p2N1NTSVBDS0xIRmF2OWZKbHcx?oc=5",
+      "published_at": "Mon, 23 Nov 2026 00:12:00 GMT",
+      "publisher": "뉴스핌",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "하나금융연구소, 한국금융연구센터와 포용금융 정책방향 논의",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9YdDc3TDhSSERjOUFqTElHQno3NEN0cE9WWURqWlg3d1h6T0RfSzFMLWxoc252eHdROHQ1X1VqRzltRVVZOV9KWmhOeTlZX3ozWWM5WWN5WmdjTFnSAWBBVV95cUxQMnlWUV8ybmQ1bGRsRUUxVUJtZE9sU1NHa3Z2MVFiYV9FNUEwc2owMXRlVHpJaVF0aU8wa0NzaU5JUUlEVTdJd3oyNUFpSWMxT2hDaERDcS04MS1EMVhjZTg?oc=5",
+      "published_at": "Mon, 23 Nov 2026 01:13:05 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "국내 전기차 증가분 중 절반 中서 만들어… 업계 \"세제 혜택 절실\"",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBwVlJkdzhDd0lDNGZNdUJ1bTc0VUYxd0JzZ1N4S1FlRkR3ZnNSN1JxT0VYLU52SU53dE4zb2lvQnJmbUxpQUM3SjhURTlMNlFQMzdxVjlnd1lRZw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 09:11:39 GMT",
+      "publisher": "파이낸셜뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "하나금융연구소, 한국금융연구센터와 '포용금융 정책' 방향 논의",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1pcGNvSFp5YWU5Zm1YNE51MHhGVmRqNXRwQVA3SDVnZDRjM1hMQkJwT2w5eGs5OUFHVWJ2QzEyVG5HMlBWTE56M1hSUFhxX3hQV010X1FQcGNGaE5LYUQ5bGIyOC1RODJlWVpfZ3RralZuSDDSAXdBVV95cUxPTFFndS1qdVZlRmpjUUlCWWlVaXNRdHd5MVpfejRLTUdRWG9IMzFwclM0ZWlZOFdtZkwyUTJtdzV6VHIyT2tzSi1Lak1lcjhhRlRSV0lQMTFyTzMzREdFVUdsbTNzUkQxbDdKdDdMM1Z1RlBsLXoxSQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 04:45:28 GMT",
+      "publisher": "핀포인트뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "하나금융연구소, 한국금융연구센터와 포용금융 정책 방향 논의",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1uc2g0Y1Examt5YjNVemxRQU5DT19odnpNX0hVUkZub1hSdWpnUGFNTnRfak9WQTFvQmdGYTQ2QmJFa0xIZzFiRXZRYkpyajlUQkNTekJNS0ZGdGN0alhxU2ZieHNJd0NU?oc=5",
+      "published_at": "Mon, 23 Nov 2026 02:07:55 GMT",
+      "publisher": "공감신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "로봇산업 2027 전망 (2) 미국의 중국산 로봇 규제와 한국 반사 이익.",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNT2ZhS2tRUDNrZHE3MlJBcVFjVjBZRkNUUzdjcHdOb0V6NXA2eHg1a2hRalZpNkZ3UzJ2QnNXcUZQeGdnQzFWTGhUZzEzZXpDTjVMTGM1LW1MRUp6YmFRUGxoZU9lTzluQWVFR0dZVTAzaVRBN0Zsam9nQVJyNVJhV3JzTQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 03:21:00 GMT",
+      "publisher": "네이버 프리미엄콘텐츠",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "중국산 전기차 공세에 비상..국내생산촉진세제 축소 우려",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1lQ0hldlN2VHk4OWhaalg4UHRCdkU1MVpLT1RNSjZkRHNaZmZUa1Z0aFZmcjNIaW1vQ0QwbWFUd0t5RXI1ZkM1ejljTkRwbmh6aVE?oc=5",
+      "published_at": "Sun, 22 Nov 2026 23:07:04 GMT",
+      "publisher": "한국정경신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "규제의 문법을 배워야 하는 암호화폐: CFTC 블록체인 파생상품 거래소 승인이 바꾸는 것",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5SeUlPTHpvN0xqdW42c3FDZ1U0S01QZElVZ0JFUFVqa3dTRUxadVZIQVM2c0ZXMS1xcWdZS1AyZnRJODRUbnhYUmhBWnloYTQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 09:47:58 GMT",
+      "publisher": "뉴스N연합",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "연방 자율과 주 감사 체계의 분기—미국 AI 규제가 한국 기업 비용 구조를 바꾼다",
+      "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1JZDJXMXIyd0RjQTN2NFlxR2QxX1lfQjAybGlZQ2xHRjlNci1IVlhJWmdOSlh6SmtqVmEyVjA3RDljaFp0Zjc2Z1V3?oc=5",
+      "published_at": "Sun, 22 Nov 2026 23:45:13 GMT",
+      "publisher": "얼리어답터뉴스",
       "discovery_source": "google_news_rss"
     }
   ],
@@ -636,9 +733,9 @@
     },
     {
       "topic": "kr_corporate_events",
-      "title": "페르미, 고객 선급금 계약 대금 입금 완료…계약상 의무 이행",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1rVzJ3czFidkE2c3J6Rm90S05ISEpTeWhoOHZXNHJjcEJuYU0wVktTSjVycHg1RUowcnFJVWh2X0IxRkdXcnphWFFPZGZhdXFKNGhmcC1LN0dYNFFyUWRudWV2WWRwRW1NVW5Hak81Z21KS1E?oc=5",
-      "published_at": "Mon, 23 Nov 2026 12:03:53 GMT",
+      "title": "인터내셔널 페이퍼, 디에스 스미스 분할 승인…12월 22일 런던 증시 상장폐지 추진",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9OejdnM3Q2Slg0TmJyUnlFMmVra2tCRnhOR1NqZXFKcE5ONEZxUXpHLWhaRWRZLTZhLXEtMDVXcWlTcTZXWGZ3ekRqMGowMEFxLXBRWEVmRXBNVmlPZk9WZE16eENBVEZWRko3aHNpU0JSRGM?oc=5",
+      "published_at": "Mon, 23 Nov 2026 12:27:23 GMT",
       "publisher": "데이터투자",
       "discovery_source": "google_news_rss"
     },
@@ -648,6 +745,190 @@
       "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE4tZG1IQm1zM1ZzYTFicUY1X2pFOFFxWnlwbmFsRkVWemI0b2NtWkxJUC1obktQclY3clZTOWFkYlJVTGtOeDhsVGNhNlJyWnhvTE5CVVVkZ0hIVWJOYzFPNGgzNlVXazZQa3BGNUZ6eU40SlU?oc=5",
       "published_at": "Mon, 23 Nov 2026 02:04:41 GMT",
       "publisher": "데이터투자",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_corporate_events",
+      "title": "페르미, 고객 선급금 계약 대금 입금 완료…계약상 의무 이행",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1rVzJ3czFidkE2c3J6Rm90S05ISEpTeWhoOHZXNHJjcEJuYU0wVktTSjVycHg1RUowcnFJVWh2X0IxRkdXcnphWFFPZGZhdXFKNGhmcC1LN0dYNFFyUWRudWV2WWRwRW1NVW5Hak81Z21KS1E?oc=5",
+      "published_at": "Mon, 23 Nov 2026 12:03:53 GMT",
+      "publisher": "데이터투자",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1zV3BqMXdZM1ZSNm5GVE91UEJDa2dmT3JKa3hmNUQyckc3QS14YS1rYVlVWVg0cWZOUHpURlpldjdfLVJ5bjd6TGtVWng3c2tYSGREU0RxUDlCTVluUmNTeNIBYEFVX3lxTE1zV3BqMXdZM1ZSNm5GVE91UEJDa2dmT3JKa3hmNUQyckc3QS14YS1rYVlVWVg0cWZOUHpURlpldjdfLVJ5bjd6TGtVWng3c2tYSGREU0RxUDlCTVluUmNTeA?oc=5",
+      "published_at": "Mon, 23 Nov 2026 14:40:11 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBxdDVhSFFQcjU5UkozcFN1ZDRETXZUUlhOd2xHMXJ4OTBrM3JRNmxIeHVCY1ByS3UySE11RzlsQUpnS2xvY2hBNnRFU2EzcGZXZ1F0VExKMjNGZ0ZYdFEydg?oc=5",
+      "published_at": "Mon, 23 Nov 2026 16:30:25 GMT",
+      "publisher": "아시아경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5kcHJOWjBuVHljQ2lwaVNfSk9KZTVWX3lxQS1KdTR6NWd0cW9JNGtwcWxXS3l0NGRjTVdBdHJ4Q0RqZE9EZXc3Z3g3OWc0aUp3TVQ5Q3ZWUGt0TkVPY0F6ai10aGZETTNNMlM0Nw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 17:26:49 GMT",
+      "publisher": "메디컬투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "중복상장 규제 후폭풍…1.5조 국제소송 당한 카카오",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE03b2IwZDV5SlRmLVRZMTVTUnA1MHJpY19CemhFVmFvcVFFZUxOYklvbmVRVmhmcnU3ZktVUWJkY0pqYnFEZkc5NFlkNmFlZGRvUXMxVkJtMzE1UQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 08:48:03 GMT",
+      "publisher": "한국경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "\"미, 한국·EU·호주 디지털 규제 겨냥 301조 조사 검토\"···강제노동·과잉생산 이어 세 번째 조사",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBwbnA3Z25NcV8ydmxHbVZubm1WT3p5Yk11VE5ncTJ4MFZ6N3ZOTWF5LTM2a090eFhxWWRrY1lwakg4cy0xLTVheE9IYzVyQmxScVpady1OeFFEZw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 09:38:59 GMT",
+      "publisher": "파이낸셜뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "바이오의약품협회, 주요 10개국 규제·인허가 제도 보고서 발간",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5jOHBBXzM2c3czVTJxMzBZMDhpOGdTbm5RRmxLRDgxbmE4LXBmZmlIU2MtVlRuZVI1VE45LVdkSU1hU3Nrcm43OFFTck5WSGVpcnpBN1NWMzU4Nm1WSGhOWGktRnFBb2V1TmFR?oc=5",
+      "published_at": "Mon, 23 Nov 2026 01:21:38 GMT",
+      "publisher": "히트뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "이억원 \"신종피싱 거래정지 확대…가상자산 자금세탁 규제 강화\"",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBxanhlV0MtSHNZUlJBc2pTT1pIdEVrZFVNVTNvWDhNV3RHY1ZuZ2cxV3ZONTFwNGo4S2pUOE1MTmZkRGtQSGduMTB1TG5VSjFrWXkxNUhpckJ0akI3NmlSVmpYZ2tkMmc?oc=5",
+      "published_at": "Mon, 23 Nov 2026 05:23:20 GMT",
+      "publisher": "민주신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "\"실무 경험 공유\"…의약품 규제업무 교류회 개최",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1lUEdrTVRZQ2pzTUI0bXc3OV9xN2NyQVoyalR3NmxYQ1NodWFFbmNfSnYyVDRJcFhINXMzMW1ieWNNRHJfTzhBVEtRcHMxNm9tLUNxZFFySzR4cFRJM1EtWtIBeEFVX3lxTFBCNVhqVktpOGFJN3ZRZDl0S3FCdmZiZ0pNUFFrNEwwcng3UUZzanJyNUJfV0ZqTHQwb1BaUlREY2ZGVFJ2Yk9KdGZ0akRGT204ZGhXWmRlVVJ0VUVnc3VLeGg3ekZVcmRYNHpqV0FTZWtrVFBvaWRnNQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 02:24:19 GMT",
+      "publisher": "뉴시스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "증시급락에 다시 고개 든 '공매도 금지론'…대만은 규제강화, 한국은 신중",
+      "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5oLXk1VjNWOTYxQnQ1NDV4RmF0VThvNlRyUFNodmJVWGJhNzRxM3Z2R1F4WkFTdGlwb0NDU0lLcm5TUm1qZU9QRkF0WFNFNzJxVkpvbFM5cTlfbFB4UVpMNDhzVGp1bk1xbm5FcnVkMGNxRFRXSV81RUpfS0c?oc=5",
+      "published_at": "Mon, 23 Nov 2026 01:53:53 GMT",
+      "publisher": "한국금융신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "미국, 한국 디지털 규제 조사 검토…관세 상한 흔들리나 : 국제",
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBPR1NZNHdYNHQyWjJWVzQ3Q0s0NGNmaFAxZElOenJhYVY3QnBSUi16aUc4eHpsM19UN2p1aTJfemRsZFM4ZnNJN1NDcw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 14:51:10 GMT",
+      "publisher": "재경일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "美 유타주 방폐물 규제 완화, 한국 원전 정책의 골든타임",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBUZXdYWXB2a0lnRF9uZWZtV1FHalBqZk5XSmxzYmdLY0s0WEpkN3U0R1ZkamQ1TDF1bS1GQk5FUmJudFNxc2JsUTJqaGRMZzVoZWEzQUdRNHVXU0dGQUFMM2FCbW4?oc=5",
+      "published_at": "Sun, 22 Nov 2026 22:13:20 GMT",
+      "publisher": "에너지안전신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "하나금융연구소·한국금융연구센터, '포용금융 정책 방향' 라운드테이블 개최",
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFA3WU9rU1dnOVg5SHFSOE4wS2VpYTFNX1BBcmItWjJCcGpFV0xZNGtuUXVDYVRWcjlXS1hqWExmelJDS1k1enY4M3p2N1NTSVBDS0xIRmF2OWZKbHcx?oc=5",
+      "published_at": "Mon, 23 Nov 2026 00:12:00 GMT",
+      "publisher": "뉴스핌",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "하나금융연구소, 한국금융연구센터와 포용금융 정책방향 논의",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9YdDc3TDhSSERjOUFqTElHQno3NEN0cE9WWURqWlg3d1h6T0RfSzFMLWxoc252eHdROHQ1X1VqRzltRVVZOV9KWmhOeTlZX3ozWWM5WWN5WmdjTFnSAWBBVV95cUxQMnlWUV8ybmQ1bGRsRUUxVUJtZE9sU1NHa3Z2MVFiYV9FNUEwc2owMXRlVHpJaVF0aU8wa0NzaU5JUUlEVTdJd3oyNUFpSWMxT2hDaERDcS04MS1EMVhjZTg?oc=5",
+      "published_at": "Mon, 23 Nov 2026 01:13:05 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "국내 전기차 증가분 중 절반 中서 만들어… 업계 \"세제 혜택 절실\"",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBwVlJkdzhDd0lDNGZNdUJ1bTc0VUYxd0JzZ1N4S1FlRkR3ZnNSN1JxT0VYLU52SU53dE4zb2lvQnJmbUxpQUM3SjhURTlMNlFQMzdxVjlnd1lRZw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 09:11:39 GMT",
+      "publisher": "파이낸셜뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "하나금융연구소, 한국금융연구센터와 '포용금융 정책' 방향 논의",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1pcGNvSFp5YWU5Zm1YNE51MHhGVmRqNXRwQVA3SDVnZDRjM1hMQkJwT2w5eGs5OUFHVWJ2QzEyVG5HMlBWTE56M1hSUFhxX3hQV010X1FQcGNGaE5LYUQ5bGIyOC1RODJlWVpfZ3RralZuSDDSAXdBVV95cUxPTFFndS1qdVZlRmpjUUlCWWlVaXNRdHd5MVpfejRLTUdRWG9IMzFwclM0ZWlZOFdtZkwyUTJtdzV6VHIyT2tzSi1Lak1lcjhhRlRSV0lQMTFyTzMzREdFVUdsbTNzUkQxbDdKdDdMM1Z1RlBsLXoxSQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 04:45:28 GMT",
+      "publisher": "핀포인트뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "하나금융연구소, 한국금융연구센터와 포용금융 정책 방향 논의",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1uc2g0Y1Examt5YjNVemxRQU5DT19odnpNX0hVUkZub1hSdWpnUGFNTnRfak9WQTFvQmdGYTQ2QmJFa0xIZzFiRXZRYkpyajlUQkNTekJNS0ZGdGN0alhxU2ZieHNJd0NU?oc=5",
+      "published_at": "Mon, 23 Nov 2026 02:07:55 GMT",
+      "publisher": "공감신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "로봇산업 2027 전망 (2) 미국의 중국산 로봇 규제와 한국 반사 이익.",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNT2ZhS2tRUDNrZHE3MlJBcVFjVjBZRkNUUzdjcHdOb0V6NXA2eHg1a2hRalZpNkZ3UzJ2QnNXcUZQeGdnQzFWTGhUZzEzZXpDTjVMTGM1LW1MRUp6YmFRUGxoZU9lTzluQWVFR0dZVTAzaVRBN0Zsam9nQVJyNVJhV3JzTQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 03:21:00 GMT",
+      "publisher": "네이버 프리미엄콘텐츠",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "중국산 전기차 공세에 비상..국내생산촉진세제 축소 우려",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1lQ0hldlN2VHk4OWhaalg4UHRCdkU1MVpLT1RNSjZkRHNaZmZUa1Z0aFZmcjNIaW1vQ0QwbWFUd0t5RXI1ZkM1ejljTkRwbmh6aVE?oc=5",
+      "published_at": "Sun, 22 Nov 2026 23:07:04 GMT",
+      "publisher": "한국정경신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "규제의 문법을 배워야 하는 암호화폐: CFTC 블록체인 파생상품 거래소 승인이 바꾸는 것",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5SeUlPTHpvN0xqdW42c3FDZ1U0S01QZElVZ0JFUFVqa3dTRUxadVZIQVM2c0ZXMS1xcWdZS1AyZnRJODRUbnhYUmhBWnloYTQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 09:47:58 GMT",
+      "publisher": "뉴스N연합",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "연방 자율과 주 감사 체계의 분기—미국 AI 규제가 한국 기업 비용 구조를 바꾼다",
+      "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1JZDJXMXIyd0RjQTN2NFlxR2QxX1lfQjAybGlZQ2xHRjlNci1IVlhJWmdOSlh6SmtqVmEyVjA3RDljaFp0Zjc2Z1V3?oc=5",
+      "published_at": "Sun, 22 Nov 2026 23:45:13 GMT",
+      "publisher": "얼리어답터뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "하나은행, 한국금융연구센터와 ‘포용금융 정책 방향과 민간 금융 역할’ 라운드테이블 개최",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9jcDJ1U1lNNXZqQmR5V2tkdU93d2RJT3A1YmdlS0ZUaXByMllOQmNNOUxBa2JGNGMtbUs4N205TDBjdFE4NlBkQ1JfTUJEdk9fX0E0TTZYUUdnZ3U4QnNSVzVCMk5Rdw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 09:43:39 GMT",
+      "publisher": "이슈투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_policy_economy",
+      "title": "일본, AI 규제보다 시장 설계를 먼저 택하다",
+      "url": "https://news.google.com/rss/articles/CBMiQ0FVX3lxTE9sMEZqdE1fd1BBTDJhRGVfUDVraXhZalNuRi15aFR4ZFlTY1psMDdUcGJYTzBxMXh6N3FzYWtSRzlKQnc?oc=5",
+      "published_at": "Sun, 22 Nov 2026 20:10:14 GMT",
+      "publisher": "한국공공정책신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -732,14 +1013,6 @@
     },
     {
       "topic": "kr_diplomacy_summit",
-      "title": "외교부, 한-몽골 외교장관회담",
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE53ZXlMOGYyVk1hWWNpY3RZYUlvYW80RC1nRHEwVzRBUzBPX3JXSWUxWVBXLVBJWllUYm9oVGV6S285MFBuelBiZ2lkNGhURDAtdVVINEZ5YmZ6alJrV2h3UWZ3?oc=5",
-      "published_at": "Mon, 23 Nov 2026 11:10:54 GMT",
-      "publisher": "누리일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
       "title": "이 대통령 “불안견불 돈안견돈…순방외교, 주요업무”",
       "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE42eW1DdmdLbnlYdHRJNjBRQjdfRl9GZ0RxM0gzSWVrZEZHMFA5Q3VXZHZ3V19reVVQNjRoSWdFc2RoZWk1UmJYbUZ6YWZTV2d3QUdqSG85SWxyejFHYmfSAWNBVV95cUxQWTU0ZWRoLXpndnlqdDFtejNuUEwyTkZjNUZXS0lKMDFwUVNLRDk2akZnYThCRDNmSDNmUHFiNW5UYTlqbFZ5X0hnMDZhMHFnOVFiRlY3VVBPdW5hcVNRSHFPVGs?oc=5",
       "published_at": "Sun, 22 Nov 2026 22:00:00 GMT",
@@ -764,6 +1037,14 @@
     },
     {
       "topic": "kr_diplomacy_summit",
+      "title": "李 대통령 지지율 37.3%…순방·수출 호조에2주 연속 상승",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBOOHhNVVNCblVUTnJDaFBxV1kxdEEtTnZOLXRjNEdzRVM4cVdwN19ETEhDeHRDRDl3MHZTRnlzOWNjajRxbU9iV3N2aURaSm82ZVBkbTNua2FqS2R2bmpCR0VIZzlZRnNPXzR6YXhxeVJ1ZTDSAXNBVV95cUxQTjh4TVVTQm5VVE5yQ2hQcVdZMXRBLU52Ti10YzRHc0VTOHFXcDdfRExIQ3h0Q0Q5dzB2U0Z5czljY2o0cW1PYldzdmlEWkpvNmVQZG0zbmthaktkdm5qQkdFSGc5WUZzT180emF4cXlSdWUw?oc=5",
+      "published_at": "Sun, 22 Nov 2026 23:54:00 GMT",
+      "publisher": "한국일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
       "title": "청와대, 잦은 순방 비판에 “해외 정상들의 숨 가쁜 외교를 보라”",
       "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9GdU8temtndVJlSkgtb21LSW1xbHpzU2FpbDZ4MFk4dVF1RFpRNFl3RVpLRUc5TlU4MS16VDdJX2I5aFc1YkV4Z3N0Vmo5LVFqa01pYzNrN1R3Q3g0UVc3TFp6Wmpxa0RMRW5SM1psYzlxdUZH?oc=5",
       "published_at": "Mon, 23 Nov 2026 00:02:00 GMT",
@@ -776,14 +1057,6 @@
       "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNS3BxcGtBa3h2cVYwYVN3MWFjU3pKQUgxRHZYbTJUTm9vMlVqc3JmUVVFVkVaaWZUV2RHNkpSMERWZnYxZGtkUkdkXzZfbGszNkpQVGdrOVVfYzZDZk9odFJZaG9EZkhxd3FZTHJiLU8weTJ4SzczcEszZExFVXU0aUdtNGZQWTFxSEp5QmlB?oc=5",
       "published_at": "Mon, 23 Nov 2026 09:33:15 GMT",
       "publisher": "Naver Blog",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "kr_diplomacy_summit",
-      "title": "李 대통령 지지율 37.3%…순방·수출 호조에2주 연속 상승",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBOOHhNVVNCblVUTnJDaFBxV1kxdEEtTnZOLXRjNEdzRVM4cVdwN19ETEhDeHRDRDl3MHZTRnlzOWNjajRxbU9iV3N2aURaSm82ZVBkbTNua2FqS2R2bmpCR0VIZzlZRnNPXzR6YXhxeVJ1ZTDSAXNBVV95cUxQTjh4TVVTQm5VVE5yQ2hQcVdZMXRBLU52Ti10YzRHc0VTOHFXcDdfRExIQ3h0Q0Q5dzB2U0Z5czljY2o0cW1PYldzdmlEWkpvNmVQZG0zbmthaktkdm5qQkdFSGc5WUZzT180emF4cXlSdWUw?oc=5",
-      "published_at": "Sun, 22 Nov 2026 23:54:00 GMT",
-      "publisher": "한국일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -816,6 +1089,14 @@
       "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPM2E4MHZxV203Zlh5QThsMzVvRklBLUdPVHRvOXMzSmxaWmdsSkpyMi0tTEU4SkFGWmtMbVNfYThId21ndlp4N3RmQ3dmZVV0R3ZfRFlWN2VVR2hMWjRQN2JrRjFWMGhxT1ZvS3gyX2FQX2t3dHZtRkNxZE4zUWplTA?oc=5",
       "published_at": "Sun, 22 Nov 2026 23:21:36 GMT",
       "publisher": "이데일리",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "kr_diplomacy_summit",
+      "title": "[강대국외교]“미중러 밀착에 김정은도 불안하다”… 김성배 INSS 원장, 강대국 외교의 역설 제기",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9jMm1oek5WUmhkVUNhYzRYNU9xUUdYa1JncS1NX2Q3M1Zrb3M1WFVHRTBPNERHMFFsNi1KS0tyeWpIa0FSRnRmNDhsQ3d0eVJacGdEYloyRzJlb3FQbkRXWHNDQl9qZnNYSlHSAW5BVV95cUxQT2hQZThUYjZ1d2Rnei1DWE4zcEYtUVFYZTEyUWhxWE53MlluVFYydThWbElYaFVYUHlQMG1mYko1RGZCYjdwZHhzT1VTLXJmLUxqZURfRmpsamJNYy1IZ0xHcVVaYjRXYUJiOTRUZw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 02:34:36 GMT",
+      "publisher": "르몽드디플로마티크",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1036,14 +1317,6 @@
     },
     {
       "topic": "global_market",
-      "title": "미 국무부, 북한 해외 노동자 정보 제보 요청…최대 500만 달러 포상금",
-      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOSmdYeGFpcTM5U1VDWGhZTTc2ZkFtNWpQRnE3VFdXeEpfbkZTNjdzVnZWRjF6bkxyb1VfLWU0d213cjZQSUdjZkFVNXdsMklkdFBKd2xkQnM4V2QxQVBabTFJeDJCMi1SVWFnUTlhQWo0bm9DZmZfLTVRc2hFVUFZVUR30gGEAUFVX3lxTFBMZDkzUmtMRXFGRWVSR3hEY0xkVXAwc2NEMTNNcWNyazZfdFN5Q2hVeDVsQ21sMjNLSW5LVG9kVkRBYzFZZW1XMjE1UmRGcWlzVUNta2tFRUVqTTZVbkZMb1pJQWxUdk4xSkxrN2RDT1RWVTlLYWlQU1ViM1h1SHJsdE4xQQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 15:13:03 GMT",
-      "publisher": "VOA 한국어 홈페이지",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
       "title": "나스닥, 젠슨 황 복귀에 7% 넘게 급등 출발…엔비디아 33%↑",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1OY0FTRzBOYkZMRXRZR3YxY2NvRkhUa2FJekhyWHg1aHpiakhrckYtUFVEcndObHZLM1pLQXA3Y1ZiRnF5aWN4aFZXNVlhMXVSdWVXamwxSXc0dEZXa3FfTNIBYEFVX3lxTE1OY0FTRzBOYkZMRXRZR3YxY2NvRkhUa2FJekhyWHg1aHpiakhrckYtUFVEcndObHZLM1pLQXA3Y1ZiRnF5aWN4aFZXNVlhMXVSdWVXamwxSXc0dEZXa3FfTA?oc=5",
       "published_at": "Mon, 23 Nov 2026 14:48:03 GMT",
@@ -1052,10 +1325,26 @@
     },
     {
       "topic": "global_market",
+      "title": "미 국무부, 북한 해외 노동자 정보 제보 요청…최대 500만 달러 포상금",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOSmdYeGFpcTM5U1VDWGhZTTc2ZkFtNWpQRnE3VFdXeEpfbkZTNjdzVnZWRjF6bkxyb1VfLWU0d213cjZQSUdjZkFVNXdsMklkdFBKd2xkQnM4V2QxQVBabTFJeDJCMi1SVWFnUTlhQWo0bm9DZmZfLTVRc2hFVUFZVUR30gGEAUFVX3lxTFBMZDkzUmtMRXFGRWVSR3hEY0xkVXAwc2NEMTNNcWNyazZfdFN5Q2hVeDVsQ21sMjNLSW5LVG9kVkRBYzFZZW1XMjE1UmRGcWlzVUNta2tFRUVqTTZVbkZMb1pJQWxUdk4xSkxrN2RDT1RWVTlLYWlQU1ViM1h1SHJsdE4xQQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 15:13:03 GMT",
+      "publisher": "VOA 한국어 홈페이지",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
       "title": "젠슨 황 복귀에 나스닥 7% 급등…엔비디아 33%↑",
       "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE03STdfMk1FMHRrZ3lhUzZFUGJWdU9GQ2dLZlR6MXJmZmxXMThxUFpwdzM2OGVYZzQ4YUU2NEdzX0lzVkF0Y3BJaW5ybVJhdmpDME51dHFRbXVzOXBmalctSndzLWV5ZDQ?oc=5",
       "published_at": "Mon, 23 Nov 2026 16:04:00 GMT",
       "publisher": "연합뉴스TV",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "global_market",
+      "title": "월가, 엔비디아 목표가 최대 270달러…황 복귀 효과 [젠슨 황 CEO 복귀]",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1oMEwwcDFCMWcyLUFQUkllcTN6QXEtUjdzQXhnS2VCMTdlQ2hkYnNCWXRuM2xUc0V3TVVvazItczRzZ0lzM2F0V1FpeHVFQnJMRDV1Sm9FdjA3QQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 19:08:25 GMT",
+      "publisher": "한국경제",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1080,14 +1369,6 @@
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1qQWk0ZHdGM0R0S2FobDh3LUxBelh6blMtR3cxRnVleVdPeGtpWGI3R2pQNExtQm9naHNzZ2ZHREZiOVV1THdrUHBWQ2c1eDQ?oc=5",
       "published_at": "Mon, 23 Nov 2026 18:38:52 GMT",
       "publisher": "와우테일",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_market",
-      "title": "美 달러화 강보합…'엔비디아 7%↑' 기술주 급락 후 급반등",
-      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9sOWs5cU82RVdZVmV6Smlxd0ZuUjFVZU5UZ3FmVmdLbDFzT25uUGJ6Z0RGM2dnaHZMQjdBWElRMnNJUDBRVmdPUFEwanFWcVlYWUN1OENmbFB1SzhWQXV3OUVjR1RvallFeXpadkRuXzFJUQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 12:40:31 GMT",
-      "publisher": "KB Think",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1132,17 +1413,17 @@
     },
     {
       "topic": "global_market",
-      "title": "젠슨 황 복귀에 엔비디아 주가 폭등…나스닥 6%, S&P500 4% 끌어올려 [이상은의 워싱턴나우]",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE42dW9nc0JXM2dici0wQWxJd216aXdfR3hPdHdHai1SVEhrOGpncXF3aXFfa2FGZFE0T0NxdGNMYVRsZXBKRWZ5RVF6QU16YUx2ajFidEVKRDZBdw?oc=5",
-      "published_at": "Mon, 23 Nov 2026 14:58:47 GMT",
-      "publisher": "한국경제",
+      "title": "美 달러화 강보합…'엔비디아 7%↑' 기술주 급락 후 급반등",
+      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9sOWs5cU82RVdZVmV6Smlxd0ZuUjFVZU5UZ3FmVmdLbDFzT25uUGJ6Z0RGM2dnaHZMQjdBWElRMnNJUDBRVmdPUFEwanFWcVlYWUN1OENmbFB1SzhWQXV3OUVjR1RvallFeXpadkRuXzFJUQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 12:40:31 GMT",
+      "publisher": "KB Think",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "global_market",
-      "title": "월가, 엔비디아 목표가 최대 270달러…황 복귀 효과 [젠슨 황 CEO 복귀]",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1oMEwwcDFCMWcyLUFQUkllcTN6QXEtUjdzQXhnS2VCMTdlQ2hkYnNCWXRuM2xUc0V3TVVvazItczRzZ0lzM2F0V1FpeHVFQnJMRDV1Sm9FdjA3QQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 19:08:25 GMT",
+      "title": "젠슨 황 복귀에 엔비디아 주가 폭등…나스닥 6%, S&P500 4% 끌어올려 [이상은의 워싱턴나우]",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE42dW9nc0JXM2dici0wQWxJd216aXdfR3hPdHdHai1SVEhrOGpncXF3aXFfa2FGZFE0T0NxdGNMYVRsZXBKRWZ5RVF6QU16YUx2ajFidEVKRDZBdw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 14:58:47 GMT",
       "publisher": "한국경제",
       "discovery_source": "google_news_rss"
     },
@@ -1180,9 +1461,9 @@
     },
     {
       "topic": "global_market",
-      "title": "뉴욕증시 나스닥선물 3.6% 급반등…엔비디아 등 기술주 투매 진정",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5BZ0o0Ql92bDRTMk53eGloSTlzOHdsTW9sekN0MTJNWDBNODlkNUl1OUNLTG5lWXpTbWNMbWxkS0xLbl83cjNNaUlRcmROeUFjQ3hSSmV3Y2g?oc=5",
-      "published_at": "Mon, 23 Nov 2026 12:42:03 GMT",
+      "title": "이란 법원, 美에 \"2900억 달러 손해배상하라\" 판결",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5BOWFsbFRiQXFTV1p6dFpqcldfdF9tYXZsM1l3a3pETWRxaGRIZVl4WkhteFkwX3p3N1VJbktKa0lTdHBVZGFyU1BlMUJPZnBhdzRvZm1LTjhUcGtBYkppVGF3?oc=5",
+      "published_at": "Mon, 23 Nov 2026 13:48:41 GMT",
       "publisher": "뉴스1",
       "discovery_source": "google_news_rss"
     },
@@ -1196,18 +1477,18 @@
     },
     {
       "topic": "global_market",
-      "title": "BTIG, Opus Genetics Inc 매수 의견 유지…목표주가 12달러",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE03WThkWWlhR1hIYlRUQXdQOS1XV1JqZU5qZHhDRzFFUmNySnVHTVcxTUJ3ZjhraEhVTGlpV1lJQU9UUHFjTENzSTlfQWlSb0ctM2U3OE51LU5vd0FnQzdwWkh2SC1Hd01wbi1LSkVONHBRTVZM?oc=5",
-      "published_at": "Mon, 23 Nov 2026 18:27:00 GMT",
-      "publisher": "Investing.com 한국어",
+      "title": "뉴욕증시 나스닥선물 3.6% 급반등…엔비디아 등 기술주 투매 진정",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5BZ0o0Ql92bDRTMk53eGloSTlzOHdsTW9sekN0MTJNWDBNODlkNUl1OUNLTG5lWXpTbWNMbWxkS0xLbl83cjNNaUlRcmROeUFjQ3hSSmV3Y2g?oc=5",
+      "published_at": "Mon, 23 Nov 2026 12:42:03 GMT",
+      "publisher": "뉴스1",
       "discovery_source": "google_news_rss"
     },
     {
       "topic": "global_market",
-      "title": "나스닥 시총 일주일 새 5천조 ‘증발’…“AI 투자 회의론 점점 커져”",
-      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPWUwyQWlOMlhMWE5YUUZVX0tqMHRnc2lPNnFUajZ6OWdzWXI3Q296c3dVQlRaRmtfbjcxVzlrc3p1MFM4TnMzM19lY2tLaUdLbWhGa1F2SFFSTElyVURlbDZDR1M5Z2M0UkxyVTJNbDhicjJOODAwZjlwT3h0YTBZc0Nn?oc=5",
-      "published_at": "Mon, 23 Nov 2026 00:01:00 GMT",
-      "publisher": "한겨레",
+      "title": "BTIG, Opus Genetics Inc 매수 의견 유지…목표주가 12달러",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE03WThkWWlhR1hIYlRUQXdQOS1XV1JqZU5qZHhDRzFFUmNySnVHTVcxTUJ3ZjhraEhVTGlpV1lJQU9UUHFjTENzSTlfQWlSb0ctM2U3OE51LU5vd0FnQzdwWkh2SC1Hd01wbi1LSkVONHBRTVZM?oc=5",
+      "published_at": "Mon, 23 Nov 2026 18:27:00 GMT",
+      "publisher": "Investing.com 한국어",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1228,14 +1509,6 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "“한국엔 관세 15% 안 넘긴다더니”…美, 디지털 정책 겨냥 301조 조사",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5aN1NHcnNnbVpzYkFEdnU3UmhDMjhLdHJVdEtmSjFUd20zVERiWkpacG9RNFMxVk5xSUZsY1RrZEJ6bVRCOHdwS0Zzcm8wWVBlZ1E?oc=5",
-      "published_at": "Mon, 23 Nov 2026 12:57:50 GMT",
-      "publisher": "매일경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_diplomacy_summit",
       "title": "‘하원 238석 압승’ 민주, 트럼프 ‘한국 관세·대미 투자’ 조사한다",
       "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9rUnFoejItOXA1ZVpzejBzaUxvQ2hrTGJ5VWt1NUpaTHRTRmNuVWpqLUYxUVJkQmJkOW9NM3AzRUp6M3BlZnBzeUxiSlBVQkxaRWlTRWV3UGFmMFZvRDRjaXJhelk2Q2hNM1dNUDlpdw?oc=5",
       "published_at": "Mon, 23 Nov 2026 06:11:00 GMT",
@@ -1244,10 +1517,10 @@
     },
     {
       "topic": "global_diplomacy_summit",
-      "title": "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5kcHJOWjBuVHljQ2lwaVNfSk9KZTVWX3lxQS1KdTR6NWd0cW9JNGtwcWxXS3l0NGRjTVdBdHJ4Q0RqZE9EZXc3Z3g3OWc0aUp3TVQ5Q3ZWUGt0TkVPY0F6ai10aGZETTNNMlM0Nw?oc=5",
-      "published_at": "Mon, 23 Nov 2026 17:26:49 GMT",
-      "publisher": "메디컬투데이",
+      "title": "“한국엔 관세 15% 안 넘긴다더니”…美, 디지털 정책 겨냥 301조 조사",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5aN1NHcnNnbVpzYkFEdnU3UmhDMjhLdHJVdEtmSjFUd20zVERiWkpacG9RNFMxVk5xSUZsY1RrZEJ6bVRCOHdwS0Zzcm8wWVBlZ1E?oc=5",
+      "published_at": "Mon, 23 Nov 2026 12:57:50 GMT",
+      "publisher": "매일경제",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1336,14 +1609,6 @@
       "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFBDU1lMaUsyQWF3ZXdQMHZQQVc5cENsWXduYnZDQm1RTUtnQU1sZ1hfUXBoMVlnazk0X2h4ZWJXakxTMkJINXd6a1NCN0h6Q0dLSEtWQ1ZnTmRpeHpsZ1ZJaVZsTQ?oc=5",
       "published_at": "Sun, 22 Nov 2026 23:12:51 GMT",
       "publisher": "더구루",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "global_diplomacy_summit",
-      "title": "트럼프 “다른 나라에 데이터센터 짓는 美기업에 막대한 제재”",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5SeG5tR0tLNDhtQmVqLWljTlVCSERfLUtORTR6RVBtS0h4cGY4Ul9JZDZLZlJvc0EzZVo5YnVrWEhDTk8yWmZfU2w2S1lrcXZSdnlZSWpwdHNBZUIzZndoVk5ubEtYOF9lM3h0ODhVb3B1eTDSAWZBVV95cUxOQk43WXE0bGZKLWdLR2hXdVlVM2h4NVFicXBlV3ZmcUlnazdQWFdOSVcwTDZXMGFLT041NloyWEdOa2d4bkxhWTJQUU1CTG5JTlU0QXVSQWhMVm5LZVpZUGRPVG5xd2c?oc=5",
-      "published_at": "Sun, 22 Nov 2026 19:30:00 GMT",
-      "publisher": "동아일보",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1459,6 +1724,166 @@
       "discovery_source": "google_news_rss"
     },
     {
+      "topic": "dynamic:반도체",
+      "title": "무상 등록금·반도체 효과 대학 입시 변수될까?",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9lUlBldEcyR2VHczhuMExTZng0UGpnd21mV1NNWWV5aHNtQzJ4R1FDMGQ3ckhfeVZlWFFtSkYwSTQxYXNfeGdsU3MtajgtM184c0tzNVlMb2RyUnRUZmlzQQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 12:17:37 GMT",
+      "publisher": "KBC광주방송",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "[단독]반도체 공장 지을 26만명 어디서…국토부, 삼성·SK와 양성책 짠다 - 머니투데이",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE54LUZSYVVDWHp5NDUtNERiRFZ3RWxGb1h2WVUxUGI1N19yMWhNV0lGOHQ5N0g0cE9JOHFmbm5CcmVqTzhZVWF1b2VZX3ZQRm5zMThxd0pJb19IeFM0STk0b3kydkY2dmd0alHSAW9BVV95cUxOTTJFR2FWRFFWOVJSdGxqYTR1UDNDWGJrQjdzTzBXemVKbWEyYVlkbHU1UkxvRHZtNUVWZUtZM1AtajFaU1hTRXd5STI3T3daWW1jS21SZXo3ZllxVDlTRV9EX1R4eXNYLTlFSVkzSWc?oc=5",
+      "published_at": "Mon, 23 Nov 2026 18:02:13 GMT",
+      "publisher": "머니투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "[이병훈의 마켓 나우] K반도체 성공 열쇠는 전력 병목 해소",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE83OGlDSjNlUGdCWkFPT2V0QkFZWjRUQlBjamJscmY4U0xNd2dGUWNjUTJmVlJsOEdxXzgyX3ZVTVUtcjNFX1RtNl9ZeVN3RTVjTEVjelZn?oc=5",
+      "published_at": "Mon, 23 Nov 2026 15:04:00 GMT",
+      "publisher": "중앙일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "수돗물로 반도체 공장 돌릴까…미르엔, '수돗물 가스'로 시제품 엔진 가동",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9EZmJnXzFIb1l2SkZBZm9XVXFMdUZUOHVyQUwzaWkwUzljUEp4OEIwVjA1Nm91UVo3clE1TFdIaUpwa0ZiME1OeklxNHlCQQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 19:00:00 GMT",
+      "publisher": "전자신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "미 재무 \"젠슨 황과 회사 책임 별개\"...반도체 밀수망 의혹 확산",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE16NFJhejVGejkwZVpQTWlPS1hMb3FVM0I1X0IwN0d4cmRGWUc2QnhlYTNid3luNWVwZk8zeTRzYkJteVo2YnVBUTBhN0Q0V3hhLUFtLUxBTEN5N2R1Q2c?oc=5",
+      "published_at": "Mon, 23 Nov 2026 13:51:00 GMT",
+      "publisher": "YTN",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "강이야, 바다야? '짠물' 섬진강…반도체 용수까지?",
+      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1GMEVQY2hndDREQjdXMmhsZldEVnFiYVhtd1VOS2pnWGNyaGswUnZFdVVYWmQ4Y3VFLWI0LWJ6SVhoNVo3N0FTN3Y2VHctWWVDbjh0VQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 10:44:00 GMT",
+      "publisher": "부산경남대표방송 KNN 뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "반도체 \"내년에도 호황\"…하반기 성장세는 꺾여",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5DZGhTMnR1MVhndnJpeEZoQktSUUVNdVFEb2F4YndnU3JMYnBST0hVclExbHl4SDg2UENtaW9YSHNNcnR0RjVDT2FRcEtVWUZzc2s1Z1hmOXltRmdFX1p1atIBYEFVX3lxTE5DZGhTMnR1MVhndnJpeEZoQktSUUVNdVFEb2F4YndnU3JMYnBST0hVclExbHl4SDg2UENtaW9YSHNNcnR0RjVDT2FRcEtVWUZzc2s1Z1hmOXltRmdFX1p1ag?oc=5",
+      "published_at": "Mon, 23 Nov 2026 12:04:37 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "Texas Instruments, Cantor Fitzgerald 업그레이드와 반도체 랠리에 10% 급등",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9MbFNzb05nUEE1dWFqN3RISDBrUU9XeXZBQTRCZ3VDRnVLU2pPcVc4bmdyeTJJaFRQMW5jREx4WE5JOVhlTGZXVDNiUG1Nc3JxcHkxYnhtWWdKeEQ3dXFxb1lEYThLT0ZJTjh2a0FQVXo?oc=5",
+      "published_at": "Mon, 23 Nov 2026 17:12:00 GMT",
+      "publisher": "Investing.com 한국어",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "‘AI 버블’ 공포가 최고 실적을 삼켰다… 반도체 투톱, 주가 반토막",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQV0hCQkN2ZVZKWE1zWHc5TUxVYjNOT185UE5qSUVILXV6UW5BNEQzYUc5cThHR0VEYjItUXl0VGdYaTdMWk01SUo0cUVhV3hobDRoeUpYeFR6SXBaSF9adXpHRlZkeWh6SFltQTNFY2l5UXlrbG9MTHNSSmgwcDJqR2VGZw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 15:48:00 GMT",
+      "publisher": "조선일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "MIT, 노트북에서 구동하는 소형 AI로 아날로그 반도체 설계 자동화…최첨단 대형 AI에 근접한 성능 구현",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9TcXhUNi03TnRzR19iWXRmRzVIdDVHSnhENV9nM0dLQ2FobHA2U0gwaGljbEE5cGVubW1MS1N3d3FpQmZMS0pLUlJoUFpqekJScmstOEg1MDAyY3ZrRmF0aGRTZFRvSUE?oc=5",
+      "published_at": "Mon, 23 Nov 2026 10:03:33 GMT",
+      "publisher": "인공지능신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "반도체만 웃는다…내년 주력산업 '반도체 쏠림' 심화",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5keExoMkZUVkFtaUk3c1NKdkgyMHNqTWk5Nzg2QUtBWEpwODk4eHJuaU9LaGZWdms5RTBjbGFtQXZKSGZRSEh0b1BSc2pNcEhGcUVxQVo4UjBVTThxd3NoS2RSWU9XTjQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 09:54:17 GMT",
+      "publisher": "M이코노미뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "산업연, 내년 경제성장률 3.5% 전망…\"반도체 질주에도 내수 회복 더뎌\"",
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBNcllIX0Q0YkVEcHlLcE84bWRLcm5kaGYzSzBFNXB3VjNadHhZU21neWdMQWJuRnJwcHJ3bVhuWEtvV1Fzdmh4R1JEZzFRVHh4M0ZDcVNQb0tUTHVW?oc=5",
+      "published_at": "Mon, 23 Nov 2026 06:02:00 GMT",
+      "publisher": "뉴스핌",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "내년에도 수출 1조 달러 전망…반도체가 절반, 산업도 ‘K자 양극화’ 우려",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE43dTNEVU11OHpZa1NycUQ1anRUZnRBcWpsZ3ptbGExSmp0Vnhpc19tZVphYmtwcF9CaXpyTjJ6dzR1YWIzc1RtbDVsdWFPN0FVelA5bFEyN2IxZ9IBX0FVX3lxTE8xTVI0eVVwMjJVcUhjWmJwUFloM3ZYeWhfdHlic3U1OFJzVHRiMVpWOUQzRndieEdNSnh6QzZqMjBnNkl6V3VMWXAyUjhGVnU2LW9oYlJ1WFpFa0Fhd0RV?oc=5",
+      "published_at": "Mon, 23 Nov 2026 08:03:00 GMT",
+      "publisher": "경향신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "[속보] 젠슨황 CEO 복귀 … 엔비디아 30% 급등, 美 반도체·기술주 '환호'",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5zTndjeS1iMDZ3TDd4RFdMLW4wOTFqRXloajdzUjAwSkFiSWQ5bDBvTm83N0dxYTFYYW42bFVrWDNsbGNOeHVsbW9xazJyR1libjZ1UjJRb1g4MGg0Q0pLMXBMM1RwLWlVVGhsTTZSelZKV1dLeXdLQWk1QdIBgAFBVV95cUxOSnpaTExhbUplZzdkdWZMdHh1Zmt2amctamc3YmhZZXN1Sl9XMEJVanNMeGhqSjhGM2pMeGRBRlR6YWI0N3FiRWRVRVVJeEJSemU4TjhHVTA3UE9Nc2xNVFNSU0dVTzV3TTB1S0hXSExpODVWNFg1QWFOemQwbFpCZQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 14:55:00 GMT",
+      "publisher": "뉴데일리 경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "반도체 수출 비중 42.7%…단가 10% 하락 시 전체 수출액 4.3% 감소 추산",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBpdEUxLXV4MkU1T3NHVUo5ZW1uMDBFZDJfUmFiems2LURyZ0psQldtLUZja2VRYUlGZ0ZGNDh0SVlKcmpzTW9sMVp3QUk3ZXVzdEh4MnlHcVhJODc3cjdURHRlQV8?oc=5",
+      "published_at": "Mon, 23 Nov 2026 10:34:33 GMT",
+      "publisher": "매일일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "산업연 “내년 수출 14% 늘어 1조 3000억 달러…반도체 빼면 1.5% 증가 그칠 전망”",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5ZOWJVdE1heVN2c2N0d2h0WXFncDhKS0t2WWNlUHhZZktISUZka1hDV3cxcmFhZjYzSTBuNnB1T0w0aVlrMC1zWVZkc3duZldQaVZTR3dSQnE2cjNqd1RTa3UtVHAwbWJfUUFmcjFKQ1duekRP?oc=5",
+      "published_at": "Mon, 23 Nov 2026 14:03:35 GMT",
+      "publisher": "부산일보",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "SK하이닉스가 보는 호남 반도체 성공 열쇠는?",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5ORTFLZ2RtTTBBb1k0NTFrcUZjQmNXWGY5X1FOS29meVVHbU1uZHhGejlvYWxnMFptTGVzUDk1c1RaWkZDNlVSbU11d19HeXU5TnNGem1vemhGa0dreXI0Rw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 12:16:43 GMT",
+      "publisher": "KBC광주방송",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "반도체 건설인력 어떻게 끌어오나… 국토부, 산업계와 방안 모색 - 머니투데이",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1VcU1abFZyNDBPMm5QbVFCWUQ0MmhsZjlvMEFZa0gyV2tiZmt0ZERra1FLelBKdUoxN2VVZVZxRGJjTXd1RlplSXUtX19IanZMbFhsMGZERzNjSXRCWVYxRDJPZlhwTzdULVdjcGxmRFlBTzE0R0t30gF8QVVfeXFMTTlCbXd4Sm1QeHE4RktvS3gwV1JNRmNsa21rYWlZSzlFeXJIUzVEbl9WbTdSbjdoOUpQVHBiVVFEWXZ0dG9RclAwcWE4NGpwVXMxLXFNNjNYY2p6R0xqdWRGZXpwUVFYd2djdlVrbU11WFg5V2xWVjg1aFU3Vg?oc=5",
+      "published_at": "Mon, 23 Nov 2026 18:41:00 GMT",
+      "publisher": "머니투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "대만 경제부, 100대 연구개발 혁신기술상 9개 수상…반도체 AI 시뮬레이션 4~5시간서 10초 미만으로",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE82cGw4SmhEcU9PUktZZWQ3TmJBUjRhZVhQYm1hOG1Ra2N4TUZyNzUxZWlnWGR4R19zaUpSZVNyMXdoWFh6MGowRE40UlRvcmJqZlBEczUwcjd1aEIxWGFyZm9YVEdaZmc?oc=5",
+      "published_at": "Mon, 23 Nov 2026 09:01:00 GMT",
+      "publisher": "인공지능신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:반도체",
+      "title": "4배 뛴 반도체 수출…편중 심화",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5uYXlwaVVpN1Vpcktrc3ZSQWl5cVpqT0JMUWtTQzZTeFJPenpFb3l0dTNvTGlpc25tbHdYVzdnYldjb25XSGIydHFoNVVvczI4Zm1Ydm5MRi10d9IBX0FVX3lxTFBMREs2ck55OGFvZndHWHpIQ2tQcW1lWlJVMXR6aDU3bWwydUV3VHNLRjVoWURCTTluZ1lXRml3amVkWHRDTllhNDB1Z25qN3UteF92MVNIU1VqM1U3UjA4?oc=5",
+      "published_at": "Mon, 23 Nov 2026 11:26:00 GMT",
+      "publisher": "경향신문",
+      "discovery_source": "google_news_rss"
+    },
+    {
       "topic": "dynamic:AI",
       "title": "“세무사 수석도 우리가 도왔다”... 텔레그램 ‘AI 부정행위’ 유혹 만연",
       "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE8xZ0JQcUpMb3QwS2ZKby1pUDFYcDMxWnMzUUdGTUdkN19aWTZqS09DYjB1bERvMTgwN0JTeC1peEFjOTFHM1RwM2lmUTZBNUhtQ2Y5TkczSDZkZjk1UlRxbHFGSmZfLWhTTGhJ?oc=5",
@@ -1556,14 +1981,6 @@
     },
     {
       "topic": "dynamic:AI",
-      "title": "돌아온 'AI 황제'에 환호…엔비디아 폭등 출발",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9aQktwLS1weEtFMlhUSzN4bjJQUlJSaDZEZlpjaUNwLVBld0FEVm9GVHpudVlBWFBKWkJRakdUN3RoeGpkd1VtQlRZVDQ5MWdYNHRId1hSWVdqQQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 16:11:12 GMT",
-      "publisher": "한국경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:AI",
       "title": "[메가에서 기가로] 우상호 “강원도 AI데이터센터 특구로 만들겠다”⋯전력 해결로 기업 유치 손짓",
       "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1BQUxFTS1ZZDJJTTVPeWU2Y1o5c2h1N3hHMHJKNkZuSDdnUzV0MlFodVM0LVdEN1Y2Rnl1UXVLY1A1VGZGN0ZjOUtlRzRzRzh6em85eGR1UmgyTnM?oc=5",
       "published_at": "Mon, 23 Nov 2026 15:01:00 GMT",
@@ -1596,170 +2013,18 @@
     },
     {
       "topic": "dynamic:AI",
+      "title": "젠슨 황 돌아와도…‘대중국 AI칩 수출통제’ 준수 여부 조사는 계속",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBWNUhTQmdpVlBXT28xaEVSN2I3ZEdjZFhUSklMdHZaVDdPT2JMaElyWklQZmd0RWZQRnFyekp2X2tzUUZFSGdhQ3UwVWNNc0xaTzdZT1gyWkRtVjRyN0x1X3VSY2dLLUxaa3pQclYwRQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 15:00:00 GMT",
+      "publisher": "한겨레",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:AI",
       "title": "존디어, 과수원 작물 분석 AI 오차드AI 인수…나무 단위 데이터 결합",
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBMaWRMYnZhNnpFYWtJSDV6RlhBT0lPY25NdWFBc2NkeEN6NUZoY20xUnRqZEtpLUxTMGUzMEJicThXODZHN0J6V1o4VHJwRk0?oc=5",
       "published_at": "Mon, 23 Nov 2026 18:39:11 GMT",
       "publisher": "와우테일",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "무상 등록금·반도체 효과 대학 입시 변수될까?",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9lUlBldEcyR2VHczhuMExTZng0UGpnd21mV1NNWWV5aHNtQzJ4R1FDMGQ3ckhfeVZlWFFtSkYwSTQxYXNfeGdsU3MtajgtM184c0tzNVlMb2RyUnRUZmlzQQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 12:17:37 GMT",
-      "publisher": "KBC광주방송",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "[단독]반도체 공장 지을 26만명 어디서…국토부, 삼성·SK와 양성책 짠다 - 머니투데이",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE54LUZSYVVDWHp5NDUtNERiRFZ3RWxGb1h2WVUxUGI1N19yMWhNV0lGOHQ5N0g0cE9JOHFmbm5CcmVqTzhZVWF1b2VZX3ZQRm5zMThxd0pJb19IeFM0STk0b3kydkY2dmd0alHSAW9BVV95cUxOTTJFR2FWRFFWOVJSdGxqYTR1UDNDWGJrQjdzTzBXemVKbWEyYVlkbHU1UkxvRHZtNUVWZUtZM1AtajFaU1hTRXd5STI3T3daWW1jS21SZXo3ZllxVDlTRV9EX1R4eXNYLTlFSVkzSWc?oc=5",
-      "published_at": "Mon, 23 Nov 2026 18:02:13 GMT",
-      "publisher": "머니투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "[이병훈의 마켓 나우] K반도체 성공 열쇠는 전력 병목 해소",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE83OGlDSjNlUGdCWkFPT2V0QkFZWjRUQlBjamJscmY4U0xNd2dGUWNjUTJmVlJsOEdxXzgyX3ZVTVUtcjNFX1RtNl9ZeVN3RTVjTEVjelZn?oc=5",
-      "published_at": "Mon, 23 Nov 2026 15:04:00 GMT",
-      "publisher": "중앙일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "미 재무 \"젠슨 황과 회사 책임 별개\"...반도체 밀수망 의혹 확산",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE16NFJhejVGejkwZVpQTWlPS1hMb3FVM0I1X0IwN0d4cmRGWUc2QnhlYTNid3luNWVwZk8zeTRzYkJteVo2YnVBUTBhN0Q0V3hhLUFtLUxBTEN5N2R1Q2c?oc=5",
-      "published_at": "Mon, 23 Nov 2026 13:51:00 GMT",
-      "publisher": "YTN",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "강이야, 바다야? '짠물' 섬진강…반도체 용수까지?",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1GMEVQY2hndDREQjdXMmhsZldEVnFiYVhtd1VOS2pnWGNyaGswUnZFdVVYWmQ4Y3VFLWI0LWJ6SVhoNVo3N0FTN3Y2VHctWWVDbjh0VQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 10:44:00 GMT",
-      "publisher": "부산경남대표방송 KNN 뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "Texas Instruments, Cantor Fitzgerald 업그레이드와 반도체 랠리에 10% 급등",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9MbFNzb05nUEE1dWFqN3RISDBrUU9XeXZBQTRCZ3VDRnVLU2pPcVc4bmdyeTJJaFRQMW5jREx4WE5JOVhlTGZXVDNiUG1Nc3JxcHkxYnhtWWdKeEQ3dXFxb1lEYThLT0ZJTjh2a0FQVXo?oc=5",
-      "published_at": "Mon, 23 Nov 2026 17:12:00 GMT",
-      "publisher": "Investing.com 한국어",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "MIT, 노트북에서 구동하는 소형 AI로 아날로그 반도체 설계 자동화…최첨단 대형 AI에 근접한 성능 구현",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9TcXhUNi03TnRzR19iWXRmRzVIdDVHSnhENV9nM0dLQ2FobHA2U0gwaGljbEE5cGVubW1MS1N3d3FpQmZMS0pLUlJoUFpqekJScmstOEg1MDAyY3ZrRmF0aGRTZFRvSUE?oc=5",
-      "published_at": "Mon, 23 Nov 2026 10:03:33 GMT",
-      "publisher": "인공지능신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "반도체 \"내년에도 호황\"…하반기 성장세는 꺾여",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5DZGhTMnR1MVhndnJpeEZoQktSUUVNdVFEb2F4YndnU3JMYnBST0hVclExbHl4SDg2UENtaW9YSHNNcnR0RjVDT2FRcEtVWUZzc2s1Z1hmOXltRmdFX1p1atIBYEFVX3lxTE5DZGhTMnR1MVhndnJpeEZoQktSUUVNdVFEb2F4YndnU3JMYnBST0hVclExbHl4SDg2UENtaW9YSHNNcnR0RjVDT2FRcEtVWUZzc2s1Z1hmOXltRmdFX1p1ag?oc=5",
-      "published_at": "Mon, 23 Nov 2026 12:04:37 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "수돗물로 반도체 공장 돌릴까…미르엔, '수돗물 가스'로 시제품 엔진 가동",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9EZmJnXzFIb1l2SkZBZm9XVXFMdUZUOHVyQUwzaWkwUzljUEp4OEIwVjA1Nm91UVo3clE1TFdIaUpwa0ZiME1OeklxNHlCQQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 19:00:00 GMT",
-      "publisher": "전자신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "[속보] 젠슨황 CEO 복귀 … 엔비디아 30% 급등, 美 반도체·기술주 '환호'",
-      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5zTndjeS1iMDZ3TDd4RFdMLW4wOTFqRXloajdzUjAwSkFiSWQ5bDBvTm83N0dxYTFYYW42bFVrWDNsbGNOeHVsbW9xazJyR1libjZ1UjJRb1g4MGg0Q0pLMXBMM1RwLWlVVGhsTTZSelZKV1dLeXdLQWk1QdIBgAFBVV95cUxOSnpaTExhbUplZzdkdWZMdHh1Zmt2amctamc3YmhZZXN1Sl9XMEJVanNMeGhqSjhGM2pMeGRBRlR6YWI0N3FiRWRVRVVJeEJSemU4TjhHVTA3UE9Nc2xNVFNSU0dVTzV3TTB1S0hXSExpODVWNFg1QWFOemQwbFpCZQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 14:55:00 GMT",
-      "publisher": "뉴데일리 경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "반도체만 웃는다…내년 주력산업 '반도체 쏠림' 심화",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5keExoMkZUVkFtaUk3c1NKdkgyMHNqTWk5Nzg2QUtBWEpwODk4eHJuaU9LaGZWdms5RTBjbGFtQXZKSGZRSEh0b1BSc2pNcEhGcUVxQVo4UjBVTThxd3NoS2RSWU9XTjQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 09:54:17 GMT",
-      "publisher": "M이코노미뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "산업연, 내년 경제성장률 3.5% 전망…\"반도체 질주에도 내수 회복 더뎌\"",
-      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBNcllIX0Q0YkVEcHlLcE84bWRLcm5kaGYzSzBFNXB3VjNadHhZU21neWdMQWJuRnJwcHJ3bVhuWEtvV1Fzdmh4R1JEZzFRVHh4M0ZDcVNQb0tUTHVW?oc=5",
-      "published_at": "Mon, 23 Nov 2026 06:02:00 GMT",
-      "publisher": "뉴스핌",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "내년에도 수출 1조 달러 전망…반도체가 절반, 산업도 ‘K자 양극화’ 우려",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE43dTNEVU11OHpZa1NycUQ1anRUZnRBcWpsZ3ptbGExSmp0Vnhpc19tZVphYmtwcF9CaXpyTjJ6dzR1YWIzc1RtbDVsdWFPN0FVelA5bFEyN2IxZ9IBX0FVX3lxTE8xTVI0eVVwMjJVcUhjWmJwUFloM3ZYeWhfdHlic3U1OFJzVHRiMVpWOUQzRndieEdNSnh6QzZqMjBnNkl6V3VMWXAyUjhGVnU2LW9oYlJ1WFpFa0Fhd0RV?oc=5",
-      "published_at": "Mon, 23 Nov 2026 08:03:00 GMT",
-      "publisher": "경향신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "반도체 수출 비중 42.7%…단가 10% 하락 시 전체 수출액 4.3% 감소 추산",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBpdEUxLXV4MkU1T3NHVUo5ZW1uMDBFZDJfUmFiems2LURyZ0psQldtLUZja2VRYUlGZ0ZGNDh0SVlKcmpzTW9sMVp3QUk3ZXVzdEh4MnlHcVhJODc3cjdURHRlQV8?oc=5",
-      "published_at": "Mon, 23 Nov 2026 10:34:33 GMT",
-      "publisher": "매일일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "‘AI 버블’ 공포가 최고 실적을 삼켰다… 반도체 투톱, 주가 반토막",
-      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQV0hCQkN2ZVZKWE1zWHc5TUxVYjNOT185UE5qSUVILXV6UW5BNEQzYUc5cThHR0VEYjItUXl0VGdYaTdMWk01SUo0cUVhV3hobDRoeUpYeFR6SXBaSF9adXpHRlZkeWh6SFltQTNFY2l5UXlrbG9MTHNSSmgwcDJqR2VGZw?oc=5",
-      "published_at": "Mon, 23 Nov 2026 15:48:00 GMT",
-      "publisher": "조선일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "SK하이닉스가 보는 호남 반도체 성공 열쇠는?",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5ORTFLZ2RtTTBBb1k0NTFrcUZjQmNXWGY5X1FOS29meVVHbU1uZHhGejlvYWxnMFptTGVzUDk1c1RaWkZDNlVSbU11d19HeXU5TnNGem1vemhGa0dreXI0Rw?oc=5",
-      "published_at": "Mon, 23 Nov 2026 12:16:43 GMT",
-      "publisher": "KBC광주방송",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "반도체 건설인력 어떻게 끌어오나… 국토부, 산업계와 방안 모색 - 머니투데이",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1VcU1abFZyNDBPMm5QbVFCWUQ0MmhsZjlvMEFZa0gyV2tiZmt0ZERra1FLelBKdUoxN2VVZVZxRGJjTXd1RlplSXUtX19IanZMbFhsMGZERzNjSXRCWVYxRDJPZlhwTzdULVdjcGxmRFlBTzE0R0t30gF8QVVfeXFMTTlCbXd4Sm1QeHE4RktvS3gwV1JNRmNsa21rYWlZSzlFeXJIUzVEbl9WbTdSbjdoOUpQVHBiVVFEWXZ0dG9RclAwcWE4NGpwVXMxLXFNNjNYY2p6R0xqdWRGZXpwUVFYd2djdlVrbU11WFg5V2xWVjg1aFU3Vg?oc=5",
-      "published_at": "Mon, 23 Nov 2026 18:41:00 GMT",
-      "publisher": "머니투데이",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "대만 경제부, 100대 연구개발 혁신기술상 9개 수상…반도체 AI 시뮬레이션 4~5시간서 10초 미만으로",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE82cGw4SmhEcU9PUktZZWQ3TmJBUjRhZVhQYm1hOG1Ra2N4TUZyNzUxZWlnWGR4R19zaUpSZVNyMXdoWFh6MGowRE40UlRvcmJqZlBEczUwcjd1aEIxWGFyZm9YVEdaZmc?oc=5",
-      "published_at": "Mon, 23 Nov 2026 09:01:00 GMT",
-      "publisher": "인공지능신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "반도체 '독주'에 가려진 그늘 … 내년 車 수출 1.3%↓, 정유·석화는 역성장",
-      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBwSXZFZWxrblloQ3gwMzVsTXZQdjRVZGV6RXNRMmxnV0k5ZURBdFdpcHcwZ3dZSUI3eHhseDFVSUY2eXdlYmd1Ykt0NzRtb2JZWHVNeGpNamJuXzFKYWtuZVhqNVV1WlFmRDlnaFhWLXNXdHBaTmhmOTlVY9IBgAFBVV95cUxPWXBPYkhkbjg3NTdzV29jMDFPMU1QbjJWRzhOZV8xZ3ExT05lRkJTSXA2amE1emljZl8zQ2RHRmNSdHpzV19SZHhQbjlOV1JPWlluVTJrU3VwM0V4LXNMTW8tYmxVczk2NVM3UkVhcjBpaTZYdmxkVDd3MXBZT3VqdQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 07:30:00 GMT",
-      "publisher": "뉴데일리 경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:반도체",
-      "title": "[사설] 반도체 인력, 안 나갈 매력 줘야",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE8wRVh2WFRYMWIwdi1acEdhakVQcFpBLWY4MFE5SEhoSllBUnB4NTdPcHZQVUlHUU9BTGdVMXJyNHdoQzk4THRudUJRbWMzZw?oc=5",
-      "published_at": "Mon, 23 Nov 2026 08:00:00 GMT",
-      "publisher": "전자신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1796,14 +2061,6 @@
     },
     {
       "topic": "dynamic:관세",
-      "title": "관세청, CAREC 10개국 대상 관세행정 현대화 워크숍 개최",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5hRmFpTzFEUHc0ajNBZ29JdzdTako5a1ZLY18yYXNhTV8yc0hzMktBRk5OQWgwQmdvR3R3ZTU1QmNoSGhfR1UxZGR4UW9rMWZQQnNkVllkZ25MZ2xrdGc5MDdKSjhiOG9xeENj0gFrQVVfeXFMTmFGYWlPMURQdzRqM0Fnb0l3N1NqSjlrVktjXzJhc2FNXzJzSHMyS0FGTk5BaDBCZ29HdHdlNTVCY2hIaF9HVTFkZHhRb2sxZlBCc2RWWWRnbkxnbGt0ZzkwN0pKOGI4b3F4Q2M?oc=5",
-      "published_at": "Mon, 23 Nov 2026 13:28:45 GMT",
-      "publisher": "한국관세신문",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:관세",
       "title": "미, 무역법 301조로 ‘15% 관세 합의’ 또 흔드나",
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1WT1VtUTdUSDFXalM0ZmlxY3ZqeVdSazc0VUpZZzg2MUxBVlA5cWFSZnRMaG8tSnFYVHZUUkVsLWh5QURCUEtqX3FaOU1JTWlOS0tDUTdBc1dKUdIBX0FVX3lxTFBFcWN4bnhzSk5rR3lSOUxjeDdtNGpoakVFX3VPOGszS2NmQVh4bjVsbC1mMi02SXFieVVxZkFPSlYyQVEyNllUUF9UdWNGc2E1cWZienRLMzBNZkk5RWJz?oc=5",
       "published_at": "Mon, 23 Nov 2026 11:35:00 GMT",
@@ -1812,10 +2069,26 @@
     },
     {
       "topic": "dynamic:관세",
+      "title": "[AI 트렌드] 김위상 의원, ‘AI 부정행위 방지’ 노무사법·관세사법·감정평가법 개정안 대표발의 外",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9TcTZEWFpqOXhRWHJENENxQmtzSnEzUnU5cjB6YUtUUEs2NldyY0NlNEtEX1JMZlYzSXE3VXNwWUxkTTZjdVFVSEdQdXk1ZFJXeHZKLWUyZWFpZ18wUzJENWxZb0ttMkFMc0Rwdg?oc=5",
+      "published_at": "Mon, 23 Nov 2026 18:54:37 GMT",
+      "publisher": "베이비뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:관세",
       "title": "[기자 수첩] 캐나다, 美 보복 관세에 중국산 빗장 풀었더니... 테슬라 횡재",
       "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1HM2ZhMUJkWFZmNHJzRWw0TE1oODZSbW90cEJ2TW9FSUt2Rk04aDE5QTZ0WUZxUW4wLXh4ZWswd29meEdOOEd4UVdCNDFOOTAydXpCV0dZaUpqY2wtN0IxeTlIUGY0amoyUWxjWUZSOC1kQQ?oc=5",
       "published_at": "Mon, 23 Nov 2026 08:09:21 GMT",
       "publisher": "다나와 자동차",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:관세",
+      "title": "관세청, CAREC 10개국 대상 관세행정 현대화 워크숍 개최",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5vODM0dTlQOTVJSW5YTXJRY2xIaFBQLUQxOXhRX2ZhTUtOb0VjSzl3cmh5cUFvOXpoM19HLWdfMXc1Y0lCMEIxbDhKeXdXYS05Mm5jdDd6T3hBODhyMEN2Ny1QUVV6UdIBa0FVX3lxTE5hRmFpTzFEUHc0ajNBZ29JdzdTako5a1ZLY18yYXNhTV8yc0hzMktBRk5OQWgwQmdvR3R3ZTU1QmNoSGhfR1UxZGR4UW9rMWZQQnNkVllkZ25MZ2xrdGc5MDdKSjhiOG9xeENj?oc=5",
+      "published_at": "Mon, 23 Nov 2026 08:30:00 GMT",
+      "publisher": "한국관세신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1844,14 +2117,6 @@
     },
     {
       "topic": "dynamic:관세",
-      "title": "[이슈/美 민주당, 한국 등 대미 투자합의 조사 예고] ‘관세 견제’ vs ‘검증 압박’ 교차",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9jQ2dJNjNDeXhIV3JGc2RQSnlCTWg5SEl3NUpHQlEwSzBMMjl1MUVkc2pLdExUV3JMTHMxNEF2QVdYTEhrOUdtM2hjZ1JjQzhxdk5POUFpcnFycUlfZE1hWVUydzByUGh1YkhENTRR?oc=5",
-      "published_at": "Mon, 23 Nov 2026 13:59:14 GMT",
-      "publisher": "코리아포스트 한글판",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:관세",
       "title": "선진 K-관세행정, 중앙아시아 10개국에 전수",
       "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5MQjFDTmNmUE1fNHUwLUlnYy1UU3ZfYjdGa0gwMWFLUndWSXNzMlV1UlRTWGxvQXlscTlacUpuaTFmYWJIWHY5czFPUFY4UGJUTUk0TGFSWEpiSVduTGhxT1Z2WQ?oc=5",
       "published_at": "Mon, 23 Nov 2026 02:31:57 GMT",
@@ -1860,10 +2125,10 @@
     },
     {
       "topic": "dynamic:관세",
-      "title": "관세 과세환율 (11월 22일 ~ 11월 28일)",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBlamFyQU1PNUV5cFo1ckg0eFNiRjdHRS1LTzlPNHhWU0g1U0tCNVdGcjdWWUkyLTJEN0hURDVQbmpoUXFJbDFxYXowejZveXRDSFRDMThQcGV5Z1JMN25ORkQySE51Z9IBa0FVX3lxTFBkMENnXzlQRUZVY2pZVTlhN3ZJcEpjRXdWX1R4YmZYR2dhV25oUDMyVjNYc3JuVlJYV1BSaWlkd0kyYTlBMW1USW9jeDRrRWtNUzVOTW13a0VMNVV0YmNDWk9WNVdoaWw2TW9N?oc=5",
-      "published_at": "Mon, 23 Nov 2026 01:58:00 GMT",
-      "publisher": "한국관세신문",
+      "title": "[이슈/美 민주당, 한국 등 대미 투자합의 조사 예고] ‘관세 견제’ vs ‘검증 압박’ 교차",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9jQ2dJNjNDeXhIV3JGc2RQSnlCTWg5SEl3NUpHQlEwSzBMMjl1MUVkc2pLdExUV3JMTHMxNEF2QVdYTEhrOUdtM2hjZ1JjQzhxdk5POUFpcnFycUlfZE1hWVUydzByUGh1YkhENTRR?oc=5",
+      "published_at": "Mon, 23 Nov 2026 13:59:14 GMT",
+      "publisher": "코리아포스트 한글판",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1876,58 +2141,10 @@
     },
     {
       "topic": "dynamic:관세",
-      "title": "[이슈] K-에스컬레이터 살리려면…\"관세·최저가 낙찰부터 손봐야\"",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5Bc1dBcmZzS3VuaUh1V015dlFDVUd3MDdPUnM0dEJWdzhkOUs2MEJRRkhsRWRfZVJhUDhpYVluSGwxLWtmanhQTHZtNDZFWWlXUWZGRno4bTFvYmloSy05NlpYa2REcFVy?oc=5",
-      "published_at": "Mon, 23 Nov 2026 08:30:49 GMT",
-      "publisher": "팍스경제TV",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:관세",
-      "title": "관세청, 중앙아시아경제협력체(CAREC) 10개국 관세행정현대화 워크숍 개최",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9VcXV6WFc2YklkOVpjdnp1NkJDNjZQbWlLLXJvWE5QOGVLSGVRY0t5OUJaamN1MnREYnBkWHdzUUZqQldxdS1EaFV1WDdoLVFBUGpNODNNVUJXQWRESkpUbkdtakRuTU43SWk4?oc=5",
-      "published_at": "Mon, 23 Nov 2026 02:55:19 GMT",
-      "publisher": "뉴스데일리",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:조사",
-      "title": "젠슨 황 돌아와도…‘대중국 AI칩 수출통제’ 준수 여부 조사는 계속",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBWNUhTQmdpVlBXT28xaEVSN2I3ZEdjZFhUSklMdHZaVDdPT2JMaElyWklQZmd0RWZQRnFyekp2X2tzUUZFSGdhQ3UwVWNNc0xaTzdZT1gyWkRtVjRyN0x1X3VSY2dLLUxaa3pQclYwRQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 15:00:00 GMT",
-      "publisher": "한겨레",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:조사",
-      "title": "젠슨 황 복귀에 美의회 반발…엔비디아 中수출 조사 압박 [젠슨 황 CEO 복귀]",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1EQ0w2ZlB3ZHlhSGVzWDJVSzJqcEpTNGJCVWNRa012NXNZNWdoRGpuMHZEQlRISFZLYjdSYVNwSVVuYjhLMFo3SDVEd2toNTVvZk1BLUx4RGlQZw?oc=5",
-      "published_at": "Mon, 23 Nov 2026 16:15:33 GMT",
-      "publisher": "한국경제",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:조사",
-      "title": "美민주 \"한국 등이 미국과 체결한 투자합의 조사 계획\"",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBYcDZmQ2tDV3hyYWNkcDRNTGtvWUMtNVo3WS1ON1pLSG5QMlFmeWtxVk5QeVZMclRNZEhKaTV0b0hVYUZiTjNlVHhQbGNnMy05aV9DWmNLSklNVS1kNDVYRdIBYEFVX3lxTFBYcDZmQ2tDV3hyYWNkcDRNTGtvWUMtNVo3WS1ON1pLSG5QMlFmeWtxVk5QeVZMclRNZEhKaTV0b0hVYUZiTjNlVHhQbGNnMy05aV9DWmNLSklNVS1kNDVYRQ?oc=5",
-      "published_at": "Mon, 23 Nov 2026 11:15:14 GMT",
-      "publisher": "연합뉴스",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:조사",
-      "title": "‘AI 커닝’ 불똥이 학교로… 학생들 “내신 전수조사하라”",
-      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQUS1fSVVvSGtGY3JVYjBXSFpzVUZTVnpRRGhWV0RiOWJnVjFGeVo4Q1dZbXdYQnB6TXpvUTIwOE5SQWlRcnhmU3FyUTZWVzNLdzl3czljTVZ1OGUxVFNxM1JnTElCbUJKSXB3Qkk5VHgzYTBraHlaZk54Mk1LZ29BRGljS3Zwc1E?oc=5",
-      "published_at": "Mon, 23 Nov 2026 15:47:00 GMT",
-      "publisher": "조선일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:조사",
-      "title": "이헌욱 부동산원장, 공시가격 조사 현장 방문… 정확성·객관성 당부",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNMkptSFZLUlg4TkJsQnNYU00tUWtMNDR6WlJjcENzNzVEN0JLVTZZak1oY1d2RWRibjdDNkVsX1VTMTdVMm5xQWxJWGhsVkxXTWs3cE5jT0FzNFJDUXFETlpwaVIzYzVnNVpNVHFaVFVkWFVTWnV3LXpuY2J4MHZMY2xWWnlnQUdoTlBLbHFtNDVxZW0yOGt6Y9IBrAFBVV95cUxQN0t5c2Nwc1RXcHdhV2dnVEJVZU5yNF8wTFNKYkxiT2QwaXNMS0FhaTdZRGQzbnJOYnFoZHRvT0pDdjVjc3pieVhqVHIyRWNPakhUUEdwcTRlb2h0NDhPMUN3OXZvMWNjai01bTh2S284anJBX09ScHZzUGhaS2xVWUJmanBTTFNqQVZCUUtpOW9PSlFZQ1JDWk9kSHMwSE00bEE5ejNSZFRjQ09m?oc=5",
-      "published_at": "Mon, 23 Nov 2026 07:27:00 GMT",
-      "publisher": "Chosunbiz",
+      "title": "관세 과세환율 (11월 22일 ~ 11월 28일)",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBlamFyQU1PNUV5cFo1ckg0eFNiRjdHRS1LTzlPNHhWU0g1U0tCNVdGcjdWWUkyLTJEN0hURDVQbmpoUXFJbDFxYXowejZveXRDSFRDMThQcGV5Z1JMN25ORkQySE51Z9IBa0FVX3lxTFBkMENnXzlQRUZVY2pZVTlhN3ZJcEpjRXdWX1R4YmZYR2dhV25oUDMyVjNYc3JuVlJYV1BSaWlkd0kyYTlBMW1USW9jeDRrRWtNUzVOTW13a0VMNVV0YmNDWk9WNVdoaWw2TW9N?oc=5",
+      "published_at": "Mon, 23 Nov 2026 01:58:00 GMT",
+      "publisher": "한국관세신문",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1948,10 +2165,26 @@
     },
     {
       "topic": "dynamic:젠슨",
+      "title": "엔비디아 이사회, 젠슨 황 사장·CEO 복귀 결정…비트코인, 6만3000달러 일시 회복",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1vOFBsY2FoTl9WaGpSRHpxa2xWczdRU0NURnVqVm9KdHRhX295NkNRN21CSEhHNGNBaDE2SFI1VHAwRUhBQ3B0WUhJTG9ZWm1x?oc=5",
+      "published_at": "Mon, 23 Nov 2026 13:58:32 GMT",
+      "publisher": "블루밍비트",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:젠슨",
       "title": "Nvidia, 젠슨 황 CEO 복귀 발표에 주가 35% 이상 급등",
       "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5KR0dWTmlkNVdSeFJDd053d2hyLW9Ec0luVGtVaTV4WnpVcV9Oa0M3YmNYUmQ0U0pOcGowbFA2Yk1ZcHhQWTZPbFVxZFRVa2M4c1lXTVZlZzlmcG5aallESHpCQWdSQmw1X1VRSXNRNmQ?oc=5",
       "published_at": "Mon, 23 Nov 2026 14:03:00 GMT",
       "publisher": "Investing.com 한국어",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:젠슨",
+      "title": "젠슨 황, 11일 만에 엔비디아 전격 복귀...엔비디아 주가 폭등",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBtaFZHNVp4MngzTDVuUzJPcERjMnk1aV91cnZyX1BXU0N0NDRjYkNiN2hPTVJRaGlCMEpPdWpxdjBmcy1pOWxlTUkzcVMtcGJOWFNLck13TzB1Rjl2aEE?oc=5",
+      "published_at": "Mon, 23 Nov 2026 19:10:00 GMT",
+      "publisher": "YTN",
       "discovery_source": "google_news_rss"
     },
     {
@@ -1996,14 +2229,6 @@
     },
     {
       "topic": "dynamic:수출",
-      "title": "산업연 “내년 수출 14% 늘어 1조 3000억 달러…반도체 빼면 1.5% 증가 그칠 전망”",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5ZOWJVdE1heVN2c2N0d2h0WXFncDhKS0t2WWNlUHhZZktISUZka1hDV3cxcmFhZjYzSTBuNnB1T0w0aVlrMC1zWVZkc3duZldQaVZTR3dSQnE2cjNqd1RTa3UtVHAwbWJfUUFmcjFKQ1duekRP?oc=5",
-      "published_at": "Mon, 23 Nov 2026 14:03:35 GMT",
-      "publisher": "부산일보",
-      "discovery_source": "google_news_rss"
-    },
-    {
-      "topic": "dynamic:수출",
       "title": "[기획-메르코스코프] 아르헨티나, 507억 달러 LNG 수출사업 승인…에너지 시장 큰손 될까",
       "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE0xampPV2Jrc09PeExodU0tcWxiTW9xREl5clFIcDdVNVZwWkttd1VMXzVrTGJNaHZJTmNhaHRUZG8xaFlnRFNpOTRmQ0E4MFZMY25GRHZOOVY5RlYzM2p6ZUs3cm83NFB6?oc=5",
       "published_at": "Mon, 23 Nov 2026 17:57:00 GMT",
@@ -2028,10 +2253,26 @@
     },
     {
       "topic": "dynamic:수출",
+      "title": "반도체 '독주'에 가려진 그늘 … 내년 車 수출 1.3%↓, 정유·석화는 역성장",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBwSXZFZWxrblloQ3gwMzVsTXZQdjRVZGV6RXNRMmxnV0k5ZURBdFdpcHcwZ3dZSUI3eHhseDFVSUY2eXdlYmd1Ykt0NzRtb2JZWHVNeGpNamJuXzFKYWtuZVhqNVV1WlFmRDlnaFhWLXNXdHBaTmhmOTlVY9IBgAFBVV95cUxPWXBPYkhkbjg3NTdzV29jMDFPMU1QbjJWRzhOZV8xZ3ExT05lRkJTSXA2amE1emljZl8zQ2RHRmNSdHpzV19SZHhQbjlOV1JPWlluVTJrU3VwM0V4LXNMTW8tYmxVczk2NVM3UkVhcjBpaTZYdmxkVDd3MXBZT3VqdQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 07:30:00 GMT",
+      "publisher": "뉴데일리 경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
       "title": "한국 수출 11월 1~20일 774억 달러로 역대 최대, 연간 1조 달러도 첫 돌파 📦📈",
       "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1PTnBYZzFGOGI5d3JKU05ZTTVVY2RWMndHYTBSb2tGNERDQVlhRDB3dkctamFTWFFCVDdmREJhVVFUTmcyN0FiYjl1VU5WUE4yaENF?oc=5",
       "published_at": "Mon, 23 Nov 2026 09:50:59 GMT",
       "publisher": "뉴닉",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:수출",
+      "title": "젠슨 황 복귀에 美의회 반발…엔비디아 中수출 조사 압박 [젠슨 황 CEO 복귀]",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1EQ0w2ZlB3ZHlhSGVzWDJVSzJqcEpTNGJCVWNRa012NXNZNWdoRGpuMHZEQlRISFZLYjdSYVNwSVVuYjhLMFo3SDVEd2toNTVvZk1BLUx4RGlQZw?oc=5",
+      "published_at": "Mon, 23 Nov 2026 16:15:33 GMT",
+      "publisher": "한국경제",
       "discovery_source": "google_news_rss"
     },
     {
@@ -2076,10 +2317,34 @@
     },
     {
       "topic": "dynamic:엔비디아",
+      "title": "돌아온 'AI 황제'에 환호…엔비디아 폭등 출발",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9aQktwLS1weEtFMlhUSzN4bjJQUlJSaDZEZlpjaUNwLVBld0FEVm9GVHpudVlBWFBKWkJRakdUN3RoeGpkd1VtQlRZVDQ5MWdYNHRId1hSWVdqQQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 16:11:12 GMT",
+      "publisher": "한국경제",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:엔비디아",
       "title": "엔비디아 주가, 젠슨 황 사임 전으로…복귀 소식에 35% 급반등 - 머니투데이",
       "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9NTEEyS1ZncHVabVRlY0lDZ2J2d0NZazA1Z3NyWHR3czZwWG4ySTRxSDFaQWZ2V2NmbTBxZmN1RjhWZm5JaDJyQ2tfNWZLbFhyQ3VMR1ZPOHRBbEgwNU1vVjVYbXdnbUNL0gFuQVVfeXFMTVZiWDRFblFjaHpOcUx2NnVheVc4anR0LVpFTC04UkY1WVVjeTQ0akgxM3FHQ0tWU0JWQ3FlUVFaSUlfeHp3S0M5Q0VwbVFic0RIallMVktOMDJjbFFxZjNQWGhONkx3SVBqUEZHMkE?oc=5",
       "published_at": "Mon, 23 Nov 2026 15:54:31 GMT",
       "publisher": "머니투데이",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:조사",
+      "title": "美민주 \"한국 등이 미국과 체결한 투자합의 조사 계획\"",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBYcDZmQ2tDV3hyYWNkcDRNTGtvWUMtNVo3WS1ON1pLSG5QMlFmeWtxVk5QeVZMclRNZEhKaTV0b0hVYUZiTjNlVHhQbGNnMy05aV9DWmNLSklNVS1kNDVYRdIBYEFVX3lxTFBYcDZmQ2tDV3hyYWNkcDRNTGtvWUMtNVo3WS1ON1pLSG5QMlFmeWtxVk5QeVZMclRNZEhKaTV0b0hVYUZiTjNlVHhQbGNnMy05aV9DWmNLSklNVS1kNDVYRQ?oc=5",
+      "published_at": "Mon, 23 Nov 2026 11:15:14 GMT",
+      "publisher": "연합뉴스",
+      "discovery_source": "google_news_rss"
+    },
+    {
+      "topic": "dynamic:조사",
+      "title": "‘AI 커닝’ 불똥이 학교로… 학생들 “내신 전수조사하라”",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQUS1fSVVvSGtGY3JVYjBXSFpzVUZTVnpRRGhWV0RiOWJnVjFGeVo4Q1dZbXdYQnB6TXpvUTIwOE5SQWlRcnhmU3FyUTZWVzNLdzl3czljTVZ1OGUxVFNxM1JnTElCbUJKSXB3Qkk5VHgzYTBraHlaZk54Mk1LZ29BRGljS3Zwc1E?oc=5",
+      "published_at": "Mon, 23 Nov 2026 15:47:00 GMT",
+      "publisher": "조선일보",
       "discovery_source": "google_news_rss"
     }
   ],
@@ -2088,79 +2353,133 @@
     "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
     "한국 증시 오늘 새 공시 수주 계약 정책 변화",
     "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
-    "반도체 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "반도체 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "관세 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "젠슨 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "수출 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
     "엔비디아 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-    "대통령 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+    "조사 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "관세 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+    "수출 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
   ],
   "dynamic_query_terms": [
-    "AI",
     "반도체",
+    "AI",
     "트럼프",
     "관세",
-    "조사",
     "젠슨",
     "수출",
-    "엔비디아"
+    "엔비디아",
+    "조사"
   ],
   "hot_topic_candidates": [
     {
+      "term": "AI",
+      "count": 33,
+      "publisher_count": 24,
+      "independent_story_count_estimate": 33,
+      "syndication_ratio_estimate": 0.0,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 31,
+      "delta": 2,
+      "score": 92,
+      "examples": [
+        "연방 자율과 주 감사 체계의 분기—미국 AI 규제가 한국 기업 비용 구조를 바꾼다",
+        "일본, AI 규제보다 시장 설계를 먼저 택하다",
+        "이재명 대통령 필립핀서 대학수능 비상 점검화상 회의 주재!...AI 부정행위 엄단 촉구!"
+      ],
+      "article_velocity": 2,
+      "hot_score": 188
+    },
+    {
       "term": "반도체",
       "count": 30,
-      "publisher_count": 23,
+      "publisher_count": 24,
       "independent_story_count_estimate": 29,
       "syndication_ratio_estimate": 0.033,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 31,
-      "delta": -1,
-      "score": 83,
+      "previous_count": 30,
+      "delta": 0,
+      "score": 84,
       "examples": [
         "트럼프發 AI 규제에 흔들리는 반도체 호황…국내 메모리 업체 영향은",
         "삼성·SK 주식 어쩌나…美 반도체 쇼크에 동반 급락",
         "엔비디아발 반도체 경고등 켜졌다…삼성전자·한미반도체 향방은?"
       ],
       "article_velocity": 0,
-      "hot_score": 163
-    },
-    {
-      "term": "AI",
-      "count": 31,
-      "publisher_count": 21,
-      "independent_story_count_estimate": 31,
-      "syndication_ratio_estimate": 0.0,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 33,
-      "delta": -2,
-      "score": 83,
-      "examples": [
-        "이재명 대통령 필립핀서 대학수능 비상 점검화상 회의 주재!...AI 부정행위 엄단 촉구!",
-        "트럼프發 AI 규제에 흔들리는 반도체 호황…국내 메모리 업체 영향은",
-        "엔비디아 이어 AMD까지 AI 투심 급랭…삼전닉스 '위기이자 기회'"
-      ],
-      "article_velocity": 0,
-      "hot_score": 166
+      "hot_score": 165
     },
     {
       "term": "트럼프",
-      "count": 19,
+      "count": 20,
       "publisher_count": 18,
-      "independent_story_count_estimate": 19,
-      "syndication_ratio_estimate": 0.0,
+      "independent_story_count_estimate": 18,
+      "syndication_ratio_estimate": 0.1,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 21,
-      "delta": -2,
+      "previous_count": 19,
+      "delta": 1,
+      "score": 59,
+      "examples": [
+        "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+        "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
+      ],
+      "article_velocity": 1,
+      "hot_score": 114
+    },
+    {
+      "term": "젠슨",
+      "count": 21,
+      "publisher_count": 15,
+      "independent_story_count_estimate": 19,
+      "syndication_ratio_estimate": 0.095,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 19,
+      "delta": 2,
+      "score": 59,
+      "examples": [
+        "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
+        "엔비디아, 젠슨 황 전격 복귀에 주가 33% 폭등…AMD·마이크론 등 AI주 동반 강세",
+        "[뉴욕 금가격] 젠슨 황 복귀에 저가 매수 분출…4%대 급등"
+      ],
+      "article_velocity": 2,
+      "hot_score": 116
+    },
+    {
+      "term": "엔비디아",
+      "count": 21,
+      "publisher_count": 14,
+      "independent_story_count_estimate": 19,
+      "syndication_ratio_estimate": 0.095,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 19,
+      "delta": 2,
+      "score": 58,
+      "examples": [
+        "엔비디아 이어 AMD까지 AI 투심 급랭…삼전닉스 '위기이자 기회'",
+        "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
+        "엔비디아 역대급 실적에 삼성전자·SK하이닉스 성장 기회…2027년 고부가 메모리 시장 선점 총력"
+      ],
+      "article_velocity": 2,
+      "hot_score": 114
+    },
+    {
+      "term": "조사",
+      "count": 19,
+      "publisher_count": 15,
+      "independent_story_count_estimate": 14,
+      "syndication_ratio_estimate": 0.263,
+      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+      "previous_count": 16,
+      "delta": 3,
       "score": 56,
       "examples": [
-        "트럼프發 AI 규제에 흔들리는 반도체 호황…국내 메모리 업체 영향은",
-        "트럼프, 자국 기업의 해외 데이터센터 건설에 과세 경고…국내 영향은",
-        "美 민주당, 한국·일본 대미 투자 합의 조사 예고…트럼프 관세도 정조준"
+        "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+        "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
       ],
-      "article_velocity": 0,
-      "hot_score": 112
+      "article_velocity": 3,
+      "hot_score": 103
     },
     {
       "term": "관세",
@@ -2173,138 +2492,84 @@
       "delta": 0,
       "score": 55,
       "examples": [
-        "“한국엔 관세 15% 안 넘긴다더니”…美, 디지털 정책 겨냥 301조 조사",
-        "‘하원 238석 압승’ 민주, 트럼프 ‘한국 관세·대미 투자’ 조사한다",
-        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수",
+        "미국, 한국 디지털 규제 조사 검토…관세 상한 흔들리나 : 국제",
+        "‘하원 238석 압승’ 민주, 트럼프 ‘한국 관세·대미 투자’ 조사한다"
       ],
       "article_velocity": 0,
       "hot_score": 107
     },
     {
-      "term": "젠슨",
-      "count": 19,
-      "publisher_count": 14,
-      "independent_story_count_estimate": 18,
-      "syndication_ratio_estimate": 0.053,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": 0,
-      "score": 52,
-      "examples": [
-        "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
-        "엔비디아, 젠슨 황 전격 복귀에 주가 33% 폭등…AMD·마이크론 등 AI주 동반 강세",
-        "[뉴욕 금가격] 젠슨 황 복귀에 저가 매수 분출…4%대 급등"
-      ],
-      "article_velocity": 0,
-      "hot_score": 101
-    },
-    {
       "term": "수출",
-      "count": 19,
+      "count": 20,
       "publisher_count": 14,
-      "independent_story_count_estimate": 19,
+      "independent_story_count_estimate": 20,
       "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 20,
-      "delta": -1,
-      "score": 52,
+      "previous_count": 19,
+      "delta": 1,
+      "score": 55,
       "examples": [
         "李 대통령 지지율 37.3%…순방·수출 호조에2주 연속 상승",
         "李대통령 지지율 37.3%…순방·수출 호조에 0.9%p 상승[리얼미터]",
         "메모리 수출 283% 급증…시스템반도체와 성장률 격차 19배"
       ],
-      "article_velocity": 0,
-      "hot_score": 104
-    },
-    {
-      "term": "엔비디아",
-      "count": 19,
-      "publisher_count": 12,
-      "independent_story_count_estimate": 18,
-      "syndication_ratio_estimate": 0.053,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": 0,
-      "score": 50,
-      "examples": [
-        "엔비디아 이어 AMD까지 AI 투심 급랭…삼전닉스 '위기이자 기회'",
-        "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
-        "엔비디아 역대급 실적에 삼성전자·SK하이닉스 성장 기회…2027년 고부가 메모리 시장 선점 총력"
-      ],
-      "article_velocity": 0,
-      "hot_score": 97
-    },
-    {
-      "term": "조사",
-      "count": 16,
-      "publisher_count": 14,
-      "independent_story_count_estimate": 14,
-      "syndication_ratio_estimate": 0.125,
-      "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 19,
-      "delta": -3,
-      "score": 46,
-      "examples": [
-        "美 민주당, 한국·일본 대미 투자 합의 조사 예고…트럼프 관세도 정조준",
-        "美민주, 한국 등 대미 투자합의 조사 착수 … 트럼프 관세정책 정조준",
-        "“한국엔 관세 15% 안 넘긴다더니”…美, 디지털 정책 겨냥 301조 조사"
-      ],
-      "article_velocity": 0,
-      "hot_score": 86
+      "article_velocity": 1,
+      "hot_score": 112
     },
     {
       "term": "달러",
-      "count": 16,
-      "publisher_count": 13,
-      "independent_story_count_estimate": 16,
+      "count": 17,
+      "publisher_count": 14,
+      "independent_story_count_estimate": 17,
       "syndication_ratio_estimate": 0.0,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 16,
-      "delta": 0,
-      "score": 45,
+      "delta": 1,
+      "score": 49,
       "examples": [
         "틈새 제품에서 수출 1조 달러 주역으로…HBM 13년의 역사",
         "‘앤스로픽 쇼크’… 1000억 달러 신주 발행하자 나스닥 폭락",
         "고객 서비스 AI 시에라, 17.5억 달러 투자유치…가치 300억 달러"
       ],
-      "article_velocity": 0,
-      "hot_score": 90
+      "article_velocity": 1,
+      "hot_score": 100
     },
     {
-      "term": "이재명",
-      "count": 8,
-      "publisher_count": 7,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.0,
+      "term": "규제",
+      "count": 9,
+      "publisher_count": 9,
+      "independent_story_count_estimate": 6,
+      "syndication_ratio_estimate": 0.333,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
       "previous_count": 0,
-      "delta": 8,
-      "score": 31,
+      "delta": 9,
+      "score": 36,
       "examples": [
-        "이재명 대통령, 제29차 아세안+3 정상회의 참석··· \"아세안+3 새로운 30년, 한국도 책임 다할 것\" : 네이버 블로그",
-        "이재명 대통령 시진핑 주석 한·중 정상회담 \"FTA 서비스·투자 협상 타결 계기 경제협력 확대,한반도 긴장완화 중국 건설적 역할\"",
-        "정상들 만나고 돌아왔지만...이재명 순방 '빈손 외교' 논란 [이슈톺]"
+        "\"트럼프 행정부, 한국·EU·호주 디지털 규제 301조 조사 검토\"",
+        "트럼프 행정부, 한국·EU·호주 디지털 규제 301 조사 검토",
+        "트럼프 행정부, 한국 디지털 규제 301조 조사 검토…15% 관세 합의 변수"
       ],
-      "article_velocity": 8,
-      "hot_score": 78
+      "article_velocity": 9,
+      "hot_score": 81
     },
     {
       "term": "복귀",
-      "count": 8,
-      "publisher_count": 6,
-      "independent_story_count_estimate": 8,
-      "syndication_ratio_estimate": 0.0,
+      "count": 10,
+      "publisher_count": 8,
+      "independent_story_count_estimate": 9,
+      "syndication_ratio_estimate": 0.1,
       "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-      "previous_count": 0,
-      "delta": 8,
+      "previous_count": 8,
+      "delta": 2,
       "score": 30,
       "examples": [
         "[종합] 엔비디아 젠슨 황, 사임 11일 만에 CEO 전격 복귀…삼성전자·SK하이닉스 HBM 공급망 촉각",
         "월가, 엔비디아 목표가 최대 270달러…황 복귀 효과 [젠슨 황 CEO 복귀]",
         "[속보] 젠슨황 CEO 복귀 … 엔비디아 30% 급등, 美 반도체·기술주 '환호'"
       ],
-      "article_velocity": 8,
-      "hot_score": 76
+      "article_velocity": 2,
+      "hot_score": 61
     },
     {
       "term": "민주",
