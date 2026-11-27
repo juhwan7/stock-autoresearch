@@ -1,775 +1,9 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-11-28T04:31:58.875089+09:00",
+  "updated_at": "2026-11-28T04:42:06.945717+09:00",
   "batch_size": 3,
   "sensor_interval_minutes": 10,
   "observations": [
-    {
-      "schema_version": 2,
-      "observation_id": "obs-20261127T084215+0900-45912306647-1",
-      "observed_at": "2026-11-27T08:42:15.426311+09:00",
-      "slot_at": "2026-11-27T08:40:00+09:00",
-      "slot_key": "2026-11-27T08:40+0900",
-      "sensor_interval_minutes": 10,
-      "slot_source": "dispatch_input",
-      "slot_start_delay_seconds": 29.183,
-      "slot_delay_seconds": 135.426311,
-      "source": {
-        "repository": "juhwan7/stock-autoresearch",
-        "workflow": "10분 감독 관측 큐",
-        "event_name": "workflow_dispatch",
-        "run_id": "45912306647",
-        "run_attempt": "1",
-        "head_sha": "36c74bbd813fbbd350977406cdf00bfe5e5a79a2",
-        "ref_name": "main"
-      },
-      "queue": {
-        "batch_size": 3,
-        "pending_before_append": 120,
-        "last_processed_observation_id": "obs-20260928T183221+0900-36403930052-1",
-        "last_processed_slot": "2026-09-28T18:30:00+09:00",
-        "pending_after_append": 120
-      },
-      "validation": {
-        "status": "ok",
-        "compile": "ok",
-        "pytest": "ok",
-        "diff_check": "ok"
-      },
-      "steps": {
-        "toss_fetch": "success",
-        "toss_summary": "success",
-        "health": "success",
-        "dashboard": "success",
-        "market_discovery": "success",
-        "public_batch_market": "success",
-        "market_sensor_repair": "success",
-        "risk_sensor_repair": "success",
-        "regression_refresh": "success"
-      },
-      "health": {
-        "status": "CRITICAL",
-        "generated_at": "2026-11-27T08:42:05.897662+09:00",
-        "issues": [
-          {
-            "component": "market",
-            "code": "toss-collector-unavailable",
-            "severity": "CRITICAL",
-            "message": "NXT 시간대용 토스 Collector 스냅샷을 사용할 수 없음"
-          },
-          {
-            "component": "risk",
-            "code": "calendar-empty",
-            "severity": "INFO",
-            "message": "가까운 주요 일정이 없거나 일정 데이터가 비어 있음"
-          },
-          {
-            "component": "macro",
-            "code": "unavailable",
-            "severity": "CRITICAL",
-            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
-          }
-        ]
-      },
-      "regression": {
-        "status": "COLLECTING",
-        "generated_at": "2026-11-26T23:42:05.331631+00:00",
-        "quarantine_count": 0,
-        "rolled_back_count": 0
-      },
-      "market_discovery": {
-        "generated_at": "2026-11-27T08:41:51.552178+09:00",
-        "item_count": 208,
-        "new_item_count": 29,
-        "topic_counts": {
-          "kr_market_flow": 2,
-          "kr_corporate_events": 2,
-          "kr_policy_economy": 30,
-          "kr_diplomacy_summit": 18,
-          "kr_semiconductor_ai": 14,
-          "kr_energy_power": 2,
-          "kr_defense_shipbuilding": 1,
-          "global_market": 18,
-          "global_diplomacy_summit": 30,
-          "us_macro_rates": 1,
-          "global_energy_middle_east": 4,
-          "us_china_trade_ai": 4,
-          "japan_boj_fx": 1,
-          "europe_debt_ecb": 1,
-          "dynamic:반도체": 20,
-          "dynamic:관세": 13,
-          "dynamic:트럼프": 5,
-          "dynamic:기준금리": 19,
-          "dynamic:한은": 5,
-          "dynamic:인상": 7,
-          "dynamic:금리": 6,
-          "dynamic:달러": 5
-        },
-        "trending_terms": [
-          {
-            "term": "관세",
-            "count": 39,
-            "publisher_count": 28,
-            "independent_story_count_estimate": 34,
-            "syndication_ratio_estimate": 0.128,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 32,
-            "delta": 7,
-            "score": 113,
-            "examples": [
-              "[사설] 산업정책까지 거론한 美 보고서, 관세 방어 총력전을",
-              "美, 관세 넘어 韓 산업정책 정조준…정부 “구조적 과잉생산 의도 없어”",
-              "[뉴스후] 美의 '25% 관세 카드'로 드러난 한·미 산업정책 충돌"
-            ]
-          },
-          {
-            "term": "반도체",
-            "count": 33,
-            "publisher_count": 31,
-            "independent_story_count_estimate": 32,
-            "syndication_ratio_estimate": 0.03,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 31,
-            "delta": 2,
-            "score": 99,
-            "examples": [
-              "급락 하루 만에… 코스피 반도체 업고 4724선 반등",
-              "[공시 Pick] 유니테스트, 123억 규모 반도체 검사장비 수주에 10%대 급등",
-              "美, 한국 반도체·AI 산업 정책 정조준… 301조 근거로 제조업·수출 중심 성장전략 문제 삼아"
-            ]
-          },
-          {
-            "term": "트럼프",
-            "count": 29,
-            "publisher_count": 23,
-            "independent_story_count_estimate": 25,
-            "syndication_ratio_estimate": 0.138,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 27,
-            "delta": 2,
-            "score": 83,
-            "examples": [
-              "李 대통령, 내달 13~19일 美·캐나다·페루 순방…‘트럼프 G20’ 격랑 속 실익 외교 시험대 : 알파경제TV",
-              "美언론, 트럼프 관세 정책 비판…\"최악 시기 경제적 자해\"",
-              "美기술패권 진력하는 트럼프…교역국엔 '깨알 트집' 관세 칼날"
-            ]
-          },
-          {
-            "term": "인상",
-            "count": 22,
-            "publisher_count": 17,
-            "independent_story_count_estimate": 18,
-            "syndication_ratio_estimate": 0.182,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 19,
-            "delta": 3,
-            "score": 64,
-            "examples": [
-              "4800선 찍고 밀린 코스피…한은 금리 인상 뒤 상승폭 대부분 반납",
-              "영국 파운드화, 일본은행의 매파적 기조에 엔화 강세 보이며 하락…영란은행 금리 인상 기대에 낙폭 제한",
-              "美, 15% 관세 상한 지켰지만…'25% 인상' 카드 쥐고 한국 압박 - 머니투데이"
-            ]
-          },
-          {
-            "term": "기준금리",
-            "count": 22,
-            "publisher_count": 17,
-            "independent_story_count_estimate": 16,
-            "syndication_ratio_estimate": 0.273,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 21,
-            "delta": 1,
-            "score": 62,
-            "examples": [
-              "[심층 분석] 반도체 호황에 성장률 4.1% 전망…한은, 기준금리 3.25%로 인상한 이유",
-              "한은, 기준금리 0.25%p 인상…2년 만에 연 3.25%",
-              "한은 기준금리 인상‥성장률 전망 대폭 상향"
-            ]
-          },
-          {
-            "term": "한은",
-            "count": 20,
-            "publisher_count": 17,
-            "independent_story_count_estimate": 15,
-            "syndication_ratio_estimate": 0.25,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 19,
-            "delta": 1,
-            "score": 58,
-            "examples": [
-              "4800선 찍고 밀린 코스피…한은 금리 인상 뒤 상승폭 대부분 반납",
-              "환율, 물가, 마지막은 주가 … 한은 총재가 통화정책에 고려하는 우선 순위",
-              "[심층 분석] 반도체 호황에 성장률 4.1% 전망…한은, 기준금리 3.25%로 인상한 이유"
-            ]
-          },
-          {
-            "term": "금리",
-            "count": 18,
-            "publisher_count": 14,
-            "independent_story_count_estimate": 18,
-            "syndication_ratio_estimate": 0.0,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 17,
-            "delta": 1,
-            "score": 51,
-            "examples": [
-              "4800선 찍고 밀린 코스피…한은 금리 인상 뒤 상승폭 대부분 반납",
-              "[금/유가] 중동 공급 차질 우려에 브렌트유 상승…美 금리 우려에 금값 약세",
-              "영국 파운드화, 일본은행의 매파적 기조에 엔화 강세 보이며 하락…영란은행 금리 인상 기대에 낙폭 제한"
-            ]
-          },
-          {
-            "term": "과잉생산",
-            "count": 11,
-            "publisher_count": 10,
-            "independent_story_count_estimate": 10,
-            "syndication_ratio_estimate": 0.091,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 7,
-            "delta": 4,
-            "score": 36,
-            "examples": [
-              "美, 관세 넘어 韓 산업정책 정조준…정부 “구조적 과잉생산 의도 없어”",
-              "亞, 트럼프 301조 관세 근거 반박… 韓·日은 ‘과잉생산’ 부인, 동남아는 협상 총력",
-              "美 과잉생산 관세에 中 반발…미중 무역휴전 다시 '시험대'"
-            ]
-          },
-          {
-            "term": "AI",
-            "count": 13,
-            "publisher_count": 9,
-            "independent_story_count_estimate": 13,
-            "syndication_ratio_estimate": 0.0,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 12,
-            "delta": 1,
-            "score": 36,
-            "examples": [
-              "美, 한국 반도체·AI 산업 정책 정조준… 301조 근거로 제조업·수출 중심 성장전략 문제 삼아",
-              "미국, 중국 AI 숨통 조인다… 한미반도체부터 LS ELECTRIC까지 수혜주 부상",
-              "유진투자증권 \"AI 칩 원격 접근 차단·중국 규제 이중고…삼성전자·SK하이닉스 언제 웃을까\""
-            ]
-          },
-          {
-            "term": "달러",
-            "count": 13,
-            "publisher_count": 9,
-            "independent_story_count_estimate": 13,
-            "syndication_ratio_estimate": 0.0,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 15,
-            "delta": -2,
-            "score": 35,
-            "examples": [
-              "미국 AI 칩 규제에 66억 달러 대출도 지연…SK하이닉스·한미반도체 영향은?",
-              "\"페트로 달러 시대 지나고 칩 달러 시대 온다\"",
-              "美 법원, 北 IT 인력 탈취 자금 94만 달러 몰수…피해자 통지 절차 착수"
-            ]
-          },
-          {
-            "term": "성장률",
-            "count": 11,
-            "publisher_count": 9,
-            "independent_story_count_estimate": 8,
-            "syndication_ratio_estimate": 0.273,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 10,
-            "delta": 1,
-            "score": 32,
-            "examples": [
-              "[심층 분석] 반도체 호황에 성장률 4.1% 전망…한은, 기준금리 3.25%로 인상한 이유",
-              "‘블프’ 직전 ‘관세폭탄’ 날린 트럼프…“GDP 성장률 조작” 음모론",
-              "[스타트 경제] \"내년 성장률 4.1%\" 반도체가 끌어올린 금리...같은 날 가계 실질소득 2.1%↓ 발표"
-            ]
-          },
-          {
-            "term": "규제혁신",
-            "count": 10,
-            "publisher_count": 9,
-            "independent_story_count_estimate": 4,
-            "syndication_ratio_estimate": 0.6,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 10,
-            "delta": 0,
-            "score": 29,
-            "examples": [
-              "한국토지주택공사(LH), ‘대한민국 규제혁신 대상’ 중소벤처기업부 장관상 수상",
-              "LH, ‘대한민국 규제혁신 대상’ 중소벤처기업부 장관상 수상",
-              "LH, ‘대한민국 규제혁신 대상’ 중기부 장관상 수상…중소기업 기술·판로 전방위 지원 결실"
-            ]
-          },
-          {
-            "term": "LH",
-            "count": 7,
-            "publisher_count": 7,
-            "independent_story_count_estimate": 2,
-            "syndication_ratio_estimate": 0.714,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 0,
-            "delta": 7,
-            "score": 28,
-            "examples": [
-              "한국토지주택공사(LH), ‘대한민국 규제혁신 대상’ 중소벤처기업부 장관상 수상",
-              "LH, ‘대한민국 규제혁신 대상’ 중소벤처기업부 장관상 수상",
-              "LH, ‘대한민국 규제혁신 대상’ 중기부 장관상 수상…중소기업 기술·판로 전방위 지원 결실"
-            ]
-          },
-          {
-            "term": "SK하이닉스",
-            "count": 8,
-            "publisher_count": 4,
-            "independent_story_count_estimate": 8,
-            "syndication_ratio_estimate": 0.0,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 0,
-            "delta": 8,
-            "score": 28,
-            "examples": [
-              "미국 수출통제 뚫린 엔비디아 반도체…SK하이닉스·삼성전자에 미칠 파장은?",
-              "유진투자증권 \"AI 칩 원격 접근 차단·중국 규제 이중고…삼성전자·SK하이닉스 언제 웃을까\"",
-              "반도체 호황 돈 풀린다… 삼성전자·SK하이닉스 이어 내수주도 살아날까"
-            ]
-          },
-          {
-            "term": "물가",
-            "count": 9,
-            "publisher_count": 8,
-            "independent_story_count_estimate": 8,
-            "syndication_ratio_estimate": 0.111,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 10,
-            "delta": -1,
-            "score": 26,
-            "examples": [
-              "환율, 물가, 마지막은 주가 … 한은 총재가 통화정책에 고려하는 우선 순위",
-              "연말 산타랠리엔 물가 부담…골드만삭스·모건스탠리 “내년 S&P500 8,700”",
-              "트럼프 관세의 역설…물가 부담 키우고 재정수입 의존 높여 철폐 어려워져"
-            ]
-          },
-          {
-            "term": "대통령",
-            "count": 9,
-            "publisher_count": 7,
-            "independent_story_count_estimate": 9,
-            "syndication_ratio_estimate": 0.0,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 8,
-            "delta": 1,
-            "score": 26,
-            "examples": [
-              "李 대통령, 내달 13~19일 美·캐나다·페루 순방…‘트럼프 G20’ 격랑 속 실익 외교 시험대 : 알파경제TV",
-              "이재명 대통령, APEC에서 1조달러 수출경제대국 걸맞는 예우 받고 역대급 외교성과 거두며 '혁신·회복력·포용' 3대 비전 제시",
-              "李 대통령 “7대 시드 프로젝트 속도 내야” [청와대오늘]"
-            ]
-          },
-          {
-            "term": "대상",
-            "count": 8,
-            "publisher_count": 8,
-            "independent_story_count_estimate": 2,
-            "syndication_ratio_estimate": 0.75,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 8,
-            "delta": 0,
-            "score": 24,
-            "examples": [
-              "한국토지주택공사(LH), ‘대한민국 규제혁신 대상’ 중소벤처기업부 장관상 수상",
-              "LH, ‘대한민국 규제혁신 대상’ 중소벤처기업부 장관상 수상",
-              "LH, ‘대한민국 규제혁신 대상’ 중기부 장관상 수상…중소기업 기술·판로 전방위 지원 결실"
-            ]
-          },
-          {
-            "term": "수상",
-            "count": 8,
-            "publisher_count": 7,
-            "independent_story_count_estimate": 3,
-            "syndication_ratio_estimate": 0.625,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 8,
-            "delta": 0,
-            "score": 23,
-            "examples": [
-              "한국토지주택공사(LH), ‘대한민국 규제혁신 대상’ 중소벤처기업부 장관상 수상",
-              "LH, ‘대한민국 규제혁신 대상’ 중소벤처기업부 장관상 수상",
-              "LH, ‘대한민국 규제혁신 대상’ 중기부 장관상 수상…중소기업 기술·판로 전방위 지원 결실"
-            ]
-          },
-          {
-            "term": "상호관세",
-            "count": 6,
-            "publisher_count": 5,
-            "independent_story_count_estimate": 3,
-            "syndication_ratio_estimate": 0.5,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 0,
-            "delta": 6,
-            "score": 23,
-            "examples": [
-              "美 새 관세 시행땐 평균관세율 13.9%…상호관세 무효화 전으로",
-              "“트럼프 새 관세안 시행 땐 실효세율 13.9%⋯상호관세 무효화 전으로 복귀”",
-              "\"美 새 관세 시행시 평균관세율 13.9%\"…상호관세 부활 수준"
-            ]
-          },
-          {
-            "term": "다시",
-            "count": 6,
-            "publisher_count": 5,
-            "independent_story_count_estimate": 5,
-            "syndication_ratio_estimate": 0.167,
-            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
-            "previous_count": 0,
-            "delta": 6,
-            "score": 23,
-            "examples": [
-              "엔비디아 등급 강등 현실화할까… HBM·AI 전력 인프라 수혜주 다시 따져보니",
-              "다시 관세버튼 누른 트럼프… 비과세 투자·노후 적립금도 문제 삼아",
-              "美 과잉생산 관세에 中 반발…미중 무역휴전 다시 '시험대'"
-            ]
-          }
-        ],
-        "new_dart_filings": [],
-        "official_web_candidates": [],
-        "toss_market": {
-          "available": true,
-          "captured_at": "2026-11-21T21:10:45.033729+09:00",
-          "top_turnover": [],
-          "minute_burst_leaders": [],
-          "top10_share": null
-        },
-        "sector_selection": {
-          "mode": "dynamic",
-          "fixed_sector_whitelist": false,
-          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택"
-        },
-        "naver_indices": {
-          "KOSPI": "4,711.21",
-          "KOSDAQ": "655.71",
-          "KOSPI200": "727.08"
-        },
-        "source_summary": {
-          "ok_or_partial": 23,
-          "failed": 0,
-          "degraded": 4
-        },
-        "top_new_items": [
-          {
-            "topic": "kr_policy_economy",
-            "title": "LH, '대한민국 규제혁신 대상' 중소벤처기업부 장관상 수상",
-            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1KSWVwdjd3TkxhZm9KVlM0M1Uzek9yWmtxV2Z0UEl3OGloR3NEaGZvZHdRQ0FCZXd4YlRsY0RtYzF2OG1iQWhMN0tkX2s0bGdndTQ3bklZbVNOMFRmS2w0WnppR3d0VldId1lR0gFuQVVfeXFMTnA4UG0zOWdwSTRYRm1QeGpRWm9lMzd3OEVPN1loZThobEhPLUdxTV8xaXRZRFJBdnpiSHlJS1ppOUNlYkFOWjhDbDBuZFpqMzBPR3NqOXNLVlZ4bGVRdklveGdQbG9CNkxFYldqS0E?oc=5",
-            "published_at": "Thu, 26 Nov 2026 07:04:04 GMT",
-            "publisher": "뉴스드림",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "kr_diplomacy_summit",
-            "title": "[글로컬] 멀어지는 북미회담…'페이스 메이커' 기회 올까",
-            "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE8tVXVjUVZzOUdxWTRuOEJyWU5oVmlrNFBkUnVfTlF0T1JiVGRKN1pJTW81OHpoNlRuZk80S0xFNnNDRHYwWTlwalNPTUl4cDhBdExmbGlhQjVBclXSAWBBVV95cUxORThxMm5uMTcwc3hsNEJPQUE2cXdSY2FfUjNPQnBGN1gtRTl0QUpmcXRpQW04WTNPci1ERkNXTE5VY1dqZlpNVlphRFhodEY4M2lwZXFJdDR1MFFVTjlSRzk?oc=5",
-            "published_at": "Thu, 26 Nov 2026 22:07:01 GMT",
-            "publisher": "연합뉴스",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "kr_diplomacy_summit",
-            "title": "李 대통령, 119만가구 공적주택 속도전…LH 182조원 발주·부채 관건",
-            "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1ObEZTMHpud2xxNk14Yzg3UXhKaklvc0x4S0x4cGI3NzJIRGZ6RGZqZHowMTZDeFA2aXpzRGRpLWhRbGNnQ3ExVm02Vzh3WjBoNXEyRjBVOGRDZG1TcklPcGJCNDJDbllJX1kwcE1n?oc=5",
-            "published_at": "Thu, 26 Nov 2026 04:28:10 GMT",
-            "publisher": "알파경제",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "kr_energy_power",
-            "title": "EU ‘전력화 최우선’ 안보법…12차 전기본 원전 공론화는 파행",
-            "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFAtUFlEQnFSaTZJRS0zMFJKRXViWXhHZHNZODJnczFNYUNIYkJUSjdHYnhTclAxTGRUb29XSFR0ZjktZTRpNl81UEtCejB6bGpHY25xV0dHWHhYbGc1VThWOGRYczJVUdIBakFVX3lxTFAyM1BzVTRWZ0FqV0w2TUhTY2tsRXVqVzQ5b1dNd0ppcWNNX2xCUG5RSUJRcDNZdHl2dzBrVzNndzVsNDgwNnNVbG0xdTFwYkVMcWgxTkV6bTF4cmc5V01fNF9RMmpVaXdKSmc?oc=5",
-            "published_at": "Thu, 26 Nov 2026 06:15:00 GMT",
-            "publisher": "파인드비",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "global_market",
-            "title": "도이체방크 \"기술주 하락세 곧 바닥…S&P 500 25% 상승 전망\"",
-            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9jbnhYczRTTXZSSUpiSnl3QlluYmtVQ3E3eGRCcExTcjM5VFVxdTJmd2syWWdhRXpSRER2QTJZTDRHOVdDV092cDJvd05vTHh0ZGNYZ2FDQWJjQndsNmRiV2dVLUhjX1IwR0ExZ1ZKbEExZw?oc=5",
-            "published_at": "Thu, 26 Nov 2026 23:30:51 GMT",
-            "publisher": "KB Think",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "global_market",
-            "title": "'뜨거운' 韓美 경제 성장세…환율 시사점은",
-            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFA4ZGtmSlQ1akZpV2xudnBGSk1Fa0lsaFBVUjZDZnJOYUFUYU1jNkVhajI4MDFZU2JjLVlfeFpveUt5VTdKYzRqa3RDYkNCYjNBdGpwU09uRHYteHZ2TWJ3eEphYzF1VHYxenJTRFVPdDhvZw?oc=5",
-            "published_at": "Thu, 26 Nov 2026 23:37:53 GMT",
-            "publisher": "KB Think",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "global_diplomacy_summit",
-            "title": "'40% 관세' 협박까지…'트럼프 폭주'에 G2 전쟁 재점화",
-            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFAweUxad0NJOElMQ2k1Q3Q5bnVRVldid0kwSEoxU1RaX0ZtWVhYbk9ncmxnZjB6RDFmYTVQT1JzUXdSb3RCZlpaTHdjWFdIalotTkxGRk1Dd1BacnRnX0hwcQ?oc=5",
-            "published_at": "Thu, 26 Nov 2026 08:38:55 GMT",
-            "publisher": "뉴스토마토",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "global_diplomacy_summit",
-            "title": "\"트럼프, 최악의 시점에 관세 올렸다\" 평가 이유는 - 머니투데이",
-            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5wQWFBcWpjMEN6T0JBdTFGd3E1aklScEt3dHQ3MmF1T3F3bGdaZFFvTUZEMkNRbVZ4SWpucl9EbDNUN2FudXgtbHpzQ1pqMHlweEJ1WjFHZFYyWDljdkhicGI4bzdFQ1Nk0gFuQVVfeXFMTTJmbXhPOWVKbEtRRHh3VnV6aTBLWk5oN0FiczlIS2NiSldFa3FCcE55MF80M3l2WXVNUzhSTm1obWFlb18wUU5WRUNkd3pMbkRpd2xmMUktb0VMN0E0ZjZsZjhJYU1jTFJNbDNOQmc?oc=5",
-            "published_at": "Thu, 26 Nov 2026 17:09:33 GMT",
-            "publisher": "머니투데이",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "japan_boj_fx",
-            "title": "영국 파운드화, 일본은행의 매파적 기조에 엔화 강세 보이며 하락…영란은행 금리 인상 기대에 낙폭 제한",
-            "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxOM1BXVm5fSllaQkpyZGJ2blRETFhRWGI4eF9pQXNWQWl3bldrLV9ZdldDc0h3ZFFOa0N0eWItZlowQ281WTlVNWFXVlNsU1NLaTZkSHllRVc0V0dSNjNDdXFWR1BYaTUtU2RVRHhnWGZNanNCRjRyY25IWmI2NFYxQmdMOG9oTzloZlh5bGhjb1lwb0FMQjhFVjNidS1NSGNJRHo2SkZ3RDJmNURsUExOQXh1U3Q0anpHYlpoZGthR3ZkcjFrX0NBUldqM3pnUWR2NWpZVkY4cXdCc29q?oc=5",
-            "published_at": "Thu, 26 Nov 2026 01:30:00 GMT",
-            "publisher": "www.tmgm.com",
-            "discovery_source": "google_news_rss"
-          },
-          {
-            "topic": "dynamic:반도체",
-            "title": "\"AI 반도체·PCB 주가, 최악 반영\"…증설·수주 증가에 주목",
-            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE50Q2ZiM0RzTUFHVjBJZmM4VUxXU09tSGl3STJXQWU4b2Z0OXdYRW9heC1DWElVZzVDVFRaVFdLNG1vZjJDaE84S3E4UGMweFd3SkNvVjdQQnZCbjBseE1MQlhFWmJ2X2k5OWQ1NWw1MUQ?oc=5",
-            "published_at": "Thu, 26 Nov 2026 23:25:24 GMT",
-            "publisher": "연합인포맥스",
-            "discovery_source": "google_news_rss"
-          }
-        ],
-        "handoff_queries": [
-          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
-          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
-          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
-          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
-          "관세 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "반도체 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "인상 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "기준금리 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "한은 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "금리 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
-          "과잉생산 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
-        ]
-      },
-      "public_batch_market": {
-        "generated_at": "2026-11-27T08:41:10.751621+09:00",
-        "status": "warming_or_gap",
-        "provider": "naver_public",
-        "exact_1m_bars": false,
-        "elapsed_minutes_from_previous": 10.068287766666666,
-        "interval_leaders": [],
-        "one_minute_samples_available": false,
-        "minute_amount_exact": false,
-        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
-        "minute_sample_ticker_count": 0,
-        "current_top50_count": 50,
-        "tracked_universe_count": 63,
-        "dropped_from_current_top50_count": 13,
-        "tracked_outside_top50_with_samples": 0,
-        "minute_samples_by_ticker": {},
-        "limitations": [
-          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
-          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
-          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
-          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
-          "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
-          "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
-        ]
-      },
-      "market": {
-        "generated_at": "2026-11-27T08:42:04.246843+09:00",
-        "source_status": "toss_snapshot_unavailable",
-        "provider": "toss",
-        "fallback_used": false,
-        "historical_fallback_available": true
-      },
-      "market_recent_sessions": {
-        "updated_at": "2026-09-26T12:50:00+09:00",
-        "basis": "verified_close",
-        "korea": [
-          {
-            "date": "2026-09-23",
-            "status": "closed",
-            "kospi": {
-              "close": 7080.92,
-              "change_pct": 0.9
-            },
-            "kosdaq": {
-              "close": 844.48,
-              "change_pct": 1.21
-            },
-            "flows_krw_100m": {
-              "foreign": -5047,
-              "institution": 3169,
-              "individual": -14396
-            },
-            "note": "추석 연휴 직전 마지막 거래일",
-            "source": "연합뉴스/Investing.com"
-          },
-          {
-            "date": "2026-09-22",
-            "status": "closed",
-            "kospi": {
-              "close": 7017.91,
-              "change_pct": 0.15
-            },
-            "kosdaq": {
-              "close": 834.38,
-              "change_pct": -0.23
-            },
-            "flows_krw_100m": {
-              "foreign": 850,
-              "institution": -1190,
-              "individual": -16089
-            },
-            "note": "장중 2%대 상승 후 상승폭 축소",
-            "source": "연합뉴스"
-          },
-          {
-            "date": "2026-09-21",
-            "status": "closed",
-            "kospi": {
-              "close": 7007.72,
-              "change_pct": 1.65
-            },
-            "kosdaq": {
-              "close": 836.27,
-              "change_pct": 1.11
-            },
-            "flows_krw_100m": {
-              "foreign": -1603,
-              "institution": 14924,
-              "individual": -29790
-            },
-            "note": "반도체 강세로 7천선 회복",
-            "source": "연합뉴스"
-          }
-        ],
-        "us": [
-          {
-            "date": "2026-09-25",
-            "status": "closed",
-            "sp500": {
-              "close": 7743.41,
-              "change_pct": 0.51
-            },
-            "nasdaq": {
-              "close": 27068.72,
-              "change_pct": 0.48
-            },
-            "dow": {
-              "close": 51828.62,
-              "change_pct": 0.93
-            },
-            "note": "AI 기술주 강세",
-            "source": "Reuters/시장 종가 데이터"
-          },
-          {
-            "date": "2026-09-24",
-            "status": "closed",
-            "sp500": {
-              "close": 7704.13,
-              "change_pct": -0.02
-            },
-            "nasdaq": {
-              "close": 26939.37,
-              "change_pct": 0.01
-            },
-            "dow": {
-              "close": 51349.98,
-              "change_pct": -0.31
-            },
-            "note": "금리·유가 부담 속 혼조",
-            "source": "FRED/시장 종가 데이터"
-          },
-          {
-            "date": "2026-09-23",
-            "status": "closed",
-            "sp500": {
-              "close": 7706.03,
-              "change_pct": -0.75
-            },
-            "nasdaq": {
-              "close": 26936.04,
-              "change_pct": -1.13
-            },
-            "dow": {
-              "close": 51511.59,
-              "change_pct": -0.68
-            },
-            "note": "장기금리 상승으로 위험자산 압박",
-            "source": "FRED/시장 종가 데이터"
-          }
-        ],
-        "holiday_notes": [
-          {
-            "market": "KR",
-            "from": "2026-09-24",
-            "to": "2026-09-27",
-            "reason": "추석 연휴"
-          }
-        ]
-      },
-      "toss": {
-        "available": true,
-        "captured_at": "2026-11-21T21:10:45.033729+09:00",
-        "collector": {
-          "subscription_count": 0,
-          "rejected_count": 0,
-          "last_message_at": null,
-          "last_universe_refresh": "2026-11-21T21:10:45.033729+09:00"
-        }
-      },
-      "user_feedback": {
-        "pending_count": 0,
-        "latest_pending_comment_id": null
-      },
-      "git": {
-        "head_sha": "36c74bbd813fbbd350977406cdf00bfe5e5a79a2",
-        "latest_commit_changed_files": [
-          "data/discovery/archive/2026-11-27.jsonl",
-          "data/discovery/archive/index.json",
-          "data/discovery/latest.json",
-          "data/health/latest.json",
-          "data/health/state.json",
-          "data/macro/current.json",
-          "data/market/runtime.json",
-          "data/news/fast-path-state.json",
-          "data/news/issue-digest.json",
-          "data/providers/naver_batch/history.json",
-          "data/providers/naver_batch/latest.json",
-          "data/providers/naver_batch/sessions/2026-11-27.json",
-          "data/providers/toss/fetch_runtime.json",
-          "data/providers/toss/status.json",
-          "data/regression/history/2026-11-26.jsonl",
-          "data/regression/latest.json",
-          "data/risk/calendar_live.json",
-          "data/risk/latest.json",
-          "data/risk/runtime.json",
-          "data/risk/state.json",
-          "data/supervisor/queue/2026-11-27.jsonl",
-          "data/supervisor/recent.json",
-          "data/supervisor/windows/2026-11-27/0830-B.json",
-          "data/supervisor/windows/latest-B.json"
-        ]
-      },
-      "previous_workflow_run": {
-        "id": 45911323251,
-        "name": "10분 감독 관측 큐",
-        "event": "workflow_dispatch",
-        "status": "completed",
-        "conclusion": "success",
-        "created_at": "2026-11-26T23:30:22Z",
-        "updated_at": "2026-11-26T23:40:25Z",
-        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/45911323251",
-        "head_sha": "799b5ba069807dfb00cc196a02fce7d60f32aca4"
-      },
-      "hypothesis_verification": {
-        "due": []
-      },
-      "signals": [
-        "health:CRITICAL",
-        "discovery:degraded",
-        "market:toss_snapshot_unavailable"
-      ]
-    },
     {
       "schema_version": 2,
       "observation_id": "obs-20261127T085234+0900-45913263429-1",
@@ -89937,6 +89171,757 @@
         "updated_at": "2026-11-27T19:30:25Z",
         "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/46055990854",
         "head_sha": "d8783345b13af110e66b1cf7fadeb59f4a5ec1ea"
+      },
+      "hypothesis_verification": {
+        "due": []
+      },
+      "signals": [
+        "discovery:degraded"
+      ]
+    },
+    {
+      "schema_version": 2,
+      "observation_id": "obs-20261128T044206+0900-46058333188-1",
+      "observed_at": "2026-11-28T04:42:06.945717+09:00",
+      "slot_at": "2026-11-28T04:40:00+09:00",
+      "slot_key": "2026-11-28T04:40+0900",
+      "sensor_interval_minutes": 10,
+      "slot_source": "dispatch_input",
+      "slot_start_delay_seconds": 29.462,
+      "slot_delay_seconds": 126.945717,
+      "source": {
+        "repository": "juhwan7/stock-autoresearch",
+        "workflow": "10분 감독 관측 큐",
+        "event_name": "workflow_dispatch",
+        "run_id": "46058333188",
+        "run_attempt": "1",
+        "head_sha": "64660538f5415ca191cd910469f9346afa7d4540",
+        "ref_name": "main"
+      },
+      "queue": {
+        "batch_size": 3,
+        "pending_before_append": 120,
+        "last_processed_observation_id": "obs-20260928T183221+0900-36403930052-1",
+        "last_processed_slot": "2026-09-28T18:30:00+09:00",
+        "pending_after_append": 120
+      },
+      "validation": {
+        "status": "ok",
+        "compile": "ok",
+        "pytest": "ok",
+        "diff_check": "ok"
+      },
+      "steps": {
+        "toss_fetch": "success",
+        "toss_summary": "success",
+        "health": "success",
+        "dashboard": "success",
+        "market_discovery": "success",
+        "public_batch_market": "success",
+        "market_sensor_repair": "success",
+        "risk_sensor_repair": "success",
+        "regression_refresh": "success"
+      },
+      "health": {
+        "status": "NOTICE",
+        "generated_at": "2026-11-28T04:41:41.413193+09:00",
+        "issues": [
+          {
+            "component": "risk",
+            "code": "calendar-empty",
+            "severity": "INFO",
+            "message": "가까운 주요 일정이 없거나 일정 데이터가 비어 있음"
+          },
+          {
+            "component": "macro",
+            "code": "unavailable",
+            "severity": "NOTICE",
+            "message": "매크로 runtime은 생성됐지만 실제 시장값이 비어 있음"
+          }
+        ]
+      },
+      "regression": {
+        "status": "COLLECTING",
+        "generated_at": "2026-11-27T19:41:40.931255+00:00",
+        "quarantine_count": 0,
+        "rolled_back_count": 0
+      },
+      "market_discovery": {
+        "generated_at": "2026-11-28T04:41:26.873756+09:00",
+        "item_count": 183,
+        "new_item_count": 52,
+        "topic_counts": {
+          "kr_market_flow": 8,
+          "kr_policy_economy": 30,
+          "kr_diplomacy_summit": 11,
+          "kr_semiconductor_ai": 10,
+          "kr_bio_health": 2,
+          "kr_defense_shipbuilding": 1,
+          "global_market": 27,
+          "global_diplomacy_summit": 29,
+          "us_macro_rates": 3,
+          "global_energy_middle_east": 3,
+          "us_china_trade_ai": 1,
+          "dynamic:관세": 11,
+          "dynamic:AI": 19,
+          "dynamic:뉴욕증시": 7,
+          "dynamic:금리": 19,
+          "dynamic:추가": 2
+        },
+        "trending_terms": [
+          {
+            "term": "관세",
+            "count": 34,
+            "publisher_count": 23,
+            "independent_story_count_estimate": 30,
+            "syndication_ratio_estimate": 0.118,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 35,
+            "delta": -1,
+            "score": 91,
+            "examples": [
+              "[외신동향] 北, 트럼프 대화 제의에도 핵무력 강화…美 관세 압박·반도체 패권 경쟁 격화",
+              "美 공화당서도 '관세 재검토' 목소리…트럼프 무역정책 균열 조짐",
+              "\"25%까지 올릴 수도\"...다시 꺼내든 트럼프 '관세 카드' [Y녹취록]"
+            ]
+          },
+          {
+            "term": "AI",
+            "count": 31,
+            "publisher_count": 23,
+            "independent_story_count_estimate": 29,
+            "syndication_ratio_estimate": 0.065,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 34,
+            "delta": -3,
+            "score": 85,
+            "examples": [
+              "유안타증권 \"엔비디아 서버 출하까지 막혔다\"…AI 랠리 꺾이면 삼성전자·SK하이닉스는?",
+              "미국, 중국 AI 숨통 조인다… 한미반도체부터 LS ELECTRIC까지 수혜주 부상",
+              "엔비디아, 동남아 서버 출하 보류…피치 \"AI 투자 둔화\" 경고"
+            ]
+          },
+          {
+            "term": "트럼프",
+            "count": 31,
+            "publisher_count": 22,
+            "independent_story_count_estimate": 28,
+            "syndication_ratio_estimate": 0.097,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 31,
+            "delta": 0,
+            "score": 84,
+            "examples": [
+              "[외신동향] 北, 트럼프 대화 제의에도 핵무력 강화…美 관세 압박·반도체 패권 경쟁 격화",
+              "트럼프·UFC 회장, 사비 50만 달러 군악대 기부",
+              "美 공화당서도 '관세 재검토' 목소리…트럼프 무역정책 균열 조짐"
+            ]
+          },
+          {
+            "term": "금리",
+            "count": 16,
+            "publisher_count": 12,
+            "independent_story_count_estimate": 15,
+            "syndication_ratio_estimate": 0.062,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 14,
+            "delta": 2,
+            "score": 46,
+            "examples": [
+              "미 달러화 강세…AI주 투심 개선·美 국채 금리 상승",
+              "Bernstein “2027년 금 강세 전망…연준 금리 인상 중단 가능성”",
+              "뉴욕증시 프리뷰, AI·반도체주 저가 매수에 나스닥 선물 2% 상승…금리 인상 우려 여전"
+            ]
+          },
+          {
+            "term": "뉴욕증시",
+            "count": 15,
+            "publisher_count": 11,
+            "independent_story_count_estimate": 12,
+            "syndication_ratio_estimate": 0.2,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 15,
+            "delta": 0,
+            "score": 41,
+            "examples": [
+              "뉴욕증시, 반도체주 반등에 일제히 상승…나스닥 2.3%↑",
+              "뉴욕증시, AI·기술주 반등에 일제히 상승…나스닥 2.3%↑(종합)",
+              "뉴욕증시, AI주 저가 매수에 일제히 상승…S&P500 주간 5.6%↑"
+            ]
+          },
+          {
+            "term": "남부발전",
+            "count": 10,
+            "publisher_count": 10,
+            "independent_story_count_estimate": 5,
+            "syndication_ratio_estimate": 0.5,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 9,
+            "delta": 1,
+            "score": 31,
+            "examples": [
+              "남부발전, ‘대한민국 규제혁신대상 중기부 장관상’ 수상",
+              "남부발전, 중소기업 규제개선 '3년 연속' 장관 표창",
+              "남부발전, 대한민국 규제혁신 대상 중기부 장관상 수상…‘3년 연속’"
+            ]
+          },
+          {
+            "term": "반도체",
+            "count": 11,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 11,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 28,
+            "delta": -17,
+            "score": 31,
+            "examples": [
+              "미국 수출통제 뚫린 엔비디아 반도체…SK하이닉스·삼성전자에 미칠 파장은?",
+              "[외신동향] 北, 트럼프 대화 제의에도 핵무력 강화…美 관세 압박·반도체 패권 경쟁 격화",
+              "한국의 AI 칩 열풍부터 베트남의 반도체 가치 사슬 참여라는 과제까지."
+            ]
+          },
+          {
+            "term": "규제",
+            "count": 11,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 10,
+            "syndication_ratio_estimate": 0.091,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 15,
+            "delta": -4,
+            "score": 31,
+            "examples": [
+              "인증 컨설팅만 1억…中企 울리는 '보안 규제'",
+              "공정위, 자동차 대여·공유모빌리티 경쟁제한 규제 개선 추진",
+              "공정위, 공유모빌리티·고령친화산업 규제 개선 논의"
+            ]
+          },
+          {
+            "term": "연속",
+            "count": 8,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 4,
+            "syndication_ratio_estimate": 0.5,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 8,
+            "score": 31,
+            "examples": [
+              "남부발전, 중소기업 규제개선 '3년 연속' 장관 표창",
+              "남부발전, 대한민국 규제혁신 대상 중기부 장관상 수상…‘3년 연속’",
+              "한국남부발전 규제혁신 중기부 장관상 3년 연속 수상 - 머니투데이"
+            ]
+          },
+          {
+            "term": "나스닥",
+            "count": 8,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 6,
+            "syndication_ratio_estimate": 0.25,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 8,
+            "score": 31,
+            "examples": [
+              "뉴욕증시, 반도체주 반등에 일제히 상승…나스닥 2.3%↑",
+              "뉴욕증시, AI·기술주 반등에 일제히 상승…나스닥 2.3%↑(종합)",
+              "블프에 불뿜은 AI·기술주…나스닥 2.3%↑[뉴욕마감] - 머니투데이"
+            ]
+          },
+          {
+            "term": "규제혁신",
+            "count": 8,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 2,
+            "syndication_ratio_estimate": 0.75,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 8,
+            "score": 31,
+            "examples": [
+              "남부발전, 대한민국 규제혁신 대상 중기부 장관상 수상…‘3년 연속’",
+              "남부발전, ‘2026 대한민국 규제혁신 대상’ 중기부 장관상 수상",
+              "기보, '2026년 대한민국 규제혁신 대상' 국무총리 표창 수상 - 머니투데이"
+            ]
+          },
+          {
+            "term": "장관상",
+            "count": 9,
+            "publisher_count": 9,
+            "independent_story_count_estimate": 4,
+            "syndication_ratio_estimate": 0.556,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 9,
+            "delta": 0,
+            "score": 27,
+            "examples": [
+              "남부발전, ‘대한민국 규제혁신대상 중기부 장관상’ 수상",
+              "남부발전, 대한민국 규제혁신 대상 중기부 장관상 수상…‘3년 연속’",
+              "남부발전, ‘2026 대한민국 규제혁신 대상’ 중기부 장관상 수상"
+            ]
+          },
+          {
+            "term": "추가",
+            "count": 9,
+            "publisher_count": 8,
+            "independent_story_count_estimate": 8,
+            "syndication_ratio_estimate": 0.111,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 8,
+            "delta": 1,
+            "score": 27,
+            "examples": [
+              "“물가 뛰는데 관세 추가 부과…트럼프, 경제적 자해행위”",
+              "美 언론 \"트럼프 추가 관세, 물가 부추기는 최악의 선택\"",
+              "WSJ, 트럼프 관세 정책에 쓴소리…물가 불안 속 추가 부담 우려"
+            ]
+          },
+          {
+            "term": "인상",
+            "count": 8,
+            "publisher_count": 8,
+            "independent_story_count_estimate": 8,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 7,
+            "delta": 1,
+            "score": 25,
+            "examples": [
+              "Bernstein “2027년 금 강세 전망…연준 금리 인상 중단 가능성”",
+              "뉴욕증시 프리뷰, AI·반도체주 저가 매수에 나스닥 선물 2% 상승…금리 인상 우려 여전",
+              "트럼프, 中 관세 40% 인상 경고…시진핑과 무역협상 지렛대로 활용"
+            ]
+          },
+          {
+            "term": "수상",
+            "count": 8,
+            "publisher_count": 7,
+            "independent_story_count_estimate": 4,
+            "syndication_ratio_estimate": 0.5,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 7,
+            "delta": 1,
+            "score": 24,
+            "examples": [
+              "남부발전, ‘대한민국 규제혁신대상 중기부 장관상’ 수상",
+              "남부발전, 대한민국 규제혁신 대상 중기부 장관상 수상…‘3년 연속’",
+              "남부발전, ‘2026 대한민국 규제혁신 대상’ 중기부 장관상 수상"
+            ]
+          },
+          {
+            "term": "반등에",
+            "count": 6,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 3,
+            "syndication_ratio_estimate": 0.5,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 6,
+            "score": 24,
+            "examples": [
+              "뉴욕증시, 반도체주 반등에 일제히 상승…나스닥 2.3%↑",
+              "뉴욕증시, AI·기술주 반등에 일제히 상승…나스닥 2.3%↑(종합)",
+              "뉴욕증시, AI·기술주 반등에 일제히 상승…나스닥 2.3%↑"
+            ]
+          },
+          {
+            "term": "반등",
+            "count": 6,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 6,
+            "syndication_ratio_estimate": 0.0,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 6,
+            "score": 24,
+            "examples": [
+              "외국인 매수에 증시 '반등'…코스피 4.34%·코스닥 8.13% '급등'",
+              "비트코인 반등 조건, 따로 있다…美 물가 둔화보다 중요한 '이것'",
+              "노동시장 지표 호조에 연준 금리 인상 기대 재부각…달러 반등"
+            ]
+          },
+          {
+            "term": "대한민국",
+            "count": 6,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 3,
+            "syndication_ratio_estimate": 0.5,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 6,
+            "score": 24,
+            "examples": [
+              "남부발전, ‘대한민국 규제혁신대상 중기부 장관상’ 수상",
+              "남부발전, 대한민국 규제혁신 대상 중기부 장관상 수상…‘3년 연속’",
+              "남부발전, ‘2026 대한민국 규제혁신 대상’ 중기부 장관상 수상"
+            ]
+          },
+          {
+            "term": "공정위",
+            "count": 6,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 5,
+            "syndication_ratio_estimate": 0.167,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 6,
+            "score": 24,
+            "examples": [
+              "[게시판] 공정위·조정원·규제학회 학술대회…모빌리티 시장경쟁 논의",
+              "공정위, 자동차 대여·공유모빌리티 경쟁제한 규제 개선 추진",
+              "공정위, 공유모빌리티·고령친화산업 규제 개선 논의"
+            ]
+          },
+          {
+            "term": "개선",
+            "count": 6,
+            "publisher_count": 6,
+            "independent_story_count_estimate": 4,
+            "syndication_ratio_estimate": 0.333,
+            "source_independence_method": "headline_similarity_estimate_not_primary_source_verification",
+            "previous_count": 0,
+            "delta": 6,
+            "score": 24,
+            "examples": [
+              "공정위, 자동차 대여·공유모빌리티 경쟁제한 규제 개선 추진",
+              "공정위, 공유모빌리티·고령친화산업 규제 개선 논의",
+              "공정위, 경쟁제한 규제 개선 방안 논의…공동 학술대회 개최"
+            ]
+          }
+        ],
+        "new_dart_filings": [],
+        "official_web_candidates": [],
+        "toss_market": {
+          "available": true,
+          "captured_at": "2026-11-21T21:10:45.033729+09:00",
+          "top_turnover": [],
+          "minute_burst_leaders": [],
+          "top10_share": null
+        },
+        "sector_selection": {
+          "mode": "dynamic",
+          "fixed_sector_whitelist": false,
+          "rule": "현재 뉴스 반복도·출처 다양성·정량 시장 반응을 조합해 :00/:30 A/B Supervisor가 주도 섹터를 선택"
+        },
+        "naver_indices": {
+          "KOSPI": "4,915.68",
+          "KOSDAQ": "708.99",
+          "KOSPI200": "758.51"
+        },
+        "source_summary": {
+          "ok_or_partial": 18,
+          "failed": 5,
+          "degraded": 4
+        },
+        "top_new_items": [
+          {
+            "topic": "kr_policy_economy",
+            "title": "공정거래위원회-한국공정거래조정원-한국규제학회 공동 학술대회 개최",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9SR05QVjVjeDItalIyQTAwS3k5TGRScG5uaVNvVEZaQXRsLXprSnhrRFZmZUctRGN4ODNnZm93ZUtsb2F1LUhUclJMdlF2NW9mV3lRX3pXYlY5X0ZNdFgzbW9VQ3dlSXlNZXJzMA?oc=5",
+            "published_at": "Fri, 27 Nov 2026 07:05:15 GMT",
+            "publisher": "메가충청뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_policy_economy",
+            "title": "“중소기업 규제애로 해소 공로”…남부발전, ‘대한민국 규제혁신 대상’ 3년 연속 수상",
+            "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5VQi1FaDBGcGlubmRWNVJkc1A4ZjE5ZDNzaGNHdHNjUlZpc0dBZ3F5eTlfMUNvRVpKSG05QzA5TmZRYjZwbldmT2Q1b1dlb3ZlTzZPbWRR?oc=5",
+            "published_at": "Fri, 27 Nov 2026 01:02:05 GMT",
+            "publisher": "매일경제",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_policy_economy",
+            "title": "\"K-김에 규제 과도\"…국제무대서 목소리 낸 한국",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9zUWE4Z2hqYWdwYVpwYkI0UjVmd013dlhvZGxQTVVPdnZVeGNhU1hOTUxlbzY5aWV2NVh4THZDWV9TZWJ3UXcwTXhiRF9keVZYNWJzSTBoR2laaW0wRi1fcdIBeEFVX3lxTE45c2lBVFhmcE5aVEdlSUtRR2hQX1RiNTdFY0FSVUd5ZzQtWWtmVkotOWZlaDNrOHZBRWhHVkFpT0VVdHFKTWE0YXJ5dXJRUW5qNzh0bWlfWFB1amNXWmFBMWQ5YVIwZVAzQzI3SGxSWFNhZ3ZmODBoOQ?oc=5",
+            "published_at": "Fri, 27 Nov 2026 01:20:33 GMT",
+            "publisher": "뉴시스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "\"북중 정상회담 임박했나…시진핑, 이 대통령에 김정은 방중 가능성 언급\"",
+            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9oU2hrbkptVDJkOWpONzVMS0lMOUUzdjc2eTRBWU9idjZkaGJuc0dkWXR2SjltaEdwWFgwUXQ0eDFicHpBWEVyY0phSDl0VE1pZF9UYw?oc=5",
+            "published_at": "Fri, 27 Nov 2026 13:31:00 GMT",
+            "publisher": "JTBC",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "[단독] 시진핑, 이 대통령에 “김정은 중국 찾을 수 있다” 언급…단둥엔 ‘비상대기령’",
+            "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE8wU1BtQzZMeDV4WG9NblphblVJZlhSeWJRSUxtZEZUVG51cFpNQ2FPMjZlQ1p5azgzZVZaeGsxYlZlaGNqN1c0VWJCNEF6LU9OV2d5VmdMSkN0cHFMbzJTajBKazBPdw?oc=5",
+            "published_at": "Fri, 27 Nov 2026 11:59:00 GMT",
+            "publisher": "KBS 뉴스",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "청와대 \"한중 정상회담에서 김정은 방중 가능성 언급 없었다\"",
+            "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1DdmUyM2UyU1NHTlEyYld2dmtiWFJtTTVYM0QwcFozM0Q1UngyU0tYZXdMSWs2djJhdElZMVY0RkhvdnZVV01sMkVXWHZqaDFOMkk5cDl0LXZXZVAt?oc=5",
+            "published_at": "Fri, 27 Nov 2026 15:51:00 GMT",
+            "publisher": "뉴스핌",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "[여론조사-11月결산] “국정·개헌·총선 성패, 李대통령 지지율 달려” 민심 동향 분석",
+            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBFWkV1empELXd5Y0FsWTNUSFRQTUR1dkdqSV9jS0xCOEt1X1N0Q1ZSTlBkS1VqOGt4bXBKZENKbTZMWjNQbWFxX0didzAzREFGdGh0Y0d6MVJuMFpKMlJVS2Fxc0QzMFBnd0pzWl9Rbw?oc=5",
+            "published_at": "Fri, 27 Nov 2026 08:54:43 GMT",
+            "publisher": "일요서울i",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "미중러 3국 정상회담… 남북관계 핸들 놓친 정부",
+            "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE4zRjZOZ05zdmd5NXlQQlRUZ0RyYnpOVkZMMHcyT2poZndBYU1KcS0zNnpZaWVxamNKYWFwVk1qZm5wTmduT2NLWmtPRHhHYzJFRkZKZ3VzVi1wdldjZXFKT09VclA?oc=5",
+            "published_at": "Fri, 27 Nov 2026 10:36:07 GMT",
+            "publisher": "용인신문",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "靑 “한중 정상회담서 김정은 방중 거론 안 해”",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1qYnMybjYwVFA2a2M1cUFxUjhlMWZKN0RYUHBEeFgwbzh5dTBhaUI0VUJTOVpTVXdHWmlyQ3FJSVZ1V29pUnVlM0pQeUpTbklvYTJFLWlUSWpOdG9pejZJcmllQUlkeUpxREE?oc=5",
+            "published_at": "Fri, 27 Nov 2026 16:00:00 GMT",
+            "publisher": "천지일보",
+            "discovery_source": "google_news_rss"
+          },
+          {
+            "topic": "kr_diplomacy_summit",
+            "title": "이재명 대통령 \"광장의 요구, 국민이 체감하는 변화로 만들어야\"",
+            "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE8wdC1pcEhXUDFCVk4ycU1oRkt5ZnFGbnZLckJhRS1zN1hXdUFkRnN1d2tWWmFKdUVsSUJIVmp2dnZpVzFRa2R5cGZ3LTJGYlZJcmVkWllFT3RYZEVwYk0xZVNB?oc=5",
+            "published_at": "Fri, 27 Nov 2026 12:30:04 GMT",
+            "publisher": "㈜한국탑뉴스",
+            "discovery_source": "google_news_rss"
+          }
+        ],
+        "handoff_queries": [
+          "한국 증시 오늘 주도 섹터 거래대금 상위 이유",
+          "코스피 코스닥 거래대금 상위 상승률 상위 공시 뉴스",
+          "한국 증시 오늘 새 공시 수주 계약 정책 변화",
+          "미국 증시 금리 환율 원자재 변화 한국 증시 영향",
+          "관세 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "AI 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "트럼프 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "금리 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "뉴욕증시 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "남부발전 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "반도체 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응",
+          "규제 한국 증시 관련 기업 공시 수주 실적 거래대금 시장 반응"
+        ]
+      },
+      "public_batch_market": {
+        "generated_at": "2026-11-28T04:41:09.736837+09:00",
+        "status": "unavailable",
+        "provider": "naver_public",
+        "exact_1m_bars": false,
+        "elapsed_minutes_from_previous": 9.930981983333334,
+        "interval_leaders": [],
+        "one_minute_samples_available": false,
+        "minute_amount_exact": false,
+        "minute_amount_method": "price_x_minute_volume_scaled_to_interval_total",
+        "minute_sample_ticker_count": 0,
+        "current_top50_count": 0,
+        "tracked_universe_count": 0,
+        "dropped_from_current_top50_count": 0,
+        "tracked_outside_top50_with_samples": 0,
+        "minute_samples_by_ticker": {},
+        "limitations": [
+          "네이버 공개 read-only 시세 기반으로 API 계약이 예고 없이 바뀔 수 있음",
+          "GitHub Actions 실행 지연에 따라 관측 간격이 정확히 10분이 아닐 수 있음",
+          "당일 실제 체결이 확인된 Top50만 신규 편입하며 휴장일·개장 전 이전 거래일 순위는 제외",
+          "당일 한 번이라도 거래대금 Top50에 진입한 종목은 순위 밖으로 밀려나도 장 마감까지 계속 추적",
+          "최근 10개 1분 표본의 거래대금은 가격×분당 거래량 기반 근사치이며 정확 체결대금 합산값이 아님",
+          "10분 누적 거래대금 차분은 분 단위 근사치의 합계 교차검증과 보정에 사용"
+        ]
+      },
+      "market": {
+        "generated_at": "2026-11-28T04:41:39.970333+09:00",
+        "source_status": "outside_domestic_monitor_window",
+        "provider": "provider_chain",
+        "fallback_used": null,
+        "historical_fallback_available": true
+      },
+      "market_recent_sessions": {
+        "updated_at": "2026-09-26T12:50:00+09:00",
+        "basis": "verified_close",
+        "korea": [
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "kospi": {
+              "close": 7080.92,
+              "change_pct": 0.9
+            },
+            "kosdaq": {
+              "close": 844.48,
+              "change_pct": 1.21
+            },
+            "flows_krw_100m": {
+              "foreign": -5047,
+              "institution": 3169,
+              "individual": -14396
+            },
+            "note": "추석 연휴 직전 마지막 거래일",
+            "source": "연합뉴스/Investing.com"
+          },
+          {
+            "date": "2026-09-22",
+            "status": "closed",
+            "kospi": {
+              "close": 7017.91,
+              "change_pct": 0.15
+            },
+            "kosdaq": {
+              "close": 834.38,
+              "change_pct": -0.23
+            },
+            "flows_krw_100m": {
+              "foreign": 850,
+              "institution": -1190,
+              "individual": -16089
+            },
+            "note": "장중 2%대 상승 후 상승폭 축소",
+            "source": "연합뉴스"
+          },
+          {
+            "date": "2026-09-21",
+            "status": "closed",
+            "kospi": {
+              "close": 7007.72,
+              "change_pct": 1.65
+            },
+            "kosdaq": {
+              "close": 836.27,
+              "change_pct": 1.11
+            },
+            "flows_krw_100m": {
+              "foreign": -1603,
+              "institution": 14924,
+              "individual": -29790
+            },
+            "note": "반도체 강세로 7천선 회복",
+            "source": "연합뉴스"
+          }
+        ],
+        "us": [
+          {
+            "date": "2026-09-25",
+            "status": "closed",
+            "sp500": {
+              "close": 7743.41,
+              "change_pct": 0.51
+            },
+            "nasdaq": {
+              "close": 27068.72,
+              "change_pct": 0.48
+            },
+            "dow": {
+              "close": 51828.62,
+              "change_pct": 0.93
+            },
+            "note": "AI 기술주 강세",
+            "source": "Reuters/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-24",
+            "status": "closed",
+            "sp500": {
+              "close": 7704.13,
+              "change_pct": -0.02
+            },
+            "nasdaq": {
+              "close": 26939.37,
+              "change_pct": 0.01
+            },
+            "dow": {
+              "close": 51349.98,
+              "change_pct": -0.31
+            },
+            "note": "금리·유가 부담 속 혼조",
+            "source": "FRED/시장 종가 데이터"
+          },
+          {
+            "date": "2026-09-23",
+            "status": "closed",
+            "sp500": {
+              "close": 7706.03,
+              "change_pct": -0.75
+            },
+            "nasdaq": {
+              "close": 26936.04,
+              "change_pct": -1.13
+            },
+            "dow": {
+              "close": 51511.59,
+              "change_pct": -0.68
+            },
+            "note": "장기금리 상승으로 위험자산 압박",
+            "source": "FRED/시장 종가 데이터"
+          }
+        ],
+        "holiday_notes": [
+          {
+            "market": "KR",
+            "from": "2026-09-24",
+            "to": "2026-09-27",
+            "reason": "추석 연휴"
+          }
+        ]
+      },
+      "toss": {
+        "available": true,
+        "captured_at": "2026-11-21T21:10:45.033729+09:00",
+        "collector": {
+          "subscription_count": 0,
+          "rejected_count": 0,
+          "last_message_at": null,
+          "last_universe_refresh": "2026-11-21T21:10:45.033729+09:00"
+        }
+      },
+      "user_feedback": {
+        "pending_count": 0,
+        "latest_pending_comment_id": null
+      },
+      "git": {
+        "head_sha": "64660538f5415ca191cd910469f9346afa7d4540",
+        "latest_commit_changed_files": [
+          "data/discovery/archive/2026-11-28.jsonl",
+          "data/discovery/archive/index.json",
+          "data/discovery/latest.json",
+          "data/health/latest.json",
+          "data/health/state.json",
+          "data/macro/current.json",
+          "data/market/runtime.json",
+          "data/news/fast-path-state.json",
+          "data/news/issue-digest.json",
+          "data/providers/naver_batch/history.json",
+          "data/providers/naver_batch/latest.json",
+          "data/providers/toss/fetch_runtime.json",
+          "data/providers/toss/status.json",
+          "data/regression/history/2026-11-27.jsonl",
+          "data/regression/latest.json",
+          "data/risk/calendar_live.json",
+          "data/risk/latest.json",
+          "data/risk/runtime.json",
+          "data/risk/state.json",
+          "data/supervisor/queue/2026-11-28.jsonl",
+          "data/supervisor/recent.json",
+          "data/supervisor/windows/2026-11-28/0430-B.json",
+          "data/supervisor/windows/latest-B.json"
+        ]
+      },
+      "previous_workflow_run": {
+        "id": 46057158513,
+        "name": "10분 감독 관측 큐",
+        "event": "workflow_dispatch",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-11-27T19:30:22Z",
+        "updated_at": "2026-11-27T19:40:26Z",
+        "html_url": "https://github.com/juhwan7/stock-autoresearch/actions/runs/46057158513",
+        "head_sha": "ca25953c1c0ec34eeaf3bc520e72f7fcd4c86273"
       },
       "hypothesis_verification": {
         "due": []
